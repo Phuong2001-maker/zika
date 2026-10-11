@@ -16,9 +16,9 @@ export const PARTS: PartInfo[] = [
   { code: 'lt', name: 'Lật thẻ', short: 'Từ vựng', slug: 'flashcards', accent: '#DCEBFF', light: '#DCEBFF', icon: 'flip', chip: '#DCEBFF' },
   { code: 'bt', name: 'Bài tập', short: 'Bài tập', slug: 'exercises', accent: '#7FDDA9', light: '#CFF5E1', icon: 'exercise', chip: '#CFF5E1' },
   { code: 'kt', name: 'Kiểm tra', short: 'Kiểm tra', slug: 'tests', accent: '#FF9A90', light: '#FFE0DC', icon: 'quiz', chip: '#FFE0DC' },
-  { code: 'lv', name: 'Luyện viết từ mới', short: 'Luyện viết', slug: 'writing', accent: '#FFD84D', light: '#FFF0B3', icon: 'brush', chip: '#FFF0B3' },
+  { code: 'lv', name: 'Luyện viết từ mới', short: 'Luyện viết', slug: 'writing', accent: '#FEF3C7', light: '#FFF0B3', icon: 'brush', chip: '#FFF0B3' },
   { code: 'ht', name: 'Đọc hội thoại', short: 'Hội thoại', slug: 'dialogues', accent: '#8FC1FF', light: '#DCEBFF', icon: 'chat', chip: '#D6E8FF' },
-  { code: 'np', name: 'Cấu trúc ngữ pháp', short: 'Ngữ pháp', slug: 'grammar', accent: '#C9B8FF', light: '#E8E0FF', icon: 'blocks', chip: '#E8E0FF' },
+  { code: 'np', name: 'Cấu trúc ngữ pháp', short: 'Ngữ pháp', slug: 'grammar', accent: '#C9B8FF', light: '#E8E0FF', icon: 'blocks', chip: '#F5F3FF' },
 ];
 
 export const PART: Record<Part, PartInfo> = Object.fromEntries(PARTS.map((p) => [p.code, p])) as Record<Part, PartInfo>;

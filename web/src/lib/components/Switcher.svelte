@@ -50,14 +50,14 @@
   {#if open}
     <div class="block swi-panel" style="width: {mobile ? 316 : 360}px; text-align: left">
       <div class="row">
-        <span class="ib" style="width: 40px; height: 40px; background: var(--troi); border: 1px solid var(--line); border-radius: 12px; color: #14161C"><Icon name="apps" size={20} /></span>
+        <span class="ib" style="width: 40px; height: 40px; background: var(--troi); border: 1px solid var(--line); border-radius: 12px; color: var(--text)"><Icon name="apps" size={20} /></span>
         <span style="display: flex; flex-direction: column">
           <b class="disp" style="font-size: 17px; font-weight: 800">Chuyển nhanh</b>
           <span class="muted" style="font-size: 13px">Chọn phần bạn muốn học</span>
         </span>
       </div>
       <a href="/learn/{cur.slug}" class="cur" onclick={() => (open = false)}>
-        <span class="ib" style="width: 44px; height: 44px; background: {cur.accent}; border: 2px solid #14161C; border-radius: 12px"><Icon name={cur.icon} size={22} /></span>
+        <span class="ib" style="width: 44px; height: 44px; background: {cur.accent}; border: 1px solid var(--line); border-radius: 12px"><Icon name={cur.icon} size={22} /></span>
         <span style="display: flex; flex-direction: column">
           <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #0D6B3E"><span class="dot"></span>Đang dùng</span>
           <b style="font-size: 16px">{cur.name}</b>
@@ -90,11 +90,11 @@
     align-items: center;
     gap: 12px;
     padding: 10px 12px;
-    background: #cff5e1;
-    border: 2px solid #14161c;
-    border-radius: 16px;
+    background: var(--ngoc-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
     text-decoration: none;
-    color: #14161c;
+    color: var(--text);
   }
   .fbrow {
     display: flex;
