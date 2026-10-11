@@ -97,4 +97,23 @@ final class Str
     {
         return mb_strlen($s) <= $max ? $s : mb_substr($s, 0, $max - 1) . '…';
     }
+
+    /** Nhãn ngày cho lịch sử phiên: “Hôm nay · 04/10”, “Hôm qua · 03/10”, “Thứ Bảy · 02/10”. */
+    public static function dayLabel(string $date): string
+    {
+        $ts = strtotime($date);
+        if ($ts === false) {
+            return $date;
+        }
+        $d = date('d/m', $ts);
+        $diff = (int) floor((strtotime(date('Y-m-d')) - strtotime(date('Y-m-d', $ts))) / 86400);
+        if ($diff === 0) {
+            return "Hôm nay · $d";
+        }
+        if ($diff === 1) {
+            return "Hôm qua · $d";
+        }
+        $names = ['Chủ nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+        return $names[(int) date('w', $ts)] . " · $d";
+    }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 use Zika\Controllers\Admin\ContentController as Content;
 use Zika\Controllers\Admin\DialogueController as Dialogue;
 use Zika\Controllers\Admin\MiscController as Misc;
+use Zika\Controllers\Admin\OpsController as Ops;
+use Zika\Controllers\Admin\StatsController as Stats;
 use Zika\Controllers\Admin\QuestionController as Question;
 use Zika\Controllers\Admin\WritingController as Writing;
 
@@ -75,4 +77,45 @@ return [
     ['PUT',    '/admin/lessons/{id}/grammar/order', [Dialogue::class, 'reorderGrammar'], 'E'],
     ['PUT',    '/admin/grammar/{id}', [Dialogue::class, 'updateGrammar'], 'E'],
     ['DELETE', '/admin/grammar/{id}', [Dialogue::class, 'deleteGrammar'], 'E'],
+
+    // Tổng quan · Người dùng · Phiên truy cập (04 §10.2) — chỉ quản trị
+    ['GET',    '/admin/overview', [Stats::class, 'overview'], 'A'],
+    ['GET',    '/admin/users', [Stats::class, 'users'], 'A'],
+    ['POST',   '/admin/users/bulk', [Stats::class, 'bulk'], 'A'],
+    ['GET',    '/admin/users/{id}', [Stats::class, 'user'], 'A'],
+    ['DELETE', '/admin/users/{id}', [Stats::class, 'delete'], 'A'],
+    ['GET',    '/admin/users/{id}/visits', [Stats::class, 'visits'], 'A'],
+    ['POST',   '/admin/users/{id}/lock', [Stats::class, 'lock'], 'A'],
+    ['POST',   '/admin/users/{id}/unlock', [Stats::class, 'unlock'], 'A'],
+    ['POST',   '/admin/users/{id}/notify', [Stats::class, 'notify'], 'A'],
+    ['PATCH',  '/admin/users/{id}/role', [Stats::class, 'role'], 'A'],
+    ['GET',    '/admin/sessions', [Stats::class, 'sessions'], 'A'],
+
+    // Thông báo (04 §10.8)
+    ['GET',    '/admin/announcements', [Ops::class, 'announcements'], 'A'],
+    ['POST',   '/admin/announcements', [Ops::class, 'saveAnnouncement'], 'A'],
+    ['GET',    '/admin/announcements/targets', [Ops::class, 'targets'], 'A'],
+    ['PUT',    '/admin/announcements/{id}', [Ops::class, 'saveAnnouncement'], 'A'],
+    ['DELETE', '/admin/announcements/{id}', [Ops::class, 'deleteAnnouncement'], 'A'],
+
+    // Góp ý (04 §10.9) — biên tập chỉ thấy nhóm nội dung
+    ['GET',    '/admin/feedback', [Ops::class, 'feedback'], 'E'],
+    ['GET',    '/admin/feedback/{id}', [Ops::class, 'feedbackDetail'], 'E'],
+    ['PATCH',  '/admin/feedback/{id}', [Ops::class, 'updateFeedback'], 'E'],
+    ['POST',   '/admin/feedback/{id}/reply', [Ops::class, 'replyFeedback'], 'E'],
+
+    // Ủng hộ & Shopee (04 §10.10)
+    ['GET',    '/admin/support', [Ops::class, 'support'], 'A'],
+    ['PATCH',  '/admin/support', [Ops::class, 'toggleSupport'], 'A'],
+    ['POST',   '/admin/support/links', [Ops::class, 'saveLink'], 'A'],
+    ['PUT',    '/admin/support/links/order', [Ops::class, 'reorderLinks'], 'A'],
+    ['PUT',    '/admin/support/links/{id}', [Ops::class, 'saveLink'], 'A'],
+    ['PATCH',  '/admin/support/links/{id}', [Ops::class, 'toggleLink'], 'A'],
+    ['DELETE', '/admin/support/links/{id}', [Ops::class, 'deleteLink'], 'A'],
+    ['PUT',    '/admin/support/donate', [Ops::class, 'donate'], 'A'],
+
+    // Cài đặt (04 §10.11)
+    ['GET',    '/admin/settings', [Ops::class, 'settings'], 'A'],
+    ['PUT',    '/admin/settings', [Ops::class, 'saveSettings'], 'A'],
+    ['DELETE', '/admin/staff/{id}', [Ops::class, 'removeStaff'], 'A'],
 ];

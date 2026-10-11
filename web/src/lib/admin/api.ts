@@ -78,6 +78,15 @@ export interface AdminQuestion {
   section?: 'listening' | 'reading';
 }
 
+/** Một câu hỏi đang được soạn trong trình soạn (chưa chắc đã lưu). */
+export interface Draft {
+  id: number | null;
+  type: string;
+  payload: Record<string, any>;
+  explain: string;
+  score: number;
+}
+
 export interface TestConfig {
   durationSec: number;
   passScore: number;
