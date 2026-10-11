@@ -7,7 +7,6 @@
   import { heartbeat } from '$lib/stores/heartbeat';
   import { toast } from '$lib/stores/toast.svelte';
   import { date, duration } from '$lib/utils/format';
-  import Topbar from '$lib/components/Topbar.svelte';
   import Switcher from '$lib/components/Switcher.svelte';
   import Avatar from '$lib/components/Avatar.svelte';
   import Icon from '$lib/components/Icon.svelte';
@@ -283,7 +282,7 @@
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px">
       <a href="/settings" class="btn btn-sm">Cài đặt học</a>
       <Switcher current="lt" />
-      <Avatar size={44} accountCurrent />
+      <Avatar size={44} current />
     </div>
   </header>
   <main class="page" style="max-width: 820px; display: flex; flex-direction: column; gap: 20px">{@render body(false)}</main>

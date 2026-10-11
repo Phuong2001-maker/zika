@@ -1,6 +1,7 @@
 <script lang="ts">
   import Icon from '$lib/components/Icon.svelte';
   import type { Draft } from '$lib/admin/api';
+  import type { Payload } from '$lib/utils/grade';
 
   // Biểu mẫu soạn một câu hỏi, dùng chung cho Bài tập (8 dạng) và Kiểm tra (10 dạng) — 06 §2.
   // Component chỉ giữ dữ liệu; việc lưu do trang gọi nó đảm nhiệm.
@@ -34,7 +35,7 @@
   function setType(t: string): void {
     if (t === draft.type) return;
     const p = draft.payload;
-    const keep: Record<string, any> = {
+    const keep: Payload = {
       word: p.word ?? '',
       ask: p.ask ?? '',
       vi: p.vi ?? '',
@@ -108,14 +109,14 @@
     touch();
   }
   function removeKeyword(i: number): void {
-    draft.payload.keywords = (draft.payload.keywords ?? []).filter((_: string, k: number) => k !== i);
+    draft.payload.keywords = (draft.payload.keywords ?? []).filter((_, k) => k !== i);
     touch();
   }
 
   /* ---------------- match: cặp từ – nghĩa ---------------- */
 
   function setPair(i: number, col: 0 | 1, v: string): void {
-    const pairs = (draft.payload.pairs ?? []).map((p: string[]) => [...p]);
+    const pairs = (draft.payload.pairs ?? []).map((p): [string, string] => [p[0], p[1]]);
     pairs[i][col] = v;
     draft.payload.pairs = pairs;
     touch();
@@ -126,7 +127,7 @@
     touch();
   }
   function removePair(i: number): void {
-    draft.payload.pairs = (draft.payload.pairs ?? []).filter((_: unknown, k: number) => k !== i);
+    draft.payload.pairs = (draft.payload.pairs ?? []).filter((_, k) => k !== i);
     touch();
   }
 

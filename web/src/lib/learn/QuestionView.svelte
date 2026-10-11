@@ -1,8 +1,7 @@
 <script lang="ts">
   import Icon from '$lib/components/Icon.svelte';
   import { speak } from '$lib/learn/speech';
-  import { toneParts } from '$lib/utils/pinyin';
-  import { isChoice, PAIR_COLORS, type Answer } from '$lib/utils/grade';
+  import { isChoice, PAIR_COLORS, type Answer, type Payload } from '$lib/utils/grade';
 
   // Hiển thị một câu hỏi cho người học, dùng chung cho Bài tập và Kiểm tra (06 §6).
   // Component không tự chấm: trang gọi nó quyết định `state` để tô màu.
@@ -18,7 +17,7 @@
     mobile = false,
   }: {
     type: string;
-    payload: Record<string, any>;
+    payload: Payload;
     answer: Answer;
     locked?: boolean;
     rightIndex?: number | null;
@@ -69,7 +68,7 @@
   let selLeft = $state<number | null>(null);
 
   const pairs = $derived<Record<number, number>>(
-    answer && typeof answer === 'object' && !Array.isArray(answer) ? ((answer as any).pairs ?? {}) : {},
+    answer && typeof answer === 'object' && !Array.isArray(answer) ? ((answer as { pairs?: Record<number, number> }).pairs ?? {}) : {},
   );
 
   function clickLeft(i: number): void {

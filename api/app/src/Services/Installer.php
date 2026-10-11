@@ -102,6 +102,56 @@ final class Installer
         ]);
     }
 
+    /** Mật khẩu hai tài khoản mẫu ở máy dev — README §"Hai tài khoản mẫu". */
+    public const DEMO_PASSWORD = 'Zika@2026';
+
+    /** @var list<array{email: string, name: string, role: string}> */
+    private const DEMO_USERS = [
+        ['email' => 'admin@zika.local', 'name' => 'Quan tri vien', 'role' => 'admin'],
+        ['email' => 'hocvien@zika.local', 'name' => 'Minh Anh', 'role' => 'learner'],
+    ];
+
+    /**
+     * Tạo (hoặc đặt lại mật khẩu) hai tài khoản mẫu: một admin, một người học.
+     * Chỉ dùng ở máy dev — mật khẩu nằm ngay trong mã nguồn nên không được chạy trên web thật.
+     *
+     * @return list<string> email đã xử lý
+     */
+    public static function seedDemoUsers(string $password = self::DEMO_PASSWORD): array
+    {
+        if (($pp = Auth::passwordProblem($password)) !== null) {
+            throw HttpError::validation(['password' => $pp]);
+        }
+        $done = [];
+        foreach (self::DEMO_USERS as $u) {
+            $hash = Auth::hashPassword($password);
+            $existing = Db::one('SELECT id FROM users WHERE email = ?', [$u['email']]);
+            if ($existing !== null) {
+                // Giữ nguyên tiến độ học, chỉ đặt lại mật khẩu và mở lại khoá nếu có.
+                Db::exec(
+                    "UPDATE users SET password_hash = ?, role = ?, status = 'active',
+                                     email_verified_at = COALESCE(email_verified_at, NOW())
+                     WHERE id = ?",
+                    [$hash, $u['role'], $existing['id']],
+                );
+            } else {
+                Db::insert('users', [
+                    'email' => $u['email'],
+                    'password_hash' => $hash,
+                    'full_name' => $u['name'],
+                    'display_name' => $u['name'],
+                    'role' => $u['role'],
+                    'signup_method' => 'email',
+                    'email_verified_at' => Clock::sql(),
+                    'terms_accepted_at' => Clock::sql(),
+                    'created_at' => Clock::sql(),
+                ]);
+            }
+            $done[] = $u['email'];
+        }
+        return $done;
+    }
+
     /** Nạp dữ liệu mẫu (chỉ máy dev) rồi tải dữ liệu nét chữ. Trả số chữ tải được. */
     public static function seedDemo(): int
     {

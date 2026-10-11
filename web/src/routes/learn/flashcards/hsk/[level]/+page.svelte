@@ -54,7 +54,6 @@
 
   const loading = $derived(!failed && !notFound && (content === null || prog === null));
   const rowOf = (lessonId: number): ProgressRow | undefined => prog?.lessons.find((r) => r.lessonId === lessonId);
-  const wordCountOf = (lessonId: number): number => content?.lessons.find((l) => l.id === lessonId)?.counts.lt ?? 0;
 
   function pickDefault(): number | 'all' {
     if (page.url.searchParams.get('review') === '1') return 'all';

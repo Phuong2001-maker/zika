@@ -1,6 +1,7 @@
 // Kiểu dữ liệu và lời gọi API của khu quản trị (04 §10).
 import { api } from '$lib/api/client';
 import type { Part } from '$lib/api/types';
+import type { Payload } from '$lib/utils/grade';
 
 /* ---------------- Cấp, bài, từ ---------------- */
 
@@ -70,7 +71,7 @@ export interface DictLookup {
 export interface AdminQuestion {
   id: number;
   type: string;
-  payload: Record<string, unknown>;
+  payload: Payload;
   explain: string | null;
   score: number;
   sortOrder: number;
@@ -82,7 +83,7 @@ export interface AdminQuestion {
 export interface Draft {
   id: number | null;
   type: string;
-  payload: Record<string, any>;
+  payload: Payload;
   explain: string;
   score: number;
 }

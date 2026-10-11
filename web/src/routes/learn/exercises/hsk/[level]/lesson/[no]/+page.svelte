@@ -13,14 +13,14 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import QuestionView from '$lib/learn/QuestionView.svelte';
   import { lessonByNo } from '$lib/learn/lesson';
-  import { answered, check, rightAnswerText, TYPE_LABEL, type Answer } from '$lib/utils/grade';
+  import { answered, check, rightAnswerText, TYPE_LABEL, type Answer, type Payload } from '$lib/utils/grade';
   import type { LessonRef, NextLesson } from '$lib/api/types';
 
   // Bài tập · Làm bài (07 §6). Chấm ngay tại máy, server chấm lại khi lưu.
   interface Q {
     id: number;
     type: string;
-    payload: Record<string, any>;
+    payload: Payload;
     explain: string | null;
   }
 

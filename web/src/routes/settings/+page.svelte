@@ -6,7 +6,6 @@
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import { toast } from '$lib/stores/toast.svelte';
-  import Topbar from '$lib/components/Topbar.svelte';
   import Switcher from '$lib/components/Switcher.svelte';
   import Avatar from '$lib/components/Avatar.svelte';
   import Icon from '$lib/components/Icon.svelte';
@@ -96,7 +95,7 @@
   </section>
 {/snippet}
 
-{#snippet body(m: boolean)}
+{#snippet body(_m: boolean)}
   <!-- Phát âm -->
   <section class="block card">
     <h2 class="h2">Phát âm</h2>
@@ -242,7 +241,7 @@
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px">
       <a href="/account" class="btn btn-sm">Tài khoản</a>
       <Switcher current="lt" />
-      <Avatar size={44} accountCurrent />
+      <Avatar size={44} current />
     </div>
   </header>
 

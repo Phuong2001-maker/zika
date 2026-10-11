@@ -64,8 +64,13 @@
 
   // Theo dõi phiên chỉ chạy khi đã đăng nhập (02 §3.4).
   $effect(() => {
-    if (session.user) heartbeat.start((a) => (session.announcements = a));
-    else heartbeat.stop();
+    if (session.user) {
+      heartbeat.start((a) => {
+        session.announcements = a;
+      });
+    } else {
+      heartbeat.stop();
+    }
   });
 
   // Trang quản trị luôn dùng bảng màu sáng (05 §2).

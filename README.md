@@ -29,6 +29,20 @@ dev/               file .cmd bật MariaDB / API / web trên máy Windows
 
 Email ở máy dev không gửi thật mà ghi vào `api/app/storage/logs/mail-YYYY-MM-DD.log`.
 
+### Hai tài khoản mẫu (chỉ dùng ở máy dev)
+
+| Vai trò | Email | Mật khẩu |
+| --- | --- | --- |
+| Quản trị (admin) | `admin@zika.local` | `Zika@2026` |
+| Người học (learner) | `hocvien@zika.local` | `Zika@2026` |
+
+Admin vào được `/admin`; người học chỉ thấy phần `/learn`. Đổi mật khẩu trong
+`Tài khoản → Bảo mật`, hoặc đặt lại bằng:
+
+```bash
+php api/app/tools/install.php --reset-demo-password
+```
+
 ## Kiểm thử
 
 ```bash

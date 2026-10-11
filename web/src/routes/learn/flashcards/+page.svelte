@@ -5,7 +5,7 @@
   import { session } from '$lib/stores/session.svelte';
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
-  import { ago, num } from '$lib/utils/format';
+  import { ago } from '$lib/utils/format';
   import Topbar from '$lib/components/Topbar.svelte';
   import Switcher from '$lib/components/Switcher.svelte';
   import Avatar from '$lib/components/Avatar.svelte';

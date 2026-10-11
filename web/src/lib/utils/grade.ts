@@ -1,6 +1,33 @@
 // Chấm câu hỏi ở trình duyệt (06 §3). Bản PHP tương ứng: api/app/src/Services/QuestionGrader.php.
 // Hai bản phải cho cùng kết quả — sửa bên này nhớ sửa cả bên kia.
 
+/**
+ * Nội dung một câu hỏi. Mỗi dạng câu dùng một nhóm trường khác nhau nên để index
+ * signature, nhưng vẫn khai báo sẵn các trường hay dùng để không phải ép kiểu.
+ */
+export interface Payload {
+  [key: string]: unknown;
+  word?: string;
+  ask?: string;
+  vi?: string;
+  sentence?: string;
+  showMeaning?: boolean;
+  audioText?: string;
+  audioUrl?: string | null;
+  options?: string[];
+  tiles?: string[];
+  pairs?: [string, string][];
+  left?: string[];
+  right?: string[];
+  passage?: string;
+  statement?: string;
+  zh?: string;
+  pinyin?: string;
+  sample?: string;
+  keywords?: string[];
+  answer?: number | boolean | string;
+}
+
 export const CHOICE_TYPES = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'fill', 'pick', 'toZh'];
 
 export type Answer = number | boolean | string | number[] | { pairs: Record<number, number> } | null;
@@ -11,7 +38,7 @@ export function isChoice(type: string): boolean {
 
 /** Chữ Hán: bỏ khoảng trắng và dấu câu Trung/Anh. */
 export function normZh(s: string): string {
-  return s.normalize('NFC').replace(/[\s，。！？、；：“”‘’（）《》,.!?;:'"()\-]/g, '');
+  return s.normalize('NFC').replace(/[\s，。！？、；：“”‘’（）《》,.!?;:'"()-]/g, '');
 }
 
 /** Tiếng Việt: thường hoá, bỏ dấu câu, gộp khoảng trắng, GIỮ dấu thanh. */
@@ -29,7 +56,7 @@ export function normVi(s: string): string {
 }
 
 /** Người học đã trả lời câu này chưa. */
-export function answered(type: string, payload: Record<string, any>, a: Answer): boolean {
+export function answered(type: string, payload: Payload, a: Answer): boolean {
   if (a === null || a === undefined) return false;
   if (isChoice(type)) return typeof a === 'number';
   if (type === 'order') return Array.isArray(a) && a.length === (payload.tiles ?? []).length;
@@ -43,11 +70,11 @@ export function answered(type: string, payload: Record<string, any>, a: Answer):
 }
 
 /** Chấm đúng/sai. `payload` là bản đầy đủ (có đáp án) — chỉ dùng cho Bài tập. */
-export function check(type: string, payload: Record<string, any>, a: Answer): boolean {
+export function check(type: string, payload: Payload, a: Answer): boolean {
   if (isChoice(type)) return typeof a === 'number' && a === payload.answer;
 
   if (type === 'order') {
-    const tiles: string[] = payload.tiles ?? [];
+    const tiles = payload.tiles ?? [];
     if (!Array.isArray(a) || a.length !== tiles.length) return false;
     const built = (a as number[]).map((i) => tiles[i] ?? '').join('');
     return normZh(built) === normZh(String(payload.answer ?? ''));
@@ -56,7 +83,7 @@ export function check(type: string, payload: Record<string, any>, a: Answer): bo
   if (type === 'trans') {
     if (typeof a !== 'string' || a.trim() === '') return false;
     const got = normVi(a);
-    return (payload.keywords ?? []).every((kw: string) =>
+    return (payload.keywords ?? []).every((kw) =>
       String(kw)
         .split('|')
         .some((variant) => {
@@ -80,12 +107,12 @@ export function check(type: string, payload: Record<string, any>, a: Answer): bo
 }
 
 /** Chuỗi đáp án đúng để hiện ở khung phản hồi. */
-export function rightAnswerText(type: string, payload: Record<string, any>): string {
-  if (isChoice(type)) return String((payload.options ?? [])[payload.answer] ?? '');
+export function rightAnswerText(type: string, payload: Payload): string {
+  if (isChoice(type)) return String((payload.options ?? [])[Number(payload.answer)] ?? '');
   if (type === 'order') return String(payload.answer ?? '');
   if (type === 'trans') return String(payload.sample ?? '');
   if (type === 'tf') return payload.answer ? 'Đúng' : 'Sai';
-  if (type === 'match') return (payload.pairs ?? []).map((p: string[]) => `${p[0]} ${p[1]}`).join(' · ');
+  if (type === 'match') return (payload.pairs ?? []).map((p) => `${p[0]} ${p[1]}`).join(' · ');
   return '';
 }
 

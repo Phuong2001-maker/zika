@@ -4,7 +4,6 @@
   import { goto } from '$app/navigation';
   import { media } from '$lib/stores/media.svelte';
   import { toast } from '$lib/stores/toast.svelte';
-  import { num } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';

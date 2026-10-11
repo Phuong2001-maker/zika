@@ -417,8 +417,8 @@ button.ava { cursor: pointer; width: 40px; height: 40px; }
 .kpi .muted { color: var(--text-2); }
 .mtabs { display: flex; gap: 4px; overflow-x: auto; padding: 8px 12px; background: var(--surface); border-bottom: 1px solid var(--line); scrollbar-width: none; }
 .mtabs::-webkit-scrollbar { display: none; }
-.mtabs a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 13px; border-radius: var(--r-sm); border: 0; white-space: nowrap; color: var(--text-2); font-weight: 600; font-size: 14px; text-decoration: none; }
-.mtabs a.on { background: var(--son-soft); color: var(--son-text); }
+.mtabs a, .mtabs button { display: inline-flex; align-items: center; gap: 5px; min-height: 36px; padding: 0 13px; border-radius: var(--r-sm); border: 0; background: transparent; white-space: nowrap; color: var(--text-2); font-family: inherit; font-weight: 600; font-size: 14px; text-decoration: none; cursor: pointer; }
+.mtabs a.on, .mtabs button.on { background: var(--son-soft); color: var(--son-text); }
 
 /* =====================================================================
    Thành phần bổ sung (mockup chưa vẽ) — cùng ngôn ngữ thiết kế

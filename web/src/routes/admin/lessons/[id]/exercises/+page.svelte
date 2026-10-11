@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/state';
-  import { media } from '$lib/stores/media.svelte';
   import { toast } from '$lib/stores/toast.svelte';
   import { ApiError } from '$lib/api/client';
   import Icon from '$lib/components/Icon.svelte';

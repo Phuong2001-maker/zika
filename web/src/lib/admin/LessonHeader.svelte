@@ -78,7 +78,6 @@
     void goto(slug === 'words' ? `/admin/words?level=${lesson?.levelId}&lesson=${lessonId}` : `/admin/lessons/${lessonId}/${slug}`);
   }
 
-  const partLabel = $derived(PART_COL.find((c) => c.part === part)?.label ?? '');
   /** Mở màn người học tương ứng kèm ?preview=1 để xem cả bài Nháp. */
   const previewHref = $derived(
     lesson ? `/learn/${{ lt: 'flashcards', bt: 'exercises', kt: 'tests', lv: 'writing', ht: 'dialogues', np: 'grammar' }[part]}/hsk/${lesson.levelId}/lesson/${lesson.no}?preview=1` : '#',
@@ -100,11 +99,9 @@
     </header>
     <div class="mtabs" style="margin: 0 -14px 14px">
       {#each PART_COL as c (c.key)}
-        <a
-          href={'#'}
-          class:on={c.part === part}
-          onclick={(e) => { e.preventDefault(); go(c.part); }}
-        >{c.label} <span class="muted num">{lesson.counts[c.key]}</span></a>
+        <button type="button" class:on={c.part === part} onclick={() => go(c.part)}>
+          {c.label} <span class="muted num">{lesson.counts[c.key]}</span>
+        </button>
       {/each}
     </div>
   {:else}
