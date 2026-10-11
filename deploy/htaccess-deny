@@ -1,0 +1,2 @@
+# Đặt vào <APP_DIR>/.htaccess phòng khi thư mục app lỡ nằm trong public_html: chặn mọi truy cập web.
+Require all denied

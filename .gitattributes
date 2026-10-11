@@ -1,0 +1,2 @@
+# Script shell phải giữ xuống dòng LF để chạy được trên hosting Linux.
+*.sh text eol=lf

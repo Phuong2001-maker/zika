@@ -1,0 +1,78 @@
+<?php
+declare(strict_types=1);
+
+use Zika\Controllers\Admin\ContentController as Content;
+use Zika\Controllers\Admin\DialogueController as Dialogue;
+use Zika\Controllers\Admin\MiscController as Misc;
+use Zika\Controllers\Admin\QuestionController as Question;
+use Zika\Controllers\Admin\WritingController as Writing;
+
+// Soạn nội dung (04 §10.1, §10.3–§10.6). Quyền E = biên tập + quản trị.
+return [
+    // Chung
+    ['GET',  '/admin/badges', [Misc::class, 'badges'], 'E'],
+    ['GET',  '/admin/staff', [Misc::class, 'staff'], 'E'],
+    ['GET',  '/admin/dict', [Misc::class, 'dict'], 'E'],
+    ['POST', '/admin/media/image', [Misc::class, 'image'], 'E'],
+    ['POST', '/admin/media/audio', [Misc::class, 'audio'], 'E'],
+
+    // Cấp
+    ['GET',   '/admin/levels', [Content::class, 'levels'], 'E'],
+    ['PATCH', '/admin/levels/{id}', [Content::class, 'updateLevel'], 'A'],
+
+    // Bài học
+    ['GET',    '/admin/levels/{id}/lessons', [Content::class, 'lessons'], 'E'],
+    ['POST',   '/admin/levels/{id}/lessons', [Content::class, 'createLesson'], 'E'],
+    ['PUT',    '/admin/levels/{id}/lessons/order', [Content::class, 'reorderLessons'], 'E'],
+    ['GET',    '/admin/lessons/{id}', [Content::class, 'lesson'], 'E'],
+    ['PATCH',  '/admin/lessons/{id}', [Content::class, 'updateLesson'], 'E'],
+    ['DELETE', '/admin/lessons/{id}', [Content::class, 'deleteLesson'], 'E'],
+
+    // Từ vựng
+    ['GET',    '/admin/words', [Content::class, 'words'], 'E'],
+    ['POST',   '/admin/words', [Content::class, 'createWord'], 'E'],
+    ['POST',   '/admin/words/bulk', [Content::class, 'bulkWords'], 'E'],
+    ['GET',    '/admin/words/{id}', [Content::class, 'word'], 'E'],
+    ['PUT',    '/admin/words/{id}', [Content::class, 'updateWord'], 'E'],
+    ['DELETE', '/admin/words/{id}', [Content::class, 'deleteWord'], 'E'],
+    ['PUT',    '/admin/lessons/{id}/words/order', [Content::class, 'reorderWords'], 'E'],
+
+    // Bài tập · Kiểm tra
+    ['GET',    '/admin/lessons/{id}/questions', [Question::class, 'index'], 'E'],
+    ['POST',   '/admin/lessons/{id}/questions', [Question::class, 'create'], 'E'],
+    ['PUT',    '/admin/lessons/{id}/questions/order', [Question::class, 'reorder'], 'E'],
+    ['POST',   '/admin/lessons/{id}/questions/copy-from-bt', [Question::class, 'copyFromBt'], 'E'],
+    ['PUT',    '/admin/questions/{id}', [Question::class, 'update'], 'E'],
+    ['DELETE', '/admin/questions/{id}', [Question::class, 'delete'], 'E'],
+    ['PUT',    '/admin/lessons/{id}/test-config', [Question::class, 'testConfig'], 'E'],
+
+    // Thi thử
+    ['GET',    '/admin/levels/{id}/mock-tests', [Question::class, 'mockTests'], 'E'],
+    ['POST',   '/admin/levels/{id}/mock-tests', [Question::class, 'createMock'], 'E'],
+    ['PATCH',  '/admin/mock-tests/{id}', [Question::class, 'updateMock'], 'E'],
+    ['DELETE', '/admin/mock-tests/{id}', [Question::class, 'deleteMock'], 'E'],
+    ['GET',    '/admin/mock-tests/{id}/questions', [Question::class, 'mockQuestions'], 'E'],
+    ['POST',   '/admin/mock-tests/{id}/questions', [Question::class, 'createMockQuestion'], 'E'],
+    ['PUT',    '/admin/mock-tests/{id}/questions/order', [Question::class, 'reorderMockQuestions'], 'E'],
+    ['POST',   '/admin/mock-tests/{id}/copy-from-tests', [Question::class, 'copyIntoMockTest'], 'E'],
+
+    // Luyện viết
+    ['GET',    '/admin/lessons/{id}/writing', [Writing::class, 'index'], 'E'],
+    ['POST',   '/admin/lessons/{id}/writing/from-words', [Writing::class, 'fromWords'], 'E'],
+    ['POST',   '/admin/lessons/{id}/writing/chars', [Writing::class, 'addChar'], 'E'],
+    ['PUT',    '/admin/lessons/{id}/writing/order', [Writing::class, 'reorder'], 'E'],
+    ['PUT',    '/admin/lessons/{id}/writing/config', [Writing::class, 'config'], 'E'],
+    ['PATCH',  '/admin/lesson-chars/{id}', [Writing::class, 'updateLessonChar'], 'E'],
+    ['DELETE', '/admin/lesson-chars/{id}', [Writing::class, 'deleteLessonChar'], 'E'],
+    ['POST',   '/admin/characters/{id}/stroke-data', [Writing::class, 'uploadStroke'], 'E'],
+    ['POST',   '/admin/characters/{id}/stroke-data/fetch', [Writing::class, 'fetchStroke'], 'E'],
+
+    // Hội thoại · Ngữ pháp
+    ['GET',    '/admin/lessons/{id}/dialogue', [Dialogue::class, 'get'], 'E'],
+    ['PUT',    '/admin/lessons/{id}/dialogue', [Dialogue::class, 'save'], 'E'],
+    ['GET',    '/admin/lessons/{id}/grammar', [Dialogue::class, 'grammar'], 'E'],
+    ['POST',   '/admin/lessons/{id}/grammar', [Dialogue::class, 'createGrammar'], 'E'],
+    ['PUT',    '/admin/lessons/{id}/grammar/order', [Dialogue::class, 'reorderGrammar'], 'E'],
+    ['PUT',    '/admin/grammar/{id}', [Dialogue::class, 'updateGrammar'], 'E'],
+    ['DELETE', '/admin/grammar/{id}', [Dialogue::class, 'deleteGrammar'], 'E'],
+];
