@@ -1,9 +1,14 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import { homePath } from '$lib/auth/routes';
   import { session } from '$lib/stores/session.svelte';
 
   // Trang 404 (07 §13). Lỗi khác 404 (hiếm, vì SPA) dùng cùng khung với câu chung.
   const notFound = $derived(page.status === 404);
+  const home = $derived(session.user ? homePath(session.user.role) : '/login');
+  const homeLabel = $derived(
+    !session.user ? 'Về trang đăng nhập' : session.user.role === 'learner' ? 'Về Bàn học' : 'Về khu quản trị',
+  );
 </script>
 
 <svelte:head><title>{notFound ? 'Không tìm thấy trang' : 'Có lỗi xảy ra'} · Zìkǎ</title></svelte:head>
@@ -15,7 +20,7 @@
     <p class="muted" style="font-size: 15.5px">
       {notFound ? 'Trang bạn tìm không có hoặc đã bị chuyển.' : 'Có lỗi xảy ra, thử lại sau.'}
     </p>
-    <a href={session.user ? '/learn/flashcards' : '/login'} class="btn btn-son btn-lg">{session.user ? 'Về Bàn học' : 'Về trang đăng nhập'}</a>
+    <a href={home} class="btn btn-son btn-lg">{homeLabel}</a>
   </div>
 </main>
 

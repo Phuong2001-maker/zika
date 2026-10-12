@@ -4,6 +4,7 @@
   import { page } from '$app/state';
   import { api, ApiError } from '$lib/api/client';
   import type { User } from '$lib/api/types';
+  import { homePath } from '$lib/auth/routes';
   import AuthShell from '$lib/components/AuthShell.svelte';
   import IconTile from '$lib/components/IconTile.svelte';
   import { media } from '$lib/stores/media.svelte';
@@ -47,12 +48,15 @@
   }
 
   const m = $derived(media.isMobile);
-  const back = $derived(session.user ? '/learn/flashcards' : '/login');
+  const back = $derived(session.user ? homePath(session.user.role) : '/login');
+  const backLabel = $derived(
+    !session.user ? 'Quay lại đăng nhập' : session.user.role === 'learner' ? 'Về Bàn học' : 'Về khu quản trị',
+  );
 </script>
 
 <svelte:head><title>Lời mời quản trị · Zìkǎ</title></svelte:head>
 
-<AuthShell backHref={back} backLabel={session.user ? 'Về Bàn học' : 'Quay lại đăng nhập'}>
+<AuthShell backHref={back} backLabel={backLabel}>
   {#if !info}
     <div class="skel" style="height: 180px"></div>
   {:else if !info.valid}

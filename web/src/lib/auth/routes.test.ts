@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isAdminRoute, isGuestOnly, isPublicRoute, loginUrl, safeNext } from './routes';
+import { canView, homePath, isAdminRoute, isGuestOnly, isPublicRoute, landingPath, loginUrl, safeNext } from './routes';
 import { emailProblem, nameProblem, passwordProblem } from '$lib/utils/validate';
 
 describe('phân loại route', () => {
@@ -22,6 +22,43 @@ describe('phân loại route', () => {
     expect(safeNext('/\\evil.com')).toBe('/learn/flashcards');
     expect(safeNext(null)).toBe('/learn/flashcards');
     expect(loginUrl('/learn/flashcards/hsk/2?lesson=6')).toBe('/login?next=%2Flearn%2Fflashcards%2Fhsk%2F2%3Flesson%3D6');
+  });
+});
+
+describe('vào trang nào sau khi đăng nhập', () => {
+  it('mỗi vai trò có một trang nhà', () => {
+    expect(homePath('admin')).toBe('/admin');
+    expect(homePath('editor')).toBe('/admin/lessons');
+    expect(homePath('learner')).toBe('/learn/flashcards');
+    expect(homePath(null)).toBe('/learn/flashcards');
+  });
+
+  it('học viên không mở được khu quản trị', () => {
+    expect(canView('learner', '/admin/users')).toBe(false);
+    expect(canView('learner', '/learn/flashcards')).toBe(true);
+    expect(canView('editor', '/admin/lessons')).toBe(true);
+    expect(canView('admin', '/admin')).toBe(true);
+  });
+
+  it('không có “next” thì về trang nhà của vai trò', () => {
+    expect(landingPath('admin', null)).toBe('/admin');
+    expect(landingPath('editor', null)).toBe('/admin/lessons');
+    expect(landingPath('learner', null)).toBe('/learn/flashcards');
+  });
+
+  it('có “next” hợp lệ và đúng quyền thì theo “next”', () => {
+    expect(landingPath('admin', '/learn/tests/hsk/2')).toBe('/learn/tests/hsk/2');
+    expect(landingPath('learner', '/learn/writing/hsk/1')).toBe('/learn/writing/hsk/1');
+    expect(landingPath('editor', '/admin/words')).toBe('/admin/words');
+  });
+
+  it('“next” trỏ vào chỗ không có quyền thì bỏ, về trang nhà', () => {
+    expect(landingPath('learner', '/admin/users')).toBe('/learn/flashcards');
+  });
+
+  it('“next” ra ngoài site thì bỏ (chống chuyển hướng mở)', () => {
+    expect(landingPath('admin', 'https://evil.com')).toBe('/admin');
+    expect(landingPath('learner', '//evil.com')).toBe('/learn/flashcards');
   });
 });
 

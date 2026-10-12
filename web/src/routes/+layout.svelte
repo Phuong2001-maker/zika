@@ -9,7 +9,7 @@
   import { heartbeat } from '$lib/stores/heartbeat';
   import { toast } from '$lib/stores/toast.svelte';
   import Toaster from '$lib/components/Toaster.svelte';
-  import { isAdminRoute, isGuestOnly, isPublicRoute, loginUrl, safeNext } from '$lib/auth/routes';
+  import { canView, homePath, isAdminRoute, isGuestOnly, isPublicRoute, landingPath, loginUrl } from '$lib/auth/routes';
   import { registerServiceWorker } from '$lib/utils/pwa';
 
   let { children }: { children: Snippet } = $props();
@@ -43,7 +43,7 @@
     if (p === '/') return false;
     if (!u) return isPublicRoute(p);
     if (isGuestOnly(p)) return false;
-    if (isAdminRoute(p) && u.role === 'learner') return false;
+    if (!canView(u.role, p)) return false;
     return true;
   });
 
@@ -53,13 +53,13 @@
     const p = page.url.pathname;
     const u = session.user;
     if (p === '/') {
-      void goto(u ? '/learn/flashcards' : '/login', { replaceState: true });
+      void goto(u ? homePath(u.role) : '/login', { replaceState: true });
     } else if (!u && !isPublicRoute(p)) {
       void goto(loginUrl(p + page.url.search), { replaceState: true });
     } else if (u && isGuestOnly(p)) {
-      void goto(safeNext(page.url.searchParams.get('next')), { replaceState: true });
-    } else if (u && isAdminRoute(p) && u.role === 'learner') {
-      void goto('/learn/flashcards', { replaceState: true });
+      void goto(landingPath(u.role, page.url.searchParams.get('next')), { replaceState: true });
+    } else if (u && !canView(u.role, p)) {
+      void goto(homePath(u.role), { replaceState: true });
     }
   });
 

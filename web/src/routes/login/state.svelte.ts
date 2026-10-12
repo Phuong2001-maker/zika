@@ -3,8 +3,8 @@
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
 import { api, apiUrl, ApiError } from '$lib/api/client';
-import type { SelfLevel, User } from '$lib/api/types';
-import { safeNext } from '$lib/auth/routes';
+import type { User } from '$lib/api/types';
+import { landingPath, safeNext } from '$lib/auth/routes';
 import { session } from '$lib/stores/session.svelte';
 import { toast } from '$lib/stores/toast.svelte';
 import { emailProblem, nameProblem, passwordProblem } from '$lib/utils/validate';
@@ -31,20 +31,23 @@ export class LoginState {
   name = $state('');
   regEmail = $state('');
   regPassword = $state('');
-  selfLevel = $state<SelfLevel>('beginner');
-  accept = $state(false);
 
   errors = $state<Record<string, string>>({});
   busy = $state(false);
-  doc = $state<'privacy' | 'terms' | null>(null);
 
   /** Đăng ký xong cần xác nhận email → hiện “Kiểm tra email của bạn”. */
   verifySent = $state<{ masked: string; email: string } | null>(null);
   cooldown = $state(0);
   private timer: ReturnType<typeof setInterval> | null = null;
 
+  /** “next” thô trên URL. Google dùng cái này vì lúc bấm nút chưa biết đăng nhập vào tài khoản nào. */
+  get rawNext(): string | null {
+    return page.url.searchParams.get('next');
+  }
+
+  /** Đích sau khi đăng nhập xong: theo “next” nếu có, không thì về trang nhà của vai trò vừa đăng nhập. */
   get next(): string {
-    return safeNext(page.url.searchParams.get('next'));
+    return landingPath(session.user?.role ?? 'learner', this.rawNext);
   }
 
   startCooldown(): void {
@@ -70,11 +73,10 @@ export class LoginState {
     this.needVerifyEmail = null;
   }
 
-  googleHref(withLevel: boolean): string {
+  googleHref(): string {
     return apiUrl('/auth/google/start', {
       remember: this.remember ? 1 : 0,
-      next: this.next,
-      selfLevel: withLevel ? this.selfLevel : undefined,
+      next: safeNext(this.rawNext, '/'),
     });
   }
 
@@ -127,14 +129,14 @@ export class LoginState {
     if (em) errs.email = em;
     const pw = passwordProblem(this.regPassword);
     if (pw) errs.password = pw;
-    if (!this.accept) errs.acceptTerms = 'Bạn cần đồng ý với Điều khoản và Chính sách riêng tư.';
     this.errors = errs;
     if (Object.keys(errs).length) return;
     this.busy = true;
     try {
+      // Form không hỏi trình độ nữa (API tự lấy “beginner”); acceptTerms vẫn phải gửi vì API bắt buộc.
       const res = await api.post<{ verifyRequired?: boolean; emailMasked?: string; user?: User; csrf?: string }>(
         '/auth/register',
-        { displayName: this.name.trim(), email: this.regEmail.trim(), password: this.regPassword, selfLevel: this.selfLevel, acceptTerms: true },
+        { displayName: this.name.trim(), email: this.regEmail.trim(), password: this.regPassword, acceptTerms: true },
         { quiet: true },
       );
       if (res.verifyRequired) {

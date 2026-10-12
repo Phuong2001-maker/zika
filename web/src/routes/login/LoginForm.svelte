@@ -1,6 +1,5 @@
 <script lang="ts">
   import GoogleLogo from '$lib/components/GoogleLogo.svelte';
-  import DocModal from '$lib/components/DocModal.svelte';
   import IconTile from '$lib/components/IconTile.svelte';
   import { session } from '$lib/stores/session.svelte';
   import type { LoginState } from './state.svelte';
@@ -13,12 +12,6 @@
   const emailOn = $derived(cfg?.emailEnabled ?? true);
   const signupOn = $derived(cfg?.allowSignup ?? true);
   const inpStyle = $derived(mobile ? 'font-size: 16px; height: 50px' : '');
-  const LEVELS: [string, string][] = [
-    ['beginner', 'Mới bắt đầu'],
-    ['hsk12', 'HSK 1–2'],
-    ['hsk34', 'HSK 3–4'],
-    ['hsk5', 'HSK 5+'],
-  ];
 </script>
 
 {#if st.verifySent}
@@ -46,7 +39,7 @@
   {#if st.tab === 'login'}
     <form class="stack" style="gap: {mobile ? 14 : 16}px" onsubmit={st.login} novalidate>
       {#if googleOn}
-        <a class="btn btn-google" style="width: 100%; min-height: 50px" href={st.googleHref(false)}><GoogleLogo /> Tiếp tục với Google</a>
+        <a class="btn btn-google" style="width: 100%; min-height: 50px" href={st.googleHref()}><GoogleLogo /> Tiếp tục với Google</a>
         {#if emailOn}
           <div class="divider"><span class="rule" style="flex: 1"></span>hoặc dùng email<span class="rule" style="flex: 1"></span></div>
         {/if}
@@ -104,7 +97,7 @@
   {:else}
     <form class="stack" style="gap: 14px" onsubmit={st.register} novalidate>
       {#if googleOn}
-        <a class="btn btn-google" style="width: 100%; min-height: 50px" href={st.googleHref(true)}><GoogleLogo /> Đăng ký bằng Google</a>
+        <a class="btn btn-google" style="width: 100%; min-height: 50px" href={st.googleHref()}><GoogleLogo /> Đăng ký bằng Google</a>
         {#if emailOn}
           <div class="divider"><span class="rule" style="flex: 1"></span>hoặc dùng email<span class="rule" style="flex: 1"></span></div>
         {/if}
@@ -126,36 +119,12 @@
           {#if st.errors.password}<p class="err">{st.errors.password}</p>{/if}
         </div>
       {/if}
-      <fieldset style="border: 0; padding: 0; margin: 0">
-        <legend class="lbl" style="padding: 0">Bạn đang học tới đâu?</legend>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px">
-          {#each LEVELS as [v, label] (v)}
-            <label class="pick"><input type="radio" name="rg-lv" value={v} bind:group={st.selfLevel} /><span>{label}</span></label>
-          {/each}
-        </div>
-      </fieldset>
-      {#if emailOn}
-        <label class="chk" style="align-items: flex-start; line-height: 1.45; padding-top: {mobile ? 0 : 4}px">
-          <input type="checkbox" style="margin-top: 1px" bind:checked={st.accept} aria-invalid={!!st.errors.acceptTerms} />
-          <span>
-            Tôi đồng ý với
-            <a href="/pages/terms" onclick={(e) => { e.preventDefault(); st.doc = 'terms'; }}>Điều khoản</a>
-            và
-            <a href="/pages/privacy" onclick={(e) => { e.preventDefault(); st.doc = 'privacy'; }}>Chính sách riêng tư</a>{mobile ? '.' : ', kể cả việc ghi lại thời gian học để thống kê.'}
-          </span>
-        </label>
-        {#if st.errors.acceptTerms}<p class="err" style="margin-top: -8px">{st.errors.acceptTerms}</p>{/if}
-      {/if}
       {#if st.serverError}<div class="err-box" role="alert">{st.serverError}</div>{/if}
       {#if emailOn}
         <button type="submit" class="btn btn-son btn-lg" style="width: 100%" disabled={st.busy}>{st.busy ? 'Đang tạo tài khoản…' : 'Tạo tài khoản'}</button>
       {/if}
     </form>
   {/if}
-{/if}
-
-{#if st.doc}
-  <DocModal slug={st.doc} onclose={() => (st.doc = null)} />
 {/if}
 
 <style>

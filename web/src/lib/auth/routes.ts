@@ -1,5 +1,7 @@
 // Phân loại route để chặn/chuyển hướng theo trạng thái đăng nhập (07 §0, 08 §0).
 
+import type { Role } from '$lib/api/types';
+
 /** Route ai cũng mở được (khách chưa đăng nhập). */
 const PUBLIC_PREFIXES = ['/login', '/forgot', '/reset', '/verify-email', '/invite', '/pages/'];
 
@@ -31,4 +33,23 @@ export function safeNext(next: string | null | undefined, fallback = '/learn/fla
 /** /login?next=<đường dẫn hiện tại> */
 export function loginUrl(currentPathWithSearch: string): string {
   return `/login?next=${encodeURIComponent(currentPathWithSearch)}`;
+}
+
+/** Trang nhà theo vai trò: quản trị → Tổng quan, biên tập → Bài học, học viên → Bàn học (07 §0, 08 §0). */
+export function homePath(role: Role | null | undefined): string {
+  if (role === 'admin') return '/admin';
+  if (role === 'editor') return '/admin/lessons';
+  return '/learn/flashcards';
+}
+
+/** Vai trò này mở được đường dẫn không: học viên không vào khu quản trị. */
+export function canView(role: Role, path: string): boolean {
+  return !(isAdminRoute(path) && role === 'learner');
+}
+
+/** Đích sau khi đăng nhập: theo “next” nếu hợp lệ và đúng quyền, không thì về trang nhà của vai trò. */
+export function landingPath(role: Role, next?: string | null): string {
+  const home = homePath(role);
+  const target = safeNext(next, home);
+  return canView(role, target) ? target : home;
 }

@@ -6,6 +6,7 @@
   import type { User } from '$lib/api/types';
   import AuthShell from '$lib/components/AuthShell.svelte';
   import IconTile from '$lib/components/IconTile.svelte';
+  import { homePath } from '$lib/auth/routes';
   import { media } from '$lib/stores/media.svelte';
   import { session } from '$lib/stores/session.svelte';
   import { toast } from '$lib/stores/toast.svelte';
@@ -24,7 +25,7 @@
       const res = await api.post<{ user: User; csrf: string }>('/auth/verify-email', { token }, { quiet: true });
       await session.signedIn(res.csrf);
       toast.ok('Đã xác nhận email. Chào mừng bạn!');
-      await goto('/learn/flashcards', { replaceState: true });
+      await goto(homePath(session.user?.role), { replaceState: true });
     } catch (e) {
       if (e instanceof ApiError && e.code === 'ACCOUNT_LOCKED') {
         await goto('/login?error=locked', { replaceState: true });

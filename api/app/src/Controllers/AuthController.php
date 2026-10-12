@@ -199,7 +199,7 @@ final class AuthController
         return ['sent' => true, 'emailMasked' => Str::maskEmail($email)];
     }
 
-    /** GET /auth/google/start?remember=1&next=/learn/flashcards&selfLevel= */
+    /** GET /auth/google/start?remember=1&next=/&selfLevel= */
     public function googleStart(Request $r): Response
     {
         if (!Settings::value('auth', 'google', true) || (string) Config::get('google.client_id', '') === '') {
@@ -207,7 +207,7 @@ final class AuthController
         }
         $selfLevel = (string) $r->q('selfLevel', '');
         $url = GoogleAuth::startUrl([
-            'next' => self::safeNext((string) $r->q('next', '/learn/flashcards')),
+            'next' => self::safeNext((string) $r->q('next', '/')),
             'remember' => (string) $r->q('remember', '1') !== '0',
             'selfLevel' => in_array($selfLevel, UserService::SELF_LEVELS, true) ? $selfLevel : null,
         ]);
@@ -265,7 +265,7 @@ final class AuthController
             return Response::redirect('/login?error=locked');
         }
         Auth::login($r, $user, (bool) ($ctx['remember'] ?? true));
-        return Response::redirect(self::safeNext((string) ($ctx['next'] ?? '/learn/flashcards')));
+        return Response::redirect(self::safeNext((string) ($ctx['next'] ?? '/')));
     }
 
     /** GET /auth/invite/{token} */
@@ -320,9 +320,9 @@ final class AuthController
         Mailer::queue((string) $user['email'], 'Xác nhận email Zìkǎ', $mail['html'], $mail['text'], 'verify', true);
     }
 
-    /** Chỉ chấp nhận đường dẫn nội bộ bắt đầu bằng “/” (chống chuyển hướng mở). */
+    /** Chỉ chấp nhận đường dẫn nội bộ bắt đầu bằng “/” (chống chuyển hướng mở). Mặc định “/” để web tự chia theo vai trò. */
     public static function safeNext(string $next): string
     {
-        return preg_match('#^/(?![/\\\\])[^\s]*$#', $next) ? $next : '/learn/flashcards';
+        return preg_match('#^/(?![/\\\\])[^\s]*$#', $next) ? $next : '/';
     }
 }
