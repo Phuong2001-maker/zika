@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { api, ApiError } from '$lib/api/client';
   import { toast } from '$lib/stores/toast.svelte';
+  import { bytes } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
@@ -17,10 +18,17 @@
     staff: { id: number; name: string; email: string; role: string; isMe: boolean }[];
     invites: { id: number; email: string; role: string; expiresAt: string }[];
   }
+  interface BackupFile {
+    file: string;
+    bytes: number;
+    at: string;
+  }
 
   let s = $state<Settings | null>(null);
   let failed = $state(false);
   let saving = $state(false);
+  let backups = $state<BackupFile[]>([]);
+  let backingUp = $state(false);
 
   async function load(): Promise<void> {
     failed = false;
@@ -29,8 +37,31 @@
     } catch {
       failed = true;
     }
+    await loadBackups();
   }
   onMount(load);
+
+  async function loadBackups(): Promise<void> {
+    try {
+      backups = (await api.get<{ items: BackupFile[] }>('/admin/backups')).items;
+    } catch {
+      backups = [];
+    }
+  }
+
+  /** Sao lưu ngay. Chạy đồng bộ ở máy chủ nên có thể mất vài giây với DB lớn. */
+  async function backupNow(): Promise<void> {
+    backingUp = true;
+    try {
+      const out = await api.post<{ file: string; bytes: number }>('/admin/backups');
+      toast.ok(`Đã tạo bản sao lưu ${bytes(out.bytes)}.`);
+      await Promise.all([load(), loadBackups()]);
+    } catch (e) {
+      toast.show(e instanceof ApiError ? e.message : 'Không sao lưu được.');
+    } finally {
+      backingUp = false;
+    }
+  }
 
   async function save(): Promise<void> {
     if (!s) return;
@@ -144,13 +175,32 @@
   <section class="block card">
     <h2 class="h2">Sao lưu dữ liệu</h2>
     <label class="sw"><input type="checkbox" bind:checked={s.backup.daily} /><span></span> Tự sao lưu mỗi ngày lúc 03:00</label>
-    {#if s.backup.last_at}
-      <p class="muted" style="font-size: 13.5px">
-        Bản gần nhất: {s.backup.last_at} · {(s.backup.last_size / 1024 / 1024).toFixed(1)} MB
-      </p>
+
+    {#if backups.length > 0}
+      <ul class="baks">
+        {#each backups as b (b.file)}
+          <li>
+            <Icon name="download" size={16} />
+            <span style="flex: 1; min-width: 0">
+              <b class="num">{b.at}</b>
+              <span class="muted num" style="font-size: 12.5px"> · {bytes(b.bytes)}</span>
+            </span>
+            <a class="btn btn-sm" href="/api/admin/backups/{b.file}" download>Tải về</a>
+          </li>
+        {/each}
+      </ul>
     {:else}
       <p class="muted" style="font-size: 13.5px">Chưa có bản sao lưu nào.</p>
     {/if}
+
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
+      <button type="button" class="btn btn-sm" disabled={backingUp} onclick={backupNow}>
+        {backingUp ? 'Đang sao lưu…' : 'Sao lưu ngay'}
+      </button>
+    </div>
+    <p class="muted" style="font-size: 12.5px">
+      Máy chủ giữ 7 bản gần nhất. Nên tải một bản về máy mỗi tuần — hosting cũng có mục Sao lưu riêng.
+    </p>
   </section>
 
   <section class="block card">
@@ -218,7 +268,8 @@
     grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
     gap: 12px;
   }
-  .staff {
+  .staff,
+  .baks li {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -226,5 +277,10 @@
     border: 1px solid var(--line);
     border-radius: var(--r);
     background: var(--surface-2);
+  }
+  .baks {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
 </style>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ago, clock, date, duration, lastSeen, longDate, minSec, num, pct, time, upperHv } from './format';
+import { ago, bytes, clock, date, duration, lastSeen, longDate, minSec, num, pct, time, upperHv } from './format';
 
 describe('format kiểu Việt Nam', () => {
   it('số và phần trăm', () => {
@@ -9,6 +9,14 @@ describe('format kiểu Việt Nam', () => {
     expect(pct(16.5)).toBe('16,5%');
     expect(pct(64)).toBe('64%');
     expect(num(null)).toBe('—');
+  });
+
+  it('cỡ file', () => {
+    expect(bytes(0)).toBe('0 B');
+    expect(bytes(512)).toBe('512 B');
+    expect(bytes(19870)).toBe('19,4 KB');
+    expect(bytes(50 * 1024 * 1024)).toBe('50 MB');
+    expect(bytes(null)).toBe('0 B');
   });
 
   it('ngày giờ theo múi giờ VN, không phụ thuộc máy', () => {

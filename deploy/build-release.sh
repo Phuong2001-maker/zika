@@ -5,12 +5,17 @@
 #   public/  → giải nén vào <DOCROOT> (public_html): index.html, _app/, api/index.php, .htaccess, uploads/.htaccess
 #   app/     → giải nén vào <APP_DIR> (NGOÀI public_html): bootstrap.php, src/, cron/, tools/, migrations/, vendor/, storage/
 # Biến môi trường (máy Windows không có php/composer trên PATH):
-#   PHP="D:/zika-devtools/php/php.exe"  COMPOSER="D:/zika-devtools/php/php.exe D:/zika-devtools/composer.phar"
+#   ZIKA_PHP="D:/zika-devtools/php/php.exe"
+#   ZIKA_COMPOSER="D:/zika-devtools/php/php.exe D:/zika-devtools/composer.phar"
+# KHÔNG đặt tên biến là COMPOSER: chính Composer đọc biến đó làm đường dẫn composer.json
+# nên sẽ báo "could not find the config file".
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PHP="${PHP:-php}"
-COMPOSER="${COMPOSER:-composer}"
+PHP="${ZIKA_PHP:-php}"
+ZIKA_COMPOSER="${ZIKA_COMPOSER:-composer}"
+# Dọn các biến Composer tự đọc, tránh lẫn với cấu hình của máy đang chạy.
+unset COMPOSER COMPOSER_NO_DEV 2>/dev/null || true
 OUT="$ROOT/release"
 STAGE="$OUT/stage"
 STAMP="$(date +%Y%m%d-%H%M)"
@@ -35,8 +40,8 @@ cp "$ROOT/deploy/htaccess-deny" "$STAGE/app/.htaccess"
 cp "$ROOT/deploy/htaccess-deny" "$STAGE/app/storage/.htaccess"
 
 echo "3/4  Composer (không gồm gói dev)…"
-# $COMPOSER cố ý không đặt trong ngoặc kép để cho phép dạng “php composer.phar”.
-(cd "$STAGE/app" && $COMPOSER install --no-dev --optimize-autoloader --no-interaction --quiet)
+# $ZIKA_COMPOSER cố ý không đặt trong ngoặc kép để cho phép dạng “php composer.phar”.
+(cd "$STAGE/app" && $ZIKA_COMPOSER install --no-dev --optimize-autoloader --no-interaction)
 
 echo "4/4  Nén $ZIP…"
 rm -f "$ZIP"

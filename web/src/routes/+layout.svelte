@@ -10,6 +10,7 @@
   import { toast } from '$lib/stores/toast.svelte';
   import Toaster from '$lib/components/Toaster.svelte';
   import { isAdminRoute, isGuestOnly, isPublicRoute, loginUrl, safeNext } from '$lib/auth/routes';
+  import { registerServiceWorker } from '$lib/utils/pwa';
 
   let { children }: { children: Snippet } = $props();
 
@@ -71,6 +72,13 @@
     } else {
       heartbeat.stop();
     }
+  });
+
+  // Cài app vào máy và chạy offline: đăng ký service worker, có bản mới thì mời tải lại (02 §3.5).
+  $effect(() => {
+    return registerServiceWorker((apply) => {
+      toast.show('Đã có bản cập nhật.', 'info', 0, { label: 'Tải lại', run: apply });
+    });
   });
 
   // Trang quản trị luôn dùng bảng màu sáng (05 §2).

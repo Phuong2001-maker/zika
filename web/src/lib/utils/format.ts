@@ -130,3 +130,17 @@ export const ROLE_LABELS: Record<string, string> = {
 export function upperHv(s: string | null | undefined): string {
   return (s ?? '').toLocaleUpperCase('vi-VN');
 }
+
+/** Cỡ file cho người đọc: 0 B · 19,4 KB · 48 MB (dấu phẩy thập phân như 05 §10). */
+export function bytes(n: number | null | undefined): string {
+  const v = Math.max(0, n ?? 0);
+  if (v < 1024) return `${Math.round(v)} B`;
+  for (const unit of ['KB', 'MB', 'GB'] as const) {
+    const x = v / 1024 ** (['KB', 'MB', 'GB'].indexOf(unit) + 1);
+    if (x < 1024 || unit === 'GB') {
+      // Số tròn thì bỏ phần thập phân: “48 MB” dễ đọc hơn “48,0 MB”.
+      return `${num(x, Math.round(x * 10) % 10 === 0 ? 0 : 1)} ${unit}`;
+    }
+  }
+  return `${v} B`;
+}

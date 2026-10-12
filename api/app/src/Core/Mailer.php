@@ -102,23 +102,25 @@ final class Mailer
     {
         $site = (string) Settings::value('site', 'name', 'Zìkǎ');
         $e = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        // Màu lấy từ bộ thiết kế hiện tại (05 §2): son #E5484D, viền mảnh #E7E9ED, chữ #1A1D23.
+        // Email client không đọc biến CSS nên phải ghi thẳng mã màu.
         $body = '';
         foreach ($paragraphs as $p) {
-            $body .= '<p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#2E323C">' . nl2br($e($p)) . '</p>';
+            $body .= '<p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#5A616E">' . nl2br($e($p)) . '</p>';
         }
         if ($buttonText !== null && $buttonUrl !== null) {
-            $body .= '<p style="margin:22px 0"><a href="' . $e($buttonUrl) . '" style="display:inline-block;padding:13px 22px;background:#FF6B5E;color:#14161C;'
-                . 'border:2px solid #14161C;border-radius:12px;font-weight:700;text-decoration:none">' . $e($buttonText) . '</a></p>'
-                . '<p style="margin:0 0 14px;font-size:13px;color:#5F6573">Nếu nút không bấm được, mở link này: ' . $e($buttonUrl) . '</p>';
+            $body .= '<p style="margin:22px 0"><a href="' . $e($buttonUrl) . '" style="display:inline-block;padding:13px 22px;background:#E5484D;color:#ffffff;'
+                . 'border-radius:10px;font-weight:600;text-decoration:none">' . $e($buttonText) . '</a></p>'
+                . '<p style="margin:0 0 14px;font-size:13px;color:#8A909C">Nếu nút không bấm được, mở link này: ' . $e($buttonUrl) . '</p>';
         }
         $html = '<!doctype html><html lang="vi"><body style="margin:0;background:#F2F5FA;font-family:Arial,Helvetica,sans-serif">'
             . '<div style="max-width:560px;margin:0 auto;padding:28px 16px">'
-            . '<div style="font-size:20px;font-weight:800;color:#14161C;margin-bottom:16px">'
-            . '<span style="display:inline-block;width:32px;height:32px;line-height:32px;text-align:center;background:#FF6B5E;border:2px solid #14161C;border-radius:9px;margin-right:8px">字</span>'
+            . '<div style="font-size:19px;font-weight:700;color:#1A1D23;margin-bottom:16px">'
+            . '<span style="display:inline-block;width:32px;height:32px;line-height:32px;text-align:center;background:#E5484D;color:#ffffff;border-radius:9px;margin-right:8px">字</span>'
             . $e($site) . '</div>'
-            . '<div style="background:#fff;border:2px solid #14161C;border-radius:18px;padding:24px">'
-            . '<h1 style="margin:0 0 14px;font-size:22px;color:#14161C">' . $e($title) . '</h1>' . $body . '</div>'
-            . '<p style="font-size:12px;color:#5F6573;margin-top:14px">' . $e($site) . ' — học chữ Hán miễn phí.</p></div></body></html>';
+            . '<div style="background:#ffffff;border:1px solid #E7E9ED;border-radius:16px;padding:24px">'
+            . '<h1 style="margin:0 0 14px;font-size:22px;font-weight:700;color:#1A1D23">' . $e($title) . '</h1>' . $body . '</div>'
+            . '<p style="font-size:12px;color:#8A909C;margin-top:14px">' . $e($site) . ' — học chữ Hán miễn phí.</p></div></body></html>';
         $text = $title . "\n\n" . implode("\n\n", $paragraphs) . ($buttonUrl !== null ? "\n\n" . $buttonText . ': ' . $buttonUrl : '');
         return ['html' => $html, 'text' => $text];
     }

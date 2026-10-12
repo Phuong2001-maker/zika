@@ -29,7 +29,7 @@ $steps = [
 ];
 // Chấm bài kiểm tra quá hạn (có từ Giai đoạn 2).
 if (class_exists(\Zika\Services\TestService::class)) {
-    $steps = ['gradeExpiredTests' => static fn () => \Zika\Services\TestService::gradeExpired()] + $steps;
+    $steps = ['gradeOverdueTests' => static fn () => \Zika\Services\TestService::gradeOverdue()] + $steps;
 }
 
 $result = Cron::run('every5min', $steps);

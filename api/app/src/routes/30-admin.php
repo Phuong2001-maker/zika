@@ -118,4 +118,9 @@ return [
     ['GET',    '/admin/settings', [Ops::class, 'settings'], 'A'],
     ['PUT',    '/admin/settings', [Ops::class, 'saveSettings'], 'A'],
     ['DELETE', '/admin/staff/{id}', [Ops::class, 'removeStaff'], 'A'],
+
+    // Sao lưu dữ liệu (08 §13.5)
+    ['GET',    '/admin/backups', [Ops::class, 'backups'], 'A'],
+    ['POST',   '/admin/backups', [Ops::class, 'createBackup'], 'A'],
+    ['GET',    '/admin/backups/{file:zika-[0-9]{8}-[0-9]{4}\.sql\.gz}', [Ops::class, 'downloadBackup'], 'A'],
 ];

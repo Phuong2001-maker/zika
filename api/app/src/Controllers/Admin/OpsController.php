@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Zika\Controllers\Admin;
 
 use Zika\Core\Audit;
+use Zika\Core\Config;
 use Zika\Core\Db;
 use Zika\Core\HttpError;
 use Zika\Core\Mailer;
@@ -13,6 +14,7 @@ use Zika\Core\Settings;
 use Zika\Core\Str;
 use Zika\Core\Validator;
 use Zika\Services\AnnouncementService;
+use Zika\Services\BackupService;
 
 /** Quản trị · Thông báo, Góp ý, Ủng hộ & Shopee, Cài đặt (04 §10.8–§10.11). */
 final class OpsController
@@ -617,6 +619,41 @@ final class OpsController
         Db::update('users', ['role' => 'learner'], ['id' => $id]);
         Audit::log($r, 'staff.remove', 'user', $id);
         return Response::noContent();
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Sao lưu dữ liệu (A) — 08 §13.5                                      */
+    /* ------------------------------------------------------------------ */
+
+    /** GET /admin/backups — danh sách bản sao lưu đang có trên máy chủ. */
+    public function backups(Request $r): array
+    {
+        unset($r);
+        return ['items' => BackupService::listFiles(), 'keep' => BackupService::KEEP];
+    }
+
+    /** POST /admin/backups — “Sao lưu ngay”. Chạy đồng bộ nên có thể mất vài giây. */
+    public function createBackup(Request $r): array
+    {
+        $out = BackupService::run();
+        Audit::log($r, 'backup.create', 'backup', null, ['file' => $out['file'], 'bytes' => $out['bytes']]);
+        return $out;
+    }
+
+    /** GET /admin/backups/{file} — tải một bản sao lưu về máy. */
+    public function downloadBackup(Request $r): Response
+    {
+        $file = (string) $r->param('file');
+        // Chỉ nhận đúng tên do BackupService sinh ra — chặn mọi mưu toan đi ra ngoài thư mục.
+        if (preg_match('/^zika-\d{8}-\d{4}\.sql\.gz$/', $file) !== 1) {
+            throw HttpError::notFound('Không có bản sao lưu này.');
+        }
+        $path = Config::storageDir('backups') . '/' . $file;
+        if (!is_file($path)) {
+            throw HttpError::notFound('Không có bản sao lưu này.');
+        }
+        Audit::log($r, 'backup.download', 'backup', null, ['file' => $file]);
+        return Response::file($path, 'application/gzip', $file);
     }
 
     private function isAdmin(Request $r): bool
