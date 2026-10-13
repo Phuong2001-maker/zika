@@ -107,8 +107,8 @@ final class MaintenanceService
             [$d],
         );
         $removed = Db::exec(
-            'DELETE FROM affiliate_events WHERE created_at < (NOW() - INTERVAL ? DAY)',
-            [self::AFFILIATE_RAW_DAYS],
+            'DELETE FROM affiliate_events WHERE created_at < ?',
+            [Clock::sql(Clock::now()->modify('-' . self::AFFILIATE_RAW_DAYS . ' days'))],
         );
         return ['days' => $rows, 'removed' => $removed];
     }
@@ -122,32 +122,36 @@ final class MaintenanceService
         $visitDays = max(7, (int) Settings::value('privacy', 'visit_log_days', 90));
         $out = [];
 
-        $out['visits'] = Db::exec('DELETE FROM visits WHERE started_at < (NOW() - INTERVAL ? DAY)', [$visitDays]);
-        $out['online_samples'] = Db::exec('DELETE FROM online_samples WHERE ts < (NOW() - INTERVAL ? DAY)', [self::ONLINE_SAMPLE_DAYS]);
+        // Mốc cắt tính bằng Clock chứ không dùng NOW() của SQL: NOW() lấy giờ máy chủ
+        // database nên bỏ qua Clock::freeze(), khiến kiểm thử phụ thuộc ngày chạy thật.
+        $truoc = static fn (int $days): string => Clock::sql(Clock::now()->modify('-' . $days . ' days'));
+
+        $out['visits'] = Db::exec('DELETE FROM visits WHERE started_at < ?', [$truoc($visitDays)]);
+        $out['online_samples'] = Db::exec('DELETE FROM online_samples WHERE ts < ?', [$truoc(self::ONLINE_SAMPLE_DAYS)]);
 
         // Token đã dùng / hết hạn và phiên đăng nhập đã thu hồi: giữ thêm 30 ngày để tra cứu.
         $out['email_tokens'] = Db::exec(
-            'DELETE FROM email_tokens WHERE expires_at < (NOW() - INTERVAL ? DAY)',
-            [self::TOKEN_DAYS],
+            'DELETE FROM email_tokens WHERE expires_at < ?',
+            [$truoc(self::TOKEN_DAYS)],
         );
         $out['auth_sessions'] = Db::exec(
             'DELETE FROM auth_sessions
-             WHERE (revoked_at IS NOT NULL AND revoked_at < (NOW() - INTERVAL ? DAY))
-                OR expires_at < (NOW() - INTERVAL ? DAY)',
-            [self::TOKEN_DAYS, self::TOKEN_DAYS],
+             WHERE (revoked_at IS NOT NULL AND revoked_at < ?)
+                OR expires_at < ?',
+            [$truoc(self::TOKEN_DAYS), $truoc(self::TOKEN_DAYS)],
         );
         $out['admin_invites'] = Db::exec(
-            'DELETE FROM admin_invites WHERE expires_at < (NOW() - INTERVAL ? DAY)',
-            [self::TOKEN_DAYS],
+            'DELETE FROM admin_invites WHERE expires_at < ?',
+            [$truoc(self::TOKEN_DAYS)],
         );
 
         // rate_limits đếm theo cửa sổ window_start; quá 1 ngày là chắc chắn không còn dùng.
-        $out['rate_limits'] = Db::exec('DELETE FROM rate_limits WHERE window_start < (NOW() - INTERVAL 1 DAY)');
+        $out['rate_limits'] = Db::exec('DELETE FROM rate_limits WHERE window_start < ?', [$truoc(1)]);
         $out['mail_queue'] = Db::exec(
-            "DELETE FROM mail_queue WHERE status = 'sent' AND sent_at < (NOW() - INTERVAL ? DAY)",
-            [self::MAIL_DAYS],
+            "DELETE FROM mail_queue WHERE status = 'sent' AND sent_at < ?",
+            [$truoc(self::MAIL_DAYS)],
         );
-        $out['audit_log'] = Db::exec('DELETE FROM audit_log WHERE created_at < (NOW() - INTERVAL ? DAY)', [self::AUDIT_DAYS]);
+        $out['audit_log'] = Db::exec('DELETE FROM audit_log WHERE created_at < ?', [$truoc(self::AUDIT_DAYS)]);
         $out['log_files'] = self::pruneLogFiles();
 
         return $out;
