@@ -5,12 +5,10 @@
   import { session } from '$lib/stores/session.svelte';
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
-  import { ago } from '$lib/utils/format';
   import Topbar from '$lib/components/Topbar.svelte';
   import Switcher from '$lib/components/Switcher.svelte';
   import Avatar from '$lib/components/Avatar.svelte';
   import LevelCard from '$lib/components/LevelCard.svelte';
-  import Bar from '$lib/components/Bar.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
@@ -38,56 +36,11 @@
   onMount(load);
 
   const loading = $derived(!failed && (levels === null || home === null));
-  const cont = $derived(home?.continue ?? null);
-  const inProgress = $derived(cont !== null && cont.position > 0);
   const doneOf = (id: number): number => home?.levels.find((l) => l.levelId === id)?.done ?? 0;
-
-  /** Cấp để “Ôn lại Tổng hợp” khi đã học hết: cấp đang học, hoặc cấp hiện cuối cùng. */
-  const reviewFallback = $derived.by(() => {
-    if (home?.currentLevelId) return home.currentLevelId;
-    const visible = (levels ?? []).filter((l) => l.visible && l.lessonCount > 0);
-    return visible.length ? visible[visible.length - 1].id : 1;
-  });
-
-  const contHref = $derived(cont ? `/learn/flashcards/hsk/${cont.levelId}/lesson/${cont.lessonNo}` : `/learn/flashcards/hsk/${reviewFallback}/review`);
   const greeting = $derived(session.user?.displayName ?? '');
 </script>
 
 <svelte:head><title>Bàn học · Zìkǎ</title></svelte:head>
-
-{#snippet contBlock(m: boolean)}
-  <section class="block" style="padding: {m ? '18px 18px' : '22px 24px'}; display: flex; flex-direction: column; gap: {m ? 12 : 16}px">
-    <p class="kicker">{inProgress ? 'Học tiếp' : cont ? 'Bài tiếp theo' : 'Tuyệt vời'}</p>
-    {#if cont}
-      <div style="display: flex; align-items: center; gap: 14px">
-        <span class="ib lv{cont.levelId}" style="width: {m ? 48 : 60}px; height: {m ? 48 : 60}px; border-radius: 16px"><span class="bignum" style="font-size: {m ? 24 : 30}px">{cont.levelId}</span></span>
-        <div style="min-width: 0">
-          <p class="muted" style="font-size: 13px; font-weight: 700">HSK {cont.levelId} · Bài {cont.lessonNo}</p>
-          <h2 style="font-size: {m ? 18 : 24}px; font-weight: 800; line-height: 1.15">{cont.title}</h2>
-          {#if !m && cont.sampleText}<p class="hz" lang="zh" style="font-size: 16px; color: var(--text-2)">{cont.sampleText}</p>{/if}
-        </div>
-      </div>
-      {#if inProgress && !m}
-        <div style="display: flex; flex-direction: column; gap: 6px">
-          <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700">
-            <span>Đang ở thẻ {cont.position + 1} / {cont.total}</span>
-            <span class="muted">{ago(cont.updatedAt)}</span>
-          </div>
-          <Bar value={cont.position} total={cont.total} />
-        </div>
-      {:else if inProgress && m}
-        <Bar value={cont.position} total={cont.total} />
-      {/if}
-      <a href={contHref} class="btn btn-son btn-lg" style="width: 100%">
-        {#if m && inProgress}Lật tiếp · thẻ {cont.position + 1}/{cont.total}{:else if inProgress}Lật tiếp{:else}Bắt đầu lật{/if}
-      </a>
-      {#if !m}<a href="/learn/flashcards/hsk/{cont.levelId}" class="btn btn-text btn-sm" style="align-self: center">Xem các bài HSK {cont.levelId}</a>{/if}
-    {:else}
-      <p class="muted" style="font-size: 14px">Bạn đã học xong mọi bài đang có.</p>
-      <a href={contHref} class="btn btn-son btn-lg" style="width: 100%">Ôn lại Tổng hợp</a>
-    {/if}
-  </section>
-{/snippet}
 
 {#snippet suggestCard()}
   {#if home && home.reviewSuggest}
@@ -106,7 +59,7 @@
     <header class="mtop">
       <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 30px; height: 30px; font-size: 17px">字</span>Zìkǎ</a>
       <div style="margin-left: auto; display: flex; align-items: center; gap: 10px">
-        <Switcher current="lt" mobile intro />
+        <Switcher current="lt" mobile />
         <Avatar size={44} />
       </div>
     </header>
@@ -120,10 +73,8 @@
           {#snippet action()}<button type="button" class="btn btn-sm" onclick={load}>Thử lại</button>{/snippet}
         </EmptyState>
       {:else if loading}
-        <Skeleton h="150px" r={22} />
         <div class="lv-grid m"><Skeleton h="120px" r={20} /><Skeleton h="120px" r={20} /></div>
       {:else}
-        {@render contBlock(true)}
         <section aria-label="Các cấp HSK" class="lv-grid m">
           {#each levels ?? [] as l (l.id)}
             <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} mobile />
@@ -135,7 +86,7 @@
   </div>
 {:else}
   <!-- ============ Máy tính ============ -->
-  <Topbar current="lt" intro />
+  <Topbar current="lt" />
   <main class="page" style="display: flex; flex-direction: column; gap: 28px">
     <div>
       <h1 style="font-size: 34px; line-height: 1.2">Hôm nay học cấp nào{greeting ? `, ${greeting}` : ''}?</h1>
@@ -157,14 +108,11 @@
             {/each}
           {/if}
         </section>
-        <aside style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
-          {#if loading}
-            <Skeleton h="260px" r={22} />
-          {:else}
-            {@render contBlock(false)}
+        {#if !loading && home?.reviewSuggest}
+          <aside style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
             {@render suggestCard()}
-          {/if}
-        </aside>
+          </aside>
+        {/if}
       </div>
     {/if}
   </main>

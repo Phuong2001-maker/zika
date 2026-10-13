@@ -11,7 +11,6 @@
   import Avatar from '$lib/components/Avatar.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import Modal from '$lib/components/Modal.svelte';
-  import type { SelfLevel } from '$lib/api/types';
 
   // Tài khoản (07 §8).
   interface Device {
@@ -23,17 +22,7 @@
     current: boolean;
   }
 
-  const LEVELS: { v: SelfLevel; label: string }[] = [
-    { v: 'beginner', label: 'Mới bắt đầu' },
-    { v: 'hsk12', label: 'HSK 1–2' },
-    { v: 'hsk34', label: 'HSK 3–4' },
-    { v: 'hsk5', label: 'HSK 5 trở lên' },
-  ];
-  const GOALS = [10, 15, 30];
-
   let name = $state('');
-  let selfLevel = $state<SelfLevel>('beginner');
-  let goal = $state(15);
   let savingInfo = $state(false);
   let errors = $state<Record<string, string>>({});
 
@@ -56,8 +45,6 @@
     const u = session.user;
     if (u) {
       name = u.displayName;
-      selfLevel = u.selfLevel;
-      goal = u.dailyGoalMin;
     }
     void loadDevices();
   });
@@ -76,8 +63,6 @@
     try {
       const res = await api.patch<{ user: typeof session.user }>('/me', {
         displayName: name.trim(),
-        selfLevel,
-        dailyGoalMin: goal,
       });
       if (res.user) session.setUser(res.user);
       toast.ok('Đã lưu.');
@@ -184,33 +169,18 @@
         <p class="hint">{user.signupMethod === 'google' ? 'Email lấy từ tài khoản Google.' : 'Email không đổi được.'}</p>
       </div>
 
-      <div class="field">
-        <span class="lbl">Trình độ hiện tại</span>
-        <div class="chips">
-          {#each LEVELS as l (l.v)}
-            <label class="pick">
-              <input type="radio" name="selfLevel" value={l.v} checked={selfLevel === l.v} onchange={() => (selfLevel = l.v)} />
-              <span>{l.label}</span>
-            </label>
-          {/each}
-        </div>
-      </div>
-
-      <div class="field">
-        <span class="lbl">Mục tiêu mỗi ngày</span>
-        <div class="chips">
-          {#each GOALS as g (g)}
-            <label class="pick">
-              <input type="radio" name="goal" value={g} checked={goal === g} onchange={() => (goal = g)} />
-              <span>{g} phút</span>
-            </label>
-          {/each}
-        </div>
-      </div>
-
       <button type="button" class="btn btn-son" style="align-self: flex-start" disabled={savingInfo} onclick={saveInfo}>
         {savingInfo ? 'Đang lưu…' : 'Lưu thông tin'}
       </button>
+    </section>
+
+    <!-- Cài đặt học: lối vào /settings (trước đây là nút trên thanh đầu). -->
+    <section class="block" style="padding: {m ? 18 : 24}px; display: flex; flex-direction: column; gap: 10px">
+      <h2 class="h2">Cài đặt học</h2>
+      <p class="muted" style="font-size: 14px">
+        Đổi giọng đọc, mặt trước của thẻ, kiểu chữ Hán, cỡ chữ và giao diện sáng/tối.
+      </p>
+      <a href="/settings" class="btn" style="align-self: flex-start"><Icon name="sliders" size={16} /> Mở cài đặt học</a>
     </section>
 
     <!-- Đăng nhập và bảo mật -->
@@ -272,7 +242,6 @@
     <header class="mtop">
       <a href="/learn/flashcards" class="btn btn-bare" aria-label="Về Bàn học"><Icon name="left" size={20} /></a>
       <b style="flex: 1; font-size: 16px">Tài khoản</b>
-      <a href="/settings" class="btn btn-sm">Cài đặt học</a>
     </header>
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">{@render body(true)}</main>
   </div>
@@ -280,12 +249,16 @@
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px">
-      <a href="/settings" class="btn btn-sm">Cài đặt học</a>
       <Switcher current="lt" />
       <Avatar size={44} current />
     </div>
   </header>
-  <main class="page" style="max-width: 820px; display: flex; flex-direction: column; gap: 20px">{@render body(false)}</main>
+  <main class="page" style="max-width: 820px; display: flex; flex-direction: column; gap: 20px">
+    <nav aria-label="Đường dẫn" class="crumb">
+      <a href="/learn/flashcards">Bàn học</a><span>/</span><b>Tài khoản</b>
+    </nav>
+    {@render body(false)}
+  </main>
 {/if}
 
 {#if pwOpen}
@@ -326,11 +299,6 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
-  }
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
   }
   .dev {
     display: flex;

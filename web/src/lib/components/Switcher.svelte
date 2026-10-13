@@ -6,9 +6,8 @@
   import { feedback } from '$lib/stores/feedback.svelte';
   import Icon from './Icon.svelte';
 
-  // Nút “Chuyển nhanh” 9 chấm có ở MỌI màn người học (05 §7.2).
-  // intro = Bàn học: mở sẵn bảng lần đầu mỗi phiên để người mới biết có 6 phần.
-  let { current = 'lt', mobile = false, intro = false }: { current?: Part; mobile?: boolean; intro?: boolean } = $props();
+  // Nút “Chuyển nhanh” 9 chấm có ở MỌI màn người học (05 §7.2). Bảng luôn đóng sẵn, bấm nút mới mở.
+  let { current = 'lt', mobile = false }: { current?: Part; mobile?: boolean } = $props();
 
   let open = $state(false);
   let root: HTMLDivElement | undefined = $state();
@@ -17,10 +16,6 @@
   const showFeedback = $derived(session.config?.showFeedbackButton ?? true);
 
   onMount(() => {
-    if (intro && !session.switcherIntroShown) {
-      session.switcherIntroShown = true;
-      open = true;
-    }
     const onDoc = (e: MouseEvent) => {
       if (open && root && !root.contains(e.target as Node)) open = false;
     };

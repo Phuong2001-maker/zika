@@ -9,8 +9,6 @@ class Session {
   loaded = $state(false);
   supportEnabled = $state(false);
   announcements = $state<Announcement[]>([]);
-  /** Đã mở bảng Chuyển nhanh ở Bàn học trong phiên này chưa (mở sẵn lần đầu, 05 §7.2). */
-  switcherIntroShown = $state(false);
 
   get isStaff(): boolean {
     return this.user?.role === 'editor' || this.user?.role === 'admin';

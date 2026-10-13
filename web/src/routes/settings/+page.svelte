@@ -239,13 +239,15 @@
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px">
-      <a href="/account" class="btn btn-sm">Tài khoản</a>
       <Switcher current="lt" />
       <Avatar size={44} current />
     </div>
   </header>
 
   <main class="page" style="display: flex; flex-direction: column; gap: 20px">
+    <nav aria-label="Đường dẫn" class="crumb">
+      <a href="/learn/flashcards">Bàn học</a><span>/</span><a href="/account">Tài khoản</a><span>/</span><b>Cài đặt học</b>
+    </nav>
     <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap">
       <div>
         <h1 style="font-size: 28px">Cài đặt học</h1>

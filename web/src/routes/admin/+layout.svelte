@@ -105,7 +105,7 @@
 
   <div class="foot">
     <span class="ava" style="background: var(--ngoc-soft)">{session.user?.initials ?? ''}</span>
-    <span class="who"><b>{session.user?.displayName ?? ''}</b><a href="/learn/flashcards">Về trang học</a></span>
+    <span class="acct"><b>{session.user?.displayName ?? ''}</b></span>
     <button type="button" class="btn btn-bare btn-sm" aria-label="Đăng xuất" onclick={logout}>
       <Icon name="logout" size={18} />
     </button>
@@ -233,19 +233,15 @@
     padding: 16px 8px 0;
     border-top: 1px solid var(--line);
   }
-  .who {
-    display: flex;
-    flex-direction: column;
+  .acct {
+    flex: 1;
     min-width: 0;
     font-size: 13px;
   }
-  .who b {
+  .acct b {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-  .who a {
-    font-size: 12px;
   }
 
   /* --------- Điện thoại --------- */

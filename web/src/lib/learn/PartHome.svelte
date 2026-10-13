@@ -4,12 +4,10 @@
   import type { HomeProgress, LevelInfo, Part } from '$lib/api/types';
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
-  import { ago } from '$lib/utils/format';
   import Topbar from '$lib/components/Topbar.svelte';
   import Switcher from '$lib/components/Switcher.svelte';
   import Avatar from '$lib/components/Avatar.svelte';
   import LevelCard from '$lib/components/LevelCard.svelte';
-  import Bar from '$lib/components/Bar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import { PART, PART_TEXTS } from '$lib/parts';
@@ -44,47 +42,10 @@
   });
 
   const loading = $derived(!failed && (levels === null || home === null));
-  const cont = $derived(home?.continue ?? null);
-  const inProgress = $derived(cont !== null && cont.position > 0);
   const doneOf = (id: number): number => home?.levels.find((l) => l.levelId === id)?.done ?? 0;
-
-  const contHref = $derived(cont ? `/learn/${info.slug}/hsk/${cont.levelId}/lesson/${cont.lessonNo}` : '');
 </script>
 
 <svelte:head><title>{info.name} · Zìkǎ</title></svelte:head>
-
-{#snippet contBlock(m: boolean)}
-  <section class="block" style="padding: {m ? 18 : 22}px {m ? 18 : 24}px; display: flex; flex-direction: column; gap: {m ? 12 : 16}px">
-    <p class="kicker">{inProgress ? texts.contTitle : cont ? texts.nextTitle : 'Tuyệt vời'}</p>
-    {#if cont}
-      <div style="display: flex; align-items: center; gap: 14px">
-        <span class="ib lv{cont.levelId}" style="width: {m ? 48 : 60}px; height: {m ? 48 : 60}px; border-radius: 16px">
-          <span class="bignum" style="font-size: {m ? 24 : 30}px">{cont.levelId}</span>
-        </span>
-        <div style="min-width: 0">
-          <p class="muted" style="font-size: 13px; font-weight: 700">HSK {cont.levelId} · Bài {cont.lessonNo}</p>
-          <h2 style="font-size: {m ? 18 : 24}px; font-weight: 800; line-height: 1.15">{cont.title}</h2>
-          {#if !m && cont.sampleText}<p class="hz" lang="zh" style="font-size: 16px; color: var(--text-2)">{cont.sampleText}</p>{/if}
-        </div>
-      </div>
-      {#if inProgress}
-        <div style="display: flex; flex-direction: column; gap: 6px">
-          <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700">
-            <span>Đang ở {cont.position + 1} / {cont.total}</span>
-            <span class="muted">{ago(cont.updatedAt)}</span>
-          </div>
-          <Bar value={cont.position} total={cont.total} />
-        </div>
-      {/if}
-      <a href={contHref} class="btn btn-son btn-lg" style="width: 100%">{inProgress ? texts.contStart : texts.nextStart}</a>
-      {#if !m}
-        <a href="/learn/{info.slug}/hsk/{cont.levelId}" class="btn btn-text btn-sm" style="align-self: center">Xem các bài HSK {cont.levelId}</a>
-      {/if}
-    {:else}
-      <p class="muted" style="font-size: 14px">Bạn đã {texts.past} hết mọi bài đang có.</p>
-    {/if}
-  </section>
-{/snippet}
 
 {#if media.isMobile}
   <!-- ============ Điện thoại ============ -->
@@ -106,10 +67,8 @@
           {#snippet action()}<button type="button" class="btn btn-sm" onclick={load}>Thử lại</button>{/snippet}
         </EmptyState>
       {:else if loading}
-        <Skeleton h="150px" r={20} />
         <div class="lv-grid m"><Skeleton h="120px" r={16} /><Skeleton h="120px" r={16} /></div>
       {:else}
-        {@render contBlock(true)}
         <section aria-label="Các cấp HSK" class="lv-grid m">
           {#each levels ?? [] as l (l.id)}
             <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} slug={info.slug} past={texts.past} mobile />
@@ -132,20 +91,15 @@
         {#snippet action()}<button type="button" class="btn" onclick={load}>Thử lại</button>{/snippet}
       </EmptyState>
     {:else}
-      <div style="display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start">
-        <section aria-label="Các cấp HSK" class="lv-grid" style="flex: 999 1 640px; min-width: 0">
-          {#if loading}
-            {#each Array.from({ length: 6 }) as _, k (k)}<Skeleton h="190px" r={16} />{/each}
-          {:else}
-            {#each levels ?? [] as l (l.id)}
-              <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} slug={info.slug} past={texts.past} />
-            {/each}
-          {/if}
-        </section>
-        <aside style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
-          {#if loading}<Skeleton h="240px" r={20} />{:else}{@render contBlock(false)}{/if}
-        </aside>
-      </div>
+      <section aria-label="Các cấp HSK" class="lv-grid">
+        {#if loading}
+          {#each Array.from({ length: 6 }) as _, k (k)}<Skeleton h="190px" r={16} />{/each}
+        {:else}
+          {#each levels ?? [] as l (l.id)}
+            <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} slug={info.slug} past={texts.past} />
+          {/each}
+        {/if}
+      </section>
     {/if}
   </main>
 {/if}
