@@ -25,7 +25,9 @@ export class LoginState {
   email = $state('');
   password = $state('');
   showPw = $state(false);
-  remember = $state(true);
+  // Mặc định không ghi nhớ: phiên hết sau 12 giờ không dùng, giống thói quen ngân hàng.
+  // Tích ô mới được 30 ngày; nút Google cũng đọc giá trị này qua googleHref().
+  remember = $state(false);
 
   // Tạo tài khoản
   name = $state('');
