@@ -166,7 +166,7 @@
         <h2 class="h2">Thử xếp câu</h2>
         {#if g.practice.vi}<p style="font-size: 16px; font-weight: 600; text-align: center">“{g.practice.vi}”</p>{/if}
 
-        <div class="drop" class:empty={picked.length === 0}>
+        <div class="drop" class:trong={picked.length === 0}>
           {#if picked.length === 0}
             <span class="muted" style="font-size: 14px">Bấm các ô chữ bên dưới theo đúng thứ tự</span>
           {:else}
@@ -261,7 +261,7 @@
     border: 2px dashed var(--line-3);
     border-radius: var(--r);
   }
-  .drop.empty {
+  .drop.trong {
     justify-content: center;
   }
 </style>

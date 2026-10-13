@@ -118,7 +118,7 @@
 {:else if chars === null}
   <Skeleton h="300px" r={16} />
 {:else}
-  <section class="paper bar">
+  <section class="paper toolbar">
     <b style="font-size: 14px">{chars.length} chữ trong bài</b>
     {#if config}
       <span class="muted" style="font-size: 13.5px">
@@ -215,7 +215,7 @@
 {/if}
 
 <style>
-  .bar {
+  .toolbar {
     display: flex;
     align-items: center;
     gap: 10px;
