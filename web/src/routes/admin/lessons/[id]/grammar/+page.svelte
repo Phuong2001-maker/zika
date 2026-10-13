@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { toast } from '$lib/stores/toast.svelte';
   import { ApiError } from '$lib/api/client';
@@ -52,7 +51,12 @@
       points = [];
     }
   }
-  onMount(load);
+  // Đổi bài mà vẫn ở cùng một phần thì SvelteKit giữ nguyên trang (chỉ đổi tham số),
+  // nên phải nạp lại theo lessonId chứ onMount không chạy lại.
+  $effect(() => {
+    void lessonId;
+    void load();
+  });
 
   function pick(p: AdminGrammarPoint | null): void {
     if (dirty && !confirm('Điểm đang sửa chưa lưu. Bỏ thay đổi?')) return;

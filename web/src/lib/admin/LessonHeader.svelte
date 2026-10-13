@@ -5,7 +5,8 @@
   import { toast } from '$lib/stores/toast.svelte';
   import { ago } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
-  import { adminApi, PART_COL, PART_SLUG, type AdminLesson } from '$lib/admin/api';
+  import Select from '$lib/components/Select.svelte';
+  import { adminApi, PART_COL, PART_SLUG, type AdminLesson, type AdminLevel } from '$lib/admin/api';
   import { rememberLesson } from '$lib/admin/menu';
   import type { Part } from '$lib/api/types';
 
@@ -28,15 +29,92 @@
   let lesson = $state<(AdminLesson & { levelId: number }) | null>(null);
   let busy = $state(false);
 
+  // Bộ chọn cấp + bài: soạn phần nào cũng đổi được bài ngay tại chỗ, khỏi quay về danh sách.
+  let levels = $state<AdminLevel[]>([]);
+  let lessons = $state<AdminLesson[]>([]);
+  let capChon = $state(0);
+  let baiChon = $state(0);
+
+  // Ô chọn luôn bám theo bài đang mở (và quay về đúng giá trị cũ nếu người dùng huỷ).
+  $effect(() => {
+    if (lesson) {
+      capChon = lesson.levelId;
+      baiChon = lessonId;
+    }
+  });
+
   async function load(): Promise<void> {
     try {
       lesson = await adminApi.lesson(lessonId);
       rememberLesson(lessonId);
+      void loadLessons(lesson.levelId);
     } catch {
       toast.show('Không tải được thông tin bài.');
     }
   }
-  onMount(load);
+
+  async function loadLevels(): Promise<void> {
+    try {
+      levels = await adminApi.levels();
+    } catch {
+      // Không tải được danh sách cấp: ô chọn để trống, phần còn lại vẫn dùng bình thường.
+    }
+  }
+
+  async function loadLessons(levelId: number): Promise<void> {
+    try {
+      lessons = (await adminApi.lessons(levelId)).lessons;
+    } catch {
+      lessons = [];
+    }
+  }
+
+  onMount(loadLevels);
+
+  // Đổi bài mà vẫn ở cùng một phần thì trang không dựng lại, nên bám theo lessonId.
+  $effect(() => {
+    void lessonId;
+    void load();
+  });
+
+  /** Hỏi lại nếu còn thay đổi chưa lưu, giống khi đổi tab. */
+  function roiDuoc(): boolean {
+    return !dirty || confirm('Bạn có thay đổi chưa lưu. Rời trang và bỏ thay đổi?');
+  }
+
+  /** Đổi cấp HSK → sang bài đầu của cấp đó; cấp chưa có bài thì về danh sách bài. */
+  async function doiCap(): Promise<void> {
+    if (!lesson || capChon === lesson.levelId) return;
+    if (!roiDuoc()) {
+      capChon = lesson.levelId;
+      return;
+    }
+    const lv = capChon;
+    let ds: AdminLesson[] = [];
+    try {
+      ds = (await adminApi.lessons(lv)).lessons;
+    } catch {
+      toast.show('Không tải được bài của cấp này.');
+      capChon = lesson.levelId;
+      return;
+    }
+    if (ds.length === 0) {
+      toast.show(`HSK ${lv} chưa có bài nào.`);
+      void goto(`/admin/lessons?level=${lv}`);
+      return;
+    }
+    void goto(`/admin/lessons/${ds[0].id}/${PART_SLUG[part]}`);
+  }
+
+  /** Đổi bài trong cùng cấp, giữ nguyên phần đang soạn. */
+  function doiBai(): void {
+    if (baiChon === lessonId) return;
+    if (!roiDuoc()) {
+      baiChon = lessonId;
+      return;
+    }
+    void goto(`/admin/lessons/${baiChon}/${PART_SLUG[part]}`);
+  }
 
   /** Công tắc Hiện cho người học. Bài chưa có từ vựng thì hỏi lại trước khi hiện. */
   async function toggleStatus(on: boolean): Promise<void> {
@@ -85,6 +163,21 @@
 </script>
 
 {#if lesson}
+  {#snippet boChon()}
+    <div class="chon">
+      <span class="o">
+        <span class="lbl">Cấp HSK</span>
+        <Select bind:value={capChon} onchange={doiCap} ariaLabel="Chọn cấp HSK"
+          options={levels.map((l) => ({ v: l.id, label: `HSK ${l.id}` }))} />
+      </span>
+      <span class="o">
+        <span class="lbl">Bài</span>
+        <Select bind:value={baiChon} onchange={doiBai} ariaLabel="Chọn bài"
+          options={lessons.map((b) => ({ v: b.id, label: `Bài ${b.no} · ${b.title}` }))} />
+      </span>
+    </div>
+  {/snippet}
+
   {#if media.isAdminMobile}
     <!-- ============ Điện thoại ============ -->
     <header class="mhead">
@@ -97,6 +190,7 @@
         <button type="button" class="btn btn-son btn-sm" disabled={!dirty || saving} onclick={onsave}>Lưu</button>
       {/if}
     </header>
+      {@render boChon()}
     <div class="mtabs" style="margin: 0 -14px 14px">
       {#each PART_COL as c (c.key)}
         <button type="button" class:on={c.part === part} onclick={() => go(c.part)}>
@@ -126,6 +220,7 @@
           <button type="button" class="btn btn-bare btn-sm" aria-label="Sửa tên bài" onclick={rename}><Icon name="edit" size={16} /></button>
         </h1>
       </div>
+      {@render boChon()}
       <label class="sw">
         <input type="checkbox" checked={lesson.status === 'published'} disabled={busy} onchange={(e) => toggleStatus(e.currentTarget.checked)} />
         <span></span>
@@ -169,6 +264,23 @@
     border-radius: var(--r-md);
     line-height: 1.05;
     text-align: center;
+  }
+  .chon {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .chon .o {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .chon .o:first-child {
+    width: 112px;
+  }
+  .chon .o:last-child {
+    width: 230px;
+    max-width: 100%;
   }
   .mhead {
     display: flex;
