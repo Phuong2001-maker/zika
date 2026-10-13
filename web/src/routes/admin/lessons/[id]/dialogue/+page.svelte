@@ -4,6 +4,7 @@
   import { toast } from '$lib/stores/toast.svelte';
   import { ApiError } from '$lib/api/client';
   import Icon from '$lib/components/Icon.svelte';
+  import Select from '$lib/components/Select.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import LessonHeader from '$lib/admin/LessonHeader.svelte';
   import { adminApi, type DialogueLine, type DialogueQuestion, type DialogueSpeaker } from '$lib/admin/api';
@@ -163,11 +164,13 @@
         <span class="lno">{i + 1}</span>
         <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
           <div style="display: flex; gap: 8px; flex-wrap: wrap">
-            <div class="sel" style="flex: 0 0 150px">
-              <select class="inp" bind:value={l.speakerKey} onchange={touch}>
-                {#each speakers as s (s.key)}<option value={s.key}>{s.name || s.key}</option>{/each}
-              </select>
-              <Icon name="down" size={18} />
+            <div style="flex: 0 0 150px">
+              <Select
+                bind:value={l.speakerKey}
+                ariaLabel="Người nói"
+                onchange={touch}
+                options={speakers.map((s) => ({ v: s.key, label: s.name || s.key }))}
+              />
             </div>
             <input class="inp hz" lang="zh" style="flex: 1 1 200px" bind:value={l.zh} oninput={touch} placeholder="你好，你们想吃什么？" />
           </div>

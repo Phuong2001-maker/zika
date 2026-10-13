@@ -4,6 +4,7 @@
   import { media } from '$lib/stores/media.svelte';
   import { num } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
+  import Select from '$lib/components/Select.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import { PART } from '$lib/parts';
@@ -83,20 +84,32 @@
     <Icon name="search" size={16} />
     <input class="inp" bind:value={q} oninput={onSearch} placeholder="Tìm theo tên hoặc email…" />
   </span>
-  <div class="sel" style="flex: 0 0 170px">
-    <select class="inp" bind:value={device}>
-      <option value="all">Thiết bị: Tất cả</option><option value="phone">Điện thoại</option>
-      <option value="desktop">Máy tính</option><option value="tablet">Máy tính bảng</option>
-    </select>
-    <Icon name="down" size={18} />
+  <div style="flex: 0 0 170px">
+    <Select
+      bind:value={device}
+      ariaLabel="Lọc theo thiết bị"
+      options={[
+        { v: 'all', label: 'Thiết bị: Tất cả' },
+        { v: 'phone', label: 'Điện thoại' },
+        { v: 'desktop', label: 'Máy tính' },
+        { v: 'tablet', label: 'Máy tính bảng' },
+      ]}
+    />
   </div>
-  <div class="sel" style="flex: 0 0 180px">
-    <select class="inp" bind:value={part}>
-      <option value="all">Phần học: Tất cả</option>
-      <option value="lt">Lật thẻ</option><option value="bt">Bài tập</option><option value="kt">Kiểm tra</option>
-      <option value="lv">Luyện viết</option><option value="ht">Hội thoại</option><option value="np">Ngữ pháp</option>
-    </select>
-    <Icon name="down" size={18} />
+  <div style="flex: 0 0 180px">
+    <Select
+      bind:value={part}
+      ariaLabel="Lọc theo phần học"
+      options={[
+        { v: 'all', label: 'Phần học: Tất cả' },
+        { v: 'lt', label: 'Lật thẻ' },
+        { v: 'bt', label: 'Bài tập' },
+        { v: 'kt', label: 'Kiểm tra' },
+        { v: 'lv', label: 'Luyện viết' },
+        { v: 'ht', label: 'Hội thoại' },
+        { v: 'np', label: 'Ngữ pháp' },
+      ]}
+    />
   </div>
 </div>
 

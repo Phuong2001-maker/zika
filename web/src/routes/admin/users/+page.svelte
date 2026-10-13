@@ -6,6 +6,7 @@
   import { toast } from '$lib/stores/toast.svelte';
   import { duration, lastSeen, num } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
+  import Select from '$lib/components/Select.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import Modal from '$lib/components/Modal.svelte';
@@ -137,13 +138,27 @@
     <Icon name="search" size={16} />
     <input class="inp" bind:value={q} oninput={onSearch} placeholder="Tìm theo tên hoặc email…" />
   </span>
-  <div class="sel" style="flex: 0 0 180px">
-    <select class="inp" bind:value={method}><option value="all">Đăng ký qua: Tất cả</option><option value="google">Google</option><option value="email">Email</option></select>
-    <Icon name="down" size={18} />
+  <div style="flex: 0 0 180px">
+    <Select
+      bind:value={method}
+      ariaLabel="Lọc theo cách đăng ký"
+      options={[
+        { v: 'all', label: 'Đăng ký qua: Tất cả' },
+        { v: 'google', label: 'Google' },
+        { v: 'email', label: 'Email' },
+      ]}
+    />
   </div>
-  <div class="sel" style="flex: 0 0 190px">
-    <select class="inp" bind:value={sort}><option value="recent">Vào gần nhất</option><option value="study">Học nhiều nhất</option><option value="new">Mới tạo</option></select>
-    <Icon name="down" size={18} />
+  <div style="flex: 0 0 190px">
+    <Select
+      bind:value={sort}
+      ariaLabel="Sắp xếp"
+      options={[
+        { v: 'recent', label: 'Vào gần nhất' },
+        { v: 'study', label: 'Học nhiều nhất' },
+        { v: 'new', label: 'Mới tạo' },
+      ]}
+    />
   </div>
 </div>
 
@@ -254,11 +269,8 @@
 
 {#if roleFor}
   <Modal title="Đổi quyền · {roleFor.name}" onclose={() => (roleFor = null)}>
-    <div class="sel">
-      <select class="inp" bind:value={newRole}>
-        {#each Object.entries(ROLE_LABEL) as [v, label] (v)}<option value={v}>{label}</option>{/each}
-      </select>
-      <Icon name="down" size={18} />
+    <div>
+      <Select bind:value={newRole} ariaLabel="Vai trò" options={Object.entries(ROLE_LABEL).map(([v, label]) => ({ v, label }))} />
     </div>
     <p class="hint">Biên tập chỉ soạn được nội dung, không xem được người dùng.</p>
     {#snippet actions()}

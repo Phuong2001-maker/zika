@@ -7,6 +7,7 @@
   import { toast } from '$lib/stores/toast.svelte';
   import { num } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
+  import Select from '$lib/components/Select.svelte';
   import Bar from '$lib/components/Bar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
@@ -244,12 +245,12 @@
 
     <div class="field">
       <label class="lbl" for="w-lesson">Thuộc bài</label>
-      <div class="sel">
-        <select id="w-lesson" class="inp" bind:value={lessonId}>
-          <option value={null}>— Chưa gắn bài —</option>
-          {#each lessons as l (l.id)}<option value={l.id}>Bài {l.no} · {l.title}</option>{/each}
-        </select>
-        <Icon name="down" size={18} />
+      <div>
+        <Select
+          id="w-lesson"
+          bind:value={lessonId}
+          options={[{ v: null, label: '— Chưa gắn bài —' }, ...lessons.map((l) => ({ v: l.id, label: `Bài ${l.no} · ${l.title}` }))]}
+        />
       </div>
       <p class="hint">Từ sẽ hiện trong phần Lật thẻ của bài này, và dùng để tự tạo câu bài tập, chữ luyện viết.</p>
     </div>
@@ -293,11 +294,8 @@
       </div>
       <div class="field">
         <label class="lbl" for="w-pos">Loại từ</label>
-        <div class="sel">
-          <select id="w-pos" class="inp" bind:value={pos}>
-            {#each POS as [v, label] (v)}<option value={v}>{label}</option>{/each}
-          </select>
-          <Icon name="down" size={18} />
+        <div>
+          <Select id="w-pos" bind:value={pos} options={POS.map(([v, label]) => ({ v, label }))} />
         </div>
       </div>
     </div>

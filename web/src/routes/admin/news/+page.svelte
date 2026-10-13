@@ -4,6 +4,7 @@
   import { toast } from '$lib/stores/toast.svelte';
   import { num } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
+  import Select from '$lib/components/Select.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
 
@@ -119,7 +120,7 @@
       <ul style="display: flex; flex-direction: column; gap: 6px">
         {#each list as a (a.id)}
           <li class="row" class:on={id === a.id}>
-            <button type="button" class="pick" onclick={() => edit(a)}>
+            <button type="button" class="item" onclick={() => edit(a)}>
               <b style="display: block; font-size: 14px">{a.title}</b>
               <span class="muted" style="font-size: 12.5px">
                 {KIND_LABEL[a.kind]} · {AUD_LABEL[a.audience]}{a.audienceLevel ? ` ${a.audienceLevel}` : ''}
@@ -171,23 +172,23 @@
         <div class="grid2">
           <div class="field">
             <label class="lbl" for="n-aud">Ai thấy</label>
-            <div class="sel">
-              <select id="n-aud" class="inp" bind:value={audience}>
-                <option value="all">Tất cả người học</option>
-                <option value="level">Người học một cấp</option>
-                <option value="new7d">Người mới (7 ngày)</option>
-              </select>
-              <Icon name="down" size={18} />
+            <div>
+              <Select
+                id="n-aud"
+                bind:value={audience}
+                options={[
+                  { v: 'all', label: 'Tất cả người học' },
+                  { v: 'level', label: 'Người học một cấp' },
+                  { v: 'new7d', label: 'Người mới (7 ngày)' },
+                ]}
+              />
             </div>
           </div>
           {#if audience === 'level'}
             <div class="field">
               <label class="lbl" for="n-lv">Cấp</label>
-              <div class="sel">
-                <select id="n-lv" class="inp" bind:value={audienceLevel}>
-                  {#each [1, 2, 3, 4, 5, 6] as l (l)}<option value={l}>HSK {l}</option>{/each}
-                </select>
-                <Icon name="down" size={18} />
+              <div>
+                <Select id="n-lv" bind:value={audienceLevel} options={[1, 2, 3, 4, 5, 6].map((l) => ({ v: l, label: `HSK ${l}` }))} />
               </div>
             </div>
           {/if}
@@ -211,12 +212,12 @@
           </div>
           <div class="field">
             <label class="lbl" for="n-route">Bấm nút thì đi đâu</label>
-            <div class="sel">
-              <select id="n-route" class="inp" bind:value={ctaRoute}>
-                <option value="">— Không có nút —</option>
-                {#each targets as t (t.route)}<option value={t.route}>{t.label}</option>{/each}
-              </select>
-              <Icon name="down" size={18} />
+            <div>
+              <Select
+                id="n-route"
+                bind:value={ctaRoute}
+                options={[{ v: '', label: '— Không có nút —' }, ...targets.map((t) => ({ v: t.route, label: t.label }))]}
+              />
             </div>
           </div>
         </div>
@@ -279,9 +280,10 @@
   .row.on {
     background: var(--son-soft);
   }
-  .pick {
+  .item {
     flex: 1;
     min-width: 0;
+    display: block;
     text-align: left;
     border: 0;
     background: none;
@@ -289,7 +291,7 @@
     border-radius: var(--r);
     cursor: pointer;
   }
-  .pick:hover {
+  .item:hover {
     background: var(--surface-2);
   }
   .form {
