@@ -29,7 +29,7 @@
     strokeDataUrl: string | null;
     word: { hanzi: string; meaning: string } | null;
   }
-  interface Config { startMode: 'demo' | 'trace' | 'free'; grid: 'tian' | 'mi'; passCount: number; showAnimation: boolean }
+  interface Config { startMode: 'demo' | 'trace' | 'free'; grid: 'tian' | 'mi'; passCount: number; hintAfterMisses: number; showAnimation: boolean; highlightRadical: boolean }
   interface Data { lesson: LessonRef; config: Config; chars: Char[]; next: NextLesson | null }
 
   const levelId = $derived(Number(page.params.level));
@@ -131,7 +131,17 @@
   <div class="tian" class:mi={data?.config.grid === 'mi'} style="width: {size}px; height: {size}px">
     {#if c}
       {#key c.id}
-        <HanziPad bind:this={pad} hanzi={c.hanzi} dataUrl={c.strokeDataUrl} {size} {mode} onpass={markPass} />
+        <HanziPad
+          bind:this={pad}
+          hanzi={c.hanzi}
+          dataUrl={c.strokeDataUrl}
+          {size}
+          {mode}
+          tuChay={data?.config.showAnimation ?? true}
+          toBoThu={data?.config.highlightRadical ?? false}
+          goiYSauMay={data?.config.hintAfterMisses ?? 3}
+          onpass={markPass}
+        />
       {/key}
     {/if}
   </div>

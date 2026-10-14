@@ -13,11 +13,15 @@
     dataUrl: string | null;
     size: number;
     mode: 'demo' | 'trace' | 'free';
+    /** Cấu hình của bài, do người soạn đặt ở khu quản trị. */
+    tuChay?: boolean;        // Xem mẫu có tự chạy nét không
+    toBoThu?: boolean;       // tô bộ thủ bằng màu khác
+    goiYSauMay?: number;     // sai mấy lần thì nhấp nháy nét đang cần
     /** Hết một lượt tô đúng cả chữ. */
     onpass?: (mistakes: number) => void;
   }
 
-  let { hanzi, dataUrl, size, mode, onpass }: Props = $props();
+  let { hanzi, dataUrl, size, mode, tuChay = true, toBoThu = false, goiYSauMay = 3, onpass }: Props = $props();
 
   let host = $state<HTMLDivElement | null>(null);
   let writer: HanziWriter | null = null;
@@ -67,6 +71,7 @@
       strokeHighlightSpeed: 1.2,
       drawingWidth: 24,
       strokeColor: mau('--text', '#22262F'),
+      radicalColor: toBoThu ? mau('--blue-text', '#2B5BD7') : null,
       outlineColor: mau('--line-3', '#D7DCE5'),
       drawingColor: mau('--son', '#E5484D'),
       highlightColor: mau('--son-mid', '#FF9A90'),
@@ -87,7 +92,9 @@
     });
 
     if (mode === 'demo') {
-      void writer.animateCharacter();
+      // Người soạn tắt hoạt hình thì chỉ hiện chữ kèm số nét, không chạy.
+      if (tuChay) void writer.animateCharacter();
+      else writer.showCharacter();
     } else {
       batDauTo();
     }
@@ -98,7 +105,7 @@
     netHienTai = 0;
     void writer.quiz({
       leniency: 1.1, // Rộng tay một chút: viết bằng chuột khó hơn bằng ngón tay.
-      showHintAfterMisses: 3,
+      showHintAfterMisses: goiYSauMay > 0 ? goiYSauMay : false,
       highlightOnComplete: true,
       onCorrectStroke: (d) => (netHienTai = d.strokeNum + 1),
       onMistake: (d) => (netHienTai = d.strokeNum),
@@ -111,6 +118,7 @@
     if (mode === 'demo') void writer.animateCharacter();
     else batDauTo();
   }
+
 
   export function goiY(): void {
     writer?.highlightStroke(netHienTai);
@@ -127,6 +135,9 @@
     void dataUrl;
     void size;
     void mode;
+    void tuChay;
+    void toBoThu;
+    void goiYSauMay;
     void host;
     dung();
     return huy;
