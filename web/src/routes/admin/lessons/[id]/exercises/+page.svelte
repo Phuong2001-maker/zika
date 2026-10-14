@@ -301,6 +301,8 @@
   @media (max-width: 899px) {
     .list {
       max-width: none;
+      /* flex-basis 320px + padding không lọt màn điện thoại nếu ô không được phép co lại. */
+      min-width: 0;
     }
   }
 </style>

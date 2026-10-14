@@ -335,11 +335,19 @@
   }
   .list {
     flex: 1 1 320px;
+    /* min-width: 0 để cột co lại được: flex-basis 320px cộng padding vượt bề ngang điện thoại. */
+    min-width: 0;
     max-width: 380px;
     padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+
+  @media (max-width: 899px) {
+    .list {
+      max-width: none;
+    }
   }
   .list-head {
     display: flex;

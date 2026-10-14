@@ -390,6 +390,11 @@
     outline-offset: 2px;
   }
 
+  /* Hai thẻ xếp phía sau lệch ra ngoài 7px mỗi bên, trên màn hẹp chúng đẩy trang tràn ngang. */
+  .the {
+    margin-inline: 14px;
+  }
+
   /* Khung thẻ: nền chuyển sắc dịu, viền trong mảnh và bóng sâu hơn để thẻ nổi khỏi trang. */
   .the :global(.face) {
     border-radius: 26px;

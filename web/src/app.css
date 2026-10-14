@@ -223,7 +223,10 @@ textarea.inp { height: auto; padding: 11px 13px; line-height: 1.5; resize: verti
 .ico-in > .inp { padding-left: 40px; }
 
 /* Nhóm tab dạng nút */
-.tabs { display: flex; gap: 3px; padding: 3px; background: var(--seg-bg); border-radius: var(--r); width: fit-content; max-width: 100%; }
+/* Nhãn trong tab không xuống dòng, nên trên màn hẹp phải cho hàng tab tự cuộn ngang —
+   không thì nó đẩy cả trang rộng ra và sinh thanh cuộn ngang toàn trang. */
+.tabs { display: flex; gap: 3px; padding: 3px; background: var(--seg-bg); border-radius: var(--r); width: fit-content; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
 .tab {
   display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 14px;
   border: 0; border-radius: 7px; background: none;
@@ -330,7 +333,6 @@ button.ava { cursor: pointer; width: 40px; height: 40px; }
 .qn.no  { background: var(--son-soft); border-color: var(--bad); color: var(--bad-text); }
 .qn.ans { background: var(--troi); border-color: var(--blue); color: var(--blue-text); }
 .qn.cur { border: 2px solid var(--son); background: var(--son-soft); color: var(--son-text); }
-.qn .fl { position: absolute; top: -5px; right: -5px; width: 14px; height: 14px; border-radius: 50%; background: var(--son); border: 2px solid var(--surface); }
 .fb { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r); }
 .wt { min-height: 48px; min-width: 48px; padding: 0 16px; border: 1px solid var(--ink-strong); border-radius: var(--r-sm); background: var(--surface); box-shadow: var(--sh-sm); font: 500 22px/1 var(--font-hz); color: var(--text); cursor: pointer; transition: border-color .12s, box-shadow .12s; }
 .wt:hover { border-color: var(--son); box-shadow: var(--sh); }
