@@ -34,7 +34,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web 489 file **0 lỗi 0 cảnh báo**, lint sạch, 18/18 test; API 35/35.
+Mốc hiện tại: web 500 file **0 lỗi 0 cảnh báo**, lint sạch, 43/43 test; API 44/44.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -43,6 +43,7 @@ Mốc hiện tại: web 489 file **0 lỗi 0 cảnh báo**, lint sạch, 18/18 t
 web/src/routes/          màn hình (SvelteKit)
 web/src/lib/components/  component dùng chung (Select, Modal, Icon, Switcher…)
 web/src/lib/admin/       riêng khu quản trị (menu.ts, api.ts, LessonHeader.svelte)
+web/src/lib/admin/import/ nhập Excel cho 6 phần soạn bài — xem bẫy số 6
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
 web/src/app.css          tokens + class dùng chung TOÀN CỤC (xem bẫy số 1)
 api/app/src/             Controllers/, Services/, Core/
@@ -98,6 +99,17 @@ thật. Tính mốc thời gian bằng `Clock::sql(Clock::now()->modify('-N days
 `web/src/lib/auth/routes.ts`: `homePath(role)`, `canView(role, path)`, `landingPath()`.
 Đừng hardcode đường dẫn đích ở chỗ khác. Admin → `/admin`, editor → `/admin/lessons`,
 learner → `/learn/flashcards`. Guard thật nằm ở `web/src/routes/+layout.svelte`.
+
+### 6. Nhập Excel: đọc file ở trình duyệt, không đọc ở PHP
+
+`web/src/lib/admin/xlsx.ts` tự đọc/ghi `.xlsx` (ZIP + XML, dùng `DecompressionStream`), nên hosting
+không phải cài PhpSpreadsheet. Mỗi phần khai báo một `ImportSpec` trong `web/src/lib/admin/import/`:
+cột, dòng mẫu, và hàm đổi bảng thành dữ liệu API. Hộp thoại `ImportModal.svelte` không biết gì về
+từng phần — thêm bộ nhập mới chỉ là thêm một file spec.
+
+Lọc ở trình duyệt **không thay** cho kiểm tra ở server: 4 endpoint `*/bulk` vẫn chạy
+`QuestionPayload::clean()` / `Validator` như khi soạn tay, dòng nào sai thì bỏ qua kèm số dòng
+chứ không làm hỏng cả mẻ.
 
 ## Nếp viết
 

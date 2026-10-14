@@ -16,6 +16,7 @@
     part,
     dirty = false,
     saving = false,
+    reload = 0,
     onsave,
   }: {
     lessonId: number;
@@ -23,6 +24,8 @@
     /** Có thay đổi chưa lưu — bật nút “Lưu thay đổi” và cảnh báo khi rời trang. */
     dirty?: boolean;
     saving?: boolean;
+    /** Tăng số này khi màn hình vừa đổi số lượng nội dung (nhập Excel) để đọc lại số trên tabs. */
+    reload?: number;
     onsave?: () => void;
   } = $props();
 
@@ -74,6 +77,7 @@
   // Đổi bài mà vẫn ở cùng một phần thì trang không dựng lại, nên bám theo lessonId.
   $effect(() => {
     void lessonId;
+    void reload;
     void load();
   });
 

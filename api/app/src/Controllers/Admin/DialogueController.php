@@ -17,6 +17,9 @@ use Zika\Services\PartContent;
 /** Quản trị · Hội thoại và Ngữ pháp (04 §10.6). Quyền E. */
 final class DialogueController
 {
+    /** Trần cho một lượt nhập từ Excel. */
+    private const BULK_MAX = 100;
+
     /* ------------------------------------------------------------------ */
     /* Hội thoại                                                           */
     /* ------------------------------------------------------------------ */
@@ -207,6 +210,53 @@ final class DialogueController
         return Response::json(self::point($id), 201);
     }
 
+    /**
+     * POST /admin/lessons/{id}/grammar/bulk — nhập nhiều cấu trúc một lượt (từ Excel).
+     * Cấu trúc nào sai thì bỏ qua kèm số dòng, phần còn lại vẫn vào.
+     */
+    public function bulkGrammar(Request $r): array
+    {
+        $lesson = ContentWriter::lesson($r->id());
+        $lessonId = (int) $lesson['id'];
+
+        $v = new Validator($r->body);
+        $mode = (string) $v->in('mode', 'Cách nhập', ['append', 'replace'], 'append');
+        $items = $v->arr('items', 'Danh sách cấu trúc');
+        $v->done();
+
+        if (count($items) > self::BULK_MAX) {
+            throw HttpError::validation(['items' => 'Mỗi lần nhập tối đa ' . self::BULK_MAX . ' cấu trúc.']);
+        }
+
+        $created = 0;
+        $skipped = [];
+
+        Db::tx(static function () use ($items, $lessonId, $mode, &$created, &$skipped): void {
+            if ($mode === 'replace') {
+                Db::exec('DELETE FROM grammar_points WHERE lesson_id = ?', [$lessonId]);
+            }
+            $sort = (int) Db::val('SELECT COALESCE(MAX(sort_order), 0) FROM grammar_points WHERE lesson_id = ?', [$lessonId]);
+
+            foreach (array_values($items) as $i => $raw) {
+                try {
+                    $set = self::grammarSet(is_array($raw) ? $raw : []);
+                } catch (HttpError $e) {
+                    $fields = $e->fields;
+                    $skipped[] = ['row' => $i + 1, 'reason' => reset($fields) ?: $e->getMessage()];
+                    continue;
+                }
+                $set['lesson_id'] = $lessonId;
+                $set['sort_order'] = ++$sort;
+                Db::insert('grammar_points', $set);
+                $created++;
+            }
+        });
+
+        ContentWriter::touch($lessonId, $r);
+        Audit::log($r, 'grammar.bulk', 'lesson', $lessonId, ['mode' => $mode, 'created' => $created, 'skipped' => count($skipped)]);
+        return ['created' => $created, 'skipped' => $skipped];
+    }
+
     /** PUT /admin/grammar/{id} */
     public function updateGrammar(Request $r): array
     {
@@ -247,7 +297,16 @@ final class DialogueController
     /** @return array<string,mixed> cột sẵn sàng ghi vào grammar_points */
     private function readGrammar(Request $r): array
     {
-        $v = new Validator($r->body);
+        return self::grammarSet($r->body);
+    }
+
+    /**
+     * @param array<string,mixed> $in
+     * @return array<string,mixed> cột sẵn sàng ghi vào grammar_points
+     */
+    private static function grammarSet(array $in): array
+    {
+        $v = new Validator($in);
         $title = $v->str('title', 'Tên cấu trúc', min: 1, max: 120);
         $subtitle = $v->str('subtitle', 'Mô tả ngắn', false, 0, 160);
         $explain = $v->str('explain', 'Giải thích', min: 1, max: 4000);

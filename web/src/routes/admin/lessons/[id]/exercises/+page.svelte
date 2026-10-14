@@ -7,7 +7,9 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import LessonHeader from '$lib/admin/LessonHeader.svelte';
   import QuestionForm from '$lib/admin/QuestionForm.svelte';
+  import ImportModal from '$lib/admin/ImportModal.svelte';
   import { adminApi, type AdminQuestion, type Draft } from '$lib/admin/api';
+  import { questionsImport, type ImportMode, type QuestionRow } from '$lib/admin/import';
 
   // Soạn bài tập — /admin/lessons/:id/exercises (08 §8).
   const TYPES: [string, string][] = [
@@ -32,6 +34,20 @@
   let saving = $state(false);
   /** Khoá tăng dần để ép QuestionForm dựng lại khi đổi câu (tránh giữ state cũ). */
   let formKey = $state(0);
+  let nhapOpen = $state(false);
+  /** Tăng sau mỗi lần nhập để LessonHeader đọc lại số lượng trên hàng tabs. */
+  let reload = $state(0);
+
+  const nhapSpec = questionsImport('bt');
+
+  /** Nhập xong thì tải lại cả danh sách — câu mới do server đánh số thứ tự. */
+  async function nhapExcel(items: QuestionRow[], mode: ImportMode) {
+    const out = await adminApi.bulkQuestions(lessonId, { part: 'bt', mode, items });
+    dirty = false;
+    await load();
+    reload++;
+    return out;
+  }
 
   function blank(): Draft {
     return {
@@ -123,7 +139,16 @@
 
 <svelte:head><title>Soạn bài tập · Quản trị · Zìkǎ</title></svelte:head>
 
-<LessonHeader {lessonId} part="bt" {dirty} {saving} onsave={() => save(false)} />
+<LessonHeader {lessonId} part="bt" {dirty} {saving} {reload} onsave={() => save(false)} />
+
+{#if nhapOpen}
+  <ImportModal
+    spec={nhapSpec}
+    replaceNote="Xoá hết câu bài tập đang có của bài rồi nhập mới."
+    onclose={() => (nhapOpen = false)}
+    onrun={nhapExcel}
+  />
+{/if}
 
 {#if failed}
   <EmptyState title="Không tải được danh sách câu.">
@@ -137,7 +162,12 @@
     <aside class="paper list">
       <div class="list-head">
         <b>{questions.length} câu bài tập</b>
-        <button type="button" class="btn btn-sm btn-paper" onclick={addNew}><Icon name="plus" size={15} /> Thêm câu</button>
+        <span style="display: flex; gap: 8px">
+          <button type="button" class="btn btn-sm btn-paper" onclick={() => (nhapOpen = true)}>
+            <Icon name="upload" size={14} /> Nhập Excel
+          </button>
+          <button type="button" class="btn btn-sm btn-paper" onclick={addNew}><Icon name="plus" size={15} /> Thêm câu</button>
+        </span>
       </div>
 
       {#if questions.length === 0}

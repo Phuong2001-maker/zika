@@ -18,6 +18,10 @@ use Zika\Services\PartContent;
 /** Quản trị · Luyện viết (04 §10.5). Quyền E. */
 final class WritingController
 {
+    private const BULK_MAX = 200;
+    /** Thời gian tối đa dành cho việc tải dữ liệu nét trong một lượt nhập. */
+    private const FETCH_BUDGET_SEC = 20.0;
+
     /** GET /admin/lessons/{id}/writing */
     public function index(Request $r): array
     {
@@ -98,6 +102,104 @@ final class WritingController
         ContentWriter::touch((int) $lesson['id'], $r);
         Audit::log($r, 'writing.add_char', 'lesson', (int) $lesson['id'], ['hanzi' => $hanzi]);
         return Response::json(['chars' => self::chars((int) $lesson['id'])], 201);
+    }
+
+    /**
+     * POST /admin/lessons/{id}/writing/bulk — nhập nhiều chữ một lượt (từ Excel).
+     *
+     * Dữ liệu nét tải từ CDN, mỗi chữ tốn tới 5 giây, nên chỉ tải trong FETCH_BUDGET_SEC đầu;
+     * chữ còn lại để trạng thái “missing” và người soạn bấm tải lại ở từng ô — thà nhập xong
+     * 100 chữ còn thiếu nét hơn là để request chạy quá giờ rồi hỏng cả mẻ.
+     */
+    public function bulk(Request $r): Response
+    {
+        $lesson = ContentWriter::lesson($r->id());
+        $lessonId = (int) $lesson['id'];
+
+        $v = new Validator($r->body);
+        $mode = (string) $v->in('mode', 'Cách nhập', ['append', 'replace'], 'append');
+        $items = $v->arr('items', 'Danh sách chữ');
+        $v->done();
+
+        if (count($items) > self::BULK_MAX) {
+            throw HttpError::validation(['items' => 'Mỗi lần nhập tối đa ' . self::BULK_MAX . ' chữ.']);
+        }
+
+        if ($mode === 'replace') {
+            Db::exec('DELETE FROM lesson_chars WHERE lesson_id = ?', [$lessonId]);
+        }
+
+        $sort = (int) Db::val('SELECT COALESCE(MAX(sort_order), 0) FROM lesson_chars WHERE lesson_id = ?', [$lessonId]);
+        $seen = array_map('strval', Db::col(
+            'SELECT c.hanzi FROM lesson_chars lc JOIN characters c ON c.id = lc.char_id WHERE lc.lesson_id = ?',
+            [$lessonId],
+        ));
+
+        $added = 0;
+        $fetched = 0;
+        $skipped = [];
+        $deadline = microtime(true) + self::FETCH_BUDGET_SEC;
+
+        foreach (array_values($items) as $i => $raw) {
+            $row = is_array($raw) ? $raw : [];
+            $hanzi = trim((string) ($row['hanzi'] ?? ''));
+
+            if (!Pinyin::isHanzi($hanzi) || mb_strlen($hanzi) !== 1) {
+                $skipped[] = ['row' => $i + 1, 'reason' => 'Không phải một chữ Hán đơn.'];
+                continue;
+            }
+            if (in_array($hanzi, $seen, true)) {
+                $skipped[] = ['row' => $i + 1, 'reason' => 'Bài đã có chữ ' . $hanzi . '.'];
+                continue;
+            }
+            $seen[] = $hanzi;
+
+            [$charId, $isNew] = self::ensureChar($hanzi);
+            self::fillChar($charId, $row);
+            if ($isNew && microtime(true) < $deadline && HanziDataService::fetch($charId)) {
+                $fetched++;
+            }
+
+            Db::exec(
+                'INSERT IGNORE INTO lesson_chars (lesson_id, char_id, sort_order, is_visible) VALUES (?, ?, ?, ?)',
+                [$lessonId, $charId, ++$sort, ($row['visible'] ?? true) ? 1 : 0],
+            );
+            $added++;
+        }
+
+        ContentWriter::touch($lessonId, $r);
+        Audit::log($r, 'writing.bulk', 'lesson', $lessonId, ['mode' => $mode, 'added' => $added, 'skipped' => count($skipped)]);
+        return Response::json([
+            'created' => $added,
+            'strokeFetched' => $fetched,
+            'skipped' => $skipped,
+            'chars' => self::chars($lessonId),
+        ], 201);
+    }
+
+    /**
+     * Bổ sung mô tả cho chữ. Bảng characters dùng chung mọi bài nên chỉ điền vào ô đang trống,
+     * không ghi đè thứ người khác đã soạn.
+     * @param array<string,mixed> $row
+     */
+    private static function fillChar(int $charId, array $row): void
+    {
+        $c = Db::one('SELECT pinyin, han_viet, meaning_vi, structure FROM characters WHERE id = ?', [$charId]);
+        if ($c === null) {
+            return;
+        }
+
+        $set = [];
+        $map = ['pinyin' => ['pinyin', 20], 'hanViet' => ['han_viet', 60], 'meaning' => ['meaning_vi', 255], 'structure' => ['structure', 160]];
+        foreach ($map as $from => [$col, $max]) {
+            $value = trim((string) ($row[$from] ?? ''));
+            if ($value !== '' && (string) $c[$col] === '') {
+                $set[$col] = mb_substr($value, 0, $max);
+            }
+        }
+        if ($set !== []) {
+            Db::update('characters', $set, ['id' => $charId]);
+        }
     }
 
     /** PATCH /admin/lesson-chars/{id} — bật/tắt hiện chữ, sửa mô tả cấu tạo. */

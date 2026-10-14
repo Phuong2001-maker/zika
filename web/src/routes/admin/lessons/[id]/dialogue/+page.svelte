@@ -6,7 +6,9 @@
   import Select from '$lib/components/Select.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import LessonHeader from '$lib/admin/LessonHeader.svelte';
+  import ImportModal from '$lib/admin/ImportModal.svelte';
   import { adminApi, type DialogueLine, type DialogueQuestion, type DialogueSpeaker } from '$lib/admin/api';
+  import { dialogueImport, type DialogueBundle, type ImportMode } from '$lib/admin/import';
 
   // Soạn hội thoại — /admin/lessons/:id/dialogue (08 §11). Lưu cả khối một lần.
   const COLORS = ['#DCEBFF', '#CFF5E1', '#FFF0B3', '#E8E0FF', '#FFE0DC', '#FFE9C7'];
@@ -21,9 +23,47 @@
   let quiz = $state<DialogueQuestion[]>([]);
   let dirty = $state(false);
   let saving = $state(false);
+  let nhapOpen = $state(false);
+  /** Tăng sau mỗi lần nhập để LessonHeader đọc lại số lượng trên hàng tabs. */
+  let reload = $state(0);
 
   function touch(): void {
     dirty = true;
+  }
+
+  /**
+   * Hội thoại lưu cả khối một lần nên bộ nhập không gọi API riêng: đổ vào biểu mẫu để người soạn
+   * xem lại, bấm “Lưu thay đổi” mới ghi. “Thêm vào cuối” nối tiếp lời thoại đang có.
+   */
+  async function nhapExcel(items: DialogueBundle[], mode: ImportMode) {
+    const d = items[0];
+    if (!d) return { created: 0, skipped: [] };
+
+    if (mode === 'replace') {
+      speakers = d.speakers;
+      lines = d.lines;
+      quiz = d.questions;
+    } else {
+      // Khoá nhân vật phải không đụng nhau thì lời thoại cũ mới giữ đúng người.
+      const map: Record<string, string> = {};
+      for (const s of d.speakers) {
+        const same = speakers.find((x) => x.name.trim() === s.name.trim());
+        if (same) {
+          map[s.key] = same.key;
+        } else {
+          const key = `n${speakers.length + 1}`;
+          map[s.key] = key;
+          speakers = [...speakers, { ...s, key }];
+        }
+      }
+      lines = [...lines, ...d.lines.map((l) => ({ ...l, speakerKey: map[l.speakerKey] ?? l.speakerKey }))];
+      quiz = [...quiz, ...d.questions].slice(0, 5);
+    }
+
+    // Nhân vật trống do khuôn mẫu tạo sẵn thì bỏ đi cho gọn.
+    speakers = speakers.filter((s) => s.name.trim() !== '');
+    touch();
+    return { created: d.lines.length, skipped: [] };
   }
 
   async function load(): Promise<void> {
@@ -105,6 +145,7 @@
       dirty = false;
       toast.ok('Đã lưu hội thoại.');
       await load();
+      reload++;
     } catch (e) {
       toast.show(e instanceof ApiError ? (Object.values(e.fields)[0] ?? e.message) : 'Không lưu được.');
     } finally {
@@ -115,7 +156,16 @@
 
 <svelte:head><title>Soạn hội thoại · Quản trị · Zìkǎ</title></svelte:head>
 
-<LessonHeader {lessonId} part="ht" {dirty} {saving} onsave={save} />
+<LessonHeader {lessonId} part="ht" {dirty} {saving} {reload} onsave={save} />
+
+{#if nhapOpen}
+  <ImportModal
+    spec={dialogueImport}
+    replaceNote="Thay toàn bộ nhân vật và lời thoại đang có trên biểu mẫu."
+    onclose={() => (nhapOpen = false)}
+    onrun={nhapExcel}
+  />
+{/if}
 
 {#if !loaded}
   <Skeleton h="320px" r={16} />
@@ -160,7 +210,12 @@
   <section class="block card">
     <div style="display: flex; align-items: center; justify-content: space-between">
       <h2 class="h2">Lời thoại · {lines.length} câu</h2>
-      <button type="button" class="btn btn-sm btn-paper" onclick={addLine}><Icon name="plus" size={15} /> Thêm câu</button>
+      <span style="display: flex; gap: 8px">
+        <button type="button" class="btn btn-sm btn-paper" onclick={() => (nhapOpen = true)}>
+          <Icon name="upload" size={14} /> Nhập Excel
+        </button>
+        <button type="button" class="btn btn-sm btn-paper" onclick={addLine}><Icon name="plus" size={15} /> Thêm câu</button>
+      </span>
     </div>
 
     {#each lines as l, i (i)}

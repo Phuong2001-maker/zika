@@ -11,7 +11,9 @@
   import Bar from '$lib/components/Bar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import ImportModal from '$lib/admin/ImportModal.svelte';
   import { adminApi, type AdminLevel, type AdminWord, type DictLookup, type WordExample } from '$lib/admin/api';
+  import { wordsImport, type ImportMode, type WordRow } from '$lib/admin/import';
   import { toneParts } from '$lib/utils/pinyin';
 
   // Quản trị · Từ vựng HSK (08 §7).
@@ -41,7 +43,15 @@
   let saving = $state(false);
 
   let dict = $state<DictLookup | null>(null);
+  let nhapOpen = $state(false);
   let dictTimer: ReturnType<typeof setTimeout> | null = null;
+
+  /** Nhập vào đúng bài đang chọn ở ô “Thuộc bài”; chưa chọn bài thì từ nằm ở mức cấp. */
+  async function nhapExcel(items: WordRow[], mode: ImportMode) {
+    const out = await adminApi.bulkWords({ levelId, lessonId, mode, items });
+    await Promise.all([loadWords(), loadLevels()]);
+    return out;
+  }
   let side = $state<'front' | 'back'>('front');
 
   const levelId = $derived(Number(page.url.searchParams.get('level')) || 1);
@@ -365,9 +375,14 @@
 
 {#snippet wordList()}
   <section class="paper" style="padding: 16px; display: flex; flex-direction: column; gap: 10px">
-    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap">
       <b>Từ trong HSK {levelId}</b>
-      <span class="muted num" style="font-size: 13px">{num(total)} từ</span>
+      <span style="display: flex; align-items: center; gap: 10px">
+        <span class="muted num" style="font-size: 13px">{num(total)} từ</span>
+        <button type="button" class="btn btn-sm btn-paper" onclick={() => (nhapOpen = true)}>
+          <Icon name="upload" size={14} /> Nhập Excel
+        </button>
+      </span>
     </div>
     <span class="ico-in">
       <Icon name="search" size={16} />
@@ -393,6 +408,17 @@
     {/if}
   </section>
 {/snippet}
+
+{#if nhapOpen}
+  <ImportModal
+    spec={wordsImport}
+    replaceNote={lessonId === null
+      ? 'Chọn một bài ở ô “Thuộc bài” mới xoá được — nhập ở mức cấp chỉ thêm, không ghi đè.'
+      : 'Xoá hết từ đang có của bài đã chọn rồi nhập mới.'}
+    onclose={() => (nhapOpen = false)}
+    onrun={nhapExcel}
+  />
+{/if}
 
 <div class="head">
   <div>

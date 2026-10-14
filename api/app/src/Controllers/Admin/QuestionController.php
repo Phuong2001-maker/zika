@@ -19,6 +19,9 @@ use Zika\Services\QuestionPayload;
 /** Quản trị · Bài tập, Kiểm tra, Thi thử (04 §10.4). Quyền E. */
 final class QuestionController
 {
+    /** Trần cho một lượt nhập từ Excel — đủ rộng cho cả cấp, vẫn chặn file hỏng gửi hàng vạn dòng. */
+    private const BULK_MAX = 500;
+
     /* ------------------------------------------------------------------ */
     /* Câu hỏi của bài (bt · kt)                                           */
     /* ------------------------------------------------------------------ */
@@ -61,6 +64,77 @@ final class QuestionController
         ContentWriter::touch((int) $lesson['id'], $r);
         Audit::log($r, 'question.create', 'question', $id, ['lessonId' => (int) $lesson['id'], 'part' => $part, 'type' => $type]);
         return Response::json(self::row($id), 201);
+    }
+
+    /**
+     * POST /admin/lessons/{id}/questions/bulk — nhập nhiều câu một lượt (từ Excel).
+     * Câu nào sai thì bỏ qua và báo số dòng, các câu còn lại vẫn vào — nhập 50 câu không nên
+     * hỏng cả mẻ vì một dòng thiếu đáp án.
+     */
+    public function bulk(Request $r): array
+    {
+        $lesson = ContentWriter::lesson($r->id());
+        $lessonId = (int) $lesson['id'];
+
+        $v = new Validator($r->body);
+        $part = (string) $v->in('part', 'Phần', ['bt', 'kt'], 'bt');
+        $mode = (string) $v->in('mode', 'Cách nhập', ['append', 'replace'], 'append');
+        $items = $v->arr('items', 'Danh sách câu');
+        $v->done();
+
+        if (count($items) > self::BULK_MAX) {
+            throw HttpError::validation(['items' => 'Mỗi lần nhập tối đa ' . self::BULK_MAX . ' câu.']);
+        }
+
+        $allowed = $part === 'bt' ? QuestionGrader::BT_TYPES : QuestionGrader::KT_TYPES;
+        $created = 0;
+        $skipped = [];
+
+        Db::tx(static function () use ($items, $allowed, $part, $lessonId, $mode, &$created, &$skipped): void {
+            if ($mode === 'replace') {
+                Db::exec('DELETE FROM questions WHERE part = ? AND lesson_id = ?', [$part, $lessonId]);
+            }
+            $sort = (int) Db::val(
+                'SELECT COALESCE(MAX(sort_order), 0) FROM questions WHERE part = ? AND lesson_id = ?',
+                [$part, $lessonId],
+            );
+
+            foreach (array_values($items) as $i => $raw) {
+                $row = is_array($raw) ? $raw : [];
+                $type = (string) ($row['type'] ?? '');
+                if (!in_array($type, $allowed, true)) {
+                    $skipped[] = ['row' => $i + 1, 'reason' => 'Dạng câu không dùng được ở phần này.'];
+                    continue;
+                }
+
+                try {
+                    $payload = QuestionPayload::clean($type, (array) ($row['payload'] ?? []));
+                } catch (HttpError $e) {
+                    // Lấy đúng câu lỗi của trường đầu tiên để người soạn biết sửa ô nào.
+                    $fields = $e->fields;
+                    $skipped[] = ['row' => $i + 1, 'reason' => reset($fields) ?: $e->getMessage()];
+                    continue;
+                }
+
+                $score = isset($row['score']) && is_numeric($row['score']) ? (float) $row['score'] : 1.0;
+                Db::insert('questions', [
+                    'part' => $part,
+                    'lesson_id' => $lessonId,
+                    'type' => $type,
+                    'payload' => Json::encode($payload),
+                    'explain_vi' => mb_substr(trim((string) ($row['explain'] ?? '')), 0, 2000) ?: null,
+                    'score' => $score > 0 ? min($score, 100) : 1.0,
+                    'sort_order' => ++$sort,
+                ]);
+                $created++;
+            }
+        });
+
+        ContentWriter::touch($lessonId, $r);
+        Audit::log($r, 'question.bulk', 'lesson', $lessonId, [
+            'part' => $part, 'mode' => $mode, 'created' => $created, 'skipped' => count($skipped),
+        ]);
+        return ['created' => $created, 'skipped' => $skipped];
     }
 
     /** PUT /admin/questions/{id} */

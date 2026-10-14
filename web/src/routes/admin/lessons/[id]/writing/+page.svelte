@@ -7,7 +7,9 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import Modal from '$lib/components/Modal.svelte';
   import LessonHeader from '$lib/admin/LessonHeader.svelte';
+  import ImportModal from '$lib/admin/ImportModal.svelte';
   import { adminApi, type AdminChar, type WritingConfig } from '$lib/admin/api';
+  import { writingImport, type CharRow, type ImportMode } from '$lib/admin/import';
 
   // Soạn luyện viết — /admin/lessons/:id/writing (08 §10).
   const lessonId = $derived(Number(page.params.id));
@@ -19,6 +21,17 @@
   let addOpen = $state(false);
   let addHanzi = $state('');
   let cfgOpen = $state(false);
+  let nhapOpen = $state(false);
+  /** Tăng sau mỗi lần nhập để LessonHeader đọc lại số lượng trên hàng tabs. */
+  let reload = $state(0);
+
+  /** API trả luôn danh sách mới nên khỏi gọi lại GET. */
+  async function nhapExcel(items: CharRow[], mode: ImportMode) {
+    const out = await adminApi.bulkChars(lessonId, { mode, items });
+    chars = out.chars;
+    reload++;
+    return out;
+  }
 
   async function load(): Promise<void> {
     failed = false;
@@ -113,7 +126,7 @@
 
 <svelte:head><title>Soạn luyện viết · Quản trị · Zìkǎ</title></svelte:head>
 
-<LessonHeader {lessonId} part="lv" />
+<LessonHeader {lessonId} part="lv" {reload} />
 
 {#if failed}
   <EmptyState title="Không tải được danh sách chữ.">
@@ -134,6 +147,9 @@
     <button type="button" class="btn btn-sm" onclick={() => (cfgOpen = true)}><Icon name="sliders" size={15} /> Chỉnh</button>
     <button type="button" class="btn btn-sm btn-paper" disabled={busy} onclick={fromWords}>
       <Icon name="download" size={15} /> Lấy chữ từ từ vựng
+    </button>
+    <button type="button" class="btn btn-sm btn-paper" onclick={() => (nhapOpen = true)}>
+      <Icon name="upload" size={15} /> Nhập Excel
     </button>
     <button type="button" class="btn btn-son btn-sm" onclick={() => (addOpen = true)}><Icon name="plus" size={15} /> Thêm chữ</button>
   </section>
@@ -173,6 +189,15 @@
       {/each}
     </div>
   {/if}
+{/if}
+
+{#if nhapOpen}
+  <ImportModal
+    spec={writingImport}
+    replaceNote="Xoá hết chữ đang có của bài rồi nhập mới."
+    onclose={() => (nhapOpen = false)}
+    onrun={nhapExcel}
+  />
 {/if}
 
 {#if addOpen}

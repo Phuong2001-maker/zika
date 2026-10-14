@@ -43,6 +43,16 @@ Admin vào được `/admin`; người học chỉ thấy phần `/learn`. Đổ
 php api/app/tools/install.php --reset-demo-password
 ```
 
+## Nhập nội dung từ Excel
+
+Sáu trang soạn bài (Từ vựng, Bài tập, Kiểm tra, Luyện viết, Hội thoại, Ngữ pháp) đều có nút
+**Nhập Excel**. Trong hộp thoại: bấm **Tải file mẫu** để lấy đúng khuôn cột kèm ví dụ, điền vào
+rồi chọn file — hoặc bôi đen vùng bảng trong Excel và dán thẳng vào ô.
+
+Nhận `.xlsx`, `.csv` và nội dung dán. File được đọc ngay trong trình duyệt nên máy chủ không cần
+thư viện Excel. Trước khi ghi, hộp thoại hiện bảng xem trước và liệt kê dòng nào sai, sai chỗ nào;
+các dòng còn lại vẫn nhập được. Chọn **Thêm vào cuối** hoặc **Xoá hết rồi nhập mới**.
+
 ## Kiểm thử
 
 ```bash

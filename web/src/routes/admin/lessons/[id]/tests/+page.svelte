@@ -9,7 +9,9 @@
   import Modal from '$lib/components/Modal.svelte';
   import LessonHeader from '$lib/admin/LessonHeader.svelte';
   import QuestionForm from '$lib/admin/QuestionForm.svelte';
+  import ImportModal from '$lib/admin/ImportModal.svelte';
   import { adminApi, type AdminQuestion, type Draft, type TestConfig } from '$lib/admin/api';
+  import { questionsImport, type ImportMode, type QuestionRow } from '$lib/admin/import';
 
   // Soạn bài kiểm tra — /admin/lessons/:id/tests (08 §9).
   const TYPES: [string, string][] = [
@@ -38,6 +40,20 @@
   let formKey = $state(0);
   let cfgOpen = $state(false);
   let copyOpen = $state(false);
+  let nhapOpen = $state(false);
+  /** Tăng sau mỗi lần nhập để LessonHeader đọc lại số lượng trên hàng tabs. */
+  let reload = $state(0);
+
+  const nhapSpec = questionsImport('kt');
+
+  /** Nhập xong thì tải lại cả danh sách — câu mới do server đánh số thứ tự. */
+  async function nhapExcel(items: QuestionRow[], mode: ImportMode) {
+    const out = await adminApi.bulkQuestions(lessonId, { part: 'kt', mode, items });
+    dirty = false;
+    await load();
+    reload++;
+    return out;
+  }
   let btQuestions = $state<AdminQuestion[]>([]);
   const copyPick = new SvelteSet<number>();
 
@@ -154,7 +170,7 @@
 
 <svelte:head><title>Soạn bài kiểm tra · Quản trị · Zìkǎ</title></svelte:head>
 
-<LessonHeader {lessonId} part="kt" {dirty} {saving} onsave={() => save(false)} />
+<LessonHeader {lessonId} part="kt" {dirty} {saving} {reload} onsave={() => save(false)} />
 
 {#if failed}
   <EmptyState title="Không tải được câu hỏi.">
@@ -181,7 +197,10 @@
     <aside class="paper list">
       <div class="list-head">
         <b>{questions.length} câu kiểm tra</b>
-        <div style="display: flex; gap: 6px">
+        <div style="display: flex; gap: 6px; flex-wrap: wrap">
+          <button type="button" class="btn btn-sm btn-paper" onclick={() => (nhapOpen = true)}>
+            <Icon name="upload" size={14} /> Nhập Excel
+          </button>
           <button type="button" class="btn btn-sm btn-paper" onclick={openCopy}><Icon name="download" size={14} /> Lấy từ Bài tập</button>
           <button type="button" class="btn btn-sm btn-paper" onclick={() => pick(null)}><Icon name="plus" size={15} /> Thêm</button>
         </div>
@@ -223,6 +242,15 @@
       {/if}
     </section>
   </div>
+{/if}
+
+{#if nhapOpen}
+  <ImportModal
+    spec={nhapSpec}
+    replaceNote="Xoá hết câu kiểm tra đang có của bài rồi nhập mới."
+    onclose={() => (nhapOpen = false)}
+    onrun={nhapExcel}
+  />
 {/if}
 
 {#if cfgOpen && config}

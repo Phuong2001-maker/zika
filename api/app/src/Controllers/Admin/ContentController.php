@@ -18,6 +18,9 @@ final class ContentController
 {
     private const POS = ['n', 'v', 'adj', 'adv', 'mw', 'phrase', 'num', 'pron', 'prep', 'conj', 'part', 'other'];
 
+    /** Trần cho một lượt nhập từ Excel. */
+    private const BULK_MAX = 500;
+
     /** Tên loại từ hiển thị trong trình soạn, cũng dùng khi nhập CSV bằng chữ tiếng Việt. */
     public const POS_VI = [
         'n' => 'danh từ', 'v' => 'động từ', 'adj' => 'tính từ', 'adv' => 'phó từ',
@@ -424,11 +427,19 @@ final class ContentController
         $v = new Validator($r->body);
         $levelId = (int) $v->int('levelId', 'Cấp', 1, 6);
         $lessonId = $v->int('lessonId', 'Bài', 1, null, false);
+        $mode = (string) $v->in('mode', 'Cách nhập', ['append', 'replace'], 'append');
         $items = $v->arr('items', 'Danh sách từ');
         $v->done();
 
         if ($lessonId !== null && (int) Db::val('SELECT level_id FROM lessons WHERE id = ?', [$lessonId]) !== $levelId) {
             throw HttpError::validation(['lessonId' => 'Bài này không thuộc cấp đã chọn.']);
+        }
+        if (count($items) > self::BULK_MAX) {
+            throw HttpError::validation(['items' => 'Mỗi lần nhập tối đa ' . self::BULK_MAX . ' từ.']);
+        }
+        // Ghi đè chỉ xoá từ của đúng bài đang chọn; từ chưa gắn bài (lesson_id NULL) không đụng tới.
+        if ($mode === 'replace' && $lessonId !== null) {
+            Db::exec('DELETE FROM words WHERE lesson_id = ?', [$lessonId]);
         }
 
         $created = 0;
@@ -465,7 +476,7 @@ final class ContentController
                 continue;
             }
 
-            Db::insert('words', [
+            $wordId = Db::insert('words', [
                 'level_id' => $levelId,
                 'lesson_id' => $lessonId,
                 'hanzi' => $hanzi,
@@ -475,6 +486,7 @@ final class ContentController
                 'pos' => in_array($pos, self::POS, true) ? $pos : 'n',
                 'sort_order' => ++$sort,
             ]);
+            self::saveExamples($wordId, self::cleanExamples($raw['examples'] ?? [], $hanzi));
             $created++;
         }
 
@@ -572,6 +584,34 @@ final class ContentController
     }
 
     /** @param list<array<string,string|null>> $examples */
+    /**
+     * Làm sạch câu ví dụ khi nhập hàng loạt. Khác readWord(): ví dụ sai ở đây chỉ bị bỏ chứ không
+     * làm hỏng cả từ — nhập 200 từ không nên dừng vì một câu ví dụ gõ thiếu chữ.
+     * @param mixed $in
+     * @return list<array<string,mixed>>
+     */
+    private static function cleanExamples(mixed $in, string $hanzi): array
+    {
+        $out = [];
+        foreach (array_slice(is_array($in) ? $in : [], 0, 3) as $e) {
+            $zh = trim((string) (is_array($e) ? ($e['zh'] ?? '') : ''));
+            if ($zh === '' || mb_strlen($zh) > 255) {
+                continue;
+            }
+            $highlight = trim((string) ($e['highlight'] ?? '')) ?: $hanzi;
+            if (mb_strpos($zh, $highlight) === false) {
+                $highlight = $hanzi;
+            }
+            $out[] = [
+                'zh' => $zh,
+                'pinyin' => mb_substr(trim((string) ($e['pinyin'] ?? '')), 0, 500),
+                'vi' => mb_substr(trim((string) ($e['vi'] ?? '')), 0, 500),
+                'highlight' => $highlight === $hanzi ? null : mb_substr($highlight, 0, 32),
+            ];
+        }
+        return $out;
+    }
+
     private static function saveExamples(int $wordId, array $examples): void
     {
         foreach ($examples as $i => $e) {

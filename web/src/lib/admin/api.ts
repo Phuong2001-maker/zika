@@ -2,6 +2,7 @@
 import { api } from '$lib/api/client';
 import type { Part } from '$lib/api/types';
 import type { Payload } from '$lib/utils/grade';
+import type { ImportMode, ImportOutcome } from './import/core';
 
 /* ---------------- Cấp, bài, từ ---------------- */
 
@@ -215,8 +216,8 @@ export const adminApi = {
   createWord: (body: Partial<AdminWord> & { examples: WordExample[] }) => api.post<AdminWord>('/admin/words', body),
   updateWord: (id: number, body: Partial<AdminWord> & { examples: WordExample[] }) => api.put<AdminWord>(`/admin/words/${id}`, body),
   deleteWord: (id: number) => api.del(`/admin/words/${id}`),
-  bulkWords: (body: { levelId: number; lessonId: number | null; items: Partial<AdminWord>[] }) =>
-    api.post<{ created: number; skipped: { hanzi: string; reason: string }[] }>('/admin/words/bulk', body),
+  bulkWords: (body: { levelId: number; lessonId: number | null; mode?: ImportMode; items: Partial<AdminWord>[] }) =>
+    api.post<ImportOutcome>('/admin/words/bulk', body),
   reorderWords: (lessonId: number, ids: number[]) => api.put(`/admin/lessons/${lessonId}/words/order`, { ids }),
   dict: (hanzi: string, level: number) => api.get<DictLookup>('/admin/dict', { query: { hanzi, level } }),
 
@@ -228,12 +229,16 @@ export const adminApi = {
   reorderQuestions: (lessonId: number, part: 'bt' | 'kt', ids: number[]) => api.put(`/admin/lessons/${lessonId}/questions/order`, { part, ids }),
   copyFromBt: (lessonId: number, questionIds: number[]) =>
     api.post<{ copied: number; skipped: unknown[] }>(`/admin/lessons/${lessonId}/questions/copy-from-bt`, { questionIds }),
+  bulkQuestions: (lessonId: number, body: { part: 'bt' | 'kt'; mode: ImportMode; items: unknown[] }) =>
+    api.post<ImportOutcome>(`/admin/lessons/${lessonId}/questions/bulk`, body),
   saveTestConfig: (lessonId: number, body: TestConfig) => api.put<TestConfig>(`/admin/lessons/${lessonId}/test-config`, body),
 
   writing: (lessonId: number) => api.get<{ config: WritingConfig; chars: AdminChar[] }>(`/admin/lessons/${lessonId}/writing`),
   writingFromWords: (lessonId: number) =>
     api.post<{ added: number; strokeFetched: number; chars: AdminChar[] }>(`/admin/lessons/${lessonId}/writing/from-words`),
   addChar: (lessonId: number, hanzi: string) => api.post<{ chars: AdminChar[] }>(`/admin/lessons/${lessonId}/writing/chars`, { hanzi }),
+  bulkChars: (lessonId: number, body: { mode: ImportMode; items: unknown[] }) =>
+    api.post<ImportOutcome & { chars: AdminChar[] }>(`/admin/lessons/${lessonId}/writing/bulk`, body),
   patchLessonChar: (id: number, body: { visible?: boolean; structure?: string }) => api.patch(`/admin/lesson-chars/${id}`, body),
   deleteLessonChar: (id: number) => api.del(`/admin/lesson-chars/${id}`),
   reorderChars: (lessonId: number, ids: number[]) => api.put(`/admin/lessons/${lessonId}/writing/order`, { ids }),
@@ -245,6 +250,8 @@ export const adminApi = {
 
   grammar: (lessonId: number) => api.get<AdminGrammarPoint[]>(`/admin/lessons/${lessonId}/grammar`),
   createGrammar: (lessonId: number, body: Record<string, unknown>) => api.post<AdminGrammarPoint>(`/admin/lessons/${lessonId}/grammar`, body),
+  bulkGrammar: (lessonId: number, body: { mode: ImportMode; items: unknown[] }) =>
+    api.post<ImportOutcome>(`/admin/lessons/${lessonId}/grammar/bulk`, body),
   updateGrammar: (id: number, body: Record<string, unknown>) => api.put<AdminGrammarPoint>(`/admin/grammar/${id}`, body),
   deleteGrammar: (id: number) => api.del(`/admin/grammar/${id}`),
   reorderGrammar: (lessonId: number, ids: number[]) => api.put(`/admin/lessons/${lessonId}/grammar/order`, { ids }),

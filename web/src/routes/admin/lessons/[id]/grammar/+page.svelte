@@ -5,7 +5,9 @@
   import Icon from '$lib/components/Icon.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import LessonHeader from '$lib/admin/LessonHeader.svelte';
+  import ImportModal from '$lib/admin/ImportModal.svelte';
   import { adminApi, type AdminGrammarPoint, type GrammarBlock, type GrammarExample } from '$lib/admin/api';
+  import { grammarImport, type GrammarRow, type ImportMode } from '$lib/admin/import';
   import { normZh } from '$lib/utils/grade';
 
   // Soạn ngữ pháp — /admin/lessons/:id/grammar (08 §12).
@@ -28,6 +30,17 @@
   let draft = $state<Draft | null>(null);
   let dirty = $state(false);
   let saving = $state(false);
+  let nhapOpen = $state(false);
+  /** Tăng sau mỗi lần nhập để LessonHeader đọc lại số lượng trên hàng tabs. */
+  let reload = $state(0);
+
+  async function nhapExcel(items: GrammarRow[], mode: ImportMode) {
+    const out = await adminApi.bulkGrammar(lessonId, { mode, items });
+    dirty = false;
+    await load();
+    reload++;
+    return out;
+  }
 
   function blank(): Draft {
     return {
@@ -149,7 +162,16 @@
 
 <svelte:head><title>Soạn ngữ pháp · Quản trị · Zìkǎ</title></svelte:head>
 
-<LessonHeader {lessonId} part="np" {dirty} {saving} onsave={save} />
+<LessonHeader {lessonId} part="np" {dirty} {saving} {reload} onsave={save} />
+
+{#if nhapOpen}
+  <ImportModal
+    spec={grammarImport}
+    replaceNote="Xoá hết điểm ngữ pháp đang có của bài rồi nhập mới."
+    onclose={() => (nhapOpen = false)}
+    onrun={nhapExcel}
+  />
+{/if}
 
 {#if points === null}
   <Skeleton h="320px" r={16} />
@@ -158,7 +180,12 @@
     <aside class="paper list">
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
         <b>{points.length} điểm ngữ pháp</b>
-        <button type="button" class="btn btn-sm btn-paper" onclick={() => pick(null)}><Icon name="plus" size={15} /> Thêm</button>
+        <span style="display: flex; gap: 8px">
+          <button type="button" class="btn btn-sm btn-paper" onclick={() => (nhapOpen = true)}>
+            <Icon name="upload" size={14} /> Nhập Excel
+          </button>
+          <button type="button" class="btn btn-sm btn-paper" onclick={() => pick(null)}><Icon name="plus" size={15} /> Thêm</button>
+        </span>
       </div>
       <ul style="display: flex; flex-direction: column; gap: 6px">
         {#each points as p, i (p.id)}
