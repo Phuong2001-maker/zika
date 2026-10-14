@@ -11,7 +11,9 @@ use Zika\Core\Json;
 /**
  * Dựng JSON nội dung học (04 §4) và cache thành file (02 §4.3).
  *
- * Khoá cache:  "levels" · "l{cấp}-lessons" · "l{cấp}-review-{phần}" · "x{bài}-{phần}".
+ * Khoá cache:  "levels" · "l{cấp}-lessons" · "l{cấp}-review-{mã phần}" · "x{bài}-{slug phần}".
+ * Hai phần cuối đặt tên khác nhau: tổng hợp theo mã 2 chữ (lt, bt…), nội dung bài theo slug trong
+ * URL (flashcards, exercises…) vì LearnController::lesson lấy thẳng tham số route làm khoá.
  * Chỉ dựng bản cho NGƯỜI HỌC (bài đang hiện, cấp đang hiện); bài ẩn → 404 và không ghi cache.
  * Bản xem trước của biên tập/quản trị (?preview=1) dựng thẳng từ DB, không cache.
  * Admin lưu bất cứ thứ gì thuộc cấp → ContentBuilder::forgetLevel() xoá mọi cache của cấp đó.
@@ -19,6 +21,9 @@ use Zika\Core\Json;
 final class ContentBuilder
 {
     public const PARTS = ['lt', 'bt', 'kt', 'lv', 'ht', 'np'];
+
+    /** Slug của 6 phần trong URL /learn/lessons/{id}/{slug} — cũng là phần đuôi khoá cache nội dung bài. */
+    public const PART_SLUGS = ['flashcards', 'exercises', 'test', 'writing', 'dialogue', 'grammar'];
     private const CNT = ['lt' => 'cnt_words', 'bt' => 'cnt_bt', 'kt' => 'cnt_kt', 'lv' => 'cnt_lv', 'ht' => 'cnt_ht', 'np' => 'cnt_np'];
 
     /* ------------------------------------------------------------------ */
@@ -56,8 +61,9 @@ final class ContentBuilder
 
     private static function forgetLessonFiles(int $lessonId): void
     {
-        foreach (self::PARTS as $p) {
-            FileCache::forget('content', "x{$lessonId}-{$p}");
+        // Phải là slug, không phải mã 2 chữ: khoá lúc ghi do LearnController đặt theo slug route.
+        foreach (self::PART_SLUGS as $slug) {
+            FileCache::forget('content', "x{$lessonId}-{$slug}");
         }
     }
 

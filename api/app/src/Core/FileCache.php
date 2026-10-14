@@ -5,7 +5,7 @@ namespace Zika\Core;
 
 /**
  * Cache nội dung học dạng file JSON + ETag (02 §4.3): API học đọc file, không chạm MySQL.
- * Khoá theo cấp để xoá gọn: "levels", "l2-lessons", "l2-lesson21-lt", "l2-review-lt".
+ * Khoá theo cấp để xoá gọn: "levels", "l2-lessons", "l2-review-lt", "x21-flashcards".
  */
 final class FileCache
 {
