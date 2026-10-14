@@ -144,7 +144,9 @@ export const dialogueImport: ImportSpec<DialogueBundle> = {
 
     // ----- Câu hỏi hiểu bài (sheet tuỳ chọn) -----
     const questions: DialogueQuestion[] = [];
-    const qSheet = sheets.find((s) => s !== sheet && s.rows.length > 0) ?? null;
+    // Tìm theo tên trước, để file gộp nhiều sheet của cả bài vẫn lấy đúng sheet câu hỏi.
+    const found2 = pickSheet(sheets, QUESTIONS, 1);
+    const qSheet = found2 !== null && found2 !== sheet ? found2 : null;
     if (qSheet) {
       const qIssues = new Issues(QUESTIONS.name);
       const q = headerMap(qSheet.rows, QUESTIONS.columns);

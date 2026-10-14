@@ -121,6 +121,9 @@ chứ không làm hỏng cả mẻ.
 
 ## Việc còn treo
 
+- **Đang làm dở: nạp giáo trình HSK 1 vào database.** Bộ tách PDF và các bước còn lại ghi ở
+  [data/hsk1/TIEN-DO.md](data/hsk1/TIEN-DO.md) — mở file đó ra là làm tiếp được ngay.
+
 - API còn khoảng 56 chỗ dùng `NOW()`, phần lớn vô hại (truy vấn thống kê, hoặc đặt mốc thời
   gian lúc ghi). Chỉ thành vấn đề khi hàm đó có test đóng băng đồng hồ **và** so sánh với một
   mốc cắt — như `MaintenanceService` đã dính. Gặp trường hợp đó thì chuyển sang `Clock`.

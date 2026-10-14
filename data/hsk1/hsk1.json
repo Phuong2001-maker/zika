@@ -1,0 +1,4109 @@
+{
+ "nguon": "HSK1 3.0 Hanu",
+ "bai": [
+  {
+   "no": 1,
+   "ten": "Xin chào",
+   "tu_vung": [
+    {
+     "hanzi": "你",
+     "pinyin": "nǐ",
+     "loai": "đại từ",
+     "nghia": "anh, chị, bạn, ông, bà,"
+    },
+    {
+     "hanzi": "好",
+     "pinyin": "hǎo",
+     "loai": "tính từ",
+     "nghia": "tốt, đẹp, hay, ngon"
+    },
+    {
+     "hanzi": "一",
+     "pinyin": "yī",
+     "loai": "số từ",
+     "nghia": "một"
+    },
+    {
+     "hanzi": "五",
+     "pinyin": "wǔ",
+     "loai": "số từ",
+     "nghia": "năm"
+    },
+    {
+     "hanzi": "八",
+     "pinyin": "bā",
+     "loai": "số từ",
+     "nghia": "tám"
+    },
+    {
+     "hanzi": "大",
+     "pinyin": "dà",
+     "loai": "tính từ",
+     "nghia": "to, lớn"
+    },
+    {
+     "hanzi": "不",
+     "pinyin": "bù",
+     "loai": "phó từ",
+     "nghia": "không, chẳng"
+    },
+    {
+     "hanzi": "口",
+     "pinyin": "kǒu",
+     "loai": "danh từ, \nlượng từ",
+     "nghia": "miệng, nhân khẩu"
+    },
+    {
+     "hanzi": "白",
+     "pinyin": "bái",
+     "loai": "tính từ",
+     "nghia": "trắng"
+    },
+    {
+     "hanzi": "女",
+     "pinyin": "nǚ",
+     "loai": "tính từ",
+     "nghia": "nữ, phụ nữ"
+    },
+    {
+     "hanzi": "马",
+     "pinyin": "mǎ",
+     "loai": "danh từ",
+     "nghia": "ngựa"
+    }
+   ],
+   "hoi_thoai": [],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": []
+  },
+  {
+   "no": 2,
+   "ten": "Tôi tên là Tiểu Lệ",
+   "tu_vung": [
+    {
+     "hanzi": "小丽",
+     "pinyin": "Xiǎolì",
+     "loai": "",
+     "nghia": "Tiểu Lệ"
+    },
+    {
+     "hanzi": "同学",
+     "pinyin": "tóngxué",
+     "loai": "danh từ",
+     "nghia": "bạn học"
+    },
+    {
+     "hanzi": "谢谢",
+     "pinyin": "xièxie",
+     "loai": "động từ",
+     "nghia": "cảm ơn"
+    },
+    {
+     "hanzi": "不客气",
+     "pinyin": "bú kèqi",
+     "loai": "",
+     "nghia": "không có gì"
+    },
+    {
+     "hanzi": "大家",
+     "pinyin": "dàjiā",
+     "loai": "đại từ",
+     "nghia": "mọi người"
+    },
+    {
+     "hanzi": "您",
+     "pinyin": "nín",
+     "loai": "đại từ",
+     "nghia": "ngài, ông, bà"
+    },
+    {
+     "hanzi": "你们",
+     "pinyin": "nǐmen",
+     "loai": "đại từ",
+     "nghia": "các bạn"
+    },
+    {
+     "hanzi": "我",
+     "pinyin": "wǒ",
+     "loai": "đại từ",
+     "nghia": "tôi"
+    },
+    {
+     "hanzi": "我们",
+     "pinyin": "wǒmen",
+     "loai": "đại từ",
+     "nghia": "chúng tôi, chúng ta"
+    },
+    {
+     "hanzi": "叫",
+     "pinyin": "jiào",
+     "loai": "động từ",
+     "nghia": "gọi, tên là"
+    },
+    {
+     "hanzi": "对不起",
+     "pinyin": "duìbuqǐ",
+     "loai": "",
+     "nghia": "xin lỗi"
+    },
+    {
+     "hanzi": "没关系",
+     "pinyin": "méi guānxi",
+     "loai": "",
+     "nghia": "không sao đâu"
+    },
+    {
+     "hanzi": "李文",
+     "pinyin": "Lǐ Wén",
+     "loai": "",
+     "nghia": "Lý Văn"
+    },
+    {
+     "hanzi": "白家月",
+     "pinyin": "Bái Jiāyuè",
+     "loai": "",
+     "nghia": "Bạch Gia Nguyệt"
+    },
+    {
+     "hanzi": "很",
+     "pinyin": "hěn",
+     "loai": "phó từ",
+     "nghia": "rất"
+    },
+    {
+     "hanzi": "高兴",
+     "pinyin": "gāoxìng",
+     "loai": "tính từ",
+     "nghia": "vui vẻ"
+    },
+    {
+     "hanzi": "认识",
+     "pinyin": "rènshi",
+     "loai": "động từ",
+     "nghia": "gặp, quen biết"
+    },
+    {
+     "hanzi": "也",
+     "pinyin": "yě",
+     "loai": "phó từ",
+     "nghia": "cũng"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "老师",
+       "zh": "大家好！",
+       "pinyin": "Dàjiā hǎo!",
+       "vi": ""
+      },
+      {
+       "ten": "同学们",
+       "zh": "您好！",
+       "pinyin": "Nín hǎo!",
+       "vi": ""
+      },
+      {
+       "ten": "小丽",
+       "zh": "你们好！我叫小丽。",
+       "pinyin": "Nǐmen hǎo! Wǒ jiào Xiǎolì.",
+       "vi": ""
+      },
+      {
+       "ten": "同学们",
+       "zh": "你好，小丽！",
+       "pinyin": "Nǐ hǎo, Xiǎolì!",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "老师",
+       "zh": "同学们，谢谢！",
+       "pinyin": "Tóngxuémen, xièxie!",
+       "vi": ""
+      },
+      {
+       "ten": "同学们",
+       "zh": "不客气！",
+       "pinyin": "Bú kèqi!",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "李文",
+       "zh": "对不起！",
+       "pinyin": "Duìbuqǐ!",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "没关系！",
+       "pinyin": "Méi guānxi!",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "李文",
+       "zh": "你好！我叫李文。",
+       "pinyin": "Nǐ hǎo! Wǒ jiào Lǐ Wén.",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "你好！我叫白家月。",
+       "pinyin": "Nǐ hǎo! Wǒ jiào Bái Jiāyuè.",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "很高兴认识你。",
+       "pinyin": "Hěn gāoxìng rènshi nǐ.",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "认识你我也很高兴。",
+       "pinyin": "Rènshi nǐ, wǒ yě hěn gāoxìng.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "家",
+    "们",
+    "您",
+    "同",
+    "学",
+    "叫",
+    "很",
+    "高",
+    "兴",
+    "他",
+    "她",
+    "也"
+   ]
+  },
+  {
+   "no": 3,
+   "ten": "Tôi là người Việt Nam",
+   "tu_vung": [
+    {
+     "hanzi": "请问",
+     "pinyin": "qǐngwèn",
+     "loai": "động từ",
+     "nghia": "Xin hỏi"
+    },
+    {
+     "hanzi": "什么",
+     "pinyin": "shénme",
+     "loai": "đại từ",
+     "nghia": "cái gì, gì"
+    },
+    {
+     "hanzi": "名字",
+     "pinyin": "míngzi",
+     "loai": "danh từ",
+     "nghia": "tên"
+    },
+    {
+     "hanzi": "是",
+     "pinyin": "shì",
+     "loai": "động từ",
+     "nghia": "là"
+    },
+    {
+     "hanzi": "人",
+     "pinyin": "rén",
+     "loai": "danh từ",
+     "nghia": "người"
+    },
+    {
+     "hanzi": "的",
+     "pinyin": "de",
+     "loai": "trợ từ",
+     "nghia": ""
+    },
+    {
+     "hanzi": "陈天中",
+     "pinyin": "Chén Tiānzhōng",
+     "loai": "",
+     "nghia": "Trần Thiên Trung"
+    },
+    {
+     "hanzi": "中国",
+     "pinyin": "Zhōngguó",
+     "loai": "",
+     "nghia": "Trung Quốc"
+    },
+    {
+     "hanzi": "中文",
+     "pinyin": "Zhōngwén",
+     "loai": "",
+     "nghia": "Tiếng Trung"
+    },
+    {
+     "hanzi": "越南",
+     "pinyin": "Yuènán",
+     "loai": "",
+     "nghia": "Việt Nam"
+    },
+    {
+     "hanzi": "这",
+     "pinyin": "zhè",
+     "loai": "đại từ",
+     "nghia": "đây, này"
+    },
+    {
+     "hanzi": "谁",
+     "pinyin": "shéi/shuí",
+     "loai": "đại từ",
+     "nghia": "ai"
+    },
+    {
+     "hanzi": "女朋友",
+     "pinyin": "nǚpéngyou",
+     "loai": "danh từ",
+     "nghia": "bạn gái"
+    },
+    {
+     "hanzi": "哪",
+     "pinyin": "nǎ",
+     "loai": "đại từ",
+     "nghia": "nào"
+    },
+    {
+     "hanzi": "国",
+     "pinyin": "guó",
+     "loai": "danh từ",
+     "nghia": "nước"
+    },
+    {
+     "hanzi": "她",
+     "pinyin": "tā",
+     "loai": "đại từ",
+     "nghia": "cô ấy"
+    },
+    {
+     "hanzi": "他",
+     "pinyin": "tā",
+     "loai": "đại từ",
+     "nghia": "anh ấy"
+    },
+    {
+     "hanzi": "法国",
+     "pinyin": "Fǎguó",
+     "loai": "",
+     "nghia": "Nước Pháp"
+    },
+    {
+     "hanzi": "泰国",
+     "pinyin": "Tàiguó",
+     "loai": "",
+     "nghia": "Thái Lan"
+    },
+    {
+     "hanzi": "安妮",
+     "pinyin": "Ānnī",
+     "loai": "",
+     "nghia": "Annie"
+    },
+    {
+     "hanzi": "喂",
+     "pinyin": "wèi",
+     "loai": "thán từ",
+     "nghia": "alo, này"
+    },
+    {
+     "hanzi": "姐姐",
+     "pinyin": "jiějie",
+     "loai": "danh từ",
+     "nghia": "chị gái"
+    },
+    {
+     "hanzi": "工作",
+     "pinyin": "gōngzuò",
+     "loai": "danh từ",
+     "nghia": "công việc"
+    },
+    {
+     "hanzi": "还",
+     "pinyin": "hái",
+     "loai": "phó từ",
+     "nghia": "còn, vẫn"
+    },
+    {
+     "hanzi": "忙",
+     "pinyin": "máng",
+     "loai": "tính từ",
+     "nghia": "bận"
+    },
+    {
+     "hanzi": "吗",
+     "pinyin": "ma",
+     "loai": "trợ từ",
+     "nghia": "không, à"
+    },
+    {
+     "hanzi": "对",
+     "pinyin": "duì",
+     "loai": "tính từ",
+     "nghia": "đúng"
+    },
+    {
+     "hanzi": "太",
+     "pinyin": "tài",
+     "loai": "phó từ",
+     "nghia": "quá, lắm"
+    },
+    {
+     "hanzi": "想",
+     "pinyin": "xiǎng",
+     "loai": "động từ",
+     "nghia": "nhớ, muốn, nghĩ"
+    },
+    {
+     "hanzi": "再见",
+     "pinyin": "zàijiàn",
+     "loai": "động từ",
+     "nghia": "tạm biệt"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "李文",
+       "zh": "请问，你叫什么名字？",
+       "pinyin": "Qǐngwèn, nǐ jiào shénme míngzi?",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "我叫陈天中，我是中国人。",
+       "pinyin": "Wǒ jiào Chén Tiānzhōng. Wǒ shì Zhōngguó rén.",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "我是越南人，我的中文老师也是中国人。",
+       "pinyin": "Wǒ shì Yuènán rén. Wǒ de Zhōngwén lǎoshī yě shì Zhōngguó rén.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "安妮",
+       "zh": "这是谁？",
+       "pinyin": "Zhè shì shéi?",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "这是我女朋友。",
+       "pinyin": "Zhè shì wǒ nǚpéngyou.",
+       "vi": ""
+      },
+      {
+       "ten": "安妮",
+       "zh": "你女朋友是哪国人？",
+       "pinyin": "Nǐ nǚpéngyou shì nǎ guó rén?",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "我是泰国人，她是法国人。",
+       "pinyin": "Wǒ shì Tàiguó rén, tā shì Fǎguó rén.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "王一雪",
+       "zh": "喂，一飞！",
+       "pinyin": "Wèi, Yīfēi!",
+       "vi": ""
+      },
+      {
+       "ten": "王一飞",
+       "zh": "姐姐！",
+       "pinyin": "Jiějie!",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "你工作还忙吗？",
+       "pinyin": "Nǐ gōngzuò hái máng ma?",
+       "vi": ""
+      },
+      {
+       "ten": "王一飞",
+       "zh": "对，还很忙。你也很忙吗？",
+       "pinyin": "Duì, hái hěn máng. Nǐ yě hěn máng ma?",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "我不太忙。我们很想你。",
+       "pinyin": "Wǒ bú tài máng. Wǒmen hěn xiǎng nǐ.",
+       "vi": ""
+      },
+      {
+       "ten": "王一飞",
+       "zh": "我也想你们。",
+       "pinyin": "Wǒ yě xiǎng nǐmen.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "再见！",
+       "pinyin": "Zàijiàn!",
+       "vi": ""
+      },
+      {
+       "ten": "王一飞",
+       "zh": "再见！",
+       "pinyin": "Zàijiàn!",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "我是 ________ 。",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "安妮",
+       "zh": "她是陈天中的女朋友。",
+       "pinyin": "",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [
+    {
+     "ten": "CÁCH DÙNG TỪ 是",
+     "giai_thich": "Dùng để biểu thị người hoặc sự vật là cái gì, thuộc loại gì。 Hình thức phủ định là “不是”.",
+     "vi_du": [
+      "我是越南人。",
+      "他是中文老师。",
+      "我老师不是法国人。"
+     ]
+    },
+    {
+     "ten": "TRỢ TỪ KẾT CẤU 的",
+     "giai_thich": "Đứng giữa định ngữ và trung tâm ngữ, trong bài này dùng để biểu thị quan hệ sở hữu. Nếu trước “的” là đại từ nhân xưng, sau là danh từ chỉ người hoặc cách xưng hô thân thuộc, thì “的” có thể lược bỏ. 我老师 / 我的老师 你同学 / 你的同学 Zhuānmíng Tên riêng Yǔfǎ Ngữ pháp Nhiệm vụ: Phân vai đọc hội thoại Annie : Đây là ai? Trần Thiên Trung : Đây là bạn gái của tôi. Annie : Bạn gái của bạn là người nước nào? Trần Thiên Trung : Tôi là người Thái Lan, cô ấy là người Pháp.",
+     "vi_du": [
+      "白家月的老师",
+      "你的名字",
+      "我老师 / 我的老师",
+      "你同学 / 你的同学"
+     ]
+    }
+   ],
+   "mau_cau": [],
+   "chu_viet": [
+    "人",
+    "的",
+    "是",
+    "老",
+    "师",
+    "谁",
+    "请",
+    "问",
+    "什",
+    "么",
+    "哪",
+    "国",
+    "朋",
+    "友",
+    "喂",
+    "姐",
+    "工",
+    "作",
+    "还",
+    "忙",
+    "吗",
+    "对",
+    "太",
+    "我",
+    "想",
+    "再",
+    "见",
+    "中",
+    "汉",
+    "语",
+    "越",
+    "南"
+   ]
+  },
+  {
+   "no": 4,
+   "ten": "Tôi có hai đứa con",
+   "tu_vung": [
+    {
+     "hanzi": "有",
+     "pinyin": "yǒu",
+     "loai": "động từ",
+     "nghia": "có"
+    },
+    {
+     "hanzi": "多少",
+     "pinyin": "duōshao",
+     "loai": "đại từ",
+     "nghia": "bao nhiêu"
+    },
+    {
+     "hanzi": "个",
+     "pinyin": "gè",
+     "loai": "lượng từ",
+     "nghia": "cái, chiếc"
+    },
+    {
+     "hanzi": "学生",
+     "pinyin": "xuésheng",
+     "loai": "danh từ",
+     "nghia": "học sinh"
+    },
+    {
+     "hanzi": "刘明",
+     "pinyin": "Liú Míng",
+     "loai": "",
+     "nghia": "Lưu Minh"
+    },
+    {
+     "hanzi": "哥哥",
+     "pinyin": "gēge",
+     "loai": "danh từ",
+     "nghia": "anh trai"
+    },
+    {
+     "hanzi": "呢",
+     "pinyin": "ne",
+     "loai": "trợ từ",
+     "nghia": "(trợ từ đứng cuối câu)"
+    },
+    {
+     "hanzi": "家",
+     "pinyin": "jiā",
+     "loai": "danh từ",
+     "nghia": "nhà, gia đình"
+    },
+    {
+     "hanzi": "几",
+     "pinyin": "jǐ",
+     "loai": "đại từ",
+     "nghia": "mấy"
+    },
+    {
+     "hanzi": "口",
+     "pinyin": "kǒu",
+     "loai": "lượng từ",
+     "nghia": "(lượng từ cho thành"
+    },
+    {
+     "hanzi": "爸爸",
+     "pinyin": "bàba",
+     "loai": "danh từ",
+     "nghia": "bố"
+    },
+    {
+     "hanzi": "妈妈",
+     "pinyin": "māma",
+     "loai": "danh từ",
+     "nghia": "mẹ"
+    },
+    {
+     "hanzi": "妹妹",
+     "pinyin": "mèimei",
+     "loai": "danh từ",
+     "nghia": "em gái"
+    },
+    {
+     "hanzi": "和",
+     "pinyin": "hé",
+     "loai": "liên từ",
+     "nghia": "và"
+    },
+    {
+     "hanzi": "杨同乐",
+     "pinyin": "Yáng Tónglè",
+     "loai": "",
+     "nghia": "Dương Đồng Lạc"
+    },
+    {
+     "hanzi": "孩子",
+     "pinyin": "háizi",
+     "loai": "danh từ",
+     "nghia": "con cái"
+    },
+    {
+     "hanzi": "儿子",
+     "pinyin": "érzi",
+     "loai": "danh từ",
+     "nghia": "con trai"
+    },
+    {
+     "hanzi": "女儿",
+     "pinyin": "nǚér",
+     "loai": "danh từ",
+     "nghia": "con gái"
+    },
+    {
+     "hanzi": "岁",
+     "pinyin": "suì",
+     "loai": "lượng từ",
+     "nghia": "tuổi"
+    },
+    {
+     "hanzi": "今年",
+     "pinyin": "jīnnián",
+     "loai": "danh từ",
+     "nghia": "năm nay"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "刘明",
+       "zh": "一飞忙吗？",
+       "pinyin": "Yīfēi máng ma?",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "她很忙。",
+       "pinyin": "Tā hěn máng.",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "她有多少个学生？",
+       "pinyin": "Tā yǒu duōshao gè xuésheng?",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "她有二十个学生。",
+       "pinyin": "Tā yǒu èrshí gè xuésheng.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "我有两个哥哥，你呢？",
+       "pinyin": "Wǒ yǒu liǎng gè gēge, nǐ ne?",
+       "vi": ""
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "我没有哥哥。",
+       "pinyin": "Wǒ méiyǒu gēge.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "你家有几口人？",
+       "pinyin": "Nǐ jiā yǒu jǐ kǒu rén?",
+       "vi": ""
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "我家有四口人，爸爸、妈妈、妹妹和我。",
+       "pinyin": "Wǒ jiā yǒu sì kǒu rén, bàba, māma, mèimei hé wǒ.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "杨同乐",
+       "zh": "这是您儿子吗？",
+       "pinyin": "Zhè shì nín érzi ma?",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "是的，我有两个孩子，一个儿子，一个女儿。",
+       "pinyin": "Shì de, wǒ yǒu liǎng gè háizi, yí gè érzi, yí gè nǚ’ér.",
+       "vi": ""
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "您儿子几岁？",
+       "pinyin": "Nín érzi jǐ suì?",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "他今年五岁。",
+       "pinyin": "Tā jīnnián wǔ suì.",
+       "vi": ""
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "您女儿多大？",
+       "pinyin": "Nín nǚ’ér duō dà?",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "她今年十二。",
+       "pinyin": "Tā jīnnián shí’èr.",
+       "vi": ""
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "我 ________ 孩子。",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "我女儿今年十二。",
+       "pinyin": "",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [
+    {
+     "ten": "CÂU CHỮ 有",
+     "giai_thich": "Dùng để biểu thị việc sở hữu người hoặc đồ vật; hình thức phủ định là “没 / 没有”. 我没 / 没有姐姐。",
+     "vi_du": [
+      "他有二十个学生。",
+      "她有一个姐姐。",
+      "我没 / 没有姐姐。"
+     ]
+    },
+    {
+     "ten": "CÁCH BIỂU THỊ CON SỐ",
+     "giai_thich": "Trong tiếng Trung Quốc, con số có thể được viết dưới hai dạng: ký tự Latin hoặc chữ Hán. Ví dụ: “1” hoặc “一” （1） Dưới đây là bảng cách đọc và cách viết số từ 0 ~ 99 Zhuānmíng Tên riêng Yǔfǎ Ngữ pháp （2） Cách viết và cách đọc các số từ hàng trăm （百） trở lên (bao gồm 100) đến dưới mười nghìn（万）. （3） Chữ số “2” đọc và viết là 二/èr/hoặc 两/liǎng/. Thông thường: 王一雪: 我有两个哥哥，你呢？ Wǒ yǒu liǎng gè gēge, nǐ ne? 杨同乐: 我没有哥哥。 Wǒ méiyǒu gēge. 王一雪: 你家有几口人？ Nǐ jiā yǒu jǐ kǒu rén? 杨同乐: 我家有四口人，爸爸、妈妈、妹妹和我。 Wǒ jiā yǒu sì kǒu rén, bàba, māma, mèimei hé wǒ. Kèwén èr Bài khóa 2 Vương Nhất Tuyết: Tôi có 2 anh trai, bạn thì sao? Dương Đồng Lạc: Tôi không có anh trai. Vương Nhất Tuyết: Nhà bạn có mấy người? Dương Đồng Lạc: Nhà tôi có 4 người: bố, mẹ, em gái và tôi.",
+     "vi_du": [
+      "Trong số thứ tự thì dùng 二; ví dụ 第二 (thứ 2)",
+      "Trước lượng từ (đếm số lượng của sự vật) thì dùng 两"
+     ]
+    },
+    {
+     "ten": "TRỢ TỪ NGỮ KHÍ 呢",
+     "giai_thich": "Trong bài này, “呢” đứng ở cuối câu để biểu thị câu hỏi, dùng để hỏi tiếp tình huống vừa được nhắc tới; cấu trúc cơ bản là: A……， B 呢? （A…, B thì sao?）",
+     "vi_du": [
+      "我有两个哥哥，你呢？",
+      "我叫白家月，你呢？",
+      "我是中国人，你呢？"
+     ]
+    },
+    {
+     "ten": "LƯỢNG TỪ VÀ CẤU TRÚC SỐ TỪ + LƯỢNG TỪ + (DANH TỪ)",
+     "giai_thich": "Khi biểu đạt số lượng, sau số từ trong tiếng Trung thường phải có lượng từ. Bài này học các lượng từ danh từ dùng để chỉ số lượng người hoặc đồ vật, như “口, 个”… cũng như cấu trúc số từ + lượng từ + danh từ, ví dụ “四口人 (bốn người trong nhà), 两个哥哥 (hai anh trai)”. Shēngcí Từ mới Zhuānmíng Tên riêng Yǔfǎ Ngữ pháp Hoàn thành hội thoại (1) A: 你家有________？ B: 我家有三口人，你家呢？ A: 我家有________。 (2) A: 你有姐姐吗？ B: 我有________姐姐，你呢？ A: 我有两个姐姐。 Liànxí Bài tập Kèwén sān Bài khóa 3 杨同乐: 这是您儿子吗？ Zhè shì nín érzi ma? 王一雪: 是的，我有两个孩子，一个儿子，一个女儿。 Shì de, wǒ yǒu liǎng gè háizi, yí gè érzi, yí gè nǚ’ér. 杨同乐: 您儿子几岁？ Nín érzi jǐ suì? 王一雪: 他今年五岁。 Tā jīnnián wǔ suì. 杨同乐: 您女儿多大？ Nín nǚ’ér duō dà? 王一雪: 她今年十二。 Tā jīnnián shí’èr. Dương Đồng Lạc: Đây là con trai của chị à? Vương Nhất Tuyết: Đúng vậy, tôi có hai đứa con, một đứa con trai, một đứa con gái. Dương Đồng Lạc: Con trai chị mấy tuổi? Vương Nhất Tuyết: Năm nay nó 5 tuổi. Dương Đồng Lạc: Con gái chị bao nhiêu tuổi? Vương Nhất Tuyết: Năm nay nó 12 tuổi. Nhiệm vụ: Phân vai đọc hội thoại Chia nhóm hội thoại thực tế",
+     "vi_du": [
+      "四口人",
+      "两个学生"
+     ]
+    }
+   ],
+   "mau_cau": [],
+   "chu_viet": [
+    "有",
+    "多",
+    "少",
+    "学",
+    "生",
+    "哥",
+    "爸",
+    "妈",
+    "妹",
+    "呢",
+    "家",
+    "几",
+    "和",
+    "孩",
+    "子",
+    "儿",
+    "岁",
+    "今",
+    "年",
+    "个",
+    "口",
+    "一",
+    "二",
+    "三",
+    "四",
+    "五",
+    "六",
+    "七",
+    "八",
+    "九",
+    "十"
+   ]
+  },
+  {
+   "no": 5,
+   "ten": "Hôm nay là ngày bao nhiêu?",
+   "tu_vung": [
+    {
+     "hanzi": "今天",
+     "pinyin": "jīntiān",
+     "loai": "danh từ",
+     "nghia": "hôm nay"
+    },
+    {
+     "hanzi": "明天",
+     "pinyin": "míngtiān",
+     "loai": "danh từ",
+     "nghia": "ngày mai"
+    },
+    {
+     "hanzi": "号",
+     "pinyin": "hào",
+     "loai": "lượng từ",
+     "nghia": "ngày"
+    },
+    {
+     "hanzi": "月",
+     "pinyin": "yuè",
+     "loai": "danh từ",
+     "nghia": "tháng"
+    },
+    {
+     "hanzi": "星期",
+     "pinyin": "xīngqī",
+     "loai": "danh từ",
+     "nghia": "tuần, thứ"
+    },
+    {
+     "hanzi": "星期日",
+     "pinyin": "xīngqīrì",
+     "loai": "danh từ",
+     "nghia": "chủ nhật"
+    },
+    {
+     "hanzi": "休息",
+     "pinyin": "xiūxi",
+     "loai": "động từ",
+     "nghia": "nghỉ ngơi"
+    },
+    {
+     "hanzi": "会",
+     "pinyin": "huì",
+     "loai": "động từ năng nguyện",
+     "nghia": "biết; có thể (biểu thị"
+    },
+    {
+     "hanzi": "做",
+     "pinyin": "zuò",
+     "loai": "động từ",
+     "nghia": "làm"
+    },
+    {
+     "hanzi": "做饭",
+     "pinyin": "zuò fàn",
+     "loai": "động từ",
+     "nghia": "nấu cơm,"
+    },
+    {
+     "hanzi": "面条儿",
+     "pinyin": "miàntiáor",
+     "loai": "danh từ",
+     "nghia": "mì sợi"
+    },
+    {
+     "hanzi": "饺子",
+     "pinyin": "jiǎozi",
+     "loai": "danh từ",
+     "nghia": "sủi cảo"
+    },
+    {
+     "hanzi": "一些",
+     "pinyin": "yìxiē",
+     "loai": "cụm số lượng từ",
+     "nghia": "một ít,"
+    },
+    {
+     "hanzi": "菜",
+     "pinyin": "cài",
+     "loai": "danh từ",
+     "nghia": "món ăn; thức ăn; rau"
+    },
+    {
+     "hanzi": "下班",
+     "pinyin": "xiàbān",
+     "loai": "động từ",
+     "nghia": "tan làm"
+    },
+    {
+     "hanzi": "新",
+     "pinyin": "xīn",
+     "loai": "tính từ",
+     "nghia": "mới"
+    },
+    {
+     "hanzi": "电脑",
+     "pinyin": "diànnǎo",
+     "loai": "danh từ",
+     "nghia": "máy tính"
+    },
+    {
+     "hanzi": "真",
+     "pinyin": "zhēn",
+     "loai": "phó từ",
+     "nghia": "thật, rất"
+    },
+    {
+     "hanzi": "好看",
+     "pinyin": "hǎokàn",
+     "loai": "tính từ",
+     "nghia": "đẹp, dễ nhìn"
+    },
+    {
+     "hanzi": "喜欢",
+     "pinyin": "xǐhuan",
+     "loai": "động từ",
+     "nghia": "thích"
+    },
+    {
+     "hanzi": "它",
+     "pinyin": "tā",
+     "loai": "đại từ",
+     "nghia": "nó"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "小丽",
+       "zh": "请问，今天几月几号？",
+       "pinyin": "Qǐngwèn, jīntiān jǐ yuè jǐ hào?",
+       "vi": ""
+      },
+      {
+       "ten": "小刚",
+       "zh": "今天11 月21 号（日）。",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "小丽",
+       "zh": "明天星期几？",
+       "pinyin": "Míngtiān xīngqī jǐ?",
+       "vi": ""
+      },
+      {
+       "ten": "小刚",
+       "zh": "星期日。明天我休息。",
+       "pinyin": "Xīngqīrì. Míngtiān wǒ xiūxi",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "小丽",
+       "zh": "你会做饭吗？",
+       "pinyin": "Xiǎo lì：Nǐ huì zuò fàn ma?",
+       "vi": ""
+      },
+      {
+       "ten": "小刚",
+       "zh": "我会做。",
+       "pinyin": "Xiǎo gāng：Wǒ huì zuò.",
+       "vi": ""
+      },
+      {
+       "ten": "小丽",
+       "zh": "你会做什么？",
+       "pinyin": "Xiǎo lì：Nǐ huì zuò shénme?",
+       "vi": ""
+      },
+      {
+       "ten": "小刚",
+       "zh": "我会做面条儿、饺子，也会做",
+       "pinyin": "Xiǎo gāng：Wǒ huì zuò miàntiáor, jiǎozi, yě huì zuò",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "小丽",
+       "zh": "小刚，下班吗？",
+       "pinyin": "Xiǎo Gāng, nǐ xiàbān ma??",
+       "vi": ""
+      },
+      {
+       "ten": "小刚",
+       "zh": "下班。",
+       "pinyin": "Xiàbān..",
+       "vi": ""
+      },
+      {
+       "ten": "小丽",
+       "zh": "这是你的新电脑吗？",
+       "pinyin": "Zhè shì nǐ de xīn diànnǎo ma?",
+       "vi": ""
+      },
+      {
+       "ten": "小刚",
+       "zh": "是的，是我的新电脑。",
+       "pinyin": "Shì de, shì wǒ de xīn diànnǎo.",
+       "vi": ""
+      },
+      {
+       "ten": "小丽",
+       "zh": "真好看！",
+       "pinyin": "Zhēn hǎokàn!",
+       "vi": ""
+      },
+      {
+       "ten": "小刚",
+       "zh": "我也很喜欢它。",
+       "pinyin": "Wǒ yě hěn xǐhuan tā.",
+       "vi": ""
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "我会做。",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "我也很好看！",
+       "pinyin": "",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "今",
+    "天",
+    "明",
+    "号",
+    "月",
+    "年",
+    "日",
+    "星",
+    "期",
+    "休",
+    "会",
+    "做",
+    "饭",
+    "面",
+    "条",
+    "饺",
+    "子",
+    "些",
+    "菜",
+    "下",
+    "班",
+    "新",
+    "电",
+    "脑",
+    "真",
+    "好",
+    "看",
+    "喜",
+    "欢"
+   ]
+  },
+  {
+   "no": 6,
+   "ten": "Số điện thoại của bạn là bao nhiêu?",
+   "tu_vung": [
+    {
+     "hanzi": "手机",
+     "pinyin": "shǒujī",
+     "loai": "danh từ",
+     "nghia": "điện thoại di động"
+    },
+    {
+     "hanzi": "电话",
+     "pinyin": "diànhuà",
+     "loai": "danh từ",
+     "nghia": "điện thoại"
+    },
+    {
+     "hanzi": "号",
+     "pinyin": "hào",
+     "loai": "lượng từ",
+     "nghia": "số; số hiệu"
+    },
+    {
+     "hanzi": "去",
+     "pinyin": "qù",
+     "loai": "động từ",
+     "nghia": "đi"
+    },
+    {
+     "hanzi": "哪儿",
+     "pinyin": "nǎr",
+     "loai": "đại từ nghi vấn",
+     "nghia": "đâu"
+    },
+    {
+     "hanzi": "想",
+     "pinyin": "xiǎng",
+     "loai": "động từ năng nguyện",
+     "nghia": "muốn"
+    },
+    {
+     "hanzi": "超市",
+     "pinyin": "chāoshì",
+     "loai": "danh từ",
+     "nghia": "siêu thị"
+    },
+    {
+     "hanzi": "买",
+     "pinyin": "mǎi",
+     "loai": "động từ",
+     "nghia": "mua"
+    },
+    {
+     "hanzi": "东西",
+     "pinyin": "dōngxi",
+     "loai": "danh từ",
+     "nghia": "đồ; đồ vật"
+    },
+    {
+     "hanzi": "些",
+     "pinyin": "xiē",
+     "loai": "lượng từ",
+     "nghia": "một ít, một vài"
+    },
+    {
+     "hanzi": "牛奶",
+     "pinyin": "niúnǎi",
+     "loai": "danh từ",
+     "nghia": "sữa bò"
+    },
+    {
+     "hanzi": "吃",
+     "pinyin": "chī",
+     "loai": "động từ",
+     "nghia": "ăn"
+    },
+    {
+     "hanzi": "晚饭",
+     "pinyin": "wǎnfàn",
+     "loai": "danh từ",
+     "nghia": "bữa tối"
+    },
+    {
+     "hanzi": "那边",
+     "pinyin": "nàbiān",
+     "loai": "đại từ chỉ nơi chốn",
+     "nghia": "bên kia, chỗ đó"
+    },
+    {
+     "hanzi": "包子",
+     "pinyin": "bāozi",
+     "loai": "danh từ",
+     "nghia": "bánh bao"
+    },
+    {
+     "hanzi": "非常",
+     "pinyin": "fēicháng",
+     "loai": "phó từ",
+     "nghia": "rất, vô cùng"
+    },
+    {
+     "hanzi": "好吃",
+     "pinyin": "hǎochī",
+     "loai": "tính từ",
+     "nghia": "ngon"
+    },
+    {
+     "hanzi": "米饭",
+     "pinyin": "mǐfàn",
+     "loai": "danh từ",
+     "nghia": "cơm"
+    },
+    {
+     "hanzi": "怎么",
+     "pinyin": "zěnme",
+     "loai": "đại từ nghi vấn",
+     "nghia": "thế nào, làm sao"
+    },
+    {
+     "hanzi": "坐",
+     "pinyin": "zuò",
+     "loai": "động từ",
+     "nghia": "ngồi"
+    },
+    {
+     "hanzi": "西安饭店",
+     "pinyin": "Xī’ān Fàndiàn",
+     "loai": "",
+     "nghia": "Nhà hàng Tây An"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "李文",
+       "zh": "家月，你的手机号是多少？",
+       "pinyin": "Jiāyuè, nǐ de shǒujīhào shì duōshao?",
+       "vi": "Gia Nguyệt, số điện thoại của bạn là bao nhiêu?",
+       "ten_vi": "Lý Văn"
+      },
+      {
+       "ten": "白家月",
+       "zh": "我的手机号是",
+       "pinyin": "Wǒ de shǒujīhào shì",
+       "vi": "Số điện thoại của tôi là 0932463321.",
+       "ten_vi": "Bạch Gia Nguyệt"
+      },
+      {
+       "ten": "李文",
+       "zh": "我的手机号是",
+       "pinyin": "Wǒ de shǒujīhào shì",
+       "vi": "Số điện thoại của tôi là 0932581127.",
+       "ten_vi": "Lý Văn"
+      },
+      {
+       "ten": "白家月",
+       "zh": "好的。",
+       "pinyin": "Hǎo de",
+       "vi": "Được rồi.",
+       "ten_vi": "Bạch Gia Nguyệt"
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "陈天中",
+       "zh": "家月，明天你去哪儿？",
+       "pinyin": "Jiāyuè, míngtiān nǐ qù nǎr?",
+       "vi": "Gia Nguyệt, ngày mai bạn đi đâu?",
+       "ten_vi": "Trần Thiên Trung"
+      },
+      {
+       "ten": "白家月",
+       "zh": "我想去超市买东西。",
+       "pinyin": "Wǒ xiǎng qù chāoshì mǎi dōngxi.",
+       "vi": "Tôi muốn đi siêu thị mua đồ.",
+       "ten_vi": "Bạch Gia Nguyệt"
+      },
+      {
+       "ten": "陈天中",
+       "zh": "你去超市买什么？",
+       "pinyin": "Nǐ qù chāoshì mǎi shénme.",
+       "vi": "Bạn đi siêu thị mua gì?",
+       "ten_vi": "Trần Thiên Trung"
+      },
+      {
+       "ten": "白家月",
+       "zh": "我想买一些牛奶。",
+       "pinyin": "Wǒ xiǎng mǎi yìxiē niúnǎi.",
+       "vi": "Tôi muốn mua một ít sữa.",
+       "ten_vi": "Bạch Gia Nguyệt"
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "王一雪",
+       "zh": "星期天我们去哪儿吃完饭？",
+       "pinyin": "Xīngqītiān wǒmen qù nǎr chī wǎnfàn?",
+       "vi": "Chủ nhật chúng ta đi đâu ăn tối?",
+       "ten_vi": "Vương Nhất Tuyết"
+      },
+      {
+       "ten": "刘明",
+       "zh": "我还想去西安饭店。",
+       "pinyin": "Wǒ hái xiǎng qù Xī’ān fàndiàn.",
+       "vi": "Anh vẫn muốn đi nhà hàng Tây An.",
+       "ten_vi": "Lưu Minh"
+      },
+      {
+       "ten": "王一雪",
+       "zh": "那里的包子非常好吃，",
+       "pinyin": "Nàli de jiǎozi fēicháng hǎochī,",
+       "vi": "Sủi cảo ở đó rất ngon, em muốn ăn sủi cảo.",
+       "ten_vi": "Vương Nhất Tuyết"
+      },
+      {
+       "ten": "刘小明",
+       "zh": "妈妈，我想吃米饭，",
+       "pinyin": "Māma, wǒ xiǎng chī mǐfàn,",
+       "vi": "Mẹ ơi, con muốn ăn cơm, không muốn ăn sủi cảo.",
+       "ten_vi": "Lưu Tiểu Minh"
+      },
+      {
+       "ten": "王一雪",
+       "zh": "好的。我们怎么去？",
+       "pinyin": "Hǎo de, wǒmen zěnme qù?",
+       "vi": "Được thôi, chúng ta đi bằng cách nào?",
+       "ten_vi": "Vương Nhất Tuyết"
+      },
+      {
+       "ten": "刘明",
+       "zh": "坐出租车去。",
+       "pinyin": "Zuò chūzūchē qù.",
+       "vi": "Đi taxi.",
+       "ten_vi": "Lưu Minh"
+      },
+      {
+       "ten": "学生",
+       "zh": "我的手机号是0972392011",
+       "pinyin": "",
+       "vi": "sắp xếp từ thành câu",
+       "ten_vi": "Luyện tập"
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "手",
+    "机",
+    "电",
+    "话",
+    "号",
+    "多",
+    "少",
+    "去",
+    "哪",
+    "想",
+    "超",
+    "市",
+    "买",
+    "东",
+    "西",
+    "些",
+    "牛",
+    "奶",
+    "吃",
+    "晚",
+    "饭",
+    "那",
+    "边",
+    "包",
+    "子",
+    "非",
+    "常",
+    "好",
+    "米",
+    "怎",
+    "么",
+    "坐",
+    "出",
+    "租",
+    "车"
+   ]
+  },
+  {
+   "no": 7,
+   "ten": "Bây giờ mấy giờ ?",
+   "tu_vung": [
+    {
+     "hanzi": "现在",
+     "pinyin": "xiànzài",
+     "loai": "danh từ",
+     "nghia": "bây giờ, hiện tại"
+    },
+    {
+     "hanzi": "点",
+     "pinyin": "diǎn",
+     "loai": "lượng từ",
+     "nghia": "giờ (đơn vị chỉ giờ)"
+    },
+    {
+     "hanzi": "早上",
+     "pinyin": "zǎoshang",
+     "loai": "danh từ",
+     "nghia": "buổi sáng"
+    },
+    {
+     "hanzi": "上午",
+     "pinyin": "shàngwǔ",
+     "loai": "danh từ",
+     "nghia": "buối sáng (trước 12h)"
+    },
+    {
+     "hanzi": "分",
+     "pinyin": "fēn",
+     "loai": "lượng từ",
+     "nghia": "phút"
+    },
+    {
+     "hanzi": "课",
+     "pinyin": "kè",
+     "loai": "danh từ",
+     "nghia": "bài học; tiết học"
+    },
+    {
+     "hanzi": "下午",
+     "pinyin": "xiàwǔ",
+     "loai": "danh từ",
+     "nghia": "buổi chiều"
+    },
+    {
+     "hanzi": "见",
+     "pinyin": "jiàn",
+     "loai": "động từ",
+     "nghia": "gặp"
+    },
+    {
+     "hanzi": "吧",
+     "pinyin": "ba",
+     "loai": "trợ từ ngữ khí",
+     "nghia": "(dùng cuối câu để biểu thị"
+    },
+    {
+     "hanzi": "电影院",
+     "pinyin": "diànyǐngyuàn",
+     "loai": "danh từ",
+     "nghia": "rạp chiếu phim"
+    },
+    {
+     "hanzi": "看",
+     "pinyin": "kàn",
+     "loai": "động từ",
+     "nghia": "xem, nhìn, đọc"
+    },
+    {
+     "hanzi": "电影",
+     "pinyin": "diànyǐng",
+     "loai": "danh từ",
+     "nghia": "phim"
+    },
+    {
+     "hanzi": "事",
+     "pinyin": "shì",
+     "loai": "danh từ",
+     "nghia": "việc, chuyện"
+    },
+    {
+     "hanzi": "上课",
+     "pinyin": "shàngkè",
+     "loai": "động từ",
+     "nghia": "lên lớp, đi học"
+    },
+    {
+     "hanzi": "呢",
+     "pinyin": "ne",
+     "loai": "trợ từ ngữ khí",
+     "nghia": "(trợ từ cuối câu,"
+    },
+    {
+     "hanzi": "半",
+     "pinyin": "bàn",
+     "loai": "số từ",
+     "nghia": "một nửa"
+    },
+    {
+     "hanzi": "下课",
+     "pinyin": "xiàkè",
+     "loai": "động từ",
+     "nghia": "tan học"
+    },
+    {
+     "hanzi": "在",
+     "pinyin": "zài",
+     "loai": "động từ",
+     "nghia": "ở, tại"
+    },
+    {
+     "hanzi": "家",
+     "pinyin": "jiā",
+     "loai": "danh từ",
+     "nghia": "nhà, gia đình"
+    },
+    {
+     "hanzi": "里",
+     "pinyin": "lǐ / li",
+     "loai": "danh từ / phương vị từ",
+     "nghia": "bên trong"
+    },
+    {
+     "hanzi": "晚上",
+     "pinyin": "wǎnshang",
+     "loai": "danh từ",
+     "nghia": "buổi tối"
+    },
+    {
+     "hanzi": "医院",
+     "pinyin": "yīyuàn",
+     "loai": "danh từ",
+     "nghia": "bệnh viện"
+    },
+    {
+     "hanzi": "上班",
+     "pinyin": "shàngbān",
+     "loai": "động từ",
+     "nghia": "đi làm"
+    },
+    {
+     "hanzi": "店",
+     "pinyin": "diàn",
+     "loai": "danh từ",
+     "nghia": "cửa hàng, tiệm"
+    },
+    {
+     "hanzi": "菜",
+     "pinyin": "cài",
+     "loai": "danh từ",
+     "nghia": "rau; món ăn"
+    },
+    {
+     "hanzi": "分钟",
+     "pinyin": "fēnzhōng",
+     "loai": "lượng từ",
+     "nghia": "phút"
+    },
+    {
+     "hanzi": "后",
+     "pinyin": "hòu",
+     "loai": "danh từ / phương vị từ",
+     "nghia": "sau; phía sau"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "白家月",
+       "zh": "现在几点？",
+       "pinyin": "Xiànzài jǐ diǎn?",
+       "vi": ""
+      },
+      {
+       "ten": "安妮",
+       "zh": "早上八点四十",
+       "pinyin": "Zǎoshang bā diǎn sìshí.",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "我上午十点十分有课。",
+       "pinyin": "Wǒ shàngwǔ shí diǎn shí fēn yǒu kè.",
+       "vi": ""
+      },
+      {
+       "ten": "安妮",
+       "zh": "好的，我们下午两天吧。",
+       "pinyin": "Hǎo de, wǒmen xiàwǔ liǎng diǎn jiàn ba.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "李文",
+       "zh": "下午我想去电影院看电影，你去吗？",
+       "pinyin": "Xiàwǔ wǒ xiǎng qù diànyǐngyuàn kàn diànyǐng, Nǐ qù ma?",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "我不想去，下午还有事。",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "好的，明天呢？",
+       "pinyin": "Hǎo de, míngtiān ne?",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "我明天下午两点还上课呢，四点半下课。",
+       "pinyin": "Wǒ míngtiān xiàwǔ liǎng diǎn hái yào shàng kè ne, sì diǎn bàn xià kè.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "王一雪",
+       "zh": "喂，你在哪儿呢？",
+       "pinyin": "Wèi, nǐ zài nǎr ne?",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "我在家里呢。",
+       "pinyin": "Wǒ zài jiāli ne.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "我晚上六点半下班。",
+       "pinyin": "Wǒ wǎnshang liù diǎn bàn xiàbān.",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "我八点去医院上班。",
+       "pinyin": "Wǒ bā diǎn qù yīyuàn shàngbān.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "好的，你去店里买些菜吧。",
+       "pinyin": "Hǎo de, nǐ qù diàn lǐ mǎi xiē cài ba.",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "好，我十分钟后去。",
+       "pinyin": "Hǎo, wǒ shí fēnzhōng hòu qù.",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "好的，你忙吧。",
+       "pinyin": "",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "现",
+    "在",
+    "点",
+    "分",
+    "早",
+    "上",
+    "午",
+    "下",
+    "晚",
+    "课",
+    "见",
+    "吧",
+    "电",
+    "影",
+    "事",
+    "呢",
+    "半",
+    "家",
+    "里",
+    "医",
+    "院",
+    "班",
+    "店",
+    "菜",
+    "钟",
+    "后"
+   ]
+  },
+  {
+   "no": 8,
+   "ten": "Hãy chọn hình ảnh tương ứng với các từ sau",
+   "tu_vung": [
+    {
+     "hanzi": "房间",
+     "pinyin": "fángjiān",
+     "loai": "danh từ",
+     "nghia": "căn phòng"
+    },
+    {
+     "hanzi": "外",
+     "pinyin": "wài",
+     "loai": "danh từ",
+     "nghia": "ngoài"
+    },
+    {
+     "hanzi": "只",
+     "pinyin": "zhī",
+     "loai": "lượng từ",
+     "nghia": "cho con vật"
+    },
+    {
+     "hanzi": "小",
+     "pinyin": "xiǎo",
+     "loai": "tính từ",
+     "nghia": "nhỏ"
+    },
+    {
+     "hanzi": "猫",
+     "pinyin": "māo",
+     "loai": "danh từ",
+     "nghia": "mèo"
+    },
+    {
+     "hanzi": "没",
+     "pinyin": "méi",
+     "loai": "phó từ",
+     "nghia": "không/chưa"
+    },
+    {
+     "hanzi": "看见",
+     "pinyin": "kànjiàn",
+     "loai": "động từ",
+     "nghia": "nhìn thấy"
+    },
+    {
+     "hanzi": "桌子",
+     "pinyin": "zhuōzi",
+     "loai": "danh từ",
+     "nghia": "cái bàn"
+    },
+    {
+     "hanzi": "下",
+     "pinyin": "xià",
+     "loai": "danh từ",
+     "nghia": "dưới"
+    },
+    {
+     "hanzi": "漂亮",
+     "pinyin": "piàoliang",
+     "loai": "tính từ",
+     "nghia": "xinh đẹp"
+    },
+    {
+     "hanzi": "在",
+     "pinyin": "zài",
+     "loai": "giới từ",
+     "nghia": "ở"
+    },
+    {
+     "hanzi": "学校",
+     "pinyin": "xuéxiào",
+     "loai": "danh từ",
+     "nghia": "trường học"
+    },
+    {
+     "hanzi": "书店",
+     "pinyin": "shūdiàn",
+     "loai": "danh từ",
+     "nghia": "hiệu sách"
+    },
+    {
+     "hanzi": "前",
+     "pinyin": "qián",
+     "loai": "danh từ",
+     "nghia": "phía trước"
+    },
+    {
+     "hanzi": "能",
+     "pinyin": "néng",
+     "loai": "động từ năng nguyện",
+     "nghia": "có thể"
+    },
+    {
+     "hanzi": "到",
+     "pinyin": "dào",
+     "loai": "động từ",
+     "nghia": "đến"
+    },
+    {
+     "hanzi": "午饭",
+     "pinyin": "wǔfàn",
+     "loai": "danh từ",
+     "nghia": "cơm trưa"
+    },
+    {
+     "hanzi": "饭",
+     "pinyin": "fàn",
+     "loai": "danh từ",
+     "nghia": "cơm"
+    },
+    {
+     "hanzi": "病人",
+     "pinyin": "bìngrén",
+     "loai": "danh từ",
+     "nghia": "bệnh nhân"
+    },
+    {
+     "hanzi": "多",
+     "pinyin": "duō",
+     "loai": "tính từ",
+     "nghia": "nhiều"
+    },
+    {
+     "hanzi": "医生",
+     "pinyin": "yīshēng",
+     "loai": "danh từ",
+     "nghia": "bác sĩ"
+    },
+    {
+     "hanzi": "工作",
+     "pinyin": "gōngzuò",
+     "loai": "động từ",
+     "nghia": "làm việc"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "白家月",
+       "zh": "房间外有一只小猫。",
+       "pinyin": "Fángjiān wài yǒu yì zhī xiǎo māo.",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "我没看见，它在哪儿呢？",
+       "pinyin": "Wǒ méi kànjiàn, tā zài nǎr ne?",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "它在桌子下呢。",
+       "pinyin": "Tā zài zhuōzi xià ne.",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "这只小猫真漂亮。",
+       "pinyin": "Zhè zhī xiǎo māo zhēn piàoliang.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "白家月",
+       "zh": "我们在哪儿见呢？",
+       "pinyin": "Wǒmen zài nǎr jiàn ne?",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "在学校书店前见吧。",
+       "pinyin": "Zài xuéxiào shūdiàn qián jiàn ba.",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "好的。下午两点你能到吗？",
+       "pinyin": "Hǎo de. Xiàwǔ liǎngdiǎn nǐ néng dào ma?",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "我能到。我在学校吃午饭。",
+       "pinyin": "Wǒ néng dào. Wǒ zài xuéxiào chī wǔfàn.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "刘明",
+       "zh": "小胡，还没吃饭呢？",
+       "pinyin": "Xiǎo Hú, hái méi chī fàn ne?",
+       "vi": ""
+      },
+      {
+       "ten": "胡医生",
+       "zh": "没吃呢。",
+       "pinyin": "Méi chī ne.",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "大医院病人多，医生非常忙。",
+       "pinyin": "Dà yīyuàn bìngrén duō, yīshēng fēicháng máng.",
+       "vi": ""
+      },
+      {
+       "ten": "胡医生",
+       "zh": "是的。我爸爸也在医院工作，他也非常忙。",
+       "pinyin": "Shì de. Wǒ bàba yě zài yīyuàn gōngzuò, tā yě fēicháng máng.",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "你家有两个医生？",
+       "pinyin": "Nǐ jiā yǒu liǎng gè yīshēng?",
+       "vi": ""
+      },
+      {
+       "ten": "胡医生",
+       "zh": "对。",
+       "pinyin": "Duì.",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "小猫在",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "我现在有事，不能去。",
+       "pinyin": "",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "在",
+    "能",
+    "房",
+    "间",
+    "外",
+    "只",
+    "小",
+    "没",
+    "看",
+    "见",
+    "桌",
+    "子",
+    "下",
+    "学",
+    "校",
+    "书",
+    "店",
+    "钱",
+    "到",
+    "午",
+    "饭",
+    "大",
+    "病",
+    "人",
+    "多",
+    "医",
+    "生",
+    "工",
+    "作"
+   ]
+  },
+  {
+   "no": 9,
+   "ten": "Sáng ngày mai tôi học ở trường",
+   "tu_vung": [
+    {
+     "hanzi": "前边",
+     "pinyin": "qiánbian",
+     "loai": "danh từ",
+     "nghia": "phía trước"
+    },
+    {
+     "hanzi": "边",
+     "pinyin": "bian/biān",
+     "loai": "danh từ",
+     "nghia": "phía/bên"
+    },
+    {
+     "hanzi": "家",
+     "pinyin": "jiā",
+     "loai": "lượng từ",
+     "nghia": "cho gia đình/"
+    },
+    {
+     "hanzi": "那个",
+     "pinyin": "nàge",
+     "loai": "đại từ",
+     "nghia": "cái kia"
+    },
+    {
+     "hanzi": "外边",
+     "pinyin": "wàibian",
+     "loai": "danh từ",
+     "nghia": "bên ngoài"
+    },
+    {
+     "hanzi": "椅子",
+     "pinyin": "yǐzi",
+     "loai": "danh từ",
+     "nghia": "ghế"
+    },
+    {
+     "hanzi": "上",
+     "pinyin": "shang/shàng",
+     "loai": "danh từ",
+     "nghia": "phía trên/trên"
+    },
+    {
+     "hanzi": "本",
+     "pinyin": "běn",
+     "loai": "lượng từ",
+     "nghia": "quyển"
+    },
+    {
+     "hanzi": "书",
+     "pinyin": "shū",
+     "loai": "danh từ",
+     "nghia": "sách"
+    },
+    {
+     "hanzi": "那",
+     "pinyin": "nà",
+     "loai": "đại từ",
+     "nghia": "đó"
+    },
+    {
+     "hanzi": "学习",
+     "pinyin": "xuéxí",
+     "loai": "động từ",
+     "nghia": "học tập"
+    },
+    {
+     "hanzi": "做",
+     "pinyin": "zuò",
+     "loai": "động từ",
+     "nghia": "làm"
+    },
+    {
+     "hanzi": "白天",
+     "pinyin": "báitiān",
+     "loai": "danh từ",
+     "nghia": "ban ngày"
+    },
+    {
+     "hanzi": "读书",
+     "pinyin": "dúshū",
+     "loai": "động từ",
+     "nghia": "đọc sách"
+    },
+    {
+     "hanzi": "和",
+     "pinyin": "hé",
+     "loai": "liên từ",
+     "nghia": "và"
+    },
+    {
+     "hanzi": "朋友",
+     "pinyin": "péngyou",
+     "loai": "danh từ",
+     "nghia": "bạn"
+    },
+    {
+     "hanzi": "唱",
+     "pinyin": "chàng",
+     "loai": "động từ",
+     "nghia": "hát"
+    },
+    {
+     "hanzi": "歌",
+     "pinyin": "gē",
+     "loai": "danh từ",
+     "nghia": "bài hát"
+    },
+    {
+     "hanzi": "好听",
+     "pinyin": "hǎotīng",
+     "loai": "tính từ",
+     "nghia": "nghe hay"
+    },
+    {
+     "hanzi": "电视",
+     "pinyin": "diànshì",
+     "loai": "danh từ",
+     "nghia": "TV"
+    },
+    {
+     "hanzi": "狗",
+     "pinyin": "gǒu",
+     "loai": "danh từ",
+     "nghia": "chó"
+    },
+    {
+     "hanzi": "玩",
+     "pinyin": "wán",
+     "loai": "động từ",
+     "nghia": "chơi"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "李文",
+       "zh": "学校前边有一家电影院。",
+       "pinyin": "Xuéxiào qiánbian yǒu yì jiā diànyǐngyuàn.",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "对。我们晚上去那个电影院看电影吧。",
+       "pinyin": "Duì. Wǒmen wǎnshang qù nàge diànyǐngyuàn kàn diànyǐng ba.",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "好！我们七点在电影院外边见，好吗？",
+       "pinyin": "Hǎo! Wǒmen qī diǎn zài diànyǐngyuàn wàibian jiàn, hǎo ma?",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "好的，晚上七点见！",
+       "pinyin": "Hǎo de, wǎnshang qī diǎn jiàn!",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "白家月",
+       "zh": "椅子上有一本中文书，那是谁的书？",
+       "pinyin": "Yǐzi shang yǒu yì běn Zhōngwén shū, nà shì shéi de shū?",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "是我的书，谢谢。这是我的第二本中文书。",
+       "pinyin": "Shì wǒ de shū, xièxie. Zhè shì wǒ de dì-èr běn Zhōngwén shū.",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "不客气。你明天上午在哪儿？",
+       "pinyin": "Bú kèqi. Nǐ míngtiān shàngwǔ zài nǎr?",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "我明天上午在学校学习。",
+       "pinyin": "Wǒ míngtiān shàngwǔ zài xuéxiào xuéxí.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "王一雪",
+       "zh": "明天星期六，你做什么？",
+       "pinyin": "Míngtiān Xīngqīliù, nǐ zuò shénme?",
+       "vi": ""
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "我白天在家里读书，晚上和朋友们去外边唱歌。",
+       "pinyin": "Wǒ báitiān zài jiālǐ dúshū, wǎnshang hé péngyoumen qù wàibian chànggē.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "你唱歌很好听。",
+       "pinyin": "Nǐ chànggē hěn hǎotīng.",
+       "vi": ""
+      },
+      {
+       "ten": "王同乐",
+       "zh": "谢谢！您星期六做什么？",
+       "pinyin": "Xièxie! Nín Xīngqīliù zuò shénme?",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "我在家里做饭、看电视，和孩子们、小狗玩。",
+       "pinyin": "Wǒ zài jiālǐ zuòfàn, kàn diànshì, hé háizimen, xiǎogǒu wán.",
+       "vi": ""
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "我也有一只小狗。",
+       "pinyin": "Wǒ yě yǒu yì zhī xiǎogǒu.",
+       "vi": ""
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "谢谢！",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "安妮",
+       "zh": "我下午还",
+       "pinyin": "",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "前",
+    "边",
+    "家",
+    "那",
+    "个",
+    "外",
+    "椅",
+    "子",
+    "上",
+    "本",
+    "书",
+    "学",
+    "习",
+    "做",
+    "白",
+    "天",
+    "读",
+    "和",
+    "朋",
+    "友",
+    "唱",
+    "歌",
+    "好",
+    "听",
+    "电",
+    "视",
+    "狗",
+    "玩"
+   ]
+  },
+  {
+   "no": 10,
+   "ten": "Táo ở đây thật rẻ!",
+   "tu_vung": [
+    {
+     "hanzi": "杯子",
+     "pinyin": "bēizi",
+     "loai": "danh từ",
+     "nghia": "cốc"
+    },
+    {
+     "hanzi": "售货员",
+     "pinyin": "shòuhuòyuán",
+     "loai": "danh từ",
+     "nghia": "nhân viên bán hàng"
+    },
+    {
+     "hanzi": "这边",
+     "pinyin": "zhèbiān",
+     "loai": "đại từ",
+     "nghia": "bên này"
+    },
+    {
+     "hanzi": "钱",
+     "pinyin": "qián",
+     "loai": "danh từ",
+     "nghia": "tiền"
+    },
+    {
+     "hanzi": "这些",
+     "pinyin": "zhèxiē",
+     "loai": "đại từ",
+     "nghia": "những cái này"
+    },
+    {
+     "hanzi": "块",
+     "pinyin": "kuài",
+     "loai": "lượng từ",
+     "nghia": "tệ"
+    },
+    {
+     "hanzi": "那些",
+     "pinyin": "nàxiē",
+     "loai": "đại từ",
+     "nghia": "những cái kia"
+    },
+    {
+     "hanzi": "这儿",
+     "pinyin": "zhèr",
+     "loai": "đại từ",
+     "nghia": "đây"
+    },
+    {
+     "hanzi": "水果",
+     "pinyin": "shuǐguǒ",
+     "loai": "danh từ",
+     "nghia": "hoa quả"
+    },
+    {
+     "hanzi": "少",
+     "pinyin": "shǎo",
+     "loai": "tính từ",
+     "nghia": "ít"
+    },
+    {
+     "hanzi": "斤",
+     "pinyin": "jīn",
+     "loai": "lượng từ",
+     "nghia": "nửa cân"
+    },
+    {
+     "hanzi": "苹果",
+     "pinyin": "píngguǒ",
+     "loai": "danh từ",
+     "nghia": "táo"
+    },
+    {
+     "hanzi": "便宜",
+     "pinyin": "piányi",
+     "loai": "tính từ",
+     "nghia": "rẻ"
+    },
+    {
+     "hanzi": "商店",
+     "pinyin": "shāngdiàn",
+     "loai": "danh từ",
+     "nghia": "cửa hàng"
+    },
+    {
+     "hanzi": "衣服",
+     "pinyin": "yīfu",
+     "loai": "danh từ",
+     "nghia": "quần áo"
+    },
+    {
+     "hanzi": "件",
+     "pinyin": "jiàn",
+     "loai": "lượng từ",
+     "nghia": "chiếc"
+    },
+    {
+     "hanzi": "元",
+     "pinyin": "yuán",
+     "loai": "lượng từ",
+     "nghia": "tệ"
+    },
+    {
+     "hanzi": "怎么样",
+     "pinyin": "zěnmeyàng",
+     "loai": "đại từ",
+     "nghia": "như thế nào"
+    },
+    {
+     "hanzi": "贵",
+     "pinyin": "guì",
+     "loai": "tính từ",
+     "nghia": "đắt"
+    },
+    {
+     "hanzi": "穿",
+     "pinyin": "chuān",
+     "loai": "động từ",
+     "nghia": "mặc"
+    },
+    {
+     "hanzi": "女",
+     "pinyin": "nǚ",
+     "loai": "tính từ",
+     "nghia": "nữ"
+    },
+    {
+     "hanzi": "男",
+     "pinyin": "nán",
+     "loai": "tính từ",
+     "nghia": "nam"
+    },
+    {
+     "hanzi": "那儿",
+     "pinyin": "nàr",
+     "loai": "đại từ",
+     "nghia": "đó, kia"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "王一雪",
+       "zh": "请问，有杯子吗？",
+       "pinyin": "Qǐngwèn, yǒu bēizi ma?",
+       "vi": ""
+      },
+      {
+       "ten": "售货员",
+       "zh": "有，杯子在这边。",
+       "pinyin": "Yǒu, bēizi zài zhèbiān.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "多少钱一个？",
+       "pinyin": "Duōshǎo qián yí gè?",
+       "vi": ""
+      },
+      {
+       "ten": "售货员",
+       "zh": "这些五块钱一个，那些十块钱一个。",
+       "pinyin": "Zhèxiē wǔ kuài qián yí gè, nàxiē shí kuài qián yí gè.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "我买这个吧。",
+       "pinyin": "Wǒ mǎi zhège ba.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "王一雪",
+       "zh": "这儿的水果真不少！",
+       "pinyin": "Zhèr de shuǐguǒ zhēn bù shǎo!",
+       "vi": ""
+      },
+      {
+       "ten": "售货员",
+       "zh": "您想买什么？",
+       "pinyin": "Nín xiǎng mǎi shénme?",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "我想买两斤苹果。",
+       "pinyin": "Wǒ xiǎng mǎi liǎng jīn píngguǒ.",
+       "vi": ""
+      },
+      {
+       "ten": "售货员",
+       "zh": "苹果三块五一斤。这些七块二，七块钱吧。",
+       "pinyin": "Píngguǒ sān kuài wǔ yì jīn. Zhèxiē qī kuài èr, qī kuài qián ba.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "好的，这儿的苹果真便宜!",
+       "pinyin": "Hǎo de, zhèr de píngguǒ zhēn piányi!",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "王一雪",
+       "zh": "这家商店衣服真多！这件一百元，怎么样？",
+       "pinyin": "Zhè jiā shāngdiàn yīfu zhēn duō! Zhè jiàn yìbǎi yuán, zěnmeyàng?",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "好看，也不贵。",
+       "pinyin": "Hǎokàn, yě bú guì.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "小雪能穿，买一件吧。",
+       "pinyin": "Xiǎo Xuě néng chuān, mǎi yí jiàn ba.",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "好的。小明能穿吗？",
+       "pinyin": "Hǎo de. Xiǎo Míng néng chuān ma?",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "不能。这些是女孩子穿的衣服，男孩子的衣服在那儿。",
+       "pinyin": "Bù néng. Zhèxiē shì nǚ háizi chuān de yīfu, nán háizi de yīfu zài nàr.",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "好的。",
+       "pinyin": "Hǎo de.",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "好的，我买五个。",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "很好看。",
+       "pinyin": "",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "杯",
+    "售",
+    "货",
+    "员",
+    "这",
+    "钱",
+    "些",
+    "块",
+    "水",
+    "果",
+    "少",
+    "斤",
+    "苹",
+    "便",
+    "宜",
+    "商",
+    "店",
+    "衣",
+    "服",
+    "件",
+    "元",
+    "怎",
+    "么",
+    "样",
+    "贵",
+    "穿"
+   ]
+  },
+  {
+   "no": 11,
+   "ten": "Tôi đang học đại học",
+   "tu_vung": [
+    {
+     "hanzi": "时候",
+     "pinyin": "shíhou",
+     "loai": "danh từ",
+     "nghia": "lúc"
+    },
+    {
+     "hanzi": "饭店",
+     "pinyin": "fàndiàn",
+     "loai": "danh từ",
+     "nghia": "khách sạn"
+    },
+    {
+     "hanzi": "知道",
+     "pinyin": "zhīdao",
+     "loai": "động từ",
+     "nghia": "biết"
+    },
+    {
+     "hanzi": "正在",
+     "pinyin": "zhèngzài",
+     "loai": "phó từ",
+     "nghia": "đang"
+    },
+    {
+     "hanzi": "找",
+     "pinyin": "zhǎo",
+     "loai": "động từ",
+     "nghia": "tìm"
+    },
+    {
+     "hanzi": "开车",
+     "pinyin": "kāichē",
+     "loai": "động từ",
+     "nghia": "lái xe"
+    },
+    {
+     "hanzi": "车",
+     "pinyin": "chē",
+     "loai": "danh từ",
+     "nghia": "xe"
+    },
+    {
+     "hanzi": "在",
+     "pinyin": "zài",
+     "loai": "phó từ",
+     "nghia": "đang"
+    },
+    {
+     "hanzi": "读",
+     "pinyin": "dú",
+     "loai": "động từ",
+     "nghia": "học"
+    },
+    {
+     "hanzi": "大学",
+     "pinyin": "dàxué",
+     "loai": "danh từ",
+     "nghia": "đại học"
+    },
+    {
+     "hanzi": "大学生",
+     "pinyin": "dàxuéshēng",
+     "loai": "danh từ",
+     "nghia": "sinh viên"
+    },
+    {
+     "hanzi": "学",
+     "pinyin": "xué",
+     "loai": "động từ",
+     "nghia": "học"
+    },
+    {
+     "hanzi": "医",
+     "pinyin": "yī",
+     "loai": "danh từ",
+     "nghia": "y"
+    },
+    {
+     "hanzi": "弟弟",
+     "pinyin": "dìdi",
+     "loai": "danh từ",
+     "nghia": "em trai"
+    },
+    {
+     "hanzi": "起床",
+     "pinyin": "qǐchuáng",
+     "loai": "động từ",
+     "nghia": "thức dậy"
+    },
+    {
+     "hanzi": "睡觉",
+     "pinyin": "shuìjiào",
+     "loai": "động từ",
+     "nghia": "ngủ"
+    },
+    {
+     "hanzi": "睡",
+     "pinyin": "shuì",
+     "loai": "động từ",
+     "nghia": "ngủ"
+    },
+    {
+     "hanzi": "那里",
+     "pinyin": "nàlǐ",
+     "loai": "đại từ",
+     "nghia": "bên đó"
+    },
+    {
+     "hanzi": "哪里",
+     "pinyin": "nǎlǐ",
+     "loai": "đại từ",
+     "nghia": "ở đâu"
+    },
+    {
+     "hanzi": "昨天",
+     "pinyin": "zuótiān",
+     "loai": "danh từ",
+     "nghia": "hôm qua"
+    },
+    {
+     "hanzi": "问",
+     "pinyin": "wèn",
+     "loai": "động từ",
+     "nghia": "hỏi"
+    },
+    {
+     "hanzi": "对",
+     "pinyin": "duì",
+     "loai": "giới từ",
+     "nghia": "về phía"
+    },
+    {
+     "hanzi": "说",
+     "pinyin": "shuō",
+     "loai": "động từ",
+     "nghia": "nói"
+    },
+    {
+     "hanzi": "要",
+     "pinyin": "yào",
+     "loai": "động từ năng nguyện",
+     "nghia": "muốn"
+    },
+    {
+     "hanzi": "小朋友",
+     "pinyin": "xiǎopéngyou",
+     "loai": "danh từ",
+     "nghia": "trẻ em"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "王一飞",
+       "zh": "喂，李文，你什么时候能到酒店？",
+       "pinyin": "Wèi, Lǐ Wén, nǐ shénme shíhou néng dào jiǔdiàn?",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "还不知道，正在找呢。它是不是在超市后边？",
+       "pinyin": "Hái bù zhīdào, zhèngzài zhǎo ne. Tā shì bu shì zài chāoshì hòubian?",
+       "vi": ""
+      },
+      {
+       "ten": "王一飞",
+       "zh": "是的。你开车没开车？",
+       "pinyin": "Shì de. Nǐ kāichē méi kāichē?",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "我没开车，坐车呢。",
+       "pinyin": "Wǒ méi kāichē, zuòchē ne..",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "王一飞",
+       "zh": "你还在读大学吗？",
+       "pinyin": "Nǐ hái zài dú dàxué ma?",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "对，我读大学呢，还是大学生。",
+       "pinyin": "Duì, wǒ dú dàxué ne, hái shì dàxuéshēng.",
+       "vi": ""
+      },
+      {
+       "ten": "王一飞",
+       "zh": "你们学习忙不忙？",
+       "pinyin": "Nǐmen xuéxí máng bu máng?",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "非常忙，我学医，我们的课很多。",
+       "pinyin": "Fēicháng máng, wǒ xué yī, wǒmen de kè hěn duō.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "刘明",
+       "zh": "弟弟起床没起床呢？",
+       "pinyin": "Dìdi, qǐchuáng méi qǐchuáng ne?",
+       "vi": ""
+      },
+      {
+       "ten": "刘小雪",
+       "zh": "没起床呢，还在睡觉。",
+       "pinyin": "Méi qǐchuáng ne, hái zài shuìjiào.",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "还睡呢？他今天去不去那里？",
+       "pinyin": "Hái shuì ne? Tā jīntiān qù bu qù nàlǐ?",
+       "vi": ""
+      },
+      {
+       "ten": "刘小雪",
+       "zh": "去哪里？",
+       "pinyin": "Qù nǎlǐ?",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "去超市。",
+       "pinyin": "Qù chāoshì.",
+       "vi": ""
+      },
+      {
+       "ten": "刘小雪",
+       "zh": "我昨天问他，他对我说，他不去，他今天要和小朋友玩。",
+       "pinyin": "Wǒ zuótiān wèn tā, tā duì wǒ shuō, tā bù qù, tā jīntiān yào hé xiǎo péngyou wán.",
+       "vi": ""
+      },
+      {
+       "ten": "姐姐",
+       "zh": "我不去，我",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "他在",
+       "pinyin": "",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "店",
+    "知",
+    "道",
+    "正",
+    "在",
+    "找",
+    "车",
+    "读",
+    "医",
+    "弟",
+    "起",
+    "床",
+    "昨",
+    "问",
+    "对",
+    "说",
+    "要"
+   ]
+  },
+  {
+   "no": 12,
+   "ten": "Hôm qua tuyết rơi rồi",
+   "tu_vung": [
+    {
+     "hanzi": "天气",
+     "pinyin": "tiānqì",
+     "loai": "danh từ",
+     "nghia": "thời tiết"
+    },
+    {
+     "hanzi": "这里",
+     "pinyin": "zhèlǐ",
+     "loai": "đại từ",
+     "nghia": "ở đây"
+    },
+    {
+     "hanzi": "天",
+     "pinyin": "tiān",
+     "loai": "danh từ",
+     "nghia": "trời/thời tiết"
+    },
+    {
+     "hanzi": "下雨",
+     "pinyin": "xiàyǔ",
+     "loai": "",
+     "nghia": "mưa"
+    },
+    {
+     "hanzi": "了",
+     "pinyin": "le",
+     "loai": "trợ từ ngữ khí",
+     "nghia": ""
+    },
+    {
+     "hanzi": "有点儿",
+     "pinyin": "yǒudiǎnr",
+     "loai": "phó từ",
+     "nghia": "hơi"
+    },
+    {
+     "hanzi": "觉得",
+     "pinyin": "juéde",
+     "loai": "động từ",
+     "nghia": "cảm thấy"
+    },
+    {
+     "hanzi": "冷",
+     "pinyin": "lěng",
+     "loai": "tính từ",
+     "nghia": "lạnh"
+    },
+    {
+     "hanzi": "下",
+     "pinyin": "xià",
+     "loai": "động từ",
+     "nghia": "(tuyết/mưa) rơi"
+    },
+    {
+     "hanzi": "雪",
+     "pinyin": "xuě",
+     "loai": "danh từ",
+     "nghia": "tuyết"
+    },
+    {
+     "hanzi": "来",
+     "pinyin": "lái",
+     "loai": "động từ",
+     "nghia": "đến"
+    },
+    {
+     "hanzi": "公司",
+     "pinyin": "gōngsī",
+     "loai": "danh từ",
+     "nghia": "công ty"
+    },
+    {
+     "hanzi": "看病",
+     "pinyin": "kànbìng",
+     "loai": "động từ",
+     "nghia": "khám"
+    },
+    {
+     "hanzi": "病",
+     "pinyin": "bìng",
+     "loai": "động từ",
+     "nghia": "bị ốm"
+    },
+    {
+     "hanzi": "一点儿",
+     "pinyin": "yìdiǎnr",
+     "loai": "cụm số lượng từ",
+     "nghia": "một chút"
+    },
+    {
+     "hanzi": "药",
+     "pinyin": "yào",
+     "loai": "danh từ",
+     "nghia": "thuốc"
+    },
+    {
+     "hanzi": "回",
+     "pinyin": "huí",
+     "loai": "động từ",
+     "nghia": "quay lại"
+    },
+    {
+     "hanzi": "再",
+     "pinyin": "zài",
+     "loai": "phó từ",
+     "nghia": "sau đó"
+    },
+    {
+     "hanzi": "喝",
+     "pinyin": "hē",
+     "loai": "động từ",
+     "nghia": "uống"
+    },
+    {
+     "hanzi": "热",
+     "pinyin": "rè",
+     "loai": "tính từ",
+     "nghia": "nóng"
+    },
+    {
+     "hanzi": "水",
+     "pinyin": "shuǐ",
+     "loai": "danh từ",
+     "nghia": "nước"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "王一雪",
+       "zh": "今天天气怎么样？",
+       "pinyin": "Jīntiān tiānqì zěnmeyàng?",
+       "vi": "Hôm nay thời tiết thế nào?",
+       "ten_vi": "Vương Nhất Tuyết"
+      },
+      {
+       "ten": "王一飞",
+       "zh": "这里的天不太好，下雨了。",
+       "pinyin": "Zhèlǐ de tiān bù tài hǎo, xiàyǔ le.",
+       "vi": "Trời ở đây không đẹp lắm, mưa rồi.",
+       "ten_vi": "Trần Nhất Phi"
+      },
+      {
+       "ten": "王一雪",
+       "zh": "雨大吗？",
+       "pinyin": "Yǔ dà ma?",
+       "vi": "Mưa to không?",
+       "ten_vi": "Vương Nhất Tuyết"
+      },
+      {
+       "ten": "王一飞",
+       "zh": "有点儿大，我觉得很冷。",
+       "pinyin": "Yǒudiǎnr dà, wǒ juéde hěn lěng.",
+       "vi": "Hơi to, tôi cảm thấy rất lạnh.",
+       "ten_vi": "Vương Nhất Phi"
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "王一雪",
+       "zh": "昨天下雪了。",
+       "pinyin": "Zuótiān xiàxuě le.",
+       "vi": "Chọn đáp án đúng",
+       "ten_vi": "Bài 1"
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "是的，太冷了。",
+       "pinyin": "Shì de, tài lěng le.",
+       "vi": "Đổi sang câu phủ định",
+       "ten_vi": "Bài 2"
+      },
+      {
+       "ten": "王一雪",
+       "zh": "你昨天没来公司，生病了？",
+       "pinyin": "Nǐ zuótiān méi lái gōngsī, shēngbìng le?",
+       "vi": "Hôm qua tuyết rơi rồi.",
+       "ten_vi": "Vương Nhất Tuyết"
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "对，我昨天去医院看病了。",
+       "pinyin": "Duì, wǒ zuótiān qù yīyuàn kànbìng le.",
+       "vi": "Đúng vậy, lạnh quá.",
+       "ten_vi": "Lí Văn"
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "刘明",
+       "zh": "医生，我病了。",
+       "pinyin": "Yīshēng, wǒ bìng le.",
+       "vi": "Bạn hôm qua không đến công ty, ốm rồi à?",
+       "ten_vi": "Bạch Gia Nguyệt"
+      },
+      {
+       "ten": "胡医生",
+       "zh": "我看看。你觉得怎么样？",
+       "pinyin": "Wǒ kànkan. Nǐ juéde zěnmeyàng?",
+       "vi": "Đúng vậy, tôi hôm qua đi bệnh viện khám bệnh.",
+       "ten_vi": "Lí Văn"
+      },
+      {
+       "ten": "刘明",
+       "zh": "我很冷。",
+       "pinyin": "Wǒ hěn lěng.",
+       "vi": "Bác sĩ, tôi ốm rồi.",
+       "ten_vi": "Dương Đồng Lạc"
+      },
+      {
+       "ten": "胡医生",
+       "zh": "好的，吃一点儿药，今天休息半天吧。",
+       "pinyin": "Hǎo de, chī yìdiǎnr yào, jīntiān xiūxi bàntiān ba.",
+       "vi": "Tôi xem một chút, bạn cảm thấy thế nào?",
+       "ten_vi": "Bác sĩ Hồ"
+      },
+      {
+       "ten": "刘生",
+       "zh": "好的。",
+       "pinyin": "Hǎo de.",
+       "vi": "Tôi rất lạnh.",
+       "ten_vi": "Dương Đồng Lạc"
+      },
+      {
+       "ten": "刘明",
+       "zh": "回家后再喝些热水。",
+       "pinyin": "Huí jiā hòu zài hē xiē rè shuǐ.",
+       "vi": "Được, uống một chút thuốc, hôm nay nghỉ ngơi nửa ngày đi.",
+       "ten_vi": "Bác sĩ Hồ"
+      },
+      {
+       "ten": "杨同乐",
+       "zh": "我很冷。",
+       "pinyin": "",
+       "vi": "Được.",
+       "ten_vi": "Dương Đồng Lạc"
+      },
+      {
+       "ten": "李文",
+       "zh": "没有，我今天去。",
+       "pinyin": "",
+       "vi": "Sau khi về nhà thì uống một chút nước nóng.",
+       "ten_vi": "Bác sĩ Hồ"
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "天",
+    "气",
+    "下",
+    "雨",
+    "了",
+    "觉",
+    "得",
+    "冷",
+    "雪",
+    "来",
+    "公",
+    "司",
+    "生",
+    "病",
+    "看",
+    "药",
+    "回",
+    "再",
+    "热",
+    "水"
+   ]
+  },
+  {
+   "no": 13,
+   "ten": "Cho tôi một cốc trà",
+   "tu_vung": [
+    {
+     "hanzi": "可以",
+     "pinyin": "kěyǐ",
+     "loai": "động từ năng nguyện",
+     "nghia": "có thể; được phép"
+    },
+    {
+     "hanzi": "再",
+     "pinyin": "zài",
+     "loai": "phó từ",
+     "nghia": "lại; thêm lần nữa"
+    },
+    {
+     "hanzi": "问题",
+     "pinyin": "wèntí",
+     "loai": "danh từ",
+     "nghia": "câu hỏi; vấn đề"
+    },
+    {
+     "hanzi": "卖",
+     "pinyin": "mài",
+     "loai": "động từ",
+     "nghia": "bán"
+    },
+    {
+     "hanzi": "打电话",
+     "pinyin": "dǎ diànhuà",
+     "loai": "động từ",
+     "nghia": "gọi điện thoại"
+    },
+    {
+     "hanzi": "一下",
+     "pinyin": "yíxià",
+     "loai": "số từ, lượng từ",
+     "nghia": "một chút; một lần"
+    },
+    {
+     "hanzi": "服务员",
+     "pinyin": "fúwùyuán",
+     "loai": "danh từ",
+     "nghia": "nhân viên phục vụ"
+    },
+    {
+     "hanzi": "女士",
+     "pinyin": "nǚshì",
+     "loai": "danh từ",
+     "nghia": "quý cô; thưa bà; cô"
+    },
+    {
+     "hanzi": "请",
+     "pinyin": "qǐng",
+     "loai": "động từ",
+     "nghia": "mời; xin"
+    },
+    {
+     "hanzi": "坐",
+     "pinyin": "zuò",
+     "loai": "động từ",
+     "nghia": "ngồi"
+    },
+    {
+     "hanzi": "杯",
+     "pinyin": "bēi",
+     "loai": "lượng từ",
+     "nghia": "cốc; ly"
+    },
+    {
+     "hanzi": "要",
+     "pinyin": "yào",
+     "loai": "động từ",
+     "nghia": "muốn; cần"
+    },
+    {
+     "hanzi": "早饭",
+     "pinyin": "zǎofàn",
+     "loai": "danh từ",
+     "nghia": "bữa sáng"
+    },
+    {
+     "hanzi": "这个",
+     "pinyin": "zhège",
+     "loai": "đại từ",
+     "nghia": "cái này"
+    },
+    {
+     "hanzi": "面包",
+     "pinyin": "miànbāo",
+     "loai": "danh từ",
+     "nghia": "bánh mì"
+    },
+    {
+     "hanzi": "鸡蛋",
+     "pinyin": "jīdàn",
+     "loai": "danh từ",
+     "nghia": "trứng gà"
+    },
+    {
+     "hanzi": "先生",
+     "pinyin": "xiānsheng",
+     "loai": "danh từ",
+     "nghia": "ông; quý ông; ngài"
+    },
+    {
+     "hanzi": "一半",
+     "pinyin": "yíbàn",
+     "loai": "số từ",
+     "nghia": "một nửa"
+    },
+    {
+     "hanzi": "茶",
+     "pinyin": "chá",
+     "loai": "danh từ",
+     "nghia": "trà"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "白家月",
+       "zh": "王老师，我可以再问您一个问题吗？",
+       "pinyin": "Wáng lǎoshī, wǒ kěyǐ zài wèn nín yí gè wèntí ma?",
+       "vi": ""
+      },
+      {
+       "ten": "王一飞",
+       "zh": "可以。你有什么问题？",
+       "pinyin": "Kěyǐ. Nǐ yǒu shénme wèntí?",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "那个小店卖不卖手机？",
+       "pinyin": "Nàge xiǎo diàn mài bu mài shǒujī?",
+       "vi": ""
+      },
+      {
+       "ten": "王一飞",
+       "zh": "我不知道。你可以打电话问一下。",
+       "pinyin": "Wǒ bù zhīdào。Nǐ kěyǐ dǎ diànhuà wèn yíxià.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "服务员",
+       "zh": "女士，请坐！您喝什么？",
+       "pinyin": "Nǚshì, qǐng zuò! Nín hē shénme?",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "我看一下。请给我一杯牛奶。",
+       "pinyin": "Wǒ kàn yíxià. Qǐng gěi wǒ yì bēi niúnǎi.",
+       "vi": ""
+      },
+      {
+       "ten": "服务员",
+       "zh": "好的。您还要什么？",
+       "pinyin": "Hǎo de. Nín hái yào shénme?",
+       "vi": ""
+      },
+      {
+       "ten": "王一雪",
+       "zh": "我还没吃早饭，再要这个面包和鸡蛋吧。",
+       "pinyin": "Wǒ hái méi chī zǎofàn, zài yào zhège miànbāo hé jīdàn ba.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "服务员",
+       "zh": "先生，请坐！您要什么？",
+       "pinyin": "Xiānsheng, qǐng zuò! Nín yào shénme?",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "我要一斤饺子。",
+       "pinyin": "Wǒ yào yì jīn jiǎozi.",
+       "vi": ""
+      },
+      {
+       "ten": "服务员",
+       "zh": "好的。一斤饺子四十个。",
+       "pinyin": "Hǎo de. Yì jīn jiǎozi sìshí gè.",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "四十个太多了，我要一半吧。",
+       "pinyin": "Sìshí gè tài duō le, wǒ yào yíbàn ba.",
+       "vi": ""
+      },
+      {
+       "ten": "服务员",
+       "zh": "半斤二十个。您想喝什么？",
+       "pinyin": "Bàn jīn èrshí gè. Nín xiǎng hē shénme?",
+       "vi": ""
+      },
+      {
+       "ten": "刘明",
+       "zh": "请给我一杯茶吧。",
+       "pinyin": "Qǐng gěi wǒ yì bēi chá ba.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "请",
+    "坐",
+    "给",
+    "杯",
+    "要",
+    "早",
+    "面",
+    "包",
+    "蛋",
+    "一",
+    "半",
+    "茶",
+    "问",
+    "再",
+    "个"
+   ]
+  },
+  {
+   "no": 14,
+   "ten": "Tôi đã xem một bộ phim",
+   "tu_vung": [
+    {
+     "hanzi": "上",
+     "pinyin": "shàng",
+     "loai": "động từ",
+     "nghia": "lên; đi lên; lên (xe, tàu)"
+    },
+    {
+     "hanzi": "火车",
+     "pinyin": "huǒchē",
+     "loai": "danh từ",
+     "nghia": "tàu hỏa"
+    },
+    {
+     "hanzi": "中午",
+     "pinyin": "zhōngwǔ",
+     "loai": "danh từ",
+     "nghia": "buổi trưa"
+    },
+    {
+     "hanzi": "开",
+     "pinyin": "kāi",
+     "loai": "động từ",
+     "nghia": "(xe cộ) khởi hành; rời đi"
+    },
+    {
+     "hanzi": "有些",
+     "pinyin": "yǒuxiē",
+     "loai": "đại từ",
+     "nghia": "một vài; một số"
+    },
+    {
+     "hanzi": "有的",
+     "pinyin": "yǒude",
+     "loai": "đại từ",
+     "nghia": "một số; có người thì…"
+    },
+    {
+     "hanzi": "了",
+     "pinyin": "le",
+     "loai": "trợ từ ngữ khí",
+     "nghia": "(trợ từ chỉ sự hoàn thành)"
+    },
+    {
+     "hanzi": "写",
+     "pinyin": "xiě",
+     "loai": "động từ",
+     "nghia": "viết"
+    },
+    {
+     "hanzi": "都",
+     "pinyin": "dōu",
+     "loai": "phó từ",
+     "nghia": "đều; tất cả"
+    },
+    {
+     "hanzi": "听见",
+     "pinyin": "tīngjiàn",
+     "loai": "động từ",
+     "nghia": "nghe thấy"
+    },
+    {
+     "hanzi": "说话",
+     "pinyin": "shuōhuà",
+     "loai": "động từ",
+     "nghia": "nói chuyện; nói"
+    },
+    {
+     "hanzi": "听",
+     "pinyin": "tīng",
+     "loai": "động từ",
+     "nghia": "nghe"
+    },
+    {
+     "hanzi": "哪些",
+     "pinyin": "nǎxiē",
+     "loai": "đại từ nghi vấn",
+     "nghia": "những… nào"
+    },
+    {
+     "hanzi": "字",
+     "pinyin": "zì",
+     "loai": "danh từ",
+     "nghia": "chữ; ký tự"
+    },
+    {
+     "hanzi": "汉语",
+     "pinyin": "Hànyǔ",
+     "loai": "",
+     "nghia": "tiếng Trung"
+    },
+    {
+     "hanzi": "汉字",
+     "pinyin": "Hànzì",
+     "loai": "",
+     "nghia": "chữ Hán"
+    },
+    {
+     "hanzi": "明年",
+     "pinyin": "míngnián",
+     "loai": "danh từ",
+     "nghia": "năm sau"
+    },
+    {
+     "hanzi": "中学",
+     "pinyin": "zhōngxué",
+     "loai": "danh từ",
+     "nghia": "trường trung học"
+    },
+    {
+     "hanzi": "小学",
+     "pinyin": "xiǎoxué",
+     "loai": "danh từ",
+     "nghia": "trường tiểu học"
+    },
+    {
+     "hanzi": "中学生",
+     "pinyin": "zhōngxuéshēng",
+     "loai": "danh từ",
+     "nghia": "học sinh trung học"
+    },
+    {
+     "hanzi": "小学生",
+     "pinyin": "xiǎoxuéshēng",
+     "loai": "danh từ",
+     "nghia": "học sinh tiểu học"
+    },
+    {
+     "hanzi": "上学",
+     "pinyin": "shàngxué",
+     "loai": "động từ",
+     "nghia": "đi học; bắt đầu đi học"
+    },
+    {
+     "hanzi": "他们",
+     "pinyin": "tāmen",
+     "loai": "đại từ",
+     "nghia": "họ (giống chung/nam)"
+    },
+    {
+     "hanzi": "她们",
+     "pinyin": "tāmen",
+     "loai": "đại từ",
+     "nghia": "họ (nữ)"
+    },
+    {
+     "hanzi": "它们",
+     "pinyin": "tāmen",
+     "loai": "đại từ",
+     "nghia": "chúng (đồ vật/động vật)"
+    },
+    {
+     "hanzi": "晚",
+     "pinyin": "wǎn",
+     "loai": "tính từ",
+     "nghia": "muộn"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "白家月",
+       "zh": "你们上火车后看见王老师了吗？",
+       "pinyin": "Nǐmen shàng huǒchē hòu kànjiàn Wáng lǎoshī le ma?",
+       "vi": "Sau khi lên tàu, các bạn có nhìn thấy thầy Vương không?",
+       "ten_vi": "Bạch Gia Nguyệt"
+      },
+      {
+       "ten": "陈天中",
+       "zh": "没看见。中午车开后，",
+       "pinyin": "Méi kànjiàn. Zhōngwǔ chē kāi hòu,",
+       "vi": "Không thấy. Sau khi tàu chạy buổi trưa, có người đang đọc sách, có người đã ngủ.",
+       "ten_vi": "Trần Thiên Trung"
+      },
+      {
+       "ten": "白家月",
+       "zh": "你呢？",
+       "pinyin": "Nǐ ne?",
+       "vi": "Còn bạn thì sao?",
+       "ten_vi": "Bạch Gia Nguyệt"
+      },
+      {
+       "ten": "陈天中",
+       "zh": "我看了一个电影。",
+       "pinyin": "Wǒ kàn le yí gè diànyǐng.",
+       "vi": "Tôi đã xem một bộ phim.",
+       "ten_vi": "Trần Thiên Trung"
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "王一飞",
+       "zh": "你们会说汉语了，也会写汉字了吗？",
+       "pinyin": "Nǐmen huì shuō Hànyǔ le, yě huì xiě Hànzì le ma?",
+       "vi": "Hoàn thành hội thoại",
+       "ten_vi": "Luyện tập"
+      },
+      {
+       "ten": "白家月",
+       "zh": "我们都会写了。",
+       "pinyin": "Wǒmen dōu huì xiě le.",
+       "vi": "Các em đã biết nói tiếng Trung rồi, cũng đã biết viết chữ Hán rồi chứ?",
+       "ten_vi": "Vương Nhất Phi"
+      },
+      {
+       "ten": "陈天中",
+       "zh": "老师，我听不见。",
+       "pinyin": "Lǎoshī, wǒ tīng bù jiàn.",
+       "vi": "Chúng em đều biết viết rồi ạ.",
+       "ten_vi": "Bạch Gia Nguyệt"
+      },
+      {
+       "ten": "王一飞",
+       "zh": "请大家不要说话！请听老师的问题：",
+       "pinyin": "Qǐng dàjiā bú yào shuōhuà! Qǐng tīng lǎoshī de wèntí:",
+       "vi": "Thưa cô, em không nghe thấy.",
+       "ten_vi": "Trần Thiên Trung"
+      },
+      {
+       "ten": "陈天中",
+       "zh": "我会写这些字了，您看！",
+       "pinyin": "Wǒ huì xiě zhèxiē zì le, nín kàn!",
+       "vi": "Mời mọi người đừng nói chuyện! Hãy nghe câu hỏi của cô: Các em đã biết viết những chữ Hán nào rồi?",
+       "ten_vi": "Vương Nhất Phi"
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "刘明",
+       "zh": "明年女儿上中学。",
+       "pinyin": "Míngnián nǚ’ér shàng zhōngxué",
+       "vi": "Em biết viết những chữ này rồi, cô xem ạ!",
+       "ten_vi": "Trần Thiên Trung"
+      },
+      {
+       "ten": "王一雪",
+       "zh": "对。儿子也上小学了。",
+       "pinyin": "Duì. Érzi yě shàng xiǎoxué le.",
+       "vi": "Sắp xếp từ thành câu.",
+       "ten_vi": "Luyện tập"
+      },
+      {
+       "ten": "刘明",
+       "zh": "我们家有了一个中学生。",
+       "pinyin": "Wǒmen jiā yǒu le yí gè zhōngxuéshēng.",
+       "vi": "Năm sau con gái sẽ lên trung học.",
+       "ten_vi": "Lưu Minh"
+      },
+      {
+       "ten": "王一雪",
+       "zh": "还有了一个小学生。",
+       "pinyin": "Hái yǒu le yí gè xiǎoxuéshēng.",
+       "vi": "Đúng vậy. Con trai cũng đã lên tiểu học rồi.",
+       "ten_vi": "Vương Nhất Tuyết"
+      },
+      {
+       "ten": "刘明",
+       "zh": "上学后，他们都忙了。",
+       "pinyin": "Shàngxué hòu, tāmen dōu máng le.",
+       "vi": "Nhà chúng ta đã có một học sinh trung học rồi.",
+       "ten_vi": "Lưu Minh"
+      },
+      {
+       "ten": "王一雪",
+       "zh": "是的。太晚了，睡觉吧。",
+       "pinyin": "Shì de. Tài wǎn le, shuìjiào ba.",
+       "vi": "Còn có thêm một học sinh tiểu học nữa.",
+       "ten_vi": "Vương Nhất Tuyết"
+      },
+      {
+       "ten": "陈天中",
+       "zh": "我看了一本书，______人在睡觉。",
+       "pinyin": "",
+       "vi": "Sau khi đi học, họ đều bận rồi.",
+       "ten_vi": "Lưu Minh"
+      },
+      {
+       "ten": "王一雪",
+       "zh": "是的。",
+       "pinyin": "",
+       "vi": "Đúng vậy. Muộn quá rồi, đi ngủ thôi.",
+       "ten_vi": "Vương Nhất Tuyết"
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "上",
+    "火",
+    "车",
+    "中",
+    "午",
+    "开",
+    "写",
+    "都",
+    "听",
+    "字",
+    "明",
+    "年",
+    "学",
+    "生",
+    "晚"
+   ]
+  },
+  {
+   "no": 15,
+   "ten": "Hãy chọn hình ảnh tương ứng với các từ sau",
+   "tu_vung": [
+    {
+     "hanzi": "爱",
+     "pinyin": "ài",
+     "loai": "động từ",
+     "nghia": "yêu, thích"
+    },
+    {
+     "hanzi": "哪个",
+     "pinyin": "nǎgè",
+     "loai": "đại từ",
+     "nghia": "cái nào"
+    },
+    {
+     "hanzi": "去年",
+     "pinyin": "qùnián",
+     "loai": "danh từ",
+     "nghia": "năm ngoái"
+    },
+    {
+     "hanzi": "男朋友",
+     "pinyin": "nánpéngyou",
+     "loai": "danh từ",
+     "nghia": "bạn trai"
+    },
+    {
+     "hanzi": "几",
+     "pinyin": "jǐ",
+     "loai": "số từ",
+     "nghia": "mấy"
+    },
+    {
+     "hanzi": "年",
+     "pinyin": "nián",
+     "loai": "danh từ",
+     "nghia": "năm"
+    },
+    {
+     "hanzi": "好玩儿",
+     "pinyin": "hǎowánr",
+     "loai": "tính từ",
+     "nghia": "vui, chơi vui"
+    },
+    {
+     "hanzi": "西安",
+     "pinyin": "Xī’ān",
+     "loai": "",
+     "nghia": "Tây An"
+    },
+    {
+     "hanzi": "北京",
+     "pinyin": "Běijīng",
+     "loai": "",
+     "nghia": "Bắc Kinh"
+    },
+    {
+     "hanzi": "飞机",
+     "pinyin": "fēijī",
+     "loai": "danh từ",
+     "nghia": "máy bay"
+    },
+    {
+     "hanzi": "要",
+     "pinyin": "yào",
+     "loai": "động từ năng nguyện",
+     "nghia": "cần, phải, muốn"
+    },
+    {
+     "hanzi": "小时",
+     "pinyin": "xiǎoshí",
+     "loai": "danh từ",
+     "nghia": "tiếng đồng hồ"
+    },
+    {
+     "hanzi": "家人",
+     "pinyin": "jiārén",
+     "loai": "danh từ",
+     "nghia": "người nhà"
+    },
+    {
+     "hanzi": "时间",
+     "pinyin": "shíjiān",
+     "loai": "danh từ",
+     "nghia": "thời gian"
+    },
+    {
+     "hanzi": "机场",
+     "pinyin": "jīchǎng",
+     "loai": "danh từ",
+     "nghia": "sân bay"
+    },
+    {
+     "hanzi": "接",
+     "pinyin": "jiē",
+     "loai": "động từ",
+     "nghia": "đón"
+    },
+    {
+     "hanzi": "住",
+     "pinyin": "zhù",
+     "loai": "động từ",
+     "nghia": "ở, sống ở"
+    },
+    {
+     "hanzi": "早",
+     "pinyin": "zǎo",
+     "loai": "tính từ",
+     "nghia": "sớm"
+    },
+    {
+     "hanzi": "那",
+     "pinyin": "nà",
+     "loai": "liên từ",
+     "nghia": "vậy, thế thì"
+    },
+    {
+     "hanzi": "首都",
+     "pinyin": "shǒudū",
+     "loai": "danh từ",
+     "nghia": "thủ đô"
+    }
+   ],
+   "hoi_thoai": [
+    {
+     "cau": [
+      {
+       "ten": "李文",
+       "zh": "你们爱吃哪个菜？",
+       "pinyin": "Nǐmen ài chī nǎge cài?",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "我喜欢这个，也喜欢那个。",
+       "pinyin": "Wǒ xǐhuan zhège, yě xǐhuan nàge.",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "这些菜都好吃，还很好看。",
+       "pinyin": "Zhèxiē cài dōu hǎochī, hái hěn hǎokàn.",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "我爱吃中国菜，也喜欢做。大家多吃点儿。",
+       "pinyin": "Wǒ ài chī Zhōngguó cài, yě xǐhuan zuò. Dàjiā duō chī diǎnr.",
+       "vi": ""
+      },
+      {
+       "ten": "李文说",
+       "zh": "“大家（ ）。”",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "你们都想去哪儿？",
+       "pinyin": "Nǐmen dōu xiǎng qù nǎr?",
+       "vi": ""
+      },
+      {
+       "ten": "安妮",
+       "zh": "去年我和男朋友去了西安，今年我想去北京。",
+       "pinyin": "Qùnián wǒ hé nánpéngyou qù le Xī’ān, jīnnián wǒ xiǎng qù Běijīng.",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "前几年我去了西安，非常好玩儿。今年我也想去北京。",
+       "pinyin": "Qián jǐ nián wǒ qù le Xī’ān, fēicháng hǎowánr. Jīnnián wǒ yě xiǎng qù Běijīng.",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "我和王老师都是北京人，北京非常漂亮。",
+       "pinyin": "Wǒ hé Wáng lǎoshī dōu shì Běijīng rén, Běijīng fēicháng piàoliang.",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    },
+    {
+     "cau": [
+      {
+       "ten": "王一飞",
+       "zh": "你们的飞机到北京要几个小时？",
+       "pinyin": "Nǐmen de fēijī dào Běijīng yào jǐ gè xiǎoshí?",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "九个小时。",
+       "pinyin": "Jiǔ gè xiǎoshí.",
+       "vi": ""
+      },
+      {
+       "ten": "王一飞",
+       "zh": "我家人都在北京，星期天我姐姐也有时间，她可以",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "安妮",
+       "zh": "我们星期日早上八点到首都机场，早不早？",
+       "pinyin": "Wǒmen xīngqīrì zǎoshang bā diǎn dào Shǒudū Jīchǎng, zǎo bu zǎo?",
+       "vi": ""
+      },
+      {
+       "ten": "王一飞",
+       "zh": "不早。",
+       "pinyin": "Bù zǎo.",
+       "vi": ""
+      },
+      {
+       "ten": "白家月",
+       "zh": "谢谢老师！那我们和您姐姐在首都机场见！",
+       "pinyin": "Xièxie lǎoshī! Nà wǒmen hé nín jiějie zài Shǒudū Jīchǎng jiàn!",
+       "vi": ""
+      },
+      {
+       "ten": "李文",
+       "zh": "不早。",
+       "pinyin": "",
+       "vi": ""
+      },
+      {
+       "ten": "陈天中",
+       "zh": "我们没有 ________，不能出去玩。",
+       "pinyin": "",
+       "vi": ""
+      }
+     ],
+     "boi_canh": ""
+    }
+   ],
+   "ngu_phap": [],
+   "mau_cau": [],
+   "chu_viet": [
+    "爱",
+    "几",
+    "年",
+    "玩",
+    "西",
+    "安",
+    "北",
+    "京",
+    "飞",
+    "机",
+    "要",
+    "小",
+    "时",
+    "间",
+    "场",
+    "接",
+    "住",
+    "早",
+    "那",
+    "首",
+    "都"
+   ]
+  }
+ ]
+}

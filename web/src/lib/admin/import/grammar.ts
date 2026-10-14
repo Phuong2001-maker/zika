@@ -169,7 +169,9 @@ export const grammarImport: ImportSpec<GrammarRow> = {
     });
 
     // ----- Ví dụ (sheet tuỳ chọn) -----
-    const exSheet = sheets.find((s) => s !== sheet && s.rows.length > 0) ?? null;
+    // Tìm theo tên trước, để file gộp nhiều sheet của cả bài vẫn lấy đúng sheet ví dụ.
+    const byName = pickSheet(sheets, EXAMPLES, 1);
+    const exSheet = byName !== null && byName !== sheet ? byName : null;
     if (exSheet && items.length > 0) {
       const exIssues = new Issues(EXAMPLES.name);
       const ex = headerMap(exSheet.rows, EXAMPLES.columns);
