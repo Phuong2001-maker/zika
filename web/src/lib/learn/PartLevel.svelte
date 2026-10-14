@@ -12,6 +12,7 @@
   import Icon from '$lib/components/Icon.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
   import { PART, PART_TEXTS } from '$lib/parts';
   import { levelLessons, levelProgress, progressOf } from '$lib/learn/lesson';
 
@@ -213,7 +214,10 @@
 {:else}
   <Topbar current={part} />
   <main class="page" style="display: flex; flex-direction: column; gap: 22px">
-    <nav class="crumb"><a href="/learn/{info.slug}">{info.name}</a> / <b>HSK {levelId}</b></nav>
+    <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+      <BackLink href="/learn/{info.slug}" label="Chọn cấp" />
+      <nav class="crumb"><a href="/learn/{info.slug}">{info.name}</a> / <b>HSK {levelId}</b></nav>
+    </div>
     {@render body(false)}
   </main>
 {/if}

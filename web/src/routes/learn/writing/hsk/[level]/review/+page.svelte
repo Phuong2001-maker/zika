@@ -8,6 +8,7 @@
   import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
   import { speak } from '$lib/learn/speech';
 
   // Ôn viết cả cấp (04 §4.9 part = lv). Có lọc “chỉ chữ hay sai”.
@@ -115,6 +116,8 @@
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
   <main class="page" style="max-width: 920px; display: flex; flex-direction: column; gap: 16px">
+    <BackLink href="/learn/writing/hsk/{levelId}" label="Chọn bài" />
+    
     <h1 style="font-size: 28px">Ôn viết cả cấp HSK {levelId}</h1>
     {@render body(false)}
   </main>

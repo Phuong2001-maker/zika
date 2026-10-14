@@ -11,6 +11,7 @@
   import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
   import { completeReview, saveReviewProgress, seededShuffle } from '$lib/learn/lesson';
   import { speak } from '$lib/learn/speech';
   import { toneParts } from '$lib/utils/pinyin';
@@ -141,5 +142,7 @@
     <nav class="crumb" style="margin-left: 8px"><a href="/learn/flashcards/hsk/{levelId}">HSK {levelId}</a> / <b>Tổng hợp</b></nav>
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
-  <main class="page" style="max-width: 760px; display: flex; flex-direction: column; gap: 18px">{@render body(false)}</main>
+  <main class="page" style="max-width: 760px; display: flex; flex-direction: column; gap: 18px">
+    <BackLink href="/learn/flashcards/hsk/{levelId}" label="Chọn bài" />
+    {@render body(false)}</main>
 {/if}

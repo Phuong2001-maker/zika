@@ -11,6 +11,7 @@
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import Modal from '$lib/components/Modal.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
   import QuestionView from '$lib/learn/QuestionView.svelte';
   import { lessonByNo } from '$lib/learn/lesson';
   import { answered, TYPE_LABEL, type Answer, type Payload } from '$lib/utils/grade';
@@ -346,7 +347,9 @@
     <nav class="crumb" style="margin-left: 8px"><a href={backHref}>Kiểm tra · HSK {levelId}</a> / <b>{heading}</b></nav>
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
-  <main class="page" style="max-width: 860px; display: flex; flex-direction: column; gap: 16px">{@render body(false)}</main>
+  <main class="page" style="max-width: 860px; display: flex; flex-direction: column; gap: 16px">
+    <BackLink href={backHref} label="Chọn bài" />
+    {@render body(false)}</main>
 {/if}
 
 {#if confirmOpen}

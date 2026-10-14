@@ -10,6 +10,7 @@
   import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
   import QuestionView from '$lib/learn/QuestionView.svelte';
   import { answered, check, rightAnswerText, TYPE_LABEL, type Answer, type Payload } from '$lib/utils/grade';
 
@@ -157,5 +158,7 @@
     <nav class="crumb" style="margin-left: 8px"><a href="/learn/exercises/hsk/{levelId}">Bài tập · HSK {levelId}</a> / <b>Tổng hợp</b></nav>
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
-  <main class="page" style="max-width: 820px; display: flex; flex-direction: column; gap: 16px">{@render body(false)}</main>
+  <main class="page" style="max-width: 820px; display: flex; flex-direction: column; gap: 16px">
+    <BackLink href="/learn/exercises/hsk/{levelId}" label="Chọn bài" />
+    {@render body(false)}</main>
 {/if}

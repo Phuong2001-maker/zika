@@ -10,6 +10,7 @@
   import Switcher from '$lib/components/Switcher.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
   import { completePart, lessonByNo, saveProgress } from '$lib/learn/lesson';
   import { speak } from '$lib/learn/speech';
   import { normZh } from '$lib/utils/grade';
@@ -234,7 +235,9 @@
     <nav class="crumb" style="margin-left: 8px"><a href="/learn/grammar/hsk/{levelId}">Ngữ pháp · HSK {levelId}</a> / <b>Bài {lessonNo}</b></nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="np" /><Avatar size={44} /></div>
   </header>
-  <main class="page" style="max-width: 860px; display: flex; flex-direction: column; gap: 16px">{@render body(false)}</main>
+  <main class="page" style="max-width: 860px; display: flex; flex-direction: column; gap: 16px">
+    <BackLink href="/learn/grammar/hsk/{levelId}" label="Chọn bài" />
+    {@render body(false)}</main>
 {/if}
 
 <style>

@@ -8,6 +8,7 @@
   import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
 
   // Bảng tra ngữ pháp cả cấp (04 §4.9 part = np).
   interface Block { label: string; hz: string; color: string }
@@ -119,6 +120,8 @@
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
   <main class="page" style="max-width: 880px; display: flex; flex-direction: column; gap: 16px">
+    <BackLink href="/learn/grammar/hsk/{levelId}" label="Chọn bài" />
+    
     <div>
       <h1 style="font-size: 28px">Tổng hợp ngữ pháp HSK {levelId}</h1>
       <p class="muted" style="font-size: 14px">{totalPoints} cấu trúc của cả cấp, tra nhanh theo công thức.</p>

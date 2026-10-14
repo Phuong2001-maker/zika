@@ -15,6 +15,7 @@
   import Icon from '$lib/components/Icon.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
 
   // Chọn bài — Lật thẻ (07 §4.2).
   const level = $derived(Number(page.params.level));
@@ -305,7 +306,7 @@
       <Skeleton h="400px" r={22} />
     {:else if content}
       <section class="lv{level}" style="border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--sh-md); padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center">
-        <a href="/learn/flashcards" class="btn btn-icon" aria-label="Về Bàn học"><Icon name="left" size={20} /></a>
+        <BackLink href="/learn/flashcards" label="Bàn học" />
         <div style="display: flex; align-items: baseline; gap: 6px"><span class="disp" style="font-size: 20px; font-weight: 800">HSK</span><span class="bignum" style="font-size: 72px">{level}</span></div>
         <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 8px">
           <h1 style="font-size: 30px; line-height: 1.2">Chọn bài để lật</h1>

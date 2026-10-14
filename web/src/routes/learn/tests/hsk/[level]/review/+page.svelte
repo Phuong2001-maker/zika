@@ -12,6 +12,7 @@
   import Switcher from '$lib/components/Switcher.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
 
   // Thi thử cuối cấp — danh sách đề (07 §7, 04 §4.9 part = kt).
   interface Mock { id: number; title: string; questionCount: number; durationSec: number; maxPoints: number; passPoints: number }
@@ -109,6 +110,8 @@
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="kt" /><Avatar size={44} /></div>
   </header>
   <main class="page" style="max-width: 860px; display: flex; flex-direction: column; gap: 16px">
+    <BackLink href="/learn/tests/hsk/{levelId}" label="Chọn bài" />
+    
     <h1 style="font-size: 28px">Thi thử HSK {levelId}</h1>
     {@render body(false)}
   </main>

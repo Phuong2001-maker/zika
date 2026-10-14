@@ -11,6 +11,7 @@
   import Switcher from '$lib/components/Switcher.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
   import QuestionView from '$lib/learn/QuestionView.svelte';
   import { lessonByNo } from '$lib/learn/lesson';
   import { answered, check, CHOICE_TYPES, rightAnswerText, TYPE_LABEL, type Answer, type Payload } from '$lib/utils/grade';
@@ -219,7 +220,9 @@
     </nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="bt" /><Avatar size={44} /></div>
   </header>
-  <main class="page" style="max-width: 820px; display: flex; flex-direction: column; gap: 16px">{@render main(false)}</main>
+  <main class="page" style="max-width: 820px; display: flex; flex-direction: column; gap: 16px">
+    <BackLink href="/learn/exercises/hsk/{levelId}" label="Chọn bài" />
+    {@render main(false)}</main>
 {/if}
 
 <style>

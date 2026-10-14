@@ -9,6 +9,7 @@
   import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import BackLink from '$lib/components/BackLink.svelte';
   import { speak, stopSpeak } from '$lib/learn/speech';
 
   // Nghe liền các hội thoại của cả cấp (04 §4.9 part = ht).
@@ -132,6 +133,8 @@
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
   <main class="page" style="max-width: 860px; display: flex; flex-direction: column; gap: 16px">
+    <BackLink href="/learn/dialogues/hsk/{levelId}" label="Chọn bài" />
+    
     <h1 style="font-size: 28px">Ôn hội thoại HSK {levelId}</h1>
     {@render body(false)}
   </main>
