@@ -41,6 +41,19 @@ thuật xem [CLAUDE.md](../../CLAUDE.md) bẫy số 6.
 
 ### Đã làm
 
+- **Bài 6 đã nạp xong, đủ cả 6 phần** (15/10/2026) — làm tay, không qua `hsk1.json` tự bóc:
+  `bai-06.json` (soạn tay, đối chiếu PDF trang 51–60) → `xuat-excel.py` → `excel/bai-06.xlsx`
+  → nhập qua nút **Nhập Excel** ở cả 6 trang soạn bài.
+  Kết quả: 22 từ · 10 bài tập · 10 kiểm tra · 35 chữ (đủ nét) · 14 câu thoại + 4 câu hỏi · 4 điểm
+  ngữ pháp + 13 ví dụ. Bài đang để **Đang hiện**, cấp HSK 1 đã bật hiện cho người học.
+
+  Ba chỗ sách in sai đã sửa, ghi trong `_sua_so_voi_giao_trinh` của `bai-06.json`.
+  `hsk1.json` thiếu từ **出租车** của bài 6 — bộ bóc sót, các bài khác nên rà lại tương tự.
+
+  Làm bài 6 lộ ra 2 lỗi đã sửa kèm: tên cấu trúc ngữ pháp bằng chữ Hán bị coi là trùng nhau
+  (`norm` ném hết chữ ngoài a–z0–9 → thêm `khoaTen`), và cache nội dung bài không bao giờ bị xoá
+  (ghi khoá theo slug `x1-writing`, xoá theo mã `x1-lv`).
+
 - `tach-pdf.py` — bóc PDF ra `hsk1.json`. Chạy:
 
 ```bash
