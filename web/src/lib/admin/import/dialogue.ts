@@ -1,19 +1,23 @@
 // Nhập Hội thoại từ Excel (08 §11).
 //
-// Hai sheet: “Lời thoại” (bắt buộc) và “Câu hỏi” (tuỳ chọn). Nhân vật không khai báo riêng mà
-// suy ra từ cột Nhân vật — người soạn chỉ việc gõ tên ở từng câu, trùng tên là cùng một người.
+// Một bài có nhiều bài khoá (giáo trình HSK chia 课文一, 课文二…), nên cột “Bài khoá” ở sheet
+// Lời thoại quyết định câu nào thuộc cảnh nào. Sheet “Bài khoá” chỉ để đặt tên và tả tình huống
+// cho từng số đó; bỏ trống thì bài khoá vẫn nhập được, chỉ là lấy tên mặc định.
+//
+// Nhân vật không khai báo riêng mà suy ra từ cột Nhân vật — gõ trùng tên là cùng một người, và
+// mỗi bài khoá có bộ nhân vật của riêng nó.
 //
 // Khác 5 phần kia, bộ nhập này không gọi API ngay mà đổ thẳng vào biểu mẫu đang mở để người soạn
 // xem lại rồi bấm “Lưu thay đổi” — vì hội thoại lưu cả khối một lần (PUT /admin/lessons/{id}/dialogue).
 
 import type { Sheet } from '$lib/admin/xlsx';
-import type { DialogueLine, DialogueQuestion, DialogueSpeaker } from '$lib/admin/api';
+import type { DialogueBlock, DialogueLine, DialogueSpeaker } from '$lib/admin/api';
 import {
-  answerIndex,
   cellOf,
   headerMap,
   isBlank,
   Issues,
+  parseNumber,
   pickSheet,
   previewOf,
   type ImportSpec,
@@ -21,58 +25,65 @@ import {
   type SheetSpec,
 } from './core';
 
-export interface DialogueBundle {
-  speakers: DialogueSpeaker[];
-  lines: DialogueLine[];
-  questions: DialogueQuestion[];
+/**
+ * Chữ trong vòng tròn cạnh bong bóng thoại. Ưu tiên cột “Chữ đại diện”; bỏ trống thì lấy chữ Hán
+ * cuối trong tên (kiểu 小王 → 王), còn tên viết bằng chữ Latin thì lấy chữ cái đầu — chứ lấy chữ
+ * cuối như trước ra “Lý Văn” → “n”, chẳng nói lên điều gì.
+ */
+function chuDaiDien(cot: string, name: string): string {
+  const chon = [...cot.trim()][0];
+  if (chon !== undefined) return chon;
+  const chu = [...name.trim()];
+  const han = chu.filter((c) => /[一-鿿]/.test(c));
+  return han.length > 0 ? (han.at(-1) as string) : (chu[0] ?? '?').toUpperCase();
 }
 
 /** Màu nhân vật gán lần lượt, lấy từ bảng màu của bộ thiết kế. */
-const COLORS = ['#DCEBFF', '#CFF5E1', '#FFF0B3', '#E8E0FF', '#FFE0DC', '#D6E8FF'];
+const COLORS = ['#DCEBFF', '#CFF5E1', '#FFE2DE', '#FFF0B3', '#E8E0FF', '#D8F3F6'];
 
 const LINES: SheetSpec = {
   name: 'Lời thoại',
-  about: 'Mỗi dòng một câu thoại, theo đúng thứ tự trong bài. Gõ trùng tên ở cột Nhân vật là cùng một người.',
+  about: 'Mỗi dòng một câu thoại, theo đúng thứ tự trong bài. Cột “Bài khoá” tách các cảnh với nhau.',
   columns: [
+    { key: 'block', header: 'Bài khoá', alias: ['bai khoa', 'cảnh', 'số bài khoá'], hint: '1, 2, 3… Bỏ trống thì coi là bài khoá 1' },
     { key: 'speaker', header: 'Nhân vật', alias: ['người nói', 'ai nói'], hint: 'Tên hiện trên bong bóng thoại', required: true },
     { key: 'role', header: 'Vai', alias: ['vai trò', 'mô tả'], hint: 'Khách · Nhân viên… (chỉ cần ghi ở dòng đầu của mỗi người)' },
+    { key: 'avatar', header: 'Chữ đại diện', alias: ['avatar', 'chữ avatar'], hint: 'Một chữ Hán hiện trong vòng tròn: 李, 白…' },
     { key: 'zh', header: 'Tiếng Trung', alias: ['câu', 'nội dung', 'zh'], hint: 'Câu thoại', required: true },
     { key: 'pinyin', header: 'Pinyin', alias: ['phiên âm'], hint: 'Nǐ hǎo!' },
     { key: 'vi', header: 'Nghĩa tiếng Việt', alias: ['nghĩa', 'dịch'], hint: 'Xin chào!' },
     { key: 'highlight', header: 'Từ nhấn', alias: ['từ khoá', 'highlight'], hint: 'Từ được tô trong câu, phải có trong câu' },
   ],
   sample: [
-    ['Tiểu Minh', 'Khách', '你好！我要一杯牛奶。', 'Nǐ hǎo! Wǒ yào yì bēi niúnǎi.', 'Xin chào! Tôi muốn một cốc sữa.', '牛奶'],
-    ['Nhân viên', 'Nhân viên quán', '好的，还要别的吗？', 'Hǎo de, hái yào bié de ma?', 'Được ạ, anh còn muốn gì nữa không?', ''],
-    ['Tiểu Minh', '', '再要两个鸡蛋，谢谢。', 'Zài yào liǎng gè jīdàn, xièxie.', 'Cho thêm hai quả trứng gà, cảm ơn.', '鸡蛋'],
+    ['1', 'Tiểu Minh', 'Khách', '明', '你好！我要一杯牛奶。', 'Nǐ hǎo! Wǒ yào yì bēi niúnǎi.', 'Xin chào! Tôi muốn một cốc sữa.', '牛奶'],
+    ['1', 'Nhân viên', 'Nhân viên quán', '务', '好的，还要别的吗？', 'Hǎo de, hái yào bié de ma?', 'Được ạ, anh còn muốn gì nữa không?', ''],
+    ['2', 'Tiểu Lan', 'Bạn cùng lớp', '兰', '你去哪儿？', 'Nǐ qù nǎr?', 'Bạn đi đâu đấy?', '哪儿'],
+    ['2', 'Tiểu Minh', 'Bạn cùng lớp', '明', '我去超市。', 'Wǒ qù chāoshì.', 'Mình đi siêu thị.', '超市'],
   ],
 };
 
-const QUESTIONS: SheetSpec = {
-  name: 'Câu hỏi',
-  about: 'Câu hỏi hiểu bài, nhiều nhất 5 câu. Bỏ trống sheet này cũng được.',
+const BLOCKS: SheetSpec = {
+  name: 'Bài khoá',
+  about: 'Tên và tình huống của từng bài khoá. Bỏ trống sheet này cũng được.',
   optional: true,
   columns: [
-    { key: 'prompt', header: 'Câu hỏi', alias: ['đề bài'], hint: 'Viết bằng tiếng Trung hoặc tiếng Việt', required: true },
-    { key: 'a', header: 'A', hint: 'Phương án A' },
-    { key: 'b', header: 'B', hint: 'Phương án B' },
-    { key: 'c', header: 'C', hint: 'Phương án C' },
-    { key: 'd', header: 'D', hint: 'Phương án D' },
-    { key: 'answer', header: 'Đáp án', alias: ['đáp án đúng'], hint: 'A, B, C hoặc D' },
+    { key: 'no', header: 'Bài khoá', alias: ['số', 'stt'], hint: 'Trùng với cột “Bài khoá” ở sheet Lời thoại', required: true },
+    { key: 'title', header: 'Tên bài khoá', alias: ['tên', 'tiêu đề'], hint: 'Ở quán nước', required: true },
+    { key: 'scene', header: 'Tình huống', alias: ['mô tả', 'bối cảnh'], hint: 'Tiểu Minh vào quán gọi đồ uống.' },
   ],
   sample: [
-    ['小明要买什么？', '牛奶和鸡蛋', '面包和牛奶', '米饭和鸡蛋', '只要牛奶', 'A'],
-    ['小明要几个鸡蛋？', '两个', '一个', '三个', '不要鸡蛋', 'A'],
+    ['1', 'Ở quán nước', 'Tiểu Minh vào quán gọi một cốc sữa.'],
+    ['2', 'Trên đường', 'Tiểu Lan gặp Tiểu Minh và hỏi đi đâu.'],
   ],
 };
 
-export const dialogueImport: ImportSpec<DialogueBundle> = {
+export const dialogueImport: ImportSpec<DialogueBlock> = {
   title: 'Nhập hội thoại từ Excel',
   fileName: 'zika-mau-hoi-thoai.xlsx',
   intro: 'Nội dung đọc được sẽ hiện ngay trên biểu mẫu để bạn xem lại — bấm “Lưu thay đổi” thì mới ghi.',
-  sheets: [LINES, QUESTIONS],
+  sheets: [LINES, BLOCKS],
 
-  parse(sheets: Sheet[]): ParseResult<DialogueBundle> {
+  parse(sheets: Sheet[]): ParseResult<DialogueBlock> {
     const sheet = pickSheet(sheets, LINES, 0);
     const issues = new Issues(LINES.name);
     if (!sheet) {
@@ -86,8 +97,8 @@ export const dialogueImport: ImportSpec<DialogueBundle> = {
       return { items: [], issues: issues.list, preview: previewOf(sheet, at) };
     }
 
-    const speakers: DialogueSpeaker[] = [];
-    const lines: DialogueLine[] = [];
+    // Gom câu theo số bài khoá; giữ thứ tự xuất hiện trong file.
+    const khoi = new Map<number, { speakers: DialogueSpeaker[]; lines: DialogueLine[] }>();
 
     sheet.rows.slice(at + 1).forEach((row, i) => {
       const line = at + 1 + i;
@@ -104,23 +115,38 @@ export const dialogueImport: ImportSpec<DialogueBundle> = {
         return;
       }
 
-      let who = speakers.find((s) => s.name === name);
+      const no = Math.max(1, Math.round(parseNumber(cellOf(row, index, 'block'), 1)));
+      let k = khoi.get(no);
+      if (!k) {
+        if (khoi.size >= 10) {
+          issues.add(line, `Quá 10 bài khoá — bỏ qua bài khoá ${no}.`);
+          return;
+        }
+        k = { speakers: [], lines: [] };
+        khoi.set(no, k);
+      }
+
+      let who = k.speakers.find((s) => s.name === name);
       if (!who) {
-        if (speakers.length >= 6) {
-          issues.add(line, `Quá 6 nhân vật — bỏ qua “${name}”.`);
+        if (k.speakers.length >= 6) {
+          issues.add(line, `Bài khoá ${no} quá 6 nhân vật — bỏ qua “${name}”.`);
           return;
         }
         who = {
-          key: `k${speakers.length + 1}`,
+          key: `k${no}-${k.speakers.length + 1}`,
           name,
-          avatarChar: [...name].at(-1) ?? name,
-          color: COLORS[speakers.length % COLORS.length],
+          avatarChar: chuDaiDien(cellOf(row, index, 'avatar'), name),
+          color: COLORS[k.speakers.length % COLORS.length],
           roleVi: cellOf(row, index, 'role'),
         };
-        speakers.push(who);
+        k.speakers.push(who);
       } else if (who.roleVi === '') {
-        // Vai chỉ cần ghi một lần; dòng sau bổ sung thì vẫn nhận.
         who.roleVi = cellOf(row, index, 'role');
+      }
+
+      if (k.lines.length >= 60) {
+        issues.add(line, `Bài khoá ${no} quá 60 câu thoại — các dòng sau bị bỏ qua.`);
+        return;
       }
 
       const highlight = cellOf(row, index, 'highlight');
@@ -128,12 +154,7 @@ export const dialogueImport: ImportSpec<DialogueBundle> = {
         issues.add(line, `Câu không chứa từ nhấn “${highlight}” — bỏ qua từ nhấn.`);
       }
 
-      if (lines.length >= 60) {
-        issues.add(line, 'Quá 60 câu thoại — các dòng sau bị bỏ qua.');
-        return;
-      }
-
-      lines.push({
+      k.lines.push({
         speakerKey: who.key,
         zh,
         pinyin: cellOf(row, index, 'pinyin'),
@@ -142,51 +163,53 @@ export const dialogueImport: ImportSpec<DialogueBundle> = {
       });
     });
 
-    // ----- Câu hỏi hiểu bài (sheet tuỳ chọn) -----
-    const questions: DialogueQuestion[] = [];
-    // Tìm theo tên trước, để file gộp nhiều sheet của cả bài vẫn lấy đúng sheet câu hỏi.
-    const found2 = pickSheet(sheets, QUESTIONS, 1);
-    const qSheet = found2 !== null && found2 !== sheet ? found2 : null;
-    if (qSheet) {
-      const qIssues = new Issues(QUESTIONS.name);
-      const q = headerMap(qSheet.rows, QUESTIONS.columns);
-      if (q.at >= 0 && q.index.prompt !== undefined) {
-        qSheet.rows.slice(q.at + 1).forEach((row, i) => {
-          const line = q.at + 1 + i;
+    // ----- Tên và tình huống từng bài khoá (sheet tuỳ chọn) -----
+    const ten = new Map<number, { title: string; scene: string }>();
+    const found2 = pickSheet(sheets, BLOCKS, 1);
+    const bSheet = found2 !== null && found2 !== sheet ? found2 : null;
+    if (bSheet) {
+      const bIssues = new Issues(BLOCKS.name);
+      const b = headerMap(bSheet.rows, BLOCKS.columns);
+      if (b.at >= 0 && b.index.no !== undefined) {
+        bSheet.rows.slice(b.at + 1).forEach((row, i) => {
+          const line = b.at + 1 + i;
           if (isBlank(row)) return;
-          if (questions.length >= 5) return;
-
-          const prompt = cellOf(row, q.index, 'prompt');
-          if (prompt === '') return;
-
-          const options = ['a', 'b', 'c', 'd'].map((k) => cellOf(row, q.index, k)).filter((o) => o !== '');
-          if (options.length < 2) {
-            qIssues.add(line, 'Cần ít nhất 2 phương án.');
+          const no = Math.round(parseNumber(cellOf(row, b.index, 'no'), 0));
+          const title = cellOf(row, b.index, 'title');
+          if (no < 1) {
+            bIssues.add(line, 'Cột “Bài khoá” phải là số từ 1 trở lên.');
             return;
           }
-          const answer = answerIndex(cellOf(row, q.index, 'answer'));
-          if (answer < 0 || answer >= options.length) {
-            qIssues.add(line, 'Cột Đáp án phải là A, B, C hoặc D.');
+          if (title === '') {
+            bIssues.add(line, `Bài khoá ${no} chưa có tên.`);
             return;
           }
-          questions.push({ prompt, options, answer });
+          ten.set(no, { title, scene: cellOf(row, b.index, 'scene') });
         });
       }
-      issues.list.push(...qIssues.list);
+      issues.list.push(...bIssues.list);
     }
 
-    if (lines.length === 0) {
+    const items: DialogueBlock[] = [...khoi.entries()]
+      .sort((a, b) => a[0] - b[0])
+      .map(([no, k], i) => ({
+        no: i + 1,
+        title: ten.get(no)?.title ?? `Bài khoá ${i + 1}`,
+        scene: ten.get(no)?.scene ?? '',
+        speakers: k.speakers,
+        lines: k.lines,
+      }));
+
+    if (items.length === 0) {
       return { items: [], issues: issues.list, preview: previewOf(sheet, at) };
     }
 
-    const summary =
-      `${lines.length} câu thoại · ${speakers.length} nhân vật` + (questions.length ? ` · ${questions.length} câu hỏi` : '');
-
+    const soCau = items.reduce((s, x) => s + x.lines.length, 0);
     return {
-      items: [{ speakers, lines, questions }],
+      items,
       issues: issues.list,
       preview: previewOf(sheet, at),
-      summary,
+      summary: `${items.length} bài khoá · ${soCau} câu thoại`,
     };
   },
 };

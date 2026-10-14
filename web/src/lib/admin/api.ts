@@ -148,19 +148,15 @@ export interface DialogueLine {
   audioPath?: string | null;
 }
 
-export interface DialogueQuestion {
-  prompt: string;
-  options: string[];
-  answer: number;
-}
-
-export interface AdminDialogue {
+/** Một bài khoá: giáo trình chia mỗi bài thành 课文一, 课文二… nên một bài có nhiều khối thế này. */
+export interface DialogueBlock {
+  id?: number;
+  no: number;
   title: string;
   scene: string;
-  imageUrl: string | null;
+  imageUrl?: string | null;
   speakers: DialogueSpeaker[];
   lines: DialogueLine[];
-  questions: DialogueQuestion[];
 }
 
 export interface GrammarBlock {
@@ -245,8 +241,9 @@ export const adminApi = {
   saveWritingConfig: (lessonId: number, body: WritingConfig) => api.put<WritingConfig>(`/admin/lessons/${lessonId}/writing/config`, body),
   fetchStroke: (charId: number) => api.post<{ ok: boolean }>(`/admin/characters/${charId}/stroke-data/fetch`),
 
-  dialogue: (lessonId: number) => api.get<AdminDialogue | null>(`/admin/lessons/${lessonId}/dialogue`),
-  saveDialogue: (lessonId: number, body: Record<string, unknown>) => api.put<AdminDialogue>(`/admin/lessons/${lessonId}/dialogue`, body),
+  dialogue: (lessonId: number) => api.get<{ dialogues: DialogueBlock[] }>(`/admin/lessons/${lessonId}/dialogue`),
+  saveDialogue: (lessonId: number, body: { dialogues: DialogueBlock[] }) =>
+    api.put<{ dialogues: DialogueBlock[] }>(`/admin/lessons/${lessonId}/dialogue`, body),
 
   grammar: (lessonId: number) => api.get<AdminGrammarPoint[]>(`/admin/lessons/${lessonId}/grammar`),
   createGrammar: (lessonId: number, body: Record<string, unknown>) => api.post<AdminGrammarPoint>(`/admin/lessons/${lessonId}/grammar`, body),

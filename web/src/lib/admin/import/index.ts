@@ -4,5 +4,5 @@ export * from './core';
 export { wordsImport, type WordRow } from './words';
 export { questionsImport, type QuestionRow } from './questions';
 export { writingImport, type CharRow } from './writing';
-export { dialogueImport, type DialogueBundle } from './dialogue';
+export { dialogueImport } from './dialogue';
 export { grammarImport, type GrammarRow } from './grammar';

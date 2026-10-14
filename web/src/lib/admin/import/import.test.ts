@@ -222,19 +222,24 @@ describe('nhập luyện viết', () => {
 describe('nhập hội thoại', () => {
   it('gom nhân vật theo tên, giữ thứ tự câu, đọc cả sheet câu hỏi', () => {
     const lines = sheet('Lời thoại', [
-      ['Nhân vật', 'Vai', 'Tiếng Trung', 'Pinyin', 'Nghĩa tiếng Việt', 'Từ nhấn'],
-      ['Tiểu Minh', 'Khách', '你好！我要一杯牛奶。', 'Nǐ hǎo!', 'Xin chào!', '牛奶'],
-      ['Nhân viên', 'Nhân viên quán', '好的。', 'Hǎo de.', 'Được ạ.', ''],
-      ['Tiểu Minh', '', '谢谢。', 'Xièxie.', 'Cảm ơn.', '面包'],
+      ['Bài khoá', 'Nhân vật', 'Vai', 'Tiếng Trung', 'Pinyin', 'Nghĩa tiếng Việt', 'Từ nhấn'],
+      ['1', 'Tiểu Minh', 'Khách', '你好！我要一杯牛奶。', 'Nǐ hǎo!', 'Xin chào!', '牛奶'],
+      ['1', 'Nhân viên', 'Nhân viên quán', '好的。', 'Hǎo de.', 'Được ạ.', ''],
+      ['1', 'Tiểu Minh', '', '谢谢。', 'Xièxie.', 'Cảm ơn.', '面包'],
+      ['2', 'Tiểu Lan', 'Bạn', '你去哪儿？', 'Nǐ qù nǎr?', 'Bạn đi đâu?', ''],
     ]);
-    const qs = sheet('Câu hỏi', [
-      ['Câu hỏi', 'A', 'B', 'C', 'D', 'Đáp án'],
-      ['小明要什么？', '牛奶', '鸡蛋', '', '', 'A'],
+    const bk = sheet('Bài khoá', [
+      ['Bài khoá', 'Tên bài khoá', 'Tình huống'],
+      ['1', 'Ở quán nước', 'Tiểu Minh gọi sữa.'],
+      ['2', 'Trên đường', ''],
     ]);
-    const r = dialogueImport.parse([lines, qs]);
+    const r = dialogueImport.parse([lines, bk]);
 
-    expect(r.items).toHaveLength(1);
+    // Hai bài khoá tách theo cột “Bài khoá”, mỗi bài khoá có bộ nhân vật riêng.
+    expect(r.items).toHaveLength(2);
     const d = r.items[0];
+    expect(d.title).toBe('Ở quán nước');
+    expect(d.scene).toBe('Tiểu Minh gọi sữa.');
     expect(d.speakers.map((s) => s.name)).toEqual(['Tiểu Minh', 'Nhân viên']);
     expect(d.speakers[0].roleVi).toBe('Khách');
     expect(d.lines).toHaveLength(3);
@@ -243,8 +248,9 @@ describe('nhập hội thoại', () => {
     // Từ nhấn không có trong câu thì bỏ, kèm lời nhắc.
     expect(d.lines[2].highlight).toBe(null);
     expect(r.issues[0].message).toContain('面包');
-    expect(d.questions).toEqual([{ prompt: '小明要什么？', options: ['牛奶', '鸡蛋'], answer: 0 }]);
-    expect(r.summary).toContain('3 câu thoại');
+    expect(r.items[1].title).toBe('Trên đường');
+    expect(r.items[1].lines).toHaveLength(1);
+    expect(r.summary).toContain('2 bài khoá');
   });
 });
 

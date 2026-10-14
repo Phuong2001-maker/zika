@@ -135,10 +135,12 @@ final class ContentBuilder
     {
         $lv = self::level($levelId, $preview);
         $lessons = Db::all(
-            'SELECT l.*, tc.duration_sec AS test_duration, d.title AS dialogue_title
+            // Đếm bài khoá bằng truy vấn con: JOIN thẳng vào dialogues sẽ nhân dòng bài lên theo
+            // số bài khoá, và danh sách bài hiện ra mấy lần cùng một bài.
+            'SELECT l.*, tc.duration_sec AS test_duration,
+                    (SELECT COUNT(*) FROM dialogues d WHERE d.lesson_id = l.id) AS so_bai_khoa
              FROM lessons l
              LEFT JOIN test_configs tc ON tc.lesson_id = l.id
-             LEFT JOIN dialogues d ON d.lesson_id = l.id
              WHERE l.level_id = ? AND ' . self::statusSql($preview) . ' ORDER BY l.lesson_no',
             [$levelId],
         );
@@ -164,7 +166,9 @@ final class ContentBuilder
                     'bt' => $l['cnt_bt'] . ' câu',
                     'kt' => $l['cnt_kt'] . ' câu · ' . $min . ' phút',
                     'lv' => $l['cnt_lv'] . ' chữ',
-                    'ht' => (string) ($l['dialogue_title'] ?? ''),
+                    'ht' => ((int) ($l['so_bai_khoa'] ?? 0)) > 0
+                        ? (int) $l['so_bai_khoa'] . ' bài khoá · ' . $l['cnt_ht'] . ' câu'
+                        : '',
                     'np' => implode(' · ', $grammar[$id] ?? []),
                 ],
             ];

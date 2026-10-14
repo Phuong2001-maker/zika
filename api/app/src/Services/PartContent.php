@@ -285,12 +285,10 @@ final class PartContent
     public static function dialogue(int $lessonId, bool $preview): array
     {
         $l = ContentBuilder::lesson($lessonId, $preview);
-        $d = self::dialogueBlock($lessonId, true);
 
         return [
             'lesson' => ContentBuilder::lessonRef($l, $preview),
-            'dialogue' => $d,
-            'newWords' => $d === null ? [] : self::newWords($lessonId, $d['lines']),
+            'dialogues' => self::dialogueBlocks($lessonId),
             'next' => ContentBuilder::nextLesson($l, $preview, 'cnt_ht'),
         ];
     }
@@ -301,16 +299,17 @@ final class PartContent
         $lv = ContentBuilder::level($levelId, $preview);
         $out = [];
         foreach (ContentBuilder::reviewLessonIds($lv, $preview) as $lessonId) {
-            $d = self::dialogueBlock($lessonId, false);
-            if ($d === null || $d['lines'] === []) {
-                continue;
-            }
             $l = Db::one('SELECT lesson_no, title FROM lessons WHERE id = ?', [$lessonId]);
-            $out[] = [
-                'lessonId' => $lessonId,
-                'lessonNo' => (int) ($l['lesson_no'] ?? 0),
-                'lessonTitle' => (string) ($l['title'] ?? ''),
-            ] + $d;
+            foreach (self::dialogueBlocks($lessonId) as $d) {
+                if ($d['lines'] === []) {
+                    continue;
+                }
+                $out[] = [
+                    'lessonId' => $lessonId,
+                    'lessonNo' => (int) ($l['lesson_no'] ?? 0),
+                    'lessonTitle' => (string) ($l['title'] ?? ''),
+                ] + $d;
+            }
         }
         return [
             'level' => ['id' => (int) $lv['id'], 'name' => (string) $lv['name']],
@@ -318,16 +317,25 @@ final class PartContent
         ];
     }
 
-    /** @return array<string,mixed>|null */
-    public static function dialogueBlock(int $lessonId, bool $withQuestions): ?array
+    /**
+     * Mọi bài khoá của một bài, theo đúng thứ tự trong giáo trình.
+     * Giáo trình HSK chia mỗi bài thành 课文一, 课文二… nên đây là danh sách chứ không phải một khối.
+     * @return list<array<string,mixed>>
+     */
+    public static function dialogueBlocks(int $lessonId): array
     {
-        $d = Db::one('SELECT * FROM dialogues WHERE lesson_id = ?', [$lessonId]);
-        if ($d === null) {
-            return null;
-        }
+        $rows = Db::all('SELECT * FROM dialogues WHERE lesson_id = ? ORDER BY sort_order, id', [$lessonId]);
+        return array_map(static fn (array $d): array => self::dialogueBlock($d), $rows);
+    }
+
+    /** Một bài khoá: nhân vật và lời thoại. @param array<string,mixed> $d dòng bảng dialogues */
+    public static function dialogueBlock(array $d): array
+    {
         $id = (int) $d['id'];
 
-        $block = [
+        return [
+            'id' => $id,
+            'no' => (int) $d['sort_order'],
             'title' => (string) $d['title'],
             'scene' => (string) $d['scene'],
             'imageUrl' => $d['image_path'] !== null && $d['image_path'] !== '' ? (string) $d['image_path'] : null,
@@ -348,54 +356,6 @@ final class PartContent
                 'audioUrl' => $x['audio_path'] ?: null,
             ], Db::all('SELECT * FROM dialogue_lines WHERE dialogue_id = ? ORDER BY sort_order, id', [$id])),
         ];
-
-        if ($withQuestions) {
-            $block['questions'] = array_map(static fn (array $q): array => [
-                'prompt' => (string) $q['prompt_zh'],
-                'options' => ContentBuilder::json($q['options'], []),
-                'answer' => (int) $q['answer'],
-            ], Db::all('SELECT * FROM dialogue_questions WHERE dialogue_id = ? ORDER BY sort_order, id', [$id]));
-        }
-
-        return $block;
-    }
-
-    /**
-     * Từ mới của màn hội thoại: từ được tô sáng trong câu thoại, rồi tới từ vựng của bài
-     * có xuất hiện trong lời thoại. Không trùng, tối đa 8 (04 §4.7).
-     * @param list<array<string,mixed>> $lines
-     * @return list<array{hanzi:string,meaning:string}>
-     */
-    private static function newWords(int $lessonId, array $lines): array
-    {
-        $words = Db::all('SELECT hanzi, meaning_vi FROM words WHERE lesson_id = ? ORDER BY sort_order, id', [$lessonId]);
-        $meaning = [];
-        foreach ($words as $w) {
-            $meaning[(string) $w['hanzi']] = (string) $w['meaning_vi'];
-        }
-
-        $all = implode('', array_map(static fn (array $l): string => (string) $l['zh'], $lines));
-        $out = [];
-        $seen = [];
-
-        foreach ($lines as $l) {
-            $h = (string) ($l['highlight'] ?? '');
-            if ($h !== '' && !isset($seen[$h])) {
-                $seen[$h] = true;
-                $out[] = ['hanzi' => $h, 'meaning' => $meaning[$h] ?? ''];
-            }
-        }
-        foreach ($meaning as $hanzi => $vi) {
-            if (count($out) >= 8) {
-                break;
-            }
-            if (!isset($seen[$hanzi]) && mb_strpos($all, $hanzi) !== false) {
-                $seen[$hanzi] = true;
-                $out[] = ['hanzi' => $hanzi, 'meaning' => $vi];
-            }
-        }
-
-        return array_slice($out, 0, 8);
     }
 
     /* ------------------------------------------------------------------ */

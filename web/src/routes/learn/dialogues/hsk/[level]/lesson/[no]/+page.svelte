@@ -19,11 +19,11 @@
   // Đọc hội thoại (07 §10).
   interface Speaker { id: number; name: string; avatarChar: string; color: string; roleVi: string }
   interface Line { id: number; speakerId: number; zh: string; highlight: string | null; pinyin: string; vi: string; audioUrl: string | null }
-  interface Quiz { prompt: string; options: string[]; answer: number }
+  /** Một bài khoá (课文一, 课文二…): mỗi cảnh có nhân vật và lời thoại riêng. */
+  interface BaiKhoa { id: number; no: number; title: string; scene: string; speakers: Speaker[]; lines: Line[] }
   interface Data {
     lesson: LessonRef;
-    dialogue: { title: string; scene: string; speakers: Speaker[]; lines: Line[]; questions: Quiz[] } | null;
-    newWords: { hanzi: string; meaning: string }[];
+    dialogues: BaiKhoa[];
     next: NextLesson | null;
   }
 
@@ -32,15 +32,14 @@
 
   let data = $state<Data | null>(null);
   let failed = $state(false);
-  let now = $state(0);          // câu đang đọc
-  let role = $state<number | null>(null);
+  let dangDoc = $state<string>('');   // 'chỉ số bài khoá:chỉ số câu' đang đọc
   let showPy = $state(true);
   let showVi = $state(true);
-  let quizPick = $state<Record<number, number>>({});
+  let moTa = $state<Record<number, boolean>>({});   // bài khoá nào đang mở rộng phần tình huống
   let done = $state(false);
 
-  const d = $derived(data?.dialogue ?? null);
-  const lines = $derived(d?.lines ?? []);
+  const khoi = $derived(data?.dialogues ?? []);
+  const tongCau = $derived(khoi.reduce((n, k) => n + k.lines.length, 0));
 
   async function load(): Promise<void> {
     failed = false;
@@ -50,10 +49,9 @@
       if (!l) { failed = true; return; }
       const res = await api.get<Data>(`/learn/lessons/${l.id}/dialogue`);
       data = res;
-      now = 0;
-      quizPick = {};
+      dangDoc = '';
+      moTa = {};
       done = false;
-      role = res.dialogue?.speakers[1]?.id ?? res.dialogue?.speakers[0]?.id ?? null;
       showPy = settings.value.dialogue.showPinyin;
       showVi = settings.value.dialogue.showVi;
       heartbeat.setActivity({ part: 'ht', screen: 'do', level: levelId, lessonId: l.id, lessonNo: l.no });
@@ -65,17 +63,25 @@
   onMount(load);
   $effect(() => { void levelId; void lessonNo; void load(); });
 
-  function playLine(k: number): void {
-    now = k;
-    const line = lines[k];
-    if (line) void speak(line.zh, line.audioUrl);
-    if (data) void saveProgress(data.lesson.id, 'ht', k + 1, lines.length).catch(() => {});
+  /** Số câu đã đi qua tính từ đầu bài, để lưu tiến độ chung cho cả bài. */
+  function viTri(ki: number, i: number): number {
+    return khoi.slice(0, ki).reduce((n, k) => n + k.lines.length, 0) + i + 1;
   }
 
-  async function playAll(): Promise<void> {
-    for (let k = 0; k < lines.length; k++) {
-      now = k;
-      await speak(lines[k].zh, lines[k].audioUrl);
+  function playLine(ki: number, i: number): void {
+    dangDoc = `${ki}:${i}`;
+    const line = khoi[ki]?.lines[i];
+    if (line) void speak(line.zh, line.audioUrl);
+    if (data) void saveProgress(data.lesson.id, 'ht', viTri(ki, i), tongCau).catch(() => {});
+  }
+
+  /** Đọc liền cả một bài khoá, từng câu một. */
+  async function playKhoi(ki: number): Promise<void> {
+    const k = khoi[ki];
+    if (!k) return;
+    for (let i = 0; i < k.lines.length; i++) {
+      dangDoc = `${ki}:${i}`;
+      await speak(k.lines[i].zh, k.lines[i].audioUrl);
       await new Promise((r) => setTimeout(r, 900));
     }
   }
@@ -91,7 +97,7 @@
     }
   }
 
-  const speakerOf = (id: number): Speaker | undefined => d?.speakers.find((s) => s.id === id);
+  const speakerOf = (k: BaiKhoa, id: number): Speaker | undefined => k.speakers.find((s) => s.id === id);
 
   /** Tô sáng từ mới trong câu. */
   function parts(line: Line): [string, string, string] {
@@ -101,7 +107,7 @@
   }
 </script>
 
-<svelte:head><title>{d ? `${d.title} · Hội thoại` : 'Hội thoại'} · Zìkǎ</title></svelte:head>
+<svelte:head><title>{data ? `${data.lesson.title} · Hội thoại` : 'Hội thoại'} · Zìkǎ</title></svelte:head>
 
 {#snippet body(m: boolean)}
   {#if failed}
@@ -110,90 +116,66 @@
     </EmptyState>
   {:else if data === null}
     <Skeleton h="360px" r={20} />
-  {:else if d === null}
+  {:else if khoi.length === 0}
     <EmptyState title="Bài này chưa có hội thoại." />
   {:else}
-    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap">
-      <div>
-        <h1 style="font-size: {m ? 20 : 26}px">{d.title}</h1>
-        {#if d.scene}<p class="muted" style="font-size: 14px">{d.scene}</p>{/if}
+    <!-- Hàng công cụ của cả bài: chỉ còn bật/tắt pinyin và nghĩa. -->
+    <div class="dau">
+      <div style="min-width: 0">
+        <span class="kicker">Hội thoại · Bài {lessonNo}</span>
+        <h1 style="font-size: {m ? 19 : 24}px; line-height: 1.25; margin-top: 2px">{data.lesson.title}</h1>
+        <p class="muted" style="font-size: 13px">{khoi.length} bài khoá · {tongCau} câu</p>
       </div>
-      <div style="display: flex; gap: 8px; flex-wrap: wrap">
-        <button type="button" class="btn btn-sm" class:apps-on={showPy} onclick={() => (showPy = !showPy)}>Pinyin</button>
-        <button type="button" class="btn btn-sm" class:apps-on={showVi} onclick={() => (showVi = !showVi)}>Nghĩa</button>
-        <button type="button" class="btn btn-sm" onclick={playAll}><Icon name="play" size={15} /> Nghe cả bài</button>
+      <div class="seg">
+        <button type="button" class:on={showPy} onclick={() => (showPy = !showPy)}>Pinyin</button>
+        <button type="button" class:on={showVi} onclick={() => (showVi = !showVi)}>Nghĩa</button>
       </div>
     </div>
 
-    <!-- Chọn vai -->
-    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
-      <span class="muted" style="font-size: 13.5px">Bạn đóng vai:</span>
-      {#each d.speakers as s (s.id)}
-        <label class="pick">
-          <input type="radio" name="role" checked={role === s.id} onchange={() => (role = s.id)} />
-          <span><span class="hz" lang="zh">{s.name}</span>{s.roleVi ? ` · ${s.roleVi}` : ''}</span>
-        </label>
-      {/each}
-    </div>
-
-    <!-- Lời thoại -->
-    <ul style="display: flex; flex-direction: column; gap: 12px">
-      {#each lines as line, k (line.id)}
-        {@const sp = speakerOf(line.speakerId)}
-        {@const mine = role === line.speakerId}
-        {@const [pre, hl, post] = parts(line)}
-        <li style="display: flex; gap: 10px; flex-direction: {mine ? 'row-reverse' : 'row'}">
-          <span class="who hz" lang="zh" style="background: {sp?.color ?? 'var(--surface)'}">{sp?.avatarChar ?? '?'}</span>
-          <button
-            type="button"
-            class="bub"
-            class:me={mine}
-            class:now={now === k}
-            style="flex: 1 1 auto; max-width: 80%; text-align: {mine ? 'right' : 'left'}; cursor: pointer"
-            onclick={() => playLine(k)}
-          >
-            <span class="hz" lang="zh" style="font-size: {m ? 19 : 22}px">{pre}{#if hl}<b class="hl">{hl}</b>{/if}{post}</span>
-            {#if showPy && line.pinyin}<span class="muted" style="font-size: 13.5px">{line.pinyin}</span>{/if}
-            {#if showVi && line.vi}<span style="font-size: 14px">{line.vi}</span>{/if}
+    <!-- Mỗi bài khoá một khối riêng: đọc tới đâu biết đang ở cảnh nào. -->
+    {#each khoi as k, ki (k.id)}
+      <section class="block khoi" style="padding: {m ? 14 : 18}px {m ? 14 : 20}px">
+        <div class="tren">
+          <span class="so">{ki + 1}</span>
+          <div style="flex: 1 1 180px; min-width: 0">
+            <h2 style="font-size: {m ? 16 : 19}px; line-height: 1.3">{k.title}</h2>
+            {#if k.scene}
+              <p class="mota" class:mo={moTa[ki]}>{k.scene}</p>
+              {#if k.scene.length > 90}
+                <button type="button" class="btn btn-text btn-sm them" onclick={() => (moTa = { ...moTa, [ki]: !moTa[ki] })}>
+                  {moTa[ki] ? 'Thu gọn' : 'Xem tình huống'}
+                </button>
+              {/if}
+            {/if}
+          </div>
+          <button type="button" class="btn btn-sm nghe" onclick={() => playKhoi(ki)} aria-label="Nghe bài khoá {ki + 1}">
+            <Icon name="speaker" size={16} /> Nghe
           </button>
-        </li>
-      {/each}
-    </ul>
+        </div>
 
-    <!-- Câu hỏi hiểu bài -->
-    {#each d.questions as quiz, qi (qi)}
-      <section class="block" style="padding: 18px 20px; display: flex; flex-direction: column; gap: 10px">
-        <b class="hz" lang="zh" style="font-size: 18px">{quiz.prompt}</b>
-        {#each quiz.options as o, oi (oi)}
-          <button
-            type="button"
-            class="opt"
-            class:right={quizPick[qi] !== undefined && oi === quiz.answer}
-            class:wrong={quizPick[qi] === oi && oi !== quiz.answer}
-            disabled={quizPick[qi] !== undefined}
-            onclick={() => (quizPick = { ...quizPick, [qi]: oi })}
-          >
-            <span class="k">{String.fromCharCode(65 + oi)}</span>
-            <span class="hz" lang="zh">{o}</span>
-          </button>
-        {/each}
+        <ul style="display: flex; flex-direction: column; gap: 10px">
+          {#each k.lines as line, i (line.id)}
+            {@const sp = speakerOf(k, line.speakerId)}
+            {@const [pre, hl, post] = parts(line)}
+            <li style="display: flex; gap: 10px">
+              <span class="who hz" lang="zh" style="background: {sp?.color ?? 'var(--surface)'}">{sp?.avatarChar ?? '?'}</span>
+              <button
+                type="button"
+                class="bub"
+                class:now={dangDoc === `${ki}:${i}`}
+                style="flex: 1 1 auto; max-width: 86%; text-align: left; cursor: pointer"
+                onclick={() => playLine(ki, i)}
+              >
+                {#if sp}<span class="muted" style="font-size: 12px; font-weight: 700">{sp.name}{sp.roleVi ? ` · ${sp.roleVi}` : ''}</span>{/if}
+                <span class="hz" lang="zh" style="font-size: {m ? 19 : 22}px">{pre}{#if hl}<b class="hl">{hl}</b>{/if}{post}</span>
+                {#if showPy && line.pinyin}<span class="muted" style="font-size: 13.5px">{line.pinyin}</span>{/if}
+                {#if showVi && line.vi}<span style="font-size: 14px">{line.vi}</span>{/if}
+              </button>
+            </li>
+          {/each}
+        </ul>
       </section>
     {/each}
-
-    <!-- Từ mới -->
-    {#if data.newWords.length > 0}
-      <section class="paper" style="padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
-        <p class="kicker">Từ mới trong bài</p>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px">
-          {#each data.newWords as w (w.hanzi)}
-            <button type="button" class="tag" style="height: auto; padding: 6px 10px" onclick={() => speak(w.hanzi)}>
-              <span class="hz" lang="zh" style="font-size: 15px">{w.hanzi}</span>
-              <span class="muted">{w.meaning}</span>
-            </button>
-          {/each}
-        </div>
-      </section>
-    {/if}
 
     <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end">
       {#if done}
@@ -228,3 +210,58 @@
     <BackLink href="/learn/dialogues/hsk/{levelId}" label="Chọn bài" />
     {@render body(false)}</main>
 {/if}
+
+<style>
+  .dau {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .khoi {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .tren {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  /* Số bài khoá: người đọc liếc là biết đang ở cảnh thứ mấy. */
+  .so {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--son-soft);
+    color: var(--son-text);
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .nghe {
+    flex: none;
+  }
+  /* Tình huống có thể dài vài câu, thu lại hai dòng cho khỏi đè mất phần thoại. */
+  .mota {
+    margin: 2px 0 0;
+    font-size: 13.5px;
+    color: var(--text-2);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  .mota.mo {
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+  .them {
+    padding: 0;
+  }
+</style>

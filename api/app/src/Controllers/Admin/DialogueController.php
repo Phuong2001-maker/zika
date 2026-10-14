@@ -24,24 +24,26 @@ final class DialogueController
     /* Hội thoại                                                           */
     /* ------------------------------------------------------------------ */
 
-    /** GET /admin/lessons/{id}/dialogue — trả null khi bài chưa có hội thoại. */
-    public function get(Request $r): ?array
+    /** GET /admin/lessons/{id}/dialogue — danh sách bài khoá của bài (rỗng nếu chưa soạn). */
+    public function get(Request $r): array
     {
         $lesson = ContentWriter::lesson($r->id());
-        $d = PartContent::dialogueBlock((int) $lesson['id'], true);
-        if ($d === null) {
-            return null;
-        }
-        // Trình soạn tham chiếu nhân vật bằng “key” để thêm/xoá nhân vật không cần biết id.
-        $d['speakers'] = array_map(static fn (array $s): array => $s + ['key' => (string) $s['id']], $d['speakers']);
-        $d['lines'] = array_map(static fn (array $l): array => $l + ['speakerKey' => (string) $l['speakerId']], $d['lines']);
-        return $d;
+        return ['dialogues' => array_map(
+            static function (array $d): array {
+                // Trình soạn tham chiếu nhân vật bằng “key” để thêm/xoá không cần biết id.
+                $d['speakers'] = array_map(static fn (array $s): array => $s + ['key' => (string) $s['id']], $d['speakers']);
+                $d['lines'] = array_map(static fn (array $l): array => $l + ['speakerKey' => (string) $l['speakerId']], $d['lines']);
+                return $d;
+            },
+            PartContent::dialogueBlocks((int) $lesson['id']),
+        )];
     }
 
     /**
-     * PUT /admin/lessons/{id}/dialogue — lưu cả khối trong một transaction.
-     * Nhân vật được giữ id cũ nếu trình soạn gửi lên `id`, còn câu thoại và câu hỏi
-     * thì xoá hết rồi ghi lại (dữ liệu nhỏ, tránh phải so từng dòng).
+     * PUT /admin/lessons/{id}/dialogue — lưu toàn bộ bài khoá của bài trong một transaction.
+     *
+     * Xoá hết rồi ghi lại: dữ liệu nhỏ, không bảng nào trỏ vào id hội thoại (tiến độ học ghi
+     * theo bài + phần), nên so từng dòng chỉ thêm việc chứ không được gì.
      */
     public function save(Request $r): array
     {
@@ -49,59 +51,100 @@ final class DialogueController
         $lessonId = (int) $lesson['id'];
 
         $v = new Validator($r->body);
-        $title = $v->str('title', 'Tên hội thoại', min: 1, max: 120);
-        $scene = $v->str('scene', 'Tình huống', false, 0, 2000);
-        $imagePath = $v->strOrNull('imagePath', 'Ảnh', 255);
-        $speakersIn = $v->arr('speakers', 'Nhân vật');
-        $linesIn = $v->arr('lines', 'Câu thoại');
-        $questionsIn = $v->arr('questions', 'Câu hỏi', false);
-
-        if (count($speakersIn) < 1) {
-            $v->error('speakers', 'Cần ít nhất một nhân vật.');
-        }
-        if (count($speakersIn) > 6) {
-            $v->error('speakers', 'Nhiều nhất 6 nhân vật.');
-        }
-        if (count($linesIn) < 1) {
-            $v->error('lines', 'Cần ít nhất một câu thoại.');
-        }
-        if (count($linesIn) > 60) {
-            $v->error('lines', 'Nhiều nhất 60 câu thoại.');
-        }
+        $khoiIn = $v->arr('dialogues', 'Bài khoá');
         $v->done();
 
-        // Chuẩn hoá nhân vật trước để biết key nào hợp lệ.
+        if (count($khoiIn) > 10) {
+            throw HttpError::validation(['dialogues' => 'Mỗi bài nhiều nhất 10 bài khoá.']);
+        }
+
+        $khoi = [];
+        foreach (array_values($khoiIn) as $i => $raw) {
+            $khoi[] = self::chuanHoaBaiKhoa(is_array($raw) ? $raw : [], $i + 1);
+        }
+
+        Db::tx(static function () use ($lessonId, $khoi): void {
+            Db::exec('DELETE FROM dialogues WHERE lesson_id = ?', [$lessonId]);
+            foreach ($khoi as $k) {
+                $dlgId = Db::insert('dialogues', [
+                    'lesson_id' => $lessonId,
+                    'sort_order' => $k['no'],
+                    'title' => $k['title'],
+                    'scene' => $k['scene'],
+                    'image_path' => $k['imagePath'],
+                ]);
+                $idByKey = [];
+                foreach ($k['speakers'] as $key => $sp) {
+                    $idByKey[$key] = Db::insert('dialogue_speakers', ['dialogue_id' => $dlgId] + $sp);
+                }
+                foreach ($k['lines'] as $l) {
+                    $key = $l['speakerKey'];
+                    unset($l['speakerKey']);
+                    Db::insert('dialogue_lines', ['dialogue_id' => $dlgId, 'speaker_id' => $idByKey[$key]] + $l);
+                }
+            }
+        });
+
+        ContentWriter::touch($lessonId, $r);
+        Audit::log($r, 'dialogue.save', 'lesson', $lessonId, [
+            'baiKhoa' => count($khoi),
+            'lines' => array_sum(array_map(static fn (array $k): int => count($k['lines']), $khoi)),
+        ]);
+        return $this->get($r);
+    }
+
+    /**
+     * Kiểm tra và chuẩn hoá một bài khoá gửi lên.
+     * @param array<string,mixed> $in
+     * @return array<string,mixed>
+     */
+    private static function chuanHoaBaiKhoa(array $in, int $no): array
+    {
+        $nhan = 'Bài khoá ' . $no;
+        $title = mb_substr(trim((string) ($in['title'] ?? '')), 0, 120);
+        if ($title === '') {
+            $title = 'Bài khoá ' . $no;
+        }
+        $speakersIn = is_array($in['speakers'] ?? null) ? $in['speakers'] : [];
+        $linesIn = is_array($in['lines'] ?? null) ? $in['lines'] : [];
+
+        if (count($speakersIn) < 1 || count($speakersIn) > 6) {
+            throw HttpError::validation(['dialogues' => $nhan . ': cần 1 đến 6 nhân vật.']);
+        }
+        if (count($linesIn) < 1 || count($linesIn) > 60) {
+            throw HttpError::validation(['dialogues' => $nhan . ': cần 1 đến 60 câu thoại.']);
+        }
+
         $speakers = [];
-        foreach ($speakersIn as $i => $s) {
+        foreach (array_values($speakersIn) as $i => $s) {
             $name = trim((string) ($s['name'] ?? ''));
             $key = trim((string) ($s['key'] ?? $name));
             if ($name === '' || $key === '') {
-                throw HttpError::validation(['speakers' => 'Nhân vật ' . ($i + 1) . ' chưa có tên.']);
+                throw HttpError::validation(['dialogues' => $nhan . ': nhân vật ' . ($i + 1) . ' chưa có tên.']);
             }
             $color = (string) ($s['color'] ?? '');
             $speakers[$key] = [
-                'id' => isset($s['id']) ? (int) $s['id'] : null,
                 'name' => mb_substr($name, 0, 30),
                 'avatar_char' => mb_substr(trim((string) ($s['avatarChar'] ?? '')) ?: mb_substr($name, -1), 0, 4),
-                'color' => preg_match('/^#[0-9A-Fa-f]{6}$/', $color) ? $color : '#DCEBFF',
+                'color' => preg_match('/^#[0-9A-Fa-f]{6}$/', $color) === 1 ? $color : '#DCEBFF',
                 'role_vi' => mb_substr(trim((string) ($s['roleVi'] ?? '')), 0, 40),
                 'sort_order' => $i + 1,
             ];
         }
 
         $lines = [];
-        foreach ($linesIn as $i => $l) {
+        foreach (array_values($linesIn) as $i => $l) {
             $zh = trim((string) ($l['zh'] ?? ''));
             $key = trim((string) ($l['speakerKey'] ?? ''));
             if ($zh === '') {
-                throw HttpError::validation(['lines' => 'Câu thoại ' . ($i + 1) . ' chưa có nội dung.']);
+                throw HttpError::validation(['dialogues' => $nhan . ': câu thoại ' . ($i + 1) . ' chưa có nội dung.']);
             }
             if (!isset($speakers[$key])) {
-                throw HttpError::validation(['lines' => 'Câu thoại ' . ($i + 1) . ' chưa chọn nhân vật.']);
+                throw HttpError::validation(['dialogues' => $nhan . ': câu thoại ' . ($i + 1) . ' chưa chọn nhân vật.']);
             }
             $highlight = trim((string) ($l['highlight'] ?? ''));
             if ($highlight !== '' && mb_strpos($zh, $highlight) === false) {
-                throw HttpError::validation(['lines' => 'Câu thoại ' . ($i + 1) . ' không chứa từ ' . $highlight . '.']);
+                throw HttpError::validation(['dialogues' => $nhan . ': câu ' . ($i + 1) . ' không chứa từ ' . $highlight . '.']);
             }
             $lines[] = [
                 'speakerKey' => $key,
@@ -114,75 +157,14 @@ final class DialogueController
             ];
         }
 
-        $questions = [];
-        foreach (array_slice($questionsIn, 0, 5) as $i => $q) {
-            $prompt = trim((string) ($q['prompt'] ?? ''));
-            $options = array_values(array_filter(array_map(
-                static fn ($o): string => mb_substr(trim((string) $o), 0, 200),
-                (array) ($q['options'] ?? []),
-            ), static fn (string $o): bool => $o !== ''));
-            if ($prompt === '') {
-                continue;
-            }
-            if (count($options) < 2) {
-                throw HttpError::validation(['questions' => 'Câu hỏi ' . ($i + 1) . ' cần ít nhất 2 phương án.']);
-            }
-            $answer = (int) ($q['answer'] ?? 0);
-            if ($answer < 0 || $answer >= count($options)) {
-                throw HttpError::validation(['questions' => 'Câu hỏi ' . ($i + 1) . ' chưa chọn đáp án đúng.']);
-            }
-            $questions[] = ['prompt_zh' => mb_substr($prompt, 0, 255), 'options' => $options, 'answer' => $answer, 'sort_order' => $i + 1];
-        }
-
-        Db::tx(static function () use ($lessonId, $title, $scene, $imagePath, $speakers, $lines, $questions): void {
-            $dlgId = Db::val('SELECT id FROM dialogues WHERE lesson_id = ?', [$lessonId]);
-            if ($dlgId === null) {
-                $dlgId = Db::insert('dialogues', [
-                    'lesson_id' => $lessonId, 'title' => $title, 'scene' => $scene, 'image_path' => $imagePath,
-                ]);
-            } else {
-                $dlgId = (int) $dlgId;
-                Db::update('dialogues', ['title' => $title, 'scene' => $scene, 'image_path' => $imagePath], ['id' => $dlgId]);
-            }
-
-            // Nhân vật: giữ id cũ để câu thoại của lượt trước không mất tham chiếu.
-            $keep = [];
-            $idByKey = [];
-            foreach ($speakers as $key => $s) {
-                $row = ['dialogue_id' => $dlgId] + array_diff_key($s, ['id' => null]);
-                if ($s['id'] !== null && Db::val('SELECT id FROM dialogue_speakers WHERE id = ? AND dialogue_id = ?', [$s['id'], $dlgId]) !== null) {
-                    Db::update('dialogue_speakers', $row, ['id' => $s['id']]);
-                    $idByKey[$key] = (int) $s['id'];
-                } else {
-                    $idByKey[$key] = Db::insert('dialogue_speakers', $row);
-                }
-                $keep[] = $idByKey[$key];
-            }
-
-            Db::exec('DELETE FROM dialogue_lines WHERE dialogue_id = ?', [$dlgId]);
-            if ($keep !== []) {
-                Db::exec(
-                    'DELETE FROM dialogue_speakers WHERE dialogue_id = ? AND id NOT IN (' . Db::in($keep) . ')',
-                    [$dlgId, ...$keep],
-                );
-            }
-
-            foreach ($lines as $l) {
-                $key = $l['speakerKey'];
-                unset($l['speakerKey']);
-                Db::insert('dialogue_lines', ['dialogue_id' => $dlgId, 'speaker_id' => $idByKey[$key]] + $l);
-            }
-
-            Db::exec('DELETE FROM dialogue_questions WHERE dialogue_id = ?', [$dlgId]);
-            foreach ($questions as $q) {
-                $q['options'] = Json::encode($q['options']);
-                Db::insert('dialogue_questions', ['dialogue_id' => $dlgId] + $q);
-            }
-        });
-
-        ContentWriter::touch($lessonId, $r);
-        Audit::log($r, 'dialogue.save', 'lesson', $lessonId, ['lines' => count($lines)]);
-        return $this->get($r) ?? [];
+        return [
+            'no' => $no,
+            'title' => $title,
+            'scene' => mb_substr(trim((string) ($in['scene'] ?? '')), 0, 2000),
+            'imagePath' => self::uploadPath($in['imagePath'] ?? null),
+            'speakers' => $speakers,
+            'lines' => $lines,
+        ];
     }
 
     /* ------------------------------------------------------------------ */

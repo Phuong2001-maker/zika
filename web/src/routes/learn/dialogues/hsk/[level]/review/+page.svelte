@@ -15,7 +15,8 @@
   // Nghe liền các hội thoại của cả cấp (04 §4.9 part = ht).
   interface Speaker { id: number; name: string; avatarChar: string; color: string }
   interface Line { id: number; speakerId: number; zh: string; pinyin: string; vi: string; audioUrl: string | null }
-  interface Dlg { lessonId: number; lessonNo: number; lessonTitle: string; title: string; scene: string; speakers: Speaker[]; lines: Line[] }
+  /** Một bài khoá trong danh sách ôn; `id` là của bài khoá, một bài có thể có nhiều. */
+  interface Dlg { id: number; no: number; lessonId: number; lessonNo: number; lessonTitle: string; title: string; scene: string; speakers: Speaker[]; lines: Line[] }
 
   const levelId = $derived(Number(page.params.level));
 
@@ -31,7 +32,7 @@
     try {
       const res = await api.get<{ dialogues: Dlg[] }>(`/learn/levels/${levelId}/review/ht`);
       list = res.dialogues;
-      openId = res.dialogues[0]?.lessonId ?? null;
+      openId = res.dialogues[0]?.id ?? null;
       showPy = settings.value.dialogue.showPinyin;
       showVi = settings.value.dialogue.showVi;
       heartbeat.setActivity({ part: 'ht', screen: 'review', level: levelId });
@@ -78,12 +79,12 @@
       {/if}
     </div>
 
-    {#each list as d (d.lessonId)}
+    {#each list as d (d.id)}
       <section class="block" style="padding: {m ? 16 : 20}px; display: flex; flex-direction: column; gap: 10px">
         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
           <button type="button" class="btn btn-bare btn-sm" aria-label="Mở hoặc đóng"
-                  onclick={() => (openId = openId === d.lessonId ? null : d.lessonId)}>
-            <Icon name={openId === d.lessonId ? 'down' : 'right'} size={18} />
+                  onclick={() => (openId = openId === d.id ? null : d.id)}>
+            <Icon name={openId === d.id ? 'down' : 'right'} size={18} />
           </button>
           <div style="flex: 1; min-width: 0">
             <b style="font-size: 16px">{d.title}</b>
@@ -95,7 +96,7 @@
           <a href="/learn/dialogues/hsk/{levelId}/lesson/{d.lessonNo}" class="btn btn-sm btn-paper">Mở bài</a>
         </div>
 
-        {#if openId === d.lessonId}
+        {#if openId === d.id}
           <ul style="display: flex; flex-direction: column; gap: 8px">
             {#each d.lines as l (l.id)}
               {@const sp = speakerOf(d, l.speakerId)}
