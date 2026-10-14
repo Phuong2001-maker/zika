@@ -25,7 +25,6 @@
   let failed = $state(false);
   let i = $state(0);
   let flipped = $state(false);
-  let known = $state(0);
   let finished = $state(false);
 
   const total = $derived(order.length);
@@ -39,7 +38,6 @@
       const idx = res.words.map((_, k) => k);
       order = settings.value.shuffle ? seededShuffle(idx, levelId * 7919) : idx;
       i = 0;
-      known = 0;
       flipped = false;
       finished = res.words.length === 0;
       heartbeat.setActivity({ part: 'lt', screen: 'review', level: levelId });
@@ -54,8 +52,7 @@
     if (flipped && settings.value.autoSpeak && card) void speak(card.hanzi);
   }
 
-  async function next(mark: boolean): Promise<void> {
-    if (mark) known++;
+  async function next(): Promise<void> {
     flipped = false;
     const at = i + 1;
     if (at >= total) {
@@ -85,7 +82,7 @@
     <section class="block" style="padding: {m ? 22 : 32}px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center">
       <span class="stamp" style="font-size: {m ? 26 : 34}px">完成</span>
       <h1 style="font-size: {m ? 24 : 30}px">Xong Tổng hợp HSK {levelId}</h1>
-      <p class="muted">Bạn đã lật hết {total} thẻ · nhớ được {known} từ.</p>
+      <p class="muted">Bạn đã lật hết {total} thẻ của cấp này.</p>
       <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center">
         <button type="button" class="btn" onclick={load}><Icon name="repeat" size={16} /> Lật lại</button>
         <a href="/learn/flashcards/hsk/{levelId}" class="btn btn-son">Về danh sách bài</a>
@@ -120,9 +117,10 @@
       </button>
     </div>
 
+    <!-- Giống màn lật thẻ theo bài: chỉ lật và chuyển từ, không chấm thuộc/chưa thuộc. -->
     <div style="display: flex; gap: 10px">
-      <button type="button" class="btn btn-lg grow" onclick={() => next(false)}>Chưa thuộc</button>
-      <button type="button" class="btn btn-son btn-lg grow" onclick={() => next(true)}>Đã thuộc</button>
+      <button type="button" class="btn btn-lg grow" onclick={flip}><Icon name="repeat" size={17} /> Lật thẻ</button>
+      <button type="button" class="btn btn-son btn-lg grow" onclick={next}>Thẻ sau <Icon name="right" size={17} /></button>
     </div>
   {/if}
 {/snippet}
