@@ -11,6 +11,7 @@
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import BackLink from '$lib/components/BackLink.svelte';
+  import HanziPad from '$lib/learn/HanziPad.svelte';
   import { completePart, lessonByNo, saveProgress } from '$lib/learn/lesson';
   import { speak } from '$lib/learn/speech';
   import type { LessonRef, NextLesson } from '$lib/api/types';
@@ -38,11 +39,9 @@
   let failed = $state(false);
   let ci = $state(0);
   let mode = $state<'demo' | 'trace' | 'free'>('trace');
-  let shown = $state(0);                       // số nét đang hiện
-  let strokes = $state<string[]>([]);          // path SVG của chữ hiện tại
-  let loadingStrokes = $state(false);
   let passes = $state(0);
   let done = $state(false);
+  let pad = $state<ReturnType<typeof HanziPad> | null>(null);
 
   const chars = $derived(data?.chars ?? []);
   const c = $derived<Char | null>(chars[ci] ?? null);
@@ -69,44 +68,17 @@
   onMount(load);
   $effect(() => { void levelId; void lessonNo; void load(); });
 
-  /** Tải dữ liệu nét của một chữ (định dạng hanzi-writer: toạ độ 1024, trục y lật). */
-  async function pickChar(k: number): Promise<void> {
+  function pickChar(k: number): void {
     ci = k;
     passes = 0;
-    shown = 0;
-    strokes = [];
-    const ch = chars[k];
-    if (!ch?.strokeDataUrl) return;
-
-    loadingStrokes = true;
-    try {
-      const res = await fetch(ch.strokeDataUrl);
-      const json = (await res.json()) as { strokes?: string[] };
-      strokes = json.strokes ?? [];
-      if (mode === 'demo' && data?.config.showAnimation) void animate();
-    } catch {
-      strokes = [];
-    } finally {
-      loadingStrokes = false;
-    }
-
     if (data) void saveProgress(data.lesson.id, 'lv', k, chars.length).catch(() => {});
   }
 
-  async function animate(): Promise<void> {
-    shown = 0;
-    for (let k = 1; k <= strokes.length; k++) {
-      shown = k;
-      await new Promise((r) => setTimeout(r, 420));
-    }
-  }
-
-  function nextStroke(): void {
-    if (shown < strokes.length) shown++;
-  }
-
-  /** Ghi nhận một lần viết đạt. */
-  async function markPass(): Promise<void> {
+  /**
+   * Tô xong cả chữ một lượt. Trước đây người học tự bấm “Viết đúng”, giờ ô viết tự chấm từng nét
+   * nên lượt nào đạt là nó báo về đây — không ai phải tự khai nữa.
+   */
+  async function markPass(mistakes: number): Promise<void> {
     if (!c || !data) return;
     passes++;
     try {
@@ -114,18 +86,19 @@
         charId: c.id,
         lessonId: data.lesson.id,
         mode: mode === 'free' ? 'free' : 'trace',
-        mistakes: 0,
+        mistakes,
         passed: true,
       });
       if (res.charDone || passes >= need) {
         if (ci + 1 < chars.length) {
           toast.ok(`Xong chữ ${c.hanzi}!`);
-          await pickChar(ci + 1);
+          pickChar(ci + 1);
         } else {
           await finish();
         }
       } else {
-        shown = 0;
+        toast.ok(`Đúng rồi! Viết lại lượt ${passes + 1}/${need}.`);
+        pad?.chayLai();
       }
     } catch {
       toast.show('Chưa lưu được kết quả.');
@@ -143,18 +116,12 @@
     }
   }
 
-  function setMode(m: 'demo' | 'trace' | 'free'): void {
-    mode = m;
-    shown = m === 'free' ? 0 : shown;
-    if (m === 'demo' && data?.config.showAnimation) void animate();
-  }
-
   const hint = $derived(
     mode === 'demo'
-      ? 'Xem thứ tự nét, rồi chuyển sang “Tô theo”.'
+      ? 'Nét được đánh số theo thứ tự viết. Xem xong thì chuyển sang “Tô theo”.'
       : mode === 'trace'
-        ? 'Bấm “Nét tiếp” để hiện từng nét và viết theo.'
-        : 'Tự viết ra giấy rồi bấm “Hiện nét” để đối chiếu.',
+        ? 'Viết đè lên chữ mờ, mỗi lần một nét. Nét đúng sẽ hiện ra, nét sai thì viết lại.'
+        : 'Không có chữ mờ — viết từ trí nhớ, sai nét nào thì bấm “Gợi ý”.',
   );
 </script>
 
@@ -162,26 +129,10 @@
 
 {#snippet grid(size: number)}
   <div class="tian" class:mi={data?.config.grid === 'mi'} style="width: {size}px; height: {size}px">
-    {#if strokes.length > 0}
-      <svg viewBox="0 0 1024 1024" width={size} height={size} aria-label="Chữ {c?.hanzi}">
-        <g transform="translate(0, 900) scale(1, -1)">
-          <!-- Nét mờ của cả chữ, trừ chế độ Tự viết -->
-          {#if mode !== 'free'}
-            {#each strokes as d, k (k)}
-              <path {d} fill="#E6DEF8" />
-            {/each}
-          {/if}
-          <!-- Các nét đã hiện -->
-          {#each strokes.slice(0, shown) as d, k (k)}
-            <path {d} fill={k === shown - 1 ? 'var(--son)' : 'var(--text)'} />
-          {/each}
-        </g>
-      </svg>
-    {:else if loadingStrokes}
-      <span class="muted" style="font-size: 13px">Đang tải nét…</span>
-    {:else}
-      <!-- Không có dữ liệu nét: hiện thẳng chữ để vẫn tập viết được -->
-      <span class="hz" lang="zh" style="font-size: {size * 0.62}px; color: {mode === 'free' ? '#E6DEF8' : 'var(--text)'}">{c?.hanzi}</span>
+    {#if c}
+      {#key c.id}
+        <HanziPad bind:this={pad} hanzi={c.hanzi} dataUrl={c.strokeDataUrl} {size} {mode} onpass={markPass} />
+      {/key}
     {/if}
   </div>
 {/snippet}
@@ -214,26 +165,23 @@
         {@render grid(m ? 240 : 300)}
 
         <div class="seg">
-          <button type="button" class:on={mode === 'demo'} onclick={() => setMode('demo')}>Xem mẫu</button>
-          <button type="button" class:on={mode === 'trace'} onclick={() => setMode('trace')}>Tô theo</button>
-          <button type="button" class:on={mode === 'free'} onclick={() => setMode('free')}>Tự viết</button>
+          <button type="button" class:on={mode === 'demo'} onclick={() => (mode = 'demo')}>Xem mẫu</button>
+          <button type="button" class:on={mode === 'trace'} onclick={() => (mode = 'trace')}>Tô theo</button>
+          <button type="button" class:on={mode === 'free'} onclick={() => (mode = 'free')}>Tự viết</button>
         </div>
 
         <p class="muted" style="font-size: 13px; text-align: center; max-width: 280px">{hint}</p>
 
         <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center">
-          <button type="button" class="btn btn-sm" onclick={() => (shown = 0)}><Icon name="repeat" size={15} /> Xoá</button>
-          <button type="button" class="btn btn-sm" disabled={shown >= strokes.length} onclick={nextStroke}>
-            {mode === 'free' ? 'Hiện nét' : 'Nét tiếp'} ({shown}/{strokes.length || c.strokes})
-          </button>
-          {#if data.config.showAnimation}
-            <button type="button" class="btn btn-sm" onclick={animate}><Icon name="play" size={15} /> Chạy lại</button>
+          {#if mode === 'demo'}
+            <button type="button" class="btn btn-sm" onclick={() => pad?.chayLai()}><Icon name="play" size={15} /> Chạy lại</button>
+          {:else}
+            <button type="button" class="btn btn-sm" onclick={() => pad?.xoa()}><Icon name="repeat" size={15} /> Viết lại</button>
+            <button type="button" class="btn btn-sm" onclick={() => pad?.goiY()}><Icon name="eye" size={15} /> Gợi ý nét</button>
           {/if}
         </div>
 
-        <button type="button" class="btn btn-son btn-lg" onclick={markPass}>
-          <Icon name="check" size={18} /> Viết đúng ({passes}/{need})
-        </button>
+        <p class="muted num" style="font-size: 13px">Lượt viết đúng: {passes}/{need}</p>
       </div>
 
       <!-- Thông tin chữ -->
@@ -249,7 +197,7 @@
 
         <p style="font-size: 15px">{c.meaning}</p>
         <hr class="rule" />
-        <p class="muted" style="font-size: 13.5px"><b>{c.strokes || strokes.length} nét</b>{c.structure ? ` · ${c.structure}` : ''}</p>
+        <p class="muted" style="font-size: 13.5px"><b>{c.strokes} nét</b>{c.structure ? ` · ${c.structure}` : ''}</p>
         {#if c.word}
           <p style="font-size: 14px">Có trong từ: <b class="hz" lang="zh">{c.word.hanzi}</b> <span class="muted">{c.word.meaning}</span></p>
         {/if}
