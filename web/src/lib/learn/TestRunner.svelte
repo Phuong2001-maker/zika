@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { SvelteSet } from 'svelte/reactivity';
   import { api, ApiError } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
@@ -37,7 +36,6 @@
     autoSubmit: boolean;
     questions: TQ[];
     answers: Record<string, Answer>;
-    flags: number[];
     listenCounts: Record<string, number>;
   }
   interface Result {
@@ -74,7 +72,6 @@
 
   let cur = $state(0);
   let answers = $state<Record<number, Answer>>({});
-  const flags = new SvelteSet<number>();
   let listens = $state<Record<number, number>>({});
   let left = $state(0);
   let confirmOpen = $state(false);
@@ -122,8 +119,6 @@
 
       at = data;
       answers = Object.fromEntries(Object.entries(data.answers ?? {}).map(([k, v]) => [Number(k), v]));
-      flags.clear();
-      for (const id of data.flags ?? []) flags.add(id);
       listens = Object.fromEntries(Object.entries(data.listenCounts ?? {}).map(([k, v]) => [Number(k), Number(v)]));
       cur = 0;
       skew = new Date(data.serverNow).getTime() - Date.now();
@@ -167,7 +162,6 @@
       void api
         .patch(`/tests/attempts/${at.attemptId}`, {
           answers: Object.fromEntries(Object.entries(answers).map(([k, v]) => [k, v])),
-          flags: [...flags],
           listenCounts: listens,
         })
         .catch(() => {});
@@ -177,13 +171,6 @@
   function setAnswer(v: Answer): void {
     if (!q) return;
     answers = { ...answers, [q.id]: v };
-    queueSave();
-  }
-
-  function toggleFlag(): void {
-    if (!q) return;
-    if (flags.has(q.id)) flags.delete(q.id);
-    else flags.add(q.id);
     queueSave();
   }
 
@@ -201,7 +188,6 @@
     try {
       result = await api.post<Result>(`/tests/attempts/${at.attemptId}/submit`, {
         answers: Object.fromEntries(Object.entries(answers).map(([k, v]) => [k, v])),
-        flags: [...flags],
       });
       if (auto) toast.show('Hết giờ — bài đã được nộp.');
     } catch (e) {
@@ -295,9 +281,6 @@
 
     <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
       <button type="button" class="btn" disabled={cur === 0} onclick={() => cur--}><Icon name="left" size={16} /> Câu trước</button>
-      <button type="button" class="btn" class:apps-on={flags.has(q.id)} onclick={toggleFlag}>
-        <Icon name="flag" size={16} /> {flags.has(q.id) ? 'Bỏ đánh dấu' : 'Đánh dấu xem lại'}
-      </button>
       <span style="flex: 1"></span>
       {#if cur + 1 < total}
         <button type="button" class="btn btn-son" onclick={() => cur++}>Câu tiếp <Icon name="right" size={16} /></button>
@@ -309,7 +292,7 @@
     <div class="grid">
       {#each at.questions as x, k (x.id)}
         <button type="button" class={qnClass(x, k)} onclick={() => (cur = k)} aria-label="Câu {k + 1}">
-          {k + 1}{#if flags.has(x.id)}<i class="fl"></i>{/if}
+          {k + 1}
         </button>
       {/each}
     </div>
