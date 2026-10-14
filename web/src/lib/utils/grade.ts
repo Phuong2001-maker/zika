@@ -28,7 +28,7 @@ export interface Payload {
   answer?: number | boolean | string;
 }
 
-export const CHOICE_TYPES = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'fill', 'pick', 'toZh'];
+export const CHOICE_TYPES = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'pick', 'toZh'];
 
 export type Answer = number | boolean | string | number[] | { pairs: Record<number, number> } | null;
 
@@ -124,7 +124,6 @@ export const TYPE_LABEL: Record<string, string> = {
   audio: 'Nghe và chọn chữ Hán',
   listen: 'Nghe và chọn',
   blank: 'Điền vào chỗ trống',
-  fill: 'Chọn từ điền vào câu',
   pick: 'Chọn câu viết đúng',
   toZh: 'Chọn câu tiếng Trung đúng nghĩa',
   order: 'Sắp xếp thành câu',

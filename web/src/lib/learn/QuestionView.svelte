@@ -27,10 +27,10 @@
   } = $props();
 
   const options = $derived<string[]>(payload.options ?? []);
-  const hzOptions = $derived(['audio', 'blank', 'fill', 'pick', 'toZh'].includes(type));
+  const hzOptions = $derived(['audio', 'blank', 'pick', 'toZh'].includes(type));
   const isWordQ = $derived(['meaning', 'pinyin', 'tone'].includes(type));
   const isAudioQ = $derived(type === 'audio' || type === 'listen');
-  const isBlankQ = $derived(type === 'blank' || type === 'fill');
+  const isBlankQ = $derived(type === 'blank');
 
   /* ---------------- trắc nghiệm ---------------- */
   function pickOption(i: number): void {

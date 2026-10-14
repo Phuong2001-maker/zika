@@ -13,7 +13,7 @@
 
   // Soạn bài kiểm tra — /admin/lessons/:id/tests (08 §9).
   const TYPES: [string, string][] = [
-    ['fill', 'Chọn từ điền câu'],
+    ['blank', 'Chọn từ điền câu'],
     ['listen', 'Nghe và chọn'],
     ['meaning', 'Chọn nghĩa'],
     ['pick', 'Chọn câu đúng'],
@@ -44,7 +44,7 @@
   function blank(): Draft {
     return {
       id: null,
-      type: 'fill',
+      type: 'blank',
       payload: { pre: '', post: '', sentence: '', vi: '', showMeaning: false, options: ['', '', '', ''], answer: 0 },
       explain: '',
       score: 1,

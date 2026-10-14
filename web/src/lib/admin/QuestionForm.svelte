@@ -19,13 +19,13 @@
     onchange?: () => void;
   } = $props();
 
-  const CHOICE = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'fill', 'pick', 'toZh'];
+  const CHOICE = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'pick', 'toZh'];
   const isChoice = $derived(CHOICE.includes(draft.type));
   const isWord = $derived(['meaning', 'pinyin', 'tone'].includes(draft.type));
   const isAudio = $derived(['audio', 'listen'].includes(draft.type));
-  const isBlank = $derived(['blank', 'fill'].includes(draft.type));
+  const isBlank = $derived(draft.type === 'blank');
   /** Đáp án là chữ Hán → ô nhập dùng phông chữ Hán. */
-  const hzOptions = $derived(['audio', 'blank', 'fill', 'pick', 'toZh'].includes(draft.type));
+  const hzOptions = $derived(['audio', 'blank', 'pick', 'toZh'].includes(draft.type));
 
   function touch(): void {
     onchange?.();

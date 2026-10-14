@@ -13,7 +13,7 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import QuestionView from '$lib/learn/QuestionView.svelte';
   import { lessonByNo } from '$lib/learn/lesson';
-  import { answered, check, rightAnswerText, TYPE_LABEL, type Answer, type Payload } from '$lib/utils/grade';
+  import { answered, check, CHOICE_TYPES, rightAnswerText, TYPE_LABEL, type Answer, type Payload } from '$lib/utils/grade';
   import type { LessonRef, NextLesson } from '$lib/api/types';
 
   // Bài tập · Làm bài (07 §6). Chấm ngay tại máy, server chấm lại khi lưu.
@@ -178,7 +178,7 @@
         payload={q.payload}
         bind:answer
         locked={checked}
-        rightIndex={checked && ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'fill', 'pick', 'toZh'].includes(q.type)
+        rightIndex={checked && CHOICE_TYPES.includes(q.type)
           ? (q.payload.answer as number)
           : null}
         mobile={m}
