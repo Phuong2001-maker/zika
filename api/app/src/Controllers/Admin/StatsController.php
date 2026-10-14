@@ -134,14 +134,22 @@ final class StatsController
         return sprintf('Đông nhất %02d:00–%02d:00 %s trong tuần.', $bestH, $bestH + 2, $buoi);
     }
 
-    /** @return list<array<string,mixed>> */
+    /**
+     * Mỗi người đúng một dòng. Một người mở nhiều tab hoặc nhiều máy thì có nhiều phiên còn
+     * mở cùng lúc; lấy phiên hoạt động gần nhất để danh sách khớp số “đang online” — con số
+     * đó đếm theo người (`onlineCount()`), không đếm theo phiên.
+     * @return list<array<string,mixed>>
+     */
     private function onlineList(): array
     {
         $rows = Db::all(
-            'SELECT v.user_id, v.started_at, v.duration_sec, v.activity, v.device_type, u.display_name
-               FROM visits v JOIN users u ON u.id = v.user_id
-              WHERE v.ended_at IS NULL AND v.last_seen_at > (NOW() - INTERVAL ? SECOND)
-              ORDER BY v.started_at DESC LIMIT 20',
+            'SELECT user_id, started_at, duration_sec, activity, device_type, display_name
+               FROM (SELECT v.user_id, v.started_at, v.duration_sec, v.activity, v.device_type, u.display_name,
+                            ROW_NUMBER() OVER (PARTITION BY v.user_id ORDER BY v.last_seen_at DESC, v.id DESC) AS rn
+                       FROM visits v JOIN users u ON u.id = v.user_id
+                      WHERE v.ended_at IS NULL AND v.last_seen_at > (NOW() - INTERVAL ? SECOND)) t
+              WHERE rn = 1
+              ORDER BY started_at DESC LIMIT 20',
             [self::LIVE],
         );
         return array_map(static fn (array $v): array => [
