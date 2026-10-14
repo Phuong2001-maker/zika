@@ -275,4 +275,24 @@ describe('nhập ngữ pháp', () => {
     expect(r.issues[0].message).toContain('Không có cấu trúc nào');
     expect(r.summary).toBe('2 cấu trúc · 2 ví dụ');
   });
+
+  it('phân biệt hai cấu trúc chỉ khác nhau ở phần chữ Hán', () => {
+    // Giáo trình đặt tên kiểu “想 + động từ”, “怎么 + động từ” — chỉ khác nhau ở chữ Hán.
+    const points = sheet('Ngữ pháp', [
+      ['Tên cấu trúc', 'Mô tả ngắn', 'Giải thích', 'Lưu ý', 'Khối công thức', 'Câu luyện tập', 'Nghĩa luyện tập'],
+      ['想 + động từ', 'Muốn làm gì', 'Đặt trước động từ, nói mong muốn.', '', '', '', ''],
+      ['怎么 + động từ', 'Hỏi cách thức', 'Đặt trước động từ, hỏi làm thế nào.', '', '', '', ''],
+    ]);
+    const examples = sheet('Ví dụ', [
+      ['Tên cấu trúc', 'Loại', 'Công thức', 'Tiếng Trung', 'Pinyin', 'Nghĩa', 'Từ nhấn'],
+      ['想 + động từ', 'Khẳng định', '', '我想去超市。', '', 'Tôi muốn đi siêu thị.', '想'],
+      ['怎么 + động từ', 'Câu hỏi', '', '你怎么去超市？', '', 'Bạn đi siêu thị bằng cách nào?', '怎么'],
+    ]);
+    const r = grammarImport.parse([points, examples]);
+
+    expect(r.issues).toEqual([]);
+    expect(r.items).toHaveLength(2);
+    expect(r.items[0].examples).toHaveLength(1);
+    expect(r.items[1].examples[0].zh).toBe('你怎么去超市？');
+  });
 });

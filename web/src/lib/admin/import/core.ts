@@ -72,6 +72,21 @@ export function norm(s: string): string {
 }
 
 /**
+ * Khoá so khớp cho tên do người soạn đặt (tên cấu trúc ngữ pháp…), nơi chữ Hán mang nghĩa.
+ * Khác `norm` ở chỗ chỉ bỏ dấu tiếng Việt và khoảng trắng, giữ nguyên mọi ký tự còn lại —
+ * `norm` ném hết chữ ngoài a–z0–9 nên “想 + động từ” và “怎么 + động từ” ra cùng một khoá,
+ * còn tên thuần chữ Hán thì thành chuỗi rỗng và cấu trúc nào cũng “trùng tên”.
+ */
+export function khoaTen(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/đ/gi, 'd')
+    .toLowerCase()
+    .replace(/\s+/g, '');
+}
+
+/**
  * Dò dòng tiêu đề rồi trả về vị trí từng cột.
  * Tiêu đề không nhất thiết ở dòng 1 — người dùng hay chèn dòng ghi chú ở trên, nên quét 10 dòng đầu
  * và chọn dòng khớp được nhiều cột nhất.

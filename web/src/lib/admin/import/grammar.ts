@@ -12,7 +12,7 @@ import {
   headerMap,
   isBlank,
   Issues,
-  norm,
+  khoaTen,
   pickSheet,
   previewOf,
   splitList,
@@ -143,7 +143,7 @@ export const grammarImport: ImportSpec<GrammarRow> = {
         issues.add(line, `“${title}” chưa có phần Giải thích.`);
         return;
       }
-      if (byTitle.has(norm(title))) {
+      if (byTitle.has(khoaTen(title))) {
         issues.add(line, `Trùng tên với dòng trên: ${title}`);
         return;
       }
@@ -165,7 +165,7 @@ export const grammarImport: ImportSpec<GrammarRow> = {
         practice: tiles.length >= 2 ? { answer, vi: cellOf(row, index, 'practiceVi'), tiles } : null,
       };
       items.push(item);
-      byTitle.set(norm(title), item);
+      byTitle.set(khoaTen(title), item);
     });
 
     // ----- Ví dụ (sheet tuỳ chọn) -----
@@ -185,7 +185,7 @@ export const grammarImport: ImportSpec<GrammarRow> = {
 
           const title = cellOf(row, ex.index, 'title');
           // Chỉ có một cấu trúc thì khỏi bắt ghi tên ở từng dòng ví dụ.
-          const owner = title === '' && items.length === 1 ? items[0] : byTitle.get(norm(title));
+          const owner = title === '' && items.length === 1 ? items[0] : byTitle.get(khoaTen(title));
           if (!owner) {
             exIssues.add(line, `Không có cấu trúc nào tên “${title}”.`);
             return;
