@@ -274,7 +274,8 @@ button.ava { cursor: pointer; width: 40px; height: 40px; }
     linear-gradient(to bottom, transparent calc(50% - .5px), var(--son-line) calc(50% - .5px), var(--son-line) calc(50% + .5px), transparent calc(50% + .5px));
 }
 .ruled { background-color: var(--bo-paper) !important; background-image: radial-gradient(var(--bo-dot) 1.1px, transparent 1.4px); background-size: 20px 20px; }
-.hl { background: linear-gradient(transparent 60%, var(--bo-hl) 60%); padding: 0 2px; border-radius: 2px; }
+/* Từ nhấn trong câu: đổi màu chữ chứ không tô nền — vệt nền cắt ngang nét chữ Hán trông rối. */
+.hl { color: var(--bo); }
 
 /* Thanh tiến độ */
 .bar { height: 8px; background: var(--track); border-radius: 999px; overflow: hidden; }
