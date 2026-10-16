@@ -33,6 +33,7 @@ export class LoginState {
   name = $state('');
   regEmail = $state('');
   regPassword = $state('');
+  showRegPw = $state(false);
 
   errors = $state<Record<string, string>>({});
   busy = $state(false);

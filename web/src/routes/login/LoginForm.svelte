@@ -47,7 +47,7 @@
       {#if emailOn}
         <div>
           <label class="lbl" for="lg-em">Email</label>
-          <input class="inp" id="lg-em" type="email" autocomplete="email" placeholder="ban@email.com" style={inpStyle} bind:value={st.email} aria-invalid={!!st.errors.email} aria-describedby={st.errors.email ? 'lg-em-e' : undefined} />
+          <input class="inp" id="lg-em" type="email" autocomplete="email" style={inpStyle} bind:value={st.email} aria-invalid={!!st.errors.email} aria-describedby={st.errors.email ? 'lg-em-e' : undefined} />
           {#if st.errors.email}<p class="err" id="lg-em-e">{st.errors.email}</p>{/if}
         </div>
         <div>
@@ -105,17 +105,20 @@
       {#if emailOn}
         <div>
           <label class="lbl" for="rg-name">Tên hiển thị</label>
-          <input class="inp" id="rg-name" type="text" autocomplete="nickname" placeholder="Ví dụ: Minh Anh" style={inpStyle} bind:value={st.name} aria-invalid={!!st.errors.displayName} />
+          <input class="inp" id="rg-name" type="text" autocomplete="nickname" style={inpStyle} bind:value={st.name} aria-invalid={!!st.errors.displayName} />
           {#if st.errors.displayName}<p class="err">{st.errors.displayName}</p>{/if}
         </div>
         <div>
           <label class="lbl" for="rg-em">Email</label>
-          <input class="inp" id="rg-em" type="email" autocomplete="email" placeholder="ban@email.com" style={inpStyle} bind:value={st.regEmail} aria-invalid={!!st.errors.email} />
+          <input class="inp" id="rg-em" type="email" autocomplete="email" style={inpStyle} bind:value={st.regEmail} aria-invalid={!!st.errors.email} />
           {#if st.errors.email}<p class="err">{st.errors.email}</p>{/if}
         </div>
         <div>
           <label class="lbl" for="rg-pw">Mật khẩu</label>
-          <input class="inp" id="rg-pw" type="password" autocomplete="new-password" placeholder="Ít nhất 8 ký tự, có chữ và số" style={inpStyle} bind:value={st.regPassword} aria-invalid={!!st.errors.password} />
+          <div style="position: relative">
+            <input class="inp" id="rg-pw" type={st.showRegPw ? 'text' : 'password'} autocomplete="new-password" placeholder="Ít nhất 8 ký tự, có chữ và số" style="padding-right: 64px; {inpStyle}" bind:value={st.regPassword} aria-invalid={!!st.errors.password} />
+            <button type="button" class="btn btn-text btn-sm" style="position: absolute; right: 8px; top: {mobile ? 6 : 5}px" onclick={() => (st.showRegPw = !st.showRegPw)} aria-pressed={st.showRegPw}>{st.showRegPw ? 'Ẩn' : 'Hiện'}</button>
+          </div>
           {#if st.errors.password}<p class="err">{st.errors.password}</p>{/if}
         </div>
       {/if}
