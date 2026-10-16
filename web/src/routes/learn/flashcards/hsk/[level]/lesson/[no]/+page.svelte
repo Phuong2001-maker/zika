@@ -29,6 +29,10 @@
   let flipped = $state(false);
   let finished = $state(false);
   let huong = $state(1); // 1 = sang thẻ sau, -1 = lùi lại — thẻ mới trượt vào từ phía tương ứng
+  let swipeX = 0;
+  let swipeY = 0;
+  let swipePointer: number | null = null;
+  let ignoreCardClick = false;
 
   const cards = $derived(data?.words ?? []);
   const total = $derived(order.length);
@@ -70,6 +74,36 @@
   function flip(): void {
     flipped = !flipped;
     if (flipped && settings.value.autoSpeak && card) void speak(card.hanzi);
+  }
+
+  function cardClick(): void {
+    if (ignoreCardClick) {
+      ignoreCardClick = false;
+      return;
+    }
+    flip();
+  }
+
+  function swipeStart(e: PointerEvent): void {
+    if (e.pointerType === 'mouse') return;
+    swipePointer = e.pointerId;
+    swipeX = e.clientX;
+    swipeY = e.clientY;
+  }
+
+  function swipeEnd(e: PointerEvent): void {
+    if (swipePointer !== e.pointerId) return;
+    const dx = e.clientX - swipeX;
+    const dy = e.clientY - swipeY;
+    swipePointer = null;
+    if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
+    ignoreCardClick = true;
+    if (dx < 0) void next();
+    else prev();
+  }
+
+  function swipeCancel(): void {
+    swipePointer = null;
   }
 
   /** Sang thẻ sau; hết thẻ thì vào màn tổng kết và ghi “đã học xong”. */
@@ -151,7 +185,7 @@
             <Icon name="speaker" size={m ? 17 : 19} />
           </button>
         {/if}
-        <button type="button" class={flipped ? 'flip is-back' : 'flip'} onclick={flip} aria-label={flipped ? 'Bấm để xem lại mặt trước' : 'Lật thẻ'}>
+        <button type="button" class={flipped ? 'flip is-back' : 'flip'} onclick={cardClick} aria-label={flipped ? 'Bấm để xem lại mặt trước' : 'Lật thẻ'} onpointerdown={m ? swipeStart : undefined} onpointerup={m ? swipeEnd : undefined} onpointercancel={m ? swipeCancel : undefined}>
           <span class="flip-inner">
             <span class="face face-front">
               <span class="kicker">{frontLabel}</span>
@@ -159,7 +193,7 @@
                     style="font-size: {settings.value.cardFront === 'hanzi' ? (m ? 56 : 80) : (m ? 28 : 38)}px; font-weight: 800; line-height: 1.15">
                 {frontText}
               </span>
-              <span class="goi">Bấm để lật</span>
+              <span class="goi">{m ? '' : 'Bấm để lật'}</span>
             </span>
             <span class="face face-back">
               {@render pinyinRow(card.pinyin, m ? 18 : 22)}
@@ -176,11 +210,11 @@
   {/if}
 {/snippet}
 
-<!-- Điện thoại: lật nằm giữa vì không có phím cách, hai bên là nút chuyển từ. -->
+<!-- Điện thoại ưu tiên vuốt; hai nút nhỏ là điều hướng dự phòng. -->
 {#snippet controls()}
   <div class="ctrl">
     <button type="button" class="tron" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={20} /></button>
-    <button type="button" class="btn btn-son btn-lg grow" onclick={flip}><Icon name="repeat" size={17} /> Lật thẻ</button>
+    <span class="muted" style="font-size: 12.5px">Vuốt để chuyển thẻ</span>
     <button type="button" class="tron" aria-label="Từ sau" onclick={next}><Icon name="right" size={20} /></button>
   </div>
 {/snippet}
@@ -250,7 +284,9 @@
       {:else if finished}
         {@render done(true)}
       {:else}
-        {@render cardFace(true)}
+        <div class="swipe-zone">
+          {@render cardFace(true)}
+        </div>
         {@render examples()}
       {/if}
     </main>
@@ -458,6 +494,10 @@
   .ctrl {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
+  }
+  .swipe-zone {
+    touch-action: pan-y;
   }
 </style>

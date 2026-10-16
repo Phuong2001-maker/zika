@@ -26,6 +26,10 @@
   let i = $state(0);
   let flipped = $state(false);
   let finished = $state(false);
+  let swipeX = 0;
+  let swipeY = 0;
+  let swipePointer: number | null = null;
+  let ignoreCardClick = false;
 
   const total = $derived(order.length);
   const card = $derived<Word | null>(words?.[order[i]] ?? null);
@@ -50,6 +54,43 @@
   function flip(): void {
     flipped = !flipped;
     if (flipped && settings.value.autoSpeak && card) void speak(card.hanzi);
+  }
+
+  function cardClick(): void {
+    if (ignoreCardClick) {
+      ignoreCardClick = false;
+      return;
+    }
+    flip();
+  }
+
+  function prev(): void {
+    if (i > 0) {
+      i--;
+      flipped = false;
+    }
+  }
+
+  function swipeStart(e: PointerEvent): void {
+    if (e.pointerType === 'mouse') return;
+    swipePointer = e.pointerId;
+    swipeX = e.clientX;
+    swipeY = e.clientY;
+  }
+
+  function swipeEnd(e: PointerEvent): void {
+    if (swipePointer !== e.pointerId) return;
+    const dx = e.clientX - swipeX;
+    const dy = e.clientY - swipeY;
+    swipePointer = null;
+    if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
+    ignoreCardClick = true;
+    if (dx < 0) void next();
+    else prev();
+  }
+
+  function swipeCancel(): void {
+    swipePointer = null;
   }
 
   async function next(): Promise<void> {
@@ -95,14 +136,15 @@
       {#if card.lessonNo}<span class="tag">Bài {card.lessonNo}</span>{/if}
     </div>
 
-    <div class="deckwrap" style="height: {m ? 290 : 360}px">
+    <div class:swipe-zone={m} class="deckwrap" style="height: {m ? 290 : 360}px">
       <span class="stk stk-a"></span>
       <span class="stk stk-b"></span>
-      <button type="button" class={flipped ? 'flip is-back' : 'flip'} onclick={flip} aria-label="Lật thẻ">
+      <button type="button" class={flipped ? 'flip is-back' : 'flip'} onclick={cardClick} aria-label="Lật thẻ" onpointerdown={m ? swipeStart : undefined} onpointerup={m ? swipeEnd : undefined} onpointercancel={m ? swipeCancel : undefined}>
         <span class="flip-inner">
           <span class="face face-front">
             <span class="kicker">Nghĩa tiếng Việt</span>
             <span style="font-size: {m ? 26 : 34}px; font-weight: 800">{card.meaning}</span>
+            {#if m}<span class="muted" style="font-size: 12.5px"></span>{/if}
           </span>
           <span class="face face-back">
             <span class="num" style="font-size: {m ? 17 : 21}px; font-weight: 600" class:no-tone={!settings.value.toneColors}>
@@ -118,10 +160,18 @@
     </div>
 
     <!-- Giống màn lật thẻ theo bài: chỉ lật và chuyển từ, không chấm thuộc/chưa thuộc. -->
-    <div style="display: flex; gap: 10px">
-      <button type="button" class="btn btn-lg grow" onclick={flip}><Icon name="repeat" size={17} /> Lật thẻ</button>
-      <button type="button" class="btn btn-son btn-lg grow" onclick={next}>Thẻ sau <Icon name="right" size={17} /></button>
-    </div>
+    {#if m}
+      <div class="mobile-controls">
+        <button type="button" class="round-control" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={20} /></button>
+        <span class="muted" style="font-size: 12.5px">Vuốt để chuyển thẻ</span>
+        <button type="button" class="round-control" aria-label="Từ sau" onclick={next}><Icon name="right" size={20} /></button>
+      </div>
+    {:else}
+      <div style="display: flex; gap: 10px">
+        <button type="button" class="btn btn-lg grow" onclick={flip}><Icon name="repeat" size={17} /> Lật thẻ</button>
+        <button type="button" class="btn btn-son btn-lg grow" onclick={next}>Thẻ sau <Icon name="right" size={17} /></button>
+      </div>
+    {/if}
   {/if}
 {/snippet}
 
@@ -144,3 +194,29 @@
     <BackLink href="/learn/flashcards/hsk/{levelId}" label="Chọn bài" />
     {@render body(false)}</main>
 {/if}
+
+<style>
+  .swipe-zone {
+    touch-action: pan-y;
+  }
+  .mobile-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .round-control {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--sh-sm);
+  }
+  .round-control:disabled {
+    opacity: 0.35;
+  }
+</style>
