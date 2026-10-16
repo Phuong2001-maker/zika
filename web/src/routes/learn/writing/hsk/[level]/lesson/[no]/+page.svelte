@@ -189,6 +189,9 @@
             <button type="button" class="btn btn-sm" onclick={() => pad?.xoa()}><Icon name="repeat" size={15} /> Viết lại</button>
             <button type="button" class="btn btn-sm" onclick={() => pad?.goiY()}><Icon name="eye" size={15} /> Gợi ý nét</button>
           {/if}
+          {#if m && !done && ci + 1 < chars.length}
+            <button type="button" class="btn btn-sm" aria-label="Bỏ qua chữ này" onclick={() => pickChar(ci + 1)}>Bỏ qua <Icon name="right" size={15} /></button>
+          {/if}
         </div>
 
         <p class="muted num" style="font-size: 13px">Lượt viết đúng: {passes}/{need}</p>
@@ -214,7 +217,7 @@
       </section>
     </div>
 
-    <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap">
+    <div style="display: {m && !done && ci + 1 < chars.length ? 'none' : 'flex'}; gap: 10px; justify-content: flex-end; flex-wrap: wrap">
       {#if done}
         {#if data.next}
           <a href="/learn/writing/hsk/{levelId}/lesson/{data.next.no}" class="btn btn-son btn-lg">Bài tiếp: {data.next.title}</a>

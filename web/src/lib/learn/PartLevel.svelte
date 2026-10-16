@@ -196,7 +196,9 @@
           </button>
         {/if}
       </section>
-      <aside style="flex: 1 1 320px; min-width: 0">{@render panel(m)}</aside>
+      {#if !m}
+        <aside style="flex: 1 1 320px; min-width: 0">{@render panel(m)}</aside>
+      {/if}
     </div>
   {/if}
 {/snippet}
@@ -210,6 +212,23 @@
       <Avatar size={36} />
     </header>
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">{@render body(true)}</main>
+    {#if startHref && (picked === 'all' || current)}
+      <div class="msheet">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <span class="ib lv{levelId}" style="width: 44px; height: 44px; border-radius: 12px"><Icon name={info.icon} size={21} /></span>
+          <div style="flex: 1; min-width: 0">
+            <p class="muted" style="font-size: 12px; font-weight: 700">{picked === 'all' ? `HSK ${levelId} · Tổng hợp` : `HSK ${levelId} · Bài ${current?.no}`}</p>
+            <b style="display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{picked === 'all' ? texts.allTitle(levelId) : current?.title}</b>
+            <p class="muted" style="font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+              {picked === 'all' ? texts.allDesc(levelId, reviewCount, lessons.length) : current ? subOf(current) : ''}
+            </p>
+          </div>
+        </div>
+        <a href={startHref} class="btn btn-son btn-lg" style="width: 100%">
+          {picked === 'all' ? texts.allStart : currentProg && currentProg.position > 0 ? texts.contStart : texts.nextStart}
+        </a>
+      </div>
+    {/if}
   </div>
 {:else}
   <Topbar current={part} />

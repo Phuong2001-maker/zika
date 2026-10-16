@@ -204,19 +204,6 @@
       </section>
     {/if}
 
-    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end">
-      {#if pi + 1 < points.length}
-        <button type="button" class="btn btn-son btn-lg" onclick={() => goPoint(pi + 1)}>Điểm tiếp <Icon name="right" size={16} /></button>
-      {:else if done}
-        {#if data.next}
-          <a href="/learn/grammar/hsk/{levelId}/lesson/{data.next.no}" class="btn btn-son btn-lg">Bài tiếp: {data.next.title}</a>
-        {:else}
-          <a href="/learn/grammar/hsk/{levelId}" class="btn btn-son btn-lg">Về danh sách bài</a>
-        {/if}
-      {:else}
-        <button type="button" class="btn btn-son btn-lg" onclick={finish}><Icon name="check" size={18} /> Xong bài</button>
-      {/if}
-    </div>
   {/if}
 {/snippet}
 
