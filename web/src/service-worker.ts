@@ -15,13 +15,22 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 const PRECACHE = `zika-app-${version}`;
 const LEARN = 'zika-learn';
 const MEDIA = 'zika-media';
+const BOOK = 'zika-book';
 const FONTS = 'zika-fonts';
-const MINE = [PRECACHE, LEARN, MEDIA, FONTS];
+const MINE = [PRECACHE, LEARN, MEDIA, BOOK, FONTS];
 
 /** Nội dung bài học giữ tối đa 300 mục, 30 ngày (02 §3.5). */
 const LEARN_MAX = 300;
 const LEARN_TTL = 30 * 24 * 60 * 60 * 1000;
 const MEDIA_TTL = 60 * 24 * 60 * 60 * 1000;
+
+/**
+ * Trang giáo trình để riêng một cache có trần, không dùng chung với MEDIA.
+ * Cả ba quyển là 469 ảnh ~44MB: đọc hết một lượt mà không chặn thì chúng chiếm sạch hạn mức
+ * của origin và trình duyệt sẽ xoá luôn cả cache bài học. 80 trang (~7MB) đủ để quay lại
+ * vài chục trang vừa đọc khi mất mạng.
+ */
+const BOOK_MAX = 80;
 const FONT_TTL = 365 * 24 * 60 * 60 * 1000;
 
 /** Đường dẫn API không bao giờ được cache — dữ liệu riêng của từng người, phải luôn mới. */
@@ -99,13 +108,16 @@ async function staleWhileRevalidate(req: Request, cacheName: string, ttl: number
 }
 
 /** Có trong cache thì dùng luôn, không có mới tải. */
-async function cacheFirst(req: Request, cacheName: string, ttl: number): Promise<Response> {
+async function cacheFirst(req: Request, cacheName: string, ttl: number, max?: number): Promise<Response> {
   const cache = await caches.open(cacheName);
   const hit = await cache.match(req);
   if (hit && fresh(hit, ttl)) return hit;
   try {
     const res = await fetch(req);
-    if (res.ok || res.type === 'opaque') await cache.put(req, stamp(res.clone()));
+    if (res.ok || res.type === 'opaque') {
+      await cache.put(req, stamp(res.clone()));
+      if (max) await trim(cacheName, max);
+    }
     return res;
   } catch {
     return hit ?? Response.error();
@@ -131,6 +143,12 @@ sw.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.open(PRECACHE).then(async (c) => (await c.match(url.pathname)) ?? fetch(req)),
     );
+    return;
+  }
+
+  // Trang giáo trình: cùng là /uploads/ nhưng nhiều và nặng, giữ riêng có trần (xem BOOK_MAX).
+  if (url.pathname.startsWith('/uploads/giao-trinh/')) {
+    event.respondWith(cacheFirst(req, BOOK, MEDIA_TTL, BOOK_MAX));
     return;
   }
 

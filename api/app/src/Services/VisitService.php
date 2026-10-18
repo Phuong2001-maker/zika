@@ -118,6 +118,10 @@ final class VisitService
         if ($screen === 'admin') {
             return 'Ở trang quản trị';
         }
+        // Phần Giáo trình không thuộc 6 phần học nên không có mã part, chỉ có số cấp của quyển sách.
+        if ($screen === 'book') {
+            return 'Đang đọc giáo trình' . ($level !== null ? ' HSK ' . $level : '');
+        }
         if ($screen === 'home') {
             return match ($part) {
                 'bt' => 'Ở Bài tập', 'kt' => 'Ở Kiểm tra', 'lv' => 'Ở Luyện viết',

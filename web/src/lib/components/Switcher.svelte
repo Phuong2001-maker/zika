@@ -58,11 +58,14 @@
           <b style="font-size: 16px">{cur.name}</b>
         </span>
       </a>
-      <p style="font-size: 11.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted)">Chuyển sang · 5 phần</p>
-      <nav aria-label="Các phần học" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px">
+      <p style="font-size: 11.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted)">Chuyển sang</p>
+      <nav aria-label="Các phần học và giáo trình" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px">
         {#each others as p (p.code)}
           <a href="/learn/{p.slug}" class="swi" onclick={() => (open = false)}><span class="swi-ic" style="background: {p.accent}"><Icon name={p.icon} size={24} /></span>{p.name}</a>
         {/each}
+        <!-- Giáo trình khép lại lưới: luôn đúng 5 phần còn lại + 1 nên lưới 3 cột vừa kín 2 hàng.
+             Màu giấy kraft để không lẫn với 6 màu của các phần học. -->
+        <a href="/learn/books" class="swi" onclick={() => (open = false)}><span class="swi-ic" style="background: #EFE0C8"><Icon name="book" size={24} /></span>Giáo trình</a>
       </nav>
       {#if showFeedback && feedback.available}
         <span class="rule"></span>
