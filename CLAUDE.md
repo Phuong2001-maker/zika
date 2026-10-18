@@ -45,6 +45,7 @@ web/src/lib/components/  component dùng chung (Select, Modal, Icon, Switcher…
 web/src/lib/admin/       riêng khu quản trị (menu.ts, api.ts, LessonHeader.svelte)
 web/src/lib/admin/import/ nhập Excel cho 6 phần soạn bài — xem bẫy số 6
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
+web/src/lib/learn/sach.ts  3 quyển giáo trình đọc ở /learn/books (ảnh trang nằm ngoài git)
 web/src/app.css          tokens + class dùng chung TOÀN CỤC (xem bẫy số 1)
 api/app/src/             Controllers/, Services/, Core/
 api/app/config.php       bí mật (DB, Google, SMTP) — gitignore, KHÔNG commit
@@ -121,8 +122,18 @@ chứ không làm hỏng cả mẻ.
 
 ## Việc còn treo
 
-- **Đang làm dở: nạp giáo trình HSK 1 vào database.** Bộ tách PDF và các bước còn lại ghi ở
-  [data/hsk1/TIEN-DO.md](data/hsk1/TIEN-DO.md) — mở file đó ra là làm tiếp được ngay.
+- **Đang làm dở: nạp nội dung 3 quyển giáo trình vào 6 phần học.** Bản đồ "mục sách → phần học"
+  đã chốt, các vấn đề đã biết và thứ tự việc còn lại ghi ở
+  [data/giao-trinh/TIEN-DO.md](data/giao-trinh/TIEN-DO.md) — **mở file đó trước**. Chi tiết
+  riêng bộ tách PDF HSK 1 ở [data/hsk1/TIEN-DO.md](data/hsk1/TIEN-DO.md).
+
+  Hai chỗ chặn phải biết trước: `dialogues` có `UNIQUE KEY uq_dlg_lesson (lesson_id)` nên mỗi
+  bài chỉ chứa được **1** hội thoại, trong khi sách có 2–4 bài khoá mỗi bài; và HSK 2, HSK 3
+  là bản **scan**, không có text nào để bóc.
+
+- **Màn đọc giáo trình đã xong** (`/learn/books`): 3 quyển HSK 1–3 đọc theo ảnh từng trang.
+  Ảnh sinh bằng `data/giao-trinh/tach-giao-trinh.py`, nằm ở `<uploads>/giao-trinh/` và
+  **không có trong git** — xem mục "Giáo trình" ở [README.md](README.md) trước khi triển khai.
 
 - API còn khoảng 56 chỗ dùng `NOW()`, phần lớn vô hại (truy vấn thống kê, hoặc đặt mốc thời
   gian lúc ghi). Chỉ thành vấn đề khi hàm đó có test đóng băng đồng hồ **và** so sánh với một

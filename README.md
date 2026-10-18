@@ -53,6 +53,30 @@ Nhận `.xlsx`, `.csv` và nội dung dán. File được đọc ngay trong trì
 thư viện Excel. Trước khi ghi, hộp thoại hiện bảng xem trước và liệt kê dòng nào sai, sai chỗ nào;
 các dòng còn lại vẫn nhập được. Chọn **Thêm vào cuối** hoặc **Xoá hết rồi nhập mới**.
 
+## Giáo trình (3 quyển HSK 1–3)
+
+Ngoài 6 phần học, người học còn đọc được nguyên ba quyển giáo trình của Đại học Hà Nội: bấm
+**Giáo trình** ở bảng Chuyển nhanh → kệ 3 quyển → lật từng trang như sách giấy (bấm hai nửa
+trang, vuốt ngang, hoặc phím mũi tên). Chỗ đọc dở nhớ riêng từng quyển bằng `localStorage`.
+
+Nội dung là **ảnh từng trang**, không phải chữ — vì HSK 2 và HSK 3 là bản scan, không tách chữ
+ra được. Sinh ảnh bằng:
+
+```bash
+cd data/giao-trinh && python tach-giao-trinh.py "<thư mục uploads>"
+```
+
+Máy dev thì thư mục uploads là `api/dev-uploads`, hosting là `public_html/uploads`. Script cần
+`pymupdf` và đường dẫn 3 file PDF khai trong chính file đó. Kết quả: 469 trang WebP rộng 1200px
++ 3 ảnh bìa, tổng ~44MB.
+
+> **Ảnh không nằm trong git.** Đẩy code lên hosting là chưa đủ — phải tải thư mục `giao-trinh/`
+> lên `public_html/uploads/` (giải nén thành `uploads/giao-trinh/hsk1/001.webp`…), nếu không màn
+> đọc sẽ báo "Chưa có ảnh trang sách".
+
+Kế hoạch nạp nội dung 3 quyển này vào 6 phần học ghi ở
+[data/giao-trinh/TIEN-DO.md](data/giao-trinh/TIEN-DO.md).
+
 ## Kiểm thử
 
 ```bash
