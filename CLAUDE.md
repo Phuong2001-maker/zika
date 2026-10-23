@@ -123,13 +123,22 @@ chứ không làm hỏng cả mẻ.
 ## Việc còn treo
 
 - **Đang làm dở: nạp nội dung 3 quyển giáo trình vào 6 phần học.** Bản đồ "mục sách → phần học"
-  đã chốt, các vấn đề đã biết và thứ tự việc còn lại ghi ở
-  [data/giao-trinh/TIEN-DO.md](data/giao-trinh/TIEN-DO.md) — **mở file đó trước**. Chi tiết
-  riêng bộ tách PDF HSK 1 ở [data/hsk1/TIEN-DO.md](data/hsk1/TIEN-DO.md).
+  đã chốt. **Mở [data/hsk1/TIEN-DO.md](data/hsk1/TIEN-DO.md) trước** — mục "Việc còn lại" ở cuối
+  liệt kê 18 đầu việc theo đúng thứ tự nên làm. Bản đồ tổng cả 3 quyển ở
+  [data/giao-trinh/TIEN-DO.md](data/giao-trinh/TIEN-DO.md).
 
-  Hai chỗ chặn phải biết trước: `dialogues` có `UNIQUE KEY uq_dlg_lesson (lesson_id)` nên mỗi
-  bài chỉ chứa được **1** hội thoại, trong khi sách có 2–4 bài khoá mỗi bài; và HSK 2, HSK 3
-  là bản **scan**, không có text nào để bóc.
+  Tình hình 23/10/2026: HSK 1 **đã nạp lên server thật** (15 bài, draft, học viên chưa thấy),
+  nhưng **dữ liệu chưa chuẩn** — bộ tách bóc nhầm bảng 会写字 thay 会认字 nên thiếu 66 chữ ở 14 bài,
+  mất trắng 60 dòng 句式, mất 36/42 điểm ngữ pháp, 23 câu rác từ 练习 lọt vào hội thoại. Phải sửa
+  `data/hsk1/tach-pdf.py` rồi nạp lại trước khi bật cho học viên. Đo bằng `data/hsk1/kiem-tra.py`.
+
+  HSK 2 và HSK 3 là bản **scan**, không có text nào để bóc — để sau.
+
+- **Hai đường nạp nội dung, dùng đường nào cũng được:**
+  - **Nhập Excel** (bẫy số 6) — đi qua API nên giữ đủ 3 lớp kiểm tra. Chỉ chạy ở máy local.
+  - **Sinh SQL** `data/hsk1/xuat-sql.py` → `data/hsk1/sql/*.sql` → phpMyAdmin. Dùng khi đẩy lên
+    hosting. Mất 3 lớp kiểm tra, đã bù 2 (đếm `cnt_*` và trỏ nét chữ), còn `QuestionPayload::clean()`
+    thì chưa — xem `data/hsk1/TIEN-DO.md` Phần B.
 
 - **Màn đọc giáo trình đã xong** (`/learn/books`): 3 quyển HSK 1–3 đọc theo ảnh từng trang.
   Ảnh sinh bằng `data/giao-trinh/tach-giao-trinh.py`, nằm ở `<uploads>/giao-trinh/` và
@@ -142,3 +151,8 @@ chứ không làm hỏng cả mẻ.
   `.tian`, `.tag`, `.row`, `.mtop`, `.mcontent`, `.lbl`) — để nguyên, đừng "sửa".
 - Đăng nhập Google chỉ chạy khi `config.google.client_id` có giá trị; máy nào chưa điền thì
   nút tự ẩn, đó là chủ ý chứ không phải lỗi.
+- **SMTP trên server thật đang để trống** nên email xác minh và quên mật khẩu không gửi được,
+  chỉ ghi vào `storage/logs/mail-*.log`. Xem README mục "Gửi email thật (SMTP)".
+- **Đẩy code lên hosting có 4 cái bẫy đã sa vào thật** (Paste của 1Panel thay cả thư mục nên xoá
+  mất `config.php`; `api/index.php` trong repo trỏ sai đường dẫn; đừng copy `uploads`; service
+  worker cache cả đường dẫn 404). Đọc README mục "Đưa lên hosting" trước khi deploy.

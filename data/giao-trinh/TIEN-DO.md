@@ -133,15 +133,11 @@ HSK 2–3 phải OCR 320 trang rồi soát tay, hoặc gõ tay.
 từng bài một. Nếu buộc phải OCR thì bóc **2 lượt độc lập rồi so lệch** — chỗ hai lượt khác
 nhau là chỗ phải nhìn mắt.
 
-### 2. `dialogues` chỉ chứa được 1 hội thoại mỗi bài ❌ phải sửa schema trước khi nạp
+### 2. `dialogues` chỉ chứa được 1 hội thoại mỗi bài ✅ ĐÃ SỬA
 
-```sql
-UNIQUE KEY uq_dlg_lesson (lesson_id)
-```
-
-Mà sách có **2–4 bài khoá mỗi bài**. Phải bỏ ràng buộc này (migration mới + sửa
-`ContentWriter` / `LearnController` / màn Đọc hội thoại), hoặc chấp nhận gộp các bài khoá
-làm một. **Không né được** — `INSERT` bài khoá thứ hai là lỗi trùng khoá ngay.
+~~`UNIQUE KEY uq_dlg_lesson (lesson_id)`~~ — migration `003_dialogue_nhieu_bai_khoa.sql`
+(commit `957fbe6`) đã bỏ khoá này, thêm cột `sort_order`, và bỏ hẳn bảng `dialogue_questions`.
+Mỗi bài giờ chứa được nhiều bài khoá. Đã chạy xong trên server ngày 23/10/2026.
 
 Kèm theo: một số 课文 của HSK 3 là **đoạn văn một người kể**, không phải đối thoại hai người,
 trong khi mô hình hiện tại giả định có nhân vật nói qua lại.
@@ -160,10 +156,27 @@ nghĩa của cả từ (服务员 = nhân viên phục vụ, không ghi nghĩa r
 nguồn từ điển khác hoặc điền tay. 专名 là chỗ khó nhất: tách 颐和园 ra từng chữ thì nghĩa gần
 như vô nghĩa.
 
-### 5. Không có file âm thanh
+### 5. Có file âm thanh nhưng chưa gắn được ⚠️ sửa lại 23/10/2026
 
-Sách chỉ ghi "Nghe 2 lần đoạn đối thoại". Đọc hội thoại và hai dạng `listen` / `audio` phải
-dựa hẳn vào giọng đọc máy (`web/src/lib/learn/speech.ts`), không có bản thu thật.
+Chủ dự án có **143 file mp3** ở `D:\Tiếng trung\New folder` (ngoài git): `hsk1/` 93 file
+(15 bài, bài 1–3 có 7 file, bài 4–15 có 6 file, ~28,6 phút) và `hsk2/Bài N/` 50 file
+(10 bài × 5 file, ~24 phút). HSK 3 không có.
+
+Ba chỗ vướng:
+
+1. **Cột `audio_path` nằm ở `dialogue_lines`, tức một file cho MỘT CÂU**, còn mp3 là một file
+   cho **cả đoạn** (10–34 giây). Gắn nguyên vào từng dòng thì bấm câu nào cũng phát lại cả đoạn.
+   Phải chọn: cắt mp3 thành từng câu, hoặc thêm cột `audio_path` vào bảng `dialogues` rồi sửa
+   màn đọc thêm nút “Nghe cả đoạn”.
+2. **Chưa biết 6 file mỗi bài ứng với mục nào** (khởi động / từ mới / bài khoá 1,2,3 / luyện tập).
+   Sách không in số track, phải nghe mới biết.
+3. **Thẻ ID3 của HSK 1 ghi album `新HSK教程1` của NXB `外研社` (FLTRP)** — một bộ giáo trình khác,
+   soạn cho HSK 2.0. Cấu trúc thì khớp (15 bài, bài 1–3 có thêm 1 file đúng với mục 语音·声调 chỉ
+   có ở 3 bài đầu), nhưng phải nghe thử một file mới chắc là đúng sách. HSK 2 không có thẻ, và
+   một file còn dấu vết `Lavf60` nên đã bị cắt lại bằng ffmpeg.
+
+Trước khi gắn được thì Đọc hội thoại và hai dạng `listen` / `audio` vẫn dựa vào giọng đọc máy
+(`web/src/lib/learn/speech.ts`).
 
 ### 6. Chất lượng bóc HSK 1 hiện tại
 
@@ -241,15 +254,18 @@ bên phải** thì soát một bài mất vài phút, thay vì dò SQL.
 
 ## Phần F — Việc tiếp theo, theo thứ tự
 
-1. **Sửa `dialogues` UNIQUE** — phải xong trước khi nạp bài nào.
-2. **Viết script đối chiếu 会认字 / 句式** cho cả 15 bài HSK 1.
-3. Sửa bộ tách HSK 1 theo kết quả đối chiếu: sót từ, ngữ pháp 6/27, mẫu câu 0, tên bài 8 và 15.
-4. Nới `cau_tieng_viet()` trong `data/hsk1/tach-pdf.py` — ghép bản dịch theo từng đoạn 课文
-   thay vì khớp tổng số câu cả bài (hiện 48/221).
-5. Điền tay nghĩa cho `的` và `了`.
-6. Viết `sinh-cau-hoi.py` theo nguyên tắc "suy ra, đừng bịa" ở Phần E mục 2. Khuôn payload
+Cập nhật 23/10/2026. **Chi tiết đầy đủ nằm ở [data/hsk1/TIEN-DO.md](../hsk1/TIEN-DO.md) mục
+"Việc còn lại" — mở file đó trước, file này chỉ là bản đồ tổng.**
+
+1. ~~Sửa `dialogues` UNIQUE~~ ✅ xong (migration 003, đã chạy cả local lẫn server).
+2. ~~Viết script đối chiếu 会认字 / 句式~~ ✅ xong — `data/hsk1/kiem-tra.py`, và đã cho 5 agent
+   đọc PDF đối chiếu cả 15 bài. Kết quả: 8 nhóm lỗi, xem `data/hsk1/TIEN-DO.md` Phần D.
+3. **Sửa bộ tách HSK 1** — việc lớn nhất còn lại, 18 đầu việc đã liệt kê theo thứ tự ở
+   `data/hsk1/TIEN-DO.md`. Lỗi gốc: bóc nhầm bảng 会写字 thay 会认字, dính 14 bài.
+4. **Viết `sinh-cau-hoi.py`** theo nguyên tắc "suy ra, đừng bịa" ở Phần E mục 2. Khuôn payload
    từng dạng xem `api/app/src/Services/QuestionPayload.php` — sai là API trả 422.
-7. Xuất Excel từng bài, nhập, soát, `mysqldump`.
-8. HSK 2–3: để sau.
+5. **Nạp lại HSK 1** bằng `xuat-sql.py` (đường SQL, đã dùng được) hoặc nút Nhập Excel.
+6. **Bài nghe** — quyết cách gắn, xem Phần D mục 5.
+7. HSK 2–3: để sau. HSK 2 giờ đã có file nghe, nhưng sách vẫn là bản scan không bóc được chữ.
 
 Chi tiết các bước bóc PDF HSK 1 xem thêm [data/hsk1/TIEN-DO.md](../hsk1/TIEN-DO.md).

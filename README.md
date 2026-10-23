@@ -109,6 +109,32 @@ Kết quả `release/zika-release-<ngày giờ>.zip` gồm hai thư mục:
 
 Thư mục `uploads/` phải cho PHP ghi được (755 hoặc 775), `app/storage/` cũng vậy.
 
+### 1b. Bốn cái bẫy khi giải nén bằng File Manager — đã sa vào thật 23/10/2026
+
+Nếu đẩy lên bằng File Manager của panel (1Panel, cPanel…) thay vì SSH thì đọc kỹ bốn mục này.
+Cả bốn đều đã làm sập web thật một lần.
+
+1. **Paste của File Manager THAY CẢ THƯ MỤC, không trộn vào.** Dán `app/` đè lên `<APP_DIR>` là
+   **xoá mất `config.php`** (file này cố ý không nằm trong zip) và xoá sạch `storage/logs`,
+   `storage/cache`. Triệu chứng: API trả **500 với thân rỗng và không ghi log nào** — vì log cũng
+   vừa bị xoá. Chép `config.php` ra chỗ khác trước khi dán, hoặc dán từng file thay vì cả thư mục.
+
+2. **`api/index.php` trong repo trỏ tới `<DOCROOT>/../../../../zika_app`.** Đó là đường dẫn mặc
+   định theo tài liệu, gần như chắc chắn **không trùng** chỗ bạn đặt `<APP_DIR>` thật. Mỗi lần
+   deploy đè file này đều phải sửa lại dòng `$appDir`, hoặc đặt biến môi trường `ZIKA_APP_DIR`.
+   Triệu chứng giống hệt mục 1: 500 thân rỗng.
+
+3. **Đừng copy thư mục `uploads` từ zip.** Trong zip nó chỉ có `.htaccess`, mà trên server
+   `uploads/` đang chứa ảnh giáo trình (hàng chục MB) và toàn bộ file nét chữ.
+
+4. **Dò file bằng mã HTTP 200 là sai.** `.htaccess` gốc có `RewriteCond %{REQUEST_FILENAME} !-f`
+   nên **mọi** đường dẫn không tồn tại đều trả `index.html` kèm mã **200**. Phải xem
+   `content-type`. Thêm nữa service worker cache cả những đường dẫn 404 cũ, nên sau khi đẩy file
+   lên trình duyệt vẫn trả bản cũ — kiểm bằng `?v=<ngẫu nhiên>` và bảo người dùng Ctrl+Shift+R.
+
+Sau khi deploy xong, nếu có đổi nội dung bằng SQL thẳng thì **xoá sạch `<APP_DIR>/storage/cache/content/`**,
+không thì API vẫn trả số đếm cũ.
+
 ### 2. Tạo `config.php`
 
 Chép `app/config.example.php` thành `app/config.php` rồi điền. Ba giá trị bắt buộc:

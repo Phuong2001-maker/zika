@@ -19,6 +19,10 @@ api/app/storage/tmp/
 api/dev-uploads/
 *.log
 
+# Python tự sinh khi chạy script trong data/
+__pycache__/
+*.pyc
+
 # Rác hệ điều hành / editor
 Thumbs.db
 .DS_Store
