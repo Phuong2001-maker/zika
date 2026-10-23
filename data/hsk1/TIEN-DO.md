@@ -241,6 +241,11 @@ Bản trước khi sửa giữ ở `hsk1.truoc-khi-sua.json` và `tach-pdf.truoc
 
 ## Việc còn lại, theo thứ tự nên làm
 
+> **ĐANG LÀM DỞ Ở ĐÂY.** Code cho các việc 1, 2, 5, 6, 7 đã viết xong và đã đo đạt mốc, nhưng
+> **chưa ghép vào `tach-pdf.py`**. Nằm ở [sua-dang-do/](sua-dang-do/) — **đọc
+> [sua-dang-do/DOC-TRUOC.md](sua-dang-do/DOC-TRUOC.md) trước**, trong đó có chỗ đụng tên phải sửa,
+> ba chỗ báo cáo soát sách đã bị đo lại và bác bỏ, và bảy chỗ cần chủ dự án quyết.
+
 Thứ tự do bộ soát đề xuất, đã cân nhắc chỗ nào phải làm trước vì ảnh hưởng chỗ sau.
 
 1. **Sửa `tach_chu_viet()` lấy 会认字** (nhận cả 会认词 của bài 8). Một mốc đổi là trả lại 66 chữ
