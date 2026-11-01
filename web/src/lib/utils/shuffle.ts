@@ -40,6 +40,15 @@ export function shuffledIndexes(n: number, seed: number): number[] {
   return out;
 }
 
+/**
+ * Thứ tự hiện các ô của câu sắp xếp. Server bắt lưu ô theo đúng thứ tự câu, nên hiện nguyên thì
+ * đáp án bày sẵn trước mắt. Seed lấy theo nội dung ô để tải lại trang vẫn như cũ.
+ * Trả chỉ số gốc theo thứ tự hiển thị — đáp án vẫn là chỉ số gốc nên cách chấm không đổi.
+ */
+export function tileOrder(tiles: readonly string[]): number[] {
+  return shuffledIndexes(tiles.length, seedOf(...Array.from(tiles.join('|'), (c) => c.codePointAt(0) ?? 0)));
+}
+
 /** Seed ổn định từ các số (ví dụ id câu + id lượt). */
 export function seedOf(...nums: number[]): number {
   let h = 2166136261;

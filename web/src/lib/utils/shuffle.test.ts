@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { seedOf, shuffle, shuffledIndexes } from './shuffle';
+import { seedOf, shuffle, shuffledIndexes, tileOrder } from './shuffle';
 
 describe('xáo trộn có seed', () => {
   it('cùng seed → cùng thứ tự (tải lại trang vẫn giữ nguyên)', () => {
@@ -18,6 +18,15 @@ describe('xáo trộn có seed', () => {
       }
     }
     expect(shuffledIndexes(1, 5)).toEqual([0]);
+  });
+
+  it('ô chữ lưu đúng thứ tự vẫn hiện bị xáo, cùng câu thì cùng thứ tự', () => {
+    const o = ['我', '是', '越南人'];
+    const p = tileOrder(o);
+    expect(p).not.toEqual([0, 1, 2]);
+    expect([...p].sort()).toEqual([0, 1, 2]);
+    expect(tileOrder(['我', '是', '越南人'])).toEqual(p);
+    expect(tileOrder(['好'])).toEqual([0]);
   });
 
   it('seedOf ổn định', () => {

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { SvelteSet } from 'svelte/reactivity';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
@@ -12,6 +13,7 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import BackLink from '$lib/components/BackLink.svelte';
   import { completePart, lessonByNo, saveProgress } from '$lib/learn/lesson';
+  import { tileOrder } from '$lib/utils/shuffle';
   import { speak } from '$lib/learn/speech';
   import { normZh } from '$lib/utils/grade';
   import type { LessonRef, NextLesson } from '$lib/api/types';
@@ -41,6 +43,8 @@
   let picked = $state<number[]>([]);
   let checked = $state(false);
   let done = $state(false);
+  /** Các điểm ngữ pháp đã mở trong lượt này — xem hết thì tự ghi “xong phần” (không còn nút Xong bài). */
+  const daXem = new SvelteSet<number>();
 
   const points = $derived(data?.points ?? []);
   const g = $derived<Point | null>(points[pi] ?? null);
@@ -57,6 +61,9 @@
       pi = 0;
       resetPractice();
       done = false;
+      daXem.clear();
+      daXem.add(0);
+      xemHet();
       heartbeat.setActivity({ part: 'np', screen: 'do', level: levelId, lessonId: l.id, lessonNo: l.no });
     } catch {
       failed = true;
@@ -75,10 +82,17 @@
     pi = k;
     resetPractice();
     if (data) void saveProgress(data.lesson.id, 'np', k + 1, points.length).catch(() => {});
+    daXem.add(k);
+    xemHet();
+  }
+
+  /** Đã mở đủ mọi điểm của bài thì ghi xong phần Ngữ pháp, để tiến độ bài học không kẹt ở “đang học”. */
+  function xemHet(): void {
+    if (points.length > 0 && daXem.size >= points.length) void finish();
   }
 
   async function finish(): Promise<void> {
-    if (!data) return;
+    if (!data || done) return;
     try {
       await completePart(data.lesson.id, 'np');
       done = true;
@@ -106,7 +120,8 @@
     <Skeleton h="360px" r={20} />
   {:else if g}
     <!-- Chọn điểm ngữ pháp -->
-    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+    <!-- Điện thoại: một hàng cuộn ngang, bài nhiều điểm (7 tab) không đẩy nội dung xuống tận dưới -->
+    <div class:tabs-m={m} style="display: flex; gap: 8px; flex-wrap: wrap">
       {#each points as p, k (p.id)}
         <button type="button" class="btn btn-sm {k === pi ? 'btn-muc' : 'btn-paper'}" onclick={() => goPoint(k)}>
           {k + 1}. <span class="hz" lang="zh">{p.title}</span>
@@ -180,8 +195,8 @@
         </div>
 
         <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center">
-          {#each g.practice.tiles as t, k (k)}
-            <button type="button" class="wt" disabled={checked || picked.includes(k)} onclick={() => (picked = [...picked, k])}>{t}</button>
+          {#each tileOrder(g.practice.tiles) as k (k)}
+            <button type="button" class="wt" disabled={checked || picked.includes(k)} onclick={() => (picked = [...picked, k])}>{g.practice.tiles[k]}</button>
           {/each}
         </div>
 
@@ -228,6 +243,17 @@
 {/if}
 
 <style>
+  .tabs-m {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    margin: 0 -14px;
+    padding: 0 14px 4px;
+    scrollbar-width: none;
+  }
+  .tabs-m > :global(button) {
+    flex: none;
+    white-space: nowrap;
+  }
   .blocks {
     display: flex;
     flex-wrap: wrap;

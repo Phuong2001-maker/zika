@@ -110,7 +110,8 @@
   >
     <span style="display: flex; align-items: baseline; gap: 8px">
       <b class="num" style="font-size: 13px; color: var(--text-3)">Bài {l.no}</b>
-      <b style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{l.title}</b>
+      <!-- Tên bài giáo trình dài ("Số điện thoại của bạn là bao nhiêu?"): cho xuống 2 dòng thay vì cắt cụt -->
+      <b style="flex: 1; min-width: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical">{l.title}</b>
       {#if st.label}<span class={st.cls}>{st.label}</span>{/if}
     </span>
     <span class="muted" style="font-size: 13px">{subOf(l)}</span>

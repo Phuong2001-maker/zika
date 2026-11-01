@@ -123,17 +123,12 @@ chứ không làm hỏng cả mẻ.
 
 ## Việc còn treo
 
-- **Đang làm dở: nạp nội dung 3 quyển giáo trình vào 6 phần học.** Bản đồ "mục sách → phần học"
-  đã chốt. **Mở [data/hsk1/TIEN-DO.md](data/hsk1/TIEN-DO.md) trước** — mục "Việc còn lại" ở cuối
-  liệt kê 18 đầu việc theo đúng thứ tự nên làm. Bản đồ tổng cả 3 quyển ở
-  [data/giao-trinh/TIEN-DO.md](data/giao-trinh/TIEN-DO.md).
-
-  Tình hình 23/10/2026: HSK 1 **đã nạp lên server thật** (15 bài, draft, học viên chưa thấy),
-  nhưng **dữ liệu chưa chuẩn** — bộ tách bóc nhầm bảng 会写字 thay 会认字 nên thiếu 66 chữ ở 14 bài,
-  mất trắng 60 dòng 句式, mất 36/42 điểm ngữ pháp, 23 câu rác từ 练习 lọt vào hội thoại. Phải sửa
-  `data/hsk1/tach-pdf.py` rồi nạp lại trước khi bật cho học viên. Đo bằng `data/hsk1/kiem-tra.py`.
-
-  HSK 2 và HSK 3 là bản **scan**, không có text nào để bóc — để sau.
+- **Giáo trình HSK 1–3 (40 bài) đã nạp đủ 6 phần ở máy local (02/11/2026)** bằng bộ mới
+  [data/nap-sach/](data/nap-sach/README.md): chép từ ảnh trang sách ra `bai/*.json` → `sinh.py` →
+  `nap.py` (gọi API quản trị, giữ đủ lớp kiểm tra) → `doi_chieu.py` + `doi_chieu_sach.py`.
+  Bộ tách cũ `data/hsk1/tach-pdf.py` và hai file TIEN-DO cũ coi như đã thay. Nội dung sách
+  (`bai/`, `ra/`, `anh/`) không đưa lên git. **Web thật chưa nạp bản mới** — HSK 1 trên server
+  vẫn là bản bóc lỗi ngày 23/10.
 
 - **Hai đường nạp nội dung, dùng đường nào cũng được:**
   - **Nhập Excel** (bẫy số 6) — đi qua API nên giữ đủ 3 lớp kiểm tra. Chỉ chạy ở máy local.

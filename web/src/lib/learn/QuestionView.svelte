@@ -1,5 +1,6 @@
 <script lang="ts">
   import Icon from '$lib/components/Icon.svelte';
+  import { tileOrder } from '$lib/utils/shuffle';
   import { speak } from '$lib/learn/speech';
   import { isChoice, PAIR_COLORS, type Answer, type Payload } from '$lib/utils/grade';
 
@@ -48,6 +49,7 @@
 
   /* ---------------- sắp xếp câu ---------------- */
   const tiles = $derived<string[]>(payload.tiles ?? []);
+  const shown = $derived(tileOrder(tiles));
   const picked = $derived<number[]>(Array.isArray(answer) ? (answer as number[]) : []);
 
   function addTile(i: number): void {
@@ -176,8 +178,8 @@
       {/if}
     </div>
     <div class="tiles">
-      {#each tiles as t, i (i)}
-        <button type="button" class="wt" disabled={locked || picked.includes(i)} onclick={() => addTile(i)}>{t}</button>
+      {#each shown as i (i)}
+        <button type="button" class="wt" disabled={locked || picked.includes(i)} onclick={() => addTile(i)}>{tiles[i]}</button>
       {/each}
     </div>
     {#if picked.length > 0 && !locked}
@@ -303,6 +305,8 @@
     border-radius: var(--r);
     font-size: 22px;
     line-height: 1.6;
+    /* Đoạn hội thoại mỗi lượt nói một dòng; dồn liền thì không biết ai nói câu nào */
+    white-space: pre-line;
   }
   .stmt {
     font-size: 24px;

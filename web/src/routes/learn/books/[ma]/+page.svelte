@@ -79,6 +79,12 @@
     }
     trang = dich;
     nhoTrang(q.ma, dich);
+    // Trang sách cao hơn màn hình: đang đọc nửa dưới mà lật thì đưa về đầu trang mới, đọc tiếp từ trên xuống.
+    const tren = khung?.getBoundingClientRect().top ?? 0;
+    if (tren < 0) {
+      const dau = document.querySelector<HTMLElement>('.topbar, .mtop')?.offsetHeight ?? 0;
+      window.scrollTo({ top: window.scrollY + tren - dau - 12, behavior: media.reducedMotion ? 'auto' : 'smooth' });
+    }
   }
 
   function phim(e: KeyboardEvent): void {
