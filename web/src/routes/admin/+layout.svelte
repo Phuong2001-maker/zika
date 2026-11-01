@@ -105,7 +105,10 @@
 
   <div class="foot">
     <span class="ava" style="background: var(--ngoc-soft)">{session.user?.initials ?? ''}</span>
-    <span class="acct"><b>{session.user?.displayName ?? ''}</b></span>
+    <span class="acct">
+      <b>{session.user?.displayName ?? ''}</b>
+      <a href="/learn/flashcards" class="to-learn">Về trang học</a>
+    </span>
     <button type="button" class="btn btn-bare btn-sm" aria-label="Đăng xuất" onclick={logout}>
       <Icon name="logout" size={18} />
     </button>
@@ -237,11 +240,20 @@
     flex: 1;
     min-width: 0;
     font-size: 13px;
+    display: flex;
+    flex-direction: column;
   }
   .acct b {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+  .to-learn {
+    color: var(--text-2);
+    font-size: 12px;
+  }
+  .to-learn:hover {
+    color: var(--text);
   }
 
   /* --------- Điện thoại --------- */

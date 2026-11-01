@@ -63,9 +63,12 @@ Trong Explorer mở `dev\CHAY-TAT-CA.cmd`. Nó tự bật cả 3 phần, mỗi p
 | Vai trò | Email | Mật khẩu |
 |---|---|---|
 | Quản trị | `admin@zika.local` | `Zika@2026` |
+| Biên tập | `bientap@zika.local` | `Zika@2026` |
 | Người học | `hocvien@zika.local` | `Zika@2026` |
 
-- Quản trị vào http://localhost:5173/admin để nhập từ mới, bài tập, kiểm tra…
+- Quản trị vào http://localhost:5173/admin để nhập từ mới, bài tập, kiểm tra…; bấm “Về trang học”
+  ở chân menu để sang phần học.
+- Biên tập vào http://localhost:5173/admin/lessons, chỉ thấy phần soạn bài.
 - Người học vào http://localhost:5173/learn/flashcards
 
 Quên mật khẩu thì đặt lại:

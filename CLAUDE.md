@@ -19,7 +19,8 @@ Cần 3 thứ chạy cùng lúc. Nhanh nhất: bấm đúp `dev\CHAY-TAT-CA.cmd`
 
 Mở http://localhost:5173. Vite proxy `/api`, `/go`, `/uploads` sang 8787.
 
-Tài khoản mẫu: `admin@zika.local` và `hocvien@zika.local`, mật khẩu `Zika@2026`.
+Tài khoản mẫu, mỗi vai trò một: `admin@zika.local`, `bientap@zika.local`, `hocvien@zika.local`,
+mật khẩu `Zika@2026`.
 Quên thì `cd api && php app/tools/install.php --reset-demo-password`.
 
 Email ở máy dev không gửi thật, ghi vào `api/app/storage/logs/mail-*.log`.

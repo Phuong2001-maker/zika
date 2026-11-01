@@ -4,6 +4,7 @@
   import { api, ApiError } from '$lib/api/client';
   import { session } from '$lib/stores/session.svelte';
   import { media } from '$lib/stores/media.svelte';
+  import { canView, homePath } from '$lib/auth/routes';
   import { heartbeat } from '$lib/stores/heartbeat';
   import { toast } from '$lib/stores/toast.svelte';
   import { date, duration } from '$lib/utils/format';
@@ -144,6 +145,10 @@
           <span class="tag">Tham gia {date(user.createdAt)}</span>
         </p>
       </div>
+      <!-- Biên tập / quản trị quay lại khu quản trị (07 §8) -->
+      {#if canView(user.role, '/admin')}
+        <a href={homePath(user.role)} class="btn btn-muc">Vào trang quản trị</a>
+      {/if}
     </section>
 
     <!-- Ba con số -->

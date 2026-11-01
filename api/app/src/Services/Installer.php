@@ -102,17 +102,18 @@ final class Installer
         ]);
     }
 
-    /** Mật khẩu hai tài khoản mẫu ở máy dev — README §"Hai tài khoản mẫu". */
+    /** Mật khẩu ba tài khoản mẫu ở máy dev — README §"Ba tài khoản mẫu". */
     public const DEMO_PASSWORD = 'Zika@2026';
 
     /** @var list<array{email: string, name: string, role: string}> */
     private const DEMO_USERS = [
         ['email' => 'admin@zika.local', 'name' => 'Quan tri vien', 'role' => 'admin'],
+        ['email' => 'bientap@zika.local', 'name' => 'Bien tap vien', 'role' => 'editor'],
         ['email' => 'hocvien@zika.local', 'name' => 'Minh Anh', 'role' => 'learner'],
     ];
 
     /**
-     * Tạo (hoặc đặt lại mật khẩu) hai tài khoản mẫu: một admin, một người học.
+     * Tạo (hoặc đặt lại mật khẩu) ba tài khoản mẫu, mỗi vai trò một: admin, biên tập, người học.
      * Chỉ dùng ở máy dev — mật khẩu nằm ngay trong mã nguồn nên không được chạy trên web thật.
      *
      * @return list<string> email đã xử lý

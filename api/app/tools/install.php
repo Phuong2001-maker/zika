@@ -7,8 +7,8 @@ declare(strict_types=1);
  *   php tools/install.php --migrate  chỉ chạy migration mới (khi cập nhật phiên bản)
  *   php tools/install.php --demo     nạp thêm dữ liệu mẫu (tự bật khi env = local). KHÔNG dùng trên web thật.
  *   php tools/install.php --reset-demo-password
- *                                    tạo / đặt lại hai tài khoản mẫu admin@zika.local và hocvien@zika.local
- *                                    về mật khẩu Zika@2026 (chỉ máy dev; alias: --demo-users)
+ *                                    tạo / đặt lại ba tài khoản mẫu admin@zika.local, bientap@zika.local
+ *                                    và hocvien@zika.local về mật khẩu Zika@2026 (chỉ máy dev; alias: --demo-users)
  * Biến môi trường ZIKA_ADMIN_EMAIL / ZIKA_ADMIN_NAME / ZIKA_ADMIN_PASSWORD để chạy không cần hỏi.
  */
 
@@ -32,10 +32,10 @@ if ($problems !== []) {
     exit(1);
 }
 
-// Chỉ tạo / đặt lại hai tài khoản mẫu — không chạy migration, không nạp lại dữ liệu.
+// Chỉ tạo / đặt lại ba tài khoản mẫu — không chạy migration, không nạp lại dữ liệu.
 if ($demoUsersOnly) {
     if (!Config::isLocal() && !in_array('--force', $args, true)) {
-        fwrite(STDERR, 'Hai tài khoản mẫu chỉ dùng khi env = local (thêm --force nếu thật sự muốn).' . PHP_EOL);
+        fwrite(STDERR, 'Ba tài khoản mẫu chỉ dùng khi env = local (thêm --force nếu thật sự muốn).' . PHP_EOL);
         exit(1);
     }
     $emails = Installer::seedDemoUsers();
@@ -57,7 +57,7 @@ if ($demo) {
     $n = Installer::seedDemo();
     echo "Đã nạp dữ liệu mẫu; tải được dữ liệu nét cho $n chữ.\n";
     $emails = Installer::seedDemoUsers();
-    echo 'Hai tài khoản mẫu (mật khẩu ' . Installer::DEMO_PASSWORD . '): ' . implode(', ', $emails) . PHP_EOL;
+    echo 'Ba tài khoản mẫu (mật khẩu ' . Installer::DEMO_PASSWORD . '): ' . implode(', ', $emails) . PHP_EOL;
 }
 
 if (!Installer::hasAdmin()) {
