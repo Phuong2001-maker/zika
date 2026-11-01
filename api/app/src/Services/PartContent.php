@@ -339,6 +339,7 @@ final class PartContent
             'title' => (string) $d['title'],
             'scene' => (string) $d['scene'],
             'imageUrl' => $d['image_path'] !== null && $d['image_path'] !== '' ? (string) $d['image_path'] : null,
+            'audioUrl' => ($d['audio_path'] ?? null) !== null && $d['audio_path'] !== '' ? (string) $d['audio_path'] : null,
             'speakers' => array_map(static fn (array $s): array => [
                 'id' => (int) $s['id'],
                 'name' => (string) $s['name'],

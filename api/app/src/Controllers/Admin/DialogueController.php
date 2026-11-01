@@ -64,6 +64,12 @@ final class DialogueController
         }
 
         Db::tx(static function () use ($lessonId, $khoi): void {
+            // Trình soạn chưa có ô file nghe nên không gửi audioPath: giữ file cũ theo số bài khoá,
+            // kẻo sửa một câu thoại là mất file nghe đã gắn.
+            $amCu = [];
+            foreach (Db::all('SELECT sort_order, audio_path FROM dialogues WHERE lesson_id = ?', [$lessonId]) as $d) {
+                $amCu[(int) $d['sort_order']] = $d['audio_path'];
+            }
             Db::exec('DELETE FROM dialogues WHERE lesson_id = ?', [$lessonId]);
             foreach ($khoi as $k) {
                 $dlgId = Db::insert('dialogues', [
@@ -72,6 +78,7 @@ final class DialogueController
                     'title' => $k['title'],
                     'scene' => $k['scene'],
                     'image_path' => $k['imagePath'],
+                    'audio_path' => $k['coAudio'] ? $k['audioPath'] : ($amCu[$k['no']] ?? null),
                 ]);
                 $idByKey = [];
                 foreach ($k['speakers'] as $key => $sp) {
@@ -162,6 +169,8 @@ final class DialogueController
             'title' => $title,
             'scene' => mb_substr(trim((string) ($in['scene'] ?? '')), 0, 2000),
             'imagePath' => self::uploadPath($in['imagePath'] ?? null),
+            'coAudio' => array_key_exists('audioPath', $in),
+            'audioPath' => self::uploadPath($in['audioPath'] ?? null),
             'speakers' => $speakers,
             'lines' => $lines,
         ];

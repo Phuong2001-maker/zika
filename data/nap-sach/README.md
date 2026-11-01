@@ -151,3 +151,19 @@ Quy ước thêm:
   án Vở tập viết HSK (`curated.js` soạn tay; `hanzi-1/2.js` tự sinh từ Unicode Unihan, Make Me a
   Hanzi, CVDICT © Phong Phan **CC BY-SA 4.0**, hanviet-pinyin-wordlist © Phong Phan MIT).
 - Câu ví dụ của thẻ từ: lấy câu trong chính bài khoá có chứa từ đó (kèm pinyin, nghĩa sách in).
+
+## File nghe bài khoá (HSK 1, HSK 2)
+
+Dùng đúng bộ mp3 người dùng gửi (`Project/hsk1/`, `Project/hsk2/Bài N/`). HSK 3 chưa có file nghe nên
+**không gắn gì** — trang hội thoại ẩn nút "Nghe" và bấm câu không phát gì, không thay bằng giọng máy.
+
+1. `python nghe_gan.py 1` / `2` — giải mã mp3, nhận dạng giọng nói tiếng Trung của Windows (`nghe_chu.ps1`),
+   chấm trùng chữ với từng phần của bài → `ra/nghe.json`. Lâu (vài phút một bài), nên chạy nền.
+2. `python gan_nghe.py 1` / `2` — tải mp3 lên `/admin/media/audio` rồi gắn vào bài khoá.
+   Gắn theo thứ tự file cố định (HSK 1: bài khoá k = file 2k−1, file chẵn là đọc từ mới;
+   HSK 2: bài khoá k = file k, file 5 là bài tập), chữ nhận dạng được chỉ để kiểm chéo (≥ 0.2).
+   Chỗ máy nghe kém đã xét tay ghi ở `TAY` trong `gan_nghe.py`.
+
+Kết quả ở máy local 02/11/2026: HSK 1 gắn 41/44 bài khoá, HSK 2 40/40. Ba bài khoá còn trống là
+HSK 1 bài 2 khoá 1–3: bộ nghe HSK 1 là bản FLTRP, bài 2 chỉ có 3 đoạn và tên nhân vật khác sách Hanu,
+gắn vào sẽ nghe khác chữ đang đọc. File đọc bảng từ mới chưa gắn (web chỉ có ô nghe cho từng từ).

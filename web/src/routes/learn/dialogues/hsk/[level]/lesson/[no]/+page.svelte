@@ -20,7 +20,7 @@
   interface Speaker { id: number; name: string; avatarChar: string; color: string; roleVi: string }
   interface Line { id: number; speakerId: number; zh: string; highlight: string | null; pinyin: string; vi: string; audioUrl: string | null }
   /** Một bài khoá (课文一, 课文二…): mỗi cảnh có nhân vật và lời thoại riêng. */
-  interface BaiKhoa { id: number; no: number; title: string; scene: string; speakers: Speaker[]; lines: Line[] }
+  interface BaiKhoa { id: number; no: number; title: string; scene: string; audioUrl: string | null; speakers: Speaker[]; lines: Line[] }
   interface Data {
     lesson: LessonRef;
     dialogues: BaiKhoa[];
@@ -71,19 +71,35 @@
   function playLine(ki: number, i: number): void {
     dangDoc = `${ki}:${i}`;
     const line = khoi[ki]?.lines[i];
-    if (line) void speak(line.zh, line.audioUrl);
+    // Chỉ phát bản thu thật; câu không có file thì chỉ đánh dấu đang đọc, không dùng giọng máy
+    if (line?.audioUrl) void speak(line.zh, line.audioUrl);
     if (data) void saveProgress(data.lesson.id, 'ht', viTri(ki, i), tongCau).catch(() => {});
   }
 
-  /** Đọc liền cả một bài khoá, từng câu một. */
-  async function playKhoi(ki: number): Promise<void> {
+  /** File thu âm cả bài khoá đang phát (giáo trình thu nguyên đoạn, không cắt theo câu). */
+  let amThanh: HTMLAudioElement | null = null;
+  let dangPhat = $state<number | null>(null);
+
+  function dungPhat(): void {
+    amThanh?.pause();
+    amThanh = null;
+    dangPhat = null;
+  }
+
+  onMount(() => dungPhat);
+
+  /** Nghe cả một bài khoá bằng file thu âm của giáo trình (bấm lần nữa để dừng). Không có file thì nút ẩn. */
+  function playKhoi(ki: number): void {
     const k = khoi[ki];
-    if (!k) return;
-    for (let i = 0; i < k.lines.length; i++) {
-      dangDoc = `${ki}:${i}`;
-      await speak(k.lines[i].zh, k.lines[i].audioUrl);
-      await new Promise((r) => setTimeout(r, 900));
-    }
+    if (!k?.audioUrl) return;
+    const dangLaKhoiNay = dangPhat === ki;
+    dungPhat();
+    if (dangLaKhoiNay) return;
+    const a = new Audio(k.audioUrl);
+    amThanh = a;
+    dangPhat = ki;
+    a.onended = () => { if (amThanh === a) dungPhat(); };
+    void a.play().catch(() => { if (amThanh === a) dungPhat(); });
   }
 
   async function finish(): Promise<void> {
@@ -148,9 +164,11 @@
               {/if}
             {/if}
           </div>
-          <button type="button" class="btn btn-sm nghe" onclick={() => playKhoi(ki)} aria-label="Nghe bài khoá {ki + 1}">
-            <Icon name="speaker" size={16} /> Nghe
-          </button>
+          {#if k.audioUrl}
+            <button type="button" class="btn btn-sm nghe" onclick={() => playKhoi(ki)} aria-label="{dangPhat === ki ? 'Dừng' : 'Nghe'} bài khoá {ki + 1}">
+              <Icon name="speaker" size={16} /> {dangPhat === ki ? 'Dừng' : 'Nghe'}
+            </button>
+          {/if}
         </div>
 
         <ul style="display: flex; flex-direction: column; gap: 10px">
