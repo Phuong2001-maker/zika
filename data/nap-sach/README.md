@@ -167,3 +167,17 @@ Dùng đúng bộ mp3 người dùng gửi (`Project/hsk1/`, `Project/hsk2/Bài 
 Kết quả ở máy local 02/11/2026: HSK 1 gắn 41/44 bài khoá, HSK 2 40/40. Ba bài khoá còn trống là
 HSK 1 bài 2 khoá 1–3: bộ nghe HSK 1 là bản FLTRP, bài 2 chỉ có 3 đoạn và tên nhân vật khác sách Hanu,
 gắn vào sẽ nghe khác chữ đang đọc. File đọc bảng từ mới chưa gắn (web chỉ có ô nghe cho từng từ).
+
+## Ví dụ lật thẻ, bộ thủ, giọng đọc mẫu
+
+Các bước và lệnh nằm ở bảng "Quy trình nạp và kiểm tra nội dung" trong
+[NHAT-KY-CAP-NHAT.md](../../NHAT-KY-CAP-NHAT.md). Tóm tắt công cụ:
+
+| File | Việc |
+|---|---|
+| `vi-du/hsk*.json` | câu ví dụ lật thẻ tự soạn (2 câu/từ) — `sinh.py` ưu tiên dùng |
+| `kiem_vi_du.py`, `nap_vi_du.py` | kiểm (độ dài theo cấp, chữ ngoài cấp, pinyin) và nạp ví dụ |
+| `phan_tich_chu.py` | bộ thủ, giải thích cấu tạo, chữ cùng bộ cho màn Luyện viết |
+| `viec_doc.py` → `doc_mau.py` → `tai_doc.py` → `gan_thoai.py` | giọng đọc mẫu Kokoro: lập danh sách, sinh mp3 (ép đúng pinyin sách), tải lên, gắn câu thoại + ghép bài khoá |
+| `quet.py` | quét lỗi toàn bộ (âm thanh, nét chữ, bộ thủ, ví dụ) → cuối NHAT-KY-CAP-NHAT.md |
+

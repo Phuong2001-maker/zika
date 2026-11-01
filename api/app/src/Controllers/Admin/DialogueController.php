@@ -70,6 +70,15 @@ final class DialogueController
             foreach (Db::all('SELECT sort_order, audio_path FROM dialogues WHERE lesson_id = ?', [$lessonId]) as $d) {
                 $amCu[(int) $d['sort_order']] = $d['audio_path'];
             }
+            // Câu thoại cũng vậy, giữ theo đúng chữ câu: sửa chữ thì file cũ không còn khớp nên bỏ.
+            $amCau = [];
+            foreach (Db::all(
+                'SELECT dl.zh, dl.audio_path FROM dialogue_lines dl JOIN dialogues d ON d.id = dl.dialogue_id
+                 WHERE d.lesson_id = ? AND dl.audio_path IS NOT NULL',
+                [$lessonId],
+            ) as $c) {
+                $amCau[(string) $c['zh']] = $c['audio_path'];
+            }
             Db::exec('DELETE FROM dialogues WHERE lesson_id = ?', [$lessonId]);
             foreach ($khoi as $k) {
                 $dlgId = Db::insert('dialogues', [
@@ -86,7 +95,10 @@ final class DialogueController
                 }
                 foreach ($k['lines'] as $l) {
                     $key = $l['speakerKey'];
-                    unset($l['speakerKey']);
+                    if (!$l['coAudio']) {
+                        $l['audio_path'] = $amCau[$l['zh']] ?? null;
+                    }
+                    unset($l['speakerKey'], $l['coAudio']);
                     Db::insert('dialogue_lines', ['dialogue_id' => $dlgId, 'speaker_id' => $idByKey[$key]] + $l);
                 }
             }
@@ -160,6 +172,7 @@ final class DialogueController
                 'vi' => mb_substr(trim((string) ($l['vi'] ?? '')), 0, 800),
                 'highlight' => $highlight !== '' ? mb_substr($highlight, 0, 32) : null,
                 'audio_path' => self::uploadPath($l['audioPath'] ?? null),
+                'coAudio' => array_key_exists('audioPath', $l),
                 'sort_order' => $i + 1,
             ];
         }

@@ -148,7 +148,7 @@
           </span>
           <span class="face face-back">
             <span class="num" style="font-size: {m ? 17 : 21}px; font-weight: 600" class:no-tone={!settings.value.toneColors}>
-              {#each toneParts(card.pinyin) as p (p.text + p.tone)}<span class="t{p.tone}">{p.text}</span>{/each}
+              {#each toneParts(card.pinyin) as p, k (k)}<span class="t{p.tone}">{p.text}</span>{/each}
             </span>
             <span class="hz" lang="zh" style="font-size: {m ? 54 : 72}px">{card.hanzi}</span>
             {#if settings.value.showHanViet && card.hanViet}

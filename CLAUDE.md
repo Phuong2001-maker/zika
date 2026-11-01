@@ -35,7 +35,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web 500 file **0 lỗi 0 cảnh báo**, lint sạch, 43/43 test; API 44/44.
+Mốc hiện tại: web 514 file **0 lỗi 0 cảnh báo**, lint sạch, 47/47 test; API 46/46.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -122,6 +122,12 @@ chứ không làm hỏng cả mẻ.
 - Svelte 5 runes (`$state`, `$derived`, `$effect`, `$props`), không dùng cú pháp Svelte 4.
 
 ## Việc còn treo
+
+- **Giọng đọc mẫu Kokoro + ví dụ lật thẻ + bộ thủ + chuông thông báo (02/11/2026)**: xem
+  [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md) — quy trình nạp, lần quét lỗi gần nhất, kịch bản test.
+  `speech.ts` tự tìm file `/uploads/tts/<giọng>/<sha1 câu chữ>.mp3` nên đọc chữ ở đâu cũng có giọng
+  người; thêm nội dung mới thì chạy lại bước 5 trong nhật ký, không thì rơi về giọng trình duyệt.
+  Server thật cần migration 004 + 005 và chép `uploads/tts`, `uploads/audio`, `uploads/hanzi`.
 
 - **Giáo trình HSK 1–3 (40 bài) đã nạp đủ 6 phần ở máy local (02/11/2026)** bằng bộ mới
   [data/nap-sach/](data/nap-sach/README.md): chép từ ảnh trang sách ra `bai/*.json` → `sinh.py` →

@@ -167,7 +167,7 @@
 
 {#snippet pinyinRow(py: string, size: number)}
   <span class="num" style="font-size: {size}px; font-weight: 600" class:no-tone={!settings.value.toneColors}>
-    {#each toneParts(py) as p (p.text + p.tone)}<span class="t{p.tone}">{p.text}</span>{/each}
+    {#each toneParts(py) as p, k (k)}<span class="t{p.tone}">{p.text}</span>{/each}
   </span>
 {/snippet}
 
@@ -175,7 +175,8 @@
   {#if card}
     <!-- Khoá theo chỉ số thẻ: mỗi thẻ là một phần tử mới nên animation “trượt vào” chạy lại từ đầu. -->
     {#key i}
-      <div class="deckwrap the vao" style="height: {m ? 300 : 380}px; --huong: {huong}">
+      <!-- Điện thoại: thẻ cao theo màn hình (máy thấp vẫn còn chỗ cho câu ví dụ bên dưới). -->
+      <div class="deckwrap the vao" style="height: {m ? 'clamp(260px, 42vh, 360px)' : '380px'}; --huong: {huong}">
         <span class="stk stk-a"></span>
         <span class="stk stk-b"></span>
         <!-- Nút nghe nằm ngoài <button> lật (không lồng nút được) nên đặt tuyệt đối đè lên góc thẻ.
@@ -193,7 +194,7 @@
                     style="font-size: {settings.value.cardFront === 'hanzi' ? (m ? 56 : 80) : (m ? 28 : 38)}px; font-weight: 800; line-height: 1.15">
                 {frontText}
               </span>
-              <span class="goi">{m ? '' : 'Bấm để lật'}</span>
+              <span class="goi"><Icon name="repeat" size={14} /> {m ? 'Chạm để lật' : 'Bấm để lật'}</span>
             </span>
             <span class="face face-back">
               {@render pinyinRow(card.pinyin, m ? 18 : 22)}
@@ -224,19 +225,20 @@
   {#if card && flipped && settings.value.showExamples && card.examples.length > 0}
     <section class="block vidu" style="padding: 18px 20px; display: flex; flex-direction: column; gap: 14px">
       <p class="kicker">Câu ví dụ</p>
-      {#each card.examples as ex (ex.zh)}
+      {#each card.examples as ex, k (ex.zh)}
+        {#if k > 0}<hr class="rule" />{/if}
         <div style="display: flex; flex-direction: column; gap: 4px">
           <div style="display: flex; align-items: flex-start; gap: 8px">
-            <span class="hz" lang="zh" style="font-size: 19px; flex: 1">
+            <span class="hz" lang="zh" style="font-size: 20px; line-height: 1.45; flex: 1">
               {#if ex.highlight && ex.zh.includes(ex.highlight)}
                 {@const parts = ex.zh.split(ex.highlight)}
                 {parts[0]}<b class="hl">{ex.highlight}</b>{parts.slice(1).join(ex.highlight)}
               {:else}{ex.zh}{/if}
             </span>
-            <button type="button" class="btn btn-bare btn-sm" aria-label="Nghe câu" onclick={() => speak(ex.zh)}><Icon name="speaker" size={17} /></button>
+            <button type="button" class="loa-cau" aria-label="Nghe câu" onclick={() => speak(ex.zh)}><Icon name="speaker" size={17} /></button>
           </div>
-          {#if ex.pinyin}<span class="muted" style="font-size: 13.5px">{ex.pinyin}</span>{/if}
-          {#if ex.vi}<span style="font-size: 14px">{ex.vi}</span>{/if}
+          {#if ex.pinyin}{@render pinyinRow(ex.pinyin, 13.5)}{/if}
+          {#if ex.vi}<span class="muted" style="font-size: 14px">{ex.vi}</span>{/if}
         </div>
       {/each}
     </section>
@@ -484,6 +486,24 @@
     }
   }
 
+  /* Nút nghe câu ví dụ đủ to cho ngón tay. */
+  .loa-cau {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin: -4px -6px 0 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--text-2);
+    cursor: pointer;
+  }
+  .loa-cau:hover,
+  .loa-cau:active {
+    color: var(--son-text);
+  }
   .goi {
     display: inline-flex;
     align-items: center;

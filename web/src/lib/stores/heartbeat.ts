@@ -3,6 +3,7 @@
 // rời trang hoặc tab ẩn quá 5 phút → sendBeacon /visit/leave.
 import { api, beacon, isPreview } from '$lib/api/client';
 import type { Activity, Announcement } from '$lib/api/types';
+import { notifications } from './notifications.svelte';
 
 const INTERVAL_MS = 120_000;
 const MIN_GAP_MS = 30_000;
@@ -23,12 +24,13 @@ async function send(): Promise<void> {
   left = false;
   try {
     // Chế độ xem trước của admin: không gửi activity học (07 §0).
-    const res = await api.post<{ serverTime: string; announcements?: Announcement[] }>(
+    const res = await api.post<{ serverTime: string; announcements?: Announcement[]; unreadNotifications?: number }>(
       '/visit/ping',
       { activity: isPreview() ? null : activity },
       { quiet: true },
     );
     if (res?.announcements) onAnnouncements?.(res.announcements);
+    if (typeof res?.unreadNotifications === 'number') notifications.dongBo(res.unreadNotifications);
   } catch {
     /* mất mạng: lần sau gửi lại */
   }

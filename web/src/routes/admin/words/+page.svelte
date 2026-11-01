@@ -8,7 +8,6 @@
   import { num } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
   import Select from '$lib/components/Select.svelte';
-  import Bar from '$lib/components/Bar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import ImportModal from '$lib/admin/ImportModal.svelte';
@@ -237,8 +236,8 @@
           </span>
           <span class="tag {l.visible ? 'tag-ok' : ''}">{l.visible ? 'Đang hiện' : 'Đang ẩn'}</span>
         </span>
-        <span class="num" style="font-size: 13px"><b>{num(l.enteredWords)}</b> / {num(l.targetWords)} từ</span>
-        <Bar value={l.enteredWords} total={l.targetWords} />
+        <!-- Chỉ số từ thật: số "mục tiêu" cũ (150, 300…) lệch hẳn giáo trình Hanu nên ra 320/150 gây hiểu nhầm. -->
+        <span class="num" style="font-size: 13px"><b>{num(l.enteredWords)}</b> từ</span>
       </button>
     {/each}
   </div>
@@ -364,7 +363,7 @@
         <b style="font-size: 26px">{meaning || '…'}</b>
       {:else}
         <span class="num" style="font-size: 17px; font-weight: 600">
-          {#each toneParts(pinyin) as p (p.text + p.tone)}<span class="t{p.tone}">{p.text}</span>{/each}
+          {#each toneParts(pinyin) as p, k (k)}<span class="t{p.tone}">{p.text}</span>{/each}
         </span>
         <span class="tian hz" lang="zh" style="width: 72px; height: 72px; font-size: 44px">{hanzi.slice(0, 1) || '字'}</span>
         <span class="muted" style="font-size: 12px; font-weight: 700; text-transform: uppercase">{hanViet}</span>
@@ -456,8 +455,7 @@
           <span class="ib lv{level.id}" style="width: 56px; height: 56px; border-radius: 14px"><span class="bignum" style="font-size: 26px">{level.id}</span></span>
           <div style="flex: 1 1 200px; min-width: 0">
             <h2 class="h2">HSK {level.id}</h2>
-            <p class="muted num" style="font-size: 13.5px">Đã nhập {num(level.enteredWords)} / {num(level.targetWords)} từ</p>
-            <Bar value={level.enteredWords} total={level.targetWords} />
+            <p class="muted num" style="font-size: 13.5px">{num(level.enteredWords)} từ · {level.lessonCount} bài</p>
           </div>
           <label class="sw">
             <input type="checkbox" checked={level.visible} onchange={(e) => toggleVisible(e.currentTarget.checked)} />

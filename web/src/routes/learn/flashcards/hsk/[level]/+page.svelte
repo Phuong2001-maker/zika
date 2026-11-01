@@ -10,6 +10,7 @@
   import { num } from '$lib/utils/format';
   import Topbar from '$lib/components/Topbar.svelte';
   import Switcher from '$lib/components/Switcher.svelte';
+  import NotificationBell from '$lib/components/NotificationBell.svelte';
   import LessonCard from '$lib/components/LessonCard.svelte';
   import Bar from '$lib/components/Bar.svelte';
   import Icon from '$lib/components/Icon.svelte';
@@ -239,7 +240,7 @@
       <a href="/learn/flashcards" class="btn btn-bare" aria-label="Về Bàn học"><Icon name="left" size={22} /></a>
       <span class="lv{level}" style="padding: 4px 10px; border: 1px solid var(--line); border-radius: 10px; font-weight: 800; font-size: 13px">HSK {level}</span>
       <b style="font-size: 15px">Chọn bài</b>
-      <span style="margin-left: auto"><Switcher current="lt" mobile /></span>
+      <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 8px"><NotificationBell size={40} /><Switcher current="lt" mobile /></span>
     </header>
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">
       {#if failed}

@@ -28,6 +28,9 @@
     structure: string;
     strokeDataUrl: string | null;
     word: { hanzi: string; meaning: string } | null;
+    radicalInfo: { no: number; form: string; root: string; name: string; meaning: string } | null;
+    analysis: string;
+    radicalExamples: { hanzi: string; pinyin: string; hanViet: string; meaning: string; word: string | null }[];
   }
   interface Config { startMode: 'demo' | 'trace' | 'free'; grid: 'tian' | 'mi'; passCount: number; hintAfterMisses: number; showAnimation: boolean; highlightRadical: boolean }
   interface Data { lesson: LessonRef; config: Config; chars: Char[]; next: NextLesson | null }
@@ -46,6 +49,17 @@
   const chars = $derived(data?.chars ?? []);
   const c = $derived<Char | null>(chars[ci] ?? null);
   const need = $derived(data?.config.passCount ?? 2);
+
+  // Ô viết trên điện thoại chiếm gần hết bề ngang (chừa lề 16px mỗi bên), tối đa 340px.
+  let rong = $state(375);
+  const oDt = $derived(Math.max(240, Math.min(340, rong - 32)));
+  let dai = $state<HTMLDivElement | null>(null);
+
+  /** Dải chữ trên điện thoại cuộn ngang: đổi chữ thì kéo chữ đang viết vào giữa cho thấy. */
+  $effect(() => {
+    void ci;
+    dai?.querySelector<HTMLElement>('.on')?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+  });
 
   async function load(): Promise<void> {
     failed = false;
@@ -155,8 +169,8 @@
   {:else if data === null}
     <Skeleton h="380px" r={20} />
   {:else if c}
-    <!-- Danh sách chữ -->
-    <div style="display: flex; gap: 6px; flex-wrap: wrap">
+    <!-- Danh sách chữ: điện thoại một dải cuộn ngang để ô viết nằm ngay trong màn hình đầu -->
+    <div bind:this={dai} class={m ? 'w-strip' : ''} style={m ? '' : 'display: flex; gap: 6px; flex-wrap: wrap'}>
       {#each chars as ch, k (ch.id)}
         <button
           type="button"
@@ -172,7 +186,7 @@
     <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
       <!-- Ô viết -->
       <div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 12px; align-items: center">
-        {@render grid(m ? 240 : 300)}
+        {@render grid(m ? oDt : 300)}
 
         <div class="seg">
           <button type="button" class:on={mode === 'demo'} onclick={() => (mode = 'demo')}>Xem mẫu</button>
@@ -214,6 +228,35 @@
         {#if c.word}
           <p style="font-size: 14px">Có trong từ: <b class="hz" lang="zh">{c.word.hanzi}</b> <span class="muted">{c.word.meaning}</span></p>
         {/if}
+
+        {#if c.radicalInfo}
+          <div class="bo-thu">
+            <span class="hz bo-chu" lang="zh">{c.radicalInfo.form}</span>
+            <div style="min-width: 0">
+              <p style="font-size: 14px"><b>Bộ {c.radicalInfo.name}</b>{#if c.radicalInfo.form !== c.radicalInfo.root} <span class="hz" lang="zh">({c.radicalInfo.root})</span>{/if} · <span class="muted">số {c.radicalInfo.no}</span></p>
+              <p class="muted" style="font-size: 13.5px">Nghĩa: {c.radicalInfo.meaning}</p>
+            </div>
+          </div>
+        {/if}
+        {#if c.analysis}
+          <p style="font-size: 14px; line-height: 1.55">{c.analysis}</p>
+        {/if}
+        {#if c.radicalExamples.length > 0 && c.radicalInfo}
+          <div>
+            <p class="muted" style="font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 6px">Chữ khác cùng bộ {c.radicalInfo.form}</p>
+            <div class="cung-bo">
+              {#each c.radicalExamples as e (e.hanzi)}
+                <button type="button" class="cung-o" onclick={() => speak(e.hanzi)} aria-label="Nghe {e.hanzi}">
+                  <span class="hz" lang="zh" style="font-size: 26px; line-height: 1">{e.hanzi}</span>
+                  <span style="min-width: 0; text-align: left">
+                    <b style="font-size: 13px">{e.pinyin}</b>{#if e.hanViet}<span class="muted" style="font-size: 11.5px; margin-left: 5px">{e.hanViet}</span>{/if}
+                    <span class="muted" style="display: block; font-size: 12.5px">{e.meaning}{#if e.word} · <span class="hz" lang="zh">{e.word}</span>{/if}</span>
+                  </span>
+                </button>
+              {/each}
+            </div>
+          </div>
+        {/if}
       </section>
     </div>
 
@@ -232,6 +275,8 @@
     </div>
   {/if}
 {/snippet}
+
+<svelte:window bind:innerWidth={rong} />
 
 {#if media.isMobile}
   <div class="mscreen">
@@ -267,6 +312,61 @@
   .chip.on {
     border-color: var(--son);
     background: var(--son-soft);
+  }
+  .w-strip {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    margin: 0 -16px;
+    padding: 2px 16px 6px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .w-strip::-webkit-scrollbar {
+    display: none;
+  }
+  .w-strip .chip {
+    flex: none;
+    scroll-snap-align: center;
+  }
+  .bo-thu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--r);
+    background: var(--troi);
+  }
+  .bo-chu {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--surface);
+    font-size: 28px;
+    color: var(--blue-text);
+  }
+  .cung-bo {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+  }
+  .cung-o {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .cung-o:hover {
+    border-color: var(--ink-strong);
   }
   .chip.passed {
     background: var(--ngoc-soft);

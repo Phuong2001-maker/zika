@@ -39,4 +39,6 @@ return [
     ['POST',   '/visit/ping', [Me::class, 'ping'], 'L'],
     ['POST',   '/visit/leave', [Me::class, 'leave'], 'L'],
     ['POST',   '/announcements/{id}/{action:seen|dismiss|click}', [Me::class, 'announcement'], 'L'],
+    ['GET',    '/me/notifications', [Me::class, 'notifications'], 'L'],
+    ['POST',   '/me/notifications/read-all', [Me::class, 'readAllNotifications'], 'L'],
 ];

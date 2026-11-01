@@ -17,6 +17,7 @@ return [
     ['GET',  '/admin/dict', [Misc::class, 'dict'], 'E'],
     ['POST', '/admin/media/image', [Misc::class, 'image'], 'E'],
     ['POST', '/admin/media/audio', [Misc::class, 'audio'], 'E'],
+    ['POST', '/admin/media/tts', [Misc::class, 'tts'], 'E'],
 
     // Cấp
     ['GET',   '/admin/levels', [Content::class, 'levels'], 'E'],
@@ -68,6 +69,7 @@ return [
     ['PUT',    '/admin/lessons/{id}/writing/config', [Writing::class, 'config'], 'E'],
     ['PATCH',  '/admin/lesson-chars/{id}', [Writing::class, 'updateLessonChar'], 'E'],
     ['DELETE', '/admin/lesson-chars/{id}', [Writing::class, 'deleteLessonChar'], 'E'],
+    ['PUT',    '/admin/characters/analysis', [Writing::class, 'analysis'], 'E'],
     ['POST',   '/admin/characters/{id}/stroke-data', [Writing::class, 'uploadStroke'], 'E'],
     ['POST',   '/admin/characters/{id}/stroke-data/fetch', [Writing::class, 'fetchStroke'], 'E'],
 

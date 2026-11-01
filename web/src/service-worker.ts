@@ -152,7 +152,11 @@ sw.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Ảnh, âm thanh, dữ liệu nét chữ: đổi rất ít, giữ 60 ngày.
+  // mp3 để trình duyệt tự tải: thẻ <audio> xin từng đoạn (Range), phản hồi 206 không cất được vào
+  // Cache Storage nên cacheFirst trả lỗi và file câm; Safari còn đòi đúng 206 khi tua.
+  if (url.pathname.endsWith('.mp3')) return;
+
+  // Ảnh, dữ liệu nét chữ: đổi rất ít, giữ 60 ngày.
   if (url.pathname.startsWith('/uploads/')) {
     event.respondWith(cacheFirst(req, MEDIA, MEDIA_TTL));
     return;

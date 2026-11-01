@@ -262,6 +262,12 @@ final class PartContent
                 'strokes' => (int) $c['strokes'],
                 'structure' => (string) $c['structure'],
                 'radical' => $c['radical'] !== null && $c['radical'] !== '' ? (string) $c['radical'] : null,
+                'radicalInfo' => Radicals::info(
+                    $c['radical_no'] !== null ? (int) $c['radical_no'] : null,
+                    $c['radical'] !== null ? (string) $c['radical'] : null,
+                ),
+                'analysis' => (string) ($c['analysis'] ?? ''),
+                'radicalExamples' => ContentBuilder::json($c['radical_examples'], []),
                 // Thêm ?v= theo lần sửa gần nhất để trình duyệt không dùng bản nét cũ.
                 'strokeDataUrl' => $c['stroke_data_path'] !== null && $c['stroke_data_path'] !== ''
                     ? (string) $c['stroke_data_path'] . '?v=' . strtotime((string) $c['updated_at'])

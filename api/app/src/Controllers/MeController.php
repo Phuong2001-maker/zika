@@ -157,7 +157,22 @@ final class MeController
         return [
             'serverTime' => Clock::now()->format('Y-m-d\TH:i:s.vP'),
             'announcements' => AnnouncementService::activeFor($r->requireUser()),
+            // Số trên chuông cập nhật theo nhịp ping, admin vừa đăng là học viên thấy trong ~1 phút.
+            'unreadNotifications' => AnnouncementService::inbox($r->requireUser(), 0)['unread'],
         ];
+    }
+
+    /** GET /me/notifications — hộp thư chuông thông báo. */
+    public function notifications(Request $r): array
+    {
+        return AnnouncementService::inbox($r->requireUser());
+    }
+
+    /** POST /me/notifications/read-all */
+    public function readAllNotifications(Request $r): array
+    {
+        AnnouncementService::readAll($r->requireUser());
+        return AnnouncementService::inbox($r->requireUser());
     }
 
     /** POST /visit/leave (sendBeacon, form csrf=…) */

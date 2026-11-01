@@ -12,6 +12,7 @@ import json
 import random
 import re
 import sys
+from functools import lru_cache
 
 from chung import (THU_MUC, cau_tao, chon_bai, chu_han, file_bai, ghi_json, han_viet_chu, han_viet_tu, kho_chu,
                    la_han, nghia_ngan, so_bai, tach_am_tiet)
@@ -112,6 +113,14 @@ def chon_dung(dung: str, nhieu: list[str], rng: random.Random, n: int = 4) -> tu
     return pa, pa.index(dung)
 
 
+@lru_cache(maxsize=None)
+def vi_du_soan(cap: int) -> dict:
+    vd: dict = {}
+    for f in sorted((THU_MUC / "vi-du").glob(f"hsk{cap}*.json")):
+        vd.update(json.loads(f.read_text(encoding="utf-8")))
+    return vd
+
+
 class Bai:
     def __init__(self, d: dict, tu_dien: set[str], tu_cap_truoc: set[str]):
         self.d = d
@@ -126,6 +135,10 @@ class Bai:
 
     # ---------------- Lật thẻ
     def vi_du_cho(self, han: str) -> list[dict]:
+        # Ưu tiên câu soạn riêng cho lật thẻ (vi-du/, ngắn theo cấp, đã qua kiem_vi_du.py).
+        soan = vi_du_soan(self.d["cap"]).get(han)
+        if soan:
+            return [{"zh": v["zh"], "pinyin": v["pinyin"], "vi": v["vi"], "highlight": han} for v in soan]
         ra = []
         nguon = [(c["zh"], c.get("pinyin", ""), c.get("vi", "")) for c in self.cau]
         nguon += [(v["zh"], v.get("pinyin", ""), v.get("vi", "")) for g in self.d["ngu_phap"] for v in g.get("vi_du", [])]

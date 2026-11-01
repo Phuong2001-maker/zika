@@ -1,4 +1,5 @@
 <script lang="ts">
+  import NotificationBell from '$lib/components/NotificationBell.svelte';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { api, ApiError } from '$lib/api/client';
@@ -247,6 +248,7 @@
     <header class="mtop">
       <a href="/learn/flashcards" class="btn btn-bare" aria-label="Về Bàn học"><Icon name="left" size={20} /></a>
       <b style="flex: 1; font-size: 16px">Tài khoản</b>
+      <NotificationBell size={40} />
     </header>
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">{@render body(true)}</main>
   </div>

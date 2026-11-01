@@ -60,6 +60,23 @@ export interface Announcement {
   ctaRoute: string | null;
 }
 
+/** Một dòng trong chuông thông báo (GET /me/notifications). */
+export interface InboxItem {
+  id: number;
+  title: string;
+  body: string;
+  ctaText: string | null;
+  ctaRoute: string | null;
+  at: string;
+  read: boolean;
+}
+
+export interface Inbox {
+  items: InboxItem[];
+  unread: number;
+  total: number;
+}
+
 export interface MeResponse {
   user: User;
   settings: UserSettings;

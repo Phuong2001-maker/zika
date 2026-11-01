@@ -224,6 +224,50 @@ final class WritingController
         return ['ok' => true];
     }
 
+    /**
+     * PUT /admin/characters/analysis — nạp hàng loạt phần phân tích chữ (bộ thủ, cấu tạo, chữ cùng bộ)
+     * sinh từ từ điển chữ. Chữ chưa có trong bảng characters thì bỏ qua: chỉ chữ đã vào bài mới cần.
+     */
+    public function analysis(Request $r): array
+    {
+        $v = new Validator($r->body);
+        $items = $v->arr('items', 'Danh sách chữ');
+        $v->done();
+        if (count($items) > 500) {
+            throw HttpError::validation(['items' => 'Mỗi lượt nhiều nhất 500 chữ.']);
+        }
+
+        $ok = 0;
+        foreach ($items as $it) {
+            if (!is_array($it)) {
+                continue;
+            }
+            $hanzi = trim((string) ($it['hanzi'] ?? ''));
+            $no = (int) ($it['radicalNo'] ?? 0);
+            $vd = array_slice(is_array($it['examples'] ?? null) ? $it['examples'] : [], 0, 6);
+            $vd = array_values(array_filter(array_map(static fn (mixed $e): ?array => is_array($e) && trim((string) ($e['hanzi'] ?? '')) !== '' ? [
+                'hanzi' => mb_substr(trim((string) $e['hanzi']), 0, 2),
+                'pinyin' => mb_substr((string) ($e['pinyin'] ?? ''), 0, 30),
+                'hanViet' => mb_substr((string) ($e['hanViet'] ?? ''), 0, 30),
+                'meaning' => mb_substr((string) ($e['meaning'] ?? ''), 0, 80),
+                'word' => isset($e['word']) && is_string($e['word']) ? mb_substr($e['word'], 0, 12) : null,
+            ] : null, $vd)));
+            $ok += Db::exec(
+                'UPDATE characters SET radical = ?, radical_no = ?, structure = ?, analysis = ?, radical_examples = ? WHERE hanzi = ?',
+                [
+                    mb_substr(trim((string) ($it['radical'] ?? '')), 0, 4) ?: null,
+                    $no >= 1 && $no <= 214 ? $no : null,
+                    mb_substr(trim((string) ($it['structure'] ?? '')), 0, 160),
+                    mb_substr(trim((string) ($it['analysis'] ?? '')), 0, 600),
+                    $vd === [] ? null : json_encode($vd, JSON_UNESCAPED_UNICODE),
+                    $hanzi,
+                ],
+            );
+        }
+        Audit::log($r, 'characters.analysis', 'characters', null, ['count' => count($items)]);
+        return ['updated' => $ok];
+    }
+
     /** DELETE /admin/lesson-chars/{id} */
     public function deleteLessonChar(Request $r): Response
     {

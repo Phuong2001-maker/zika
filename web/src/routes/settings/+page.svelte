@@ -83,7 +83,7 @@
         </span>
       {:else}
         <span class="num" style="font-size: 18px; font-weight: 600" class:no-tone={!draft.toneColors}>
-          {#each toneParts(DEMO.pinyin) as p (p.text + p.tone)}<span class="t{p.tone}">{p.text}</span>{/each}
+          {#each toneParts(DEMO.pinyin) as p, k (k)}<span class="t{p.tone}">{p.text}</span>{/each}
         </span>
         <span class="hz" lang="zh" style="font-size: 48px">{DEMO.hanzi}</span>
         {#if draft.showHanViet}<span class="muted" style="font-size: 12.5px; font-weight: 700">{DEMO.hanViet}</span>{/if}
@@ -103,9 +103,9 @@
     <div class="line">
       {@render row('Giọng đọc')}
       {@render seg(draft.voice, [
-        { v: 'xiaoxiao' as const, label: 'Xiaoxiao · nữ' },
-        { v: 'yunxi' as const, label: 'Yunxi · nam' },
-        { v: 'browser' as const, label: 'Giọng máy' },
+        { v: 'xiaoxiao' as const, label: 'Giọng nữ' },
+        { v: 'yunxi' as const, label: 'Giọng nam' },
+        { v: 'browser' as const, label: 'Giọng trình duyệt' },
       ], (v) => (draft.voice = v))}
     </div>
 

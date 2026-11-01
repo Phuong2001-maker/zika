@@ -1,0 +1,2834 @@
+{
+ "菜单": [
+  {
+   "zh": "服务员，请给我们看一下菜单。",
+   "pinyin": "Fúwùyuán, qǐng gěi wǒmen kàn yíxià càidān.",
+   "vi": "Phục vụ ơi, cho chúng tôi xem thực đơn một chút."
+  },
+  {
+   "zh": "这个饭馆的菜单上有很多菜。",
+   "pinyin": "Zhège fànguǎn de càidān shang yǒu hěn duō cài.",
+   "vi": "Thực đơn của quán này có rất nhiều món."
+  }
+ ],
+ "又": [
+  {
+   "zh": "这个菜又好吃又便宜。",
+   "pinyin": "Zhège cài yòu hǎochī yòu piányi.",
+   "vi": "Món này vừa ngon vừa rẻ."
+  },
+  {
+   "zh": "她的房间又大又漂亮。",
+   "pinyin": "Tā de fángjiān yòu dà yòu piàoliang.",
+   "vi": "Phòng của cô ấy vừa rộng vừa đẹp."
+  }
+ ],
+ "饮料": [
+  {
+   "zh": "你想喝什么饮料？",
+   "pinyin": "Nǐ xiǎng hē shénme yǐnliào?",
+   "vi": "Bạn muốn uống đồ uống gì?"
+  },
+  {
+   "zh": "天气太热了，我去买一些饮料。",
+   "pinyin": "Tiānqì tài rè le, wǒ qù mǎi yìxiē yǐnliào.",
+   "vi": "Trời nóng quá, tôi đi mua ít đồ uống."
+  }
+ ],
+ "请客": [
+  {
+   "zh": "今天我请客，大家多吃点儿！",
+   "pinyin": "Jīntiān wǒ qǐngkè, dàjiā duō chī diǎnr!",
+   "vi": "Hôm nay tôi mời, mọi người ăn nhiều vào nhé!"
+  },
+  {
+   "zh": "上次是你请客，这次我来。",
+   "pinyin": "Shàng cì shì nǐ qǐngkè, zhè cì wǒ lái.",
+   "vi": "Lần trước bạn đã bao rồi, lần này để tôi."
+  }
+ ],
+ "鸡汤": [
+  {
+   "zh": "妈妈做的鸡汤很好喝。",
+   "pinyin": "Māma zuò de jītāng hěn hǎohē.",
+   "vi": "Canh gà mẹ nấu rất ngon."
+  },
+  {
+   "zh": "生病的时候，喝一碗鸡汤吧。",
+   "pinyin": "Shēngbìng de shíhou, hē yì wǎn jītāng ba.",
+   "vi": "Lúc bị ốm thì uống một bát canh gà đi."
+  }
+ ],
+ "饿": [
+  {
+   "zh": "我饿了，咱们去吃饭吧。",
+   "pinyin": "Wǒ è le, zánmen qù chīfàn ba.",
+   "vi": "Tôi đói rồi, chúng ta đi ăn cơm thôi."
+  },
+  {
+   "zh": "孩子一天没吃东西，饿极了。",
+   "pinyin": "Háizi yì tiān méi chī dōngxi, è jí le.",
+   "vi": "Đứa bé cả ngày chưa ăn gì, đói lắm rồi."
+  }
+ ],
+ "渴": [
+  {
+   "zh": "我有点儿渴，想喝水。",
+   "pinyin": "Wǒ yǒudiǎnr kě, xiǎng hē shuǐ.",
+   "vi": "Tôi hơi khát, muốn uống nước."
+  },
+  {
+   "zh": "跑完步以后，他又饿又渴。",
+   "pinyin": "Pǎo wán bù yǐhòu, tā yòu è yòu kě.",
+   "vi": "Chạy bộ xong, anh ấy vừa đói vừa khát."
+  }
+ ],
+ "好久": [
+  {
+   "zh": "好久不见，你最近怎么样？",
+   "pinyin": "Hǎojiǔ bú jiàn, nǐ zuìjìn zěnmeyàng?",
+   "vi": "Lâu lắm không gặp, dạo này bạn thế nào?"
+  },
+  {
+   "zh": "我好久没吃四川菜了。",
+   "pinyin": "Wǒ hǎojiǔ méi chī Sìchuān cài le.",
+   "vi": "Lâu lắm rồi tôi không ăn món Tứ Xuyên."
+  }
+ ],
+ "碗": [
+  {
+   "zh": "我要一碗米饭。",
+   "pinyin": "Wǒ yào yì wǎn mǐfàn.",
+   "vi": "Tôi muốn một bát cơm."
+  },
+  {
+   "zh": "吃完饭以后，我来洗碗。",
+   "pinyin": "Chī wán fàn yǐhòu, wǒ lái xǐ wǎn.",
+   "vi": "Ăn cơm xong, để tôi rửa bát."
+  }
+ ],
+ "鸡": [
+  {
+   "zh": "今天晚上我们吃鸡，好吗？",
+   "pinyin": "Jīntiān wǎnshang wǒmen chī jī, hǎo ma?",
+   "vi": "Tối nay chúng ta ăn gà nhé, được không?"
+  },
+  {
+   "zh": "草地上有几只鸡。",
+   "pinyin": "Cǎodì shang yǒu jǐ zhī jī.",
+   "vi": "Trên bãi cỏ có mấy con gà."
+  }
+ ],
+ "服务员": [
+  {
+   "zh": "服务员，再给我们一碗米饭。",
+   "pinyin": "Fúwùyuán, zài gěi wǒmen yì wǎn mǐfàn.",
+   "vi": "Phục vụ ơi, cho chúng tôi thêm một bát cơm."
+  },
+  {
+   "zh": "这家饭馆的服务员都很热情。",
+   "pinyin": "Zhè jiā fànguǎn de fúwùyuán dōu hěn rèqíng.",
+   "vi": "Nhân viên phục vụ của quán này đều rất nhiệt tình."
+  }
+ ],
+ "服务": [
+  {
+   "zh": "这家酒店服务得很好。",
+   "pinyin": "Zhè jiā jiǔdiàn fúwù de hěn hǎo.",
+   "vi": "Khách sạn này phục vụ rất tốt."
+  },
+  {
+   "zh": "我很高兴为大家服务。",
+   "pinyin": "Wǒ hěn gāoxìng wèi dàjiā fúwù.",
+   "vi": "Tôi rất vui được phục vụ mọi người."
+  }
+ ],
+ "筷子": [
+  {
+   "zh": "你会用筷子吗？",
+   "pinyin": "Nǐ huì yòng kuàizi ma?",
+   "vi": "Bạn có biết dùng đũa không?"
+  },
+  {
+   "zh": "服务员，请再给我一双筷子。",
+   "pinyin": "Fúwùyuán, qǐng zài gěi wǒ yì shuāng kuàizi.",
+   "vi": "Phục vụ ơi, cho tôi thêm một đôi đũa."
+  }
+ ],
+ "勺子": [
+  {
+   "zh": "喝汤的时候要用勺子。",
+   "pinyin": "Hē tāng de shíhou yào yòng sháozi.",
+   "vi": "Khi ăn canh thì phải dùng thìa."
+  },
+  {
+   "zh": "孩子还不会用筷子，给他一个勺子吧。",
+   "pinyin": "Háizi hái bú huì yòng kuàizi, gěi tā yí ge sháozi ba.",
+   "vi": "Đứa bé chưa biết dùng đũa, đưa cho nó một cái thìa đi."
+  }
+ ],
+ "醋": [
+  {
+   "zh": "吃饺子的时候，我喜欢放一点儿醋。",
+   "pinyin": "Chī jiǎozi de shíhou, wǒ xǐhuan fàng yìdiǎnr cù.",
+   "vi": "Khi ăn sủi cảo, tôi thích cho một chút giấm."
+  },
+  {
+   "zh": "这个菜醋放得太多了。",
+   "pinyin": "Zhège cài cù fàng de tài duō le.",
+   "vi": "Món này cho nhiều giấm quá."
+  }
+ ],
+ "尝": [
+  {
+   "zh": "你尝尝这个菜，很好吃。",
+   "pinyin": "Nǐ chángchang zhège cài, hěn hǎochī.",
+   "vi": "Bạn nếm thử món này đi, ngon lắm."
+  },
+  {
+   "zh": "这是我做的蛋糕，你尝一下吧。",
+   "pinyin": "Zhè shì wǒ zuò de dàngāo, nǐ cháng yíxià ba.",
+   "vi": "Đây là bánh tôi làm, bạn nếm thử nhé."
+  }
+ ],
+ "用": [
+  {
+   "zh": "我可以用一下你的手机吗？",
+   "pinyin": "Wǒ kěyǐ yòng yíxià nǐ de shǒujī ma?",
+   "vi": "Tôi có thể dùng điện thoại của bạn một chút không?"
+  },
+  {
+   "zh": "中国人吃饭一般用筷子。",
+   "pinyin": "Zhōngguó rén chīfàn yìbān yòng kuàizi.",
+   "vi": "Người Trung Quốc ăn cơm thường dùng đũa."
+  }
+ ],
+ "点外卖": [
+  {
+   "zh": "今天太累了，我们点外卖吧。",
+   "pinyin": "Jīntiān tài lèi le, wǒmen diǎn wàimài ba.",
+   "vi": "Hôm nay mệt quá, chúng ta đặt đồ ăn trên mạng đi."
+  },
+  {
+   "zh": "他不会做饭，每天都点外卖。",
+   "pinyin": "Tā bú huì zuò fàn, měi tiān dōu diǎn wàimài.",
+   "vi": "Anh ấy không biết nấu ăn, ngày nào cũng đặt đồ ăn trên mạng."
+  }
+ ],
+ "热情": [
+  {
+   "zh": "这里的人对客人很热情。",
+   "pinyin": "Zhèlǐ de rén duì kèrén hěn rèqíng.",
+   "vi": "Người ở đây rất nhiệt tình với khách."
+  },
+  {
+   "zh": "服务员热情地问我们想吃什么。",
+   "pinyin": "Fúwùyuán rèqíng de wèn wǒmen xiǎng chī shénme.",
+   "vi": "Nhân viên phục vụ nhiệt tình hỏi chúng tôi muốn ăn gì."
+  }
+ ],
+ "下单": [
+  {
+   "zh": "我已经在网上下单了。",
+   "pinyin": "Wǒ yǐjīng zài wǎng shang xià dān le.",
+   "vi": "Tôi đã đặt đơn trên mạng rồi."
+  },
+  {
+   "zh": "下单以前，你再看一下菜单。",
+   "pinyin": "Xià dān yǐqián, nǐ zài kàn yíxià càidān.",
+   "vi": "Trước khi đặt đơn, bạn xem lại thực đơn một lần nữa."
+  }
+ ],
+ "记": [
+  {
+   "zh": "你还记得我吗？",
+   "pinyin": "Nǐ hái jìde wǒ ma?",
+   "vi": "Bạn còn nhớ tôi không?"
+  },
+  {
+   "zh": "我记不清楚他叫什么名字了。",
+   "pinyin": "Wǒ jì bù qīngchu tā jiào shénme míngzi le.",
+   "vi": "Tôi không nhớ rõ anh ấy tên là gì nữa."
+  }
+ ],
+ "马上": [
+  {
+   "zh": "等一下，我马上到。",
+   "pinyin": "Děng yíxià, wǒ mǎshàng dào.",
+   "vi": "Đợi một chút, tôi đến ngay."
+  },
+  {
+   "zh": "饭马上好了，你先坐一下。",
+   "pinyin": "Fàn mǎshàng hǎo le, nǐ xiān zuò yíxià.",
+   "vi": "Cơm sắp xong ngay rồi, bạn ngồi một lát đã."
+  }
+ ],
+ "香菜": [
+  {
+   "zh": "我不吃香菜，请不要放。",
+   "pinyin": "Wǒ bù chī xiāngcài, qǐng bú yào fàng.",
+   "vi": "Tôi không ăn rau mùi, xin đừng cho vào."
+  },
+  {
+   "zh": "这碗面里有很多香菜。",
+   "pinyin": "Zhè wǎn miàn li yǒu hěn duō xiāngcài.",
+   "vi": "Bát mì này có rất nhiều rau mùi."
+  }
+ ],
+ "不用": [
+  {
+   "zh": "不用谢，这是我应该做的。",
+   "pinyin": "Búyòng xiè, zhè shì wǒ yīnggāi zuò de.",
+   "vi": "Không cần cảm ơn, đây là việc tôi nên làm."
+  },
+  {
+   "zh": "明天不用上班，我们去玩儿吧。",
+   "pinyin": "Míngtiān búyòng shàngbān, wǒmen qù wánr ba.",
+   "vi": "Ngày mai không cần đi làm, chúng ta đi chơi đi."
+  }
+ ],
+ "方便": [
+  {
+   "zh": "这儿坐地铁很方便。",
+   "pinyin": "Zhèr zuò dìtiě hěn fāngbiàn.",
+   "vi": "Ở đây đi tàu điện ngầm rất tiện."
+  },
+  {
+   "zh": "你明天方便吗？我想去看你。",
+   "pinyin": "Nǐ míngtiān fāngbiàn ma? Wǒ xiǎng qù kàn nǐ.",
+   "vi": "Ngày mai bạn có tiện không? Tôi muốn đến thăm bạn."
+  }
+ ],
+ "备注": [
+  {
+   "zh": "我在备注里写了不要放香菜。",
+   "pinyin": "Wǒ zài bèizhù li xiě le bú yào fàng xiāngcài.",
+   "vi": "Tôi đã ghi trong phần ghi chú là đừng cho rau mùi."
+  },
+  {
+   "zh": "下单的时候别忘了写备注。",
+   "pinyin": "Xià dān de shíhou bié wàng le xiě bèizhù.",
+   "vi": "Khi đặt đơn đừng quên viết ghi chú."
+  }
+ ],
+ "蛋糕": [
+  {
+   "zh": "今天是我的生日，妈妈买了一个大蛋糕。",
+   "pinyin": "Jīntiān shì wǒ de shēngrì, māma mǎi le yí ge dà dàngāo.",
+   "vi": "Hôm nay là sinh nhật tôi, mẹ mua một cái bánh kem to."
+  },
+  {
+   "zh": "这个蛋糕是你自己做的吗？",
+   "pinyin": "Zhège dàngāo shì nǐ zìjǐ zuò de ma?",
+   "vi": "Cái bánh này là bạn tự làm à?"
+  }
+ ],
+ "方便面": [
+  {
+   "zh": "我没时间做饭，只吃了一包方便面。",
+   "pinyin": "Wǒ méi shíjiān zuò fàn, zhǐ chī le yì bāo fāngbiànmiàn.",
+   "vi": "Tôi không có thời gian nấu cơm, chỉ ăn một gói mì."
+  },
+  {
+   "zh": "方便面不健康，别常吃。",
+   "pinyin": "Fāngbiànmiàn bú jiànkāng, bié cháng chī.",
+   "vi": "Mì ăn liền không tốt cho sức khỏe, đừng ăn thường xuyên."
+  }
+ ],
+ "简单": [
+  {
+   "zh": "这个问题很简单。",
+   "pinyin": "Zhège wèntí hěn jiǎndān.",
+   "vi": "Câu hỏi này rất đơn giản."
+  },
+  {
+   "zh": "晚饭我们吃得简单一点儿吧。",
+   "pinyin": "Wǎnfàn wǒmen chī de jiǎndān yìdiǎnr ba.",
+   "vi": "Bữa tối chúng ta ăn đơn giản một chút nhé."
+  }
+ ],
+ "开心": [
+  {
+   "zh": "和朋友在一起的时候，我很开心。",
+   "pinyin": "Hé péngyou zài yìqǐ de shíhou, wǒ hěn kāixīn.",
+   "vi": "Khi ở cùng bạn bè, tôi rất vui."
+  },
+  {
+   "zh": "祝你生日快乐，天天开心！",
+   "pinyin": "Zhù nǐ shēngrì kuàilè, tiāntiān kāixīn!",
+   "vi": "Chúc bạn sinh nhật vui vẻ, ngày nào cũng vui!"
+  }
+ ],
+ "四川烤鱼": [
+  {
+   "zh": "这家饭馆的四川烤鱼很有名。",
+   "pinyin": "Zhè jiā fànguǎn de Sìchuān kǎoyú hěn yǒumíng.",
+   "vi": "Món cá nướng Tứ Xuyên của quán này rất nổi tiếng."
+  },
+  {
+   "zh": "我们点一个四川烤鱼吧。",
+   "pinyin": "Wǒmen diǎn yí ge Sìchuān kǎoyú ba.",
+   "vi": "Chúng ta gọi một món cá nướng Tứ Xuyên đi."
+  }
+ ],
+ "麦克": [
+  {
+   "zh": "麦克是我的同学。",
+   "pinyin": "Màikè shì wǒ de tóngxué.",
+   "vi": "Mike là bạn học của tôi."
+  },
+  {
+   "zh": "麦克很喜欢吃中国菜。",
+   "pinyin": "Màikè hěn xǐhuan chī Zhōngguó cài.",
+   "vi": "Mike rất thích ăn món Trung Quốc."
+  }
+ ],
+ "海南鸡饭": [
+  {
+   "zh": "我最喜欢吃海南鸡饭。",
+   "pinyin": "Wǒ zuì xǐhuan chī Hǎinán jīfàn.",
+   "vi": "Tôi thích ăn cơm gà Hải Nam nhất."
+  },
+  {
+   "zh": "这家店的海南鸡饭又便宜又好吃。",
+   "pinyin": "Zhè jiā diàn de Hǎinán jīfàn yòu piányi yòu hǎochī.",
+   "vi": "Cơm gà Hải Nam của quán này vừa rẻ vừa ngon."
+  }
+ ],
+ "咱们": [
+  {
+   "zh": "咱们一起去吃饭吧。",
+   "pinyin": "Zánmen yìqǐ qù chīfàn ba.",
+   "vi": "Chúng ta cùng đi ăn cơm đi."
+  },
+  {
+   "zh": "咱们班的同学都很喜欢他。",
+   "pinyin": "Zánmen bān de tóngxué dōu hěn xǐhuan tā.",
+   "vi": "Các bạn trong lớp chúng ta đều rất thích cậu ấy."
+  }
+ ],
+ "换": [
+  {
+   "zh": "我想换一个大一点儿的房子。",
+   "pinyin": "Wǒ xiǎng huàn yí ge dà yìdiǎnr de fángzi.",
+   "vi": "Tôi muốn đổi sang một căn nhà rộng hơn một chút."
+  },
+  {
+   "zh": "这件衣服有点儿小，可以换吗？",
+   "pinyin": "Zhè jiàn yīfu yǒudiǎnr xiǎo, kěyǐ huàn ma?",
+   "vi": "Bộ quần áo này hơi chật, có thể đổi không?"
+  }
+ ],
+ "房子": [
+  {
+   "zh": "他们家的房子很大。",
+   "pinyin": "Tāmen jiā de fángzi hěn dà.",
+   "vi": "Nhà của họ rất rộng."
+  },
+  {
+   "zh": "我们打算明年买房子。",
+   "pinyin": "Wǒmen dǎsuàn míngnián mǎi fángzi.",
+   "vi": "Chúng tôi dự định sang năm mua nhà."
+  }
+ ],
+ "套": [
+  {
+   "zh": "他在北京买了一套房子。",
+   "pinyin": "Tā zài Běijīng mǎi le yí tào fángzi.",
+   "vi": "Anh ấy đã mua một căn nhà ở Bắc Kinh."
+  },
+  {
+   "zh": "这套房子又大又便宜。",
+   "pinyin": "Zhè tào fángzi yòu dà yòu piányi.",
+   "vi": "Căn nhà này vừa rộng vừa rẻ."
+  }
+ ],
+ "小区": [
+  {
+   "zh": "我们小区的环境很好。",
+   "pinyin": "Wǒmen xiǎoqū de huánjìng hěn hǎo.",
+   "vi": "Môi trường khu chung cư của chúng tôi rất tốt."
+  },
+  {
+   "zh": "小区里有一个大花园。",
+   "pinyin": "Xiǎoqū li yǒu yí ge dà huāyuán.",
+   "vi": "Trong khu dân cư có một vườn hoa lớn."
+  }
+ ],
+ "环境": [
+  {
+   "zh": "这个小区环境很好，也很安静。",
+   "pinyin": "Zhège xiǎoqū huánjìng hěn hǎo, yě hěn ānjìng.",
+   "vi": "Khu dân cư này môi trường rất tốt, cũng rất yên tĩnh."
+  },
+  {
+   "zh": "新学校的环境怎么样？",
+   "pinyin": "Xīn xuéxiào de huánjìng zěnmeyàng?",
+   "vi": "Môi trường ở trường mới thế nào?"
+  }
+ ],
+ "挺": [
+  {
+   "zh": "这个房子挺好的，我很喜欢。",
+   "pinyin": "Zhège fángzi tǐng hǎo de, wǒ hěn xǐhuan.",
+   "vi": "Căn nhà này khá là tốt, tôi rất thích."
+  },
+  {
+   "zh": "今天天气挺冷的，多穿点儿衣服。",
+   "pinyin": "Jīntiān tiānqì tǐng lěng de, duō chuān diǎnr yīfu.",
+   "vi": "Hôm nay trời khá lạnh, mặc thêm áo vào."
+  }
+ ],
+ "空调": [
+  {
+   "zh": "太热了，把空调打开吧。",
+   "pinyin": "Tài rè le, bǎ kōngtiáo dǎkāi ba.",
+   "vi": "Nóng quá, bật điều hòa lên đi."
+  },
+  {
+   "zh": "天气热的时候，我每天都开空调。",
+   "pinyin": "Tiānqì rè de shíhou, wǒ měi tiān dōu kāi kōngtiáo.",
+   "vi": "Lúc trời nóng, ngày nào tôi cũng bật điều hòa."
+  }
+ ],
+ "洗衣机": [
+  {
+   "zh": "新房子里有洗衣机吗？",
+   "pinyin": "Xīn fángzi li yǒu xǐyījī ma?",
+   "vi": "Trong nhà mới có máy giặt không?"
+  },
+  {
+   "zh": "我把衣服放进洗衣机里了。",
+   "pinyin": "Wǒ bǎ yīfu fàng jìn xǐyījī li le.",
+   "vi": "Tôi đã cho quần áo vào máy giặt rồi."
+  }
+ ],
+ "层": [
+  {
+   "zh": "我家住在十八层。",
+   "pinyin": "Wǒ jiā zhù zài shíbā céng.",
+   "vi": "Nhà tôi ở tầng mười tám."
+  },
+  {
+   "zh": "这个小区的房子都不高，只有五层。",
+   "pinyin": "Zhège xiǎoqū de fángzi dōu bù gāo, zhǐ yǒu wǔ céng.",
+   "vi": "Nhà trong khu này đều không cao, chỉ có năm tầng."
+  }
+ ],
+ "花园": [
+  {
+   "zh": "我们家后面有一个小花园。",
+   "pinyin": "Wǒmen jiā hòumiàn yǒu yí ge xiǎo huāyuán.",
+   "vi": "Phía sau nhà chúng tôi có một vườn hoa nhỏ."
+  },
+  {
+   "zh": "早上很多老人在花园里运动。",
+   "pinyin": "Zǎoshang hěn duō lǎorén zài huāyuán li yùndòng.",
+   "vi": "Buổi sáng có nhiều người già tập thể dục trong vườn hoa."
+  }
+ ],
+ "灯": [
+  {
+   "zh": "房间里太黑了，开一下灯吧。",
+   "pinyin": "Fángjiān li tài hēi le, kāi yíxià dēng ba.",
+   "vi": "Trong phòng tối quá, bật đèn lên đi."
+  },
+  {
+   "zh": "这个灯太旧了，我们换一个新的吧。",
+   "pinyin": "Zhège dēng tài jiù le, wǒmen huàn yí ge xīn de ba.",
+   "vi": "Cái đèn này cũ quá rồi, chúng ta thay cái mới đi."
+  }
+ ],
+ "关": [
+  {
+   "zh": "出门以前，别忘了关灯。",
+   "pinyin": "Chū mén yǐqián, bié wàng le guān dēng.",
+   "vi": "Trước khi ra ngoài, đừng quên tắt đèn."
+  },
+  {
+   "zh": "外面很冷，请把门关上。",
+   "pinyin": "Wàimiàn hěn lěng, qǐng bǎ mén guānshang.",
+   "vi": "Bên ngoài rất lạnh, làm ơn đóng cửa lại."
+  }
+ ],
+ "卫生间": [
+  {
+   "zh": "请问，卫生间在哪儿？",
+   "pinyin": "Qǐngwèn, wèishēngjiān zài nǎr?",
+   "vi": "Xin hỏi, nhà vệ sinh ở đâu?"
+  },
+  {
+   "zh": "这套房子的卫生间很大。",
+   "pinyin": "Zhè tào fángzi de wèishēngjiān hěn dà.",
+   "vi": "Nhà vệ sinh của căn hộ này rất rộng."
+  }
+ ],
+ "打扫": [
+  {
+   "zh": "星期天我要打扫房间。",
+   "pinyin": "Xīngqītiān wǒ yào dǎsǎo fángjiān.",
+   "vi": "Chủ nhật tôi phải dọn dẹp phòng."
+  },
+  {
+   "zh": "卫生间我已经打扫好了。",
+   "pinyin": "Wèishēngjiān wǒ yǐjīng dǎsǎo hǎo le.",
+   "vi": "Nhà vệ sinh tôi đã dọn xong rồi."
+  }
+ ],
+ "搬家": [
+  {
+   "zh": "我们下个月搬家。",
+   "pinyin": "Wǒmen xià ge yuè bānjiā.",
+   "vi": "Tháng sau chúng tôi chuyển nhà."
+  },
+  {
+   "zh": "搬家很累，你需要帮忙吗？",
+   "pinyin": "Bānjiā hěn lèi, nǐ xūyào bāngmáng ma?",
+   "vi": "Chuyển nhà mệt lắm, bạn có cần giúp không?"
+  }
+ ],
+ "搬": [
+  {
+   "zh": "你能帮我把这个箱子搬下去吗？",
+   "pinyin": "Nǐ néng bāng wǒ bǎ zhège xiāngzi bān xiàqu ma?",
+   "vi": "Bạn có thể giúp tôi bê cái thùng này xuống không?"
+  },
+  {
+   "zh": "他上个月搬到新小区了。",
+   "pinyin": "Tā shàng ge yuè bān dào xīn xiǎoqū le.",
+   "vi": "Tháng trước anh ấy đã chuyển đến khu dân cư mới."
+  }
+ ],
+ "冰箱": [
+  {
+   "zh": "冰箱里还有牛奶吗？",
+   "pinyin": "Bīngxiāng li hái yǒu niúnǎi ma?",
+   "vi": "Trong tủ lạnh còn sữa không?"
+  },
+  {
+   "zh": "把西瓜放进冰箱里吧。",
+   "pinyin": "Bǎ xīguā fàng jìn bīngxiāng li ba.",
+   "vi": "Cho dưa hấu vào tủ lạnh đi."
+  }
+ ],
+ "初中": [
+  {
+   "zh": "我弟弟今年上初中了。",
+   "pinyin": "Wǒ dìdi jīnnián shàng chūzhōng le.",
+   "vi": "Em trai tôi năm nay lên trung học cơ sở rồi."
+  },
+  {
+   "zh": "我们是初中同学。",
+   "pinyin": "Wǒmen shì chūzhōng tóngxué.",
+   "vi": "Chúng tôi là bạn học cấp hai."
+  }
+ ],
+ "对面": [
+  {
+   "zh": "银行在超市对面。",
+   "pinyin": "Yínháng zài chāoshì duìmiàn.",
+   "vi": "Ngân hàng ở đối diện siêu thị."
+  },
+  {
+   "zh": "我家对面有一个大公园。",
+   "pinyin": "Wǒ jiā duìmiàn yǒu yí ge dà gōngyuán.",
+   "vi": "Đối diện nhà tôi có một công viên lớn."
+  }
+ ],
+ "办": [
+  {
+   "zh": "我想办一张信用卡。",
+   "pinyin": "Wǒ xiǎng bàn yì zhāng xìnyòngkǎ.",
+   "vi": "Tôi muốn làm một chiếc thẻ tín dụng."
+  },
+  {
+   "zh": "办这个卡需要多长时间？",
+   "pinyin": "Bàn zhège kǎ xūyào duō cháng shíjiān?",
+   "vi": "Làm thẻ này cần bao lâu?"
+  }
+ ],
+ "信用卡": [
+  {
+   "zh": "在这儿可以用信用卡吗？",
+   "pinyin": "Zài zhèr kěyǐ yòng xìnyòngkǎ ma?",
+   "vi": "Ở đây có thể dùng thẻ tín dụng không?"
+  },
+  {
+   "zh": "我的信用卡找不到了。",
+   "pinyin": "Wǒ de xìnyòngkǎ zhǎo bú dào le.",
+   "vi": "Tôi không tìm thấy thẻ tín dụng của mình nữa."
+  }
+ ],
+ "还": [
+  {
+   "zh": "我明天还你钱。",
+   "pinyin": "Wǒ míngtiān huán nǐ qián.",
+   "vi": "Ngày mai tôi trả tiền cho bạn."
+  },
+  {
+   "zh": "这本书我看完了，下次还给你。",
+   "pinyin": "Zhè běn shū wǒ kàn wán le, xià cì huán gěi nǐ.",
+   "vi": "Cuốn sách này tôi đọc xong rồi, lần sau trả lại bạn."
+  }
+ ],
+ "听说": [
+  {
+   "zh": "听说你要搬家了？",
+   "pinyin": "Tīngshuō nǐ yào bānjiā le?",
+   "vi": "Nghe nói bạn sắp chuyển nhà à?"
+  },
+  {
+   "zh": "我听说那个小区的环境很好。",
+   "pinyin": "Wǒ tīngshuō nàge xiǎoqū de huánjìng hěn hǎo.",
+   "vi": "Tôi nghe nói môi trường ở khu dân cư đó rất tốt."
+  }
+ ],
+ "银行": [
+  {
+   "zh": "我要去银行换钱。",
+   "pinyin": "Wǒ yào qù yínháng huàn qián.",
+   "vi": "Tôi phải đến ngân hàng đổi tiền."
+  },
+  {
+   "zh": "银行下午五点关门。",
+   "pinyin": "Yínháng xiàwǔ wǔ diǎn guān mén.",
+   "vi": "Ngân hàng đóng cửa lúc năm giờ chiều."
+  }
+ ],
+ "才": [
+  {
+   "zh": "他十点才起床。",
+   "pinyin": "Tā shí diǎn cái qǐchuáng.",
+   "vi": "Mười giờ anh ấy mới dậy."
+  },
+  {
+   "zh": "我等了一个小时，他才来。",
+   "pinyin": "Wǒ děng le yí ge xiǎoshí, tā cái lái.",
+   "vi": "Tôi đợi một tiếng đồng hồ anh ấy mới đến."
+  }
+ ],
+ "纸": [
+  {
+   "zh": "请给我一张纸。",
+   "pinyin": "Qǐng gěi wǒ yì zhāng zhǐ.",
+   "vi": "Làm ơn đưa tôi một tờ giấy."
+  },
+  {
+   "zh": "他把我的名字写在纸上了。",
+   "pinyin": "Tā bǎ wǒ de míngzi xiě zài zhǐ shang le.",
+   "vi": "Anh ấy đã viết tên tôi lên giấy."
+  }
+ ],
+ "纸箱": [
+  {
+   "zh": "搬家需要很多纸箱。",
+   "pinyin": "Bānjiā xūyào hěn duō zhǐxiāng.",
+   "vi": "Chuyển nhà cần rất nhiều thùng giấy."
+  },
+  {
+   "zh": "我把书都放进纸箱里了。",
+   "pinyin": "Wǒ bǎ shū dōu fàng jìn zhǐxiāng li le.",
+   "vi": "Tôi đã cho hết sách vào thùng giấy rồi."
+  }
+ ],
+ "需要": [
+  {
+   "zh": "你需要什么帮助吗？",
+   "pinyin": "Nǐ xūyào shénme bāngzhù ma?",
+   "vi": "Bạn có cần giúp gì không?"
+  },
+  {
+   "zh": "我需要一个大一点儿的冰箱。",
+   "pinyin": "Wǒ xūyào yí ge dà yìdiǎnr de bīngxiāng.",
+   "vi": "Tôi cần một cái tủ lạnh to hơn một chút."
+  }
+ ],
+ "暑假": [
+  {
+   "zh": "暑假你打算去哪儿玩儿？",
+   "pinyin": "Shǔjià nǐ dǎsuàn qù nǎr wánr?",
+   "vi": "Kỳ nghỉ hè bạn định đi đâu chơi?"
+  },
+  {
+   "zh": "今年暑假我去了海边。",
+   "pinyin": "Jīnnián shǔjià wǒ qù le hǎibiān.",
+   "vi": "Kỳ nghỉ hè năm nay tôi đã đi biển."
+  }
+ ],
+ "以前": [
+  {
+   "zh": "以前我不喜欢吃鱼，现在很喜欢。",
+   "pinyin": "Yǐqián wǒ bù xǐhuan chī yú, xiànzài hěn xǐhuan.",
+   "vi": "Trước đây tôi không thích ăn cá, bây giờ lại rất thích."
+  },
+  {
+   "zh": "吃饭以前要洗手。",
+   "pinyin": "Chīfàn yǐqián yào xǐ shǒu.",
+   "vi": "Trước khi ăn cơm phải rửa tay."
+  }
+ ],
+ "太阳": [
+  {
+   "zh": "今天太阳很大，天气很热。",
+   "pinyin": "Jīntiān tàiyáng hěn dà, tiānqì hěn rè.",
+   "vi": "Hôm nay nắng to, trời rất nóng."
+  },
+  {
+   "zh": "太阳出来了，我们去公园吧。",
+   "pinyin": "Tàiyáng chūlai le, wǒmen qù gōngyuán ba.",
+   "vi": "Mặt trời lên rồi, chúng ta đi công viên đi."
+  }
+ ],
+ "热": [
+  {
+   "zh": "北京的夏天很热。",
+   "pinyin": "Běijīng de xiàtiān hěn rè.",
+   "vi": "Mùa hè ở Bắc Kinh rất nóng."
+  },
+  {
+   "zh": "天气越来越热了。",
+   "pinyin": "Tiānqì yuè lái yuè rè le.",
+   "vi": "Thời tiết ngày càng nóng."
+  }
+ ],
+ "天气": [
+  {
+   "zh": "明天天气怎么样？",
+   "pinyin": "Míngtiān tiānqì zěnmeyàng?",
+   "vi": "Thời tiết ngày mai thế nào?"
+  },
+  {
+   "zh": "天气好的时候，我们常去爬山。",
+   "pinyin": "Tiānqì hǎo de shíhou, wǒmen cháng qù páshān.",
+   "vi": "Khi thời tiết đẹp, chúng tôi thường đi leo núi."
+  }
+ ],
+ "一样": [
+  {
+   "zh": "我和姐姐一样高。",
+   "pinyin": "Wǒ hé jiějie yíyàng gāo.",
+   "vi": "Tôi và chị gái cao bằng nhau."
+  },
+  {
+   "zh": "我的手机和你的一样。",
+   "pinyin": "Wǒ de shǒujī hé nǐ de yíyàng.",
+   "vi": "Điện thoại của tôi giống của bạn."
+  }
+ ],
+ "团": [
+  {
+   "zh": "这次我们参加了一个旅游团。",
+   "pinyin": "Zhè cì wǒmen cānjiā le yí ge lǚyóu tuán.",
+   "vi": "Lần này chúng tôi tham gia một đoàn du lịch."
+  },
+  {
+   "zh": "旅游团明天早上八点出发。",
+   "pinyin": "Lǚyóu tuán míngtiān zǎoshang bā diǎn chūfā.",
+   "vi": "Đoàn du lịch xuất phát lúc tám giờ sáng mai."
+  }
+ ],
+ "当": [
+  {
+   "zh": "我以后想当老师。",
+   "pinyin": "Wǒ yǐhòu xiǎng dāng lǎoshī.",
+   "vi": "Sau này tôi muốn làm giáo viên."
+  },
+  {
+   "zh": "他在旅游团当翻译。",
+   "pinyin": "Tā zài lǚyóu tuán dāng fānyì.",
+   "vi": "Anh ấy làm phiên dịch trong đoàn du lịch."
+  }
+ ],
+ "翻译": [
+  {
+   "zh": "我姐姐是汉语翻译。",
+   "pinyin": "Wǒ jiějie shì Hànyǔ fānyì.",
+   "vi": "Chị tôi là phiên dịch viên tiếng Trung."
+  },
+  {
+   "zh": "你能帮我翻译一下这句话吗？",
+   "pinyin": "Nǐ néng bāng wǒ fānyì yíxià zhè jù huà ma?",
+   "vi": "Bạn có thể giúp tôi dịch câu này không?"
+  }
+ ],
+ "羡慕": [
+  {
+   "zh": "你能去中国旅游，我真羡慕你！",
+   "pinyin": "Nǐ néng qù Zhōngguó lǚyóu, wǒ zhēn xiànmù nǐ!",
+   "vi": "Bạn được đi du lịch Trung Quốc, tôi thật ngưỡng mộ bạn!"
+  },
+  {
+   "zh": "大家都很羡慕他的汉语水平。",
+   "pinyin": "Dàjiā dōu hěn xiànmù tā de Hànyǔ shuǐpíng.",
+   "vi": "Mọi người đều rất hâm mộ trình độ tiếng Trung của anh ấy."
+  }
+ ],
+ "景点": [
+  {
+   "zh": "北京有很多有名的景点。",
+   "pinyin": "Běijīng yǒu hěn duō yǒumíng de jǐngdiǎn.",
+   "vi": "Bắc Kinh có rất nhiều điểm du lịch nổi tiếng."
+  },
+  {
+   "zh": "这个景点人太多了。",
+   "pinyin": "Zhège jǐngdiǎn rén tài duō le.",
+   "vi": "Điểm du lịch này đông người quá."
+  }
+ ],
+ "地方": [
+  {
+   "zh": "这个地方的风景很漂亮。",
+   "pinyin": "Zhège dìfang de fēngjǐng hěn piàoliang.",
+   "vi": "Phong cảnh ở nơi này rất đẹp."
+  },
+  {
+   "zh": "你住在什么地方？",
+   "pinyin": "Nǐ zhù zài shénme dìfang?",
+   "vi": "Bạn sống ở chỗ nào?"
+  }
+ ],
+ "一般": [
+  {
+   "zh": "我一般八点起床。",
+   "pinyin": "Wǒ yìbān bā diǎn qǐchuáng.",
+   "vi": "Tôi thường dậy lúc tám giờ."
+  },
+  {
+   "zh": "星期天他一般在家休息。",
+   "pinyin": "Xīngqītiān tā yìbān zài jiā xiūxi.",
+   "vi": "Chủ nhật anh ấy thường nghỉ ở nhà."
+  }
+ ],
+ "地铁": [
+  {
+   "zh": "我每天坐地铁去上班。",
+   "pinyin": "Wǒ měi tiān zuò dìtiě qù shàngbān.",
+   "vi": "Ngày nào tôi cũng đi tàu điện ngầm đi làm."
+  },
+  {
+   "zh": "坐地铁比坐出租车便宜。",
+   "pinyin": "Zuò dìtiě bǐ zuò chūzūchē piányi.",
+   "vi": "Đi tàu điện ngầm rẻ hơn đi taxi."
+  }
+ ],
+ "除了": [
+  {
+   "zh": "除了北京，我还去过上海。",
+   "pinyin": "Chúle Běijīng, wǒ hái qù guo Shànghǎi.",
+   "vi": "Ngoài Bắc Kinh ra, tôi còn đến Thượng Hải rồi."
+  },
+  {
+   "zh": "除了小王以外，大家都来了。",
+   "pinyin": "Chúle Xiǎo Wáng yǐwài, dàjiā dōu lái le.",
+   "vi": "Ngoài Tiểu Vương ra, mọi người đều đến rồi."
+  }
+ ],
+ "以外": [
+  {
+   "zh": "除了游泳以外，我还喜欢跑步。",
+   "pinyin": "Chúle yóuyǒng yǐwài, wǒ hái xǐhuan pǎobù.",
+   "vi": "Ngoài bơi lội ra, tôi còn thích chạy bộ."
+  },
+  {
+   "zh": "除了他以外，别人都不知道这件事。",
+   "pinyin": "Chúle tā yǐwài, biérén dōu bù zhīdào zhè jiàn shì.",
+   "vi": "Ngoài anh ấy ra, người khác đều không biết chuyện này."
+  }
+ ],
+ "城市": [
+  {
+   "zh": "上海是一个很大的城市。",
+   "pinyin": "Shànghǎi shì yí ge hěn dà de chéngshì.",
+   "vi": "Thượng Hải là một thành phố rất lớn."
+  },
+  {
+   "zh": "你最喜欢中国的哪个城市？",
+   "pinyin": "Nǐ zuì xǐhuan Zhōngguó de nǎge chéngshì?",
+   "vi": "Bạn thích thành phố nào của Trung Quốc nhất?"
+  }
+ ],
+ "风景": [
+  {
+   "zh": "这里的风景真漂亮！",
+   "pinyin": "Zhèlǐ de fēngjǐng zhēn piàoliang!",
+   "vi": "Phong cảnh ở đây đẹp thật!"
+  },
+  {
+   "zh": "我们一边看风景，一边照相。",
+   "pinyin": "Wǒmen yìbiān kàn fēngjǐng, yìbiān zhàoxiàng.",
+   "vi": "Chúng tôi vừa ngắm cảnh vừa chụp ảnh."
+  }
+ ],
+ "好玩儿": [
+  {
+   "zh": "北京有很多好玩儿的地方。",
+   "pinyin": "Běijīng yǒu hěn duō hǎowánr de dìfang.",
+   "vi": "Bắc Kinh có rất nhiều nơi vui chơi thú vị."
+  },
+  {
+   "zh": "在草原上骑马真好玩儿！",
+   "pinyin": "Zài cǎoyuán shang qí mǎ zhēn hǎowánr!",
+   "vi": "Cưỡi ngựa trên thảo nguyên thật là vui!"
+  }
+ ],
+ "无聊": [
+  {
+   "zh": "一个人在家太无聊了。",
+   "pinyin": "Yí ge rén zài jiā tài wúliáo le.",
+   "vi": "Ở nhà một mình chán quá."
+  },
+  {
+   "zh": "这个电影很无聊，我不想看了。",
+   "pinyin": "Zhège diànyǐng hěn wúliáo, wǒ bù xiǎng kàn le.",
+   "vi": "Bộ phim này rất nhàm chán, tôi không muốn xem nữa."
+  }
+ ],
+ "草原": [
+  {
+   "zh": "我想去草原骑马。",
+   "pinyin": "Wǒ xiǎng qù cǎoyuán qí mǎ.",
+   "vi": "Tôi muốn đến thảo nguyên cưỡi ngựa."
+  },
+  {
+   "zh": "草原上有很多牛和羊。",
+   "pinyin": "Cǎoyuán shang yǒu hěn duō niú hé yáng.",
+   "vi": "Trên thảo nguyên có rất nhiều bò và cừu."
+  }
+ ],
+ "海边": [
+  {
+   "zh": "夏天我们常去海边游泳。",
+   "pinyin": "Xiàtiān wǒmen cháng qù hǎibiān yóuyǒng.",
+   "vi": "Mùa hè chúng tôi thường ra biển bơi."
+  },
+  {
+   "zh": "他家在海边，风景很好。",
+   "pinyin": "Tā jiā zài hǎibiān, fēngjǐng hěn hǎo.",
+   "vi": "Nhà anh ấy ở bờ biển, phong cảnh rất đẹp."
+  }
+ ],
+ "羊": [
+  {
+   "zh": "草地上有很多羊。",
+   "pinyin": "Cǎodì shang yǒu hěn duō yáng.",
+   "vi": "Trên bãi cỏ có rất nhiều cừu."
+  },
+  {
+   "zh": "你吃过羊肉吗？",
+   "pinyin": "Nǐ chī guo yángròu ma?",
+   "vi": "Bạn đã ăn thịt cừu bao giờ chưa?"
+  }
+ ],
+ "牛": [
+  {
+   "zh": "草原上的牛和羊都很多。",
+   "pinyin": "Cǎoyuán shang de niú hé yáng dōu hěn duō.",
+   "vi": "Trên thảo nguyên bò và cừu đều rất nhiều."
+  },
+  {
+   "zh": "你喜欢吃牛肉吗？",
+   "pinyin": "Nǐ xǐhuan chī niúròu ma?",
+   "vi": "Bạn có thích ăn thịt bò không?"
+  }
+ ],
+ "骑": [
+  {
+   "zh": "我每天骑自行车上学。",
+   "pinyin": "Wǒ měi tiān qí zìxíngchē shàngxué.",
+   "vi": "Ngày nào tôi cũng đạp xe đi học."
+  },
+  {
+   "zh": "你骑过马吗？",
+   "pinyin": "Nǐ qí guo mǎ ma?",
+   "vi": "Bạn đã từng cưỡi ngựa chưa?"
+  }
+ ],
+ "海鲜": [
+  {
+   "zh": "海边的海鲜又新鲜又便宜。",
+   "pinyin": "Hǎibiān de hǎixiān yòu xīnxiān yòu piányi.",
+   "vi": "Hải sản ở biển vừa tươi vừa rẻ."
+  },
+  {
+   "zh": "我不能吃海鲜。",
+   "pinyin": "Wǒ bù néng chī hǎixiān.",
+   "vi": "Tôi không ăn được hải sản."
+  }
+ ],
+ "假期": [
+  {
+   "zh": "假期你有什么打算？",
+   "pinyin": "Jiàqī nǐ yǒu shénme dǎsuàn?",
+   "vi": "Kỳ nghỉ bạn có dự định gì?"
+  },
+  {
+   "zh": "这个假期我想在家好好休息。",
+   "pinyin": "Zhège jiàqī wǒ xiǎng zài jiā hǎohǎo xiūxi.",
+   "vi": "Kỳ nghỉ này tôi muốn ở nhà nghỉ ngơi cho thật tốt."
+  }
+ ],
+ "机票": [
+  {
+   "zh": "我已经买好去北京的机票了。",
+   "pinyin": "Wǒ yǐjīng mǎi hǎo qù Běijīng de jīpiào le.",
+   "vi": "Tôi đã mua xong vé máy bay đi Bắc Kinh rồi."
+  },
+  {
+   "zh": "假期的机票很贵。",
+   "pinyin": "Jiàqī de jīpiào hěn guì.",
+   "vi": "Vé máy bay vào kỳ nghỉ rất đắt."
+  }
+ ],
+ "酒店": [
+  {
+   "zh": "我们住的酒店在海边。",
+   "pinyin": "Wǒmen zhù de jiǔdiàn zài hǎibiān.",
+   "vi": "Khách sạn chúng tôi ở nằm cạnh biển."
+  },
+  {
+   "zh": "你订酒店了吗？",
+   "pinyin": "Nǐ dìng jiǔdiàn le ma?",
+   "vi": "Bạn đặt khách sạn chưa?"
+  }
+ ],
+ "接送": [
+  {
+   "zh": "酒店有车接送客人。",
+   "pinyin": "Jiǔdiàn yǒu chē jiēsòng kèrén.",
+   "vi": "Khách sạn có xe đưa đón khách."
+  },
+  {
+   "zh": "每天爸爸开车接送我上学。",
+   "pinyin": "Měi tiān bàba kāichē jiēsòng wǒ shàngxué.",
+   "vi": "Hằng ngày bố lái xe đưa đón tôi đi học."
+  }
+ ],
+ "订": [
+  {
+   "zh": "我在网上订了一个房间。",
+   "pinyin": "Wǒ zài wǎng shang dìng le yí ge fángjiān.",
+   "vi": "Tôi đã đặt một phòng trên mạng."
+  },
+  {
+   "zh": "你帮我订一张去上海的机票吧。",
+   "pinyin": "Nǐ bāng wǒ dìng yì zhāng qù Shànghǎi de jīpiào ba.",
+   "vi": "Bạn đặt giúp tôi một vé máy bay đi Thượng Hải nhé."
+  }
+ ],
+ "舒服": [
+  {
+   "zh": "这个沙发很舒服。",
+   "pinyin": "Zhège shāfā hěn shūfu.",
+   "vi": "Chiếc ghế sofa này rất thoải mái."
+  },
+  {
+   "zh": "我今天有点儿不舒服，不想去上班。",
+   "pinyin": "Wǒ jīntiān yǒudiǎnr bù shūfu, bù xiǎng qù shàngbān.",
+   "vi": "Hôm nay tôi hơi khó chịu trong người, không muốn đi làm."
+  }
+ ],
+ "极了": [
+  {
+   "zh": "这里的风景漂亮极了！",
+   "pinyin": "Zhèlǐ de fēngjǐng piàoliang jí le!",
+   "vi": "Phong cảnh ở đây đẹp cực kỳ!"
+  },
+  {
+   "zh": "听说你要来，我高兴极了。",
+   "pinyin": "Tīngshuō nǐ yào lái, wǒ gāoxìng jí le.",
+   "vi": "Nghe nói bạn sắp đến, tôi vui vô cùng."
+  }
+ ],
+ "体验": [
+  {
+   "zh": "我想去草原体验一下骑马。",
+   "pinyin": "Wǒ xiǎng qù cǎoyuán tǐyàn yíxià qí mǎ.",
+   "vi": "Tôi muốn đến thảo nguyên trải nghiệm cưỡi ngựa."
+  },
+  {
+   "zh": "这次旅游我体验了很多新东西。",
+   "pinyin": "Zhè cì lǚyóu wǒ tǐyàn le hěn duō xīn dōngxi.",
+   "vi": "Chuyến du lịch này tôi đã trải nghiệm nhiều điều mới."
+  }
+ ],
+ "特别": [
+  {
+   "zh": "这个城市特别漂亮。",
+   "pinyin": "Zhège chéngshì tèbié piàoliang.",
+   "vi": "Thành phố này vô cùng đẹp."
+  },
+  {
+   "zh": "今天是一个特别的日子。",
+   "pinyin": "Jīntiān shì yí ge tèbié de rìzi.",
+   "vi": "Hôm nay là một ngày đặc biệt."
+  }
+ ],
+ "颐和园": [
+  {
+   "zh": "颐和园是北京有名的景点。",
+   "pinyin": "Yíhéyuán shì Běijīng yǒumíng de jǐngdiǎn.",
+   "vi": "Di Hòa Viên là điểm du lịch nổi tiếng của Bắc Kinh."
+  },
+  {
+   "zh": "我们明天去颐和园玩儿吧。",
+   "pinyin": "Wǒmen míngtiān qù Yíhéyuán wánr ba.",
+   "vi": "Ngày mai chúng ta đi Di Hòa Viên chơi nhé."
+  }
+ ],
+ "天坛": [
+  {
+   "zh": "天坛在北京的南边。",
+   "pinyin": "Tiāntán zài Běijīng de nánbian.",
+   "vi": "Thiên Đàn nằm ở phía nam Bắc Kinh."
+  },
+  {
+   "zh": "你去过天坛吗？",
+   "pinyin": "Nǐ qù guo Tiāntán ma?",
+   "vi": "Bạn đã đến Thiên Đàn chưa?"
+  }
+ ],
+ "胡同": [
+  {
+   "zh": "北京有很多老胡同。",
+   "pinyin": "Běijīng yǒu hěn duō lǎo hútòng.",
+   "vi": "Bắc Kinh có rất nhiều ngõ nhỏ cổ."
+  },
+  {
+   "zh": "我们一边在胡同里走，一边照相。",
+   "pinyin": "Wǒmen yìbiān zài hútòng li zǒu, yìbiān zhàoxiàng.",
+   "vi": "Chúng tôi vừa đi dạo trong ngõ nhỏ vừa chụp ảnh."
+  }
+ ],
+ "上海": [
+  {
+   "zh": "上海是中国很大的城市。",
+   "pinyin": "Shànghǎi shì Zhōngguó hěn dà de chéngshì.",
+   "vi": "Thượng Hải là một thành phố rất lớn của Trung Quốc."
+  },
+  {
+   "zh": "我坐高铁去上海。",
+   "pinyin": "Wǒ zuò gāotiě qù Shànghǎi.",
+   "vi": "Tôi đi tàu cao tốc đến Thượng Hải."
+  }
+ ],
+ "南京": [
+  {
+   "zh": "我的大学在南京。",
+   "pinyin": "Wǒ de dàxué zài Nánjīng.",
+   "vi": "Trường đại học của tôi ở Nam Kinh."
+  },
+  {
+   "zh": "你去过南京吗？那里怎么样？",
+   "pinyin": "Nǐ qù guo Nánjīng ma? Nàlǐ zěnmeyàng?",
+   "vi": "Bạn đã đến Nam Kinh chưa? Ở đó thế nào?"
+  }
+ ],
+ "迪士尼乐园": [
+  {
+   "zh": "孩子们都想去迪士尼乐园。",
+   "pinyin": "Háizimen dōu xiǎng qù Díshìní lèyuán.",
+   "vi": "Bọn trẻ đều muốn đi công viên Disneyland."
+  },
+  {
+   "zh": "上海迪士尼乐园特别好玩儿。",
+   "pinyin": "Shànghǎi Díshìní lèyuán tèbié hǎowánr.",
+   "vi": "Công viên Disneyland Thượng Hải vô cùng thú vị."
+  }
+ ],
+ "新疆": [
+  {
+   "zh": "新疆有很大的草原。",
+   "pinyin": "Xīnjiāng yǒu hěn dà de cǎoyuán.",
+   "vi": "Tân Cương có những thảo nguyên rất rộng lớn."
+  },
+  {
+   "zh": "暑假我想去新疆旅游。",
+   "pinyin": "Shǔjià wǒ xiǎng qù Xīnjiāng lǚyóu.",
+   "vi": "Kỳ nghỉ hè tôi muốn đi du lịch Tân Cương."
+  }
+ ],
+ "终于": [
+  {
+   "zh": "等了一个小时，车终于来了。",
+   "pinyin": "Děng le yí ge xiǎoshí, chē zhōngyú lái le.",
+   "vi": "Đợi một tiếng đồng hồ, cuối cùng xe cũng đến."
+  },
+  {
+   "zh": "我们终于爬到山上了。",
+   "pinyin": "Wǒmen zhōngyú pá dào shān shang le.",
+   "vi": "Cuối cùng chúng tôi cũng leo lên đến đỉnh núi."
+  }
+ ],
+ "爬": [
+  {
+   "zh": "我们一起去爬长城吧。",
+   "pinyin": "Wǒmen yìqǐ qù pá Chángchéng ba.",
+   "vi": "Chúng ta cùng đi leo Vạn Lý Trường Thành nhé."
+  },
+  {
+   "zh": "孩子爬到树上去了。",
+   "pinyin": "Háizi pá dào shù shang qu le.",
+   "vi": "Đứa bé trèo lên cây rồi."
+  }
+ ],
+ "山": [
+  {
+   "zh": "那个山很高，很多人去爬。",
+   "pinyin": "Nàge shān hěn gāo, hěn duō rén qù pá.",
+   "vi": "Ngọn núi đó rất cao, nhiều người đến leo."
+  },
+  {
+   "zh": "山上的风景特别漂亮。",
+   "pinyin": "Shān shang de fēngjǐng tèbié piàoliang.",
+   "vi": "Phong cảnh trên núi vô cùng đẹp."
+  }
+ ],
+ "锻炼": [
+  {
+   "zh": "我每天早上锻炼身体。",
+   "pinyin": "Wǒ měi tiān zǎoshang duànliàn shēntǐ.",
+   "vi": "Sáng nào tôi cũng tập thể dục."
+  },
+  {
+   "zh": "多锻炼对身体好。",
+   "pinyin": "Duō duànliàn duì shēntǐ hǎo.",
+   "vi": "Tập thể dục nhiều tốt cho sức khỏe."
+  }
+ ],
+ "照": [
+  {
+   "zh": "我给你照一张相吧。",
+   "pinyin": "Wǒ gěi nǐ zhào yì zhāng xiàng ba.",
+   "vi": "Để tôi chụp cho bạn một tấm ảnh nhé."
+  },
+  {
+   "zh": "这里风景很好，帮我照一下吧。",
+   "pinyin": "Zhèlǐ fēngjǐng hěn hǎo, bāng wǒ zhào yíxià ba.",
+   "vi": "Phong cảnh ở đây đẹp quá, chụp giúp tôi một tấm nhé."
+  }
+ ],
+ "鞋": [
+  {
+   "zh": "爬山要穿舒服的鞋。",
+   "pinyin": "Páshān yào chuān shūfu de xié.",
+   "vi": "Leo núi phải đi giày thoải mái."
+  },
+  {
+   "zh": "这双鞋多少钱？",
+   "pinyin": "Zhè shuāng xié duōshao qián?",
+   "vi": "Đôi giày này bao nhiêu tiền?"
+  }
+ ],
+ "大衣": [
+  {
+   "zh": "外面很冷，穿上大衣吧。",
+   "pinyin": "Wàimiàn hěn lěng, chuān shang dàyī ba.",
+   "vi": "Bên ngoài rất lạnh, mặc áo khoác vào đi."
+  },
+  {
+   "zh": "这件大衣是我妈妈买的。",
+   "pinyin": "Zhè jiàn dàyī shì wǒ māma mǎi de.",
+   "vi": "Chiếc áo khoác này là mẹ tôi mua."
+  }
+ ],
+ "总是": [
+  {
+   "zh": "他总是迟到。",
+   "pinyin": "Tā zǒngshì chídào.",
+   "vi": "Anh ấy lúc nào cũng đến muộn."
+  },
+  {
+   "zh": "妈妈总是说我穿得太少。",
+   "pinyin": "Māma zǒngshì shuō wǒ chuān de tài shǎo.",
+   "vi": "Mẹ lúc nào cũng nói tôi mặc ít quá."
+  }
+ ],
+ "拍照": [
+  {
+   "zh": "他很喜欢拍照。",
+   "pinyin": "Tā hěn xǐhuan pāizhào.",
+   "vi": "Anh ấy rất thích chụp ảnh."
+  },
+  {
+   "zh": "这里不能拍照。",
+   "pinyin": "Zhèlǐ bù néng pāizhào.",
+   "vi": "Ở đây không được chụp ảnh."
+  }
+ ],
+ "感兴趣": [
+  {
+   "zh": "我对中国文化很感兴趣。",
+   "pinyin": "Wǒ duì Zhōngguó wénhuà hěn gǎn xìngqù.",
+   "vi": "Tôi rất hứng thú với văn hóa Trung Quốc."
+  },
+  {
+   "zh": "你对什么运动感兴趣？",
+   "pinyin": "Nǐ duì shénme yùndòng gǎn xìngqù?",
+   "vi": "Bạn thích môn thể thao nào?"
+  }
+ ],
+ "照相": [
+  {
+   "zh": "我们在这儿照相吧。",
+   "pinyin": "Wǒmen zài zhèr zhàoxiàng ba.",
+   "vi": "Chúng ta chụp ảnh ở đây đi."
+  },
+  {
+   "zh": "他照相照得很好。",
+   "pinyin": "Tā zhàoxiàng zhào de hěn hǎo.",
+   "vi": "Anh ấy chụp ảnh rất đẹp."
+  }
+ ],
+ "难看": [
+  {
+   "zh": "这件衣服太难看了。",
+   "pinyin": "Zhè jiàn yīfu tài nánkàn le.",
+   "vi": "Bộ quần áo này xấu quá."
+  },
+  {
+   "zh": "我觉得这双鞋有点儿难看。",
+   "pinyin": "Wǒ juéde zhè shuāng xié yǒudiǎnr nánkàn.",
+   "vi": "Tôi thấy đôi giày này hơi xấu."
+  }
+ ],
+ "比较": [
+  {
+   "zh": "今天比较冷，多穿点儿衣服。",
+   "pinyin": "Jīntiān bǐjiào lěng, duō chuān diǎnr yīfu.",
+   "vi": "Hôm nay khá lạnh, mặc thêm áo vào."
+  },
+  {
+   "zh": "我比较喜欢喝茶。",
+   "pinyin": "Wǒ bǐjiào xǐhuan hē chá.",
+   "vi": "Tôi khá thích uống trà."
+  }
+ ],
+ "水平": [
+  {
+   "zh": "他的汉语水平很高。",
+   "pinyin": "Tā de Hànyǔ shuǐpíng hěn gāo.",
+   "vi": "Trình độ tiếng Trung của anh ấy rất cao."
+  },
+  {
+   "zh": "我照相的水平越来越高了。",
+   "pinyin": "Wǒ zhàoxiàng de shuǐpíng yuè lái yuè gāo le.",
+   "vi": "Trình độ chụp ảnh của tôi ngày càng cao."
+  }
+ ],
+ "难过": [
+  {
+   "zh": "听到这个消息，他很难过。",
+   "pinyin": "Tīng dào zhège xiāoxi, tā hěn nánguò.",
+   "vi": "Nghe tin này, anh ấy rất buồn."
+  },
+  {
+   "zh": "别难过了，下次还有机会。",
+   "pinyin": "Bié nánguò le, xià cì hái yǒu jīhuì.",
+   "vi": "Đừng buồn nữa, lần sau vẫn còn cơ hội."
+  }
+ ],
+ "树": [
+  {
+   "zh": "山上有很多树。",
+   "pinyin": "Shān shang yǒu hěn duō shù.",
+   "vi": "Trên núi có rất nhiều cây."
+  },
+  {
+   "zh": "我们在大树下面休息一下吧。",
+   "pinyin": "Wǒmen zài dà shù xiàmiàn xiūxi yíxià ba.",
+   "vi": "Chúng ta nghỉ một lát dưới gốc cây to đi."
+  }
+ ],
+ "干": [
+  {
+   "zh": "你在干什么呢？",
+   "pinyin": "Nǐ zài gàn shénme ne?",
+   "vi": "Bạn đang làm gì thế?"
+  },
+  {
+   "zh": "星期天你想干什么？",
+   "pinyin": "Xīngqītiān nǐ xiǎng gàn shénme?",
+   "vi": "Chủ nhật bạn muốn làm gì?"
+  }
+ ],
+ "电": [
+  {
+   "zh": "我的手机没电了。",
+   "pinyin": "Wǒ de shǒujī méi diàn le.",
+   "vi": "Điện thoại của tôi hết pin rồi."
+  },
+  {
+   "zh": "相机还有电吗？",
+   "pinyin": "Xiàngjī hái yǒu diàn ma?",
+   "vi": "Máy ảnh còn pin không?"
+  }
+ ],
+ "镜头": [
+  {
+   "zh": "这个相机的镜头很好。",
+   "pinyin": "Zhège xiàngjī de jìngtóu hěn hǎo.",
+   "vi": "Ống kính của chiếc máy ảnh này rất tốt."
+  },
+  {
+   "zh": "他对着镜头笑了笑。",
+   "pinyin": "Tā duìzhe jìngtóu xiào le xiào.",
+   "vi": "Anh ấy mỉm cười trước ống kính."
+  }
+ ],
+ "收到": [
+  {
+   "zh": "你收到我的邮件了吗？",
+   "pinyin": "Nǐ shōudào wǒ de yóujiàn le ma?",
+   "vi": "Bạn nhận được email của tôi chưa?"
+  },
+  {
+   "zh": "我收到了朋友送的生日礼物。",
+   "pinyin": "Wǒ shōudào le péngyou sòng de shēngrì lǐwù.",
+   "vi": "Tôi đã nhận được quà sinh nhật bạn tặng."
+  }
+ ],
+ "封": [
+  {
+   "zh": "我昨天给老师写了一封邮件。",
+   "pinyin": "Wǒ zuótiān gěi lǎoshī xiě le yì fēng yóujiàn.",
+   "vi": "Hôm qua tôi đã viết một email cho thầy giáo."
+  },
+  {
+   "zh": "我今天收到了好几封邮件。",
+   "pinyin": "Wǒ jīntiān shōudào le hǎo jǐ fēng yóujiàn.",
+   "vi": "Hôm nay tôi nhận được mấy email liền."
+  }
+ ],
+ "邮件": [
+  {
+   "zh": "我每天早上看一下邮件。",
+   "pinyin": "Wǒ měi tiān zǎoshang kàn yíxià yóujiàn.",
+   "vi": "Sáng nào tôi cũng xem email một chút."
+  },
+  {
+   "zh": "他还没回我的邮件。",
+   "pinyin": "Tā hái méi huí wǒ de yóujiàn.",
+   "vi": "Anh ấy vẫn chưa trả lời email của tôi."
+  }
+ ],
+ "哈哈": [
+  {
+   "zh": "哈哈，你说的话太好玩儿了！",
+   "pinyin": "Hāhā, nǐ shuō de huà tài hǎowánr le!",
+   "vi": "Ha ha, bạn nói buồn cười quá!"
+  },
+  {
+   "zh": "哈哈，我终于赢了！",
+   "pinyin": "Hāhā, wǒ zhōngyú yíng le!",
+   "vi": "Ha ha, cuối cùng tôi cũng thắng rồi!"
+  }
+ ],
+ "结束": [
+  {
+   "zh": "考试结束了，我们去玩儿吧。",
+   "pinyin": "Kǎoshì jiéshù le, wǒmen qù wánr ba.",
+   "vi": "Thi xong rồi, chúng ta đi chơi đi."
+  },
+  {
+   "zh": "会议几点结束？",
+   "pinyin": "Huìyì jǐ diǎn jiéshù?",
+   "vi": "Cuộc họp mấy giờ kết thúc?"
+  }
+ ],
+ "音乐会": [
+  {
+   "zh": "明天晚上我们去听音乐会吧。",
+   "pinyin": "Míngtiān wǎnshang wǒmen qù tīng yīnyuèhuì ba.",
+   "vi": "Tối mai chúng ta đi nghe hòa nhạc nhé."
+  },
+  {
+   "zh": "音乐会八点结束。",
+   "pinyin": "Yīnyuèhuì bā diǎn jiéshù.",
+   "vi": "Buổi hòa nhạc kết thúc lúc tám giờ."
+  }
+ ],
+ "该": [
+  {
+   "zh": "已经十一点了，我该睡觉了。",
+   "pinyin": "Yǐjīng shíyī diǎn le, wǒ gāi shuìjiào le.",
+   "vi": "Đã mười một giờ rồi, tôi nên đi ngủ thôi."
+  },
+  {
+   "zh": "你病了，该去医院看看。",
+   "pinyin": "Nǐ bìng le, gāi qù yīyuàn kànkan.",
+   "vi": "Bạn bị ốm rồi, nên đến bệnh viện khám đi."
+  }
+ ],
+ "打算": [
+  {
+   "zh": "放假以后你打算干什么？",
+   "pinyin": "Fàngjià yǐhòu nǐ dǎsuàn gàn shénme?",
+   "vi": "Được nghỉ rồi bạn định làm gì?"
+  },
+  {
+   "zh": "我打算明年去中国学汉语。",
+   "pinyin": "Wǒ dǎsuàn míngnián qù Zhōngguó xué Hànyǔ.",
+   "vi": "Tôi dự định sang năm đến Trung Quốc học tiếng Trung."
+  }
+ ],
+ "高铁": [
+  {
+   "zh": "坐高铁去上海很快。",
+   "pinyin": "Zuò gāotiě qù Shànghǎi hěn kuài.",
+   "vi": "Đi tàu cao tốc đến Thượng Hải rất nhanh."
+  },
+  {
+   "zh": "我买了明天早上的高铁票。",
+   "pinyin": "Wǒ mǎi le míngtiān zǎoshang de gāotiě piào.",
+   "vi": "Tôi đã mua vé tàu cao tốc sáng mai."
+  }
+ ],
+ "行": [
+  {
+   "zh": "你帮我买一张票，行吗？",
+   "pinyin": "Nǐ bāng wǒ mǎi yì zhāng piào, xíng ma?",
+   "vi": "Bạn mua giúp tôi một vé, được không?"
+  },
+  {
+   "zh": "他做饭真行！",
+   "pinyin": "Tā zuò fàn zhēn xíng!",
+   "vi": "Anh ấy nấu ăn giỏi thật!"
+  }
+ ],
+ "路口": [
+  {
+   "zh": "到了前面的路口往左走。",
+   "pinyin": "Dào le qiánmiàn de lùkǒu wǎng zuǒ zǒu.",
+   "vi": "Đến ngã tư phía trước thì rẽ trái."
+  },
+  {
+   "zh": "我在路口等你。",
+   "pinyin": "Wǒ zài lùkǒu děng nǐ.",
+   "vi": "Tôi đợi bạn ở ngã tư."
+  }
+ ],
+ "小心": [
+  {
+   "zh": "外面下雪了，开车要小心。",
+   "pinyin": "Wàimiàn xià xuě le, kāichē yào xiǎoxīn.",
+   "vi": "Bên ngoài có tuyết rồi, lái xe phải cẩn thận."
+  },
+  {
+   "zh": "小心！前面有车。",
+   "pinyin": "Xiǎoxīn! Qiánmiàn yǒu chē.",
+   "vi": "Cẩn thận! Phía trước có xe."
+  }
+ ],
+ "红绿灯": [
+  {
+   "zh": "过了红绿灯往右走。",
+   "pinyin": "Guò le hónglǜdēng wǎng yòu zǒu.",
+   "vi": "Qua đèn giao thông thì rẽ phải."
+  },
+  {
+   "zh": "过马路的时候要看红绿灯。",
+   "pinyin": "Guò mǎlù de shíhou yào kàn hónglǜdēng.",
+   "vi": "Khi qua đường phải nhìn đèn giao thông."
+  }
+ ],
+ "如果": [
+  {
+   "zh": "如果明天下雨，我们不去爬山了。",
+   "pinyin": "Rúguǒ míngtiān xià yǔ, wǒmen bú qù páshān le.",
+   "vi": "Nếu ngày mai trời mưa, chúng ta sẽ không đi leo núi nữa."
+  },
+  {
+   "zh": "如果你有时间，我们一起去吃饭吧。",
+   "pinyin": "Rúguǒ nǐ yǒu shíjiān, wǒmen yìqǐ qù chīfàn ba.",
+   "vi": "Nếu bạn có thời gian, chúng ta cùng đi ăn cơm nhé."
+  }
+ ],
+ "迟到": [
+  {
+   "zh": "对不起，我迟到了。",
+   "pinyin": "Duìbuqǐ, wǒ chídào le.",
+   "vi": "Xin lỗi, tôi đến muộn."
+  },
+  {
+   "zh": "快点儿走，不然要迟到了。",
+   "pinyin": "Kuài diǎnr zǒu, bùrán yào chídào le.",
+   "vi": "Đi nhanh lên, nếu không sẽ bị muộn đấy."
+  }
+ ],
+ "急": [
+  {
+   "zh": "别急，时间还早呢。",
+   "pinyin": "Bié jí, shíjiān hái zǎo ne.",
+   "vi": "Đừng vội, vẫn còn sớm mà."
+  },
+  {
+   "zh": "他有急事，先走了。",
+   "pinyin": "Tā yǒu jí shì, xiān zǒu le.",
+   "vi": "Anh ấy có việc gấp nên đi trước rồi."
+  }
+ ],
+ "后来": [
+  {
+   "zh": "他以前住在北京，后来去了上海。",
+   "pinyin": "Tā yǐqián zhù zài Běijīng, hòulái qù le Shànghǎi.",
+   "vi": "Trước đây anh ấy sống ở Bắc Kinh, sau đó chuyển đến Thượng Hải."
+  },
+  {
+   "zh": "我们见过一次面，后来再也没见过。",
+   "pinyin": "Wǒmen jiàn guo yí cì miàn, hòulái zài yě méi jiàn guo.",
+   "vi": "Chúng tôi từng gặp nhau một lần, sau đó không bao giờ gặp lại nữa."
+  }
+ ],
+ "越": [
+  {
+   "zh": "雨越下越大。",
+   "pinyin": "Yǔ yuè xià yuè dà.",
+   "vi": "Mưa càng lúc càng to."
+  },
+  {
+   "zh": "汉语我越学越喜欢。",
+   "pinyin": "Hànyǔ wǒ yuè xué yuè xǐhuan.",
+   "vi": "Tiếng Trung tôi càng học càng thích."
+  }
+ ],
+ "检票": [
+  {
+   "zh": "火车马上要检票了。",
+   "pinyin": "Huǒchē mǎshàng yào jiǎnpiào le.",
+   "vi": "Tàu hỏa sắp soát vé rồi."
+  },
+  {
+   "zh": "请大家在这里检票。",
+   "pinyin": "Qǐng dàjiā zài zhèlǐ jiǎnpiào.",
+   "vi": "Mời mọi người soát vé ở đây."
+  }
+ ],
+ "刷": [
+  {
+   "zh": "现在坐地铁可以刷手机。",
+   "pinyin": "Xiànzài zuò dìtiě kěyǐ shuā shǒujī.",
+   "vi": "Bây giờ đi tàu điện ngầm có thể quét điện thoại."
+  },
+  {
+   "zh": "进站的时候请刷卡。",
+   "pinyin": "Jìn zhàn de shíhou qǐng shuā kǎ.",
+   "vi": "Khi vào ga xin vui lòng quẹt thẻ."
+  }
+ ],
+ "检查": [
+  {
+   "zh": "写完以后，请再检查一遍。",
+   "pinyin": "Xiě wán yǐhòu, qǐng zài jiǎnchá yí biàn.",
+   "vi": "Viết xong rồi, hãy kiểm tra lại một lượt."
+  },
+  {
+   "zh": "医生给我检查了身体。",
+   "pinyin": "Yīshēng gěi wǒ jiǎnchá le shēntǐ.",
+   "vi": "Bác sĩ đã khám sức khỏe cho tôi."
+  }
+ ],
+ "耳机": [
+  {
+   "zh": "我用耳机听音乐。",
+   "pinyin": "Wǒ yòng ěrjī tīng yīnyuè.",
+   "vi": "Tôi dùng tai nghe để nghe nhạc."
+  },
+  {
+   "zh": "我的耳机找不到了，你看见了吗？",
+   "pinyin": "Wǒ de ěrjī zhǎo bú dào le, nǐ kànjiàn le ma?",
+   "vi": "Tôi không tìm thấy tai nghe đâu cả, bạn có thấy không?"
+  }
+ ],
+ "充电宝": [
+  {
+   "zh": "我的手机快没电了，你有充电宝吗？",
+   "pinyin": "Wǒ de shǒujī kuài méi diàn le, nǐ yǒu chōngdiànbǎo ma?",
+   "vi": "Điện thoại tôi sắp hết pin rồi, bạn có sạc dự phòng không?"
+  },
+  {
+   "zh": "出门的时候别忘了充电宝。",
+   "pinyin": "Chū mén de shíhou bié wàng le chōngdiànbǎo.",
+   "vi": "Khi ra ngoài đừng quên sạc dự phòng."
+  }
+ ],
+ "常用": [
+  {
+   "zh": "这是汉语里常用的一句话。",
+   "pinyin": "Zhè shì Hànyǔ li chángyòng de yí jù huà.",
+   "vi": "Đây là một câu thường dùng trong tiếng Trung."
+  },
+  {
+   "zh": "请把常用的东西放在一起。",
+   "pinyin": "Qǐng bǎ chángyòng de dōngxi fàng zài yìqǐ.",
+   "vi": "Hãy để những đồ thường dùng ở cùng một chỗ."
+  }
+ ],
+ "分开": [
+  {
+   "zh": "检查的时候，请把手机和电脑分开放。",
+   "pinyin": "Jiǎnchá de shíhou, qǐng bǎ shǒujī hé diànnǎo fēnkāi fàng.",
+   "vi": "Khi kiểm tra, xin để điện thoại và máy tính riêng ra."
+  },
+  {
+   "zh": "我们分开走吧，八点在路口见。",
+   "pinyin": "Wǒmen fēnkāi zǒu ba, bā diǎn zài lùkǒu jiàn.",
+   "vi": "Chúng ta tách ra đi riêng nhé, tám giờ gặp nhau ở ngã tư."
+  }
+ ],
+ "电梯": [
+  {
+   "zh": "我们坐电梯上去吧。",
+   "pinyin": "Wǒmen zuò diàntī shàngqu ba.",
+   "vi": "Chúng ta đi thang máy lên đi."
+  },
+  {
+   "zh": "人太多了，我们等下一个电梯吧。",
+   "pinyin": "Rén tài duō le, wǒmen děng xià yí ge diàntī ba.",
+   "vi": "Đông người quá, chúng ta đợi chuyến thang máy sau đi."
+  }
+ ],
+ "放假": [
+  {
+   "zh": "学校下个星期放假。",
+   "pinyin": "Xuéxiào xià ge xīngqī fàngjià.",
+   "vi": "Tuần sau trường được nghỉ."
+  },
+  {
+   "zh": "放假的时候你回家吗？",
+   "pinyin": "Fàngjià de shíhou nǐ huí jiā ma?",
+   "vi": "Lúc được nghỉ bạn có về nhà không?"
+  }
+ ],
+ "沙发": [
+  {
+   "zh": "爸爸在沙发上看电视。",
+   "pinyin": "Bàba zài shāfā shang kàn diànshì.",
+   "vi": "Bố đang xem tivi trên ghế sofa."
+  },
+  {
+   "zh": "这个沙发又大又舒服。",
+   "pinyin": "Zhège shāfā yòu dà yòu shūfu.",
+   "vi": "Chiếc sofa này vừa to vừa thoải mái."
+  }
+ ],
+ "安静": [
+  {
+   "zh": "图书馆里很安静。",
+   "pinyin": "Túshūguǎn li hěn ānjìng.",
+   "vi": "Trong thư viện rất yên tĩnh."
+  },
+  {
+   "zh": "请大家安静一点儿。",
+   "pinyin": "Qǐng dàjiā ānjìng yìdiǎnr.",
+   "vi": "Mọi người trật tự một chút nhé."
+  }
+ ],
+ "选择": [
+  {
+   "zh": "你选择坐高铁还是坐飞机？",
+   "pinyin": "Nǐ xuǎnzé zuò gāotiě háishi zuò fēijī?",
+   "vi": "Bạn chọn đi tàu cao tốc hay đi máy bay?"
+  },
+  {
+   "zh": "我选择了一个安静的地方住。",
+   "pinyin": "Wǒ xuǎnzé le yí ge ānjìng de dìfang zhù.",
+   "vi": "Tôi đã chọn một nơi yên tĩnh để ở."
+  }
+ ],
+ "必须": [
+  {
+   "zh": "明天八点上课，你必须早点儿起床。",
+   "pinyin": "Míngtiān bā diǎn shàngkè, nǐ bìxū zǎo diǎnr qǐchuáng.",
+   "vi": "Ngày mai tám giờ vào học, bạn phải dậy sớm một chút."
+  },
+  {
+   "zh": "坐高铁必须检票。",
+   "pinyin": "Zuò gāotiě bìxū jiǎnpiào.",
+   "vi": "Đi tàu cao tốc nhất định phải soát vé."
+  }
+ ],
+ "北京南站": [
+  {
+   "zh": "去上海的高铁从北京南站出发。",
+   "pinyin": "Qù Shànghǎi de gāotiě cóng Běijīng Nán Zhàn chūfā.",
+   "vi": "Tàu cao tốc đi Thượng Hải xuất phát từ ga Nam Bắc Kinh."
+  },
+  {
+   "zh": "请问，北京南站怎么走？",
+   "pinyin": "Qǐngwèn, Běijīng Nán Zhàn zěnme zǒu?",
+   "vi": "Xin hỏi, đến ga Nam Bắc Kinh đi thế nào?"
+  }
+ ],
+ "辆": [
+  {
+   "zh": "我买了一辆新自行车。",
+   "pinyin": "Wǒ mǎi le yí liàng xīn zìxíngchē.",
+   "vi": "Tôi đã mua một chiếc xe đạp mới."
+  },
+  {
+   "zh": "路口停着一辆出租车。",
+   "pinyin": "Lùkǒu tíng zhe yí liàng chūzūchē.",
+   "vi": "Ở ngã tư có một chiếc taxi đang đỗ."
+  }
+ ],
+ "自行车": [
+  {
+   "zh": "我每天骑自行车去上班。",
+   "pinyin": "Wǒ měi tiān qí zìxíngchē qù shàngbān.",
+   "vi": "Ngày nào tôi cũng đi xe đạp đi làm."
+  },
+  {
+   "zh": "这辆自行车是我哥哥的。",
+   "pinyin": "Zhè liàng zìxíngchē shì wǒ gēge de.",
+   "vi": "Chiếc xe đạp này là của anh trai tôi."
+  }
+ ],
+ "旧": [
+  {
+   "zh": "这辆自行车太旧了，换一辆新的吧。",
+   "pinyin": "Zhè liàng zìxíngchē tài jiù le, huàn yí liàng xīn de ba.",
+   "vi": "Chiếc xe đạp này cũ quá rồi, đổi một chiếc mới đi."
+  },
+  {
+   "zh": "我把旧衣服都送给别人了。",
+   "pinyin": "Wǒ bǎ jiù yīfu dōu sòng gěi biérén le.",
+   "vi": "Tôi đã đem hết quần áo cũ cho người khác."
+  }
+ ],
+ "矮": [
+  {
+   "zh": "我比哥哥矮一点儿。",
+   "pinyin": "Wǒ bǐ gēge ǎi yìdiǎnr.",
+   "vi": "Tôi thấp hơn anh trai một chút."
+  },
+  {
+   "zh": "这张桌子太矮了。",
+   "pinyin": "Zhè zhāng zhuōzi tài ǎi le.",
+   "vi": "Cái bàn này thấp quá."
+  }
+ ],
+ "试": [
+  {
+   "zh": "这件衣服我可以试一下吗？",
+   "pinyin": "Zhè jiàn yīfu wǒ kěyǐ shì yíxià ma?",
+   "vi": "Tôi có thể thử bộ quần áo này không?"
+  },
+  {
+   "zh": "你试试这双鞋，大小合适吗？",
+   "pinyin": "Nǐ shìshi zhè shuāng xié, dàxiǎo héshì ma?",
+   "vi": "Bạn thử đôi giày này xem, cỡ có vừa không?"
+  }
+ ],
+ "付钱": [
+  {
+   "zh": "在网上买东西可以用手机付钱。",
+   "pinyin": "Zài wǎng shang mǎi dōngxi kěyǐ yòng shǒujī fù qián.",
+   "vi": "Mua đồ trên mạng có thể trả tiền bằng điện thoại."
+  },
+  {
+   "zh": "我已经付钱了。",
+   "pinyin": "Wǒ yǐjīng fù qián le.",
+   "vi": "Tôi đã trả tiền rồi."
+  }
+ ],
+ "现金": [
+  {
+   "zh": "现在很多人买东西不用现金。",
+   "pinyin": "Xiànzài hěn duō rén mǎi dōngxi búyòng xiànjīn.",
+   "vi": "Bây giờ nhiều người mua đồ không dùng tiền mặt."
+  },
+  {
+   "zh": "我身上没有现金，可以刷卡吗？",
+   "pinyin": "Wǒ shēnshang méiyǒu xiànjīn, kěyǐ shuā kǎ ma?",
+   "vi": "Trên người tôi không có tiền mặt, có thể quẹt thẻ không?"
+  }
+ ],
+ "双十一": [
+  {
+   "zh": "双十一的时候，网上的东西很便宜。",
+   "pinyin": "Shuāng shíyī de shíhou, wǎng shang de dōngxi hěn piányi.",
+   "vi": "Vào dịp 11/11, đồ trên mạng rất rẻ."
+  },
+  {
+   "zh": "我在双十一买了很多衣服。",
+   "pinyin": "Wǒ zài shuāng shíyī mǎi le hěn duō yīfu.",
+   "vi": "Tôi đã mua rất nhiều quần áo vào dịp 11/11."
+  }
+ ],
+ "黄色": [
+  {
+   "zh": "我喜欢那件黄色的裙子。",
+   "pinyin": "Wǒ xǐhuan nà jiàn huángsè de qúnzi.",
+   "vi": "Tôi thích chiếc váy màu vàng kia."
+  },
+  {
+   "zh": "香蕉是黄色的。",
+   "pinyin": "Xiāngjiāo shì huángsè de.",
+   "vi": "Chuối có màu vàng."
+  }
+ ],
+ "短裤": [
+  {
+   "zh": "夏天太热了，我喜欢穿短裤。",
+   "pinyin": "Xiàtiān tài rè le, wǒ xǐhuan chuān duǎnkù.",
+   "vi": "Mùa hè nóng quá, tôi thích mặc quần short."
+  },
+  {
+   "zh": "这条短裤有点儿大。",
+   "pinyin": "Zhè tiáo duǎnkù yǒudiǎnr dà.",
+   "vi": "Chiếc quần short này hơi rộng."
+  }
+ ],
+ "大小": [
+  {
+   "zh": "这双鞋大小正合适。",
+   "pinyin": "Zhè shuāng xié dàxiǎo zhèng héshì.",
+   "vi": "Đôi giày này cỡ vừa khít."
+  },
+  {
+   "zh": "这件衣服的大小怎么样？",
+   "pinyin": "Zhè jiàn yīfu de dàxiǎo zěnmeyàng?",
+   "vi": "Cỡ của bộ quần áo này thế nào?"
+  }
+ ],
+ "合适": [
+  {
+   "zh": "这条裙子你穿很合适。",
+   "pinyin": "Zhè tiáo qúnzi nǐ chuān hěn héshì.",
+   "vi": "Chiếc váy này bạn mặc rất hợp."
+  },
+  {
+   "zh": "我觉得他当老师不太合适。",
+   "pinyin": "Wǒ juéde tā dāng lǎoshī bú tài héshì.",
+   "vi": "Tôi thấy anh ấy làm giáo viên không phù hợp lắm."
+  }
+ ],
+ "裙子": [
+  {
+   "zh": "你的裙子真漂亮！",
+   "pinyin": "Nǐ de qúnzi zhēn piàoliang!",
+   "vi": "Váy của bạn đẹp thật!"
+  },
+  {
+   "zh": "她买了一条黄色的裙子。",
+   "pinyin": "Tā mǎi le yì tiáo huángsè de qúnzi.",
+   "vi": "Cô ấy đã mua một chiếc váy màu vàng."
+  }
+ ],
+ "更": [
+  {
+   "zh": "我觉得这件比那件更好看。",
+   "pinyin": "Wǒ juéde zhè jiàn bǐ nà jiàn gèng hǎokàn.",
+   "vi": "Tôi thấy cái này đẹp hơn cái kia."
+  },
+  {
+   "zh": "今天比昨天更冷。",
+   "pinyin": "Jīntiān bǐ zuótiān gèng lěng.",
+   "vi": "Hôm nay lạnh hơn hôm qua."
+  }
+ ],
+ "决定": [
+  {
+   "zh": "我决定买这辆自行车。",
+   "pinyin": "Wǒ juédìng mǎi zhè liàng zìxíngchē.",
+   "vi": "Tôi quyết định mua chiếc xe đạp này."
+  },
+  {
+   "zh": "去不去旅游，你自己决定吧。",
+   "pinyin": "Qù bu qù lǚyóu, nǐ zìjǐ juédìng ba.",
+   "vi": "Có đi du lịch hay không, bạn tự quyết định nhé."
+  }
+ ],
+ "西瓜": [
+  {
+   "zh": "夏天我最喜欢吃西瓜。",
+   "pinyin": "Xiàtiān wǒ zuì xǐhuan chī xīguā.",
+   "vi": "Mùa hè tôi thích ăn dưa hấu nhất."
+  },
+  {
+   "zh": "这个西瓜又大又甜。",
+   "pinyin": "Zhège xīguā yòu dà yòu tián.",
+   "vi": "Quả dưa hấu này vừa to vừa ngọt."
+  }
+ ],
+ "新鲜": [
+  {
+   "zh": "这些水果都很新鲜。",
+   "pinyin": "Zhèxiē shuǐguǒ dōu hěn xīnxiān.",
+   "vi": "Những loại hoa quả này đều rất tươi."
+  },
+  {
+   "zh": "早上的鱼最新鲜。",
+   "pinyin": "Zǎoshang de yú zuì xīnxiān.",
+   "vi": "Cá buổi sáng là tươi nhất."
+  }
+ ],
+ "甜": [
+  {
+   "zh": "这个西瓜真甜！",
+   "pinyin": "Zhège xīguā zhēn tián!",
+   "vi": "Quả dưa hấu này ngọt thật!"
+  },
+  {
+   "zh": "我不喜欢吃太甜的东西。",
+   "pinyin": "Wǒ bù xǐhuan chī tài tián de dōngxi.",
+   "vi": "Tôi không thích ăn đồ quá ngọt."
+  }
+ ],
+ "极": [
+  {
+   "zh": "这个西瓜甜极了。",
+   "pinyin": "Zhège xīguā tián jí le.",
+   "vi": "Quả dưa hấu này ngọt cực kỳ."
+  },
+  {
+   "zh": "今天的天气好极了，我们去爬山吧。",
+   "pinyin": "Jīntiān de tiānqì hǎo jí le, wǒmen qù páshān ba.",
+   "vi": "Thời tiết hôm nay đẹp tuyệt, chúng ta đi leo núi đi."
+  }
+ ],
+ "香蕉": [
+  {
+   "zh": "我每天早上吃一个香蕉。",
+   "pinyin": "Wǒ měi tiān zǎoshang chī yí ge xiāngjiāo.",
+   "vi": "Sáng nào tôi cũng ăn một quả chuối."
+  },
+  {
+   "zh": "香蕉多少钱一斤？",
+   "pinyin": "Xiāngjiāo duōshao qián yì jīn?",
+   "vi": "Chuối bao nhiêu tiền một cân?"
+  }
+ ],
+ "一共": [
+  {
+   "zh": "这些水果一共多少钱？",
+   "pinyin": "Zhèxiē shuǐguǒ yígòng duōshao qián?",
+   "vi": "Chỗ hoa quả này tổng cộng bao nhiêu tiền?"
+  },
+  {
+   "zh": "我们班一共有十八个学生。",
+   "pinyin": "Wǒmen bān yígòng yǒu shíbā ge xuésheng.",
+   "vi": "Lớp chúng tôi có tổng cộng mười tám học sinh."
+  }
+ ],
+ "结婚": [
+  {
+   "zh": "我姐姐明年结婚。",
+   "pinyin": "Wǒ jiějie míngnián jiéhūn.",
+   "vi": "Chị gái tôi sang năm kết hôn."
+  },
+  {
+   "zh": "他们结婚十年了。",
+   "pinyin": "Tāmen jiéhūn shí nián le.",
+   "vi": "Họ kết hôn được mười năm rồi."
+  }
+ ],
+ "不但": [
+  {
+   "zh": "这个西瓜不但大，而且很甜。",
+   "pinyin": "Zhège xīguā búdàn dà, érqiě hěn tián.",
+   "vi": "Quả dưa hấu này không những to mà còn rất ngọt."
+  },
+  {
+   "zh": "他不但会说汉语，还会写汉字。",
+   "pinyin": "Tā búdàn huì shuō Hànyǔ, hái huì xiě Hànzì.",
+   "vi": "Anh ấy không những biết nói tiếng Trung mà còn biết viết chữ Hán."
+  }
+ ],
+ "而且": [
+  {
+   "zh": "这条裙子不但漂亮，而且很便宜。",
+   "pinyin": "Zhè tiáo qúnzi búdàn piàoliang, érqiě hěn piányi.",
+   "vi": "Chiếc váy này không những đẹp mà còn rất rẻ."
+  },
+  {
+   "zh": "骑自行车很方便，而且可以锻炼身体。",
+   "pinyin": "Qí zìxíngchē hěn fāngbiàn, érqiě kěyǐ duànliàn shēntǐ.",
+   "vi": "Đi xe đạp rất tiện, hơn nữa còn có thể rèn luyện sức khỏe."
+  }
+ ],
+ "操场": [
+  {
+   "zh": "下课以后，我们去操场打球吧。",
+   "pinyin": "Xiàkè yǐhòu, wǒmen qù cāochǎng dǎ qiú ba.",
+   "vi": "Tan học rồi, chúng ta ra sân tập chơi bóng đi."
+  },
+  {
+   "zh": "每天早上很多学生在操场上跑步。",
+   "pinyin": "Měi tiān zǎoshang hěn duō xuésheng zài cāochǎng shang pǎobù.",
+   "vi": "Sáng nào cũng có nhiều học sinh chạy bộ trên sân vận động."
+  }
+ ],
+ "圈": [
+  {
+   "zh": "我每天在操场跑五圈。",
+   "pinyin": "Wǒ měi tiān zài cāochǎng pǎo wǔ quān.",
+   "vi": "Ngày nào tôi cũng chạy năm vòng quanh sân."
+  },
+  {
+   "zh": "我们在公园里走了一圈。",
+   "pinyin": "Wǒmen zài gōngyuán li zǒu le yì quān.",
+   "vi": "Chúng tôi đi một vòng trong công viên."
+  }
+ ],
+ "坚持": [
+  {
+   "zh": "他每天坚持跑步。",
+   "pinyin": "Tā měi tiān jiānchí pǎobù.",
+   "vi": "Anh ấy kiên trì chạy bộ mỗi ngày."
+  },
+  {
+   "zh": "学汉语要坚持，不要怕难。",
+   "pinyin": "Xué Hànyǔ yào jiānchí, bú yào pà nán.",
+   "vi": "Học tiếng Trung phải kiên trì, đừng sợ khó."
+  }
+ ],
+ "体检": [
+  {
+   "zh": "我明天要去医院体检。",
+   "pinyin": "Wǒ míngtiān yào qù yīyuàn tǐjiǎn.",
+   "vi": "Ngày mai tôi phải đến bệnh viện khám sức khỏe."
+  },
+  {
+   "zh": "体检以前不能吃东西。",
+   "pinyin": "Tǐjiǎn yǐqián bù néng chī dōngxi.",
+   "vi": "Trước khi khám sức khỏe không được ăn gì."
+  }
+ ],
+ "爬山": [
+  {
+   "zh": "星期天我们一起去爬山吧。",
+   "pinyin": "Xīngqītiān wǒmen yìqǐ qù páshān ba.",
+   "vi": "Chủ nhật chúng ta cùng đi leo núi nhé."
+  },
+  {
+   "zh": "爬山不但能看风景，而且能锻炼身体。",
+   "pinyin": "Páshān búdàn néng kàn fēngjǐng, érqiě néng duànliàn shēntǐ.",
+   "vi": "Leo núi không những được ngắm cảnh mà còn rèn luyện được sức khỏe."
+  }
+ ],
+ "腿": [
+  {
+   "zh": "爬了一天山，我的腿很疼。",
+   "pinyin": "Pá le yì tiān shān, wǒ de tuǐ hěn téng.",
+   "vi": "Leo núi cả ngày, chân tôi đau lắm."
+  },
+  {
+   "zh": "他的腿很长，跑得很快。",
+   "pinyin": "Tā de tuǐ hěn cháng, pǎo de hěn kuài.",
+   "vi": "Chân anh ấy rất dài, chạy rất nhanh."
+  }
+ ],
+ "疼": [
+  {
+   "zh": "我头疼，想休息一下。",
+   "pinyin": "Wǒ tóu téng, xiǎng xiūxi yíxià.",
+   "vi": "Tôi đau đầu, muốn nghỉ một lát."
+  },
+  {
+   "zh": "你哪儿疼？",
+   "pinyin": "Nǐ nǎr téng?",
+   "vi": "Bạn đau ở đâu?"
+  }
+ ],
+ "肚子": [
+  {
+   "zh": "我肚子饿了，想吃点儿东西。",
+   "pinyin": "Wǒ dùzi è le, xiǎng chī diǎnr dōngxi.",
+   "vi": "Tôi đói bụng rồi, muốn ăn chút gì đó."
+  },
+  {
+   "zh": "孩子们肚子饿了，妈妈马上去做饭。",
+   "pinyin": "Háizimen dùzi è le, māma mǎshàng qù zuò fàn.",
+   "vi": "Bọn trẻ đói bụng rồi, mẹ lập tức đi nấu cơm."
+  }
+ ],
+ "发烧": [
+  {
+   "zh": "孩子发烧了，我们去医院吧。",
+   "pinyin": "Háizi fāshāo le, wǒmen qù yīyuàn ba.",
+   "vi": "Con bị sốt rồi, chúng ta đi bệnh viện thôi."
+  },
+  {
+   "zh": "我昨天发烧了，今天好多了。",
+   "pinyin": "Wǒ zuótiān fāshāo le, jīntiān hǎo duō le.",
+   "vi": "Hôm qua tôi bị sốt, hôm nay đỡ nhiều rồi."
+  }
+ ],
+ "关心": [
+  {
+   "zh": "谢谢你的关心！",
+   "pinyin": "Xièxie nǐ de guānxīn!",
+   "vi": "Cảm ơn sự quan tâm của bạn!"
+  },
+  {
+   "zh": "妈妈很关心我的身体。",
+   "pinyin": "Māma hěn guānxīn wǒ de shēntǐ.",
+   "vi": "Mẹ rất quan tâm đến sức khỏe của tôi."
+  }
+ ],
+ "以为": [
+  {
+   "zh": "我以为你今天不来了。",
+   "pinyin": "Wǒ yǐwéi nǐ jīntiān bù lái le.",
+   "vi": "Tôi tưởng hôm nay bạn không đến nữa."
+  },
+  {
+   "zh": "他以为今天放假，没去上课。",
+   "pinyin": "Tā yǐwéi jīntiān fàngjià, méi qù shàngkè.",
+   "vi": "Cậu ấy tưởng hôm nay được nghỉ nên không đi học."
+  }
+ ],
+ "住院": [
+  {
+   "zh": "爷爷生病住院了。",
+   "pinyin": "Yéye shēngbìng zhùyuàn le.",
+   "vi": "Ông bị ốm phải nằm viện rồi."
+  },
+  {
+   "zh": "医生说他要住院一个星期。",
+   "pinyin": "Yīshēng shuō tā yào zhùyuàn yí ge xīngqī.",
+   "vi": "Bác sĩ nói anh ấy phải nằm viện một tuần."
+  }
+ ],
+ "跑步": [
+  {
+   "zh": "我每天早上都去跑步。",
+   "pinyin": "Wǒ měi tiān zǎoshang dōu qù pǎobù.",
+   "vi": "Sáng nào tôi cũng đi chạy bộ."
+  },
+  {
+   "zh": "跑步以后要多喝水。",
+   "pinyin": "Pǎobù yǐhòu yào duō hē shuǐ.",
+   "vi": "Sau khi chạy bộ phải uống nhiều nước."
+  }
+ ],
+ "游泳": [
+  {
+   "zh": "你会游泳吗？",
+   "pinyin": "Nǐ huì yóuyǒng ma?",
+   "vi": "Bạn có biết bơi không?"
+  },
+  {
+   "zh": "夏天我常常去游泳。",
+   "pinyin": "Xiàtiān wǒ chángcháng qù yóuyǒng.",
+   "vi": "Mùa hè tôi thường xuyên đi bơi."
+  }
+ ],
+ "伤": [
+  {
+   "zh": "他腿上的伤好多了。",
+   "pinyin": "Tā tuǐ shang de shāng hǎo duō le.",
+   "vi": "Vết thương ở chân anh ấy đã đỡ nhiều rồi."
+  },
+  {
+   "zh": "打球的时候他受了伤。",
+   "pinyin": "Dǎ qiú de shíhou tā shòu le shāng.",
+   "vi": "Anh ấy bị thương khi chơi bóng."
+  }
+ ],
+ "猜": [
+  {
+   "zh": "你猜猜我买了什么？",
+   "pinyin": "Nǐ cāicai wǒ mǎi le shénme?",
+   "vi": "Bạn đoán xem tôi đã mua gì?"
+  },
+  {
+   "zh": "我猜他今天不会来。",
+   "pinyin": "Wǒ cāi tā jīntiān bú huì lái.",
+   "vi": "Tôi đoán hôm nay anh ấy sẽ không đến."
+  }
+ ],
+ "出院": [
+  {
+   "zh": "医生说他下个星期可以出院。",
+   "pinyin": "Yīshēng shuō tā xià ge xīngqī kěyǐ chūyuàn.",
+   "vi": "Bác sĩ nói tuần sau anh ấy có thể xuất viện."
+  },
+  {
+   "zh": "奶奶已经出院回家了。",
+   "pinyin": "Nǎinai yǐjīng chūyuàn huí jiā le.",
+   "vi": "Bà đã xuất viện về nhà rồi."
+  }
+ ],
+ "根据": [
+  {
+   "zh": "医生根据你的情况给你开了药。",
+   "pinyin": "Yīshēng gēnjù nǐ de qíngkuàng gěi nǐ kāi le yào.",
+   "vi": "Bác sĩ dựa vào tình trạng của bạn để kê thuốc cho bạn."
+  },
+  {
+   "zh": "我们根据天气决定去不去爬山。",
+   "pinyin": "Wǒmen gēnjù tiānqì juédìng qù bu qù páshān.",
+   "vi": "Chúng tôi dựa vào thời tiết để quyết định có đi leo núi hay không."
+  }
+ ],
+ "健康": [
+  {
+   "zh": "祝你身体健康！",
+   "pinyin": "Zhù nǐ shēntǐ jiànkāng!",
+   "vi": "Chúc bạn sức khỏe dồi dào!"
+  },
+  {
+   "zh": "多运动对健康很好。",
+   "pinyin": "Duō yùndòng duì jiànkāng hěn hǎo.",
+   "vi": "Vận động nhiều rất tốt cho sức khỏe."
+  }
+ ],
+ "情况": [
+  {
+   "zh": "你最近的情况怎么样？",
+   "pinyin": "Nǐ zuìjìn de qíngkuàng zěnmeyàng?",
+   "vi": "Tình hình dạo này của bạn thế nào?"
+  },
+  {
+   "zh": "医生，我爸爸的情况好吗？",
+   "pinyin": "Yīshēng, wǒ bàba de qíngkuàng hǎo ma?",
+   "vi": "Thưa bác sĩ, tình trạng của bố tôi có ổn không?"
+  }
+ ],
+ "种": [
+  {
+   "zh": "这种水果我没吃过。",
+   "pinyin": "Zhè zhǒng shuǐguǒ wǒ méi chī guo.",
+   "vi": "Loại hoa quả này tôi chưa ăn bao giờ."
+  },
+  {
+   "zh": "你喜欢哪种运动？",
+   "pinyin": "Nǐ xǐhuan nǎ zhǒng yùndòng?",
+   "vi": "Bạn thích loại hình thể thao nào?"
+  }
+ ],
+ "不然": [
+  {
+   "zh": "你得多喝水，不然会生病的。",
+   "pinyin": "Nǐ děi duō hē shuǐ, bùrán huì shēngbìng de.",
+   "vi": "Bạn phải uống nhiều nước, nếu không sẽ bị ốm đấy."
+  },
+  {
+   "zh": "晚上早点儿睡，不然明天起不来。",
+   "pinyin": "Wǎnshang zǎo diǎnr shuì, bùrán míngtiān qǐ bu lái.",
+   "vi": "Tối đi ngủ sớm một chút, nếu không mai sẽ không dậy nổi."
+  }
+ ],
+ "影响": [
+  {
+   "zh": "晚上玩手机会影响睡觉。",
+   "pinyin": "Wǎnshang wán shǒujī huì yǐngxiǎng shuìjiào.",
+   "vi": "Buổi tối chơi điện thoại sẽ ảnh hưởng đến giấc ngủ."
+  },
+  {
+   "zh": "这件事对他的影响很大。",
+   "pinyin": "Zhè jiàn shì duì tā de yǐngxiǎng hěn dà.",
+   "vi": "Chuyện này ảnh hưởng rất lớn đến anh ấy."
+  }
+ ],
+ "药效": [
+  {
+   "zh": "喝酒会影响药效。",
+   "pinyin": "Hē jiǔ huì yǐngxiǎng yàoxiào.",
+   "vi": "Uống rượu sẽ ảnh hưởng đến tác dụng của thuốc."
+  },
+  {
+   "zh": "这种药的药效很好。",
+   "pinyin": "Zhè zhǒng yào de yàoxiào hěn hǎo.",
+   "vi": "Loại thuốc này có tác dụng rất tốt."
+  }
+ ],
+ "校园": [
+  {
+   "zh": "我们学校的校园很漂亮。",
+   "pinyin": "Wǒmen xuéxiào de xiàoyuán hěn piàoliang.",
+   "vi": "Khuôn viên trường chúng tôi rất đẹp."
+  },
+  {
+   "zh": "晚饭以后，我常在校园里走一走。",
+   "pinyin": "Wǎnfàn yǐhòu, wǒ cháng zài xiàoyuán li zǒu yi zǒu.",
+   "vi": "Sau bữa tối, tôi hay đi dạo trong khuôn viên trường."
+  }
+ ],
+ "卡": [
+  {
+   "zh": "进图书馆要刷学生卡。",
+   "pinyin": "Jìn túshūguǎn yào shuā xuésheng kǎ.",
+   "vi": "Vào thư viện phải quẹt thẻ sinh viên."
+  },
+  {
+   "zh": "我的卡里没有钱了。",
+   "pinyin": "Wǒ de kǎ li méiyǒu qián le.",
+   "vi": "Trong thẻ của tôi hết tiền rồi."
+  }
+ ],
+ "球场": [
+  {
+   "zh": "下午我们去球场打球吧。",
+   "pinyin": "Xiàwǔ wǒmen qù qiúchǎng dǎ qiú ba.",
+   "vi": "Chiều nay chúng ta ra sân bóng chơi bóng nhé."
+  },
+  {
+   "zh": "学校的球场很大。",
+   "pinyin": "Xuéxiào de qiúchǎng hěn dà.",
+   "vi": "Sân bóng của trường rất rộng."
+  }
+ ],
+ "为了": [
+  {
+   "zh": "为了学好汉语，他每天练习说汉语。",
+   "pinyin": "Wèile xué hǎo Hànyǔ, tā měi tiān liànxí shuō Hànyǔ.",
+   "vi": "Để học giỏi tiếng Trung, ngày nào anh ấy cũng luyện nói tiếng Trung."
+  },
+  {
+   "zh": "为了身体健康，我每天跑步。",
+   "pinyin": "Wèile shēntǐ jiànkāng, wǒ měi tiān pǎobù.",
+   "vi": "Để có sức khỏe tốt, ngày nào tôi cũng chạy bộ."
+  }
+ ],
+ "运动会": [
+  {
+   "zh": "下个月学校要开运动会。",
+   "pinyin": "Xià ge yuè xuéxiào yào kāi yùndònghuì.",
+   "vi": "Tháng sau trường sẽ tổ chức hội thao."
+  },
+  {
+   "zh": "他在运动会上得了第一名。",
+   "pinyin": "Tā zài yùndònghuì shang dé le dì yī míng.",
+   "vi": "Cậu ấy đã giành giải nhất ở hội thao."
+  }
+ ],
+ "男生": [
+  {
+   "zh": "我们班男生比女生多。",
+   "pinyin": "Wǒmen bān nánshēng bǐ nǚshēng duō.",
+   "vi": "Lớp chúng tôi nam nhiều hơn nữ."
+  },
+  {
+   "zh": "那个男生是新来的同学。",
+   "pinyin": "Nàge nánshēng shì xīn lái de tóngxué.",
+   "vi": "Cậu học sinh nam kia là bạn mới đến."
+  }
+ ],
+ "练": [
+  {
+   "zh": "他每天都练一个小时网球。",
+   "pinyin": "Tā měi tiān dōu liàn yí ge xiǎoshí wǎngqiú.",
+   "vi": "Ngày nào anh ấy cũng luyện tennis một tiếng."
+  },
+  {
+   "zh": "你的汉字写得真好，练了多长时间？",
+   "pinyin": "Nǐ de Hànzì xiě de zhēn hǎo, liàn le duō cháng shíjiān?",
+   "vi": "Chữ Hán của bạn viết đẹp thật, bạn luyện bao lâu rồi?"
+  }
+ ],
+ "参加": [
+  {
+   "zh": "你参加这次运动会吗？",
+   "pinyin": "Nǐ cānjiā zhè cì yùndònghuì ma?",
+   "vi": "Bạn có tham gia hội thao lần này không?"
+  },
+  {
+   "zh": "我想参加学校的网球比赛。",
+   "pinyin": "Wǒ xiǎng cānjiā xuéxiào de wǎngqiú bǐsài.",
+   "vi": "Tôi muốn tham gia giải tennis của trường."
+  }
+ ],
+ "网球": [
+  {
+   "zh": "你会打网球吗？",
+   "pinyin": "Nǐ huì dǎ wǎngqiú ma?",
+   "vi": "Bạn có biết chơi tennis không?"
+  },
+  {
+   "zh": "下午我常和朋友去打网球。",
+   "pinyin": "Xiàwǔ wǒ cháng hé péngyou qù dǎ wǎngqiú.",
+   "vi": "Buổi chiều tôi thường đi chơi quần vợt với bạn."
+  }
+ ],
+ "比赛": [
+  {
+   "zh": "昨天的比赛谁赢了？",
+   "pinyin": "Zuótiān de bǐsài shéi yíng le?",
+   "vi": "Trận đấu hôm qua ai thắng?"
+  },
+  {
+   "zh": "今天晚上有网球比赛。",
+   "pinyin": "Jīntiān wǎnshang yǒu wǎngqiú bǐsài.",
+   "vi": "Tối nay có trận đấu tennis."
+  }
+ ],
+ "练习": [
+  {
+   "zh": "学汉语要多练习说。",
+   "pinyin": "Xué Hànyǔ yào duō liànxí shuō.",
+   "vi": "Học tiếng Trung phải luyện nói nhiều."
+  },
+  {
+   "zh": "他每天下午在球场练习打网球。",
+   "pinyin": "Tā měi tiān xiàwǔ zài qiúchǎng liànxí dǎ wǎngqiú.",
+   "vi": "Chiều nào anh ấy cũng luyện tập tennis ở sân bóng."
+  }
+ ],
+ "放": [
+  {
+   "zh": "你把书放在桌子上吧。",
+   "pinyin": "Nǐ bǎ shū fàng zài zhuōzi shang ba.",
+   "vi": "Bạn để sách lên bàn đi."
+  },
+  {
+   "zh": "冰箱里放了很多水果。",
+   "pinyin": "Bīngxiāng li fàng le hěn duō shuǐguǒ.",
+   "vi": "Trong tủ lạnh để rất nhiều hoa quả."
+  }
+ ],
+ "刚才": [
+  {
+   "zh": "刚才有人给你打电话了。",
+   "pinyin": "Gāngcái yǒu rén gěi nǐ dǎ diànhuà le.",
+   "vi": "Lúc nãy có người gọi điện cho bạn."
+  },
+  {
+   "zh": "你刚才说什么？我没听清楚。",
+   "pinyin": "Nǐ gāngcái shuō shénme? Wǒ méi tīng qīngchu.",
+   "vi": "Vừa nãy bạn nói gì? Tôi nghe không rõ."
+  }
+ ],
+ "好多": [
+  {
+   "zh": "今天球场上有好多人。",
+   "pinyin": "Jīntiān qiúchǎng shang yǒu hǎoduō rén.",
+   "vi": "Hôm nay trên sân bóng có rất nhiều người."
+  },
+  {
+   "zh": "我买了好多水果。",
+   "pinyin": "Wǒ mǎi le hǎoduō shuǐguǒ.",
+   "vi": "Tôi đã mua rất nhiều hoa quả."
+  }
+ ],
+ "几乎": [
+  {
+   "zh": "他几乎每天都去跑步。",
+   "pinyin": "Tā jīhū měi tiān dōu qù pǎobù.",
+   "vi": "Hầu như ngày nào anh ấy cũng đi chạy bộ."
+  },
+  {
+   "zh": "我们班的同学几乎都来了。",
+   "pinyin": "Wǒmen bān de tóngxué jīhū dōu lái le.",
+   "vi": "Các bạn trong lớp chúng tôi hầu như đều đến cả rồi."
+  }
+ ],
+ "只是": [
+  {
+   "zh": "这件衣服很漂亮，只是有点儿贵。",
+   "pinyin": "Zhè jiàn yīfu hěn piàoliang, zhǐshì yǒudiǎnr guì.",
+   "vi": "Bộ quần áo này rất đẹp, có điều hơi đắt."
+  },
+  {
+   "zh": "我只是想问一下，没有别的事。",
+   "pinyin": "Wǒ zhǐshì xiǎng wèn yíxià, méiyǒu bié de shì.",
+   "vi": "Tôi chỉ muốn hỏi một chút thôi, không có việc gì khác."
+  }
+ ],
+ "怕": [
+  {
+   "zh": "我妹妹很怕狗。",
+   "pinyin": "Wǒ mèimei hěn pà gǒu.",
+   "vi": "Em gái tôi rất sợ chó."
+  },
+  {
+   "zh": "我怕明天下雨，不能去比赛。",
+   "pinyin": "Wǒ pà míngtiān xià yǔ, bù néng qù bǐsài.",
+   "vi": "Tôi sợ ngày mai trời mưa, không thể đi thi đấu được."
+  }
+ ],
+ "紧张": [
+  {
+   "zh": "第一次参加比赛，我很紧张。",
+   "pinyin": "Dì yī cì cānjiā bǐsài, wǒ hěn jǐnzhāng.",
+   "vi": "Lần đầu tham gia thi đấu, tôi rất hồi hộp."
+  },
+  {
+   "zh": "别紧张，你一定能考好。",
+   "pinyin": "Bié jǐnzhāng, nǐ yídìng néng kǎo hǎo.",
+   "vi": "Đừng căng thẳng, bạn nhất định sẽ thi tốt."
+  }
+ ],
+ "啤酒": [
+  {
+   "zh": "看比赛的时候，他喜欢喝啤酒。",
+   "pinyin": "Kàn bǐsài de shíhou, tā xǐhuan hē píjiǔ.",
+   "vi": "Khi xem thi đấu, anh ấy thích uống bia."
+  },
+  {
+   "zh": "服务员，再来一杯啤酒！",
+   "pinyin": "Fúwùyuán, zài lái yì bēi píjiǔ!",
+   "vi": "Phục vụ ơi, cho thêm một cốc bia!"
+  }
+ ],
+ "回": [
+  {
+   "zh": "这个电影我看过好几回了。",
+   "pinyin": "Zhège diànyǐng wǒ kàn guo hǎo jǐ huí le.",
+   "vi": "Bộ phim này tôi đã xem mấy lần rồi."
+  },
+  {
+   "zh": "我去过一回上海。",
+   "pinyin": "Wǒ qù guo yì huí Shànghǎi.",
+   "vi": "Tôi đã đến Thượng Hải một lần."
+  }
+ ],
+ "主要": [
+  {
+   "zh": "我来中国主要是为了学汉语。",
+   "pinyin": "Wǒ lái Zhōngguó zhǔyào shì wèile xué Hànyǔ.",
+   "vi": "Tôi đến Trung Quốc chủ yếu là để học tiếng Trung."
+  },
+  {
+   "zh": "这家店主要卖水果。",
+   "pinyin": "Zhè jiā diàn zhǔyào mài shuǐguǒ.",
+   "vi": "Cửa hàng này chủ yếu bán hoa quả."
+  }
+ ],
+ "受到": [
+  {
+   "zh": "这个运动员受到很多人的喜欢。",
+   "pinyin": "Zhège yùndòngyuán shòudào hěn duō rén de xǐhuan.",
+   "vi": "Vận động viên này được rất nhiều người yêu thích."
+  },
+  {
+   "zh": "他的身体受到了很大的影响。",
+   "pinyin": "Tā de shēntǐ shòudào le hěn dà de yǐngxiǎng.",
+   "vi": "Sức khỏe của anh ấy bị ảnh hưởng rất lớn."
+  }
+ ],
+ "得分": [
+  {
+   "zh": "这场比赛的得分是多少？",
+   "pinyin": "Zhè chǎng bǐsài de défēn shì duōshao?",
+   "vi": "Tỉ số của trận đấu này là bao nhiêu?"
+  },
+  {
+   "zh": "他这次考试得分很高。",
+   "pinyin": "Tā zhè cì kǎoshì défēn hěn gāo.",
+   "vi": "Lần thi này cậu ấy đạt điểm rất cao."
+  }
+ ],
+ "赢": [
+  {
+   "zh": "我们队赢了！",
+   "pinyin": "Wǒmen duì yíng le!",
+   "vi": "Đội chúng ta thắng rồi!"
+  },
+  {
+   "zh": "他打网球总是赢我。",
+   "pinyin": "Tā dǎ wǎngqiú zǒngshì yíng wǒ.",
+   "vi": "Chơi tennis lần nào anh ấy cũng thắng tôi."
+  }
+ ],
+ "队": [
+  {
+   "zh": "你是哪个队的？",
+   "pinyin": "Nǐ shì nǎge duì de?",
+   "vi": "Bạn ở đội nào?"
+  },
+  {
+   "zh": "我想参加学校的网球队。",
+   "pinyin": "Wǒ xiǎng cānjiā xuéxiào de wǎngqiú duì.",
+   "vi": "Tôi muốn tham gia đội tennis của trường."
+  }
+ ],
+ "厉害": [
+  {
+   "zh": "你真厉害，又赢了！",
+   "pinyin": "Nǐ zhēn lìhai, yòu yíng le!",
+   "vi": "Bạn giỏi thật, lại thắng nữa rồi!"
+  },
+  {
+   "zh": "这个运动员很厉害，得了很多第一。",
+   "pinyin": "Zhège yùndòngyuán hěn lìhai, dé le hěn duō dì yī.",
+   "vi": "Vận động viên này rất giỏi, đã giành được nhiều giải nhất."
+  }
+ ],
+ "体育": [
+  {
+   "zh": "我最喜欢上体育课。",
+   "pinyin": "Wǒ zuì xǐhuan shàng tǐyù kè.",
+   "vi": "Tôi thích nhất là giờ thể dục."
+  },
+  {
+   "zh": "他对体育很感兴趣。",
+   "pinyin": "Tā duì tǐyù hěn gǎn xìngqù.",
+   "vi": "Anh ấy rất hứng thú với thể thao."
+  }
+ ],
+ "世界": [
+  {
+   "zh": "我想去世界上很多地方旅游。",
+   "pinyin": "Wǒ xiǎng qù shìjiè shang hěn duō dìfang lǚyóu.",
+   "vi": "Tôi muốn đi du lịch nhiều nơi trên thế giới."
+  },
+  {
+   "zh": "他是世界有名的运动员。",
+   "pinyin": "Tā shì shìjiè yǒumíng de yùndòngyuán.",
+   "vi": "Anh ấy là vận động viên nổi tiếng thế giới."
+  }
+ ],
+ "运动员": [
+  {
+   "zh": "我弟弟想当运动员。",
+   "pinyin": "Wǒ dìdi xiǎng dāng yùndòngyuán.",
+   "vi": "Em trai tôi muốn làm vận động viên."
+  },
+  {
+   "zh": "运动员们每天都要练习很长时间。",
+   "pinyin": "Yùndòngyuánmen měi tiān dōu yào liànxí hěn cháng shíjiān.",
+   "vi": "Các vận động viên ngày nào cũng phải luyện tập rất lâu."
+  }
+ ],
+ "得到": [
+  {
+   "zh": "他在比赛中得到了第一名。",
+   "pinyin": "Tā zài bǐsài zhōng dédào le dì yī míng.",
+   "vi": "Anh ấy đã giành giải nhất trong cuộc thi."
+  },
+  {
+   "zh": "我得到了一个去中国学习的机会。",
+   "pinyin": "Wǒ dédào le yí ge qù Zhōngguó xuéxí de jīhuì.",
+   "vi": "Tôi đã có được một cơ hội sang Trung Quốc học tập."
+  }
+ ],
+ "成绩": [
+  {
+   "zh": "他的学习成绩很好。",
+   "pinyin": "Tā de xuéxí chéngjì hěn hǎo.",
+   "vi": "Thành tích học tập của cậu ấy rất tốt."
+  },
+  {
+   "zh": "这次考试的成绩怎么样？",
+   "pinyin": "Zhè cì kǎoshì de chéngjì zěnmeyàng?",
+   "vi": "Kết quả kỳ thi lần này thế nào?"
+  }
+ ],
+ "奥运会": [
+  {
+   "zh": "他参加过奥运会。",
+   "pinyin": "Tā cānjiā guo Àoyùnhuì.",
+   "vi": "Anh ấy đã từng tham gia Thế vận hội."
+  },
+  {
+   "zh": "我很喜欢看奥运会比赛。",
+   "pinyin": "Wǒ hěn xǐhuan kàn Àoyùnhuì bǐsài.",
+   "vi": "Tôi rất thích xem các môn thi đấu ở Thế vận hội."
+  }
+ ],
+ "阮氏映园": [
+  {
+   "zh": "阮氏映园是越南有名的游泳运动员。",
+   "pinyin": "Ruǎn Shì Yìngyuán shì Yuènán yǒumíng de yóuyǒng yùndòngyuán.",
+   "vi": "Nguyễn Thị Ánh Viên là vận động viên bơi lội nổi tiếng của Việt Nam."
+  },
+  {
+   "zh": "阮氏映园参加过奥运会。",
+   "pinyin": "Ruǎn Shì Yìngyuán cānjiā guo Àoyùnhuì.",
+   "vi": "Nguyễn Thị Ánh Viên đã từng tham gia Thế vận hội."
+  }
+ ]
+}

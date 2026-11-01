@@ -1,6 +1,7 @@
 // Phiên đăng nhập: { user, csrf, loaded } — nạp bằng GET /public/config rồi GET /me khi mở app (02 §3.2).
 import { api, ApiError, setCsrf } from '$lib/api/client';
 import type { Announcement, MeResponse, PublicConfig, User } from '$lib/api/types';
+import { notifications } from './notifications.svelte';
 import { settings } from './settings.svelte';
 
 class Session {
@@ -62,6 +63,7 @@ class Session {
 
   clear(): void {
     this.user = null;
+    notifications.xoa(); // đổi tài khoản trên cùng máy không được thấy thông báo của người trước
     this.announcements = [];
     this.supportEnabled = false;
   }

@@ -67,11 +67,46 @@ final class Upload
     public static function audio(?array $file): array
     {
         $bytes = self::read($file, self::AUDIO_MAX);
-        $mime = (new \finfo(FILEINFO_MIME_TYPE))->buffer($bytes);
-        if (!in_array($mime, ['audio/mpeg', 'audio/mp3', 'audio/mpeg3'], true)) {
+        if (!self::isMp3($bytes)) {
             throw new HttpError(415, 'BAD_FILE', 'Chỉ nhận tệp âm thanh MP3.');
         }
         return self::store($bytes, 'audio', 'mp3');
+    }
+
+    /**
+     * finfo đoán nhầm một số MP3 hợp lệ (MPEG-2, khung đầu toàn số 0) thành application/octet-stream,
+     * nên nó nói không thì xét thêm đầu tệp: thẻ ID3, hoặc khung MPEG Layer III (11 bit đồng bộ, layer = 01).
+     */
+    public static function isMp3(string $bytes): bool
+    {
+        $mime = (new \finfo(FILEINFO_MIME_TYPE))->buffer($bytes);
+        if (in_array($mime, ['audio/mpeg', 'audio/mp3', 'audio/mpeg3'], true) || str_starts_with($bytes, 'ID3')) {
+            return true;
+        }
+        return strlen($bytes) > 4 && ord($bytes[0]) === 0xFF && (ord($bytes[1]) & 0xE6) === 0xE2;
+    }
+
+    /**
+     * File đọc mẫu sinh sẵn (Kokoro). Khác audio(): tên file là sha1 của câu chữ chứ không phải của
+     * nội dung, để trình duyệt tự tính ra đường dẫn từ chữ cần đọc (web/src/lib/learn/speech.ts).
+     * Sinh lại thì ghi đè cùng chỗ.
+     * @param array<string,mixed>|null $file @return array{path:string,url:string}
+     */
+    public static function tts(?array $file, string $text, string $voice): array
+    {
+        $bytes = self::read($file, self::AUDIO_MAX);
+        if (!self::isMp3($bytes)) {
+            throw new HttpError(415, 'BAD_FILE', 'Chỉ nhận tệp âm thanh MP3.');
+        }
+        $hash = sha1(trim($text));
+        $rel = 'tts/' . $voice . '/' . substr($hash, 0, 2) . '/' . $hash . '.mp3';
+        $abs = Config::uploadsDir($rel);
+        if (!is_dir(dirname($abs))) {
+            mkdir(dirname($abs), 0755, true);
+        }
+        file_put_contents($abs, $bytes, LOCK_EX);
+        $url = Config::uploadsUrl($rel);
+        return ['path' => $url, 'url' => $url];
     }
 
     /** Dữ liệu nét chữ (Hanzi Writer): JSON có strokes, medians. @param array<string,mixed>|null $file @return array<string,mixed> */

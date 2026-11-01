@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Zika\Services;
 
+use Zika\Core\Clock;
 use Zika\Core\Db;
 
 /** Thông báo hiện cho người học (dải trên cùng / hộp nổi) — 04 §3, 07 §1.2. */
@@ -94,6 +95,63 @@ final class AnnouncementService
         }
         Db::exec('UPDATE announcements SET emails_sent = emails_sent + ? WHERE id = ?', [count($emails), $a['id']]);
         return count($emails);
+    }
+
+    /** Điều kiện "thông báo này gửi tới người này" — dùng chung cho hộp thư chuông. */
+    private const DANH_CHO = "(a.audience = 'all'
+                    OR (a.audience = 'level' AND a.audience_level = ?)
+                    OR (a.audience = 'new7d' AND ? >= ? - INTERVAL 7 DAY)
+                    OR (a.audience = 'user' AND a.target_user_id = ?))";
+
+    /**
+     * Hộp thư chuông thông báo: mọi thông báo admin đã đăng (cả đã kết thúc, cả kiểu email) gửi tới
+     * người này trong 90 ngày, mới nhất trước. Khác activeFor(): đóng dải thông báo không làm mất
+     * khỏi hộp thư, chỉ đánh dấu đã đọc.
+     * @param array<string,mixed> $user
+     * @return array{items:list<array<string,mixed>>,unread:int,total:int}
+     */
+    public static function inbox(array $user, int $limit = 50): array
+    {
+        $now = Clock::sql(Clock::now());
+        $rows = Db::all(
+            "SELECT a.id, a.title, a.body, a.cta_text, a.cta_route, COALESCE(a.starts_at, a.created_at) AS at, r.seen_at
+             FROM announcements a
+             LEFT JOIN announcement_reads r ON r.announcement_id = a.id AND r.user_id = ?
+             WHERE a.status IN ('published','ended') AND a.is_auto_welcome = 0
+               AND (a.starts_at IS NULL OR a.starts_at <= ?)
+               AND COALESCE(a.starts_at, a.created_at) >= ? - INTERVAL 90 DAY
+               AND " . self::DANH_CHO . "
+             ORDER BY at DESC, a.id DESC",
+            [
+                (int) $user['id'], $now, $now,
+                $user['current_level_id'] === null ? null : (int) $user['current_level_id'],
+                (string) $user['created_at'], $now, (int) $user['id'],
+            ],
+        );
+        $items = array_map(static fn (array $a): array => [
+            'id' => (int) $a['id'],
+            'title' => (string) $a['title'],
+            'body' => (string) $a['body'],
+            'ctaText' => $a['cta_text'],
+            'ctaRoute' => $a['cta_route'],
+            'at' => Clock::iso((string) $a['at']),
+            'read' => $a['seen_at'] !== null,
+        ], $rows);
+        return [
+            'items' => array_slice($items, 0, $limit),
+            'unread' => count(array_filter($items, static fn (array $a): bool => !$a['read'])),
+            'total' => count($items),
+        ];
+    }
+
+    /** "Đánh dấu đã xem tất cả" — chỉ những thông báo đang có trong hộp thư của người này. */
+    public static function readAll(array $user): void
+    {
+        foreach (self::inbox($user, PHP_INT_MAX)['items'] as $a) {
+            if (!$a['read']) {
+                self::mark($a['id'], (int) $user['id'], 'seen');
+            }
+        }
     }
 
     /** Ghi đã xem / đã đóng / đã bấm (mỗi người 1 dòng). Lần đầu xem/bấm mới tăng bộ đếm. */
