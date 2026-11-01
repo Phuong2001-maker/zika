@@ -70,6 +70,11 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
   đóng khi bấm "Đánh dấu đã xem tất cả".
 - Kiểm tra code: web 514 file 0 lỗi 0 cảnh báo, lint sạch, 47/47 test; API 46/46.
 
+**Gói đưa lên server:** `python xuat_sql.py` → `Project/dong-goi-server/` (ngoài repo): 2 file SQL +
+`uploads/` (tts, audio, hanzi, giao-trinh) + HUONG-DAN.md (bản gốc: `data/nap-sach/HUONG-DAN-SERVER.md`).
+Đã nạp thử vào MariaDB trống: số dòng khớp 100% local, chạy lại 2 lần không lỗi, người dùng giữ nguyên,
+9.327 file database trỏ tới đều có trong gói.
+
 **Database:** migration `004_dialogue_audio.sql` (file nghe cả bài khoá),
 `005_character_analysis.sql` (bộ thủ, phân tích chữ). Server thật cần chạy
 `php app/tools/install.php --migrate`.

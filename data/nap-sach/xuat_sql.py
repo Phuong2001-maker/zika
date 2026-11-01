@@ -11,6 +11,7 @@ server giữ nguyên (riêng tiến độ/bài làm gắn với bài học cũ b
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -27,7 +28,7 @@ RA = THU_MUC.parents[2] / "dong-goi-server"
 BANG = [
     "levels", "lessons", "words", "word_examples", "characters", "lesson_chars", "writing_configs",
     "mock_tests", "questions", "test_configs", "dialogues", "dialogue_speakers", "dialogue_lines",
-    "dialogue_questions", "grammar_points", "audio_assets",
+    "grammar_points", "audio_assets",
 ]
 THU_MUC_UPLOADS = ["tts", "audio", "hanzi", "giao-trinh"]
 
@@ -41,9 +42,11 @@ def cau_hinh_db() -> dict:
 
 def main() -> None:
     db = cau_hinh_db()
-    if RA.exists():
-        shutil.rmtree(RA)
-    (RA / "uploads").mkdir(parents=True)
+    # Dọn bên trong chứ không xoá chính thư mục: đang mở trong Explorer thì Windows không cho xoá.
+    RA.mkdir(exist_ok=True)
+    for con in RA.iterdir():
+        shutil.rmtree(con) if con.is_dir() else con.unlink()
+    (RA / "uploads").mkdir()
 
     # 01 — cấu trúc: đúng nội dung migration, kèm dòng ghi đã chạy để install.php --migrate không chạy lại.
     phan = ["-- Zìkǎ · cập nhật cấu trúc database (migration 004, 005).",
@@ -75,17 +78,34 @@ def main() -> None:
         "START TRANSACTION;",
         *[f"DELETE FROM `{b}`;" for b in reversed(BANG) if b != "levels"],
         "COMMIT;",
-        "-- levels: giữ 6 dòng, cập nhật bằng REPLACE bên dưới.",
+        "-- levels: giữ nguyên 6 dòng sẵn có, chỉ cập nhật cột (INSERT … ON DUPLICATE KEY UPDATE).",
         "",
     ]
-    # levels đã có sẵn trên server (khoá ngoại từ nhiều bảng) → REPLACE thay vì INSERT trùng khoá.
-    du_lieu = du_lieu.replace("INSERT INTO `levels`", "REPLACE INTO `levels`")
-    (RA / "02-noi-dung.sql").write_text("\n".join(dau) + du_lieu, encoding="utf-8")
+    # MariaDB 11 chèn dòng "sandbox mode" ở đầu file dump; MySQL/phpMyAdmin cũ báo lỗi cú pháp ngay dòng đó.
+    du_lieu = "\n".join(d for d in du_lieu.splitlines() if not d.startswith("/*M!999999"))
+    # levels đã có trên server và bị nhiều bảng trỏ tới: REPLACE = xoá rồi chèn, có thể kéo dữ liệu khác
+    # theo → cập nhật tại chỗ.
+    du_lieu = re.sub(
+        r"^(INSERT INTO `levels` \(([^)]*)\) VALUES .*);$",
+        lambda m: m.group(1) + " ON DUPLICATE KEY UPDATE "
+        + ", ".join(f"{c.strip()}=VALUES({c.strip()})" for c in m.group(2).split(",") if c.strip() != "`id`") + ";",
+        du_lieu, flags=re.M,
+    )
+    (RA / "02-noi-dung.sql").write_text("\n".join(dau) + du_lieu + "\n", encoding="utf-8")
 
     for d in THU_MUC_UPLOADS:
         nguon = REPO / "api" / "dev-uploads" / d
-        if nguon.exists():
+        if not nguon.exists():
+            continue
+        if d == "audio":
+            # Chỉ file database đang dùng: mỗi lần ghép lại bài khoá để lại bản cũ (tên theo sha1 nội dung).
+            dung = set(re.findall(r"'/uploads/audio/([^']+\.mp3)'", du_lieu))
+            for f in dung:
+                (RA / "uploads" / "audio" / f).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(nguon / f, RA / "uploads" / "audio" / f)
+        else:
             shutil.copytree(nguon, RA / "uploads" / d)
+    shutil.copy2(THU_MUC / "HUONG-DAN-SERVER.md", RA / "HUONG-DAN.md")
     print(f"Đã đóng gói vào {RA}")
 
 
