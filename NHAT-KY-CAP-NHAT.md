@@ -75,6 +75,11 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 Đã nạp thử vào MariaDB trống: số dòng khớp 100% local, chạy lại 2 lần không lỗi, người dùng giữ nguyên,
 9.327 file database trỏ tới đều có trong gói.
 
+**Đã đưa lên web thật (02/11/2026):** xoá nội dung cũ, import 2 file SQL, chép code (`af65846`) và
+`uploads`, xoá `storage/cache/content`. Kiểm tra: dữ liệu web thật **giống hệt local** (dấu vân tay
+40 bài × 5 phần trùng), 8.551 file âm thanh + 697 nét chữ tải được, kịch bản giao diện đạt —
+chi tiết cuối [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+
 **Database:** migration `004_dialogue_audio.sql` (file nghe cả bài khoá),
 `005_character_analysis.sql` (bộ thủ, phân tích chữ). Server thật cần chạy
 `php app/tools/install.php --migrate`.

@@ -81,3 +81,49 @@ cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```bash
 cd data/nap-sach && python kiem_vi_du.py 1 2 3
 ```
+
+---
+
+## Kết quả chạy trên web thật — 02/11/2026 (https://tiengtrunghanu.io.vn)
+
+Sau khi đưa gói `dong-goi-server` lên (SQL + uploads + code `af65846`). Đăng nhập tài khoản admin.
+
+### So dữ liệu web thật với máy local
+
+Cùng một đoạn kiểm tra chạy trên hai bên, băm nội dung từng bài (từ + ví dụ, chữ viết + bộ thủ +
+phân tích, hội thoại + đường dẫn âm thanh, ngữ pháp, câu hỏi bài tập):
+
+| Hạng mục | Web thật | Local | |
+|---|---|---|---|
+| Bài | 40 | 40 | ✅ |
+| Từ / câu ví dụ | 932 / 1.864 | 932 / 1.864 | ✅ |
+| Chữ luyện viết / có bộ thủ | 1.567 / 1.567 | 1.567 / 1.567 | ✅ |
+| Bài khoá / có file nghe | 144 / 144 | 144 / 144 | ✅ |
+| Câu thoại / có âm thanh | 822 / 822 | 822 / 822 | ✅ |
+| Điểm ngữ pháp | 160 | 160 | ✅ |
+| Câu hỏi bài tập | 1.273 | 1.273 | ✅ |
+| Dấu vân tay toàn bộ 40 bài × 5 phần | `82a90358be` | `82a90358be` | ✅ **giống hệt** |
+
+Tải thử trên web thật: **8.551 file âm thanh** (giọng nữ + nam của mọi từ, ví dụ, chữ, ví dụ ngữ
+pháp; bài khoá; câu thoại) và **697 file nét chữ** — 0 lỗi, đúng kiểu `audio/mpeg` / `json`.
+
+### Kịch bản giao diện
+
+| # | Mục | ĐT 375px | MTB 768px | MT 1366px |
+|---|---|---|---|---|
+| A2–A5 | Lật thẻ HSK 1 bài 3: "Chạm để lật", lật tự đọc giọng Kokoro, 2 câu ví dụ | ✅ | ✅ (thử trên local) | ✅ (thử trên local) |
+| A6 | Loa câu ví dụ đọc đúng câu, không dùng giọng trình duyệt | ✅ | ✅ | ✅ |
+| A9 | Từ/câu lặp âm không trắng trang | ✅ | ✅ | ✅ |
+| B1 | Luyện viết: dải chữ cuộn ngang, ô viết 340px trong màn hình đầu | ✅ | — | — |
+| B3 | Viết bằng chạm ngón tay, nét được nhận, trang không cuộn | ✅ | ✅ (local) | ✅ chuột (local) |
+| B7–B8 | Bộ thủ (Bộ Nhân · số 9), giải thích cấu tạo, 4 chữ cùng bộ | ✅ | ✅ (local) | ✅ (local) |
+| C1 | HSK 1 bài 6 "Nghe" phát file thu thật | — | — | ✅ |
+| C2 | HSK 3 bài 1: 4 nút Nghe, phát file ghép, đổi "Dừng" | — | ✅ | — |
+| C4 | Bấm câu thoại đọc đúng giọng nhân vật | — | ✅ | ✅ (local) |
+| D1 | Ngữ pháp: loa câu ví dụ giọng Kokoro | — | — | ✅ (local) |
+| — | Chuông thông báo hiện cạnh ảnh đại diện, `/me/notifications` trả 0 thông báo (server chưa đăng thông báo nào) | ✅ | ✅ | ✅ |
+| — | Service worker đang chạy, mp3 vẫn phát (bản sửa "câm qua service worker" có tác dụng) | ✅ | ✅ | ✅ |
+| — | Quản trị → Từ vựng hiện "320 từ / 172 từ / 440 từ", hết dạng "320/150" | — | — | ✅ |
+
+Chưa thử trên web thật: đăng một thông báo thật (sẽ hiện cho mọi học viên) — luồng này đã thử đủ ở
+local (đăng → số đỏ → đọc → "Đánh dấu đã xem tất cả").
