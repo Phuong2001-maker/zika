@@ -23,6 +23,38 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 03/11/2026 — Làm lại chuông thông báo, sửa bảng tràn mép trên điện thoại
+
+Người dùng chê bảng thông báo xấu và vỡ trên điện thoại.
+- Bảng thông báo: bỏ nền hồng, vạch đỏ, nhãn "Mới" và link đỏ chồng nhau. Có tiêu đề "Thông báo" + "Đọc hết",
+  tab dạng nút gạt, mỗi dòng có ô chuông; chưa đọc = ô màu son + tiêu đề đậm + chấm đỏ, giờ dạng "hôm qua".
+  Trang `/notifications` cùng kiểu.
+- Điện thoại: chuông và nút 9 chấm không sát mép phải, bảng neo `right: 0` theo nút tràn mép trái.
+  Nay ghim dưới thanh trên, chừa 12px với đường kẻ của thanh và hai mép màn (`lib/utils/neo.ts`);
+  cả hai bảng có nền mờ giống nhau, chỉ phủ dưới thanh trên;
+  lúc mở nâng `.mtop` lên trên `.mbar`/`.msheet` để thanh dưới không đè.
+- Lưới thẻ HSK ở 5 trang tổng (Lật thẻ, Bài tập, Hội thoại, Ngữ pháp, Kiểm tra) tràn ngang 7px ở 375px:
+  `1fr 1fr` → `minmax(0, 1fr) minmax(0, 1fr)`.
+
+Kiểm: 13 màn học ở 375px không tràn ngang, hai bảng nằm trong màn và không bị phần nào đè; 768/1366px đạt;
+chế độ tối đạt. Web 0 lỗi/0 cảnh báo, lint sạch, 52/52 test.
+
+### 02/11/2026 23:48 — Kiểm web thật: gói lật thẻ nam chưa lên server
+
+Đối chiếu từng file của `cap-nhat-lat-the-nam-20261102.zip` với https://tiengtrunghanu.io.vn
+(HEAD/GET, xét `content-type` vì file không có vẫn trả `index.html` mã 200):
+
+| Nhóm | Kết quả |
+|---|---|
+| Web build | vẫn bản 07:06 (`version 1793577989636`, `start.CTCPoi23.js`); 61 file `_app` mới không có |
+| 1.788 mp3 mới (894 nam + 894 nữ theo chữ + pinyin) | thiếu cả 1.788 |
+| 2.648 mp3 đọc chậm (gói 14:14) | còn bản cũ, khác kích thước |
+| 5.838 mp3 còn lại | khớp |
+
+Mọi mp3 trên server có `Last-Modified` 07:19 sáng 02/11, tức chưa chép gói nào sau lần nạp đầu.
+Thử `还 hái/huán`, `头 tóu`, `道 dào` (giọng nam, `?v=5`): đều trả trang HTML, không phải `audio/mpeg`.
+Không thấy gói bị giải nén nhầm thư mục (`/cap-nhat-lat-the-nam-20261102/`, `/public/`, `/uploads/uploads/`).
+
 ### 02/11/2026 — Kiểm tra lại phát âm, chuyển từ lật thẻ sang giọng nam Yunxi
 
 Người dùng báo cả nhóm từ đơn đọc không đúng và yêu cầu lật thẻ giọng nam. Lượt quét trước chỉ

@@ -209,7 +209,7 @@
     <header class="mtop">
       <a href="/learn/{info.slug}" class="btn btn-bare" aria-label="Về chọn cấp"><Icon name="left" size={20} /></a>
       <b style="flex: 1; font-size: 15px">{info.name}</b>
-      <Switcher current={part} mobile />
+      <Switcher current={part} />
       <Avatar size={36} />
     </header>
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">{@render body(true)}</main>

@@ -53,7 +53,7 @@
     <header class="mtop">
       <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 30px; height: 30px; font-size: 17px">字</span>Zìkǎ</a>
       <div style="margin-left: auto; display: flex; align-items: center; gap: 10px">
-        <Switcher current={part} mobile />
+        <Switcher current={part} />
         <Avatar size={44} />
       </div>
     </header>
@@ -111,7 +111,8 @@
     gap: 18px;
   }
   .lv-grid.m {
-    grid-template-columns: 1fr 1fr;
+    /* minmax(0, …): `1fr` không co nhỏ hơn nội dung, thẻ HSK 4–6 làm lưới tràn ngang ở 375px. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 12px;
   }
 </style>

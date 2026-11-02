@@ -47,7 +47,7 @@
     <header class="mtop">
       <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 30px; height: 30px; font-size: 17px">字</span>Zìkǎ</a>
       <div style="margin-left: auto; display: flex; align-items: center; gap: 10px">
-        <Switcher current="lt" mobile />
+        <Switcher current="lt" />
         <Avatar size={44} />
       </div>
     </header>

@@ -134,6 +134,9 @@ chứ không làm hỏng cả mẻ.
   Đã xuất lại `D:/zika-devtools/Project/dong-goi-server/`. Chỉ còn triển khai và xác minh web thật
   theo [HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md), không import lại SQL.
   Gói `cap-nhat-giong-doc-20261102.zip` là bản cũ. Chưa có kết nối hosting; giữ mục này đến khi test server.
+  **Kiểm web thật 23:48 02/11: CHƯA triển khai** — web vẫn bản build 07:06 (`_app/version.json`
+  = `1793577989636`), 1.788 mp3 mới (894 nam + 894 nữ) đều thiếu, 2.648 mp3 đọc chậm vẫn bản cũ,
+  mọi mp3 trên server sửa lần cuối 07:19. Upload và giải nén gói `cap-nhat-lat-the-nam-…zip` vẫn phải làm.
 
 - **Giọng đọc mẫu Kokoro + ví dụ lật thẻ + bộ thủ + chuông thông báo (02/11/2026)**: xem
   [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md) — quy trình nạp, lần quét lỗi gần nhất, kịch bản test.

@@ -3,7 +3,7 @@
   import { page } from '$app/state';
   import { media } from '$lib/stores/media.svelte';
   import { notifications } from '$lib/stores/notifications.svelte';
-  import { date, time } from '$lib/utils/format';
+  import { ago, date, time } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
   import Topbar from '$lib/components/Topbar.svelte';
   import Avatar from '$lib/components/Avatar.svelte';
@@ -25,39 +25,54 @@
 <svelte:head><title>Thông báo · Zìkǎ</title></svelte:head>
 
 {#snippet body(m: boolean)}
-  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap">
-    {#if !m}<h1 style="font-size: 28px">Thông báo</h1>{/if}
+  <div class="tb-dau">
+    <div style="flex: 1; min-width: 0">
+      {#if !m}<h1 style="font-size: 28px">Thông báo</h1>{/if}
+      {#if notifications.total > 0}
+        <p class="muted num" style="font-size: 14px">
+          {notifications.total} thông báo{#if notifications.unread > 0}
+            · <b style="color: var(--son-text)">{notifications.unread} chưa đọc</b>{/if}
+        </p>
+      {/if}
+    </div>
     {#if notifications.unread > 0}
-      <button type="button" class="btn btn-sm" onclick={() => notifications.docHet()}><Icon name="check" size={15} /> Đánh dấu đã xem tất cả</button>
+      <button type="button" class="btn btn-sm" onclick={() => notifications.docHet()}><Icon name="check" size={15} /> Đọc hết</button>
     {:else if notifications.total > 0}
-      <span class="muted" style="display: inline-flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600"><Icon name="check" size={15} /> Đã xem tất cả</span>
+      <span class="muted tb-xong"><Icon name="check" size={15} /> Đã đọc hết</span>
     {/if}
   </div>
-  {#if notifications.total > 0}
-    <p class="muted num" style="font-size: 14px; margin-top: -6px">{notifications.total} thông báo · <b style="color: {notifications.unread > 0 ? 'var(--son-text)' : 'inherit'}">{notifications.unread} chưa đọc</b></p>
-  {/if}
 
   {#if !notifications.daTai && notifications.items.length === 0}
     <Skeleton h="160px" r={18} />
   {:else if notifications.items.length === 0}
     <EmptyState title="Chưa có thông báo nào." desc="Khi có tin mới từ Zìkǎ, chuông ở góc trên sẽ báo cho bạn." />
   {:else}
-    <div style="display: flex; flex-direction: column; gap: 12px">
+    <div class="block tb-ds">
       {#each notifications.items as x (x.id)}
-        <article id="tb-{x.id}" class="block tb" class:moi={!x.read}>
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
-            <span class="muted num" style="display: inline-flex; align-items: center; gap: 5px; font-size: 13px"><Icon name="clock" size={14} /> {date(x.at)} {time(x.at)}</span>
-            {#if x.read}
-              <span class="muted" style="display: inline-flex; align-items: center; gap: 4px; font-size: 13px"><Icon name="check" size={14} /> Đã đọc</span>
-            {:else}
-              <button type="button" class="tb-tag" onclick={() => notifications.docMot(x.id)}>Mới · đánh dấu đã đọc</button>
+        <article id="tb-{x.id}" class="tb" class:moi={!x.read}>
+          <span class="tb-o"><Icon name="bell" size={20} /></span>
+          <div class="tb-noi">
+            <div class="tb-hang">
+              <h2 class="tb-tieude">{x.title}</h2>
+              {#if !x.read}<span class="tb-cham" aria-label="Chưa đọc"></span>{/if}
+            </div>
+            <span class="tb-gio num" title={ago(x.at)}>{date(x.at)} · {time(x.at)}</span>
+            <p class="tb-than">{x.body}</p>
+            {#if (x.ctaRoute && x.ctaRoute.startsWith('/')) || !x.read}
+              <div class="tb-nut">
+                {#if x.ctaRoute && x.ctaRoute.startsWith('/')}
+                  <a href={x.ctaRoute} class="btn btn-son btn-sm" onclick={() => notifications.docMot(x.id)}
+                    >{x.ctaText || 'Xem ngay'} <Icon name="right" size={15} /></a
+                  >
+                {/if}
+                {#if !x.read}
+                  <button type="button" class="tb-lk" onclick={() => notifications.docMot(x.id)}
+                    ><Icon name="check" size={14} /> Đánh dấu đã đọc</button
+                  >
+                {/if}
+              </div>
             {/if}
           </div>
-          <h2 style="font-size: 17px; line-height: 1.35; font-weight: {x.read ? 600 : 800}; color: {x.read ? 'var(--text-2)' : 'var(--text)'}">{x.title}</h2>
-          <p style="font-size: 14.5px; line-height: 1.6; white-space: pre-line">{x.body}</p>
-          {#if x.ctaRoute && x.ctaRoute.startsWith('/')}
-            <a href={x.ctaRoute} class="btn btn-son btn-sm" style="align-self: flex-start" onclick={() => notifications.docMot(x.id)}>{x.ctaText || 'Xem ngay'} <Icon name="right" size={15} /></a>
-          {/if}
         </article>
       {/each}
     </div>
@@ -67,7 +82,8 @@
 {#if media.isMobile}
   <div class="mscreen">
     <header class="mtop">
-      <button type="button" class="btn btn-bare" aria-label="Quay lại" onclick={() => history.back()}><Icon name="left" size={20} /></button>
+      <button type="button" class="btn btn-bare" aria-label="Quay lại" onclick={() => history.back()}><Icon name="left" size={20} /></button
+      >
       <b style="flex: 1; font-size: 15px">Thông báo</b>
       <Avatar size={36} bell={false} />
     </header>
@@ -79,24 +95,121 @@
 {/if}
 
 <style>
+  .tb-dau {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .tb-xong {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .tb-ds {
+    padding: 6px;
+  }
   .tb {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 16px 18px;
-    border-left: 3px solid transparent;
+    gap: 14px;
+    padding: 16px 14px;
+    border-radius: 16px;
+    scroll-margin: 80px;
   }
-  .tb.moi {
-    border-left-color: var(--son);
+  .tb + .tb {
+    border-top: 1px solid var(--line);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  /* Chưa đọc: ô biểu tượng màu son, tiêu đề đậm, chấm đỏ. Đã đọc: xám. */
+  .tb-o {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--surface-3);
+    color: var(--text-3);
+  }
+  .tb.moi .tb-o {
     background: var(--son-soft);
+    color: var(--son-text);
   }
-  .tb-tag {
-    padding: 3px 10px;
-    border: 0;
-    border-radius: 999px;
+  .tb-noi {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .tb-hang {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .tb-tieude {
+    flex: 1;
+    color: var(--text-2);
+    font-size: 16.5px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .tb.moi .tb-tieude {
+    color: var(--text);
+    font-weight: 800;
+  }
+  .tb-cham {
+    flex: none;
+    width: 9px;
+    height: 9px;
+    margin-top: 7px;
+    border-radius: 50%;
     background: var(--son);
-    color: #fff;
-    font: 700 12px/1.4 var(--font-ui);
+  }
+  .tb-gio {
+    color: var(--text-3);
+    font-size: 13px;
+  }
+  .tb-than {
+    margin-top: 4px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+  .tb-nut {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: 8px;
+  }
+  .tb-lk {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text-2);
+    font: 600 13.5px/1.2 var(--font-ui);
     cursor: pointer;
+  }
+  .tb-lk:hover {
+    color: var(--text);
+    text-decoration: underline;
+  }
+  @media (max-width: 767px) {
+    .tb {
+      gap: 12px;
+      padding: 14px 10px;
+    }
+    .tb-o {
+      width: 36px;
+      height: 36px;
+    }
   }
 </style>
