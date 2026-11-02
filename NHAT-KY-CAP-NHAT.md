@@ -23,6 +23,37 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 02/11/2026 — Từ và chữ đơn đọc chậm lại
+
+Giữ `TOC_TU = 0.58`, `TOC_TU_DAI = 0.52` và `TTS_VERSION = 2` từ commit `4286d0d`.
+Đã kiểm đủ 8.486 mp3 trên đĩa: không file thiếu, hỏng hoặc câm. Đo 2.648 file từ/chữ 1–4 chữ
+(cả nữ và nam), lấy đoạn từ mẫu đầu đến mẫu cuối có `abs(a) > 0.02`, chia số chữ Hán:
+
+| Số chữ | File | Trung vị giây/âm tiết | Phân vị 10–90% |
+|---|---|---|---|
+| 1 | 1.394 | 0,585 | 0,511–0,657 |
+| 2 | 1.084 | 0,454 | 0,413–0,486 |
+| 3 | 138 | 0,519 | 0,385–0,693 |
+| 4 | 32 | 0,619 | 0,542–0,684 |
+
+Chi tiết phép đo: `data/nap-sach/ra/do_toc_do.json` (chỉ lưu tại máy).
+Bộ quét `quet.py` bỏ áp ngưỡng tốc độ câu cho từ 1–4 chữ vì nhóm này được sinh chậm riêng;
+trước đó 30 file 4 chữ bị báo chậm do tính cả khoảng lặng đầu/cuối. Vẫn kiểm thiếu/hỏng/câm cho
+mọi file và kiểm tốc độ câu từ 5 chữ. Đã thử 7 trường hợp âm thanh: bình thường, nhanh, chậm,
+từ ngắn đọc chậm, câm, hỏng, thiếu — kết quả đúng.
+Bộ quét dùng `127.0.0.1:5173` khớp Vite chỉ nghe IPv4. Đo 3 lượt tải cùng một mp3 trên Windows:
+`localhost` mất 6,188 giây, `127.0.0.1` mất 0,008 giây; tránh thử kết nối IPv6 thất bại cho từng file.
+
+Kiểm tra code: Svelte 0 lỗi/0 cảnh báo, lint sạch, web 47/47 test, API 46/46 test (611 assertions).
+`python kiem_vi_du.py 1 2 3`: 320 + 172 + 440 từ, 0 lỗi.
+
+Đã tải lại 2.648 file vào local, tổng đủ 8.486; đối chiếu SHA-256 với nguồn: 0 sai lệch.
+Gắn âm thanh cho 40 bài, ghép 63 bài khoá, 0 câu thiếu file. Quét qua web lúc 14:14:
+7.949 file âm thanh + 697 file nét chữ, **0 lỗi** (chi tiết ở cuối nhật ký).
+
+**Còn tiếp:** đóng gói và triển khai.
+Từ môi trường hiện tại, tải thử mp3 trên web thật trả HTTP 403; chưa xác minh được bản mới trên server.
+
 ### 02/11/2026 — Ví dụ lật thẻ, giọng đọc Kokoro, bộ thủ, chuông thông báo
 
 **Nội dung**
@@ -84,7 +115,7 @@ chi tiết cuối [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 `005_character_analysis.sql` (bộ thủ, phân tích chữ). Server thật cần chạy
 `php app/tools/install.php --migrate`.
 
-## Lần quét gần nhất — 02/11/2026 06:34
+## Lần quét gần nhất — 02/11/2026 14:14
 
 Sinh tự động bởi `data/nap-sach/quet.py`, đừng sửa tay mục này.
 
@@ -102,4 +133,4 @@ Sinh tự động bởi `data/nap-sach/quet.py`, đừng sửa tay mục này.
 
 | Lỗi | Số chỗ | Ví dụ |
 |---|---|---|
-| Âm thanh: tốc độ lạ | 2 | HSK 1 bài 6 · câu thoại 我的手机号是0932463321 · /uploads/tts/nu2/b5/b533d05aab59783ba517b41cfb2daab70dd0cf23.mp3 |
+| Không có lỗi | 0 | |

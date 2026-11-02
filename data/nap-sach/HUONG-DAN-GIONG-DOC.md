@@ -34,9 +34,15 @@ Trong `viec_doc.py`:
 
 | Hằng | Dùng cho | Hiện tại | Đo được |
 |---|---|---|---|
-| `TOC_TU` | từ/chữ 1–2 chữ | 0,58 | ~0,5 giây mỗi âm tiết |
-| `TOC_TU_DAI` | từ 3–4 chữ | 0,52 | ~0,43 giây mỗi âm tiết |
+| `TOC_TU` | từ/chữ 1–2 chữ | 0,58 | trung vị 0,585 (1 chữ), 0,454 (2 chữ) giây/âm tiết |
+| `TOC_TU_DAI` | từ 3–4 chữ | 0,52 | trung vị 0,519 (3 chữ), 0,619 (4 chữ) giây/âm tiết |
 | `TOC_CAU` | câu ví dụ, câu thoại, ngữ pháp | 1,0 | trung vị ~2,9 âm tiết/giây |
+
+Đo lại ngày 02/11/2026 trên đủ 2.648 file từ/chữ, cả giọng nữ và nam: 1.394 file 1 chữ,
+1.084 file 2 chữ, 138 file 3 chữ, 32 file 4 chữ. Lấy đoạn từ mẫu đầu đến mẫu cuối có
+`abs(a) > 0.02`, tính thời lượng đoạn đó rồi chia số chữ Hán; giữ các khoảng nghỉ giữa âm tiết.
+Không cộng riêng số mẫu vượt ngưỡng vì cách đó loại cả phần âm nhỏ bên trong lời nói.
+Chi tiết lần đo nằm ở `ra/do_toc_do.json` (file sinh tại máy, không đưa lên git).
 
 Kokoro: 1,0 là tốc độ nói thường, số nhỏ hơn là chậm hơn. Sửa số rồi chạy lại script — bước lập danh
 sách tự xoá đúng những file có tốc độ khác để sinh lại. Câu riêng lẻ cần tốc độ khác (vd câu thoại dài

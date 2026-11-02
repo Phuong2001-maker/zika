@@ -1,5 +1,21 @@
 # Đưa giáo trình HSK 1–3 lên server
 
+## Chỉ cập nhật tốc độ giọng đọc — 02/11/2026
+
+Nội dung HSK 1–3 đã được nạp lên server ngày 02/11 (xem nhật ký). Lần này chỉ đổi file giọng đọc
+và số cache `TTS_VERSION = 2`: **không import lại SQL**.
+
+Gói riêng `release/cap-nhat-giong-doc-20261102.zip` gồm web đã build ngay ở gốc zip và
+`uploads/tts/` (đủ 8.486 mp3), tên bên trong dùng dấu `/` để giải nén được trên Linux.
+Upload và giải nén **gộp vào** DOCROOT `domains/tiengtrunghanu.io.vn`, cho phép ghi đè file trùng.
+Zip này không có `api/`, mã PHP hay `config.php`; không cần chép thư mục `app/` của gói phát hành.
+
+Sau khi chép xong, kiểm tra trên web thật: lật thẻ HSK 1, thử cả nữ/nam, từ đơn đọc chậm hơn,
+URL âm thanh có `?v=2`, file trả `audio/mpeg`; làm tiếp kịch bản trong `KICH-BAN-TEST.md`.
+Mục đang dở trong `CLAUDE.md` chỉ được xoá sau khi xác minh web thật.
+
+## Nạp toàn bộ giáo trình
+
 Gói đóng ngày 02/11/2026 từ máy local, đã nạp thử vào một database trống: số dòng khớp 100% với local,
 chạy lại lần 2 không lỗi, 9.327 file mà database trỏ tới đều có trong `uploads/`.
 

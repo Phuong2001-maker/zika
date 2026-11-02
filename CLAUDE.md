@@ -123,15 +123,14 @@ chứ không làm hỏng cả mẻ.
 
 ## Việc còn treo
 
-- **ĐANG DỞ (02/11/2026 ~07:30) — làm tiếp theo đúng thứ tự:** từ đơn ở lật thẻ đọc quá nhanh
+- **ĐANG DỞ (cập nhật 02/11/2026 14:14) — làm tiếp theo đúng thứ tự:** từ đơn ở lật thẻ đọc quá nhanh
   (đo 0,27 giây/âm tiết) → đã hạ tốc độ (`TOC_TU` 0,58, `TOC_TU_DAI` 0,52 trong
-  `data/nap-sach/viec_doc.py`) và đang sinh lại 2.648 file mp3 từ/chữ 1–4 chữ;
+  `data/nap-sach/viec_doc.py`) và đã sinh + tải lại đủ 2.648 file mp3 từ/chữ 1–4 chữ;
   `TTS_VERSION` trong `web/src/lib/learn/speech.ts` đã tăng lên 2.
-  1. Bật local (`dev\CHAY-TAT-CA.cmd`), rồi sinh nốt + tải + gắn + quét bằng một lệnh — xem
-     [data/nap-sach/HUONG-DAN-GIONG-DOC.md](data/nap-sach/HUONG-DAN-GIONG-DOC.md):
-     `cd data/nap-sach; powershell -ExecutionPolicy Bypass -File .\sinh-giong-doc.ps1 -BoQuaLap`
-  2. Đo lại: file từ 1–2 chữ phải ~0,5 giây/âm tiết (cách đo: phần có tiếng `abs(a) > 0.02`, chia số chữ).
-  3. Kiểm tra code (mục trên) → commit → push.
+  Đã đối chiếu SHA-256 đủ 8.486 mp3 (0 sai lệch), gắn 40 bài/ghép 63 bài khoá,
+  quét qua web 7.949 âm thanh + 697 nét chữ **0 lỗi**. Trung vị 1 chữ 0,585 và 2 chữ 0,454
+  giây/âm tiết (đo đoạn từ mẫu đầu đến mẫu cuối có `abs(a) > 0.02`). Web check/lint/test và API
+  đều đạt; chi tiết trong [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md).
   4. Gói cho server: tắt `npm run dev` (nó khoá `node_modules`, `npm ci` lỗi EPERM) →
      `bash deploy/build-release.sh` (biến `ZIKA_PHP`/`ZIKA_COMPOSER` như README) → `python xuat_sql.py`.
      Server **không cần chạy lại SQL** (đường dẫn âm thanh không đổi): chép code web như lần trước

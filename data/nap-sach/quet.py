@@ -25,7 +25,8 @@ sys.path.append(str(SACH_DIR / "kokoro-tts" / ".venv" / "Lib" / "site-packages")
 import numpy as np  # noqa: E402
 import soundfile as sf  # noqa: E402
 
-WEB = "http://localhost:5173"
+# Vite chỉ nghe IPv4; localhost thử ::1 trước làm mỗi lần tải trên Windows chậm khoảng 2 giây.
+WEB = "http://127.0.0.1:5173"
 GIONG = ("nu", "nam")
 
 
@@ -58,9 +59,9 @@ def xet_am(url: str, text: str) -> str | None:
         return "file câm"
     n = max(1, len(chu_han(text)) + len(re.findall(r"\d", text)))  # số đọc thành âm tiết
     # Người đọc chậm cho người học ~3 âm tiết/giây (đo toàn bộ: trung vị 2,9). Báo khi quá 4,5
-    # (nhanh khó nghe, hoặc bị cắt cụt) hay dưới 1,2 (kéo dài bất thường). Từ 1–3 chữ có khoảng lặng
-    # đầu cuối nên chỉ xét câu từ 4 chữ.
-    if text and n >= 4 and not 1.2 <= n / dai <= 4.5:
+    # (nhanh khó nghe, hoặc bị cắt cụt) hay dưới 1,2 (kéo dài bất thường). Từ 1–4 chữ được sinh
+    # chậm riêng (TOC_TU/TOC_TU_DAI), thêm khoảng lặng đầu cuối nên không áp ngưỡng tốc độ câu.
+    if text and n >= 5 and not 1.2 <= n / dai <= 4.5:
         return f"tốc độ lạ: {n / dai:.1f} âm tiết/giây"
     return None
 
