@@ -113,7 +113,8 @@ final class MiscController
         $v = new Validator($r->body);
         $text = $v->str('text', 'Câu chữ', true, 1, 500);
         $reading = $v->str('reading', 'Pinyin', false, 0, 500);
-        $voice = (string) $v->in('voice', 'Giọng', ['nu', 'nam', 'nu2', 'nam2'], 'nu');
+        // nu/nam: giọng chung theo Cài đặt; các tên còn lại là giọng riêng của nhân vật hội thoại.
+        $voice = (string) $v->in('voice', 'Giọng', ['nu', 'nam', 'nu2', 'nam2', 'xiaoxiao', 'xiaoyi', 'xiaoxiao2', 'yunxi', 'yunjian', 'yunyang', 'yunxia'], 'nu');
         $v->done();
         $out = Upload::tts($r->files['file'] ?? null, $text, $voice, $reading);
         Db::exec(

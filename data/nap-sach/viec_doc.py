@@ -1,29 +1,25 @@
-"""Lập danh sách câu chữ cần đọc mẫu → ra/doc_mau.json (đầu vào của doc_mau.py).
+"""Lập danh sách câu chữ cần đọc mẫu → ra/doc_edge.json (đầu vào của doc_edge.py).
 
-  python viec_doc.py tu      # từ, câu ví dụ, chữ luyện viết (lấy từ file soạn sẵn, không cần web)
-  python viec_doc.py web     # câu thoại (giọng theo nhân vật), ví dụ ngữ pháp, câu hỏi nghe (đọc từ web)
+  python viec_doc.py tu web  # từ, câu ví dụ, chữ luyện viết (file soạn sẵn) + câu thoại, ví dụ ngữ pháp,
+                             # câu hỏi nghe (đọc từ web local)
 
 Tên file = sha1(câu chữ) như web tính (web/src/lib/learn/speech.ts), mỗi câu đủ hai giọng nữ/nam
-cho khớp lựa chọn giọng trong Cài đặt. Từ và chữ đơn đọc chậm hơn câu một chút cho nghe rõ.
+cho khớp lựa chọn giọng trong Cài đặt; từ lật thẻ thêm pinyin vào khoá. Câu thoại đọc bằng giọng
+cố định của từng nhân vật (bảng VAI), thư mục theo tên giọng.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 import re
-import shutil
 import sys
 import unicodedata
 
 from chung import THU_MUC, chu_han, ghi_json, tach_am_tiet
 
-TOC_TU = 0.58   # từ/chữ 1–2 chữ: ~0,5 giây mỗi âm tiết, như giáo viên đọc từ mới (0,9 nghe quá nhanh)
-TOC_TU_DAI = 0.52  # từ 3–4 chữ: đọc chậm riêng; số đo thực tế xem HUONG-DAN-GIONG-DOC.md
-TOC_CAU = 1.0
-
-
-def toc_tu(text: str) -> float:
-    return TOC_TU if len(chu_han(text)) <= 2 else TOC_TU_DAI
+def loai(text: str) -> str:
+    """"tu" (từ/chữ đứng riêng, đọc rõ từng âm) hay "cau"."""
+    return "tu" if 1 <= len(chu_han(text)) <= 4 and not re.search(r"[。！？，、；：!?,;:]", text) else "cau"
 
 
 def khoa_doc(text: str, reading: str | None = None) -> str:
@@ -33,7 +29,7 @@ def khoa_doc(text: str, reading: str | None = None) -> str:
 
 def duong(text: str, giong: str, reading: str | None = None) -> str:
     h = khoa_doc(text, reading)
-    return f"ra/tts/{giong}/{h[:2]}/{h}.mp3"
+    return f"ra/tts-edge/{giong}/{h[:2]}/{h}.mp3"
 
 
 def tu_theo_pinyin() -> list[dict]:
@@ -41,19 +37,16 @@ def tu_theo_pinyin() -> list[dict]:
     for cap in (1, 2, 3):
         for w in json.loads((THU_MUC / "ra" / f"tu_hsk{cap}.json").read_text(encoding="utf-8")):
             for g in ("nu", "nam"):
-                ra.append({"text": w["hanzi"], "pinyin": w["pinyin"], "reading": w["pinyin"],
-                           "speed": 0.8 if g == "nam" else toc_tu(w["hanzi"]), "voice": g,
-                           "engine": "yunxi" if g == "nam" else "kokoro",
-                           "revision": 2 if g == "nam" else 1,
-                           "out": duong(w["hanzi"], g, w["pinyin"])})
+                ra.append({"text": w["hanzi"], "pinyin": w["pinyin"], "reading": w["pinyin"], "voice": g,
+                           "kind": loai(w["hanzi"]), "out": duong(w["hanzi"], g, w["pinyin"])})
     return ra
 
 
-def them(ds: dict, text: str, pinyin: str | None, toc: float) -> None:
+def them(ds: dict, text: str, pinyin: str | None) -> None:
     text = text.strip()
     if not text or text in ds:
         return  # đã có (từ vựng đứng trước chữ đơn nên cách đọc của từ được giữ)
-    ds[text] = {"pinyin": pinyin, "speed": toc}
+    ds[text] = {"pinyin": pinyin, "kind": loai(text)}
 
 
 def tu_va_vi_du(ds: dict) -> None:
@@ -63,9 +56,9 @@ def tu_va_vi_du(ds: dict) -> None:
         for f in sorted((THU_MUC / "vi-du").glob(f"hsk{cap}*.json")):
             vd.update(json.loads(f.read_text(encoding="utf-8")))
         for w in tu:
-            them(ds, w["hanzi"], w["pinyin"], toc_tu(w["hanzi"]))
+            them(ds, w["hanzi"], w["pinyin"])
             for e in vd.get(w["hanzi"], []):
-                them(ds, e["zh"], e["pinyin"], TOC_CAU)
+                them(ds, e["zh"], e["pinyin"])
         # Chữ đơn ở màn luyện viết: đọc theo âm của chữ trong từ chứa nó.
         for w in tu:
             chu, am = chu_han(w["hanzi"]), tach_am_tiet(w["pinyin"])
@@ -75,38 +68,68 @@ def tu_va_vi_du(ds: dict) -> None:
                 am = [a[:-1] if a.lower().endswith("r") and a.lower() != "er" else a for a in am]
             if len(chu) == len(am):
                 for c, a in zip(chu, am):
-                    them(ds, c, a, TOC_TU)
+                    them(ds, c, a)
 
 
-# Giọng cố định cho từng nhân vật để một người nói cùng một giọng suốt các bài.
-NU = {"小丽", "王一雪", "李文", "白家月", "安妮", "妈妈", "小美", "小米", "刘小雪", "安娜", "琳达", "张阿姨",
-      "售货员", "服务员", "老师", "张老师", "小林", "Bài đọc", "旁白", "A", "同事", "奶奶", "姐姐", "妹妹"}
-NAM = {"小刚", "刘明", "陈天中", "王一飞", "小明", "杨同乐", "爸爸", "爷爷", "麦克", "胡医生", "张经理",
-       "王经理", "刘小明", "小李", "小王", "小陈", "同学们", "同学", "B", "大卫", "哥哥", "弟弟"}
-# Nhân vật chính giữ giọng gốc; người phụ cùng giới trong một bài khoá mới đổi sang giọng thứ hai.
-CHINH = {"小丽", "小刚", "王一雪", "王一飞", "刘明", "李文", "陈天中", "Bài đọc", "旁白"}
+# Giọng cố định cho từng nhân vật để một người nói cùng một giọng suốt các bài:
+# xiaoxiao nữ chính/người lớn, xiaoyi nữ thứ hai/bé gái, yunxi nam trẻ, yunjian nam trưởng thành,
+# yunyang thầy/người lớn tuổi/người có chức vụ, yunxia bé trai.
+VAI = {
+    **dict.fromkeys(["小丽", "王一雪", "李文", "刘小雪", "妈妈", "张阿姨", "老师", "张老师", "琳达", "Bài đọc",
+                     "旁白", "A", "同事", "奶奶", "姐姐"], "xiaoxiao"),
+    **dict.fromkeys(["白家月", "安妮", "小林", "小美", "小米", "安娜", "服务员", "售货员", "妹妹"], "xiaoyi"),
+    **dict.fromkeys(["小刚", "王一飞", "刘明", "杨同乐", "小王", "小陈", "小张", "麦克", "同学", "同学们", "B",
+                     "小明", "大卫", "哥哥", "弟弟"], "yunxi"),
+    **dict.fromkeys(["陈天中", "小李", "爸爸", "王叔叔", "小李、小陈"], "yunjian"),
+    **dict.fromkeys(["爷爷", "王经理", "张经理", "胡医生"], "yunyang"),
+    **dict.fromkeys(["刘小明"], "yunxia"),
+}
+# Hai người trong một bài khoá trùng giọng thì người sau lấy giọng kế tiếp cùng giới.
+# Chỉ có 2 giọng nữ: người nữ thứ ba trong một bài dùng xiaoxiao2 (Xiaoxiao hạ cao độ, doc_edge.CAO_DO).
+THAY = {"xiaoxiao": ["xiaoyi", "xiaoxiao2"], "xiaoyi": ["xiaoxiao", "xiaoxiao2"], "yunxi": ["yunjian", "yunyang"],
+        "yunjian": ["yunxi", "yunyang"], "yunyang": ["yunjian", "yunxi"], "yunxia": ["yunxi", "yunjian"]}
+NU_LON = {"妈妈", "张阿姨", "奶奶", "老师", "张老师", "同事"}
+# Nhân vật chính giữ giọng gốc khi trùng, theo thứ tự này (小丽 luôn trước 李文…).
+CHINH = ["Bài đọc", "旁白", "小丽", "小刚", "王一雪", "王一飞", "刘明", "李文", "陈天中"]
 
 
-def gioi(sp: dict, thu_tu: int) -> str:
+def giong_rieng(sp: dict, thu_tu: int) -> str:
     ten, vai = sp["name"], sp.get("roleVi", "").lower()
-    if ten in NU:
-        return "nu"
-    if ten in NAM:
-        return "nam"
+    if ten in VAI:
+        return VAI[ten]
     if any(x in ten for x in ("丽", "妈", "姐", "妹", "奶", "女", "娜", "雪", "阿姨")) or vai.split()[:1] in (["mẹ"], ["chị"], ["bà"], ["cô"]):
-        return "nu"
-    if any(x in ten for x in ("爸", "哥", "弟", "爷", "先生", "叔")) or vai.split()[:1] in (["bố"], ["anh"], ["ông"], ["chú"]):
-        return "nam"
-    return "nu" if thu_tu % 2 == 0 else "nam"
+        return "xiaoxiao"
+    if any(x in ten for x in ("爷", "经理", "医生", "先生")) or vai.split()[:1] in (["ông"], ["bác"]):
+        return "yunyang"
+    if any(x in ten for x in ("爸", "叔")) or vai.split()[:1] in (["bố"], ["chú"]):
+        return "yunjian"
+    if any(x in ten for x in ("哥", "弟")) or vai.split()[:1] in (["anh"],):
+        return "yunxi"
+    return "xiaoxiao" if thu_tu % 2 == 0 else "yunxi"
 
 
-def giong_khoa(speakers: list[dict]) -> dict[int, str]:
-    goc = {sp["id"]: gioi(sp, n) for n, sp in enumerate(speakers)}
-    ra: dict[int, str] = {}
-    # Nhân vật chính chọn trước để luôn giữ giọng gốc.
-    for sp in sorted(speakers, key=lambda x: x["name"] not in CHINH):
-        g = goc[sp["id"]]
-        ra[sp["id"]] = g + "2" if g in ra.values() else g
+def giong_bai(ds_khoa: list[dict]) -> dict[str, str]:
+    """Tên nhân vật → giọng cho mọi bài khoá của một bài: một người giữ một giọng suốt bài, hai người
+    cùng nói trong một bài khoá không trùng giọng (người khác khoá thì được trùng — chỉ có 3 giọng nữ).
+    Lời nói chung ("小李、小陈") lấy giọng người đầu."""
+    speakers = [sp for k in ds_khoa for sp in k["speakers"]]
+    ten = list(dict.fromkeys(sp["name"] for sp in speakers))
+    rieng = {sp["name"]: sp for sp in speakers}
+    cung: dict[str, set[str]] = {t: set() for t in ten}
+    for k in ds_khoa:
+        co = {sp["name"] for sp in k["speakers"] if "、" not in sp["name"]}
+        for t in co:
+            cung[t] |= co - {t}
+    ra: dict[str, str] = {}
+    for t in sorted((t for t in ten if "、" not in t), key=lambda t: CHINH.index(t) if t in CHINH else len(CHINH)):
+        g = giong_rieng(rieng[t], ten.index(t))
+        cam = {ra[u] for u in cung[t] if u in ra}
+        # Người nữ lớn tuổi trùng giọng thì sang Xiaoxiao hạ cao độ (già dặn), để Xiaoyi cho nhân vật trẻ.
+        thu_tu = ["xiaoxiao2", "xiaoyi"] if g == "xiaoxiao" and t in NU_LON else THAY[g]
+        ra[t] = next((x for x in [g, *thu_tu] if x not in cam), g)
+    for t in ten:
+        if "、" in t:
+            ra[t] = ra.get(t.split("、")[0]) or giong_rieng(rieng[t], ten.index(t))
     return ra
 
 
@@ -118,84 +141,46 @@ def tu_web(ds: dict, thoai: list) -> None:
         for b in s.goi("GET", f"/admin/levels/{cap}/lessons")["lessons"]:
             for p in s.goi("GET", f"/learn/lessons/{b['id']}/grammar")["points"]:
                 for e in p["examples"]:
-                    them(ds, e["zh"], e.get("pinyin"), TOC_CAU)
+                    them(ds, e["zh"], e.get("pinyin"))
             for phan in ("bt", "kt"):
                 for q in s.goi("GET", f"/admin/lessons/{b['id']}/questions?part={phan}")["questions"]:
                     t = (q.get("payload") or {}).get("audioText")
                     if t:
-                        them(ds, t, None, toc_tu(t) if len(chu_han(t)) <= 4 else TOC_CAU)
-            for k in s.goi("GET", f"/learn/lessons/{b['id']}/dialogue")["dialogues"]:
-                giong = giong_khoa(k["speakers"])
+                        them(ds, t, None)
+            ds_khoa = s.goi("GET", f"/learn/lessons/{b['id']}/dialogue")["dialogues"]
+            theo_ten = giong_bai(ds_khoa)
+            for k in ds_khoa:
+                giong = {sp["id"]: theo_ten[sp["name"]] for sp in k["speakers"]}
                 thoai.append({"cap": cap, "bai": b["no"], "lessonId": b["id"], "khoa": k["no"], "coAudio": bool(k["audioUrl"]),
                               "giong": {sp["name"]: giong[sp["id"]] for sp in k["speakers"]},
                               "cau": [{"zh": l["zh"], "pinyin": l["pinyin"], "voice": giong[l["speakerId"]]} for l in k["lines"]]})
 
 
 def gop(viec: list[dict]) -> None:
-    """`viec_doc.py tu web`: một danh sách chung ra/doc_mau_tat.json cho doc_mau.py, và dọn file cũ.
-
-    - Thứ tự: giọng nữ (mặc định trong Cài đặt) → câu thoại → giọng nam, để dừng giữa chừng vẫn dùng được.
-    - ra/toc_rieng.json {out: tốc độ}: câu đã chỉnh tay (câu thoại dài đọc chậm lại) — giữ qua các lần lập.
-    - File đã có mà tốc độ hoặc pinyin khác lần lập trước → xoá file + bỏ khỏi ra/da_tai.json, để
-      doc_mau.py sinh lại và tai_doc.py tải lại đúng những file đó (file còn nguyên thì bỏ qua).
-    """
-    f_tat, f_rieng, f_da = (THU_MUC / "ra" / t for t in ("doc_mau_tat.json", "toc_rieng.json", "da_tai.json"))
-    rieng = json.loads(f_rieng.read_text(encoding="utf-8")) if f_rieng.exists() else {}
-    cu = {v["out"]: v for v in json.loads(f_tat.read_text(encoding="utf-8"))} if f_tat.exists() else {}
-    da = json.loads(f_da.read_text(encoding="utf-8")) if f_da.exists() else {}
-    thu_tu = {"nu": 0, "nu2": 1, "nam2": 1, "nam": 2}
+    """Một danh sách chung ra/doc_edge.json cho doc_edge.py (bỏ trùng theo file ra)."""
     tat, gap = [], set()
-    for v in sorted(viec, key=lambda v: thu_tu[v["voice"]]):
-        if v["out"] in gap:
-            continue
-        gap.add(v["out"])
-        v["speed"] = rieng.get(v["out"], v["speed"])
-        tat.append(v)
-    xoa = 0
+    for v in viec:
+        if v["out"] not in gap:
+            gap.add(v["out"])
+            tat.append(v)
+    ghi_json(THU_MUC / "ra" / "doc_edge.json", tat)
+    dem: dict[str, int] = {}
     for v in tat:
-        c = cu.get(v["out"])
-        if c and (c.get("speed") != v["speed"] or c.get("pinyin") != v.get("pinyin")
-                  or c.get("engine", "kokoro") != v.get("engine", "kokoro")
-                  or c.get("revision", 1) != v.get("revision", 1)):
-            (THU_MUC / v["out"]).unlink(missing_ok=True)
-            da.pop(v["out"], None)
-            xoa += 1
-    # Chỉ tái dùng mp3 khi cả pinyin và tốc độ của bản cũ khớp; không sao chép nhầm âm thanh nhẹ
-    # của chữ tách từ từ ghép (头 tou) sang từ vựng đứng riêng (头 tóu).
-    chep = 0
-    for v in tat:
-        if not v.get("reading") or v.get("engine", "kokoro") != "kokoro" or (THU_MUC / v["out"]).exists():
-            continue
-        nguon = cu.get(duong(v["text"], v["voice"]))
-        if (nguon and khoa_doc(v["text"], nguon.get("pinyin")) == khoa_doc(v["text"], v["reading"])
-                and nguon.get("speed") == v["speed"] and (THU_MUC / nguon["out"]).exists()):
-            out = THU_MUC / v["out"]
-            out.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(THU_MUC / nguon["out"], out)
-            chep += 1
-    ghi_json(f_tat, tat)
-    ghi_json(f_da, da)
-    con = sum(1 for v in tat if not (THU_MUC / v["out"]).exists())
-    print(f"{len(tat)} file trong ra/doc_mau_tat.json · {xoa} file đổi tốc độ/pinyin đã xoá · {chep} file tái dùng đúng pinyin · {con} file cần sinh")
+        dem[v["voice"]] = dem.get(v["voice"], 0) + 1
+    print(f"{len(tat)} file → ra/doc_edge.json · theo giọng: {dem}")
 
 
 if __name__ == "__main__":
+    if not ("tu" in sys.argv and "web" in sys.argv):
+        sys.exit("Chạy: python viec_doc.py tu web")
     ds: dict = {}
     thoai: list = []
-    if "tu" in sys.argv:
-        tu_va_vi_du(ds)
-    if "web" in sys.argv:
-        tu_web(ds, thoai)
-        ghi_json(THU_MUC / "ra" / "hoi_thoai_giong.json", thoai)
-    viec = [{"text": t, **v, "voice": g, "out": duong(t, g)} for t, v in ds.items() for g in ("nu", "nam")]
-    if "tu" in sys.argv:
-        viec += tu_theo_pinyin()
-    # Câu thoại: một giọng đúng nhân vật (file riêng theo giọng, nên câu trùng với ví dụ không đè nhau).
-    viec += [{"text": c["zh"], "pinyin": c["pinyin"], "speed": TOC_CAU, "voice": c["voice"], "out": duong(c["zh"], c["voice"])}
-             for k in thoai for c in k["cau"]]
-    if "tu" in sys.argv and "web" in sys.argv:
-        gop(viec)
-    else:
-        ten = "doc_mau.json" if "tu" in sys.argv else "doc_mau_web.json"
-        ghi_json(THU_MUC / "ra" / ten, viec)
-        print(f"{len(ds)} câu chữ × 2 giọng + {sum(len(k['cau']) for k in thoai)} câu thoại = {len(viec)} file → ra/{ten}")
+    tu_va_vi_du(ds)
+    tu_web(ds, thoai)
+    ghi_json(THU_MUC / "ra" / "hoi_thoai_giong.json", thoai)
+    viec = tu_theo_pinyin()
+    # Câu thoại: một giọng đúng nhân vật (thư mục theo tên giọng, nên câu trùng với ví dụ không đè nhau).
+    viec += [{"text": c["zh"], "pinyin": c["pinyin"], "voice": c["voice"], "kind": loai(c["zh"]),
+              "out": duong(c["zh"], c["voice"])} for k in thoai for c in k["cau"]]
+    viec += [{"text": t, **v, "voice": g, "out": duong(t, g)} for t, v in ds.items() for g in ("nu", "nam")]
+    gop(viec)

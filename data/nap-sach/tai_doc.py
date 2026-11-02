@@ -1,23 +1,28 @@
-"""Tải file đọc mẫu (doc_mau.py sinh ra) lên web qua POST /admin/media/tts.
+"""Tải file đọc mẫu (doc_edge.py sinh và đã kiểm) lên web qua POST /admin/media/tts.
 
-  python tai_doc.py                 # tải mọi file đã sinh mà chưa tải (ghi nhớ ở ra/da_tai.json)
-  python tai_doc.py --doi           # chờ doc_mau.py sinh tiếp, tải dần tới khi đủ
+  python tai_doc.py                 # tải file đã kiểm mà chưa tải hoặc đã sinh lại (ra/da_tai_edge.json)
+  python tai_doc.py --nhanh         # như trên nhưng nạp thẳng bằng PHP dòng lệnh (máy local, nhanh hơn nhiều)
 
-Server lưu đúng tên sha1(câu chữ) nên web tự tìm ra file; tải lại cùng câu thì ghi đè.
+Server lưu đúng tên sha1(câu chữ [+ pinyin]) nên web tự tìm ra file; tải lại cùng câu thì ghi đè.
+Chỉ tải file đã qua bước kiểm (đạt hoặc chờ người nghe), không tải file còn lỗi kỹ thuật.
 """
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 import urllib.error
 import time
 import urllib.request
 import uuid
 
-from chung import THU_MUC, ghi_json
+from chung import REPO, THU_MUC, ghi_json
+
+PHP = "D:/zika-devtools/php/php.exe"
 from nap import API, ORIGIN, Phien
 
-DA_TAI = THU_MUC / "ra" / "da_tai.json"
+DA_TAI = THU_MUC / "ra" / "da_tai_edge.json"
+KQ = THU_MUC / "ra" / "doc_edge_kq.json"
 
 
 def tai(s: Phien, v: dict) -> str:
@@ -50,39 +55,61 @@ def tai(s: Phien, v: dict) -> str:
 
 
 def mot_luot(s: Phien, da: dict) -> tuple[int, int]:
-    viec = []
-    danh_sach = ("doc_mau_tat.json",) if (THU_MUC / "ra" / "doc_mau_tat.json").exists() else ("doc_mau.json", "doc_mau_web.json")
-    for ten in danh_sach:
-        f = THU_MUC / "ra" / ten
-        if f.exists():
-            viec += json.loads(f.read_text(encoding="utf-8"))
-    moi = con = 0
+    viec = json.loads((THU_MUC / "ra" / "doc_edge.json").read_text(encoding="utf-8"))
+    kq = json.loads(KQ.read_text(encoding="utf-8"))
+    moi = bo = 0
     for v in viec:
-        if v["out"] in da:
+        k = kq.get(v["out"], {})
+        if k.get("trang_thai") not in ("dat", "nghi") or not (THU_MUC / v["out"]).exists():
+            bo += 1
             continue
-        if not (THU_MUC / v["out"]).exists():
-            con += 1
+        if da.get(v["out"], {}).get("sha") == k.get("sha"):
             continue
         try:
-            da[v["out"]] = tai(s, v)
+            da[v["out"]] = {"path": tai(s, v), "sha": k["sha"]}
         except Exception as e:  # ghi lại rồi đi tiếp, lần chạy sau thử lại
             print(f"[lỗi] {v['out']} ({v['text'][:20]}): {e}", flush=True)
             continue
         moi += 1
-        if moi % 200 == 0:
+        if moi % 500 == 0:
             ghi_json(DA_TAI, da)
-            print(f"đã tải {len(da)} file", flush=True)
+            print(f"đã tải {moi} file", flush=True)
     ghi_json(DA_TAI, da)
-    return moi, con
+    return moi, bo
+
+
+def nhanh(da: dict) -> tuple[int, int]:
+    """--nhanh: nạp thẳng bằng api/app/tools/nhap_tts.php (cùng cách đặt tên với API), không qua HTTP —
+    server dev chỉ xử lý một yêu cầu một lúc nên 10.000 file qua API mất khoảng 2 giờ."""
+    viec = json.loads((THU_MUC / "ra" / "doc_edge.json").read_text(encoding="utf-8"))
+    kq = json.loads(KQ.read_text(encoding="utf-8"))
+    can, bo = [], 0
+    for v in viec:
+        k = kq.get(v["out"], {})
+        if k.get("trang_thai") not in ("dat", "nghi") or not (THU_MUC / v["out"]).exists():
+            bo += 1
+        elif da.get(v["out"], {}).get("sha") != k.get("sha"):
+            can.append(v)
+    ds = THU_MUC / "ra" / "tai_nhanh.json"
+    ra = THU_MUC / "ra" / "tai_nhanh_kq.json"
+    ghi_json(ds, [{"file": str(THU_MUC / v["out"]), "text": v["text"], "voice": v["voice"], "reading": v.get("reading")}
+                  for v in can])
+    subprocess.run([PHP, "app/tools/nhap_tts.php", str(ds), str(ra)], cwd=REPO / "api", check=True)
+    duong = json.loads(ra.read_text(encoding="utf-8"))
+    for v in can:
+        p = duong.get(str(THU_MUC / v["out"]))
+        if p:
+            da[v["out"]] = {"path": p, "sha": kq[v["out"]]["sha"]}
+    ghi_json(DA_TAI, da)
+    return len(duong), bo
 
 
 if __name__ == "__main__":
-    s = Phien()
-    s.dang_nhap()
     da = json.loads(DA_TAI.read_text(encoding="utf-8")) if DA_TAI.exists() else {}
-    while True:
-        moi, con = mot_luot(s, da)
-        print(f"lượt này tải {moi}, tổng {len(da)}, còn {con} file chưa sinh", flush=True)
-        if "--doi" not in sys.argv or con == 0:
-            break
-        time.sleep(60)
+    if "--nhanh" in sys.argv:
+        moi, bo = nhanh(da)
+    else:
+        s = Phien()
+        s.dang_nhap()
+        moi, bo = mot_luot(s, da)
+    print(f"lượt này tải {moi}, tổng {len(da)} file trên web, {bo} file chưa đạt nên chưa tải", flush=True)

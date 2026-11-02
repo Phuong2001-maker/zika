@@ -81,8 +81,8 @@
                 <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center">
                   {#each p.blocks as b, k (k)}
                     {#if k > 0}<span class="muted">+</span>{/if}
-                    <span class="fblk" style="background: {b.color}; min-width: 70px; padding: 8px 10px">
-                      <span class="muted" style="font-size: 11px; font-weight: 700">{b.label}</span>
+                    <span class="fblk" style="{b.color ? `background: ${b.color}; color: #1F2430; ` : ''}min-width: 70px; padding: 8px 10px">
+                      <span style="font-size: 11px; font-weight: 700; color: {b.color ? '#4A505C' : 'var(--text-2)'}">{b.label}</span>
                       <span class="hz" lang="zh" style="font-size: 17px">{b.hz}</span>
                     </span>
                   {/each}

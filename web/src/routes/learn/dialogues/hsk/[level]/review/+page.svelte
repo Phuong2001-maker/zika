@@ -101,7 +101,7 @@
             {#each d.lines as l (l.id)}
               {@const sp = speakerOf(d, l.speakerId)}
               <li style="display: flex; gap: 10px">
-                <span class="who hz" lang="zh" style="background: {sp?.color ?? 'var(--surface)'}; width: 34px; height: 34px; font-size: 14px">
+                <span class="who hz" lang="zh" style="background: {sp?.color ?? 'var(--surface)'}{sp?.color ? '; color: #1F2430' : ''}; width: 34px; height: 34px; font-size: 14px">
                   {sp?.avatarChar ?? '?'}
                 </span>
                 <button type="button" class="bub" style="flex: 1; text-align: left; cursor: pointer" onclick={() => speak(l.zh, l.audioUrl)}>

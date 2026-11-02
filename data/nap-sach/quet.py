@@ -8,7 +8,7 @@ và tải thử từng file (âm thanh, nét chữ) từ web chứ không chỉ 
 """
 from __future__ import annotations
 
-import io
+import hashlib
 import json
 import re
 import sys
@@ -17,17 +17,20 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
-from chung import REPO, SACH_DIR, THU_MUC, chu_han, ghi_json
+import numpy as np
+
+from chung import REPO, THU_MUC, chu_han, ghi_json
+from doc_edge import am_khong_dau, giai
 from viec_doc import khoa_doc
 from nap import Phien
-
-sys.path.append(str(SACH_DIR / "kokoro-tts" / ".venv" / "Lib" / "site-packages"))
-import numpy as np  # noqa: E402
-import soundfile as sf  # noqa: E402
 
 # Vite chỉ nghe IPv4; localhost thử ::1 trước làm mỗi lần tải trên Windows chậm khoảng 2 giây.
 WEB = "http://127.0.0.1:5173"
 GIONG = ("nu", "nam")
+# File doc_edge.py đã kiểm: web phải trả đúng từng byte của bản đó (sha256), không phải bản cũ.
+_KQ = THU_MUC / "ra" / "doc_edge_kq.json"
+DA_KIEM = {"/uploads/tts/" + o.split("/tts-edge/", 1)[1]: k.get("sha")
+           for o, k in (json.loads(_KQ.read_text(encoding="utf-8")).items() if _KQ.exists() else [])}
 
 
 def tts(text: str, giong: str, reading: str | None = None) -> str:
@@ -48,20 +51,24 @@ def xet_am(url: str, text: str) -> str | None:
     b = tai(url)
     if b is None:
         return "thiếu file"
+    goc = url.split("?")[0]
+    if DA_KIEM and "/tts/" in goc and DA_KIEM.get(goc) != hashlib.sha256(b).hexdigest():
+        return "khác bản đã kiểm" if goc in DA_KIEM else "file không do doc_edge.py sinh"
     try:
-        a, sr = sf.read(io.BytesIO(b), dtype="float32")
+        sr = 24000
+        a = giai(b, sr)
     except Exception:
         return "file hỏng, không giải mã được"
-    if a.ndim > 1:
-        a = a.mean(axis=1)
-    dai = len(a) / sr
     if np.abs(a).max() < 0.02:
         return "file câm"
-    n = max(1, len(chu_han(text)) + len(re.findall(r"\d", text)))  # số đọc thành âm tiết
-    # Người đọc chậm cho người học ~3 âm tiết/giây (đo toàn bộ: trung vị 2,9). Báo khi quá 4,5
-    # (nhanh khó nghe, hoặc bị cắt cụt) hay dưới 1,2 (kéo dài bất thường). Từ 1–4 chữ được sinh
-    # chậm riêng (TOC_TU/TOC_TU_DAI), thêm khoảng lặng đầu cuối nên không áp ngưỡng tốc độ câu.
-    if text and n >= 5 and not 1.2 <= n / dai <= 4.5:
+    # Chỉ tính phần có tiếng (bỏ khoảng lặng đầu cuối), câu từ 5 âm tiết. Trần 6,5 âm tiết/giây: không
+    # nhanh hơn băng giáo trình thật (đo 03/11/2026 bỏ khoảng nghỉ: băng thật trung vị 6,22; giọng mới
+    # nữ 5,39, nam 5,74). Bài khoá thu thật/ghép không xét tốc độ (text rỗng).
+    nguong = float(np.abs(a).max()) * 0.05
+    co = np.flatnonzero(np.abs(a) > nguong)
+    dai = max(0.1, (co[-1] - co[0]) / sr)
+    n = max(1, len(am_khong_dau(text))) if text else 0
+    if text and n >= 5 and not 1.8 <= n / dai <= 6.5:
         return f"tốc độ lạ: {n / dai:.1f} âm tiết/giây"
     return None
 

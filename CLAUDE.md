@@ -35,7 +35,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 52/52 test; API 49/49.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 53/53 test; API 49/49; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -123,22 +123,17 @@ chứ không làm hỏng cả mẻ.
 
 ## Việc còn treo
 
-- **ĐANG DỞ — cập nhật giọng nam lật thẻ (02/11/2026):** người dùng báo toàn bộ từ đơn đọc không đúng,
-  yêu cầu giọng nam. Đã chuyển lật thẻ sang Yunxi, file theo chữ + pinyin để tách `还 hái/huán`,
-  sửa dùng nhầm thanh nhẹ của `头/道`. Bộ 894 file nam cho 932 thẻ, tổng 10.274 TTS;
-  `TTS_VERSION = 5`. Đọc chậm bằng atempo giữ cao độ: 1/2 chữ trung vị 0,491/0,486 giây/chữ.
-  Chi tiết lần kiểm mới ở đầu [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md).
-  Đã tải đủ, quét local 8.537 âm thanh + 697 nét chữ **0 lỗi** (14:46).
-  Đã build `release/zika-release-20261102-1447.zip` và gói riêng
-  `release/cap-nhat-lat-the-nam-20261102.zip` (145.368.873 byte), đủ 10.274 mp3, CRC/SHA-256 khớp.
-  Đã xuất lại `D:/zika-devtools/Project/dong-goi-server/`. Chỉ còn triển khai và xác minh web thật
-  theo [HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md), không import lại SQL.
-  Gói `cap-nhat-giong-doc-20261102.zip` là bản cũ. Chưa có kết nối hosting; giữ mục này đến khi test server.
-  **Kiểm web thật 23:48 02/11: CHƯA triển khai** — web vẫn bản build 07:06 (`_app/version.json`
-  = `1793577989636`), 1.788 mp3 mới (894 nam + 894 nữ) đều thiếu, 2.648 mp3 đọc chậm vẫn bản cũ,
-  mọi mp3 trên server sửa lần cuối 07:19. Upload và giải nén gói `cap-nhat-lat-the-nam-…zip` vẫn phải làm.
+- **ĐANG DỞ — giọng đọc mới toàn bộ + sửa UI/UX (03/11/2026), chỉ còn đưa lên server:** mọi file đọc
+  mẫu chuyển sang giọng Microsoft (edge-tts), câu thoại giọng riêng từng nhân vật, `TTS_VERSION = 6`;
+  quy trình [HUONG-DAN-GIONG-DOC.md](data/nap-sach/HUONG-DAN-GIONG-DOC.md). Local: 10.343 file, 10.077 đạt,
+  266 chờ người nghe (`ra/nghe-tay-20261103.zip`), 0 lỗi; quét qua web 8.581 âm thanh + 697 nét chữ **0 lỗi**;
+  13 khoá băng thật lệch sách đã thay (`bang_lech_sach.json`). Gói `release/cap-nhat-giong-moi-20261103-0355.zip`
+  (web + mp3 + `cap-nhat-am-thanh.sql`) **thay** gói `cap-nhat-lat-the-nam-20261102.zip` (chưa từng lên server).
+  Còn: upload + import SQL nhỏ + xoá `storage/cache/content` theo
+  [HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md), rồi kiểm web thật. Kiểm 23:48 02/11: web thật
+  vẫn bản build 07:06 (`version.json` = `1793577989636`). Chưa có kết nối hosting; giữ mục này đến khi test server.
 
-- **Giọng đọc mẫu Kokoro + ví dụ lật thẻ + bộ thủ + chuông thông báo (02/11/2026)**: xem
+- **Ví dụ lật thẻ + bộ thủ + chuông thông báo (02/11/2026)** (giọng Kokoro của lần này đã thay ở trên): xem
   [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md) — quy trình nạp, lần quét lỗi gần nhất, kịch bản test.
   `speech.ts` tự tìm file `/uploads/tts/<giọng>/<sha1 câu chữ>.mp3` nên đọc chữ ở đâu cũng có giọng
   người; thêm nội dung mới thì chạy lại bước 5 trong nhật ký, không thì rơi về giọng trình duyệt.

@@ -368,6 +368,13 @@
     border-radius: 6px;
     cursor: pointer;
   }
+  /* Quản trị trên điện thoại: ô màu đủ lớn cho ngón tay. */
+  @media (max-width: 899px) {
+    .swatch button {
+      width: 32px;
+      height: 32px;
+    }
+  }
   .tiles {
     display: flex;
     flex-wrap: wrap;

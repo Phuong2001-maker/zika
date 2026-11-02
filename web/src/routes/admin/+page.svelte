@@ -126,7 +126,7 @@
           <div class="hm-row" style="margin-top: 2px">
             <span></span>
             {#each Array.from({ length: 24 }) as _, h (h)}
-              <span class="muted num" style="font-size: 10px; text-align: center">{h % 3 === 0 ? h : ''}</span>
+              <span class="muted num" style="font-size: 11px; text-align: center">{h % 3 === 0 ? h : ''}</span>
             {/each}
           </div>
         </div>

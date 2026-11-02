@@ -67,6 +67,14 @@
   /* ---------------- nối từ ---------------- */
   const left = $derived<string[]>(payload.left ?? (payload.pairs ?? []).map((p: string[]) => p[0]));
   const right = $derived<string[]>(payload.right ?? (payload.pairs ?? []).map((p: string[]) => p[1]));
+  /** Thứ tự hiện cột nghĩa. Bài kiểm tra: server đã xáo sẵn (payload.right). Bài tập: payload chỉ có
+   *  pairs đúng thứ tự, hiện nguyên thì nghĩa nằm ngang hàng từ — lộ đáp án. Xáo cố định theo nội dung
+   *  (không đổi khi vẽ lại), không bao giờ trùng thứ tự gốc; đáp án vẫn ghi theo chỉ số gốc. */
+  const rightOrder = $derived.by<number[]>(() => {
+    if (payload.right) return right.map((_, j) => j);
+    const o = tileOrder(right);
+    return o.length > 1 && o.every((x, k) => x === k) ? [...o.slice(1), o[0]] : o;
+  });
   let selLeft = $state<number | null>(null);
 
   const pairs = $derived<Record<number, number>>(
@@ -219,7 +227,7 @@
             class="mbox hz"
             lang="zh"
             disabled={locked}
-            style="background: {pos !== undefined ? PAIR_COLORS[i % PAIR_COLORS.length] : selLeft === i ? 'var(--bo-soft)' : 'var(--surface)'};
+            style="background: {pos !== undefined ? `${PAIR_COLORS[i % PAIR_COLORS.length]}; color: #1F2430` : selLeft === i ? 'var(--bo-soft)' : 'var(--surface)'};
                    border-width: {selLeft === i ? 2 : 1}px"
             onclick={() => clickLeft(i)}
           >
@@ -229,13 +237,14 @@
         {/each}
       </div>
       <div class="col">
-        {#each right as w, j (j)}
+        {#each rightOrder as j (j)}
+          {@const w = right[j]}
           {@const owner = rightOwner(j)}
           <button
             type="button"
             class="mbox"
             disabled={locked}
-            style="background: {owner !== null ? PAIR_COLORS[owner % PAIR_COLORS.length] : 'var(--surface)'}"
+            style="background: {owner !== null ? `${PAIR_COLORS[owner % PAIR_COLORS.length]}; color: #1F2430` : 'var(--surface)'}"
             onclick={() => clickRight(j)}
           >
             {#if owner !== null}<span class="pnum">{owner + 1}</span>{/if}

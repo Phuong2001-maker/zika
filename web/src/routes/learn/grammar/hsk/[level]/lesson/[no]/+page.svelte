@@ -140,8 +140,9 @@
         <div class="blocks">
           {#each g.blocks as b, k (k)}
             {#if k > 0}<span class="plus">+</span>{/if}
-            <span class="fblk" style="background: {b.color}">
-              <span class="muted" style="font-size: 11.5px; font-weight: 700">{b.label}</span>
+            <span class="fblk" style={b.color ? `background: ${b.color}; color: #1F2430` : undefined}>
+              <!-- Nền khối là màu pastel quản trị chọn: chữ luôn đậm, kể cả chế độ tối. -->
+              <span style="font-size: 11.5px; font-weight: 700; color: {b.color ? '#4A505C' : 'var(--text-2)'}">{b.label}</span>
               <span class="hz" lang="zh" style="font-size: 22px">{b.hz}</span>
             </span>
           {/each}

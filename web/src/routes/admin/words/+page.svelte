@@ -443,7 +443,7 @@
       <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px">
         {#each levels as l (l.id)}
           <button type="button" class="btn btn-sm {l.id === levelId ? 'btn-muc' : 'btn-paper'}" onclick={() => pickLevel(l.id)}>
-            HSK {l.id} {#if !l.visible}<Icon name="eye" size={13} />{/if}
+            HSK {l.id}{#if !l.visible}<span style="font-size: 11px; font-weight: 600; opacity: .75"> · ẩn</span>{/if}
           </button>
         {/each}
       </div>

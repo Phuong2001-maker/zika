@@ -235,7 +235,7 @@
         {#each data.lessons as l (l.id)}
           <tr>
             <td><b class="num" style="font-size: 17px">{l.no}</b></td>
-            <td>
+            <td class="ten">
               <button type="button" class="btn-text name" onclick={() => openPart(l.id, 'lt')}>{l.title}</button>
               {#if l.sampleText}<span class="hz muted sample" lang="zh">{l.sampleText}</span>{/if}
             </td>
@@ -313,6 +313,11 @@
   .tbl-wrap {
     overflow-x: auto;
     margin-top: 18px;
+  }
+  /* Tên bài xuống dòng được: để nguyên một dòng thì bảng rộng hơn khung ở 1366px, nút Sửa bị đẩy ra ngoài. */
+  .tbl-wrap :global(td.ten) {
+    white-space: normal;
+    min-width: 180px;
   }
   .name {
     font-weight: 700;

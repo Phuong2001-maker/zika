@@ -280,7 +280,8 @@
     </header>
     <div style="padding: 0 16px"><Bar value={i} {total} /></div>
 
-    <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">
+    <!-- overflow-x: clip — lá thẻ chồng phía sau trượt vào lệch 40px, không được tạo thanh cuộn ngang. -->
+    <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px; overflow-x: clip">
       {#if data === null}
         <Skeleton h="300px" r={20} />
       {:else if finished}

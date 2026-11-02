@@ -1,85 +1,103 @@
-# Giọng đọc mẫu — Yunxi cho từ lật thẻ, Kokoro cho câu và các phần khác
+# Giọng đọc mẫu — giọng Microsoft (edge-tts), tự kiểm từng file
 
-Từ ở lật thẻ dùng **giọng nam Yunxi**, tạo sẵn qua dịch vụ đọc của Microsoft Edge.
-`doc_tu_nam.py` cần mạng khi tạo file mới và `python -m pip install edge-tts av`.
-Mỗi lượt tạo 10 từ, tách đúng mốc WordBoundary, kiểm nhãn khớp trước khi lưu; lưu cả file gốc và mốc
-ở `ra/yunxi-batch/`. Sau đó kéo thời lượng bằng `atempo` giữ cao độ: đích 0,48 giây/chữ cho từ 1–2 chữ,
-0,43 giây/chữ cho từ dài hơn. Trình duyệt chỉ phát mp3 có sẵn, không gọi dịch vụ lúc học.
+Mọi file đọc mẫu (từ lật thẻ, câu ví dụ, chữ luyện viết, ví dụ ngữ pháp, câu hỏi nghe, câu thoại,
+bài khoá ghép) sinh bằng giọng Microsoft qua `edge-tts`, cùng một chuẩn: không kéo dài âm bằng phần
+mềm, cùng độ to -16 LUFS (đỉnh ≤ -1 dBFS, chặn đỉnh cục bộ chứ không hạ nhỏ cả file). Trình duyệt chỉ
+phát mp3 có sẵn, không gọi dịch vụ lúc học. Bộ Kokoro cũ đã bỏ (03/11/2026).
 
-Lật thẻ theo bài và tổng hợp đều chọn giọng nam; câu ví dụ cũng chọn nam. Từ có tên file
-`sha1(chữ.trim() + "\n" + pinyin_bỏ_khoảng_trắng_viết_thường)`, pinyin chuẩn hoá Unicode NFC.
-Nhờ đó `还 hái/huán`, `头 tou/tóu`, `道 dao/dào` không dùng nhầm file. Các trường hợp cần chọn âm
-khác mặc định của dịch vụ được ghi trong `chu_doc()`; chữ/nhãn trên thẻ giữ nguyên.
+| Dùng cho | Giọng | Thư mục |
+|---|---|---|
+| Giọng chung theo Cài đặt (từ, ví dụ, chữ, ngữ pháp, câu hỏi nghe) | nữ Xiaoxiao / nam Yunxi | `tts/nu`, `tts/nam` |
+| Lật thẻ (cố định giọng nam, khoá cả pinyin) | nam Yunxi | `tts/nam` |
+| Câu thoại — giọng riêng từng nhân vật (bảng `VAI` trong `viec_doc.py`) | xiaoxiao, xiaoyi, xiaoxiao2, yunxi, yunjian, yunyang, yunxia | `tts/<tên giọng>` |
 
-Các file không chỉ định pinyin vẫn dùng `sha1(chữ.trim())`, giữ tương thích câu ví dụ, luyện viết,
-hội thoại, ngữ pháp, câu hỏi nghe bằng **Kokoro** chạy trên CPU. File nằm ở
-`uploads/tts/<giọng>/<2 ký tự>/<hash>.mp3`; web tự tính tên trong `speech.ts`.
+Phân vai: xiaoxiao nữ chính/người lớn, xiaoyi nữ thứ hai/bé gái, xiaoxiao2 (Xiaoxiao hạ cao độ
+`-14Hz`, chỉ có 2 giọng nữ) cho người nữ lớn tuổi khi trùng, yunxi nam trẻ, yunjian nam trưởng thành,
+yunyang thầy/người lớn tuổi/người có chức vụ, yunxia bé trai. Phân **theo cả bài** (`giong_bai`): một
+người giữ một giọng suốt bài; hai người cùng nói trong một bài khoá không trùng giọng (người sau lấy
+giọng kế tiếp cùng giới, `THAY`); lời nói chung "小李、小陈" lấy giọng người đầu. Nhân vật mới chưa có
+trong bảng thì đoán theo tên/vai.
+
+Tên file: `sha1(chữ.trim())`, từ lật thẻ thêm `"\n" + pinyin_bỏ_khoảng_trắng_viết_thường` (NFC) để
+`还 hái/huán`, `头 tou/tóu` không dùng nhầm file. Web tự tính đường dẫn trong `speech.ts`; câu thoại
+và bài khoá thì đường dẫn lưu trong database.
 
 ## Chạy
 
 1. Bật môi trường local: bấm đúp `dev\CHAY-TAT-CA.cmd` (MariaDB + API + web).
-2. Mở PowerShell:
+2. Lần đầu: `python -m pip install edge-tts av pyloudnorm praat-parselmouth funasr modelscope pypinyin scipy`
+   (FunASR tự tải mô hình nhận dạng ~1 GB vào `Project/kiem-giong-doc/models/modelscope` lần đầu).
+3. Một lệnh:
 
    ```powershell
    cd D:\zika-devtools\Project\zika\data\nap-sach
    powershell -ExecutionPolicy Bypass -File .\sinh-giong-doc.ps1
    ```
 
-3. Chờ. Bộ hiện tại 10.274 file; lần sau chỉ sinh file mới hoặc file đổi tốc độ/cách đọc/bộ sinh.
-   Máy chạy 100% CPU trong lúc đó là bình thường. Dừng giữa chừng thì chạy lại y lệnh cũ.
-4. Đưa lên server: `python xuat_sql.py` → làm theo `HUONG-DAN-SERVER.md`. Nếu chỉ đổi âm thanh
-   (không đổi nội dung chữ) thì chỉ cần chép `dong-goi-server/uploads/tts` đè lên server, không cần SQL.
+   Làm 5 bước: lập danh sách (`viec_doc.py tu web`) → sinh + kiểm (`doc_edge.py`) → tải lên web local
+   (`tai_doc.py`) → gắn câu thoại và bài khoá (`gan_thoai.py`) → quét qua web (`quet.py`).
+   Dừng giữa chừng thì chạy lại y lệnh cũ: file đã sinh và đã kiểm được bỏ qua.
+4. Đổi xong thì tăng `TTS_VERSION` trong `web/src/lib/learn/speech.ts`, build web, rồi
+   `python dong_goi_giong.py` → `release/cap-nhat-giong-moi-<ngày giờ>.zip` (xem `HUONG-DAN-SERVER.md`).
 
-Script làm 5 bước: lập danh sách (`viec_doc.py tu web`) → sinh (Kokoro `doc_mau.py` + Yunxi `doc_tu_nam.py`) →
-tải lên web local (`tai_doc.py`) → gắn câu thoại + ghép bài khoá (`gan_thoai.py`) → quét lỗi (`quet.py`).
+## Tự kiểm và tự sinh lại (`doc_edge.py`)
 
-## Khi nào phải chạy
+Chạy theo đợt 200 file: sinh → kiểm ngay → file lỗi sinh lại tối đa 3 lần → ghi `ra/doc_edge_kq.json`.
 
-- Thêm/sửa từ, câu ví dụ, câu thoại, ngữ pháp, câu hỏi nghe (ở trang quản trị hoặc qua `nap.py`).
-- Đổi tốc độ đọc (xem dưới).
+| Kiểm | Ngưỡng | Khi không đạt |
+|---|---|---|
+| Giải mã, câm | có tiếng | sinh lại |
+| Độ to | -19 … -14,5 LUFS | sinh lại |
+| Từ đơn: thời lượng | 0,15–0,8 giây/âm tiết (儿 nhi hoá không tính, thanh nhẹ tính nửa) | đổi tốc độ, sinh lại |
+| Câu: tốc độ | 1,8–5,5 âm tiết/giây | chậm/nhanh hơn 10%, sinh lại |
+| Khoảng lặng giữa chừng | ≤ 1,2 giây | sinh lại |
+| FunASR nghe lại, so pinyin không dấu | câu ≤ 10 âm tiết: khớp hết; ≤ 40: lệch ≤ 1; bài đọc dài: lệch ≤ 15% | câu: ép chữ đồng âm ở chỗ sai (chỉ chữ đa âm), rồi đổi tốc độ |
+| Từ một chữ thanh 1/2/4: đường cao độ (60% giữa) | không trái hẳn thanh | không sinh lại — vào danh sách người nghe |
 
-## Chỉnh tốc độ đọc
+Trạng thái mỗi file: `dat` · `nghi` (chữ/từ đứng riêng mà máy nghe nhầm hoặc nghi thanh — nhận dạng
+thiếu ngữ cảnh, sinh lại không đổi được kết quả; cần người nghe) · `loi` (còn lỗi sau 4 lần, không tải lên).
+Khi so âm (máy nhận dạng hay lẫn, giọng đọc luôn đúng): bỏ 儿 nhi hoá, trợ từ cuối câu (啊 呀 呢 吧);
+coi 您 = 你, 的/地/得 trợ từ = de, 外边 = 外面. Hết 4 lần mà chỉ còn máy nghe chưa khớp (không lỗi kỹ
+thuật) thì vẫn dùng, xếp `nghi` để người nghe xác nhận.
 
-Giọng nam từ lật thẻ: đích thời lượng nằm ở `doc_tu_nam.py::doc_cham()`; khi đổi cách xử lý,
-tăng `revision` của mục Yunxi trong `tu_theo_pinyin()` để sinh lại từ bản gốc đã lưu.
+`python doc_edge.py --xet-lai` sinh lại từ đầu mọi file chưa `dat` và file mà chữ gửi đi đọc đã đổi.
+`python doc_edge.py --kiem-lai` kiểm lại mọi file đã có (đổi ngưỡng kiểm thì chạy cái này).
+`python doc_edge.py --kiem-chua-dat` chỉ kiểm lại file chưa đạt (đổi luật so).
+`python doc_cham_lai.py 5.8` sinh lại chậm hơn 15% những câu đọc nhanh hơn 5,8 âm tiết/giây (phần có tiếng).
+`python xuat_nghe_tay.py` xuất `ra/nghe-tay-<ngày>.zip` cho người biết tiếng Trung nghe xác nhận.
+`python test_doc_edge.py` kiểm các hàm chuẩn bị chữ và đo.
 
-Tốc độ **Kokoro** trong `viec_doc.py`:
-
-| Hằng | Dùng cho | Hiện tại | Đo được |
-|---|---|---|---|
-| `TOC_TU` | từ/chữ 1–2 chữ | 0,58 | trung vị 0,585 (1 chữ), 0,454 (2 chữ) giây/âm tiết |
-| `TOC_TU_DAI` | từ 3–4 chữ | 0,52 | trung vị 0,519 (3 chữ), 0,619 (4 chữ) giây/âm tiết |
-| `TOC_CAU` | câu ví dụ, câu thoại, ngữ pháp | 1,0 | trung vị ~2,9 âm tiết/giây |
-
-Đo lại ngày 02/11/2026 trên đủ 2.648 file từ/chữ, cả giọng nữ và nam: 1.394 file 1 chữ,
-1.084 file 2 chữ, 138 file 3 chữ, 32 file 4 chữ. Lấy đoạn từ mẫu đầu đến mẫu cuối có
-`abs(a) > 0.02`, tính thời lượng đoạn đó rồi chia số chữ Hán; giữ các khoảng nghỉ giữa âm tiết.
-Không cộng riêng số mẫu vượt ngưỡng vì cách đó loại cả phần âm nhỏ bên trong lời nói.
-Chi tiết lần đo nằm ở `ra/do_toc_do.json` (file sinh tại máy, không đưa lên git).
-
-Kokoro: 1,0 là tốc độ nói thường, số nhỏ hơn là chậm hơn. Sửa số rồi chạy lại script — bước lập danh
-sách tự xoá đúng những file có tốc độ khác để sinh lại. Câu riêng lẻ cần tốc độ khác (vd câu thoại dài
-đọc nhanh quá) ghi vào `ra/toc_rieng.json` dạng `{"ra/tts/nu/ab/abc….mp3": 0.85}`.
-
-**Sau khi sinh lại file đã có**, tăng `TTS_VERSION` trong `web/src/lib/learn/speech.ts` (1 → 2 → 3…) rồi
-build + đưa code lên: trình duyệt học viên giữ file cũ trong cache theo đường dẫn, đổi số thì tải bản mới.
+Tốc độ: đo 03/11/2026 bỏ khoảng nghỉ, băng giáo trình thật trung vị 6,22 âm tiết/giây; giọng mới
+nữ 5,39, nam 5,74 — không nhanh hơn băng thật. `quet.py` báo câu nhanh hơn 6,5.
 
 ## Đọc đúng
 
-- **Chữ đa âm** (还 hái/huán, 得 de/děi…): Kokoro tự đoán bằng pypinyin nên hay sai; `doc_mau.py` ép
-  đọc đúng pinyin của sách cho từng chữ, rồi mới để Kokoro biến điệu (3-3, 一, 不).
-- **Số**: số điện thoại đọc từng số (1 = yāo); năm, giá, giờ Kokoro tự đọc đúng.
-- **Chữ cái**: giọng tiếng Trung không đọc được chữ Latin — "A：… B：…" bỏ nhãn, A/B hai giọng;
-  "HSK" đọc 汉语水平考试. Gặp chữ Latin khác thì thêm vào `doc_so()` trong `doc_mau.py`.
-- **Câu thoại**: giọng theo nhân vật (bảng `NU`/`NAM`/`CHINH` trong `viec_doc.py`), nhân vật mới
-  chưa có trong bảng thì đoán theo tên/vai, không đoán được thì xen kẽ nữ/nam.
+- **Chữ đa âm**: chỗ cách đọc mặc định (pypinyin theo ngữ cảnh) khác pinyin sách thì gửi đi đọc một
+  chữ đồng âm đúng thanh — chỉ chọn trong 3.755 chữ thông dụng (GB2312 cấp 1), ưu tiên chữ có trong
+  giáo trình (这只 → 这织, 我明天还你钱 → 环). Chữ trên web không đổi. Từ đứng riêng cố định trong
+  `TU_RIENG` (还 hái/huán, 长 cháng, 只 zhī, 地 de, 便 pián…). Chỗ không có chữ đồng âm (得 děi,
+  不得了 liǎo) nằm trong `NGHE_TAY`, để người nghe kiểm.
+- **Biến điệu** 3-3, 一, 不 và thanh nhẹ để giọng đọc tự xử lý như người thật.
+- **Số**: số điện thoại (≥ 7 chữ số) đọc từng số, 1 = yāo; ngày, giờ, giá giọng đọc tự đọc đúng.
+- **Chữ cái**: "A：… B：…" bỏ nhãn, B đọc giọng khác giới; "HSK" đọc 汉语水平考试.
+- **Ngoặc**: phần trong ngoặc sau câu (`（日）`, lời giải thích `（妈妈还在看电视。）`) không đọc; câu dẫn
+  cả câu trong ngoặc thì đọc phần trong.
+- **Hai cách nói "A/B"** (星期日/星期天, 在/正在): đọc cả hai, nghỉ ngắn ở giữa; riêng "日/号" chỉ đọc 日.
+- **Ép cách đọc** chỉ khi ghép chắc được pinyin vào từng chữ: không ghép khi có chữ số, và mỗi âm tiết
+  phải là một cách đọc của đúng chữ đó (tránh lệch cả câu khi đếm số + nhi hoá bù nhau).
+- **Khoảng nghỉ** giữa câu dài hơn 0,6 giây rút còn 0,45 giây.
+
+## Bài khoá
+
+`gan_thoai.py`: khoá có băng thu thật (HSK 1–2) khớp sách thì giữ băng, cân về -16 LUFS; khoá băng
+đọc lệch sách (`bang_lech_sach.json`, lập bằng `kiem_bang_that.py` rồi xét tay) hoặc chưa có băng thì
+ghép các câu thoại, nghỉ 0,6 giây giữa hai lượt nói.
 
 ## Lỗi hay gặp
 
 | Triệu chứng | Cách xử lý |
 |---|---|
-| `uv trampoline failed` | đừng chạy `.venv\Scripts\python.exe` của kokoro-tts — script đã dùng Python đi kèm |
-| `No module named numpy._core…` | đang để `PYTHONPATH` trỏ vào Kokoro khi chạy Python thường — mở cửa sổ mới |
-| `HTTP 415` khi tải lên | API cũ chưa có `Upload::isMp3`; cập nhật code API |
-| Trình duyệt bị đăng xuất khi đang chạy | bình thường: script đăng nhập admin nhiều lần, đăng nhập lại là được |
-| Quét báo "tốc độ lạ" | nghe thử file đó; nhanh quá thì thêm tốc độ riêng vào `ra/toc_rieng.json` |
+| `edge-tts lỗi … thử lại sau …s` trong `ra/doc_edge.log` | mạng chập chờn hoặc dịch vụ chặn tạm; script tự chờ và thử lại |
+| `HTTP 422 Giọng` khi tải lên | API cũ chưa nhận tên giọng nhân vật; cập nhật `MiscController::tts` |
+| Quét báo "khác bản đã kiểm" | file trên web không phải bản `doc_edge.py` đã kiểm — chạy lại `tai_doc.py` |
+| Quét báo "tốc độ lạ" | nghe thử file đó; chạy `doc_edge.py --xet-lai` |

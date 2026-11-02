@@ -23,6 +23,53 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 03/11/2026 — Làm lại toàn bộ giọng đọc bằng giọng Microsoft, rà UI/UX cả web
+
+Người dùng thấy giọng các phần lệch nhau (Yunxi ở lật thẻ, Kokoro ở câu, băng thật ở bài khoá) và
+hội thoại HSK 1 đọc khác phiên âm. Đã thay Kokoro bằng giọng Microsoft (edge-tts) cho **mọi** file đọc
+mẫu, cùng một chuẩn; quy trình mới trong [HUONG-DAN-GIONG-DOC.md](data/nap-sach/HUONG-DAN-GIONG-DOC.md).
+
+- **Sinh + tự kiểm** (`doc_edge.py`, theo đợt 200 file): 10.343 file → **10.077 đạt**, 266 cần người nghe
+  (phần lớn là chữ đơn đứng riêng, máy nhận dạng thiếu ngữ cảnh), **0 lỗi**. Độ to trung vị -16,4 LUFS.
+  Từ đơn không kéo dài âm (bỏ atempo), giọng tự đọc chậm 10%: trung vị 0,29 giây/âm tiết, 99% dưới 0,56.
+  Tốc độ câu (bỏ khoảng nghỉ) nữ 5,39, nam 5,74 âm tiết/giây — chậm hơn băng giáo trình thật (6,22);
+  432 câu nhanh hơn 5,8 đã sinh lại chậm thêm 15% (`doc_cham_lai.py`).
+- **Câu thoại** đọc giọng riêng từng nhân vật (bảng `VAI`), phân theo cả bài: nữ chính Xiaoxiao, nữ thứ
+  hai/bé gái Xiaoyi, người nữ lớn tuổi khi trùng Xiaoxiao hạ cao độ, nam trẻ Yunxi, nam trưởng thành
+  Yunjian, người lớn tuổi/chức vụ Yunyang, bé trai Yunxia. Không khoá nào hai người trùng giọng, không ai
+  đổi giọng trong bài (khớp database 822/822 câu).
+- **Bài khoá:** băng thật HSK 1–2 đọc lệch sách Hanu ở **13 khoá** (越南人/法国人, ngày, số điện thoại,
+  酒店/饭店, 首都/大兴…, `bang_lech_sach.json`) → thay bằng bản ghép; 68 khoá giữ băng thật, cân về
+  -16 LUFS (trước -19,8); 63 khoá vốn không có băng ghép từ giọng mới.
+- **Đọc đúng:** chữ đa âm ép bằng chữ đồng âm thông dụng (GB2312 cấp 1); "A/B" đọc cả hai cách; năm đọc
+  từng số; khoảng lặng giữa câu > 0,6 giây rút còn 0,45.
+- `TTS_VERSION = 6`; câu thoại (đường dẫn lưu trong database) cũng mang `?v=`.
+- Nạp local bằng `tai_doc.py --nhanh` (PHP dòng lệnh `api/app/tools/nhap_tts.php`, cùng hàm đặt tên với
+  API: 10.343 file trong vài phút; qua HTTP mất ~2 giờ vì `php -S` xử lý một yêu cầu một lúc).
+- **Quét qua web** (`quet.py`, mỗi file phải trùng sha256 bản đã kiểm): 8.581 âm thanh + 697 nét chữ, **0 lỗi**.
+- **Agent kiểm độc lập** (whisper-base + paraformer, đo độ to/khoảng lặng, đối chiếu database) tìm ra
+  và đã sửa: 2 câu đọc vô nghĩa do ghép pinyin lệch khi có chữ số + nhi hoá (`am_sach` giờ bỏ qua câu có
+  số và kiểm từng âm tiết là cách đọc của chữ đó), 2 khoá trùng giọng, chữ hiếm trong chữ gửi đi, lời giải
+  thích trong ngoặc bị đọc. Kiểm lại lần 2: đạt (2 câu khớp 100% cả hai mô hình, 150 câu ngẫu nhiên không
+  câu nào cả hai mô hình cùng lệch).
+- **Gói server:** `release/cap-nhat-giong-moi-20261103-0355.zip` (198.905.056 byte, 164 file web + 10.487 mp3
+  + `cap-nhat-am-thanh.sql` sửa `audio_path` 144 khoá + 822 câu), CRC/SHA-256 khớp — thay gói lật thẻ nam
+  ngày 02/11. **Chưa đưa lên web thật.**
+- **Cần người nghe:** `data/nap-sach/ra/nghe-tay-20261103.zip` — 266 file máy chưa chắc, 15 câu 得 děi /
+  不得了, 306 file ngẫu nhiên kiểm chéo (`xuat_nghe_tay.py`).
+
+**UI/UX** — bộ dò tự động (tràn ngang, chữ cắt, nút < 32px, nút đè, ảnh hỏng, tương phản WCAG AA) trên
+45 màn × 375/768/1366 px × sáng/tối, cộng một agent kiểm độc lập theo kịch bản:
+- Tương phản: `--text-3` #8A909C → #626873, nút đỏ chính #D23B41, `--son-text` riêng cho nền tối,
+  `--bad-text` #C81E1E; avatar nhân vật, khối công thức ngữ pháp, cặp nối từ giữ chữ đậm trên nền pastel ở
+  nền tối; trang đăng nhập nền tối; `.pick` và nút chọn `.seg` nền tối.
+- Cỡ chạm: `.seg` 36px (điện thoại 40px), `.btn-text` 32px, logo 40px, ô màu và đường dẫn quản trị trên điện thoại.
+- **Lỗi thật:** câu "Nối từ với nghĩa" ở bài tập không xáo cột nghĩa (lộ đáp án) → xáo cố định theo nội dung,
+  chấm vẫn đúng; bảng `/admin/lessons` đẩy nút Sửa ra ngoài ở 1366px; lật thẻ làm trang nhảy 7px
+  (`scrollbar-gutter`) và tràn ngang lúc thẻ trượt vào; soạn hội thoại: nút Lên dùng nhầm mũi tên, nút
+  Lên/Xuống ở đầu/cuối vẫn bấm được, ô nhân vật thiếu nhãn; `/admin/words` biểu tượng mắt ngược nghĩa;
+  Cài đặt ghi rõ lật thẻ luôn giọng nam.
+
 ### 03/11/2026 — Làm lại chuông thông báo, sửa bảng tràn mép trên điện thoại
 
 Người dùng chê bảng thông báo xấu và vỡ trên điện thoại.
@@ -189,7 +236,7 @@ chi tiết cuối [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 `005_character_analysis.sql` (bộ thủ, phân tích chữ). Server thật cần chạy
 `php app/tools/install.php --migrate`.
 
-## Lần quét gần nhất — 02/11/2026 14:46
+## Lần quét gần nhất — 03/11/2026 03:50
 
 Sinh tự động bởi `data/nap-sach/quet.py`, đừng sửa tay mục này.
 
@@ -202,7 +249,7 @@ Sinh tự động bởi `data/nap-sach/quet.py`, đừng sửa tay mục này.
 | câu thoại | 822 |
 | câu hỏi nghe | 149 |
 | ví dụ ngữ pháp | 653 |
-| file âm thanh | 8.537 |
+| file âm thanh | 8.581 |
 | file nét chữ | 697 |
 
 | Lỗi | Số chỗ | Ví dụ |

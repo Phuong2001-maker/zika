@@ -233,7 +233,7 @@
           <div class="bo-thu">
             <span class="hz bo-chu" lang="zh">{c.radicalInfo.form}</span>
             <div style="min-width: 0">
-              <p style="font-size: 14px"><b>Bộ {c.radicalInfo.name}</b>{#if c.radicalInfo.form !== c.radicalInfo.root} <span class="hz" lang="zh">({c.radicalInfo.root})</span>{/if} · <span class="muted">số {c.radicalInfo.no}</span></p>
+              <p style="font-size: 14px"><b>Bộ {c.radicalInfo.name}</b>{#if c.radicalInfo.form !== c.radicalInfo.root}&nbsp;<span class="hz" lang="zh">({c.radicalInfo.root})</span>{/if} · <span class="muted">số {c.radicalInfo.no}</span></p>
               <p class="muted" style="font-size: 13.5px">Nghĩa: {c.radicalInfo.meaning}</p>
             </div>
           </div>

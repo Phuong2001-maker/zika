@@ -101,7 +101,7 @@
     <h2 class="h2">Phát âm</h2>
 
     <div class="line">
-      {@render row('Giọng đọc')}
+      {@render row('Giọng đọc', 'Dùng cho câu ví dụ, luyện viết, ngữ pháp, bài tập. Từ ở Lật thẻ luôn đọc giọng nam; hội thoại đọc giọng riêng của từng nhân vật.')}
       {@render seg(draft.voice, [
         { v: 'xiaoxiao' as const, label: 'Giọng nữ' },
         { v: 'yunxi' as const, label: 'Giọng nam' },

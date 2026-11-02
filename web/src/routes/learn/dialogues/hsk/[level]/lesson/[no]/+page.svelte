@@ -94,6 +94,7 @@
     if (!k?.audioUrl) return;
     const dangLaKhoiNay = dangPhat === ki;
     dungPhat();
+    dangDoc = ''; // nghe cả bài thì bỏ tô câu vừa bấm, không thì như đang đọc riêng câu đó
     if (dangLaKhoiNay) return;
     const a = new Audio(k.audioUrl);
     amThanh = a;
@@ -143,8 +144,8 @@
         <p class="muted" style="font-size: 13px">{khoi.length} bài khoá · {tongCau} câu</p>
       </div>
       <div class="seg">
-        <button type="button" class:on={showPy} onclick={() => (showPy = !showPy)}>Pinyin</button>
-        <button type="button" class:on={showVi} onclick={() => (showVi = !showVi)}>Nghĩa</button>
+        <button type="button" class:on={showPy} aria-pressed={showPy} onclick={() => (showPy = !showPy)}>Pinyin</button>
+        <button type="button" class:on={showVi} aria-pressed={showVi} onclick={() => (showVi = !showVi)}>Nghĩa</button>
       </div>
     </div>
 
@@ -176,7 +177,7 @@
             {@const sp = speakerOf(k, line.speakerId)}
             {@const [pre, hl, post] = parts(line)}
             <li style="display: flex; gap: 10px">
-              <span class="who hz" lang="zh" style="background: {sp?.color ?? 'var(--surface)'}">{sp?.avatarChar ?? '?'}</span>
+              <span class="who hz" lang="zh" style="background: {sp?.color ?? 'var(--surface)'}{sp?.color ? '; color: #1F2430' : ''}">{sp?.avatarChar ?? '?'}</span>
               <button
                 type="button"
                 class="bub"

@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('$lib/stores/settings.svelte', () => ({ settings: { value: { voice: 'xiaoxiao', rate: 1 } } }));
-import { speak, ttsUrl } from './speech';
+import { coPhienBan, speak, ttsUrl } from './speech';
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -33,5 +33,13 @@ describe('giọng đọc lật thẻ', () => {
     });
     await speak('道', null, 'dào', 'nam');
     expect(urls).toEqual([ttsUrl('道', 'nam', 'dào')]);
+  });
+});
+
+describe('phiên bản file đọc mẫu gắn sẵn', () => {
+  it('câu thoại /uploads/tts thêm ?v=, file thu thật và URL đã có tham số giữ nguyên', () => {
+    expect(coPhienBan('/uploads/tts/yunxi/ab/abc.mp3')).toMatch(/^\/uploads\/tts\/yunxi\/ab\/abc\.mp3\?v=\d+$/);
+    expect(coPhienBan('/uploads/audio/c5/c5a.mp3')).toBe('/uploads/audio/c5/c5a.mp3');
+    expect(coPhienBan('/uploads/tts/nu/ab/abc.mp3?v=3')).toBe('/uploads/tts/nu/ab/abc.mp3?v=3');
   });
 });

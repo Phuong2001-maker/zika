@@ -1,19 +1,33 @@
 # Đưa giáo trình HSK 1–3 lên server
 
-## Cập nhật lật thẻ giọng nam và đúng cách đọc — 02/11/2026
+## Cập nhật giọng đọc mới + sửa giao diện — 03/11/2026
 
-Nội dung HSK 1–3 đã được nạp lên server ngày 02/11 (xem nhật ký). Lần này chỉ đổi file giọng đọc
-và số cache `TTS_VERSION = 5`: **không import lại SQL**.
+Thay **cả** gói `cap-nhat-lat-the-nam-20261102.zip` (không cần upload gói đó nữa). Mọi giọng đọc mẫu
+chuyển sang giọng Microsoft, câu thoại đọc giọng riêng từng nhân vật, `TTS_VERSION = 6`; kèm web đã
+sửa giao diện (bảng thông báo, chuyển nhanh, tương phản, chế độ tối…). Nội dung bài **không đổi**:
+không import lại `02-noi-dung.sql`.
 
-Gói riêng `release/cap-nhat-lat-the-nam-20261102.zip` gồm web đã build ngay ở gốc zip và
-`uploads/tts/` (đủ 10.274 mp3, gồm 894 mục từ giọng nam Yunxi theo pinyin), tên bên trong dùng `/`.
-Gói `cap-nhat-giong-doc-20261102.zip` tạo lúc 14:16 là bản cũ, chưa có bộ giọng nam này.
-Upload và giải nén **gộp vào** DOCROOT `domains/tiengtrunghanu.io.vn`, cho phép ghi đè file trùng.
-Zip này không có `api/`, mã PHP hay `config.php`; không cần chép thư mục `app/` của gói phát hành.
+Gói `release/cap-nhat-giong-moi-<ngày giờ>.zip` (tên bên trong dùng `/`):
 
-Sau khi chép xong, kiểm tra trên web thật: lật thẻ HSK 1–3 dùng giọng nam, từ đọc rõ và chậm,
-URL âm thanh có `?v=5`, file trả `audio/mpeg`; thử `还 hái/huán`, `头 tóu`, `道 dào`.
-Làm tiếp kịch bản trong `KICH-BAN-TEST.md`.
+| Trong zip | Là gì |
+|---|---|
+| gốc zip (`index.html`, `_app/`…) | web đã build |
+| `uploads/tts/…` | toàn bộ file đọc mẫu mới: `nu`, `nam` và giọng nhân vật `xiaoxiao`, `xiaoyi`, `yunxi`, `yunjian`, `yunyang`, `yunxia` |
+| `uploads/audio/…` | file nghe cả bài khoá (băng thật đã cân độ to, hoặc bản ghép) |
+| `cap-nhat-am-thanh.sql` | chỉ `UPDATE` cột `audio_path` của bài khoá và câu thoại, tìm theo (cấp, số bài, thứ tự khoá, thứ tự câu) |
+
+Không có `api/`, mã PHP hay `config.php`.
+
+**0.** Sao lưu database (phpMyAdmin → Export).
+**1.** Upload zip, giải nén **gộp vào** DOCROOT `domains/tiengtrunghanu.io.vn`, cho phép ghi đè file trùng.
+**2.** phpMyAdmin → database của web → Import `cap-nhat-am-thanh.sql`. Chạy lại lần nữa cũng không sao.
+   Import xong **xoá file `cap-nhat-am-thanh.sql` khỏi DOCROOT** (để đó ai cũng tải được).
+**3.** Xoá sạch `<APP_DIR>/storage/cache/content/` — không thì API vẫn trả đường dẫn âm thanh cũ.
+**4.** Kiểm (hoặc báo để kiểm qua mạng như lần trước):
+   - `https://tiengtrunghanu.io.vn/_app/version.json` ra số mới của gói;
+   - lật thẻ: URL âm thanh có `?v=6`, trả `audio/mpeg`, giọng nam đọc rõ, không kéo dài;
+   - hội thoại HSK 1 bài 3: bấm từng câu nghe đúng giọng nhân vật; "Nghe" cả bài khoá đọc đúng chữ trên màn hình;
+   - trình duyệt đã từng mở web: Ctrl+Shift+R một lần.
 Mục đang dở trong `CLAUDE.md` chỉ được xoá sau khi xác minh web thật.
 
 ## Nạp toàn bộ giáo trình

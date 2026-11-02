@@ -139,7 +139,7 @@
           <b style="display: block">{r.user.name} {#if r.online}<span class="dot"></span>{/if}</b>
           <span class="muted num" style="font-size: 12.5px">{r.start} → {r.end ?? 'nay'} · <b>{r.durationMin} phút</b></span>
           <span style="display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px">
-            {#each r.parts as p (p)}<span class="tag" style="background: {PART[p].chip}">{PART[p].short}</span>{/each}
+            {#each r.parts as p (p)}<span class="tag" style="background: {PART[p].chip}; color: #1F2430">{PART[p].short}</span>{/each}
           </span>
         </span>
       </a>
@@ -171,7 +171,7 @@
             </td>
             <td>
               <span style="display: flex; gap: 4px; flex-wrap: wrap">
-                {#each r.parts as p (p)}<span class="tag" style="background: {PART[p].chip}">{PART[p].short}</span>{/each}
+                {#each r.parts as p (p)}<span class="tag" style="background: {PART[p].chip}; color: #1F2430">{PART[p].short}</span>{/each}
               </span>
             </td>
             <td>

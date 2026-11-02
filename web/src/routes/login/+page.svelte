@@ -18,7 +18,7 @@
   <div class="mscreen" style="background: var(--surface)">
     <div class="wall" style="position: relative; height: 290px; flex: none; background-position: 66% 72%; border-bottom: 1px solid var(--line)">
       <div style="position: relative; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 18px 18px 30px">
-        <span class="logo" style="align-self: flex-start; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 5px 12px 5px 5px; font-size: 17px; box-shadow: var(--sh)">
+        <span class="logo" style="align-self: flex-start; background: #fff; color: #1D2129; border: 1px solid var(--line); border-radius: 12px; padding: 5px 12px 5px 5px; font-size: 17px; box-shadow: var(--sh)">
           <span class="seal" lang="zh" style="width: 30px; height: 30px; font-size: 17px">字</span>Zìkǎ
         </span>
         <div class="sticker" style="align-self: flex-start; padding: 10px 16px; transform: rotate(-2.5deg)">
@@ -36,7 +36,7 @@
   <div class="wall" style="position: relative; min-height: 100vh; overflow: hidden">
     <div style="position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 48px; max-width: 1280px; min-height: 100vh; margin: 0 auto; padding: 48px clamp(20px, 5vw, 72px)">
       <div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 22px; align-items: flex-start">
-        <span class="logo" style="background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 8px 16px 8px 8px; box-shadow: var(--sh)">
+        <span class="logo" style="background: #fff; color: #1D2129; border: 1px solid var(--line); border-radius: 14px; padding: 8px 16px 8px 8px; box-shadow: var(--sh)">
           <span class="seal" lang="zh" style="width: 36px; height: 36px; font-size: 20px">字</span>Zìkǎ
         </span>
         <div class="sticker" style="padding: 22px 28px 20px; transform: rotate(-2.5deg); max-width: 440px">
@@ -44,7 +44,7 @@
           <p style="font-size: 16px; font-weight: 700; margin-top: 10px">Bù dào Chángchéng fēi hǎohàn</p>
           <p style="font-size: 15px; color: var(--text-2)">Chưa tới Trường Thành, chưa phải hảo hán.</p>
         </div>
-        <p style="background: #fff; border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 14px; font-weight: 600; font-size: 15px; transform: rotate(1deg); box-shadow: var(--sh)">
+        <p style="background: #fff; color: #1D2129; border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 14px; font-weight: 600; font-size: 15px; transform: rotate(1deg); box-shadow: var(--sh)">
           Chọn bộ thẻ, mỗi ngày lật một ít. Miễn phí.
         </p>
       </div>

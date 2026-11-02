@@ -184,7 +184,7 @@
       <div class="row" style="justify-content: space-between">
         <h2 class="h2">Bài khoá {ki + 1}</h2>
         <span style="display: flex; gap: 2px">
-          <button type="button" class="btn btn-bare btn-sm" aria-label="Lên" disabled={ki === 0} onclick={() => chuyenKhoi(ki, -1)}><Icon name="chev" size={15} /></button>
+          <button type="button" class="btn btn-bare btn-sm" aria-label="Lên" disabled={ki === 0} onclick={() => chuyenKhoi(ki, -1)}><Icon name="down" size={15} style="transform: rotate(180deg)" /></button>
           <button type="button" class="btn btn-bare btn-sm" aria-label="Xuống" disabled={ki === khoi.length - 1} onclick={() => chuyenKhoi(ki, 1)}><Icon name="down" size={15} /></button>
           <button type="button" class="btn btn-bare btn-sm" aria-label="Xoá bài khoá" onclick={() => xoaKhoi(ki)}><Icon name="trash" size={16} /></button>
         </span>
@@ -203,10 +203,10 @@
       <h3 class="lbl" style="margin-top: 4px">Nhân vật</h3>
       {#each k.speakers as s (s.key)}
         <div class="row">
-          <span class="who hz" lang="zh" style="background: {s.color}">{s.avatarChar || s.name.slice(-1) || '?'}</span>
-          <input class="inp hz" lang="zh" style="flex: 1 1 120px" bind:value={s.name} oninput={touch} placeholder="小王" />
-          <input class="inp hz" lang="zh" style="flex: 0 0 70px" bind:value={s.avatarChar} oninput={touch} placeholder="王" maxlength="2" />
-          <input class="inp" style="flex: 1 1 120px" bind:value={s.roleVi} oninput={touch} placeholder="khách" />
+          <span class="who hz" lang="zh" style="background: {s.color}{s.color ? '; color: #1F2430' : ''}">{s.avatarChar || s.name.slice(-1) || '?'}</span>
+          <input class="inp hz" lang="zh" style="flex: 1 1 120px" bind:value={s.name} oninput={touch} placeholder="小王" aria-label="Tên nhân vật" title="Tên nhân vật" />
+          <input class="inp hz" lang="zh" style="flex: 0 0 70px" bind:value={s.avatarChar} oninput={touch} placeholder="王" maxlength="2" aria-label="Chữ trên avatar" title="Chữ trên avatar" />
+          <input class="inp" style="flex: 1 1 120px" bind:value={s.roleVi} oninput={touch} placeholder="khách" aria-label="Vai (tiếng Việt)" title="Vai (tiếng Việt)" />
           <div class="swatch">
             {#each COLORS as col (col)}
               <button type="button" aria-label="Màu {col}" style="background: {col}; outline: {s.color === col ? '2px solid var(--text)' : 'none'}"
@@ -241,8 +241,8 @@
             <input class="inp hz" lang="zh" bind:value={l.highlight} oninput={touch} placeholder="Từ mới cần tô sáng (để trống nếu không có)" />
           </div>
           <div style="display: flex; flex-direction: column; gap: 2px">
-            <button type="button" class="btn btn-bare btn-sm" aria-label="Lên" onclick={() => chuyenCau(k, i, -1)}><Icon name="chev" size={14} /></button>
-            <button type="button" class="btn btn-bare btn-sm" aria-label="Xuống" onclick={() => chuyenCau(k, i, 1)}><Icon name="down" size={14} /></button>
+            <button type="button" class="btn btn-bare btn-sm" aria-label="Lên" disabled={i === 0} onclick={() => chuyenCau(k, i, -1)}><Icon name="down" size={14} style="transform: rotate(180deg)" /></button>
+            <button type="button" class="btn btn-bare btn-sm" aria-label="Xuống" disabled={i === k.lines.length - 1} onclick={() => chuyenCau(k, i, 1)}><Icon name="down" size={14} /></button>
             <button type="button" class="btn btn-bare btn-sm" aria-label="Xoá câu" onclick={() => { k.lines = k.lines.filter((_, x) => x !== i); touch(); }}>
               <Icon name="trash" size={15} />
             </button>
@@ -320,5 +320,12 @@
     border: 1px solid var(--line-3);
     border-radius: 6px;
     cursor: pointer;
+  }
+  /* Quản trị trên điện thoại: ô màu đủ lớn cho ngón tay. */
+  @media (max-width: 899px) {
+    .swatch button {
+      width: 32px;
+      height: 32px;
+    }
   }
 </style>

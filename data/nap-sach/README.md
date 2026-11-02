@@ -178,6 +178,8 @@ Các bước và lệnh nằm ở bảng "Quy trình nạp và kiểm tra nội 
 | `vi-du/hsk*.json` | câu ví dụ lật thẻ tự soạn (2 câu/từ) — `sinh.py` ưu tiên dùng |
 | `kiem_vi_du.py`, `nap_vi_du.py` | kiểm (độ dài theo cấp, chữ ngoài cấp, pinyin) và nạp ví dụ |
 | `phan_tich_chu.py` | bộ thủ, giải thích cấu tạo, chữ cùng bộ cho màn Luyện viết |
-| `viec_doc.py` → `doc_mau.py` → `tai_doc.py` → `gan_thoai.py` | giọng đọc mẫu Kokoro: lập danh sách, sinh mp3 (ép đúng pinyin sách), tải lên, gắn câu thoại + ghép bài khoá |
+| `viec_doc.py` → `doc_edge.py` → `tai_doc.py` → `gan_thoai.py` | giọng đọc mẫu Microsoft (edge-tts): lập danh sách + phân vai, sinh và tự kiểm từng file (FunASR, độ to, tốc độ), tải lên, gắn câu thoại + bài khoá — xem [HUONG-DAN-GIONG-DOC.md](HUONG-DAN-GIONG-DOC.md) |
+| `kiem_bang_that.py`, `bang_lech_sach.json` | băng thu thật nào đọc lệch sách Hanu (thay bằng bản ghép) |
+| `dong_goi_giong.py` | đóng gói web + mp3 + SQL nhỏ để đưa lên server |
 | `quet.py` | quét lỗi toàn bộ (âm thanh, nét chữ, bộ thủ, ví dụ) → cuối NHAT-KY-CAP-NHAT.md |
 
