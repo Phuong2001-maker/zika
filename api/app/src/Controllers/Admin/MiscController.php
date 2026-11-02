@@ -105,20 +105,21 @@ final class MiscController
     }
 
     /**
-     * POST /admin/media/tts (multipart: file, text, voice) — file đọc mẫu sinh bằng máy cho một câu chữ.
+     * POST /admin/media/tts (multipart: file, text, voice, reading tuỳ chọn) — file đọc mẫu theo cách đọc.
      * Gọi hàng nghìn lần mỗi lượt sinh nên không ghi nhật ký từng file; bảng audio_assets đã đủ để tra.
      */
     public function tts(Request $r): array
     {
         $v = new Validator($r->body);
         $text = $v->str('text', 'Câu chữ', true, 1, 500);
+        $reading = $v->str('reading', 'Pinyin', false, 0, 500);
         $voice = (string) $v->in('voice', 'Giọng', ['nu', 'nam', 'nu2', 'nam2'], 'nu');
         $v->done();
-        $out = Upload::tts($r->files['file'] ?? null, $text, $voice);
+        $out = Upload::tts($r->files['file'] ?? null, $text, $voice, $reading);
         Db::exec(
             'INSERT INTO audio_assets (text_hash, text_zh, voice, path) VALUES (?, ?, ?, ?)
              ON DUPLICATE KEY UPDATE path = VALUES(path), created_at = CURRENT_TIMESTAMP',
-            [sha1(trim($text)), trim($text), $voice, $out['path']],
+            [Upload::ttsHash($text, $reading), trim($text), $voice, $out['path']],
         );
         return $out;
     }

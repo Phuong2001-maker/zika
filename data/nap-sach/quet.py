@@ -8,7 +8,6 @@ và tải thử từng file (âm thanh, nét chữ) từ web chứ không chỉ 
 """
 from __future__ import annotations
 
-import hashlib
 import io
 import json
 import re
@@ -19,6 +18,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
 from chung import REPO, SACH_DIR, THU_MUC, chu_han, ghi_json
+from viec_doc import khoa_doc
 from nap import Phien
 
 sys.path.append(str(SACH_DIR / "kokoro-tts" / ".venv" / "Lib" / "site-packages"))
@@ -30,8 +30,8 @@ WEB = "http://127.0.0.1:5173"
 GIONG = ("nu", "nam")
 
 
-def tts(text: str, giong: str) -> str:
-    h = hashlib.sha1(text.strip().encode("utf-8")).hexdigest()
+def tts(text: str, giong: str, reading: str | None = None) -> str:
+    h = khoa_doc(text, reading)
     return f"/uploads/tts/{giong}/{h[:2]}/{h}.mp3"
 
 
@@ -83,7 +83,7 @@ def main() -> dict:
             for w in s.goi("GET", f"/learn/lessons/{b['id']}/flashcards")["words"]:
                 dem["từ"] = dem.get("từ", 0) + 1
                 for g in GIONG:
-                    am[tts(w["hanzi"], g)] = (w["hanzi"], f"{noi} · từ {w['hanzi']}")
+                    am[tts(w["hanzi"], g, w["pinyin"])] = (w["hanzi"], f"{noi} · từ {w['hanzi']}")
                 if not w["examples"]:
                     ghi("Lật thẻ: từ thiếu ví dụ", f"{noi} · {w['hanzi']}")
                 for e in w["examples"]:

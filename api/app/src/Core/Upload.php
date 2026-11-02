@@ -86,19 +86,23 @@ final class Upload
         return strlen($bytes) > 4 && ord($bytes[0]) === 0xFF && (ord($bytes[1]) & 0xE6) === 0xE2;
     }
 
-    /**
-     * File đọc mẫu sinh sẵn (Kokoro). Khác audio(): tên file là sha1 của câu chữ chứ không phải của
-     * nội dung, để trình duyệt tự tính ra đường dẫn từ chữ cần đọc (web/src/lib/learn/speech.ts).
-     * Sinh lại thì ghi đè cùng chỗ.
+    /** Thêm cách đọc vào khoá để một chữ đa âm không dùng nhầm file của âm khác. */
+    public static function ttsHash(string $text, ?string $reading = null): string
+    {
+        $py = mb_strtolower((string) preg_replace('/\s+/u', '', Str::nfc($reading ?? '')));
+        return sha1(trim($text) . ($py !== '' ? "\n" . $py : ''));
+    }
+
+    /** File Kokoro theo chữ + pinyin (nếu có); sinh lại thì ghi đè cùng chỗ.
      * @param array<string,mixed>|null $file @return array{path:string,url:string}
      */
-    public static function tts(?array $file, string $text, string $voice): array
+    public static function tts(?array $file, string $text, string $voice, ?string $reading = null): array
     {
         $bytes = self::read($file, self::AUDIO_MAX);
         if (!self::isMp3($bytes)) {
             throw new HttpError(415, 'BAD_FILE', 'Chỉ nhận tệp âm thanh MP3.');
         }
-        $hash = sha1(trim($text));
+        $hash = self::ttsHash($text, $reading);
         $rel = 'tts/' . $voice . '/' . substr($hash, 0, 2) . '/' . $hash . '.mp3';
         $abs = Config::uploadsDir($rel);
         if (!is_dir(dirname($abs))) {

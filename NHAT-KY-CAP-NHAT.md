@@ -23,6 +23,36 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 02/11/2026 — Kiểm tra lại phát âm, chuyển từ lật thẻ sang giọng nam Yunxi
+
+Người dùng báo cả nhóm từ đơn đọc không đúng và yêu cầu lật thẻ giọng nam. Lượt quét trước chỉ
+kiểm file thiếu/hỏng/câm/tốc độ, không đủ để kết luận phát âm đúng. Đối chiếu pinyin phát hiện
+`头 tóu` dùng file `tou`, `道 dào` dùng file `dao`, `还 huán` dùng file `hái` do chỉ băm chữ Hán.
+
+Đã đổi từ ở cả màn học theo bài và tổng hợp sang file theo **chữ + pinyin**, cố định giọng nam;
+nút nghe câu ví dụ cũng dùng nam. Backend nhận `reading` tuỳ chọn khi tải TTS; web/PHP/Python dùng
+cùng quy tắc băm, chuẩn hoá NFC, bỏ khoảng trắng và viết thường pinyin. Giữ nguyên đường dẫn cũ
+cho những nơi không truyền pinyin.
+
+Đã tạo 894 file nam Yunxi cho 932 thẻ (các từ trùng dùng chung), trong tổng 10.274 file TTS.
+Dịch vụ tạo từng nhóm 10 từ, chỉ tách khi mốc WordBoundary khớp đúng chữ. Các chữ dễ đọc sai
+được chọn âm trong `doc_tu_nam.py::chu_doc()` (có phân biệt `还 hái/huán`, `只 zhī`, `长 cháng`,
+`地 de`, `粘人 niánrén`). File gốc/mốc cắt lưu tại `ra/yunxi-batch/`; tạo mới cần mạng và
+`pip install edge-tts av`, phát trên web chỉ dùng mp3 đã có.
+
+Giọng Yunxi sinh ở -20%, sau đó dùng atempo giữ cao độ để đọc chậm. Đo đoạn có tiếng trên đủ
+894 file: trung vị 1 chữ **0,491**, 2 chữ **0,486**, 3 chữ **0,435**, 4 chữ **0,434**, 5 chữ **0,433**
+giây/chữ (`ra/do_toc_do_yunxi.json`). `TTS_VERSION = 5` để bỏ cache file nam cũ.
+
+Đã rà nhận dạng độc lập 40 mục đầu; kết quả mới rõ hơn bộ Kokoro chậm. Nhận dạng chỉ dùng để
+sàng lọc, không phải chứng nhận toàn bộ thanh điệu đúng. Báo cáo trong `ra/kiem_nhan_dang_nam.json`
+và `ra/kiem_nhan_dang_yunxi.json`.
+
+Kiểm tra: web 0 lỗi/0 cảnh báo, lint sạch, 52/52 test; API 49/49 test; 3 test xử lý âm thanh
+(giữ cao độ khi kéo dài, không tăng tốc file đã chậm, từ chối file câm) đều đạt.
+Đã tải đủ bộ nam mới. Quét qua web lúc 14:46: **8.537 file âm thanh + 697 file nét chữ, 0 lỗi**;
+pinyin thực tế của đủ 932 thẻ đều có file tương ứng. Chưa cập nhật hosting.
+
 ### 02/11/2026 — Từ và chữ đơn đọc chậm lại
 
 Giữ `TOC_TU = 0.58`, `TOC_TU_DAI = 0.52` và `TTS_VERSION = 2` từ commit `4286d0d`.
@@ -121,7 +151,7 @@ chi tiết cuối [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 `005_character_analysis.sql` (bộ thủ, phân tích chữ). Server thật cần chạy
 `php app/tools/install.php --migrate`.
 
-## Lần quét gần nhất — 02/11/2026 14:14
+## Lần quét gần nhất — 02/11/2026 14:46
 
 Sinh tự động bởi `data/nap-sach/quet.py`, đừng sửa tay mục này.
 
@@ -134,7 +164,7 @@ Sinh tự động bởi `data/nap-sach/quet.py`, đừng sửa tay mục này.
 | câu thoại | 822 |
 | câu hỏi nghe | 149 |
 | ví dụ ngữ pháp | 653 |
-| file âm thanh | 7.949 |
+| file âm thanh | 8.537 |
 | file nét chữ | 697 |
 
 | Lỗi | Số chỗ | Ví dụ |

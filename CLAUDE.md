@@ -35,7 +35,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web 514 file **0 lỗi 0 cảnh báo**, lint sạch, 47/47 test; API 46/46.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 52/52 test; API 49/49.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -123,26 +123,14 @@ chứ không làm hỏng cả mẻ.
 
 ## Việc còn treo
 
-- **ĐANG DỞ (cập nhật 02/11/2026 14:17) — chỉ còn triển khai và xác minh web thật:** từ đơn ở lật thẻ đọc quá nhanh
-  (đo 0,27 giây/âm tiết) → đã hạ tốc độ (`TOC_TU` 0,58, `TOC_TU_DAI` 0,52 trong
-  `data/nap-sach/viec_doc.py`) và đã sinh + tải lại đủ 2.648 file mp3 từ/chữ 1–4 chữ;
-  `TTS_VERSION` trong `web/src/lib/learn/speech.ts` đã tăng lên 2.
-  Đã đối chiếu SHA-256 đủ 8.486 mp3 (0 sai lệch), gắn 40 bài/ghép 63 bài khoá,
-  quét qua web 7.949 âm thanh + 697 nét chữ **0 lỗi**. Trung vị 1 chữ 0,585 và 2 chữ 0,454
-  giây/âm tiết (đo đoạn từ mẫu đầu đến mẫu cuối có `abs(a) > 0.02`). Web check/lint/test và API
-  đều đạt; chi tiết trong [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md).
-  Đã build `release/zika-release-20261102-1414.zip` và chạy lại `python xuat_sql.py` →
-  `D:/zika-devtools/Project/dong-goi-server/`. Gói riêng cho lần cập nhật này:
-  `release/cap-nhat-giong-doc-20261102.zip` (123,46 MiB), web ở gốc zip + `uploads/tts/` đủ 8.486 mp3.
-  Đã kiểm CRC và SHA-256 từng file, đường dẫn dùng `/`; manifest và SHA-256 nằm cạnh zip.
-  1. Chưa có kết nối hosting trong phiên này. Upload + giải nén gộp zip riêng vào
-     `domains/tiengtrunghanu.io.vn/` (không có public_html). **Không chạy lại SQL**.
-     Zip riêng không có `api/`, `app/`, `config.php`; hướng dẫn:
-     [data/nap-sach/HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md).
-     Nếu dùng gói đầy đủ, giữ `config.php` tại APP_DIR `/home/buwsofujhosting/zika-app`.
-  2. Kiểm tra web thật theo [KICH-BAN-TEST.md](KICH-BAN-TEST.md), so dữ liệu với local rồi ghi
-     kết quả vào [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md); xoá mục ĐANG DỞ này.
-     Tải thử mp3 trên web thật từ môi trường hiện tại bị HTTP 403, chưa xác minh được bản mới.
+- **ĐANG DỞ — cập nhật giọng nam lật thẻ (02/11/2026):** người dùng báo toàn bộ từ đơn đọc không đúng,
+  yêu cầu giọng nam. Đã chuyển lật thẻ sang Yunxi, file theo chữ + pinyin để tách `还 hái/huán`,
+  sửa dùng nhầm thanh nhẹ của `头/道`. Bộ 894 file nam cho 932 thẻ, tổng 10.274 TTS;
+  `TTS_VERSION = 5`. Đọc chậm bằng atempo giữ cao độ: 1/2 chữ trung vị 0,491/0,486 giây/chữ.
+  Chi tiết lần kiểm mới ở đầu [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md).
+  Đã tải đủ, quét local 8.537 âm thanh + 697 nét chữ **0 lỗi** (14:46).
+  Sau đó build + gói `release/cap-nhat-lat-the-nam-20261102.zip`,
+  triển khai và xác minh web thật theo hướng dẫn. Gói `cap-nhat-giong-doc-20261102.zip` là bản cũ.
 
 - **Giọng đọc mẫu Kokoro + ví dụ lật thẻ + bộ thủ + chuông thông báo (02/11/2026)**: xem
   [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md) — quy trình nạp, lần quét lỗi gần nhất, kịch bản test.

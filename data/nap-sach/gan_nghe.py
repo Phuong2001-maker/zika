@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import json
 import sys
+import time
+import urllib.error
 import urllib.request
 import uuid
 
@@ -42,9 +44,17 @@ def tai_len(s: Phien, path) -> str:
     req.add_header("X-CSRF-Token", s.csrf())
     req.add_header("Origin", ORIGIN)
     req.add_header("Accept", "application/json")
-    with s.op.open(req, timeout=120) as r:
-        out = json.loads(r.read().decode("utf-8"))
-    return out.get("data", out)["path"]
+    # Script tải TTS ngay trước đó dùng chung hạn mức tài khoản dù là tiến trình khác.
+    for lan in range(5):
+        try:
+            with s.op.open(req, timeout=120) as r:
+                out = json.loads(r.read().decode("utf-8"))
+            return out.get("data", out)["path"]
+        except urllib.error.HTTPError as e:
+            if e.code != 429 or lan == 4:
+                raise
+            time.sleep(15)
+    raise RuntimeError("Chưa tải được âm thanh")
 
 
 if __name__ == "__main__":

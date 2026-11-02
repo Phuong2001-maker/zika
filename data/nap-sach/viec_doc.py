@@ -10,7 +10,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
+import shutil
 import sys
+import unicodedata
 
 from chung import THU_MUC, chu_han, ghi_json, tach_am_tiet
 
@@ -23,9 +26,27 @@ def toc_tu(text: str) -> float:
     return TOC_TU if len(chu_han(text)) <= 2 else TOC_TU_DAI
 
 
-def duong(text: str, giong: str) -> str:
-    h = hashlib.sha1(text.strip().encode("utf-8")).hexdigest()
+def khoa_doc(text: str, reading: str | None = None) -> str:
+    py = re.sub(r"\s+", "", unicodedata.normalize("NFC", reading or "")).lower()
+    return hashlib.sha1((text.strip() + ("\n" + py if py else "")).encode("utf-8")).hexdigest()
+
+
+def duong(text: str, giong: str, reading: str | None = None) -> str:
+    h = khoa_doc(text, reading)
     return f"ra/tts/{giong}/{h[:2]}/{h}.mp3"
+
+
+def tu_theo_pinyin() -> list[dict]:
+    ra = []
+    for cap in (1, 2, 3):
+        for w in json.loads((THU_MUC / "ra" / f"tu_hsk{cap}.json").read_text(encoding="utf-8")):
+            for g in ("nu", "nam"):
+                ra.append({"text": w["hanzi"], "pinyin": w["pinyin"], "reading": w["pinyin"],
+                           "speed": 0.8 if g == "nam" else toc_tu(w["hanzi"]), "voice": g,
+                           "engine": "yunxi" if g == "nam" else "kokoro",
+                           "revision": 2 if g == "nam" else 1,
+                           "out": duong(w["hanzi"], g, w["pinyin"])})
+    return ra
 
 
 def them(ds: dict, text: str, pinyin: str | None, toc: float) -> None:
@@ -133,14 +154,29 @@ def gop(viec: list[dict]) -> None:
     xoa = 0
     for v in tat:
         c = cu.get(v["out"])
-        if c and (c.get("speed") != v["speed"] or c.get("pinyin") != v.get("pinyin")):
+        if c and (c.get("speed") != v["speed"] or c.get("pinyin") != v.get("pinyin")
+                  or c.get("engine", "kokoro") != v.get("engine", "kokoro")
+                  or c.get("revision", 1) != v.get("revision", 1)):
             (THU_MUC / v["out"]).unlink(missing_ok=True)
             da.pop(v["out"], None)
             xoa += 1
+    # Chỉ tái dùng mp3 khi cả pinyin và tốc độ của bản cũ khớp; không sao chép nhầm âm thanh nhẹ
+    # của chữ tách từ từ ghép (头 tou) sang từ vựng đứng riêng (头 tóu).
+    chep = 0
+    for v in tat:
+        if not v.get("reading") or v.get("engine", "kokoro") != "kokoro" or (THU_MUC / v["out"]).exists():
+            continue
+        nguon = cu.get(duong(v["text"], v["voice"]))
+        if (nguon and khoa_doc(v["text"], nguon.get("pinyin")) == khoa_doc(v["text"], v["reading"])
+                and nguon.get("speed") == v["speed"] and (THU_MUC / nguon["out"]).exists()):
+            out = THU_MUC / v["out"]
+            out.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(THU_MUC / nguon["out"], out)
+            chep += 1
     ghi_json(f_tat, tat)
     ghi_json(f_da, da)
     con = sum(1 for v in tat if not (THU_MUC / v["out"]).exists())
-    print(f"{len(tat)} file trong ra/doc_mau_tat.json · {xoa} file đổi tốc độ/pinyin đã xoá · {con} file cần sinh")
+    print(f"{len(tat)} file trong ra/doc_mau_tat.json · {xoa} file đổi tốc độ/pinyin đã xoá · {chep} file tái dùng đúng pinyin · {con} file cần sinh")
 
 
 if __name__ == "__main__":
@@ -152,6 +188,8 @@ if __name__ == "__main__":
         tu_web(ds, thoai)
         ghi_json(THU_MUC / "ra" / "hoi_thoai_giong.json", thoai)
     viec = [{"text": t, **v, "voice": g, "out": duong(t, g)} for t, v in ds.items() for g in ("nu", "nam")]
+    if "tu" in sys.argv:
+        viec += tu_theo_pinyin()
     # Câu thoại: một giọng đúng nhân vật (file riêng theo giọng, nên câu trùng với ví dụ không đè nhau).
     viec += [{"text": c["zh"], "pinyin": c["pinyin"], "speed": TOC_CAU, "voice": c["voice"], "out": duong(c["zh"], c["voice"])}
              for k in thoai for c in k["cau"]]

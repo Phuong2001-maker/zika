@@ -145,6 +145,8 @@ def main() -> None:
     for k, v in enumerate(viec):
         if k % n != i:
             continue
+        if v.get("engine", "kokoro") != "kokoro":
+            continue
         out = THU_MUC / v["out"]
         if out.exists():
             continue

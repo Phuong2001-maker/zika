@@ -1,17 +1,19 @@
 # Đưa giáo trình HSK 1–3 lên server
 
-## Chỉ cập nhật tốc độ giọng đọc — 02/11/2026
+## Cập nhật lật thẻ giọng nam và đúng cách đọc — 02/11/2026
 
 Nội dung HSK 1–3 đã được nạp lên server ngày 02/11 (xem nhật ký). Lần này chỉ đổi file giọng đọc
-và số cache `TTS_VERSION = 2`: **không import lại SQL**.
+và số cache `TTS_VERSION = 5`: **không import lại SQL**.
 
-Gói riêng `release/cap-nhat-giong-doc-20261102.zip` gồm web đã build ngay ở gốc zip và
-`uploads/tts/` (đủ 8.486 mp3), tên bên trong dùng dấu `/` để giải nén được trên Linux.
+Gói riêng `release/cap-nhat-lat-the-nam-20261102.zip` gồm web đã build ngay ở gốc zip và
+`uploads/tts/` (đủ 10.274 mp3, gồm 894 mục từ giọng nam Yunxi theo pinyin), tên bên trong dùng `/`.
+Gói `cap-nhat-giong-doc-20261102.zip` tạo lúc 14:16 là bản cũ, chưa có bộ giọng nam này.
 Upload và giải nén **gộp vào** DOCROOT `domains/tiengtrunghanu.io.vn`, cho phép ghi đè file trùng.
 Zip này không có `api/`, mã PHP hay `config.php`; không cần chép thư mục `app/` của gói phát hành.
 
-Sau khi chép xong, kiểm tra trên web thật: lật thẻ HSK 1, thử cả nữ/nam, từ đơn đọc chậm hơn,
-URL âm thanh có `?v=2`, file trả `audio/mpeg`; làm tiếp kịch bản trong `KICH-BAN-TEST.md`.
+Sau khi chép xong, kiểm tra trên web thật: lật thẻ HSK 1–3 dùng giọng nam, từ đọc rõ và chậm,
+URL âm thanh có `?v=5`, file trả `audio/mpeg`; thử `还 hái/huán`, `头 tóu`, `道 dào`.
+Làm tiếp kịch bản trong `KICH-BAN-TEST.md`.
 Mục đang dở trong `CLAUDE.md` chỉ được xoá sau khi xác minh web thật.
 
 ## Nạp toàn bộ giáo trình

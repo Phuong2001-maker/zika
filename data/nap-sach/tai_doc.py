@@ -23,7 +23,9 @@ DA_TAI = THU_MUC / "ra" / "da_tai.json"
 def tai(s: Phien, v: dict) -> str:
     ranh = uuid.uuid4().hex
     phan = []
-    for k in ("text", "voice"):
+    for k in ("text", "voice", "reading"):
+        if k not in v:
+            continue
         phan.append(f"--{ranh}\r\nContent-Disposition: form-data; name=\"{k}\"\r\n\r\n{v[k]}\r\n".encode())
     phan.append(f"--{ranh}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"a.mp3\"\r\n"
                 f"Content-Type: audio/mpeg\r\n\r\n".encode() + (THU_MUC / v["out"]).read_bytes() + b"\r\n")
@@ -49,7 +51,8 @@ def tai(s: Phien, v: dict) -> str:
 
 def mot_luot(s: Phien, da: dict) -> tuple[int, int]:
     viec = []
-    for ten in ("doc_mau.json", "doc_mau_web.json"):
+    danh_sach = ("doc_mau_tat.json",) if (THU_MUC / "ra" / "doc_mau_tat.json").exists() else ("doc_mau.json", "doc_mau_web.json")
+    for ten in danh_sach:
         f = THU_MUC / "ra" / ten
         if f.exists():
             viec += json.loads(f.read_text(encoding="utf-8"))

@@ -53,7 +53,7 @@
 
   function flip(): void {
     flipped = !flipped;
-    if (flipped && settings.value.autoSpeak && card) void speak(card.hanzi);
+    if (flipped && settings.value.autoSpeak && card) void speak(card.hanzi, null, card.pinyin, 'nam');
   }
 
   function cardClick(): void {

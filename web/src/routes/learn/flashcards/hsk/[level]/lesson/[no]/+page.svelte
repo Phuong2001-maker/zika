@@ -73,7 +73,7 @@
 
   function flip(): void {
     flipped = !flipped;
-    if (flipped && settings.value.autoSpeak && card) void speak(card.hanzi);
+    if (flipped && settings.value.autoSpeak && card) void speak(card.hanzi, null, card.pinyin, 'nam');
   }
 
   function cardClick(): void {
@@ -182,7 +182,7 @@
         <!-- Nút nghe nằm ngoài <button> lật (không lồng nút được) nên đặt tuyệt đối đè lên góc thẻ.
              Chỉ hiện khi mặt đang xem là chữ Hán — nghe pinyin hay nghĩa tiếng Việt thì vô nghĩa. -->
         {#if flipped || settings.value.cardFront === 'hanzi'}
-          <button type="button" class="loa" aria-label="Nghe lại {card.hanzi}" onclick={() => speak(card.hanzi)}>
+          <button type="button" class="loa" aria-label="Nghe lại {card.hanzi}" onclick={() => speak(card.hanzi, null, card.pinyin, 'nam')}>
             <Icon name="speaker" size={m ? 17 : 19} />
           </button>
         {/if}
@@ -235,7 +235,7 @@
                 {parts[0]}<b class="hl">{ex.highlight}</b>{parts.slice(1).join(ex.highlight)}
               {:else}{ex.zh}{/if}
             </span>
-            <button type="button" class="loa-cau" aria-label="Nghe câu" onclick={() => speak(ex.zh)}><Icon name="speaker" size={17} /></button>
+            <button type="button" class="loa-cau" aria-label="Nghe câu" onclick={() => speak(ex.zh, null, undefined, 'nam')}><Icon name="speaker" size={17} /></button>
           </div>
           {#if ex.pinyin}{@render pinyinRow(ex.pinyin, 13.5)}{/if}
           {#if ex.vi}<span class="muted" style="font-size: 14px">{ex.vi}</span>{/if}

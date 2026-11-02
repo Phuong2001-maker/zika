@@ -32,6 +32,7 @@ function Buoc($ten) { Write-Host "`n=== $ten ===" -ForegroundColor Cyan }
 if (-not $BoQuaLap) {
     Buoc '1/5 Lập danh sách câu chữ cần đọc (từ, ví dụ, chữ viết, câu thoại, ngữ pháp, câu hỏi nghe)'
     python viec_doc.py tu web
+    if ($LASTEXITCODE -ne 0) { throw 'Chưa lập xong danh sách giọng đọc.' }
 }
 
 Buoc "2/5 Sinh mp3 bằng Kokoro ($TienTrinh tiến trình) — lâu nhất, khoảng 100 file/phút"
@@ -44,14 +45,21 @@ $ps | Wait-Process
 Get-ChildItem ra/doc_mau_*.log | ForEach-Object { Get-Content $_ -Tail 1 }
 Remove-Item Env:PYTHONPATH   # Python thường không được thấy numpy của Kokoro (khác phiên bản → lỗi)
 
+Buoc 'Sinh từ lật thẻ giọng nam Yunxi (cần mạng và pip install edge-tts av)'
+python doc_tu_nam.py
+if ($LASTEXITCODE -ne 0) { throw 'Sinh giọng nam Yunxi chưa xong; chưa tải lên web.' }
+
 Buoc '3/5 Tải file lên web local (POST /admin/media/tts)'
 python tai_doc.py
+if ($LASTEXITCODE -ne 0) { throw 'Tải âm thanh chưa xong.' }
 
 Buoc '4/5 Gắn âm thanh cho câu thoại, ghép lại bài khoá chưa có file thu thật'
 python gan_thoai.py
+if ($LASTEXITCODE -ne 0) { throw 'Gắn âm thanh hội thoại chưa xong.' }
 
 if (-not $BoQuaQuet) {
     Buoc '5/5 Quét lỗi toàn bộ → cuối NHAT-KY-CAP-NHAT.md'
     python quet.py
+    if ($LASTEXITCODE -ne 0) { throw 'Quét giọng đọc chưa xong.' }
 }
 Write-Host "`nXong. Đưa lên server: python xuat_sql.py rồi làm theo HUONG-DAN-SERVER.md" -ForegroundColor Green

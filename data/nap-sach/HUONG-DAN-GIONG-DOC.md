@@ -1,9 +1,19 @@
-# Giọng đọc mẫu Kokoro — tự sinh trên máy
+# Giọng đọc mẫu — Yunxi cho từ lật thẻ, Kokoro cho câu và các phần khác
 
-Mọi chỗ web đọc chữ Hán (lật thẻ, câu ví dụ, luyện viết, hội thoại, ngữ pháp, câu hỏi nghe) phát file
-mp3 sinh sẵn bằng **Kokoro** — phần mềm đọc tiếng Trung chạy ngay trên máy (CPU), không gọi dịch vụ
-nào, không tốn tiền/token. File nằm ở `uploads/tts/<giọng>/<2 ký tự>/<sha1 câu chữ>.mp3`; web tự tính
-tên file từ chữ cần đọc (`web/src/lib/learn/speech.ts`), chữ nào chưa có file thì rơi về giọng trình duyệt.
+Từ ở lật thẻ dùng **giọng nam Yunxi**, tạo sẵn qua dịch vụ đọc của Microsoft Edge.
+`doc_tu_nam.py` cần mạng khi tạo file mới và `python -m pip install edge-tts av`.
+Mỗi lượt tạo 10 từ, tách đúng mốc WordBoundary, kiểm nhãn khớp trước khi lưu; lưu cả file gốc và mốc
+ở `ra/yunxi-batch/`. Sau đó kéo thời lượng bằng `atempo` giữ cao độ: đích 0,48 giây/chữ cho từ 1–2 chữ,
+0,43 giây/chữ cho từ dài hơn. Trình duyệt chỉ phát mp3 có sẵn, không gọi dịch vụ lúc học.
+
+Lật thẻ theo bài và tổng hợp đều chọn giọng nam; câu ví dụ cũng chọn nam. Từ có tên file
+`sha1(chữ.trim() + "\n" + pinyin_bỏ_khoảng_trắng_viết_thường)`, pinyin chuẩn hoá Unicode NFC.
+Nhờ đó `还 hái/huán`, `头 tou/tóu`, `道 dao/dào` không dùng nhầm file. Các trường hợp cần chọn âm
+khác mặc định của dịch vụ được ghi trong `chu_doc()`; chữ/nhãn trên thẻ giữ nguyên.
+
+Các file không chỉ định pinyin vẫn dùng `sha1(chữ.trim())`, giữ tương thích câu ví dụ, luyện viết,
+hội thoại, ngữ pháp, câu hỏi nghe bằng **Kokoro** chạy trên CPU. File nằm ở
+`uploads/tts/<giọng>/<2 ký tự>/<hash>.mp3`; web tự tính tên trong `speech.ts`.
 
 ## Chạy
 
@@ -15,12 +25,12 @@ tên file từ chữ cần đọc (`web/src/lib/learn/speech.ts`), chữ nào ch
    powershell -ExecutionPolicy Bypass -File .\sinh-giong-doc.ps1
    ```
 
-3. Chờ. Lần đầu (~8.500 file) khoảng 1,5 giờ; lần sau chỉ sinh file mới hoặc file đổi tốc độ.
+3. Chờ. Bộ hiện tại 10.274 file; lần sau chỉ sinh file mới hoặc file đổi tốc độ/cách đọc/bộ sinh.
    Máy chạy 100% CPU trong lúc đó là bình thường. Dừng giữa chừng thì chạy lại y lệnh cũ.
 4. Đưa lên server: `python xuat_sql.py` → làm theo `HUONG-DAN-SERVER.md`. Nếu chỉ đổi âm thanh
    (không đổi nội dung chữ) thì chỉ cần chép `dong-goi-server/uploads/tts` đè lên server, không cần SQL.
 
-Script làm 5 bước: lập danh sách (`viec_doc.py tu web`) → sinh (`doc_mau.py`, chạy song song) →
+Script làm 5 bước: lập danh sách (`viec_doc.py tu web`) → sinh (Kokoro `doc_mau.py` + Yunxi `doc_tu_nam.py`) →
 tải lên web local (`tai_doc.py`) → gắn câu thoại + ghép bài khoá (`gan_thoai.py`) → quét lỗi (`quet.py`).
 
 ## Khi nào phải chạy
@@ -30,7 +40,10 @@ tải lên web local (`tai_doc.py`) → gắn câu thoại + ghép bài khoá (`
 
 ## Chỉnh tốc độ đọc
 
-Trong `viec_doc.py`:
+Giọng nam từ lật thẻ: đích thời lượng nằm ở `doc_tu_nam.py::doc_cham()`; khi đổi cách xử lý,
+tăng `revision` của mục Yunxi trong `tu_theo_pinyin()` để sinh lại từ bản gốc đã lưu.
+
+Tốc độ **Kokoro** trong `viec_doc.py`:
 
 | Hằng | Dùng cho | Hiện tại | Đo được |
 |---|---|---|---|
