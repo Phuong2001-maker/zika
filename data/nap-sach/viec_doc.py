@@ -15,7 +15,7 @@ import sys
 from chung import THU_MUC, chu_han, ghi_json, tach_am_tiet
 
 TOC_TU = 0.58   # từ/chữ 1–2 chữ: ~0,5 giây mỗi âm tiết, như giáo viên đọc từ mới (0,9 nghe quá nhanh)
-TOC_TU_DAI = 0.52  # từ 3–4 chữ: ~0,43 giây/âm tiết — chậm hơn nữa thì đọc rời rạc từng chữ
+TOC_TU_DAI = 0.52  # từ 3–4 chữ: đọc chậm riêng; số đo thực tế xem HUONG-DAN-GIONG-DOC.md
 TOC_CAU = 1.0
 
 

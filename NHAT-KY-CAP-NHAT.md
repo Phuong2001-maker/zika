@@ -51,7 +51,13 @@ Kiểm tra code: Svelte 0 lỗi/0 cảnh báo, lint sạch, web 47/47 test, API 
 Gắn âm thanh cho 40 bài, ghép 63 bài khoá, 0 câu thiếu file. Quét qua web lúc 14:14:
 7.949 file âm thanh + 697 file nét chữ, **0 lỗi** (chi tiết ở cuối nhật ký).
 
-**Còn tiếp:** đóng gói và triển khai.
+**Đã đóng gói:** build thành công `release/zika-release-20261102-1414.zip`; chạy lại `xuat_sql.py`
+ra `D:/zika-devtools/Project/dong-goi-server/`. Gói riêng `release/cap-nhat-giong-doc-20261102.zip`
+gồm 166 file web + 8.486 mp3, 129.462.282 byte (123,46 MiB), đường dẫn `/`, không có API/PHP/config.
+Đã kiểm CRC và đối chiếu SHA-256 từng file trong zip với nguồn. Manifest và file `.zip.sha256`
+nằm cạnh zip; SHA-256 của zip: `fa14050e602f7b378541c2cb2482ec3e04a45235ace987d75b61bcce4718fc36`.
+
+**Còn tiếp:** triển khai và xác minh web thật; chưa có kết nối hosting trong phiên này.
 Từ môi trường hiện tại, tải thử mp3 trên web thật trả HTTP 403; chưa xác minh được bản mới trên server.
 
 ### 02/11/2026 — Ví dụ lật thẻ, giọng đọc Kokoro, bộ thủ, chuông thông báo

@@ -123,7 +123,7 @@ chứ không làm hỏng cả mẻ.
 
 ## Việc còn treo
 
-- **ĐANG DỞ (cập nhật 02/11/2026 14:14) — làm tiếp theo đúng thứ tự:** từ đơn ở lật thẻ đọc quá nhanh
+- **ĐANG DỞ (cập nhật 02/11/2026 14:17) — chỉ còn triển khai và xác minh web thật:** từ đơn ở lật thẻ đọc quá nhanh
   (đo 0,27 giây/âm tiết) → đã hạ tốc độ (`TOC_TU` 0,58, `TOC_TU_DAI` 0,52 trong
   `data/nap-sach/viec_doc.py`) và đã sinh + tải lại đủ 2.648 file mp3 từ/chữ 1–4 chữ;
   `TTS_VERSION` trong `web/src/lib/learn/speech.ts` đã tăng lên 2.
@@ -131,17 +131,18 @@ chứ không làm hỏng cả mẻ.
   quét qua web 7.949 âm thanh + 697 nét chữ **0 lỗi**. Trung vị 1 chữ 0,585 và 2 chữ 0,454
   giây/âm tiết (đo đoạn từ mẫu đầu đến mẫu cuối có `abs(a) > 0.02`). Web check/lint/test và API
   đều đạt; chi tiết trong [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md).
-  4. Gói cho server: tắt `npm run dev` (nó khoá `node_modules`, `npm ci` lỗi EPERM) →
-     `bash deploy/build-release.sh` (biến `ZIKA_PHP`/`ZIKA_COMPOSER` như README) → `python xuat_sql.py`.
-     Server **không cần chạy lại SQL** (đường dẫn âm thanh không đổi): chép code web như lần trước
-     (`public/*` trừ `api`, `uploads` → `domains/tiengtrunghanu.io.vn/`) và chép đè
-     `dong-goi-server/uploads/tts` vào `domains/tiengtrunghanu.io.vn/uploads/tts`
-     (nén zip bằng Python với dấu `/`, zip của PowerShell 5.1 dùng `\` → giải nén trên Linux hỏng).
-     Cách đưa lên server từng bước: [data/nap-sach/HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md);
-     server: APP_DIR `/home/buwsofujhosting/zika-app`, DOCROOT `domains/tiengtrunghanu.io.vn`
-     (không có public_html), `config.php` nằm trong `zika-app` — giữ lại khi dán đè.
-  5. Kiểm tra web thật bằng đoạn "dấu vân tay" (cuối [KICH-BAN-TEST.md](KICH-BAN-TEST.md)) rồi ghi
+  Đã build `release/zika-release-20261102-1414.zip` và chạy lại `python xuat_sql.py` →
+  `D:/zika-devtools/Project/dong-goi-server/`. Gói riêng cho lần cập nhật này:
+  `release/cap-nhat-giong-doc-20261102.zip` (123,46 MiB), web ở gốc zip + `uploads/tts/` đủ 8.486 mp3.
+  Đã kiểm CRC và SHA-256 từng file, đường dẫn dùng `/`; manifest và SHA-256 nằm cạnh zip.
+  1. Chưa có kết nối hosting trong phiên này. Upload + giải nén gộp zip riêng vào
+     `domains/tiengtrunghanu.io.vn/` (không có public_html). **Không chạy lại SQL**.
+     Zip riêng không có `api/`, `app/`, `config.php`; hướng dẫn:
+     [data/nap-sach/HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md).
+     Nếu dùng gói đầy đủ, giữ `config.php` tại APP_DIR `/home/buwsofujhosting/zika-app`.
+  2. Kiểm tra web thật theo [KICH-BAN-TEST.md](KICH-BAN-TEST.md), so dữ liệu với local rồi ghi
      kết quả vào [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md); xoá mục ĐANG DỞ này.
+     Tải thử mp3 trên web thật từ môi trường hiện tại bị HTTP 403, chưa xác minh được bản mới.
 
 - **Giọng đọc mẫu Kokoro + ví dụ lật thẻ + bộ thủ + chuông thông báo (02/11/2026)**: xem
   [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md) — quy trình nạp, lần quét lỗi gần nhất, kịch bản test.
@@ -153,8 +154,8 @@ chứ không làm hỏng cả mẻ.
   [data/nap-sach/](data/nap-sach/README.md): chép từ ảnh trang sách ra `bai/*.json` → `sinh.py` →
   `nap.py` (gọi API quản trị, giữ đủ lớp kiểm tra) → `doi_chieu.py` + `doi_chieu_sach.py`.
   Bộ tách cũ `data/hsk1/tach-pdf.py` và hai file TIEN-DO cũ coi như đã thay. Nội dung sách
-  (`bai/`, `ra/`, `anh/`) không đưa lên git. **Web thật chưa nạp bản mới** — HSK 1 trên server
-  vẫn là bản bóc lỗi ngày 23/10.
+  (`bai/`, `ra/`, `anh/`) không đưa lên git. **Web thật đã nạp bản mới ngày 02/11**, đối chiếu
+  giống local ở lần triển khai trước (xem nhật ký); lần này chỉ còn cập nhật tốc độ giọng đọc.
 
 - **Hai đường nạp nội dung, dùng đường nào cũng được:**
   - **Nhập Excel** (bẫy số 6) — đi qua API nên giữ đủ 3 lớp kiểm tra. Chỉ chạy ở máy local.
