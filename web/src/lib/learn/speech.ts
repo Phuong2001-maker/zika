@@ -8,7 +8,7 @@ import { settings } from '$lib/stores/settings.svelte';
 import { sha1 } from '$lib/utils/sha1';
 
 /** Đổi khi sinh lại toàn bộ file đọc mẫu, để trình duyệt không giữ bản cũ trong cache. */
-const TTS_VERSION = 1;
+const TTS_VERSION = 2; // 2: từ và chữ đơn đọc chậm lại (02/11/2026)
 
 let audio: HTMLAudioElement | null = null;
 /** Mỗi lần gọi speak() tăng lên; lượt cũ thấy số đổi thì thôi, không phát chồng hay rơi sang giọng khác. */

@@ -14,8 +14,13 @@ import sys
 
 from chung import THU_MUC, chu_han, ghi_json, tach_am_tiet
 
-TOC_TU = 0.9
+TOC_TU = 0.58   # từ/chữ 1–2 chữ: ~0,5 giây mỗi âm tiết, như giáo viên đọc từ mới (0,9 nghe quá nhanh)
+TOC_TU_DAI = 0.52  # từ 3–4 chữ: ~0,43 giây/âm tiết — chậm hơn nữa thì đọc rời rạc từng chữ
 TOC_CAU = 1.0
+
+
+def toc_tu(text: str) -> float:
+    return TOC_TU if len(chu_han(text)) <= 2 else TOC_TU_DAI
 
 
 def duong(text: str, giong: str) -> str:
@@ -37,7 +42,7 @@ def tu_va_vi_du(ds: dict) -> None:
         for f in sorted((THU_MUC / "vi-du").glob(f"hsk{cap}*.json")):
             vd.update(json.loads(f.read_text(encoding="utf-8")))
         for w in tu:
-            them(ds, w["hanzi"], w["pinyin"], TOC_TU)
+            them(ds, w["hanzi"], w["pinyin"], toc_tu(w["hanzi"]))
             for e in vd.get(w["hanzi"], []):
                 them(ds, e["zh"], e["pinyin"], TOC_CAU)
         # Chữ đơn ở màn luyện viết: đọc theo âm của chữ trong từ chứa nó.
@@ -97,12 +102,45 @@ def tu_web(ds: dict, thoai: list) -> None:
                 for q in s.goi("GET", f"/admin/lessons/{b['id']}/questions?part={phan}")["questions"]:
                     t = (q.get("payload") or {}).get("audioText")
                     if t:
-                        them(ds, t, None, TOC_TU if len(chu_han(t)) <= 3 else TOC_CAU)
+                        them(ds, t, None, toc_tu(t) if len(chu_han(t)) <= 4 else TOC_CAU)
             for k in s.goi("GET", f"/learn/lessons/{b['id']}/dialogue")["dialogues"]:
                 giong = giong_khoa(k["speakers"])
                 thoai.append({"cap": cap, "bai": b["no"], "lessonId": b["id"], "khoa": k["no"], "coAudio": bool(k["audioUrl"]),
                               "giong": {sp["name"]: giong[sp["id"]] for sp in k["speakers"]},
                               "cau": [{"zh": l["zh"], "pinyin": l["pinyin"], "voice": giong[l["speakerId"]]} for l in k["lines"]]})
+
+
+def gop(viec: list[dict]) -> None:
+    """`viec_doc.py tu web`: một danh sách chung ra/doc_mau_tat.json cho doc_mau.py, và dọn file cũ.
+
+    - Thứ tự: giọng nữ (mặc định trong Cài đặt) → câu thoại → giọng nam, để dừng giữa chừng vẫn dùng được.
+    - ra/toc_rieng.json {out: tốc độ}: câu đã chỉnh tay (câu thoại dài đọc chậm lại) — giữ qua các lần lập.
+    - File đã có mà tốc độ hoặc pinyin khác lần lập trước → xoá file + bỏ khỏi ra/da_tai.json, để
+      doc_mau.py sinh lại và tai_doc.py tải lại đúng những file đó (file còn nguyên thì bỏ qua).
+    """
+    f_tat, f_rieng, f_da = (THU_MUC / "ra" / t for t in ("doc_mau_tat.json", "toc_rieng.json", "da_tai.json"))
+    rieng = json.loads(f_rieng.read_text(encoding="utf-8")) if f_rieng.exists() else {}
+    cu = {v["out"]: v for v in json.loads(f_tat.read_text(encoding="utf-8"))} if f_tat.exists() else {}
+    da = json.loads(f_da.read_text(encoding="utf-8")) if f_da.exists() else {}
+    thu_tu = {"nu": 0, "nu2": 1, "nam2": 1, "nam": 2}
+    tat, gap = [], set()
+    for v in sorted(viec, key=lambda v: thu_tu[v["voice"]]):
+        if v["out"] in gap:
+            continue
+        gap.add(v["out"])
+        v["speed"] = rieng.get(v["out"], v["speed"])
+        tat.append(v)
+    xoa = 0
+    for v in tat:
+        c = cu.get(v["out"])
+        if c and (c.get("speed") != v["speed"] or c.get("pinyin") != v.get("pinyin")):
+            (THU_MUC / v["out"]).unlink(missing_ok=True)
+            da.pop(v["out"], None)
+            xoa += 1
+    ghi_json(f_tat, tat)
+    ghi_json(f_da, da)
+    con = sum(1 for v in tat if not (THU_MUC / v["out"]).exists())
+    print(f"{len(tat)} file trong ra/doc_mau_tat.json · {xoa} file đổi tốc độ/pinyin đã xoá · {con} file cần sinh")
 
 
 if __name__ == "__main__":
@@ -117,6 +155,9 @@ if __name__ == "__main__":
     # Câu thoại: một giọng đúng nhân vật (file riêng theo giọng, nên câu trùng với ví dụ không đè nhau).
     viec += [{"text": c["zh"], "pinyin": c["pinyin"], "speed": TOC_CAU, "voice": c["voice"], "out": duong(c["zh"], c["voice"])}
              for k in thoai for c in k["cau"]]
-    ten = "doc_mau.json" if "tu" in sys.argv else "doc_mau_web.json"
-    ghi_json(THU_MUC / "ra" / ten, viec)
-    print(f"{len(ds)} câu chữ × 2 giọng + {sum(len(k['cau']) for k in thoai)} câu thoại = {len(viec)} file → ra/{ten}")
+    if "tu" in sys.argv and "web" in sys.argv:
+        gop(viec)
+    else:
+        ten = "doc_mau.json" if "tu" in sys.argv else "doc_mau_web.json"
+        ghi_json(THU_MUC / "ra" / ten, viec)
+        print(f"{len(ds)} câu chữ × 2 giọng + {sum(len(k['cau']) for k in thoai)} câu thoại = {len(viec)} file → ra/{ten}")

@@ -123,6 +123,27 @@ chứ không làm hỏng cả mẻ.
 
 ## Việc còn treo
 
+- **ĐANG DỞ (02/11/2026 ~07:30) — làm tiếp theo đúng thứ tự:** từ đơn ở lật thẻ đọc quá nhanh
+  (đo 0,27 giây/âm tiết) → đã hạ tốc độ (`TOC_TU` 0,58, `TOC_TU_DAI` 0,52 trong
+  `data/nap-sach/viec_doc.py`) và đang sinh lại 2.648 file mp3 từ/chữ 1–4 chữ;
+  `TTS_VERSION` trong `web/src/lib/learn/speech.ts` đã tăng lên 2.
+  1. Bật local (`dev\CHAY-TAT-CA.cmd`), rồi sinh nốt + tải + gắn + quét bằng một lệnh — xem
+     [data/nap-sach/HUONG-DAN-GIONG-DOC.md](data/nap-sach/HUONG-DAN-GIONG-DOC.md):
+     `cd data/nap-sach; powershell -ExecutionPolicy Bypass -File .\sinh-giong-doc.ps1 -BoQuaLap`
+  2. Đo lại: file từ 1–2 chữ phải ~0,5 giây/âm tiết (cách đo: phần có tiếng `abs(a) > 0.02`, chia số chữ).
+  3. Kiểm tra code (mục trên) → commit → push.
+  4. Gói cho server: tắt `npm run dev` (nó khoá `node_modules`, `npm ci` lỗi EPERM) →
+     `bash deploy/build-release.sh` (biến `ZIKA_PHP`/`ZIKA_COMPOSER` như README) → `python xuat_sql.py`.
+     Server **không cần chạy lại SQL** (đường dẫn âm thanh không đổi): chép code web như lần trước
+     (`public/*` trừ `api`, `uploads` → `domains/tiengtrunghanu.io.vn/`) và chép đè
+     `dong-goi-server/uploads/tts` vào `domains/tiengtrunghanu.io.vn/uploads/tts`
+     (nén zip bằng Python với dấu `/`, zip của PowerShell 5.1 dùng `\` → giải nén trên Linux hỏng).
+     Cách đưa lên server từng bước: [data/nap-sach/HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md);
+     server: APP_DIR `/home/buwsofujhosting/zika-app`, DOCROOT `domains/tiengtrunghanu.io.vn`
+     (không có public_html), `config.php` nằm trong `zika-app` — giữ lại khi dán đè.
+  5. Kiểm tra web thật bằng đoạn "dấu vân tay" (cuối [KICH-BAN-TEST.md](KICH-BAN-TEST.md)) rồi ghi
+     kết quả vào [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md); xoá mục ĐANG DỞ này.
+
 - **Giọng đọc mẫu Kokoro + ví dụ lật thẻ + bộ thủ + chuông thông báo (02/11/2026)**: xem
   [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md) — quy trình nạp, lần quét lỗi gần nhất, kịch bản test.
   `speech.ts` tự tìm file `/uploads/tts/<giọng>/<sha1 câu chữ>.mp3` nên đọc chữ ở đâu cũng có giọng

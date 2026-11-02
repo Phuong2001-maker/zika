@@ -18,7 +18,7 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 | 2. Ví dụ lật thẻ | soạn `vi-du/hsk*.json` → `python kiem_vi_du.py 1 2 3` (phải 0 lỗi) → `python nap_vi_du.py 1 2 3` | 2 câu/từ, HSK1 ≤ 12 chữ, HSK2 ≤ 16, HSK3 ≤ 22, chỉ dùng chữ trong từ vựng các cấp ≤ cấp đó |
 | 3. Phân tích chữ (bộ thủ) | `python phan_tich_chu.py` | từ `tu-dien/` (soạn tay + Unihan/Make Me a Hanzi) |
 | 4. File nghe thật | `python nghe_gan.py 1 2` → `python gan_nghe.py 1 2` | mp3 giáo trình gửi kèm, HSK 1–2 |
-| 5. Giọng đọc mẫu | `python viec_doc.py tu web` → `doc_mau.py` (Python của kokoro-tts) → `python tai_doc.py` → `python gan_thoai.py` | xem đầu file `doc_mau.py` |
+| 5. Giọng đọc mẫu | **một lệnh:** `powershell -ExecutionPolicy Bypass -File .\sinh-giong-doc.ps1` | xem [HUONG-DAN-GIONG-DOC.md](data/nap-sach/HUONG-DAN-GIONG-DOC.md) |
 | 6. Quét lỗi | `python quet.py` | cập nhật cuối file này |
 
 ## Các lần cập nhật
