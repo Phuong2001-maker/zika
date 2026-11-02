@@ -129,8 +129,11 @@ chứ không làm hỏng cả mẻ.
   `TTS_VERSION = 5`. Đọc chậm bằng atempo giữ cao độ: 1/2 chữ trung vị 0,491/0,486 giây/chữ.
   Chi tiết lần kiểm mới ở đầu [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md).
   Đã tải đủ, quét local 8.537 âm thanh + 697 nét chữ **0 lỗi** (14:46).
-  Sau đó build + gói `release/cap-nhat-lat-the-nam-20261102.zip`,
-  triển khai và xác minh web thật theo hướng dẫn. Gói `cap-nhat-giong-doc-20261102.zip` là bản cũ.
+  Đã build `release/zika-release-20261102-1447.zip` và gói riêng
+  `release/cap-nhat-lat-the-nam-20261102.zip` (145.368.873 byte), đủ 10.274 mp3, CRC/SHA-256 khớp.
+  Đã xuất lại `D:/zika-devtools/Project/dong-goi-server/`. Chỉ còn triển khai và xác minh web thật
+  theo [HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md), không import lại SQL.
+  Gói `cap-nhat-giong-doc-20261102.zip` là bản cũ. Chưa có kết nối hosting; giữ mục này đến khi test server.
 
 - **Giọng đọc mẫu Kokoro + ví dụ lật thẻ + bộ thủ + chuông thông báo (02/11/2026)**: xem
   [NHAT-KY-CAP-NHAT.md](NHAT-KY-CAP-NHAT.md) — quy trình nạp, lần quét lỗi gần nhất, kịch bản test.

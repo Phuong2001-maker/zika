@@ -52,6 +52,12 @@ Kiểm tra: web 0 lỗi/0 cảnh báo, lint sạch, 52/52 test; API 49/49 test; 
 (giữ cao độ khi kéo dài, không tăng tốc file đã chậm, từ chối file câm) đều đạt.
 Đã tải đủ bộ nam mới. Quét qua web lúc 14:46: **8.537 file âm thanh + 697 file nét chữ, 0 lỗi**;
 pinyin thực tế của đủ 932 thẻ đều có file tương ứng. Chưa cập nhật hosting.
+Đối chiếu SHA-256 đủ 894 file nam sau tải: khớp nguồn. Build production thành công,
+`release/zika-release-20261102-1447.zip`. Gói cập nhật riêng:
+`release/cap-nhat-lat-the-nam-20261102.zip`, 145.368.873 byte, 166 file web + 10.274 mp3;
+CRC và SHA-256 từng file trong zip đều khớp nguồn. SHA-256 của zip:
+`4dff521b2b4f3945e0587e8011e65b90a245370f8c58bc1cd62cb96176985ea3`.
+Đã xuất lại `dong-goi-server`, bật lại Vite để người dùng thử local. Không import lại SQL khi cập nhật server.
 
 ### 02/11/2026 — Từ và chữ đơn đọc chậm lại
 
