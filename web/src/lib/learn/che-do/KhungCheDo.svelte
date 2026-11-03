@@ -34,7 +34,8 @@
   const giay = $derived(((xongLuc ?? now) - batDau) / 1000);
 </script>
 
-<section class="block cd-khung" class:cd-m={m}>
+<!-- Nằm trong khung học của trang (đã có nền trắng, viền, bóng) nên ở đây không vẽ khung nữa. -->
+<section class="cd-khung" class:cd-m={m}>
   <div class="cd-tren">
     <span class="cd-nhan">{nhan}</span>
     <span class="cd-so num">{so}</span>
@@ -51,11 +52,9 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
-    padding: 22px 24px;
   }
   .cd-khung.cd-m {
     gap: 14px;
-    padding: 16px 14px;
   }
   .cd-tren {
     display: flex;

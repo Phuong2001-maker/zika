@@ -14,7 +14,7 @@
   }: { kq: KetQua; ten: string; m?: boolean; onLuyenSai: () => void; onLamLai: () => void } = $props();
 </script>
 
-<section class="block cd-tk" style="padding: {m ? 20 : 28}px">
+<section class="cd-tk" style="padding: {m ? 8 : 16}px 0">
   <span class="stamp" style="font-size: {m ? 24 : 30}px">完成</span>
   <h2 style="font-size: {m ? 21 : 26}px">Xong phần {ten}</h2>
   <div class="cd-so-lieu">

@@ -23,6 +23,22 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 04/11/2026 — Làm lại giao diện màn Lật thẻ: một khung học, thẻ phẳng
+
+Người dùng thấy màn lật thẻ rối và xấu hơn trang mẫu. Đổi:
+- Bỏ hai lá thẻ chồng phía sau (cả màn theo bài lẫn ôn tổng hợp, xoá `.stk` trong `app.css`);
+  mặt thẻ phẳng, viền mảnh `--line-3`, bo 20px, bóng nhẹ.
+- Màn theo bài gom vào **một khung trắng** "Chế độ học": hàng chế độ (nút có viền, nút đang chọn
+  tô son nhạt), thẻ, dưới thẻ là "Thẻ x / n" + thanh tiến độ và ba nút ← Lật thẻ → canh giữa;
+  câu ví dụ nằm trong khung, mỗi câu một ô nền nhạt. Bỏ hai nút tròn lơ lửng hai bên thẻ.
+- Máy tính có đầu bài (đường về, "HSK · Bài · số từ", tên bài). Điện thoại bỏ thanh nút cố định
+  ở đáy, điều hướng nằm ngay dưới thẻ; hàng chế độ đứng ngoài khung cho đủ bề ngang.
+- 3 chế độ luyện và màn tổng kết bỏ khung riêng, nằm trong khung chung (không còn khung lồng khung).
+
+Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 72/72 test web. Trên trình duyệt ở 375 / 768 / 1024 /
+1280px, sáng và tối: không tràn ngang, 4 nút chế độ không cắt chữ ở 375px, nút điều hướng cao 50px
+trên điện thoại. Màn ôn tổng hợp chỉ bỏ chồng thẻ, bố cục còn kiểu cũ. Chưa kiểm trên máy thật.
+
 ### 04/11/2026 — Lật thẻ có thêm 3 chế độ luyện: Ghép cặp, Trắc nghiệm, Gõ chữ
 
 Theo mẫu "Chế độ học tập" của một trang học tiếng Trung khác: lấy cách bố trí, dựng lại bằng màu,

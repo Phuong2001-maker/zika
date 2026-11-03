@@ -49,7 +49,6 @@
   const cards = $derived(data?.words ?? []);
   const total = $derived(order.length);
   const card = $derived<Word | null>(cards[order[i]] ?? null);
-  const pct = $derived(total > 0 ? Math.round((i / total) * 100) : 0);
 
   async function load(): Promise<void> {
     failed = false;
@@ -180,34 +179,32 @@
   {#if card}
     <!-- Khoá theo chỉ số thẻ: mỗi thẻ là một phần tử mới nên animation “trượt vào” chạy lại từ đầu. -->
     {#key i}
-      <!-- Điện thoại: thẻ cao theo màn hình (máy thấp vẫn còn chỗ cho câu ví dụ bên dưới). -->
-      <div class="deckwrap the vao" style="height: {m ? 'clamp(260px, 42vh, 360px)' : '380px'}; --huong: {huong}">
-        <span class="stk stk-a"></span>
-        <span class="stk stk-b"></span>
+      <!-- Điện thoại: thẻ cao theo màn hình, chừa chỗ cho hàng nút ngay bên dưới. -->
+      <div class="deckwrap the vao" style="height: {m ? 'clamp(240px, 40vh, 330px)' : '340px'}; --huong: {huong}">
         <!-- Nút nghe nằm ngoài <button> lật (không lồng nút được) nên đặt tuyệt đối đè lên góc thẻ.
              Chỉ hiện khi mặt đang xem là chữ Hán — nghe pinyin hay nghĩa tiếng Việt thì vô nghĩa. -->
         {#if flipped || settings.value.cardFront === 'hanzi'}
           <button type="button" class="loa" aria-label="Nghe lại {card.hanzi}" onclick={() => speak(card.hanzi, null, card.pinyin, 'nam')}>
-            <Icon name="speaker" size={m ? 17 : 19} />
+            <Icon name="speaker" size={m ? 17 : 18} />
           </button>
         {/if}
         <button type="button" class={flipped ? 'flip is-back' : 'flip'} onclick={flip} aria-label={flipped ? 'Bấm để xem lại mặt trước' : 'Lật thẻ'}>
           <span class="flip-inner">
             <span class="face face-front">
-              <span class="kicker">{frontLabel}</span>
+              <span class="nhan-mat">{frontLabel}</span>
               <span class={settings.value.cardFront === 'hanzi' ? 'hz' : ''} lang={settings.value.cardFront === 'hanzi' ? 'zh' : 'vi'}
-                    style="font-size: {settings.value.cardFront === 'hanzi' ? (m ? 56 : 80) : (m ? 28 : 38)}px; font-weight: 800; line-height: 1.15">
+                    style="font-size: {settings.value.cardFront === 'hanzi' ? (m ? 60 : 84) : (m ? 28 : 38)}px; font-weight: 800; line-height: 1.15">
                 {frontText}
               </span>
-              <span class="goi"><Icon name="repeat" size={14} /> {m ? 'Chạm để lật' : 'Bấm để lật'}</span>
+              <span class="goi"><Icon name="repeat" size={13} /> {m ? 'Chạm để lật' : 'Bấm để lật'}</span>
             </span>
             <span class="face face-back">
-              {@render pinyinRow(card.pinyin, m ? 18 : 22)}
-              <span class="hz" lang="zh" style="font-size: {m ? 56 : 80}px; line-height: 1.1">{card.hanzi}</span>
+              {@render pinyinRow(card.pinyin, m ? 19 : 22)}
+              <span class="hz" lang="zh" style="font-size: {m ? 60 : 84}px; line-height: 1.1">{card.hanzi}</span>
               {#if settings.value.showHanViet && card.hanViet}
-                <span class="muted" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em">{card.hanViet}</span>
+                <span class="hv">{card.hanViet}</span>
               {/if}
-              <span style="font-size: {m ? 17 : 20}px; font-weight: 600">{card.meaning}</span>
+              <span class="nghia" style="font-size: {m ? 17 : 20}px">{card.meaning}</span>
             </span>
           </span>
         </button>
@@ -216,19 +213,26 @@
   {/if}
 {/snippet}
 
-<!-- Tách thao tác: chạm thẻ để lật, bấm nút để chuyển từ. -->
-{#snippet controls()}
-  <div class="ctrl">
-    <button type="button" class="tron" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={20} /></button>
-    <span class="muted" style="font-size: 12.5px">Bấm ← / → để chuyển từ</span>
-    <button type="button" class="tron" aria-label="Từ sau" onclick={next}><Icon name="right" size={20} /></button>
+<!-- Điều hướng gom ngay dưới thẻ (như trang mẫu): số thẻ + tiến độ, rồi ← Lật → canh giữa. -->
+{#snippet dieuHuong(m: boolean)}
+  <div class="dh">
+    <div class="dh-so">
+      <span class="num">Thẻ <b>{Math.min(i + 1, total)}</b> / {total}</span>
+      <span class="dh-bar"><Bar value={i} {total} /></span>
+    </div>
+    <div class="dh-nut" class:dh-nut-m={m}>
+      <button type="button" class="nut-vuong" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={20} /></button>
+      <button type="button" class="nut-vuong nut-lat" onclick={flip}><Icon name="flip" size={17} /> {flipped ? 'Mặt trước' : 'Lật thẻ'}</button>
+      <button type="button" class="nut-vuong" aria-label="Từ sau" onclick={next}><Icon name="right" size={20} /></button>
+    </div>
+    {#if !m}<p class="dh-phim">Phím Space để lật · ← / → để chuyển từ</p>{/if}
   </div>
 {/snippet}
 
 <!-- Chỉ hiện sau khi lật: trước đó nó là đáp án lộ sẵn, mà hiện ra đúng lúc cũng làm màn học sinh động hơn. -->
 {#snippet examples()}
   {#if card && flipped && settings.value.showExamples && card.examples.length > 0}
-    <section class="block vidu" style="padding: 18px 20px; display: flex; flex-direction: column; gap: 14px">
+    <div class="vidu">
       <div class="vd-dau">
         <p class="kicker">Câu ví dụ</p>
         <div class="seg">
@@ -236,9 +240,8 @@
           <button type="button" class:on={vdNghia} aria-pressed={vdNghia} onclick={() => (vdNghia = !vdNghia)}>Nghĩa</button>
         </div>
       </div>
-      {#each card.examples as ex, k (ex.zh)}
-        {#if k > 0}<hr class="rule" />{/if}
-        <div style="display: flex; flex-direction: column; gap: 4px">
+      {#each card.examples as ex (ex.zh)}
+        <div class="vd-cau">
           <div style="display: flex; align-items: flex-start; gap: 8px">
             <span class="hz" lang="zh" style="font-size: 20px; line-height: 1.45; flex: 1">
               {#if ex.highlight && ex.zh.includes(ex.highlight)}
@@ -246,20 +249,20 @@
                 {parts[0]}<b class="hl">{ex.highlight}</b>{parts.slice(1).join(ex.highlight)}
               {:else}{ex.zh}{/if}
             </span>
-            <button type="button" class="loa-cau" aria-label="Nghe câu" onclick={() => speak(ex.zh, null, undefined, 'nam')}><Icon name="speaker" size={17} /></button>
+            <button type="button" class="loa-cau" aria-label="Nghe câu" onclick={() => speak(ex.zh, null, undefined, 'nam')}><Icon name="speaker" size={16} /></button>
           </div>
           {#if vdPinyin && ex.pinyin}{@render pinyinRow(ex.pinyin, 13.5)}{/if}
           {#if vdNghia && ex.vi}<span class="muted" style="font-size: 14px">{ex.vi}</span>{/if}
         </div>
       {/each}
-    </section>
+    </div>
   {/if}
 {/snippet}
 
 {#snippet done(m: boolean)}
-  <section class="block" style="padding: {m ? 22 : 32}px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
-    <span class="stamp" style="font-size: {m ? 26 : 34}px">完成</span>
-    <h1 style="font-size: {m ? 24 : 30}px">Xong bài {data?.lesson.no}!</h1>
+  <div class="xong" style="padding: {m ? 12 : 20}px 0">
+    <span class="stamp" style="font-size: {m ? 26 : 32}px">完成</span>
+    <h2 style="font-size: {m ? 22 : 26}px">Xong bài {data?.lesson.no}!</h2>
     <p class="muted">Bạn đã lật hết {total} thẻ của bài “{data?.lesson.title}”.</p>
     <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center">
       <button type="button" class="btn" onclick={restart}><Icon name="repeat" size={16} /> Lật lại</button>
@@ -269,12 +272,12 @@
         <a href="/learn/flashcards/hsk/{levelId}" class="btn btn-son">Về danh sách bài</a>
       {/if}
     </div>
-  </section>
+  </div>
 {/snippet}
 
-<!-- Hàng chọn chế độ: cùng kiểu .seg với cặp Pinyin | Nghĩa. Điện thoại chia đều hết bề ngang. -->
+<!-- Hàng chọn chế độ: nút có viền như trang mẫu, nút đang chọn tô màu son của Zìkǎ. -->
 {#snippet chonCheDoRow(m: boolean)}
-  <div class="seg cd-chon" class:cd-chon-m={m} role="tablist" aria-label="Chế độ học">
+  <div class="cd-chon" class:cd-chon-m={m} role="tablist" aria-label="Chế độ học">
     {#each CHE_DO as c (c.ma)}
       <button type="button" role="tab" aria-selected={che === c.ma} class:on={che === c.ma} onclick={() => chonCheDo(c.ma)}>{c.ten}</button>
     {/each}
@@ -306,6 +309,28 @@
   {/if}
 {/snippet}
 
+<!-- Một khung trắng chứa trọn màn học (giống “Chế độ học tập” của trang mẫu): thẻ, điều hướng,
+     ví dụ và 3 chế độ luyện đều nằm trong, không còn mảnh rời trôi trên nền xám. -->
+{#snippet khung(m: boolean)}
+  <section class="block khung" class:khung-m={m}>
+    {#if !m}
+      <div class="khung-dau">
+        <h2 class="khung-ten">Chế độ học</h2>
+        {@render chonCheDoRow(false)}
+      </div>
+    {/if}
+    {#if che !== 'the'}
+      {@render luyen(m)}
+    {:else if finished}
+      {@render done(m)}
+    {:else}
+      {@render cardFace(m)}
+      {@render dieuHuong(m)}
+      {@render examples()}
+    {/if}
+  </section>
+{/snippet}
+
 {#if failed}
   <main class="page">
     <EmptyState title="Không mở được bài này." desc="Bài có thể đang ẩn hoặc đã bị xoá.">
@@ -318,37 +343,22 @@
     <header class="mtop">
       <a href="/learn/flashcards/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
-        <b style="display: block; font-size: 15px">{data?.lesson.title ?? '…'}</b>
-        <span class="muted num" style="font-size: 12px">
-          {che === 'the' ? `Thẻ ${Math.min(i + 1, total)} / ${total}` : CHE_DO.find((c) => c.ma === che)?.ten}
-        </span>
+        <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{data?.lesson.title ?? '…'}</b>
+        <span class="muted" style="font-size: 12px">HSK {levelId} · Bài {lessonNo}</span>
       </span>
       <Avatar size={36} />
     </header>
-    {#if che === 'the'}<div style="padding: 0 16px"><Bar value={i} {total} /></div>{/if}
 
-    <!-- overflow-x: clip — lá thẻ chồng phía sau trượt vào lệch 40px, không được tạo thanh cuộn ngang. -->
-    <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px; overflow-x: clip">
+    <!-- overflow-x: clip — thẻ mới trượt vào lệch 40px, không được tạo thanh cuộn ngang. -->
+    <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px; overflow-x: clip">
       {#if data === null}
-        <Skeleton h="300px" r={20} />
+        <Skeleton h="420px" r={22} />
       {:else}
+        <!-- Điện thoại: hàng chế độ đứng ngoài khung để 4 nút có đủ bề ngang, không cắt chữ. -->
         {@render chonCheDoRow(true)}
-        {#if che !== 'the'}
-          {@render luyen(true)}
-        {:else if finished}
-          {@render done(true)}
-        {:else}
-          <div>
-            {@render cardFace(true)}
-          </div>
-          {@render examples()}
-        {/if}
+        {@render khung(true)}
       {/if}
     </main>
-
-    {#if data !== null && che === 'the' && !finished}
-      <div class="msheet">{@render controls()}</div>
-    {/if}
   </div>
 {:else}
   <!-- ============ Máy tính ============ -->
@@ -363,133 +373,147 @@
     </div>
   </header>
 
-  <main class="page" style="display: flex; flex-direction: column; gap: 20px">
+  <main class="page cot" style="display: flex; flex-direction: column; gap: 18px">
     {#if data === null}
-      <Skeleton h="420px" r={22} />
+      <Skeleton h="520px" r={22} />
     {:else}
-      <!-- Một cột, mọi thứ xoay quanh thẻ: chỉ còn đường về bài và tiến độ ở hàng trên. -->
-      <div class="hud">
+      <!-- Đầu bài: đường về + tên bài, như thanh tiêu đề bài học của trang mẫu. -->
+      <div class="dau-bai">
         <BackLink href="/learn/flashcards/hsk/{levelId}" label="Chọn bài" />
-        {#if che === 'the' && !finished}
-          <span class="num" style="font-weight: 700; white-space: nowrap">Thẻ {Math.min(i + 1, total)} / {total}</span>
-          <span style="flex: 1 1 160px; min-width: 120px"><Bar value={i} {total} /></span>
-          <span class="muted num" style="font-size: 13px">{pct}%</span>
-        {/if}
-      </div>
-      <div class="cd-hang">{@render chonCheDoRow(false)}</div>
-
-      {#if che !== 'the'}
-        <div class="deck">{@render luyen(false)}</div>
-      {:else if finished}
-        {@render done(false)}
-      {:else}
-        <div class="deck">
-          <!-- Máy tính: nút chuyển từ nằm hai bên thẻ, tay không phải rời khỏi vùng nhìn. -->
-          <div class="sanh">
-            <button type="button" class="tron" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={22} /></button>
-            <div class="o-the">{@render cardFace(false)}</div>
-            <button type="button" class="tron" aria-label="Từ sau" onclick={next}><Icon name="right" size={22} /></button>
-          </div>
-          <!-- Thụt vào đúng bề ngang hai nút tròn để khối ví dụ thẳng mép với thẻ. -->
-          <div class="duoi">{@render examples()}</div>
+        <div style="min-width: 0">
+          <p class="kicker" style="font-size: 12px">HSK {levelId} · Bài {lessonNo} · {cards.length} từ</p>
+          <h1 class="ten-bai">{data.lesson.title}</h1>
         </div>
-      {/if}
+      </div>
+      {@render khung(false)}
     {/if}
   </main>
 {/if}
 
 <style>
-  /* Thẻ là trung tâm màn học: một cột hẹp, canh giữa, không có gì đặt cạnh để mắt phải chia đôi. */
-  .hud,
-  .deck {
-    width: 100%;
-    max-width: 760px;
-    margin: 0 auto;
+  /* Cả màn là một cột hẹp canh giữa: mắt chỉ nhìn vào khung học. */
+  .cot {
+    max-width: 808px;
   }
-  .hud {
+  .dau-bai {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 10px 14px;
+    gap: 14px;
   }
-  .deck {
+  .ten-bai {
+    font-size: 22px;
+    line-height: 1.25;
+    margin-top: 2px;
+  }
+
+  .khung {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
+    padding: 22px 28px 26px;
   }
-
-  /* Hàng chọn chế độ: máy tính canh giữa trên thẻ; điện thoại chia đều 4 nút hết bề ngang. */
-  .cd-hang {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    max-width: 760px;
-    margin: 0 auto;
+  .khung-m {
+    gap: 16px;
+    padding: 14px 14px 18px;
   }
-  .cd-chon button {
-    padding: 4px 16px;
-    white-space: nowrap;
-  }
-  .cd-chon-m {
-    display: flex;
-    width: 100%;
-  }
-  .cd-chon-m button {
-    flex: 1 1 0;
-    min-width: 0;
-    padding: 4px 2px;
-    font-size: 12.5px;
-  }
-
-  /* Thẻ và hai nút chuyển từ nằm cùng một hàng; thẻ co giãn, nút giữ nguyên cỡ. */
-  .sanh {
+  .khung-dau {
     display: flex;
     align-items: center;
-    gap: 18px;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
   }
-  .o-the {
-    flex: 1 1 auto;
-    min-width: 0;
+  .khung-ten {
+    font-size: 18px;
   }
-  .duoi {
-    padding: 0 72px;
+
+  /* Nút chế độ có viền; nút đang chọn tô son nhạt — cùng một màu cho cả 4 chế độ. */
+  .cd-chon {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
   }
-  .tron {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 54px;
-    height: 54px;
-    border: 1px solid var(--ink);
-    border-radius: 50%;
+  .cd-chon button {
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--line-3);
+    border-radius: 12px;
     background: var(--surface);
     box-shadow: var(--sh-sm);
-    color: var(--text);
+    color: var(--text-2);
+    font: 600 14px/1 var(--font-ui);
+    white-space: nowrap;
     cursor: pointer;
-    /* Rê chuột không đổi gì cho đỡ rối mắt; chỉ lúc bấm mới có phản hồi. */
-    transition: background 0.15s ease;
+    transition:
+      border-color 0.15s ease,
+      color 0.15s ease,
+      background 0.15s ease;
   }
-  .tron:hover:not(:disabled) {
-    background: var(--surface-2);
+  .cd-chon button:hover {
+    border-color: var(--ink-strong);
+    color: var(--text);
   }
-  .tron:active:not(:disabled) {
-    background: var(--surface-2);
+  .cd-chon button.on {
+    border-color: var(--son-line);
+    background: var(--son-soft);
+    color: var(--son-text);
   }
-  .tron:disabled {
-    opacity: 0.35;
-    cursor: default;
-  }
-  .tron:focus-visible {
+  .cd-chon button:focus-visible {
     outline: 2px solid var(--focus);
-    outline-offset: 3px;
+    outline-offset: 2px;
+  }
+  .cd-chon-m {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .cd-chon-m button {
+    padding: 0 2px;
+    font-size: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  /* Thẻ: một lá phẳng, viền mảnh trên nền khung trắng. */
+  .the :global(.face) {
+    gap: 10px;
+  }
+  .the :global(.flip:focus-visible) {
+    border-radius: 20px;
+  }
+  .nhan-mat {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .hv {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .nghia {
+    font-weight: 600;
+    max-width: 90%;
+  }
+  .goi {
+    position: absolute;
+    bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--text-3);
   }
 
   /* Nút nghe ở góc thẻ: nằm đè lên mặt thẻ nên phải ở trên lớp lật. */
   .loa {
     position: absolute;
     z-index: 2;
-    top: 14px;
-    right: 14px;
+    top: 12px;
+    right: 12px;
     display: grid;
     place-items: center;
     width: 38px;
@@ -497,7 +521,6 @@
     border: 1px solid var(--line);
     border-radius: 50%;
     background: var(--surface);
-    box-shadow: var(--sh-sm);
     color: var(--text-2);
     cursor: pointer;
     transition: color 0.15s ease;
@@ -511,19 +534,141 @@
     outline-offset: 2px;
   }
 
-  /* Hai thẻ xếp phía sau lệch ra ngoài 7px mỗi bên, trên màn hẹp chúng đẩy trang tràn ngang. */
-  .the {
-    margin-inline: 14px;
+  /* Điều hướng dưới thẻ. */
+  .dh {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .dh-so {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+    font-size: 13.5px;
+    color: var(--text-2);
+    white-space: nowrap;
+  }
+  .dh-bar {
+    flex: 1;
+    min-width: 0;
+  }
+  .dh-nut {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nut-vuong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 48px;
+    height: 48px;
+    padding: 0 14px;
+    border: 1px solid var(--line-3);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--sh-sm);
+    color: var(--text);
+    font: 600 14.5px/1 var(--font-ui);
+    cursor: pointer;
+    transition:
+      border-color 0.15s ease,
+      background 0.15s ease;
+  }
+  .nut-vuong:hover:not(:disabled) {
+    border-color: var(--ink-strong);
+  }
+  .nut-vuong:active:not(:disabled) {
+    background: var(--surface-2);
+  }
+  .nut-vuong:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .nut-vuong:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .nut-lat {
+    min-width: 150px;
+    border-color: var(--son-line);
+    background: var(--son-soft);
+    color: var(--son-text);
+  }
+  .nut-lat:hover:not(:disabled) {
+    border-color: var(--son);
+  }
+  /* Điện thoại: ba nút chia hết bề ngang khung, nút Lật rộng nhất cho ngón cái. */
+  .dh-nut-m {
+    width: 100%;
+  }
+  .dh-nut-m .nut-vuong {
+    flex: 1 1 0;
+    height: 50px;
+  }
+  .dh-nut-m .nut-lat {
+    flex: 2 1 0;
+    min-width: 0;
+  }
+  .dh-phim {
+    font-size: 12px;
+    color: var(--text-3);
   }
 
-  /* Khung thẻ: hai mặt cùng nền trắng trơn, bóng sâu để thẻ nổi khỏi trang. */
-  .the :global(.face) {
-    border-radius: 26px;
-    box-shadow: 0 18px 40px -24px rgb(16 24 40 / 45%);
+  /* Ví dụ nằm trong khung, ngăn với phần thẻ bằng một đường kẻ. */
+  .vidu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    animation: hienra 0.3s ease both;
   }
-  /* app.css nhấc thẻ lên khi rê chuột — ở màn này bỏ, thẻ đứng yên cho dễ nhìn. */
-  .the :global(.flip:hover) :global(.flip-inner) {
-    translate: none;
+  .vd-dau {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .vd-cau {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface-2);
+  }
+  /* Nút nghe câu ví dụ đủ to cho ngón tay. */
+  .loa-cau {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    margin: -2px -4px 0 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--text-2);
+    cursor: pointer;
+  }
+  .loa-cau:hover,
+  .loa-cau:active {
+    color: var(--son-text);
+  }
+
+  .xong {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
   }
 
   /* Thẻ mới trượt vào từ phía vừa đi tới; câu ví dụ đổ xuống ngay sau khi lật. */
@@ -540,9 +685,6 @@
       transform: none;
     }
   }
-  .vidu {
-    animation: hienra 0.3s ease both;
-  }
   @keyframes hienra {
     from {
       opacity: 0;
@@ -553,50 +695,10 @@
       transform: none;
     }
   }
-  /* Tiêu đề khối ví dụ và cặp nút Pinyin | Nghĩa chung một hàng. */
-  .vd-dau {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
   @media (prefers-reduced-motion: reduce) {
     .vao,
     .vidu {
       animation: none;
     }
-  }
-
-  /* Nút nghe câu ví dụ đủ to cho ngón tay. */
-  .loa-cau {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    margin: -4px -6px 0 0;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: var(--surface);
-    color: var(--text-2);
-    cursor: pointer;
-  }
-  .loa-cau:hover,
-  .loa-cau:active {
-    color: var(--son-text);
-  }
-  .goi {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12.5px;
-    color: var(--text-2);
-  }
-  .ctrl {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
   }
 </style>

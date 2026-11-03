@@ -103,8 +103,6 @@
     </div>
 
     <div class="deckwrap" style="height: {m ? 290 : 360}px">
-      <span class="stk stk-a"></span>
-      <span class="stk stk-b"></span>
       <button type="button" class={flipped ? 'flip is-back' : 'flip'} onclick={flip} aria-label="Lật thẻ">
         <span class="flip-inner">
           <span class="face face-front">
