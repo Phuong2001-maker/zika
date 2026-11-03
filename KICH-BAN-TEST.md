@@ -69,6 +69,16 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | D3 | Cài đặt → "Nghe thử" | Giọng người theo giọng đã chọn | | | |
 | D4 | Tắt mạng sau khi đã nghe một lượt (MT) | Âm thanh đã nghe vẫn phát từ bộ nhớ đệm trình duyệt | | | |
 
+## Đọc giáo trình (`/learn/books`)
+
+| # | Bước | Mong đợi | ĐT | MTB | MT |
+|---|---|---|---|---|---|
+| GT1 | Mở từng quyển HSK 1–3, cuộn/vuốt dọc | Các trang nối tiếp, đọc qua ranh giới trang mà không cần bấm lật | | | |
+| GT2 | Nhập số trang rồi bấm Đi tới / Enter | Cuộn đến đúng trang; ảnh tải xong không đẩy lệch vị trí | | | |
+| GT3 | Cuộn đến giữa sách, về kệ rồi mở lại | Nhớ đúng trang đang đọc của từng quyển | | | |
+| GT4 | Đổi quyển qua URL; thay đổi chiều rộng qua 768px | Hiện đúng quyển, nội dung và trạng thái đọc dùng chung giữa hai bố cục | | | |
+| GT5 | Giả lập một ảnh trang lỗi | Chỉ trang đó báo lỗi và có nút Thử lại; vẫn đọc được các trang khác | | | |
+
 ## E. Kiểm tra tự động (chạy ở máy dev)
 
 ```bash

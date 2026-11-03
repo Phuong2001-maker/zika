@@ -108,7 +108,11 @@ html[data-theme="dark"] {
    ===================================================================== */
 *, *::before, *::after { box-sizing: border-box; }
 /* scrollbar-gutter: lật thẻ làm trang cao lên, thanh cuộn hiện ra đẩy cả bố cục lệch 7px mỗi lần lật. */
-html { -webkit-text-size-adjust: 100%; background: var(--ground); scrollbar-gutter: stable; }
+html {
+  -webkit-text-size-adjust: 100%; background: var(--ground); scrollbar-gutter: stable;
+  /* Tắt lớp tô khi chạm của trình duyệt để không che nội dung nút/thẻ. */
+  -webkit-tap-highlight-color: transparent;
+}
 body {
   margin: 0; background: var(--ground); color: var(--text);
   font-family: var(--font-ui); font-size: 15px; line-height: 1.5;

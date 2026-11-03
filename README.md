@@ -59,8 +59,9 @@ các dòng còn lại vẫn nhập được. Chọn **Thêm vào cuối** hoặc
 ## Giáo trình (3 quyển HSK 1–3)
 
 Ngoài 6 phần học, người học còn đọc được nguyên ba quyển giáo trình của Đại học Hà Nội: bấm
-**Giáo trình** ở bảng Chuyển nhanh → kệ 3 quyển → lật từng trang như sách giấy (bấm hai nửa
-trang, vuốt ngang, hoặc phím mũi tên). Chỗ đọc dở nhớ riêng từng quyển bằng `localStorage`.
+**Giáo trình** ở bảng Chuyển nhanh → kệ 3 quyển → cuộn lên/xuống để đọc các trang nối tiếp như PDF.
+Thanh số trang cho phép đi thẳng tới trang cần đọc. Chỗ đọc dở nhớ riêng từng quyển bằng `localStorage`.
+Ảnh tải dần khi cuộn; giữ chỗ theo kích thước trang để nội dung không nhảy khi ảnh tải xong.
 
 Nội dung là **ảnh từng trang**, không phải chữ — vì HSK 2 và HSK 3 là bản scan, không tách chữ
 ra được. Sinh ảnh bằng:

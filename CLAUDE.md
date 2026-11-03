@@ -129,6 +129,8 @@ chứ không làm hỏng cả mẻ.
   266 chờ người nghe (`ra/nghe-tay-20261103.zip`), 0 lỗi; quét qua web 8.581 âm thanh + 697 nét chữ **0 lỗi**;
   13 khoá băng thật lệch sách đã thay (`bang_lech_sach.json`). Gói `release/cap-nhat-giong-moi-20261103-0355.zip`
   (web + mp3 + `cap-nhat-am-thanh.sql`) **thay** gói `cap-nhat-lat-the-nam-20261102.zip` (chưa từng lên server).
+  Phần web của gói này **đã cũ**: đóng trước khi bỏ vuốt ở lật thẻ và đổi giáo trình sang cuộn dọc
+  (03–04/11) — build và đóng lại phần web trước khi đưa lên.
   Còn: upload + import SQL nhỏ + xoá `storage/cache/content` theo
   [HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md), rồi kiểm web thật. Kiểm 23:48 02/11: web thật
   vẫn bản build 07:06 (`version.json` = `1793577989636`). Chưa có kết nối hosting; giữ mục này đến khi test server.

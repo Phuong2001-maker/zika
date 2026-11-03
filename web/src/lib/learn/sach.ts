@@ -15,12 +15,15 @@ export interface Quyen {
   /** Dòng phụ dưới tên sách ở thẻ bìa. */
   phu: string;
   soTrang: number;
+  /** Giữ chỗ đúng chiều cao khi ảnh chưa tải, tránh lệch vị trí cuộn. */
+  caoTrang: number;
+  caoTrangDau: number[];
 }
 
 export const SACH: Quyen[] = [
-  { ma: 'hsk1', cap: 1, ten: 'Giáo trình HSK 1', phu: 'Đại học Hà Nội · bản 3.0', soTrang: 149 },
-  { ma: 'hsk2', cap: 2, ten: 'Giáo trình HSK 2', phu: 'Đại học Hà Nội · bản 3.0', soTrang: 121 },
-  { ma: 'hsk3', cap: 3, ten: 'Giáo trình HSK 3', phu: 'Đại học Hà Nội · bản 3.0', soTrang: 199 },
+  { ma: 'hsk1', cap: 1, ten: 'Giáo trình HSK 1', phu: 'Đại học Hà Nội · bản 3.0', soTrang: 149, caoTrang: 1622, caoTrangDau: [1698, 1698] },
+  { ma: 'hsk2', cap: 2, ten: 'Giáo trình HSK 2', phu: 'Đại học Hà Nội · bản 3.0', soTrang: 121, caoTrang: 1584, caoTrangDau: [1564] },
+  { ma: 'hsk3', cap: 3, ten: 'Giáo trình HSK 3', phu: 'Đại học Hà Nội · bản 3.0', soTrang: 199, caoTrang: 1621, caoTrangDau: [1698] },
 ];
 
 export function quyenTheoMa(ma: string): Quyen | undefined {

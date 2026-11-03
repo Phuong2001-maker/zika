@@ -23,6 +23,31 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 03/11/2026 — Đọc giáo trình bằng cuộn dọc liên tục như PDF
+
+Mở sách hiển thị các trang nối tiếp, vuốt/cuộn lên xuống để đọc trên điện thoại và máy tính.
+Bỏ hiệu ứng lật, vuốt ngang và vùng bấm hai nửa trang. Giữ ô đi tới số trang và nhớ trang đang đọc
+riêng từng quyển; theo dõi trang qua IntersectionObserver, khôi phục dấu trang khi mở lại.
+Ảnh tải dần, khai kích thước đúng của đủ 469 ảnh hiện có để không làm nhảy vị trí đọc.
+Một ảnh lỗi chỉ hiện nút Thử lại ở trang đó. Hai bố cục dùng cùng khung nội dung.
+
+Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 53/53 test web đạt; build production thành công,
+web local trả HTTP 200. Đã cập nhật README và kịch bản kiểm giáo trình. Chưa cập nhật hosting.
+
+Kiểm trên trình duyệt (04/11, khung 1024px và giả lập điện thoại 375px) theo GT1–GT5, sửa thêm 2 lỗi:
+- Đổi chiều rộng (kéo qua 768px, xoay máy) làm trang đang đọc nhảy từ 95 sang 142 và ghi đè dấu
+  trang, vì các trang thấp lại mà `scrollY` giữ nguyên. Nay neo lại đúng chỗ đọc theo tỉ lệ trong trang.
+- Đi tới trang trên máy tính lộ chú thích "Trang n−1" phía trên, vì khoảng chừa cố định 128px chỉ
+  đúng cho điện thoại. Nay chừa theo chiều cao thanh dính của từng bố cục.
+Đã đối chiếu kích thước thật của cả 469 ảnh trang với số khai trong `sach.ts`: khớp hết. Chưa kiểm
+trên máy thật.
+
+### 03/11/2026 — Bỏ lớp nền lóe khi chạm trên điện thoại
+
+Tắt lớp tô mặc định của trình duyệt khi chạm bằng `-webkit-tap-highlight-color: transparent`
+trong CSS nền tảng. Vùng bấm, hành vi nút/thẻ, bóng đổ thiết kế và viền focus bàn phím giữ nguyên.
+Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 53/53 test web đạt. Thay đổi ở local, chưa đóng gói lên server.
+
 ### 03/11/2026 — Bỏ vuốt chuyển từ ở lật thẻ trên điện thoại
 
 Theo yêu cầu người dùng, bỏ nhận diện vuốt trái/phải ở cả màn lật thẻ theo bài và tổng hợp.
