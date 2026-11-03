@@ -548,3 +548,21 @@ html[data-theme="dark"] .btn-muc { background: #F2F5FA; border-color: #F2F5FA; c
 .zk-nut:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .zk-nut-chinh { border-color: var(--son-line); background: var(--son-soft); color: var(--son-text); }
 .zk-nut-chinh:hover:not(:disabled) { border-color: var(--son); }
+
+/* ---------------------------------------------------------------------
+   Dấu ấn chữ Hán (04/11): dấu triện cho bài đã xong, hoạ tiết số Hán mờ của từng cấp.
+   --------------------------------------------------------------------- */
+/* Dấu triện đỏ “完” thay chấm xanh: học xong một bài như được đóng dấu vào vở. */
+.dau-xong { display: inline-grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: 6px; background: var(--son); color: #fff; font: 700 15px/1 var(--font-hz); transform: rotate(-8deg); box-shadow: inset 0 0 0 2px var(--son), inset 0 0 0 3px rgba(255,255,255,.55); }
+.les.done { background: var(--bo-paper); border-color: var(--bo-dot); }
+/* Hoạ tiết cấp: số Hán kiểu chữ kép (壹 贰 叁…) viết bút lông, in mờ sau nội dung. */
+.lv-nen { position: relative; overflow: hidden; isolation: isolate; }
+.lv-hoa { position: absolute; z-index: -1; font: 400 180px/1 var(--font-brush); color: var(--mau, var(--son)); opacity: .1; pointer-events: none; user-select: none; }
+/* Dấu “完成” ở màn xong bài: đập xuống như đóng triện thật. */
+.stamp { animation: dong-dau .55s cubic-bezier(.2, .8, .3, 1.2) both; }
+@keyframes dong-dau {
+  from { opacity: 0; transform: rotate(-5deg) scale(2.2); }
+  60%  { opacity: 1; transform: rotate(-5deg) scale(.92); }
+  to   { opacity: 1; transform: rotate(-5deg) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .stamp { animation: none; } }

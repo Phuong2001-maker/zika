@@ -3,6 +3,9 @@
   import { num } from '$lib/utils/format';
   import Bar from './Bar.svelte';
   import Icon from './Icon.svelte';
+  import { SO_HAN, taiChuBut } from '$lib/learn/hoa-tiet';
+
+  taiChuBut();
 
   // Thẻ cấp HSK (05 §7.3). Dùng cho Bàn học (Lật thẻ) và khuôn Chọn cấp 5 phần.
   // - lt (không truyền `past`): dòng số liệu "{bài} bài · {từ} từ" + trạng thái bên phải.
@@ -43,7 +46,8 @@
     <span class="num" style="font-size: 14px"><b>{num(level.targetWords)} từ</b> · admin đang soạn</span>
   </div>
 {:else}
-  <a {href} class="lv lv{n}" style="text-decoration: none">
+  <a {href} class="lv lv{n} lv-nen" style="text-decoration: none; --mau: var(--hsk{n})">
+    <span class="lv-hoa" lang="zh" aria-hidden="true" style="font-size: {mobile ? 96 : 150}px; right: {mobile ? -4 : 6}px; bottom: {mobile ? -18 : -30}px">{SO_HAN[n]}</span>
     <span class="lv-top">
       <span class="lv-hsk"><span class="disp lv-lbl">HSK</span><span class="bignum" style="font-size: {mobile ? 40 : 58}px">{n}</span></span>
       {#if current}<span class="tag tag-bad">Đang học</span>{/if}

@@ -107,7 +107,43 @@ final class ProgressService
                 'extra' => self::lessonExtra((int) $cont['id'], $part, $cont),
             ],
             'reviewSuggest' => $suggest,
+            'today' => self::today($userId),
         ];
+    }
+
+    /**
+     * Khối “Hôm nay” ở Bàn học: chuỗi ngày học liên tiếp, 7 ngày gần nhất, số từ đã lật xong.
+     * “Ngày có học” = ngày có ghi tiến độ hoặc làm bài, không tính mở web rồi đóng (visits).
+     * Hôm nay chưa học thì chuỗi vẫn giữ tính đến hôm qua — sáng ra mở web không thấy về 0.
+     * @return array{streak:int, week:list<bool>, words:int}
+     */
+    public static function today(int $userId): array
+    {
+        $now = Clock::now();
+        $from = Clock::sql($now->setTime(0, 0)->modify('-60 days'));
+        $days = array_flip(Db::col(
+            'SELECT DATE(updated_at) FROM lesson_progress WHERE user_id = ? AND updated_at >= ?
+             UNION SELECT DATE(updated_at) FROM review_progress WHERE user_id = ? AND updated_at >= ?
+             UNION SELECT DATE(started_at) FROM exercise_attempts WHERE user_id = ? AND started_at >= ?
+             UNION SELECT DATE(started_at) FROM test_attempts WHERE user_id = ? AND started_at >= ?',
+            [$userId, $from, $userId, $from, $userId, $from, $userId, $from],
+        ));
+        $co = static fn (int $back): bool => isset($days[$now->modify("-$back days")->format('Y-m-d')]);
+
+        $streak = 0;
+        for ($b = $co(0) ? 0 : 1; $co($b); $b++) {
+            $streak++;
+        }
+        $week = [];
+        for ($b = 6; $b >= 0; $b--) {
+            $week[] = $co($b);
+        }
+        $words = (int) Db::val(
+            "SELECT COALESCE(SUM(l.cnt_words), 0) FROM lesson_progress p JOIN lessons l ON l.id = p.lesson_id
+             WHERE p.user_id = ? AND p.part = 'lt' AND p.status = 'done' AND l.status = 'published'",
+            [$userId],
+        );
+        return ['streak' => $streak, 'week' => $week, 'words' => $words];
     }
 
     /** “鸡蛋 · 牛奶 · 羊肉” — n từ đầu của bài. */

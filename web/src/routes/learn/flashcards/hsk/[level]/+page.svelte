@@ -17,6 +17,7 @@
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import BackLink from '$lib/components/BackLink.svelte';
+  import { SO_HAN, taiChuBut } from '$lib/learn/hoa-tiet';
 
   // Chọn bài — Lật thẻ (07 §4.2).
   const level = $derived(Number(page.params.level));
@@ -53,6 +54,7 @@
     }
   }
   onMount(load);
+  taiChuBut();
 
   const loading = $derived(!failed && !notFound && (content === null || prog === null));
   const rowOf = (lessonId: number): ProgressRow | undefined => prog?.lessons.find((r) => r.lessonId === lessonId);
@@ -250,7 +252,8 @@
       {:else if loading}
         <Skeleton h="64px" r={16} /><Skeleton h="72px" r={16} /><Skeleton h="72px" r={16} /><Skeleton h="72px" r={16} />
       {:else if content}
-        <div class="lv{level}" style="border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px">
+        <div class="lv{level} lv-nen" style="border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; --mau: var(--hsk{level})">
+          <span class="lv-hoa" lang="zh" aria-hidden="true" style="right: 8px; top: -14px; font-size: 92px">{SO_HAN[level]}</span>
           <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700">
             <span class="num">{content.lessons.length} bài · {num(content.review.lt.wordCount)} từ</span>
             <span class="num">{prog?.doneCount ?? 0}/{prog?.lessonCount ?? 0} bài đã học</span>
@@ -306,7 +309,8 @@
       <Skeleton h="130px" r={24} />
       <Skeleton h="400px" r={22} />
     {:else if content}
-      <section class="lv{level}" style="border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--sh-md); padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center">
+      <section class="lv{level} lv-nen" style="border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--sh-md); padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center; --mau: var(--hsk{level})">
+        <span class="lv-hoa" lang="zh" aria-hidden="true" style="right: 22%; top: -34px; font-size: 200px">{SO_HAN[level]}</span>
         <BackLink href="/learn/flashcards" label="Bàn học" />
         <div style="display: flex; align-items: baseline; gap: 6px"><span class="disp" style="font-size: 20px; font-weight: 800">HSK</span><span class="bignum" style="font-size: 72px">{level}</span></div>
         <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 8px">

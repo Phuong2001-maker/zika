@@ -22,6 +22,7 @@
   import TracNghiemView from '$lib/learn/che-do/TracNghiem.svelte';
   import GoChuView from '$lib/learn/che-do/GoChu.svelte';
   import TongKet from '$lib/learn/che-do/TongKet.svelte';
+  import ChuDien from '$lib/components/ChuDien.svelte';
 
   // Lật thẻ — màn học chính (07 §5.1).
   const levelId = $derived(Number(page.params.level));
@@ -192,15 +193,16 @@
           <span class="flip-inner">
             <span class="face face-front">
               <span class="nhan-mat">{frontLabel}</span>
-              <span class={settings.value.cardFront === 'hanzi' ? 'hz' : ''} lang={settings.value.cardFront === 'hanzi' ? 'zh' : 'vi'}
-                    style="font-size: {settings.value.cardFront === 'hanzi' ? (m ? 60 : 84) : (m ? 28 : 38)}px; font-weight: 800; line-height: 1.15">
-                {frontText}
-              </span>
+              {#if settings.value.cardFront === 'hanzi'}
+                <ChuDien text={card.hanzi} size={m ? 76 : 104} />
+              {:else}
+                <span lang="vi" style="font-size: {m ? 28 : 38}px; font-weight: 800; line-height: 1.15">{frontText}</span>
+              {/if}
               <span class="goi"><Icon name="repeat" size={13} /> {m ? 'Chạm để lật' : 'Bấm để lật'}</span>
             </span>
             <span class="face face-back">
               {@render pinyinRow(card.pinyin, m ? 19 : 22)}
-              <span class="hz" lang="zh" style="font-size: {m ? 60 : 84}px; line-height: 1.1">{card.hanzi}</span>
+              <ChuDien text={card.hanzi} size={m ? 68 : 92} />
               {#if settings.value.showHanViet && card.hanViet}
                 <span class="hv">{card.hanViet}</span>
               {/if}

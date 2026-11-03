@@ -17,6 +17,7 @@
   import { speak } from '$lib/learn/speech';
   import { toneParts } from '$lib/utils/pinyin';
   import type { Word } from '$lib/api/types';
+  import ChuDien from '$lib/components/ChuDien.svelte';
 
   // Lật thẻ · Tổng hợp cả cấp (04 §4.9 part = lt). Bố cục theo màn lật thẻ của bài:
   // đầu bài + một khung trắng chứa thẻ và điều hướng.
@@ -111,7 +112,7 @@
               <span class="num" style="font-size: {m ? 19 : 22}px; font-weight: 600" class:no-tone={!settings.value.toneColors}>
                 {#each toneParts(card.pinyin) as p, k (k)}<span class="t{p.tone}">{p.text}</span>{/each}
               </span>
-              <span class="hz" lang="zh" style="font-size: {m ? 60 : 84}px; line-height: 1.1">{card.hanzi}</span>
+              <ChuDien text={card.hanzi} size={m ? 68 : 92} />
               {#if settings.value.showHanViet && card.hanViet}
                 <span class="hv">{card.hanViet}</span>
               {/if}

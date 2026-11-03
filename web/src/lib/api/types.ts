@@ -235,6 +235,8 @@ export interface HomeProgress {
     extra?: Record<string, unknown>;
   } | null;
   reviewSuggest: { levelId: number; done: number; total: number } | null;
+  /** Khối “Hôm nay”: chuỗi ngày học, 7 ngày gần nhất (cuối mảng = hôm nay), số từ đã lật xong. */
+  today?: { streak: number; week: boolean[]; words: number };
 }
 
 export interface CompleteResult {

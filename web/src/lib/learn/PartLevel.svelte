@@ -15,6 +15,7 @@
   import BackLink from '$lib/components/BackLink.svelte';
   import { PART, PART_TEXTS } from '$lib/parts';
   import { levelLessons, levelProgress, progressOf } from '$lib/learn/lesson';
+  import { SO_HAN, taiChuBut } from '$lib/learn/hoa-tiet';
 
   // Khuôn “Chọn bài” dùng chung cho 5 phần (07 §5.3). Bố cục theo màn Chọn bài của Lật thẻ
   // (khung đầu tô màu cấp, lưới bài, cột chi tiết) để 6 phần trông như một ứng dụng.
@@ -45,6 +46,7 @@
     }
   }
 
+  taiChuBut();
   onMount(() => {
     heartbeat.setActivity({ part, screen: 'level', level: levelId });
     void load();
@@ -107,11 +109,11 @@
 
 <svelte:head><title>{info.name} · HSK {levelId} · Zìkǎ</title></svelte:head>
 
-<!-- Nhãn góc phải thẻ bài: chấm xanh khi xong, không thì nhãn trạng thái (đang làm, điểm, sắp có). -->
+<!-- Nhãn góc phải thẻ bài: dấu triện “完” khi xong, không thì nhãn trạng thái (đang làm, điểm, sắp có). -->
 {#snippet nhan(l: LessonItem, m: boolean)}
   {@const st = statusOf(l)}
   {#if st.dot}
-    <span class="ok-dot" title="Đã {texts.past} xong"><Icon name="check" size={13} /></span>
+    <span class="dau-xong" lang="zh" title="Đã {texts.past} xong">完</span>
   {:else if st.label}
     <span class={st.cls} style={m ? '' : 'height: 22px; font-size: 11px; padding: 0 7px'}>{st.label}</span>
   {/if}
@@ -256,7 +258,8 @@
       {:else if data === null}
         <Skeleton h="64px" r={16} /><Skeleton h="72px" r={16} /><Skeleton h="72px" r={16} /><Skeleton h="72px" r={16} />
       {:else}
-        <div class="lv{levelId}" style="border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px">
+        <div class="lv{levelId} lv-nen" style="border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; --mau: var(--hsk{levelId})">
+          <span class="lv-hoa" lang="zh" aria-hidden="true" style="right: 8px; top: -14px; font-size: 92px">{SO_HAN[levelId]}</span>
           <div style="display: flex; justify-content: space-between; gap: 10px; font-size: 13px; font-weight: 700">
             <span class="num">{lessons.length} bài · {num(tongSo)} {donVi}</span>
             <span class="num">{doneCount}/{lessons.length} bài đã {texts.past}</span>
@@ -312,7 +315,8 @@
       <Skeleton h="400px" r={22} />
     {:else}
       <!-- Khung đầu tô màu cấp, chép đúng khuôn màn Chọn bài của Lật thẻ. -->
-      <section class="lv{levelId}" style="border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--sh-md); padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center">
+      <section class="lv{levelId} lv-nen" style="border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--sh-md); padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center; --mau: var(--hsk{levelId})">
+        <span class="lv-hoa" lang="zh" aria-hidden="true" style="right: 22%; top: -34px; font-size: 200px">{SO_HAN[levelId]}</span>
         <BackLink href="/learn/{info.slug}" label="Chọn cấp" />
         <div style="display: flex; align-items: baseline; gap: 6px"><span class="disp" style="font-size: 20px; font-weight: 800">HSK</span><span class="bignum" style="font-size: 72px">{levelId}</span></div>
         <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 8px">
@@ -407,7 +411,7 @@
     background: var(--surface);
   }
   .pl-hang.done .pl-so {
-    background: var(--ngoc-soft);
+    background: var(--bo-paper);
   }
   .pl-giua {
     flex: 1 1 auto;

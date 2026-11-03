@@ -110,6 +110,20 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | G5 | Chọn tệp không phải ảnh / đổi ảnh > 10 lần trong 1 giờ | Báo "Không đọc được ảnh này…" / "Bạn đổi ảnh nhiều quá…" | | | |
 | G6 | Xoá tài khoản (tài khoản thử, có mật khẩu): gõ `XOA` + mật khẩu | Xoá được, về màn đăng nhập (trước đây nút này luôn hỏng) | | | |
 
+## H. Dấu ấn giao diện — khối Hôm nay, ô chữ điền, dấu triện (04/11/2026)
+
+| # | Làm gì | Mong đợi |
+|---|---|---|
+| H1 | Học viên mở `/learn/flashcards` | Lời chào "Chào {tên}, hôm nay học gì?"; thẻ "Học tiếp · HSK x · Bài y" đúng bài đang dở, bấm "Học tiếp" vào đúng bài và đúng thẻ đang dở |
+| H2 | Tài khoản mới chưa học gì | Thẻ "Bài tiếp theo" chỉ HSK 1 Bài 1; ô số chuỗi màu xám "0", lời nhắc "Học một bài hôm nay để bắt đầu chuỗi." |
+| H3 | Lật vài thẻ rồi quay lại Bàn học | Chấm ngày hôm nay (cuối hàng, chữ đỏ) thành chấm đỏ có dấu tích; chuỗi tăng nếu hôm qua cũng học |
+| H4 | Chỉ mở web, không học | Không tính là ngày học |
+| H5 | Xem các cấp | Chỉ cấp đã mở có thẻ to; cấp chưa mở nằm trên một dòng "Sắp có …"; mỗi thẻ cấp có số 壹/贰/叁 mờ ở góc |
+| H6 | Lật thẻ một từ 1–4 chữ | Chữ Hán nằm trong ô chữ điền nét đứt, mỗi chữ một ô; đổi cỡ chữ Hán trong Cài đặt thì ô to/nhỏ theo; điện thoại 375px từ 4 chữ vẫn vừa một hàng |
+| H7 | Danh sách bài (6 phần) có bài đã xong | Góc thẻ bài là dấu triện đỏ "完", nền thẻ màu giấy |
+| H8 | Học xong một bài | Dấu "完成" đập xuống rồi đứng yên; máy bật "giảm chuyển động" thì hiện luôn, không chạy |
+| H9 | Giao diện tối | Khối Hôm nay, ô chữ điền, dấu triện, hoạ tiết cấp đều đọc rõ, không chói |
+
 ## E. Kiểm tra tự động (chạy ở máy dev)
 
 ```bash

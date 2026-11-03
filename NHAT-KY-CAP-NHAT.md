@@ -23,6 +23,38 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 04/11/2026 (chiều) — Làm web nổi bật hơn: khối "Hôm nay", ô chữ điền, dấu triện
+
+**1. Bàn học có khối "Hôm nay"** (`web/src/routes/learn/flashcards/+page.svelte`):
+- Thẻ lớn **Học tiếp** dẫn thẳng vào bài đang dở (hoặc bài kế tiếp chưa học), có 3 chữ Hán mẫu, tiến độ
+  thẻ và nút "Học tiếp". Góc thẻ in mờ chữ Hán đầu của bài bằng font bút lông. Dữ liệu `continue` đã có
+  sẵn trong `/progress/home` từ trước nhưng màn này chưa dùng.
+- Thẻ **chuỗi ngày học**: số ngày học liên tiếp, 7 ngày gần nhất (đã học = chấm đỏ có dấu tích, hôm nay
+  viền đỏ), số từ đã lật xong.
+- Các cấp chưa mở gom thành một dòng "Sắp có HSK 4 · HSK 5 · HSK 6", không còn 3 thẻ xám to.
+- API: `/progress/home` trả thêm `today: {streak, week[7], words}` (`ProgressService::today`). "Ngày có học" =
+  ngày có ghi `lesson_progress`/`review_progress` hoặc bắt đầu bài tập/kiểm tra; chỉ mở web thì không tính.
+  Hôm nay chưa học thì chuỗi vẫn giữ đến hôm qua. Test: `api/tests/Unit/TodayStreakTest.php`.
+
+**2. Chữ Hán trên thẻ lật đặt trong ô chữ điền** (`web/src/lib/components/ChuDien.svelte`): mỗi chữ một ô
+田字格 nét đứt, cỡ ô theo số chữ (≤ 4 chữ; dài hơn thì in thường), theo cài đặt cỡ chữ Hán. Dùng ở mặt
+sau thẻ (và mặt trước khi chọn "Chữ Hán trước") của màn Lật thẻ theo bài và màn ôn Tổng hợp. Pinyin tô
+màu thanh điệu đã có từ trước, giữ nguyên.
+
+**3. Dấu ấn riêng** (cuối `web/src/app.css`, `web/src/lib/learn/hoa-tiet.ts`):
+- Bài đã xong: dấu triện đỏ **完** thay chấm xanh, nền thẻ bài màu giấy (`.dau-xong`, `.les.done`) — ở mọi
+  danh sách bài của 6 phần.
+- Mỗi cấp có hoạ tiết số Hán kiểu chữ kép 壹 贰 叁 肆 伍 陆 viết bút lông, in mờ màu của cấp: ở thẻ cấp
+  (Bàn học, Chọn cấp của 5 phần) và khung đầu trang danh sách bài. Không dùng 一 二 三 vì in mờ trông như vết bẩn.
+- Dấu "完成" ở màn xong bài đập xuống như đóng triện (tắt khi máy bật giảm chuyển động).
+- Font bút lông Ma Shan Zheng chỉ tải ở các màn có hoạ tiết (`taiChuBut()`), Google Fonts tự cắt theo chữ dùng.
+
+**Đã test:** web 0 lỗi 0 cảnh báo, lint sạch, 73/73; API 59/59. Xem tận mắt Bàn học, danh sách bài HSK 1–2,
+thẻ lật ở 1280px và 375px, giao diện tối; quét 10 màn ở 375px không tràn ngang. Kịch bản: mục H của
+[KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+
+**Đưa lên server:** chép lại web + `api/app/src/Services/ProgressService.php`. Không có migration mới.
+
 ### 04/11/2026 — Đồng bộ giao diện mọi màn học; học viên đổi ảnh đại diện
 
 **Giao diện một khuôn.** Thêm khối "Khung học dùng chung" cuối `web/src/app.css` (lớp `zk-*`: `.zk-khung`,

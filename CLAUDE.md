@@ -35,7 +35,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 73/73 test; API 57/57; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 73/73 test; API 59/59; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -124,6 +124,8 @@ hoặc khởi động lại `npm run dev`. Bản build không bị.
 
 - **Tiếng Việt** cho chữ hiển thị, comment và thông điệp commit. Tên biến/hàm có thể tiếng Việt khi rõ nghĩa hơn.
 - Màn học mới dùng khuôn chung: `DauBai.svelte` + một `section.block.zk-khung` (xem màn Lật thẻ theo bài).
+- Dấu ấn chữ Hán dùng lại, đừng tự chế kiểu khác: `ChuDien.svelte` (chữ trong ô chữ điền), `.dau-xong` (triện "完" bài đã xong),
+  `.lv-nen` + `.lv-hoa` với `SO_HAN` trong `lib/learn/hoa-tiet.ts` (hoạ tiết số Hán của cấp).
 - Mỗi màn phức tạp tách trạng thái ra `state.svelte.ts` (class runes), bố cục máy tính và điện thoại **dùng chung** trạng thái đó — kéo cửa sổ qua 768px không mất chữ đang gõ.
 - Bố cục điện thoại/máy tính chọn bằng `media.isMobile` (quản trị dùng `media.isAdminMobile`, ngắt ở 900px).
 - Comment giải thích **vì sao**, không mô tả lại code.

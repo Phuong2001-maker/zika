@@ -1,6 +1,5 @@
 <script lang="ts">
   import Bar from './Bar.svelte';
-  import Icon from './Icon.svelte';
 
   // Thẻ bài (05 §7.4). Dùng cho Chọn bài (Lật thẻ) và khuôn Chọn bài 5 phần.
   let {
@@ -42,7 +41,7 @@
     </span>
     <span class="les-end">
       {#if done}
-        <span class="ok-dot" title="Đã học xong"><Icon name="check" size={13} /></span>
+        <span class="dau-xong" lang="zh" title="Đã học xong">完</span>
       {:else if tag}
         <span class={tagClass}>{tag}</span>
       {:else}
@@ -55,7 +54,7 @@
     <span class="les-head">
       <span class="disp" style="font-size: 13px; font-weight: 800; color: var(--text-3)">Bài {no}</span>
       {#if done}
-        <span class="ok-dot" title="Đã học xong"><Icon name="check" size={13} /></span>
+        <span class="dau-xong" lang="zh" title="Đã học xong">完</span>
       {:else if tag}
         <span class={tagClass} style="height: 22px; font-size: 11px; padding: 0 7px">{tag}</span>
       {/if}
@@ -108,7 +107,7 @@
     background: var(--surface);
   }
   .les-row.done .les-no {
-    background: var(--ngoc-soft);
+    background: var(--bo-paper);
   }
   .les-row .les-mid {
     flex: 1 1 auto;
