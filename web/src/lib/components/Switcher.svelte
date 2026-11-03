@@ -81,11 +81,13 @@
               ><span class="swi-ic" style="background: {p.accent}"><Icon name={p.icon} size={24} /></span>{p.name}</a
             >
           {/each}
-          <!-- Giáo trình khép lại lưới: luôn đúng 5 phần còn lại + 1 nên lưới 3 cột vừa kín 2 hàng.
+          <!-- Giáo trình có bản quyền nên chỉ quản trị thấy; khi có, nó khép lại lưới 5 + 1 kín 2 hàng.
              Màu giấy kraft để không lẫn với 6 màu của các phần học. -->
-          <a href="/learn/books" class="swi" onclick={() => (open = false)}
-            ><span class="swi-ic" style="background: #EFE0C8"><Icon name="book" size={24} /></span>Giáo trình</a
-          >
+          {#if session.isAdmin}
+            <a href="/learn/books" class="swi" onclick={() => (open = false)}
+              ><span class="swi-ic" style="background: #EFE0C8"><Icon name="book" size={24} /></span>Giáo trình</a
+            >
+          {/if}
         </nav>
         {#if showFeedback && feedback.available}
           <span class="rule"></span>

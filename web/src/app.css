@@ -364,16 +364,19 @@ span.qn { cursor: default; }  /* lưới số câu ở bài tập chỉ để xe
    ===================================================================== */
 .deckwrap { position: relative; }
 .deckwrap > .stk { position: absolute; inset: 0; border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--sh-sm); }
-.stk-a { background: var(--lv4); transform: rotate(1.5deg) translate(7px, 6px); }
-.stk-b { background: var(--lv3); transform: rotate(-1deg) translate(-5px, 5px); }
+/* Cả chồng thẻ cùng nền trắng như mặt thẻ: chỉ viền và bóng tách các lớp. */
+.stk-a { background: var(--surface); transform: rotate(1.5deg) translate(7px, 6px); }
+.stk-b { background: var(--surface); transform: rotate(-1deg) translate(-5px, 5px); }
 .flip { position: relative; z-index: 1; display: block; width: 100%; height: 100%; border: 0; padding: 0; background: none; cursor: pointer; perspective: 1800px; font: inherit; color: inherit; text-align: center; }
 .flip:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r-lg); }
-.flip-inner { position: absolute; inset: 0; transition: transform .55s cubic-bezier(.3,.7,.2,1); transform-style: preserve-3d; }
-.flip.is-back .flip-inner { transform: rotateY(180deg); }
+/* Lật dọc, mép trên lật về phía người xem rồi xuống dưới (rotateX âm). Đường cong vào–ra đều để
+   không giật ở đầu và cuối; will-change cho trình duyệt dựng sẵn lớp riêng, điện thoại đỡ khựng. */
+.flip-inner { position: absolute; inset: 0; transition: transform .6s cubic-bezier(.45,.05,.25,1); transform-style: preserve-3d; will-change: transform; }
+.flip.is-back .flip-inner { transform: rotateX(-180deg); }
 .flip:hover .flip-inner { translate: 0 -2px; }
 .face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 28px; border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--sh-md); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.face-front { background-color: var(--troi); }
-.face-back  { background: var(--surface); transform: rotateY(180deg); }
+.face-front { background-color: var(--surface); }
+.face-back  { background: var(--surface); transform: rotateX(180deg); }
 @media (prefers-reduced-motion: reduce) { .flip-inner { transition: none; } .btn, .opt, .les, .lv { transition: none; } }
 
 /* Chuyển nhanh */

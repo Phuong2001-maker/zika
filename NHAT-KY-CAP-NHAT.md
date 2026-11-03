@@ -23,6 +23,26 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 04/11/2026 — Giáo trình chỉ cho quản trị; lật thẻ nền trắng lật dọc; ẩn lời giải câu ví dụ
+
+- **Giáo trình có bản quyền, chỉ quản trị đọc.** Học viên và biên tập không thấy mục trong Chuyển
+  nhanh, vào thẳng `/learn/books` bị đưa về trang nhà (`canView` trong `routes.ts`). Ảnh không còn
+  phát thẳng ở `/uploads/giao-trinh/` (`.htaccess` gốc và `dev-router.php` trả 403) mà đi qua
+  `GET /api/admin/books/{ma}/{trang}` đòi quyền quản trị, `Cache-Control: private`, không tính vào
+  giới hạn 300 request/phút. Service worker bỏ kho `zika-book`, lần kích hoạt tới tự xoá ảnh đã lưu.
+- **Lật thẻ:** mặt trước, mặt sau và chồng thẻ phía sau đều nền trắng; lật dọc từ trên xuống
+  (`rotateX`), 0,6 giây, đường cong vào–ra đều.
+- **Câu ví dụ ở lật thẻ và ngữ pháp:** mặc định chỉ hiện chữ Hán, mỗi câu có icon mắt để hiện/ẩn
+  pinyin + nghĩa; sang thẻ khác hoặc đổi điểm ngữ pháp thì ẩn lại.
+
+Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 54/54 test web, 53/53 test API. Trên trình duyệt:
+học viên bị 403 ở cả hai đường ảnh, quản trị lấy được ảnh (200 `image/webp`); thẻ trắng, lật
+`rotateX`; icon mắt ở HSK 1 Bài 2 (lật thẻ) và Bài 4 (ngữ pháp). Chưa kiểm trên máy thật.
+Ngữ pháp HSK 1 Bài 1–2 không có điểm nào nên màn trắng trơn — lỗi có từ trước, chưa sửa.
+
+Lên server: phải chép **`.htaccess` gốc mới** (có luật chặn `uploads/giao-trinh/`) cùng code PHP,
+rồi mở thử ảnh trực tiếp phải ra 403.
+
 ### 03/11/2026 — Đọc giáo trình bằng cuộn dọc liên tục như PDF
 
 Mở sách hiển thị các trang nối tiếp, vuốt/cuộn lên xuống để đọc trên điện thoại và máy tính.

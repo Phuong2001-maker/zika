@@ -40,6 +40,15 @@ describe('vào trang nào sau khi đăng nhập', () => {
     expect(canView('admin', '/admin')).toBe(true);
   });
 
+  it('chỉ quản trị đọc được giáo trình', () => {
+    expect(canView('admin', '/learn/books')).toBe(true);
+    expect(canView('admin', '/learn/books/hsk1')).toBe(true);
+    expect(canView('editor', '/learn/books/hsk1')).toBe(false);
+    expect(canView('learner', '/learn/books')).toBe(false);
+    expect(canView('learner', '/learn/booksx')).toBe(true);
+    expect(landingPath('learner', '/learn/books/hsk2')).toBe('/learn/flashcards');
+  });
+
   it('không có “next” thì về trang nhà của vai trò', () => {
     expect(landingPath('admin', null)).toBe('/admin');
     expect(landingPath('editor', null)).toBe('/admin/lessons');

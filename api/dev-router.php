@@ -5,6 +5,12 @@ declare(strict_types=1);
 
 $path = (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
 
+// Giáo trình có bản quyền: giống .htaccess thật, không phát thẳng — chỉ qua /api/admin/books.
+if (str_starts_with($path, '/uploads/giao-trinh/')) {
+    http_response_code(403);
+    return true;
+}
+
 if (str_starts_with($path, '/uploads/')) {
     require_once __DIR__ . '/app/bootstrap.php';
     $file = Zika\Core\Config::uploadsDir(rawurldecode(substr($path, strlen('/uploads/'))));

@@ -35,7 +35,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 53/53 test; API 49/49; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 54/54 test; API 53/53; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -46,7 +46,7 @@ web/src/lib/components/  component dùng chung (Select, Modal, Icon, Switcher…
 web/src/lib/admin/       riêng khu quản trị (menu.ts, api.ts, LessonHeader.svelte)
 web/src/lib/admin/import/ nhập Excel cho 6 phần soạn bài — xem bẫy số 6
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
-web/src/lib/learn/sach.ts  3 quyển giáo trình đọc ở /learn/books (ảnh trang nằm ngoài git)
+web/src/lib/learn/sach.ts  3 quyển giáo trình ở /learn/books — chỉ admin, ảnh qua /api/admin/books (ngoài git)
 web/src/app.css          tokens + class dùng chung TOÀN CỤC (xem bẫy số 1)
 api/app/src/             Controllers/, Services/, Core/
 api/app/config.php       bí mật (DB, Google, SMTP) — gitignore, KHÔNG commit
@@ -129,8 +129,9 @@ chứ không làm hỏng cả mẻ.
   266 chờ người nghe (`ra/nghe-tay-20261103.zip`), 0 lỗi; quét qua web 8.581 âm thanh + 697 nét chữ **0 lỗi**;
   13 khoá băng thật lệch sách đã thay (`bang_lech_sach.json`). Gói `release/cap-nhat-giong-moi-20261103-0355.zip`
   (web + mp3 + `cap-nhat-am-thanh.sql`) **thay** gói `cap-nhat-lat-the-nam-20261102.zip` (chưa từng lên server).
-  Phần web của gói này **đã cũ**: đóng trước khi bỏ vuốt ở lật thẻ và đổi giáo trình sang cuộn dọc
-  (03–04/11) — build và đóng lại phần web trước khi đưa lên.
+  Phần web của gói này **đã cũ**: đóng trước khi bỏ vuốt ở lật thẻ, đổi giáo trình sang cuộn dọc,
+  khoá giáo trình chỉ cho quản trị, lật thẻ nền trắng + ẩn lời giải ví dụ (03–04/11) — đóng lại cả
+  web, PHP **và `.htaccess` gốc** (luật chặn `uploads/giao-trinh/`) trước khi đưa lên.
   Còn: upload + import SQL nhỏ + xoá `storage/cache/content` theo
   [HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md), rồi kiểm web thật. Kiểm 23:48 02/11: web thật
   vẫn bản build 07:06 (`version.json` = `1793577989636`). Chưa có kết nối hosting; giữ mục này đến khi test server.

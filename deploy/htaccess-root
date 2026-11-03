@@ -14,6 +14,10 @@ DirectoryIndex index.html
   # Chặn file ẩn (.git, .env…)
   RewriteRule (^|/)\.(?!well-known/) - [F]
 
+  # Giáo trình có bản quyền: không phát thẳng ảnh, chỉ đọc qua api/admin/books (đòi quyền quản trị).
+  # Đặt ở .htaccess gốc vì uploads/.htaccess không bật RewriteEngine nên luật ở đây vẫn áp xuống.
+  RewriteRule ^uploads/giao-trinh/ - [F]
+
   # API và link ủng hộ → PHP
   RewriteRule ^api/index\.php$ - [L]
   RewriteRule ^api/ api/index.php [L,QSA]

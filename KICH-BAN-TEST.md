@@ -22,9 +22,9 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 |---|---|---|---|---|---|
 | A1 | Trang chọn cấp | HSK 1: **15 bài · 320 từ**, HSK 2: **10 bài · 172 từ**, HSK 3: **15 bài · 440 từ**. Không còn dạng "320/150" | | | |
 | A2 | Mở HSK 1 → Bài 3 | Thẻ đầu hiện mặt trước, có chữ "Chạm để lật"/"Bấm để lật"; thẻ nằm trọn trong màn hình đầu, không bị tràn ngang | | | |
-| A3 | Chạm/bấm thẻ | Thẻ lật; mặt sau có pinyin tô màu thanh, chữ Hán, âm Hán Việt, nghĩa | | | |
+| A3 | Chạm/bấm thẻ | Thẻ **lật dọc từ trên xuống**, mượt, không giật; cả hai mặt và chồng thẻ phía sau **nền trắng**; mặt sau có pinyin tô màu thanh, chữ Hán, âm Hán Việt, nghĩa | | | |
 | A4 | Ngay sau khi lật | **Tự đọc từ giọng nam Yunxi**, dùng file theo chữ + pinyin; chậm, rõ từng âm | | | |
-| A5 | Khối "Câu ví dụ" | Hiện **2 câu** ngắn đúng cấp (HSK 1 ≤ 12 chữ, HSK 2 ≤ 16, HSK 3 ≤ 22), từ đang học tô màu, pinyin tô màu thanh, có nghĩa tiếng Việt | | | |
+| A5 | Khối "Câu ví dụ" | Hiện **2 câu** ngắn đúng cấp (HSK 1 ≤ 12 chữ, HSK 2 ≤ 16, HSK 3 ≤ 22), từ đang học tô màu; **mặc định chỉ hiện chữ Hán**, bấm icon mắt từng câu mới hiện pinyin tô màu thanh + nghĩa tiếng Việt, bấm lại thì ẩn; sang thẻ khác lại ẩn hết | | | |
 | A6 | Bấm loa cạnh mỗi câu ví dụ | Đọc đúng câu đó, giọng người, tốc độ vừa | | | |
 | A7 | Bấm loa ở góc thẻ | Đọc lại từ | | | |
 | A8 | ĐT: bấm nút ← / →; chạm thẻ để lật, vuốt trái/phải không chuyển từ. Kiểm cả theo bài và tổng hợp. MTB/MT: nút chuyển từ; phím ← / → chuyển từ, Space lật thẻ ở màn theo bài | Bấm nút mới chuyển thẻ; thẻ mới hiện mặt trước. Chạm thẻ chỉ lật, không đổi từ | | | |
@@ -65,14 +65,16 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | # | Bước | Mong đợi | ĐT | MTB | MT |
 |---|---|---|---|---|---|
 | D1 | Ngữ pháp → loa cạnh câu ví dụ | Giọng người | | | |
+| D1b | Ngữ pháp → câu ví dụ (HSK 1 Bài 4) | Mặc định chỉ hiện chữ Hán; icon mắt từng câu ẩn/hiện pinyin + nghĩa; đổi điểm ngữ pháp thì ẩn lại | | | |
 | D2 | Bài tập/Kiểm tra → câu "Nghe và chọn" | Giọng người, nghe lại được theo giới hạn | | | |
 | D3 | Cài đặt → "Nghe thử" | Giọng người theo giọng đã chọn | | | |
 | D4 | Tắt mạng sau khi đã nghe một lượt (MT) | Âm thanh đã nghe vẫn phát từ bộ nhớ đệm trình duyệt | | | |
 
-## Đọc giáo trình (`/learn/books`)
+## Đọc giáo trình (`/learn/books`) — chỉ tài khoản quản trị
 
 | # | Bước | Mong đợi | ĐT | MTB | MT |
 |---|---|---|---|---|---|
+| GT0 | Học viên, biên tập: mở Chuyển nhanh; gõ thẳng `/learn/books`; mở `/uploads/giao-trinh/hsk1/001.webp` và `/api/admin/books/hsk1/1` | Không có mục Giáo trình; URL sách đưa về trang nhà; ảnh trả 403 cả hai đường | | | |
 | GT1 | Mở từng quyển HSK 1–3, cuộn/vuốt dọc | Các trang nối tiếp, đọc qua ranh giới trang mà không cần bấm lật | | | |
 | GT2 | Nhập số trang rồi bấm Đi tới / Enter | Cuộn đến đúng trang; ảnh tải xong không đẩy lệch vị trí | | | |
 | GT3 | Cuộn đến giữa sách, về kệ rồi mở lại | Nhớ đúng trang đang đọc của từng quyển | | | |

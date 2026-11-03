@@ -30,14 +30,16 @@ export function quyenTheoMa(ma: string): Quyen | undefined {
   return SACH.find((q) => q.ma === ma);
 }
 
+// Ảnh đi qua API đòi quyền quản trị; đường /uploads/giao-trinh/ bị chặn vì sách có bản quyền.
+
 /** Ảnh bìa ở màn chọn sách — bản render nhỏ, rộng 800px. */
 export function urlBia(ma: string): string {
-  return `/uploads/giao-trinh/${ma}/bia.webp`;
+  return `/api/admin/books/${ma}/bia`;
 }
 
 /** Ảnh một trang sách, rộng 1200px. Số trang đánh từ 1. */
 export function urlTrang(ma: string, trang: number): string {
-  return `/uploads/giao-trinh/${ma}/${String(trang).padStart(3, '0')}.webp`;
+  return `/api/admin/books/${ma}/${trang}`;
 }
 
 /**

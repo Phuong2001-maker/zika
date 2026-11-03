@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Zika\Controllers\Admin\BookController as Book;
 use Zika\Controllers\Admin\ContentController as Content;
 use Zika\Controllers\Admin\DialogueController as Dialogue;
 use Zika\Controllers\Admin\MiscController as Misc;
@@ -128,4 +129,8 @@ return [
     ['GET',    '/admin/backups', [Ops::class, 'backups'], 'A'],
     ['POST',   '/admin/backups', [Ops::class, 'createBackup'], 'A'],
     ['GET',    '/admin/backups/{file:zika-[0-9]{8}-[0-9]{4}\.sql\.gz}', [Ops::class, 'downloadBackup'], 'A'],
+
+    // Giáo trình có bản quyền — chỉ quản trị. Cuộn một lượt là hàng trăm ảnh nên không tính vào
+    // giới hạn 300 request/phút, kẻo đọc sách xong thì các màn quản trị khác bị chặn 429.
+    ['GET',    '/admin/books/{ma:hsk[1-6]}/{trang:bia|[0-9]{1,3}}', [Book::class, 'page'], 'A', ['rate' => false]],
 ];

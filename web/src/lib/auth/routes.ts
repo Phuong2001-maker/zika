@@ -42,8 +42,14 @@ export function homePath(role: Role | null | undefined): string {
   return '/learn/flashcards';
 }
 
-/** Vai trò này mở được đường dẫn không: học viên không vào khu quản trị. */
+/** Giáo trình là sách có bản quyền: chỉ quản trị đọc, không lộ ra cho học viên hay biên tập. */
+export function isBookRoute(path: string): boolean {
+  return matches(path, '/learn/books');
+}
+
+/** Vai trò này mở được đường dẫn không: học viên không vào khu quản trị, chỉ quản trị đọc giáo trình. */
 export function canView(role: Role, path: string): boolean {
+  if (isBookRoute(path)) return role === 'admin';
   return !(isAdminRoute(path) && role === 'learner');
 }
 

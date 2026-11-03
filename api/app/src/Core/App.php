@@ -49,7 +49,7 @@ final class App
                 Csrf::verify($req);
             }
 
-            if ($req->user !== null && $auth !== 'P') {
+            if ($req->user !== null && $auth !== 'P' && ($route['opts']['rate'] ?? true)) {
                 // Giới hạn chung 300 request / phút / người (02 §6.3).
                 RateLimit::enforce('api:' . $req->user['id'], 300, 60);
             }

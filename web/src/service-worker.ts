@@ -15,22 +15,15 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 const PRECACHE = `zika-app-${version}`;
 const LEARN = 'zika-learn';
 const MEDIA = 'zika-media';
-const BOOK = 'zika-book';
 const FONTS = 'zika-fonts';
-const MINE = [PRECACHE, LEARN, MEDIA, BOOK, FONTS];
+// Từng có kho 'zika-book' giữ ảnh giáo trình; bỏ khỏi danh sách để lần kích hoạt tới xoá nó đi,
+// vì sách có bản quyền và ảnh nay chỉ đọc qua /api/admin/ (không bao giờ cache).
+const MINE = [PRECACHE, LEARN, MEDIA, FONTS];
 
 /** Nội dung bài học giữ tối đa 300 mục, 30 ngày (02 §3.5). */
 const LEARN_MAX = 300;
 const LEARN_TTL = 30 * 24 * 60 * 60 * 1000;
 const MEDIA_TTL = 60 * 24 * 60 * 60 * 1000;
-
-/**
- * Trang giáo trình để riêng một cache có trần, không dùng chung với MEDIA.
- * Cả ba quyển là 469 ảnh ~44MB: đọc hết một lượt mà không chặn thì chúng chiếm sạch hạn mức
- * của origin và trình duyệt sẽ xoá luôn cả cache bài học. 80 trang (~7MB) đủ để quay lại
- * vài chục trang vừa đọc khi mất mạng.
- */
-const BOOK_MAX = 80;
 const FONT_TTL = 365 * 24 * 60 * 60 * 1000;
 
 /** Đường dẫn API không bao giờ được cache — dữ liệu riêng của từng người, phải luôn mới. */
@@ -146,11 +139,6 @@ sw.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Trang giáo trình: cùng là /uploads/ nhưng nhiều và nặng, giữ riêng có trần (xem BOOK_MAX).
-  if (url.pathname.startsWith('/uploads/giao-trinh/')) {
-    event.respondWith(cacheFirst(req, BOOK, MEDIA_TTL, BOOK_MAX));
-    return;
-  }
 
   // mp3 để trình duyệt tự tải: thẻ <audio> xin từng đoạn (Range), phản hồi 206 không cất được vào
   // Cache Storage nên cacheFirst trả lỗi và file câm; Safari còn đòi đúng 206 khi tua.
