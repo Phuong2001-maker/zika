@@ -99,7 +99,8 @@ final class UserService
             'theme' => 'light',
             'remindAt' => '20:00',
             'testBeep' => true,
-            'dialogue' => ['showPinyin' => true, 'showVi' => true],
+            // Hội thoại mở ra chỉ thấy chữ Hán, như câu ví dụ ở lật thẻ và ngữ pháp (migration 006).
+            'dialogue' => ['showPinyin' => false, 'showVi' => false],
         ];
     }
 
@@ -134,8 +135,8 @@ final class UserService
             'remindAt' => array_key_exists('remindAt', $input) && in_array($input['remindAt'], [null, '20:00', '07:00'], true) ? $input['remindAt'] : $d['remindAt'],
             'testBeep' => $bool('testBeep'),
             'dialogue' => [
-                'showPinyin' => is_bool($dlg['showPinyin'] ?? null) ? $dlg['showPinyin'] : true,
-                'showVi' => is_bool($dlg['showVi'] ?? null) ? $dlg['showVi'] : true,
+                'showPinyin' => is_bool($dlg['showPinyin'] ?? null) ? $dlg['showPinyin'] : $d['dialogue']['showPinyin'],
+                'showVi' => is_bool($dlg['showVi'] ?? null) ? $dlg['showVi'] : $d['dialogue']['showVi'],
             ],
         ];
     }

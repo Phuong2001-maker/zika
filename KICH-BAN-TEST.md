@@ -59,6 +59,7 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | C3 | HSK 1 Bài 2, khoá 1–3 | Có nút Nghe (Kokoro), khoá 4 là file thu thật | | | |
 | C4 | Bấm từng câu thoại | Đọc câu đó, giọng đúng nhân vật | | | |
 | C5 | Bấm "Nghe" rồi "Dừng" | Dừng ngay | | | |
+| C6 | Mở bài và "Ôn cả cấp" (tài khoản chưa bật trong Cài đặt) | Chỉ hiện chữ Hán, hai nút Pinyin / Nghĩa đều tắt; bật Cài đặt "Hội thoại: hiện …" thì mở bài thấy sẵn | | | |
 
 ## D. Phát âm ở các màn khác
 

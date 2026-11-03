@@ -16,7 +16,8 @@ export const DEFAULT_SETTINGS: UserSettings = {
   theme: 'light',
   remindAt: '20:00',
   testBeep: true,
-  dialogue: { showPinyin: true, showVi: true },
+  // Hội thoại mở ra chỉ thấy chữ Hán, như câu ví dụ ở lật thẻ và ngữ pháp; khớp UserService.php.
+  dialogue: { showPinyin: false, showVi: false },
 };
 
 const KEY = 'zk.settings';

@@ -131,7 +131,8 @@ chứ không làm hỏng cả mẻ.
   (web + mp3 + `cap-nhat-am-thanh.sql`) **thay** gói `cap-nhat-lat-the-nam-20261102.zip` (chưa từng lên server).
   Phần web của gói này **đã cũ**: đóng trước khi bỏ vuốt ở lật thẻ, đổi giáo trình sang cuộn dọc,
   khoá giáo trình chỉ cho quản trị, lật thẻ nền trắng + ẩn lời giải ví dụ (03–04/11) — đóng lại cả
-  web, PHP **và `.htaccess` gốc** (luật chặn `uploads/giao-trinh/`) trước khi đưa lên.
+  web, PHP **và `.htaccess` gốc** (luật chặn `uploads/giao-trinh/`) trước khi đưa lên, rồi chạy
+  **migration 006** (hội thoại mặc định ẩn pinyin/nghĩa).
   Còn: upload + import SQL nhỏ + xoá `storage/cache/content` theo
   [HUONG-DAN-SERVER.md](data/nap-sach/HUONG-DAN-SERVER.md), rồi kiểm web thật. Kiểm 23:48 02/11: web thật
   vẫn bản build 07:06 (`version.json` = `1793577989636`). Chưa có kết nối hosting; giữ mục này đến khi test server.

@@ -35,14 +35,17 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 - **Câu ví dụ ở lật thẻ và ngữ pháp:** mặc định chỉ hiện chữ Hán; cặp nút **Pinyin | Nghĩa** (kiểu
   `.seg` giống màn hội thoại) ở đầu khối ví dụ bật/tắt riêng từng thứ. Lật thẻ giữ lựa chọn khi sang
   thẻ khác, mở bài khác thì tắt lại; ngữ pháp đổi điểm thì tắt lại. Đã thử icon mắt từng câu rồi bỏ
-  vì nhìn rối (bộ icon không có mắt gạch chéo) và không bật riêng pinyin được. Hội thoại giữ nguyên.
+  vì nhìn rối (bộ icon không có mắt gạch chéo) và không bật riêng pinyin được.
+- **Hội thoại mặc định ẩn pinyin + nghĩa** cho đồng bộ: mặc định `dialogue.showPinyin/showVi` đổi
+  sang false ở `UserService.php` và `settings.svelte.ts`; migration **006** đặt lại false cho cài đặt
+  đã lưu (giá trị true cũ chỉ là mặc định trước đây). Hai dòng trong Cài đặt vẫn dùng được.
 
 Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 54/54 test web, 53/53 test API. Trên trình duyệt:
 học viên bị 403 ở cả hai đường ảnh, quản trị lấy được ảnh (200 `image/webp`); thẻ trắng, lật
 `rotateX`; nút Pinyin | Nghĩa ở HSK 1 Bài 2 (lật thẻ) và Bài 4 (ngữ pháp). Chưa kiểm trên máy thật.
 Ngữ pháp HSK 1 Bài 1–2 không có điểm nào nên màn trắng trơn — lỗi có từ trước, chưa sửa.
 
-Lên server: phải chép **`.htaccess` gốc mới** (có luật chặn `uploads/giao-trinh/`) cùng code PHP,
+Lên server: chạy **migration 006** (`php tools/install.php --migrate` hoặc import file SQL), chép **`.htaccess` gốc mới** (có luật chặn `uploads/giao-trinh/`) cùng code PHP,
 rồi mở thử ảnh trực tiếp phải ra 403.
 
 ### 03/11/2026 — Đọc giáo trình bằng cuộn dọc liên tục như PDF
