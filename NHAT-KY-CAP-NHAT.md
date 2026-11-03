@@ -23,6 +23,14 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 03/11/2026 — Bỏ vuốt chuyển từ ở lật thẻ trên điện thoại
+
+Theo yêu cầu người dùng, bỏ nhận diện vuốt trái/phải ở cả màn lật thẻ theo bài và tổng hợp.
+Chạm thẻ để lật; bấm nút ← / → để chuyển từ. Đổi gợi ý dưới thẻ thành
+“Bấm ← / → để chuyển từ”, cập nhật kịch bản A8.
+
+Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 53/53 test web đạt; web local trả HTTP 200.
+
 ### 03/11/2026 — Làm lại toàn bộ giọng đọc bằng giọng Microsoft, rà UI/UX cả web
 
 Người dùng thấy giọng các phần lệch nhau (Yunxi ở lật thẻ, Kokoro ở câu, băng thật ở bài khoá) và

@@ -29,10 +29,6 @@
   let flipped = $state(false);
   let finished = $state(false);
   let huong = $state(1); // 1 = sang thẻ sau, -1 = lùi lại — thẻ mới trượt vào từ phía tương ứng
-  let swipeX = 0;
-  let swipeY = 0;
-  let swipePointer: number | null = null;
-  let ignoreCardClick = false;
 
   const cards = $derived(data?.words ?? []);
   const total = $derived(order.length);
@@ -74,36 +70,6 @@
   function flip(): void {
     flipped = !flipped;
     if (flipped && settings.value.autoSpeak && card) void speak(card.hanzi, null, card.pinyin, 'nam');
-  }
-
-  function cardClick(): void {
-    if (ignoreCardClick) {
-      ignoreCardClick = false;
-      return;
-    }
-    flip();
-  }
-
-  function swipeStart(e: PointerEvent): void {
-    if (e.pointerType === 'mouse') return;
-    swipePointer = e.pointerId;
-    swipeX = e.clientX;
-    swipeY = e.clientY;
-  }
-
-  function swipeEnd(e: PointerEvent): void {
-    if (swipePointer !== e.pointerId) return;
-    const dx = e.clientX - swipeX;
-    const dy = e.clientY - swipeY;
-    swipePointer = null;
-    if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
-    ignoreCardClick = true;
-    if (dx < 0) void next();
-    else prev();
-  }
-
-  function swipeCancel(): void {
-    swipePointer = null;
   }
 
   /** Sang thẻ sau; hết thẻ thì vào màn tổng kết và ghi “đã học xong”. */
@@ -186,7 +152,7 @@
             <Icon name="speaker" size={m ? 17 : 19} />
           </button>
         {/if}
-        <button type="button" class={flipped ? 'flip is-back' : 'flip'} onclick={cardClick} aria-label={flipped ? 'Bấm để xem lại mặt trước' : 'Lật thẻ'} onpointerdown={m ? swipeStart : undefined} onpointerup={m ? swipeEnd : undefined} onpointercancel={m ? swipeCancel : undefined}>
+        <button type="button" class={flipped ? 'flip is-back' : 'flip'} onclick={flip} aria-label={flipped ? 'Bấm để xem lại mặt trước' : 'Lật thẻ'}>
           <span class="flip-inner">
             <span class="face face-front">
               <span class="kicker">{frontLabel}</span>
@@ -211,11 +177,11 @@
   {/if}
 {/snippet}
 
-<!-- Điện thoại ưu tiên vuốt; hai nút nhỏ là điều hướng dự phòng. -->
+<!-- Tách thao tác: chạm thẻ để lật, bấm nút để chuyển từ. -->
 {#snippet controls()}
   <div class="ctrl">
     <button type="button" class="tron" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={20} /></button>
-    <span class="muted" style="font-size: 12.5px">Vuốt để chuyển thẻ</span>
+    <span class="muted" style="font-size: 12.5px">Bấm ← / → để chuyển từ</span>
     <button type="button" class="tron" aria-label="Từ sau" onclick={next}><Icon name="right" size={20} /></button>
   </div>
 {/snippet}
@@ -287,7 +253,7 @@
       {:else if finished}
         {@render done(true)}
       {:else}
-        <div class="swipe-zone">
+        <div>
           {@render cardFace(true)}
         </div>
         {@render examples()}
@@ -517,8 +483,5 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-  }
-  .swipe-zone {
-    touch-action: pan-y;
   }
 </style>
