@@ -13,7 +13,7 @@
   import Switcher from '$lib/components/Switcher.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
-  import BackLink from '$lib/components/BackLink.svelte';
+  import DauBai from '$lib/components/DauBai.svelte';
   import { completePart, lessonByNo, saveProgress, seededShuffle } from '$lib/learn/lesson';
   import { speak } from '$lib/learn/speech';
   import { toneParts } from '$lib/utils/pinyin';
@@ -221,9 +221,9 @@
       <span class="dh-bar"><Bar value={i} {total} /></span>
     </div>
     <div class="dh-nut" class:dh-nut-m={m}>
-      <button type="button" class="nut-vuong" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={20} /></button>
-      <button type="button" class="nut-vuong nut-lat" onclick={flip}><Icon name="flip" size={17} /> {flipped ? 'Mặt trước' : 'Lật thẻ'}</button>
-      <button type="button" class="nut-vuong" aria-label="Từ sau" onclick={next}><Icon name="right" size={20} /></button>
+      <button type="button" class="zk-nut" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={20} /></button>
+      <button type="button" class="zk-nut zk-nut-chinh nut-lat" onclick={flip}><Icon name="flip" size={17} /> {flipped ? 'Mặt trước' : 'Lật thẻ'}</button>
+      <button type="button" class="zk-nut" aria-label="Từ sau" onclick={next}><Icon name="right" size={20} /></button>
     </div>
     {#if !m}<p class="dh-phim">Phím Space để lật · ← / → để chuyển từ</p>{/if}
   </div>
@@ -241,7 +241,7 @@
         </div>
       </div>
       {#each card.examples as ex (ex.zh)}
-        <div class="vd-cau">
+        <div class="zk-o vd-cau">
           <div style="display: flex; align-items: flex-start; gap: 8px">
             <span class="hz" lang="zh" style="font-size: 20px; line-height: 1.45; flex: 1">
               {#if ex.highlight && ex.zh.includes(ex.highlight)}
@@ -277,9 +277,9 @@
 
 <!-- Hàng chọn chế độ: nút có viền như trang mẫu, nút đang chọn tô màu son của Zìkǎ. -->
 {#snippet chonCheDoRow(m: boolean)}
-  <div class="cd-chon" class:cd-chon-m={m} role="tablist" aria-label="Chế độ học">
+  <div class="zk-tabs" class:zk-tabs-deu={m} role="tablist" aria-label="Chế độ học">
     {#each CHE_DO as c (c.ma)}
-      <button type="button" role="tab" aria-selected={che === c.ma} class:on={che === c.ma} onclick={() => chonCheDo(c.ma)}>{c.ten}</button>
+      <button type="button" role="tab" class="zk-tab" aria-selected={che === c.ma} onclick={() => chonCheDo(c.ma)}>{c.ten}</button>
     {/each}
   </div>
 {/snippet}
@@ -312,10 +312,10 @@
 <!-- Một khung trắng chứa trọn màn học (giống “Chế độ học tập” của trang mẫu): thẻ, điều hướng,
      ví dụ và 3 chế độ luyện đều nằm trong, không còn mảnh rời trôi trên nền xám. -->
 {#snippet khung(m: boolean)}
-  <section class="block khung" class:khung-m={m}>
+  <section class="block zk-khung" class:zk-khung-m={m}>
     {#if !m}
-      <div class="khung-dau">
-        <h2 class="khung-ten">Chế độ học</h2>
+      <div class="zk-khung-dau">
+        <h2 class="zk-khung-ten">Chế độ học</h2>
         {@render chonCheDoRow(false)}
       </div>
     {/if}
@@ -373,106 +373,17 @@
     </div>
   </header>
 
-  <main class="page cot" style="display: flex; flex-direction: column; gap: 18px">
+  <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
     {#if data === null}
       <Skeleton h="520px" r={22} />
     {:else}
-      <!-- Đầu bài: đường về + tên bài, như thanh tiêu đề bài học của trang mẫu. -->
-      <div class="dau-bai">
-        <BackLink href="/learn/flashcards/hsk/{levelId}" label="Chọn bài" />
-        <div style="min-width: 0">
-          <p class="kicker" style="font-size: 12px">HSK {levelId} · Bài {lessonNo} · {cards.length} từ</p>
-          <h1 class="ten-bai">{data.lesson.title}</h1>
-        </div>
-      </div>
+      <DauBai href="/learn/flashcards/hsk/{levelId}" kicker="HSK {levelId} · Bài {lessonNo} · {cards.length} từ" title={data.lesson.title} />
       {@render khung(false)}
     {/if}
   </main>
 {/if}
 
 <style>
-  /* Cả màn là một cột hẹp canh giữa: mắt chỉ nhìn vào khung học. */
-  .cot {
-    max-width: 808px;
-  }
-  .dau-bai {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .ten-bai {
-    font-size: 22px;
-    line-height: 1.25;
-    margin-top: 2px;
-  }
-
-  .khung {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 22px 28px 26px;
-  }
-  .khung-m {
-    gap: 16px;
-    padding: 14px 14px 18px;
-  }
-  .khung-dau {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .khung-ten {
-    font-size: 18px;
-  }
-
-  /* Nút chế độ có viền; nút đang chọn tô son nhạt — cùng một màu cho cả 4 chế độ. */
-  .cd-chon {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .cd-chon button {
-    height: 40px;
-    padding: 0 16px;
-    border: 1px solid var(--line-3);
-    border-radius: 12px;
-    background: var(--surface);
-    box-shadow: var(--sh-sm);
-    color: var(--text-2);
-    font: 600 14px/1 var(--font-ui);
-    white-space: nowrap;
-    cursor: pointer;
-    transition:
-      border-color 0.15s ease,
-      color 0.15s ease,
-      background 0.15s ease;
-  }
-  .cd-chon button:hover {
-    border-color: var(--ink-strong);
-    color: var(--text);
-  }
-  .cd-chon button.on {
-    border-color: var(--son-line);
-    background: var(--son-soft);
-    color: var(--son-text);
-  }
-  .cd-chon button:focus-visible {
-    outline: 2px solid var(--focus);
-    outline-offset: 2px;
-  }
-  .cd-chon-m {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 6px;
-  }
-  .cd-chon-m button {
-    padding: 0 2px;
-    font-size: 12px;
-    letter-spacing: -0.01em;
-  }
-
   /* Thẻ: một lá phẳng, viền mảnh trên nền khung trắng. */
   .the :global(.face) {
     gap: 10px;
@@ -560,53 +471,14 @@
     align-items: center;
     gap: 10px;
   }
-  .nut-vuong {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-width: 48px;
-    height: 48px;
-    padding: 0 14px;
-    border: 1px solid var(--line-3);
-    border-radius: 14px;
-    background: var(--surface);
-    box-shadow: var(--sh-sm);
-    color: var(--text);
-    font: 600 14.5px/1 var(--font-ui);
-    cursor: pointer;
-    transition:
-      border-color 0.15s ease,
-      background 0.15s ease;
-  }
-  .nut-vuong:hover:not(:disabled) {
-    border-color: var(--ink-strong);
-  }
-  .nut-vuong:active:not(:disabled) {
-    background: var(--surface-2);
-  }
-  .nut-vuong:disabled {
-    opacity: 0.4;
-    cursor: default;
-  }
-  .nut-vuong:focus-visible {
-    outline: 2px solid var(--focus);
-    outline-offset: 2px;
-  }
   .nut-lat {
     min-width: 150px;
-    border-color: var(--son-line);
-    background: var(--son-soft);
-    color: var(--son-text);
-  }
-  .nut-lat:hover:not(:disabled) {
-    border-color: var(--son);
   }
   /* Điện thoại: ba nút chia hết bề ngang khung, nút Lật rộng nhất cho ngón cái. */
   .dh-nut-m {
     width: 100%;
   }
-  .dh-nut-m .nut-vuong {
+  .dh-nut-m .zk-nut {
     flex: 1 1 0;
     height: 50px;
   }
@@ -639,10 +511,6 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding: 12px 14px;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    background: var(--surface-2);
   }
   /* Nút nghe câu ví dụ đủ to cho ngón tay. */
   .loa-cau {

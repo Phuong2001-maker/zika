@@ -509,3 +509,42 @@ html[data-theme="dark"] .btn-muc { background: #F2F5FA; border-color: #F2F5FA; c
 @media (max-width: 767px) {
   .page { padding: 18px 16px 32px; }
 }
+
+/* =====================================================================
+   Khung học dùng chung (04/11/2026) — mọi màn học theo một khuôn như màn Lật thẻ:
+   đầu bài (.zk-dau-bai) + MỘT khung trắng (.zk-khung) chứa trọn nội dung, nút và điều hướng.
+   Tiền tố zk- để không đụng các class ngắn đã có (bẫy số 1 trong CLAUDE.md).
+   ===================================================================== */
+.zk-cot { max-width: 808px; }
+.zk-cot-rong { max-width: 1100px; }
+.zk-khung { display: flex; flex-direction: column; gap: 20px; padding: 22px 28px 26px; }
+.zk-khung-m { gap: 16px; padding: 14px 14px 18px; }
+.zk-khung-dau { display: flex; align-items: center; justify-content: space-between; gap: 10px 12px; flex-wrap: wrap; }
+.zk-khung-ten { font-size: 18px; font-weight: 800; }
+.zk-khung-m .zk-khung-ten { font-size: 16px; }
+/* Số phụ ở góc khung: "Câu 3/10", "Lượt 1/2"… */
+.zk-so { padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); font-size: 12.5px; font-weight: 700; color: var(--text-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* Hàng nút cuối khung, ngăn với phần trên bằng một đường kẻ. */
+.zk-chan { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--line); }
+/* Ô con trong khung (câu ví dụ, mục danh sách…): nền nhạt, viền mảnh. */
+.zk-o { padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-2); }
+
+/* Nút có viền kiểu chọn (chế độ, tab, số câu): nút đang chọn tô son nhạt — một màu cho mọi màn. */
+.zk-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.zk-tab { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 40px; padding: 0 16px; border: 1px solid var(--line-3); border-radius: 12px; background: var(--surface); box-shadow: var(--sh-sm); color: var(--text-2); font: 600 14px/1 var(--font-ui); white-space: nowrap; text-decoration: none; cursor: pointer; transition: border-color .15s ease, color .15s ease, background .15s ease; }
+.zk-tab:hover { border-color: var(--ink-strong); color: var(--text); }
+.zk-tab.on, .zk-tab[aria-selected="true"], .zk-tab[aria-current="true"] { border-color: var(--son-line); background: var(--son-soft); color: var(--son-text); }
+.zk-tab:disabled { opacity: .4; cursor: default; }
+.zk-tab:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* Điện thoại: chia đều hết bề ngang. */
+.zk-tabs-deu { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; }
+.zk-tabs-deu .zk-tab { padding: 0 2px; font-size: 12px; letter-spacing: -.01em; }
+
+/* Nút điều hướng vuông bo tròn (← Lật →, Câu trước / Câu tiếp). */
+.zk-nut { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 48px; height: 48px; padding: 0 14px; border: 1px solid var(--line-3); border-radius: 14px; background: var(--surface); box-shadow: var(--sh-sm); color: var(--text); font: 600 14.5px/1 var(--font-ui); text-decoration: none; cursor: pointer; transition: border-color .15s ease, background .15s ease; }
+.zk-nut:hover:not(:disabled) { border-color: var(--ink-strong); }
+.zk-nut:active:not(:disabled) { background: var(--surface-2); }
+.zk-nut:disabled { opacity: .4; cursor: default; }
+.zk-nut:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.zk-nut-chinh { border-color: var(--son-line); background: var(--son-soft); color: var(--son-text); }
+.zk-nut-chinh:hover:not(:disabled) { border-color: var(--son); }

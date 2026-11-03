@@ -7,7 +7,7 @@
   import { num } from '$lib/utils/format';
   import Topbar from '$lib/components/Topbar.svelte';
   import Switcher from '$lib/components/Switcher.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
+  import NotificationBell from '$lib/components/NotificationBell.svelte';
   import Bar from '$lib/components/Bar.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
@@ -16,7 +16,8 @@
   import { PART, PART_TEXTS } from '$lib/parts';
   import { levelLessons, levelProgress, progressOf } from '$lib/learn/lesson';
 
-  // Khuôn “Chọn bài” dùng chung cho 5 phần (07 §5.3).
+  // Khuôn “Chọn bài” dùng chung cho 5 phần (07 §5.3). Bố cục theo màn Chọn bài của Lật thẻ
+  // (khung đầu tô màu cấp, lưới bài, cột chi tiết) để 6 phần trông như một ứng dụng.
   let { part }: { part: Exclude<Part, 'lt'> } = $props();
 
   const info = $derived(PART[part]);
@@ -56,26 +57,36 @@
 
   /** Số lượng của phần này trong một bài (từ / câu / chữ / điểm). */
   const countOf = (l: LessonItem): number => l.counts[part] ?? 0;
+  const donVi = $derived({ bt: 'câu', kt: 'câu', lv: 'chữ', ht: 'câu', np: 'điểm' }[part]);
 
   const lessons = $derived(data?.lessons ?? []);
   const doneCount = $derived(lessons.filter((l) => progressOf(prog, l.id)?.status === 'done').length);
+  const tongSo = $derived(lessons.reduce((s, l) => s + countOf(l), 0));
   const current = $derived(picked === 'all' ? null : lessons.find((l) => l.id === picked) ?? null);
   const currentProg = $derived<ProgressRow | null>(current ? progressOf(prog, current.id) : null);
 
   /** Dòng mô tả dưới tên bài, theo từng phần. */
   function subOf(l: LessonItem): string {
-    return l.sub?.[part] ?? `${countOf(l)} ${{ bt: 'câu', kt: 'câu', lv: 'chữ', ht: 'câu', np: 'điểm' }[part]}`;
+    return l.sub?.[part] ?? `${countOf(l)} ${donVi}`;
   }
 
-  function statusOf(l: LessonItem): { label: string; cls: string } {
+  /** `dot`: đã xong thì hiện chấm xanh như thẻ bài Lật thẻ; điểm Kiểm tra vẫn hiện thành nhãn vì có số. */
+  function statusOf(l: LessonItem): { label: string; cls: string; dot?: boolean } {
     const p = progressOf(prog, l.id);
     if (countOf(l) === 0) return { label: 'Sắp có', cls: 'tag' };
     if (part === 'kt' && p?.bestScore != null) {
       return { label: `Điểm ${num(p.bestScore)}/${num(p.maxScore ?? 0)}`, cls: 'tag tag-ok' };
     }
-    if (p?.status === 'done') return { label: 'Đã xong', cls: 'tag tag-ok' };
+    if (p?.status === 'done') return { label: 'Đã xong', cls: 'tag tag-ok', dot: true };
     if ((p?.position ?? 0) > 0 && texts.doingTag) return { label: texts.doingTag, cls: 'tag tag-g' };
     return { label: '', cls: '' };
+  }
+
+  /** Phần trăm vạch tiến độ trên thẻ bài và ở cột chi tiết. */
+  function pctOf(p: ProgressRow | null | undefined): number {
+    if (!p) return 0;
+    if (p.status === 'done') return 100;
+    return p.position > 0 && p.total > 0 ? (p.position / p.total) * 100 : 0;
   }
 
   const startHref = $derived(
@@ -96,37 +107,96 @@
 
 <svelte:head><title>{info.name} · HSK {levelId} · Zìkǎ</title></svelte:head>
 
-{#snippet lessonCard(l: LessonItem)}
+<!-- Nhãn góc phải thẻ bài: chấm xanh khi xong, không thì nhãn trạng thái (đang làm, điểm, sắp có). -->
+{#snippet nhan(l: LessonItem, m: boolean)}
   {@const st = statusOf(l)}
-  {@const p = progressOf(prog, l.id)}
-  <button
-    type="button"
-    class="les"
-    class:on={picked === l.id}
-    class:done={p?.status === 'done'}
-    class:soon={countOf(l) === 0}
-    disabled={countOf(l) === 0}
-    onclick={() => (picked = l.id)}
-  >
-    <span style="display: flex; align-items: baseline; gap: 8px">
-      <b class="num" style="font-size: 13px; color: var(--text-3)">Bài {l.no}</b>
-      <!-- Tên bài giáo trình dài ("Số điện thoại của bạn là bao nhiêu?"): cho xuống 2 dòng thay vì cắt cụt -->
-      <b style="flex: 1; min-width: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical">{l.title}</b>
-      {#if st.label}<span class={st.cls}>{st.label}</span>{/if}
-    </span>
-    <span class="muted" style="font-size: 13px">{subOf(l)}</span>
-    {#if p && p.total > 0 && p.status !== 'done' && p.position > 0}
-      <Bar value={p.position} total={p.total} />
-    {/if}
-  </button>
+  {#if st.dot}
+    <span class="ok-dot" title="Đã {texts.past} xong"><Icon name="check" size={13} /></span>
+  {:else if st.label}
+    <span class={st.cls} style={m ? '' : 'height: 22px; font-size: 11px; padding: 0 7px'}>{st.label}</span>
+  {/if}
 {/snippet}
 
-{#snippet panel(m: boolean)}
-  <section class="block" style="padding: {m ? 18 : 22}px {m ? 18 : 24}px; display: flex; flex-direction: column; gap: 14px">
+{#snippet lessonCard(l: LessonItem, m: boolean)}
+  {@const p = progressOf(prog, l.id)}
+  {@const soon = countOf(l) === 0}
+  {#if m}
+    <!-- Điện thoại: hàng ngang như thẻ bài Lật thẻ — ô số bài, tên + mô tả + vạch, nhãn bên phải. -->
+    <button
+      type="button"
+      class="les pl-hang"
+      class:on={picked === l.id}
+      class:done={p?.status === 'done'}
+      class:soon
+      disabled={soon}
+      aria-pressed={picked === l.id}
+      onclick={() => (picked = l.id)}
+    >
+      <span class="pl-so bignum">{l.no}</span>
+      <span class="pl-giua">
+        <span class="pl-ten">{l.title}</span>
+        <span class="pl-phu">{subOf(l)}</span>
+        {#if !soon}<Bar pct={pctOf(p)} h={7} />{/if}
+      </span>
+      <span class="pl-cuoi">{@render nhan(l, true)}</span>
+    </button>
+  {:else}
+    <button
+      type="button"
+      class="les"
+      class:on={picked === l.id}
+      class:done={p?.status === 'done'}
+      class:soon
+      disabled={soon}
+      aria-pressed={picked === l.id}
+      onclick={() => (picked = l.id)}
+    >
+      <span class="pl-dau">
+        <span class="disp" style="font-size: 13px; font-weight: 800; color: var(--text-3)">Bài {l.no}</span>
+        {@render nhan(l, false)}
+      </span>
+      <span class="pl-ten">{l.title}</span>
+      <!-- Mô tả Ngữ pháp là danh sách cấu trúc, có thể dài: cho 2 dòng rồi cắt, không đẩy thẻ cao lệch. -->
+      <span class="pl-phu">{subOf(l)}</span>
+      {#if !soon}<span style="margin-top: auto"><Bar pct={pctOf(p)} h={7} /></span>{/if}
+    </button>
+  {/if}
+{/snippet}
+
+{#snippet allCard(m: boolean)}
+  {#if reviewCount > 0 || part === 'kt'}
+    <button type="button" class="les les-all" class:on={picked === 'all'} aria-pressed={picked === 'all'} onclick={() => (picked = 'all')}>
+      <span class="ib" style="width: {m ? 44 : 56}px; height: {m ? 44 : 56}px; background: var(--surface); border-radius: 14px; border-width: 2px"><Icon name="cards" size={m ? 22 : 26} /></span>
+      <span style="flex: 1 1 240px; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+        <b class="disp" style="font-size: {m ? 16 : 18}px; font-weight: 800">{texts.allTitle(levelId)}</b>
+        <span style="font-size: 13.5px">{texts.allDesc(levelId, reviewCount, lessons.length)}</span>
+      </span>
+      {#if !m}
+        <span style="flex: 0 1 200px; display: flex; flex-direction: column; gap: 6px">
+          <span class="num" style="font-size: 13px; font-weight: 700">{doneCount} / {lessons.length} bài đã {texts.past} xong</span>
+          <Bar value={doneCount} total={lessons.length} trackStyle="background: var(--surface)" />
+        </span>
+      {/if}
+    </button>
+  {/if}
+{/snippet}
+
+<!-- Cột chi tiết (máy tính): đầu khối giống Lật thẻ — ô số cấp, dòng nhỏ, tên, số lượng; rồi ô trạng thái. -->
+{#snippet panel()}
+  <aside class="block" style="flex: 1 1 340px; min-width: 0; padding: 22px 24px; display: flex; flex-direction: column; gap: 16px">
     {#if picked === 'all'}
-      <p class="kicker">HSK {levelId} · cuối cấp</p>
-      <h2 style="font-size: {m ? 20 : 24}px; font-weight: 800">{texts.allTitle(levelId)}</h2>
+      <div style="display: flex; align-items: center; gap: 14px">
+        <span class="ib lv{levelId}" style="width: 60px; height: 60px; border-radius: 16px"><span class="bignum" style="font-size: 30px">{levelId}</span></span>
+        <div style="min-width: 0">
+          <p class="muted" style="font-size: 13px; font-weight: 700">HSK {levelId} · cuối cấp</p>
+          <h2 style="font-size: 24px; font-weight: 800; line-height: 1.15">{texts.allTitle(levelId)}</h2>
+        </div>
+      </div>
       <p class="muted" style="font-size: 14px">{texts.allDesc(levelId, reviewCount, lessons.length)}</p>
+      <div class="pl-tt">
+        <span class="num" style="font-size: 13.5px; font-weight: 700">{doneCount} / {lessons.length} bài đã {texts.past} xong</span>
+        <Bar value={doneCount} total={lessons.length} />
+      </div>
       <ul style="display: flex; flex-direction: column; gap: 6px">
         {#each texts.allLines(reviewCount, lessons.length, { minutes: Math.round((data?.review.kt.mockTests[0]?.durationSec ?? 3300) / 60) }) as line (line)}
           <li style="display: flex; gap: 8px; font-size: 14px"><Icon name="check" size={16} /> {line}</li>
@@ -134,23 +204,28 @@
       </ul>
       <a href={startHref} class="btn btn-son btn-lg" style="width: 100%">{texts.allStart}</a>
     {:else if current}
-      <p class="kicker">HSK {levelId} · Bài {current.no}</p>
-      <h2 style="font-size: {m ? 20 : 24}px; font-weight: 800">{current.title}</h2>
-      {#if current.sampleText}<p class="hz" lang="zh" style="font-size: 16px; color: var(--text-2)">{current.sampleText}</p>{/if}
-      <p class="muted" style="font-size: 14px">{subOf(current)}</p>
-
-      {#if part === 'kt' && currentProg?.bestScore != null}
-        <p style="font-size: 14px; font-weight: 700">Điểm cao nhất: {num(currentProg.bestScore)} / {num(currentProg.maxScore ?? 0)}</p>
-      {:else if currentProg && currentProg.position > 0 && currentProg.total > 0}
-        <div style="display: flex; flex-direction: column; gap: 6px">
-          <span style="font-size: 13px; font-weight: 700">Đang ở {currentProg.position + 1} / {currentProg.total}</span>
-          <Bar value={currentProg.position} total={currentProg.total} />
+      <div style="display: flex; align-items: center; gap: 14px">
+        <span class="ib lv{levelId}" style="width: 60px; height: 60px; border-radius: 16px"><span class="bignum" style="font-size: 30px">{levelId}</span></span>
+        <div style="min-width: 0">
+          <p class="muted" style="font-size: 13px; font-weight: 700">HSK {levelId} · Bài {current.no}</p>
+          <h2 style="font-size: 24px; font-weight: 800; line-height: 1.15">{current.title}</h2>
+          <p class="num" style="font-size: 14px; font-weight: 600">{subOf(current)}</p>
         </div>
-      {:else if currentProg?.status === 'done'}
-        <p style="font-size: 14px; font-weight: 700; color: var(--green-text)">Đã {texts.past} xong · làm lại để ôn</p>
-      {:else}
-        <p class="muted" style="font-size: 14px">Chưa {texts.past}</p>
-      {/if}
+      </div>
+      {#if current.sampleText}<p class="hz" lang="zh" style="font-size: 16px; color: var(--text-2)">{current.sampleText}</p>{/if}
+
+      <div class="pl-tt">
+        {#if part === 'kt' && currentProg?.bestScore != null}
+          <span style="font-size: 13.5px; font-weight: 700">Điểm cao nhất: {num(currentProg.bestScore)} / {num(currentProg.maxScore ?? 0)}</span>
+        {:else if currentProg && currentProg.position > 0 && currentProg.total > 0}
+          <span class="num" style="font-size: 13.5px; font-weight: 700">Đang ở {currentProg.position + 1} / {currentProg.total}</span>
+        {:else if currentProg?.status === 'done'}
+          <span style="font-size: 13.5px; font-weight: 700; color: var(--green-text)">Đã {texts.past} xong · làm lại để ôn</span>
+        {:else}
+          <span class="muted" style="font-size: 13.5px; font-weight: 700">Chưa {texts.past}</span>
+        {/if}
+        <Bar pct={pctOf(currentProg)} />
+      </div>
 
       {#if countOf(current) === 0}
         <p class="muted" style="font-size: 14px">Phần này của bài chưa soạn xong.</p>
@@ -160,66 +235,55 @@
         </a>
       {/if}
     {/if}
-  </section>
-{/snippet}
-
-{#snippet body(m: boolean)}
-  {#if failed}
-    <EmptyState title="Không tải được danh sách bài.">
-      {#snippet action()}<button type="button" class="btn btn-sm" onclick={load}>Thử lại</button>{/snippet}
-    </EmptyState>
-  {:else if data === null}
-    <Skeleton h="80px" r={16} />
-    <Skeleton h="320px" r={16} />
-  {:else if lessons.length === 0}
-    <EmptyState title="Cấp này chưa có bài nào." desc="Admin đang soạn, bạn quay lại sau nhé." />
-  {:else}
-    <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
-      <span class="ib lv{levelId}" style="width: 52px; height: 52px; border-radius: 14px"><span class="bignum" style="font-size: 26px">{levelId}</span></span>
-      <div style="flex: 1; min-width: 160px">
-        <h1 style="font-size: {m ? 20 : 26}px">{info.name} · HSK {levelId}</h1>
-        <p class="muted" style="font-size: 13.5px">{doneCount} / {lessons.length} bài đã {texts.past}</p>
-      </div>
-      <span style="flex: 1 1 180px"><Bar value={doneCount} total={lessons.length} /></span>
-    </div>
-
-    <div style="display: flex; flex-wrap: wrap; gap: {m ? 16 : 24}px; align-items: flex-start">
-      <section class="les-grid" style="flex: 999 1 {m ? 260 : 420}px; min-width: 0" aria-label="Các bài">
-        {#each lessons as l (l.id)}{@render lessonCard(l)}{/each}
-
-        {#if reviewCount > 0 || part === 'kt'}
-          <button type="button" class="les les-all" class:on={picked === 'all'} onclick={() => (picked = 'all')}>
-            <span class="ib" style="width: 38px; height: 38px; border-radius: 10px; background: var(--tim)"><Icon name="cards" size={18} /></span>
-            <span style="flex: 1; min-width: 0">
-              <b style="display: block">{texts.allTitle(levelId)}</b>
-              <span class="muted" style="font-size: 13px">{texts.allDesc(levelId, reviewCount, lessons.length)}</span>
-            </span>
-          </button>
-        {/if}
-      </section>
-      {#if !m}
-        <aside style="flex: 1 1 320px; min-width: 0">{@render panel(m)}</aside>
-      {/if}
-    </div>
-  {/if}
+  </aside>
 {/snippet}
 
 {#if media.isMobile}
+  <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/{info.slug}" class="btn btn-bare" aria-label="Về chọn cấp"><Icon name="left" size={20} /></a>
-      <b style="flex: 1; font-size: 15px">{info.name}</b>
-      <Switcher current={part} />
-      <Avatar size={36} />
+      <a href="/learn/{info.slug}" class="btn btn-bare" aria-label="Về chọn cấp"><Icon name="left" size={22} /></a>
+      <span class="lv{levelId}" style="flex: none; padding: 4px 10px; border: 1px solid var(--line); border-radius: 10px; font-weight: 800; font-size: 13px">HSK {levelId}</span>
+      <!-- Tên phần dài ("Cấu trúc ngữ pháp") được co lại bằng dấu …, không đẩy nút ra ngoài màn 375px. -->
+      <b style="flex: 1 1 auto; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{info.name}</b>
+      <span style="flex: none; display: inline-flex; align-items: center; gap: 8px"><NotificationBell size={40} /><Switcher current={part} /></span>
     </header>
-    <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">{@render body(true)}</main>
+    <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">
+      {#if failed}
+        <EmptyState title="Không tải được danh sách bài.">
+          {#snippet action()}<button type="button" class="btn btn-sm" onclick={load}>Thử lại</button>{/snippet}
+        </EmptyState>
+      {:else if data === null}
+        <Skeleton h="64px" r={16} /><Skeleton h="72px" r={16} /><Skeleton h="72px" r={16} /><Skeleton h="72px" r={16} />
+      {:else}
+        <div class="lv{levelId}" style="border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px">
+          <div style="display: flex; justify-content: space-between; gap: 10px; font-size: 13px; font-weight: 700">
+            <span class="num">{lessons.length} bài · {num(tongSo)} {donVi}</span>
+            <span class="num">{doneCount}/{lessons.length} bài đã {texts.past}</span>
+          </div>
+          <Bar value={doneCount} total={lessons.length} trackStyle="background: var(--surface)" />
+        </div>
+        {#if lessons.length === 0}
+          <EmptyState title="Cấp này chưa có bài nào." desc="Admin đang soạn, bạn quay lại sau nhé." />
+        {:else}
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <h2 class="h2">Các bài</h2>
+            <span class="muted num" style="font-size: 13px; font-weight: 600">{doneCount}/{lessons.length} bài xong</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            {#each lessons as l (l.id)}{@render lessonCard(l, true)}{/each}
+            {@render allCard(true)}
+          </div>
+        {/if}
+      {/if}
+    </main>
     {#if startHref && (picked === 'all' || current)}
       <div class="msheet">
         <div style="display: flex; align-items: center; gap: 12px">
-          <span class="ib lv{levelId}" style="width: 44px; height: 44px; border-radius: 12px"><Icon name={info.icon} size={21} /></span>
+          <span class="ib lv{levelId}" style="width: 46px; height: 46px; border-radius: 12px"><span class="bignum" style="font-size: 22px">{levelId}</span></span>
           <div style="flex: 1; min-width: 0">
             <p class="muted" style="font-size: 12px; font-weight: 700">{picked === 'all' ? `HSK ${levelId} · Tổng hợp` : `HSK ${levelId} · Bài ${current?.no}`}</p>
-            <b style="display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{picked === 'all' ? texts.allTitle(levelId) : current?.title}</b>
+            <b style="display: block; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{picked === 'all' ? texts.allTitle(levelId) : current?.title}</b>
             <p class="muted" style="font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
               {picked === 'all' ? texts.allDesc(levelId, reviewCount, lessons.length) : current ? subOf(current) : ''}
             </p>
@@ -232,21 +296,129 @@
     {/if}
   </div>
 {:else}
+  <!-- ============ Máy tính ============ -->
   <Topbar current={part} />
-  <main class="page" style="display: flex; flex-direction: column; gap: 22px">
-    <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
-      <BackLink href="/learn/{info.slug}" label="Chọn cấp" />
-      <nav class="crumb"><a href="/learn/{info.slug}">{info.name}</a> / <b>HSK {levelId}</b></nav>
-    </div>
-    {@render body(false)}
+  <main class="page page-wide" style="max-width: 1240px; display: flex; flex-direction: column; gap: 24px">
+    <nav aria-label="Đường dẫn" class="crumb">
+      <a href="/learn/{info.slug}">{info.name}</a><span>/</span><b>HSK {levelId}</b>
+    </nav>
+
+    {#if failed}
+      <EmptyState title="Không tải được danh sách bài.">
+        {#snippet action()}<button type="button" class="btn" onclick={load}>Thử lại</button>{/snippet}
+      </EmptyState>
+    {:else if data === null}
+      <Skeleton h="130px" r={24} />
+      <Skeleton h="400px" r={22} />
+    {:else}
+      <!-- Khung đầu tô màu cấp, chép đúng khuôn màn Chọn bài của Lật thẻ. -->
+      <section class="lv{levelId}" style="border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--sh-md); padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center">
+        <BackLink href="/learn/{info.slug}" label="Chọn cấp" />
+        <div style="display: flex; align-items: baseline; gap: 6px"><span class="disp" style="font-size: 20px; font-weight: 800">HSK</span><span class="bignum" style="font-size: 72px">{levelId}</span></div>
+        <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 8px">
+          <h1 style="font-size: 30px; line-height: 1.2">{info.name}</h1>
+          <p class="num" style="font-weight: 600">{lessons.length} bài · {num(tongSo)} {donVi}</p>
+          <Bar value={doneCount} total={lessons.length} trackStyle="background: var(--surface); max-width: 480px" />
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px">
+          <span class="bignum" style="font-size: 44px">{doneCount}/{lessons.length}</span>
+          <span style="font-size: 13px; font-weight: 700">bài đã {texts.past} xong</span>
+        </div>
+      </section>
+
+      {#if lessons.length === 0}
+        <EmptyState title="Cấp này chưa có bài nào." desc="Admin đang soạn, bạn quay lại sau nhé." />
+      {:else}
+        <div style="display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start">
+          <section style="flex: 999 1 620px; min-width: 0; display: flex; flex-direction: column; gap: 14px" aria-label="Các bài">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px">
+              <h2 class="h2">Các bài</h2>
+              <span class="muted num" style="font-size: 14px; font-weight: 600">{doneCount} / {lessons.length} bài đã {texts.past} xong</span>
+            </div>
+            <div class="pl-luoi">
+              {#each lessons as l (l.id)}{@render lessonCard(l, false)}{/each}
+              {@render allCard(false)}
+            </div>
+          </section>
+          {@render panel()}
+        </div>
+      {/if}
+    {/if}
   </main>
 {/if}
 
 <style>
-  .les-grid {
+  /* Tiền tố pl- (PartLevel): app.css đã có .les-grid, .row, .tag… — tránh bẫy số 1. */
+  .pl-luoi {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
-    gap: 10px;
-    align-content: start;
+    grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
+    gap: 12px;
+  }
+  .pl-dau {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    min-height: 22px;
+  }
+  .pl-ten {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .pl-phu {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-2);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .les.soon .pl-phu {
+    color: inherit;
+  }
+  /* Ô trạng thái trong cột chi tiết, cùng kiểu ô "Đang ở thẻ…" của Lật thẻ. */
+  .pl-tt {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border-radius: 14px;
+  }
+
+  /* Bản điện thoại: hàng ngang. */
+  .pl-hang {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+  .pl-so {
+    width: 40px;
+    height: 40px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 20px;
+    background: var(--surface);
+  }
+  .pl-hang.done .pl-so {
+    background: var(--ngoc-soft);
+  }
+  .pl-giua {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pl-cuoi {
+    flex: none;
+    display: flex;
+    align-items: center;
   }
 </style>

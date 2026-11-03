@@ -8,7 +8,7 @@
   import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
-  import BackLink from '$lib/components/BackLink.svelte';
+  import DauBai from '$lib/components/DauBai.svelte';
   import { speak } from '$lib/learn/speech';
 
   // Ôn viết cả cấp (04 §4.9 part = lv). Có lọc “chỉ chữ hay sai”.
@@ -54,7 +54,19 @@
 
 <svelte:head><title>Ôn viết HSK {levelId} · Zìkǎ</title></svelte:head>
 
-{#snippet body(_m: boolean)}
+<!-- Lọc “Tất cả / Chữ hay sai” dùng kiểu nút chọn chung của khung học thay cho một nút bật tắt. -->
+{#snippet loc(m: boolean)}
+  <div class="zk-tabs" class:zk-tabs-deu={m} class:vt-on-loc-m={m} role="tablist" aria-label="Lọc chữ">
+    <button type="button" role="tab" class="zk-tab" aria-selected={!onlyWeak} onclick={() => (onlyWeak = false)}>
+      Tất cả ({chars?.length ?? 0})
+    </button>
+    <button type="button" role="tab" class="zk-tab" aria-selected={onlyWeak} disabled={weak.size === 0} onclick={() => (onlyWeak = true)}>
+      Chữ hay sai ({weak.size})
+    </button>
+  </div>
+{/snippet}
+
+{#snippet body(m: boolean)}
   {#if failed}
     <EmptyState title="Cấp này chưa có chữ nào để luyện viết.">
       {#snippet action()}<a href="/learn/writing/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
@@ -62,81 +74,144 @@
   {:else if chars === null}
     <Skeleton h="300px" r={16} />
   {:else}
-    <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
-      <span class="ico-in" style="flex: 1 1 220px">
-        <Icon name="search" size={16} />
-        <input class="inp" bind:value={q} placeholder="Tìm chữ, pinyin, nghĩa…" />
-      </span>
-      <button type="button" class="btn btn-sm" class:apps-on={onlyWeak} disabled={weak.size === 0} onclick={() => (onlyWeak = !onlyWeak)}>
-        Chỉ chữ hay sai ({weak.size})
-      </button>
-    </div>
-
-    <p class="muted" style="font-size: 13.5px">{shown.length} chữ · bấm vào chữ để nghe</p>
-
-    {#if shown.length === 0}
-      <EmptyState title="Không có chữ nào khớp." />
-    {:else}
-      <div class="grid">
-        {#each shown as c (c.id)}
-          <article class="paper card" class:weak={weak.has(c.id)}>
-            <button type="button" class="tian hz" lang="zh" style="width: 72px; height: 72px; font-size: 44px; cursor: pointer"
-                    onclick={() => speak(c.hanzi)} aria-label="Nghe {c.hanzi}">{c.hanzi}</button>
-            <div style="flex: 1; min-width: 0">
-              <b class="t{c.tone}" style="font-size: 16px">{c.pinyin}</b>
-              {#if c.hanViet}<p class="muted" style="font-size: 12px; font-weight: 700; text-transform: uppercase">{c.hanViet}</p>{/if}
-              <p style="font-size: 13.5px; overflow: hidden; text-overflow: ellipsis">{c.meaning}</p>
-              <p class="muted num" style="font-size: 12px">{c.strokes} nét{c.lessonNo ? ` · Bài ${c.lessonNo}` : ''}</p>
-            </div>
-            {#if c.lessonNo}
-              <a href="/learn/writing/hsk/{levelId}/lesson/{c.lessonNo}" class="btn btn-bare btn-sm" aria-label="Tập viết chữ này">
-                <Icon name="brush" size={16} />
-              </a>
-            {/if}
-          </article>
-        {/each}
+    <!-- Một khung chứa trọn màn ôn: lọc, tìm và lưới chữ (khuôn chung với Lật thẻ). -->
+    <section class="block zk-khung" class:zk-khung-m={m}>
+      <div class="zk-khung-dau">
+        {#if !m}<h2 class="zk-khung-ten">Chữ của cấp</h2>{/if}
+        {@render loc(m)}
       </div>
-    {/if}
+
+      <div class="vt-on-tim">
+        <span class="ico-in">
+          <Icon name="search" size={16} />
+          <input class="inp" bind:value={q} placeholder="Tìm chữ, pinyin, nghĩa…" aria-label="Tìm chữ" />
+        </span>
+        <p class="vt-on-dem num">{shown.length} chữ · bấm vào chữ để nghe</p>
+      </div>
+
+      {#if shown.length === 0}
+        <EmptyState title="Không có chữ nào khớp." />
+      {:else}
+        <div class="vt-on-luoi">
+          {#each shown as c (c.id)}
+            <article class="zk-o vt-on-o" class:vt-on-sai={weak.has(c.id)}>
+              <button type="button" class="tian hz vt-on-chu" lang="zh" onclick={() => speak(c.hanzi)} aria-label="Nghe {c.hanzi}">{c.hanzi}</button>
+              <div style="flex: 1; min-width: 0">
+                <b class="t{c.tone}" style="font-size: 16px">{c.pinyin}</b>
+                {#if c.hanViet}<p class="vt-on-hv">{c.hanViet}</p>{/if}
+                <p style="font-size: 13.5px; overflow: hidden; text-overflow: ellipsis">{c.meaning}</p>
+                <p class="muted num" style="font-size: 12px">{c.strokes} nét{c.lessonNo ? ` · Bài ${c.lessonNo}` : ''}</p>
+              </div>
+              {#if c.lessonNo}
+                <a href="/learn/writing/hsk/{levelId}/lesson/{c.lessonNo}" class="vt-on-viet" aria-label="Tập viết chữ {c.hanzi}">
+                  <Icon name="brush" size={17} />
+                </a>
+              {/if}
+            </article>
+          {/each}
+        </div>
+      {/if}
+    </section>
   {/if}
 {/snippet}
 
 {#if media.isMobile}
+  <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
       <a href="/learn/writing/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
-      <b style="flex: 1; font-size: 15px">Ôn viết HSK {levelId}</b>
+      <span style="flex: 1; min-width: 0; text-align: center">
+        <b style="display: block; font-size: 15px">Ôn viết HSK {levelId}</b>
+        <span class="muted" style="font-size: 12px">Luyện viết · Ôn cả cấp</span>
+      </span>
       <Avatar size={36} />
     </header>
-    <main class="mcontent" style="display: flex; flex-direction: column; gap: 14px">{@render body(true)}</main>
+    <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">{@render body(true)}</main>
   </div>
 {:else}
+  <!-- ============ Máy tính ============ -->
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
     <nav class="crumb" style="margin-left: 8px"><a href="/learn/writing/hsk/{levelId}">Luyện viết · HSK {levelId}</a> / <b>Ôn cả cấp</b></nav>
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
-  <main class="page" style="max-width: 920px; display: flex; flex-direction: column; gap: 16px">
-    <BackLink href="/learn/writing/hsk/{levelId}" label="Chọn bài" />
-    
-    <h1 style="font-size: 28px">Ôn viết cả cấp HSK {levelId}</h1>
+  <main class="page zk-cot-rong" style="display: flex; flex-direction: column; gap: 18px">
+    <DauBai
+      href="/learn/writing/hsk/{levelId}"
+      kicker="HSK {levelId} · Ôn cả cấp{chars ? ` · ${chars.length} chữ` : ''}"
+      title="Ôn viết cả cấp HSK {levelId}"
+    />
     {@render body(false)}
   </main>
 {/if}
 
 <style>
-  .grid {
+  /* Điện thoại: hai nút lọc chia đôi bề ngang, cao 44px cho ngón tay. */
+  .vt-on-loc-m {
+    width: 100%;
+  }
+  .vt-on-loc-m .zk-tab {
+    height: 44px;
+    font-size: 13.5px;
+  }
+  .vt-on-tim {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .vt-on-dem {
+    font-size: 13.5px;
+    color: var(--text-2);
+  }
+  .vt-on-luoi {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
-    gap: 12px;
+    gap: 10px;
   }
-  .card {
+  .vt-on-o {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 12px;
   }
-  .card.weak {
+  .vt-on-o.vt-on-sai {
     border-color: var(--son-line);
     background: var(--son-soft);
+  }
+  .vt-on-chu {
+    width: 72px;
+    height: 72px;
+    font-size: 44px;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .vt-on-chu:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .vt-on-hv {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+  /* Nút sang bài để tập viết: 44px đủ cho ngón tay. */
+  .vt-on-viet {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--text-2);
+    text-decoration: none;
+  }
+  .vt-on-viet:hover {
+    background: var(--surface);
+    color: var(--son-text);
+  }
+  .vt-on-viet:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
   }
 </style>

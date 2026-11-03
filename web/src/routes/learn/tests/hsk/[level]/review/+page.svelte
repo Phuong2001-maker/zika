@@ -12,7 +12,7 @@
   import Switcher from '$lib/components/Switcher.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
-  import BackLink from '$lib/components/BackLink.svelte';
+  import DauBai from '$lib/components/DauBai.svelte';
 
   // Thi thử cuối cấp — danh sách đề (07 §7, 04 §4.9 part = kt).
   interface Mock { id: number; title: string; questionCount: number; durationSec: number; maxPoints: number; passPoints: number }
@@ -58,39 +58,52 @@
 
 <svelte:head><title>Thi thử HSK {levelId} · Zìkǎ</title></svelte:head>
 
-{#snippet body(_m: boolean)}
+<!-- Một khung chứa trọn danh sách đề (khuôn chung của các màn học); mỗi đề là một ô con. -->
+{#snippet khung(m: boolean)}
+  <section class="block zk-khung" class:zk-khung-m={m}>
+    <div class="zk-khung-dau">
+      <h2 class="zk-khung-ten">Chọn đề thi thử</h2>
+      {#if mocks && mocks.length > 0}<span class="zk-so">{mocks.length} đề</span>{/if}
+    </div>
+    {#if mocks && mocks.length === 0}
+      <EmptyState title="Cấp này chưa có đề thi thử." desc="Admin đang soạn, bạn quay lại sau nhé." />
+    {:else if mocks}
+      <div class="kt-ds-de">
+        {#each mocks as mk (mk.id)}
+          {@const s = sums[mk.id]}
+          <article class="zk-o kt-de">
+            <h3 class="kt-de-ten">{mk.title}</h3>
+            <p class="muted num" style="font-size: 14px">
+              {num(mk.questionCount)} câu · khoảng {Math.round(mk.durationSec / 60)} phút · đạt từ {mk.passPoints}/{mk.maxPoints} điểm
+            </p>
+            <ul class="kt-de-y">
+              <li><Icon name="check" size={16} /> Phần nghe và phần đọc như đề thật</li>
+              <li><Icon name="check" size={16} /> Chấm điểm ngay khi nộp</li>
+            </ul>
+            {#if s?.bestScore != null}
+              <p style="font-size: 14px; font-weight: 700; color: {s.passed ? 'var(--green-text)' : 'var(--text)'}">
+                Điểm cao nhất: {num(s.bestScore)} / {num(s.maxScore ?? mk.maxPoints)} · đã thi {s.attemptsUsed} lần
+              </p>
+            {/if}
+            <button type="button" class="btn btn-son btn-lg kt-de-nut" disabled={starting === mk.id} onclick={() => start(mk)}>
+              {starting === mk.id ? 'Đang mở…' : 'Bắt đầu thi thử'}
+            </button>
+          </article>
+        {/each}
+      </div>
+    {/if}
+  </section>
+{/snippet}
+
+{#snippet body(m: boolean)}
   {#if failed}
     <EmptyState title="Không tải được đề thi thử.">
       {#snippet action()}<a href="/learn/tests/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
     </EmptyState>
   {:else if mocks === null}
-    <Skeleton h="220px" r={16} />
-  {:else if mocks.length === 0}
-    <EmptyState title="Cấp này chưa có đề thi thử." desc="Admin đang soạn, bạn quay lại sau nhé." />
+    <Skeleton h="260px" r={22} />
   {:else}
-    <div class="grid">
-      {#each mocks as mk (mk.id)}
-        {@const s = sums[mk.id]}
-        <article class="block card">
-          <h2 class="h2">{mk.title}</h2>
-          <p class="muted num" style="font-size: 14px">
-            {num(mk.questionCount)} câu · khoảng {Math.round(mk.durationSec / 60)} phút · đạt từ {mk.passPoints}/{mk.maxPoints} điểm
-          </p>
-          <ul style="display: flex; flex-direction: column; gap: 4px; font-size: 14px">
-            <li style="display: flex; gap: 8px"><Icon name="check" size={16} /> Phần nghe và phần đọc như đề thật</li>
-            <li style="display: flex; gap: 8px"><Icon name="check" size={16} /> Chấm điểm ngay khi nộp</li>
-          </ul>
-          {#if s?.bestScore != null}
-            <p style="font-size: 14px; font-weight: 700; color: {s.passed ? 'var(--green-text)' : 'var(--text)'}">
-              Điểm cao nhất: {num(s.bestScore)} / {num(s.maxScore ?? mk.maxPoints)} · đã thi {s.attemptsUsed} lần
-            </p>
-          {/if}
-          <button type="button" class="btn btn-son btn-lg" disabled={starting === mk.id} onclick={() => start(mk)}>
-            {starting === mk.id ? 'Đang mở…' : 'Bắt đầu thi thử'}
-          </button>
-        </article>
-      {/each}
-    </div>
+    {@render khung(m)}
   {/if}
 {/snippet}
 
@@ -98,10 +111,10 @@
   <div class="mscreen">
     <header class="mtop">
       <a href="/learn/tests/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
-      <b style="flex: 1; font-size: 15px">Thi thử HSK {levelId}</b>
+      <b style="flex: 1; min-width: 0; font-size: 15px">Thi thử HSK {levelId}</b>
       <Avatar size={36} />
     </header>
-    <main class="mcontent" style="display: flex; flex-direction: column; gap: 14px">{@render body(true)}</main>
+    <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">{@render body(true)}</main>
   </div>
 {:else}
   <header class="topbar">
@@ -109,24 +122,42 @@
     <nav class="crumb" style="margin-left: 8px"><a href="/learn/tests/hsk/{levelId}">Kiểm tra · HSK {levelId}</a> / <b>Thi thử</b></nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="kt" /><Avatar size={44} /></div>
   </header>
-  <main class="page" style="max-width: 860px; display: flex; flex-direction: column; gap: 16px">
-    <BackLink href="/learn/tests/hsk/{levelId}" label="Chọn bài" />
-    
-    <h1 style="font-size: 28px">Thi thử HSK {levelId}</h1>
+  <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
+    <DauBai href="/learn/tests/hsk/{levelId}" kicker="HSK {levelId} · Kiểm tra cuối cấp" title="Thi thử HSK {levelId}" />
     {@render body(false)}
   </main>
 {/if}
 
 <style>
-  .grid {
+  .kt-ds-de {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: 14px;
   }
-  .card {
-    padding: 20px 22px;
+  .kt-de {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    padding: 16px 18px;
+  }
+  .kt-de-ten {
+    font-size: 17px;
+    font-weight: 800;
+    overflow-wrap: break-word;
+  }
+  .kt-de-y {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+  }
+  .kt-de-y li {
+    display: flex;
+    gap: 8px;
+  }
+  /* Nút đặt cuối ô để các ô cùng hàng có nút thẳng hàng dù nội dung dài ngắn khác nhau. */
+  .kt-de-nut {
+    margin-top: auto;
   }
 </style>
+

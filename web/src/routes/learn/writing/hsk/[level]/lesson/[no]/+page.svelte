@@ -10,7 +10,7 @@
   import Switcher from '$lib/components/Switcher.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
-  import BackLink from '$lib/components/BackLink.svelte';
+  import DauBai from '$lib/components/DauBai.svelte';
   import HanziPad from '$lib/learn/HanziPad.svelte';
   import { completePart, lessonByNo, saveProgress } from '$lib/learn/lesson';
   import { speak } from '$lib/learn/speech';
@@ -50,9 +50,17 @@
   const c = $derived<Char | null>(chars[ci] ?? null);
   const need = $derived(data?.config.passCount ?? 2);
 
-  // Ô viết trên điện thoại chiếm gần hết bề ngang (chừa lề 16px mỗi bên), tối đa 340px.
+  const CACH = [
+    { ma: 'demo', ten: 'Xem mẫu' },
+    { ma: 'trace', ten: 'Tô theo' },
+    { ma: 'free', ten: 'Tự viết' },
+  ] as const;
+
+  // Ô viết trên điện thoại chiếm gần hết bề ngang khung: trừ lề trang 16px, viền 1px và lề
+  // trong của .zk-khung-m 14px mỗi bên (16 + 1 + 14 = 31), tối đa 340px.
   let rong = $state(375);
-  const oDt = $derived(Math.max(240, Math.min(340, rong - 32)));
+  const oDt = $derived(Math.max(240, Math.min(340, rong - 62)));
+  const conChu = $derived(!done && ci + 1 < chars.length);
   let dai = $state<HTMLDivElement | null>(null);
 
   /** Dải chữ trên điện thoại cuộn ngang: đổi chữ thì kéo chữ đang viết vào giữa cho thấy. */
@@ -139,7 +147,8 @@
   );
 </script>
 
-<svelte:head><title>Luyện viết · Zìkǎ</title></svelte:head>
+<svelte:head><title>{data ? `${data.lesson.title} · Luyện viết` : 'Luyện viết'} · Zìkǎ</title></svelte:head>
+<svelte:window bind:innerWidth={rong} />
 
 {#snippet grid(size: number)}
   <div class="tian" class:mi={data?.config.grid === 'mi'} style="width: {size}px; height: {size}px">
@@ -161,199 +170,389 @@
   </div>
 {/snippet}
 
-{#snippet body(m: boolean)}
-  {#if failed}
-    <EmptyState title="Bài này chưa có chữ để luyện viết.">
-      {#snippet action()}<a href="/learn/writing/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
-    </EmptyState>
-  {:else if data === null}
-    <Skeleton h="380px" r={20} />
-  {:else if c}
-    <!-- Danh sách chữ: điện thoại một dải cuộn ngang để ô viết nằm ngay trong màn hình đầu -->
-    <div bind:this={dai} class={m ? 'w-strip' : ''} style={m ? '' : 'display: flex; gap: 6px; flex-wrap: wrap'}>
-      {#each chars as ch, k (ch.id)}
-        <button
-          type="button"
-          class="chip hz"
-          lang="zh"
-          class:on={k === ci}
-          class:passed={k < ci}
-          onclick={() => pickChar(k)}
-        >{ch.hanzi}</button>
-      {/each}
-    </div>
+<!-- Dải chữ của bài: điện thoại một dải cuộn ngang tràn sát mép khung để ô viết nằm ngay
+     trong màn hình đầu; máy tính xuống dòng vì đủ chỗ. -->
+{#snippet daiChu(m: boolean)}
+  <div bind:this={dai} class="vt-dai" class:vt-dai-m={m} role="group" aria-label="Chữ trong bài">
+    {#each chars as ch, k (ch.id)}
+      <button
+        type="button"
+        class="vt-chu hz"
+        lang="zh"
+        class:on={k === ci}
+        class:vt-qua={k < ci}
+        aria-current={k === ci ? 'true' : undefined}
+        onclick={() => pickChar(k)}
+      >{ch.hanzi}</button>
+    {/each}
+  </div>
+{/snippet}
 
-    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
-      <!-- Ô viết -->
-      <div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 12px; align-items: center">
-        {@render grid(m ? oDt : 300)}
+<!-- Ba cách viết dùng chung kiểu nút chọn với hàng chế độ của Lật thẻ. -->
+{#snippet cheDo(m: boolean)}
+  <div class="zk-tabs vt-che" class:zk-tabs-deu={m} class:vt-che-m={m} role="tablist" aria-label="Cách viết">
+    {#each CACH as k (k.ma)}
+      <button type="button" role="tab" class="zk-tab" aria-selected={mode === k.ma} onclick={() => (mode = k.ma)}>{k.ten}</button>
+    {/each}
+  </div>
+{/snippet}
 
-        <div class="seg">
-          <button type="button" class:on={mode === 'demo'} onclick={() => (mode = 'demo')}>Xem mẫu</button>
-          <button type="button" class:on={mode === 'trace'} onclick={() => (mode = 'trace')}>Tô theo</button>
-          <button type="button" class:on={mode === 'free'} onclick={() => (mode = 'free')}>Tự viết</button>
-        </div>
+<!-- Nút thao tác trên ô viết. Điện thoại kèm luôn “Bỏ qua” để không phải cuộn xuống cuối khung. -->
+{#snippet congCu(m: boolean)}
+  <div class="vt-cu" class:vt-cu-m={m}>
+    {#if mode === 'demo'}
+      <button type="button" class="zk-nut" onclick={() => pad?.chayLai()}><Icon name="play" size={16} /> Chạy lại</button>
+    {:else}
+      <button type="button" class="zk-nut" onclick={() => pad?.xoa()}><Icon name="repeat" size={16} /> Viết lại</button>
+      <button type="button" class="zk-nut" onclick={() => pad?.goiY()}><Icon name="eye" size={16} /> Gợi ý nét</button>
+    {/if}
+    {#if m && conChu}
+      <button type="button" class="zk-nut" aria-label="Bỏ qua chữ này" onclick={() => pickChar(ci + 1)}>Bỏ qua <Icon name="right" size={16} /></button>
+    {/if}
+  </div>
+{/snippet}
 
-        <p class="muted" style="font-size: 13px; text-align: center; max-width: 280px">{hint}</p>
+{#snippet oViet(m: boolean)}
+  <div class="vt-trai">
+    {@render grid(m ? oDt : 320)}
+    {@render cheDo(m)}
+    <p class="vt-huong">{hint}</p>
+    {@render congCu(m)}
+    {#if m}<p class="vt-luot num">Chữ {ci + 1}/{chars.length} · Lượt viết đúng {passes}/{need}</p>{/if}
+  </div>
+{/snippet}
 
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center">
-          {#if mode === 'demo'}
-            <button type="button" class="btn btn-sm" onclick={() => pad?.chayLai()}><Icon name="play" size={15} /> Chạy lại</button>
-          {:else}
-            <button type="button" class="btn btn-sm" onclick={() => pad?.xoa()}><Icon name="repeat" size={15} /> Viết lại</button>
-            <button type="button" class="btn btn-sm" onclick={() => pad?.goiY()}><Icon name="eye" size={15} /> Gợi ý nét</button>
-          {/if}
-          {#if m && !done && ci + 1 < chars.length}
-            <button type="button" class="btn btn-sm" aria-label="Bỏ qua chữ này" onclick={() => pickChar(ci + 1)}>Bỏ qua <Icon name="right" size={15} /></button>
-          {/if}
-        </div>
-
-        <p class="muted num" style="font-size: 13px">Lượt viết đúng: {passes}/{need}</p>
+<!-- Thông tin chữ: một ô nền nhạt trong khung, các ô con (bộ thủ, chữ cùng bộ) nền trắng nổi lên trên. -->
+{#snippet thongTin(cc: Char)}
+  <div class="zk-o vt-tt">
+    <div class="vt-tt-dau">
+      <span class="hz vt-tt-chu" lang="zh">{cc.hanzi}</span>
+      <div style="flex: 1; min-width: 0">
+        <b class="t{cc.tone}" style="font-size: 20px">{cc.pinyin}</b>
+        {#if cc.hanViet}<p class="vt-hv">{cc.hanViet}</p>{/if}
       </div>
-
-      <!-- Thông tin chữ -->
-      <section class="block" style="flex: 1 1 280px; min-width: 0; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px">
-        <div style="display: flex; align-items: center; gap: 10px">
-          <span class="hz" lang="zh" style="font-size: 40px">{c.hanzi}</span>
-          <div style="flex: 1">
-            <b class="t{c.tone}" style="font-size: 20px">{c.pinyin}</b>
-            {#if c.hanViet}<p class="muted" style="font-size: 12.5px; font-weight: 700; text-transform: uppercase">{c.hanViet}</p>{/if}
-          </div>
-          <button type="button" class="btn btn-bare" aria-label="Nghe" onclick={() => speak(c.hanzi)}><Icon name="speaker" size={18} /></button>
-        </div>
-
-        <p style="font-size: 15px">{c.meaning}</p>
-        <hr class="rule" />
-        <p class="muted" style="font-size: 13.5px"><b>{c.strokes} nét</b>{c.structure ? ` · ${c.structure}` : ''}</p>
-        {#if c.word}
-          <p style="font-size: 14px">Có trong từ: <b class="hz" lang="zh">{c.word.hanzi}</b> <span class="muted">{c.word.meaning}</span></p>
-        {/if}
-
-        {#if c.radicalInfo}
-          <div class="bo-thu">
-            <span class="hz bo-chu" lang="zh">{c.radicalInfo.form}</span>
-            <div style="min-width: 0">
-              <p style="font-size: 14px"><b>Bộ {c.radicalInfo.name}</b>{#if c.radicalInfo.form !== c.radicalInfo.root}&nbsp;<span class="hz" lang="zh">({c.radicalInfo.root})</span>{/if} · <span class="muted">số {c.radicalInfo.no}</span></p>
-              <p class="muted" style="font-size: 13.5px">Nghĩa: {c.radicalInfo.meaning}</p>
-            </div>
-          </div>
-        {/if}
-        {#if c.analysis}
-          <p style="font-size: 14px; line-height: 1.55">{c.analysis}</p>
-        {/if}
-        {#if c.radicalExamples.length > 0 && c.radicalInfo}
-          <div>
-            <p class="muted" style="font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 6px">Chữ khác cùng bộ {c.radicalInfo.form}</p>
-            <div class="cung-bo">
-              {#each c.radicalExamples as e (e.hanzi)}
-                <button type="button" class="cung-o" onclick={() => speak(e.hanzi)} aria-label="Nghe {e.hanzi}">
-                  <span class="hz" lang="zh" style="font-size: 26px; line-height: 1">{e.hanzi}</span>
-                  <span style="min-width: 0; text-align: left">
-                    <b style="font-size: 13px">{e.pinyin}</b>{#if e.hanViet}<span class="muted" style="font-size: 11.5px; margin-left: 5px">{e.hanViet}</span>{/if}
-                    <span class="muted" style="display: block; font-size: 12.5px">{e.meaning}{#if e.word} · <span class="hz" lang="zh">{e.word}</span>{/if}</span>
-                  </span>
-                </button>
-              {/each}
-            </div>
-          </div>
-        {/if}
-      </section>
+      <button type="button" class="vt-loa" aria-label="Nghe {cc.hanzi}" onclick={() => speak(cc.hanzi)}><Icon name="speaker" size={18} /></button>
     </div>
 
-    <div style="display: {m && !done && ci + 1 < chars.length ? 'none' : 'flex'}; gap: 10px; justify-content: flex-end; flex-wrap: wrap">
-      {#if done}
+    <p style="font-size: 15px">{cc.meaning}</p>
+    <hr class="rule" />
+    <p class="muted" style="font-size: 13.5px"><b>{cc.strokes} nét</b>{cc.structure ? ` · ${cc.structure}` : ''}</p>
+    {#if cc.word}
+      <p style="font-size: 14px">Có trong từ: <b class="hz" lang="zh">{cc.word.hanzi}</b> <span class="muted">{cc.word.meaning}</span></p>
+    {/if}
+
+    {#if cc.radicalInfo}
+      <div class="vt-bo">
+        <span class="hz vt-bo-chu" lang="zh">{cc.radicalInfo.form}</span>
+        <div style="min-width: 0">
+          <p style="font-size: 14px"><b>Bộ {cc.radicalInfo.name}</b>{#if cc.radicalInfo.form !== cc.radicalInfo.root}&nbsp;<span class="hz" lang="zh">({cc.radicalInfo.root})</span>{/if} · <span class="muted">số {cc.radicalInfo.no}</span></p>
+          <p class="muted" style="font-size: 13.5px">Nghĩa: {cc.radicalInfo.meaning}</p>
+        </div>
+      </div>
+    {/if}
+    {#if cc.analysis}
+      <p style="font-size: 14px; line-height: 1.55">{cc.analysis}</p>
+    {/if}
+    {#if cc.radicalExamples.length > 0 && cc.radicalInfo}
+      <div>
+        <p class="vt-nhan">Chữ khác cùng bộ {cc.radicalInfo.form}</p>
+        <div class="vt-cung">
+          {#each cc.radicalExamples as e (e.hanzi)}
+            <button type="button" class="vt-cung-o" onclick={() => speak(e.hanzi)} aria-label="Nghe {e.hanzi}">
+              <span class="hz" lang="zh" style="font-size: 26px; line-height: 1">{e.hanzi}</span>
+              <span style="min-width: 0; text-align: left">
+                <b style="font-size: 13px">{e.pinyin}</b>{#if e.hanViet}<span class="muted" style="font-size: 11.5px; margin-left: 5px">{e.hanViet}</span>{/if}
+                <span class="muted" style="display: block; font-size: 12.5px">{e.meaning}{#if e.word} · <span class="hz" lang="zh">{e.word}</span>{/if}</span>
+              </span>
+            </button>
+          {/each}
+        </div>
+      </div>
+    {/if}
+  </div>
+{/snippet}
+
+<!-- Hàng nút cuối khung. Điện thoại đã có “Bỏ qua” cạnh ô viết nên chỉ hiện hàng này khi
+     tới chữ cuối hoặc xong bài, như trước. -->
+{#snippet chan(m: boolean)}
+  <div class="zk-chan">
+    {#if !m}
+      <span class="vt-luot num">{done ? 'Đã viết xong cả bài.' : `Lượt viết đúng: ${passes}/${need}`}</span>
+    {/if}
+    <div class="vt-chan-nut" class:vt-chan-nut-m={m}>
+      {#if done && data}
         {#if data.next}
           <a href="/learn/writing/hsk/{levelId}/lesson/{data.next.no}" class="btn btn-son btn-lg">Bài tiếp: {data.next.title}</a>
         {:else}
           <a href="/learn/writing/hsk/{levelId}" class="btn btn-son btn-lg">Về danh sách bài</a>
         {/if}
       {:else if ci + 1 < chars.length}
-        <button type="button" class="btn" onclick={() => pickChar(ci + 1)}>Bỏ qua chữ này <Icon name="right" size={16} /></button>
+        <button type="button" class="zk-nut" onclick={() => pickChar(ci + 1)}>Bỏ qua chữ này <Icon name="right" size={16} /></button>
       {:else}
-        <button type="button" class="btn" onclick={finish}>Đánh dấu xong bài</button>
+        <button type="button" class="zk-nut zk-nut-chinh" onclick={finish}>Đánh dấu xong bài</button>
       {/if}
     </div>
+  </div>
+{/snippet}
+
+<!-- Một khung chứa trọn màn viết (khuôn chung với Lật thẻ): dải chữ, ô viết, thông tin chữ và
+     hàng nút cuối, không còn mảnh rời trôi trên nền xám. -->
+{#snippet khung(m: boolean)}
+  {#if c}
+    <section class="block zk-khung" class:zk-khung-m={m}>
+      {#if !m}
+        <div class="zk-khung-dau">
+          <h2 class="zk-khung-ten">Chữ trong bài</h2>
+          <span class="zk-so">Chữ {ci + 1}/{chars.length}</span>
+        </div>
+      {/if}
+      {@render daiChu(m)}
+      <div class="vt-than" class:vt-than-m={m}>
+        {@render oViet(m)}
+        {@render thongTin(c)}
+      </div>
+      {#if !m || !conChu}{@render chan(m)}{/if}
+    </section>
   {/if}
 {/snippet}
 
-<svelte:window bind:innerWidth={rong} />
+{#snippet hong()}
+  <EmptyState title="Bài này chưa có chữ để luyện viết.">
+    {#snippet action()}<a href="/learn/writing/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
+  </EmptyState>
+{/snippet}
 
 {#if media.isMobile}
+  <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
       <a href="/learn/writing/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
-      <b style="flex: 1; font-size: 15px">Luyện viết</b>
+      <span style="flex: 1; min-width: 0; text-align: center">
+        <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{data?.lesson.title ?? 'Luyện viết'}</b>
+        <span class="muted" style="font-size: 12px">Luyện viết · HSK {levelId} · Bài {lessonNo}</span>
+      </span>
       <Avatar size={36} />
     </header>
-    <main class="mcontent" style="display: flex; flex-direction: column; gap: 14px">{@render body(true)}</main>
+    <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">
+      {#if failed}
+        {@render hong()}
+      {:else if data === null}
+        <Skeleton h="420px" r={22} />
+      {:else}
+        {@render khung(true)}
+      {/if}
+    </main>
   </div>
 {:else}
+  <!-- ============ Máy tính ============ -->
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href="/learn/writing/hsk/{levelId}">Luyện viết · HSK {levelId}</a> / <b>Bài {lessonNo}</b></nav>
+    <nav class="crumb" style="margin-left: 8px"><a href="/learn/writing/hsk/{levelId}">Luyện viết · HSK {levelId}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b></nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="lv" /><Avatar size={44} /></div>
   </header>
-  <main class="page" style="max-width: 900px; display: flex; flex-direction: column; gap: 16px">
-    <BackLink href="/learn/writing/hsk/{levelId}" label="Chọn bài" />
-    {@render body(false)}</main>
+  <main class="page zk-cot-rong" style="display: flex; flex-direction: column; gap: 18px">
+    {#if failed}
+      {@render hong()}
+    {:else if data === null}
+      <Skeleton h="520px" r={22} />
+    {:else}
+      <DauBai href="/learn/writing/hsk/{levelId}" kicker="HSK {levelId} · Bài {lessonNo} · {chars.length} chữ" title={data.lesson.title} />
+      {@render khung(false)}
+    {/if}
+  </main>
 {/if}
 
 <style>
-  .chip {
-    min-width: 42px;
-    height: 42px;
+  /* Dải chữ của bài. */
+  .vt-dai {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  /* Điện thoại: cuộn ngang, tràn sát mép trong của khung (lề .zk-khung-m là 14px). */
+  .vt-dai-m {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin: 0 -14px;
+    padding: 2px 14px 6px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .vt-dai-m::-webkit-scrollbar {
+    display: none;
+  }
+  .vt-chu {
+    flex: none;
+    min-width: 44px;
+    height: 44px;
     padding: 0 8px;
     border: 1px solid var(--ink-strong);
     border-radius: var(--r-sm);
     background: var(--surface);
+    color: var(--text);
     font-size: 20px;
     cursor: pointer;
-  }
-  .chip.on {
-    border-color: var(--son);
-    background: var(--son-soft);
-  }
-  .w-strip {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    margin: 0 -16px;
-    padding: 2px 16px 6px;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-  }
-  .w-strip::-webkit-scrollbar {
-    display: none;
-  }
-  .w-strip .chip {
-    flex: none;
     scroll-snap-align: center;
   }
-  .bo-thu {
+  .vt-chu:hover {
+    border-color: var(--line-3);
+  }
+  .vt-chu:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  /* Chữ đã qua tô ngọc nhạt; viền pha từ biến màu để giao diện tối không bị ô sáng chói. */
+  .vt-chu.vt-qua {
+    background: var(--ngoc-soft);
+    border-color: color-mix(in srgb, var(--ngoc) 35%, var(--line));
+  }
+  .vt-chu.on {
+    border-color: var(--son);
+    background: var(--son-soft);
+    color: var(--son-text);
+  }
+
+  /* Ô viết bên trái, thông tin chữ bên phải; hẹp quá thì thông tin xuống dưới. */
+  .vt-than {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 28px;
+    align-items: flex-start;
+  }
+  .vt-than-m {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .vt-trai {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .vt-huong {
+    max-width: 300px;
+    font-size: 13px;
+    text-align: center;
+    color: var(--text-2);
+  }
+  .vt-cu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  /* Điện thoại: các nút chia đều bề ngang ô viết, lề trong hẹp lại để “Gợi ý nét” không xuống dòng. */
+  .vt-cu-m {
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  .vt-cu-m .zk-nut {
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 6px;
+    padding: 0 6px;
+    font-size: 13.5px;
+    white-space: nowrap;
+  }
+  /* Nút chọn cách viết: điện thoại cao 44px cho ngón tay; chỉ có 3 nút nên chữ to hơn mặc định của .zk-tabs-deu. */
+  .vt-che-m {
+    width: 100%;
+  }
+  .vt-che-m .zk-tab {
+    height: 44px;
+    font-size: 14px;
+  }
+  .vt-luot {
+    font-size: 13px;
+    color: var(--text-2);
+  }
+
+  /* Thông tin chữ. */
+  .vt-tt {
+    flex: 1 1 300px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 18px;
+  }
+  .vt-than-m .vt-tt {
+    flex: none;
+    padding: 14px;
+  }
+  .vt-tt-dau {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .vt-tt-chu {
+    font-size: 40px;
+    line-height: 1.1;
+  }
+  .vt-hv {
+    font-size: 12.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+  .vt-loa {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+  .vt-loa:hover,
+  .vt-loa:active {
+    color: var(--son-text);
+  }
+  .vt-loa:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .vt-bo {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 10px 12px;
-    border-radius: var(--r);
-    background: var(--troi);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
   }
-  .bo-chu {
+  .vt-bo-chu {
     display: grid;
     place-items: center;
     flex: none;
     width: 46px;
     height: 46px;
     border-radius: 12px;
-    background: var(--surface);
+    background: var(--troi);
     font-size: 28px;
     color: var(--blue-text);
   }
-  .cung-bo {
+  .vt-nhan {
+    margin-bottom: 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+  .vt-cung {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
     gap: 8px;
   }
-  .cung-o {
+  .vt-cung-o {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -363,15 +562,32 @@
     border-radius: var(--r-sm);
     background: var(--surface);
     color: var(--text);
+    font: inherit;
     cursor: pointer;
   }
-  .cung-o:hover {
-    border-color: var(--ink-strong);
+  .vt-cung-o:hover {
+    border-color: var(--line-3);
   }
-  .chip.passed {
-    background: var(--ngoc-soft);
-    border-color: #cdebd6;
+  .vt-cung-o:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
   }
+
+  /* Hàng nút cuối khung: nút nằm bên phải; điện thoại kéo hết bề ngang. */
+  .vt-chan-nut {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+  .vt-chan-nut-m {
+    width: 100%;
+    margin-left: 0;
+  }
+  .vt-chan-nut-m > :global(*) {
+    flex: 1 1 auto;
+  }
+
   .tian.mi {
     background-image:
       linear-gradient(to right, transparent calc(50% - 0.5px), var(--son-line) calc(50% - 0.5px), var(--son-line) calc(50% + 0.5px), transparent calc(50% + 0.5px)),

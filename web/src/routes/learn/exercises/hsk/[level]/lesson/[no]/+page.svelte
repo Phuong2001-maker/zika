@@ -11,7 +11,7 @@
   import Switcher from '$lib/components/Switcher.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
-  import BackLink from '$lib/components/BackLink.svelte';
+  import DauBai from '$lib/components/DauBai.svelte';
   import QuestionView from '$lib/learn/QuestionView.svelte';
   import { lessonByNo } from '$lib/learn/lesson';
   import { answered, check, CHOICE_TYPES, rightAnswerText, TYPE_LABEL, type Answer, type Payload } from '$lib/utils/grade';
@@ -141,9 +141,9 @@
 {/snippet}
 
 {#snippet done(m: boolean)}
-  <section class="block" style="padding: {m ? 22 : 32}px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
+  <div class="btp-xong" style="padding: {m ? 12 : 20}px 0">
     <span class="stamp" style="font-size: {m ? 26 : 34}px">完成</span>
-    <h1 style="font-size: {m ? 24 : 30}px">{score} / {total} câu đúng</h1>
+    <h2 style="font-size: {m ? 24 : 30}px">{score} / {total} câu đúng</h2>
     <p class="muted">Bài tập của “{lesson?.title}”.</p>
     <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center">
       <button type="button" class="btn" disabled={busy} onclick={restart}><Icon name="repeat" size={16} /> Làm lại</button>
@@ -153,27 +153,22 @@
         <a href="/learn/exercises/hsk/{levelId}" class="btn btn-son">Về danh sách bài</a>
       {/if}
     </div>
-  </section>
+  </div>
 {/snippet}
 
-{#snippet main(m: boolean)}
-  {#if failed}
-    <EmptyState title="Không mở được bài tập này.">
-      {#snippet action()}<a href="/learn/exercises/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
-    </EmptyState>
-  {:else if lesson === null}
-    <Skeleton h="360px" r={20} />
-  {:else if finished}
-    {@render done(m)}
-  {:else if q}
-    <div style="display: flex; align-items: center; gap: 14px">
-      <span class="tag" style="background: var(--ngoc-soft); color: var(--green-text)"><Icon name="exercise" size={14} /> {TYPE_LABEL[q.type] ?? q.type}</span>
-      <span style="flex: 1"></span>
-      <span class="num" style="font-weight: 700">Câu {i + 1} / {total}</span>
-    </div>
-    <Bar value={results.length} {total} />
+<!-- Một khung chứa trọn màn làm bài (như màn Lật thẻ): loại câu + số câu ở đầu khung, câu hỏi,
+     nhận xét, rồi dãy số câu và nút Kiểm tra ở chân khung — không còn mảnh rời trên nền xám. -->
+{#snippet khung(m: boolean)}
+  <section class="block zk-khung" class:zk-khung-m={m}>
+    {#if finished}
+      {@render done(m)}
+    {:else if q}
+      <div class="zk-khung-dau">
+        <span class="tag tag-ok"><Icon name="exercise" size={14} /> {TYPE_LABEL[q.type] ?? q.type}</span>
+        <span class="zk-so">Câu {i + 1} / {total}</span>
+      </div>
+      <Bar value={results.length} {total} />
 
-    <section class="block" style="padding: {m ? 18 : 26}px; display: flex; flex-direction: column; gap: 16px">
       <QuestionView
         type={q.type}
         payload={q.payload}
@@ -185,34 +180,51 @@
         mobile={m}
       />
       {@render feedback()}
-    </section>
 
-    <div style="display: flex; gap: 10px; justify-content: flex-end">
-      {#if !checked}
-        <button type="button" class="btn btn-son btn-lg" disabled={!canCheck} onclick={doCheck}>Kiểm tra</button>
-      {:else}
-        <button type="button" class="btn btn-son btn-lg" onclick={doNext}>{i + 1 >= total ? 'Xem kết quả' : 'Câu tiếp'}</button>
-      {/if}
-    </div>
-
-    {#if !m}
-      <div class="grid">
-        {#each Array.from({ length: total }) as _, k (k)}<span class={gridCls(k)}>{k + 1}</span>{/each}
+      <div class="zk-chan" class:btp-chan-m={m}>
+        <!-- Dãy số câu chỉ để xem câu nào đúng/sai; điện thoại bỏ cho gọn, thanh tiến độ ở đầu khung đã đủ. -->
+        {#if !m}
+          <div class="btp-day" aria-label="Các câu trong bài">
+            {#each Array.from({ length: total }) as _, k (k)}<span class={gridCls(k)}>{k + 1}</span>{/each}
+          </div>
+        {/if}
+        {#if !checked}
+          <button type="button" class="btn btn-son btn-lg btp-nut" disabled={!canCheck} onclick={doCheck}>Kiểm tra</button>
+        {:else}
+          <button type="button" class="btn btn-son btn-lg btp-nut" onclick={doNext}>{i + 1 >= total ? 'Xem kết quả' : 'Câu tiếp'}</button>
+        {/if}
       </div>
     {/if}
-  {/if}
+  </section>
 {/snippet}
 
-{#if media.isMobile}
+{#if failed}
+  <main class="page">
+    <EmptyState title="Không mở được bài tập này.">
+      {#snippet action()}<a href="/learn/exercises/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
+    </EmptyState>
+  </main>
+{:else if media.isMobile}
+  <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
       <a href="/learn/exercises/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
-      <b style="flex: 1; font-size: 15px">{lesson?.title ?? 'Bài tập'}</b>
+      <span style="flex: 1; min-width: 0; text-align: center">
+        <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{lesson?.title ?? 'Bài tập'}</b>
+        <span class="muted" style="font-size: 12px">HSK {levelId} · Bài {lessonNo}</span>
+      </span>
       <Avatar size={36} />
     </header>
-    <main class="mcontent" style="display: flex; flex-direction: column; gap: 14px">{@render main(true)}</main>
+    <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">
+      {#if lesson === null}
+        <Skeleton h="360px" r={20} />
+      {:else}
+        {@render khung(true)}
+      {/if}
+    </main>
   </div>
 {:else}
+  <!-- ============ Máy tính ============ -->
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
     <nav class="crumb" style="margin-left: 8px">
@@ -220,15 +232,47 @@
     </nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="bt" /><Avatar size={44} /></div>
   </header>
-  <main class="page" style="max-width: 820px; display: flex; flex-direction: column; gap: 16px">
-    <BackLink href="/learn/exercises/hsk/{levelId}" label="Chọn bài" />
-    {@render main(false)}</main>
+  <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
+    {#if lesson === null}
+      <Skeleton h="420px" r={22} />
+    {:else}
+      <DauBai href="/learn/exercises/hsk/{levelId}" kicker="HSK {levelId} · Bài {lessonNo} · {total} câu" title={lesson.title} />
+      {@render khung(false)}
+    {/if}
+  </main>
 {/if}
 
 <style>
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+  /* Dãy số câu chiếm phần trái chân khung, nút chính bên phải; nhiều câu thì tự xuống dòng. */
+  .btp-day {
+    flex: 1 1 260px;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
     gap: 6px;
+  }
+  /* Ô số nhỏ hơn bản lưới cũ: chỉ để xem, nằm chung hàng với nút nên phải gọn. */
+  .btp-day :global(.qn) {
+    width: 34px;
+    height: 34px;
+    font-size: 13px;
+  }
+  .btp-nut {
+    flex: none;
+    min-width: 150px;
+    margin-left: auto;
+  }
+  /* Điện thoại: nút chính trải hết bề ngang, cao hơn cho ngón cái. */
+  .btp-chan-m .btp-nut {
+    flex: 1 1 auto;
+    min-height: 50px;
+  }
+
+  .btp-xong {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
   }
 </style>
