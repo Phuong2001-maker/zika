@@ -13,6 +13,7 @@
   import Avatar from '$lib/components/Avatar.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import Modal from '$lib/components/Modal.svelte';
+  import { nenAnhDaiDien } from '$lib/utils/anh';
 
   // Tài khoản (07 §8).
   interface Device {
@@ -38,7 +39,49 @@
 
   let delOpen = $state(false);
   let delConfirm = $state('');
+  let delPassword = $state('');
+  let delErr = $state('');
   let delBusy = $state(false);
+
+  let anhBusy = $state(false);
+
+  /** Chọn ảnh → nén ở trình duyệt (~15KB) → gửi; server cắt 192px và xoá ảnh cũ. */
+  async function doiAnh(e: Event): Promise<void> {
+    const input = e.currentTarget as HTMLInputElement;
+    const tep = input.files?.[0];
+    input.value = ''; // chọn lại đúng tệp vừa chọn vẫn phải chạy lại
+    if (!tep) return;
+    if (!tep.type.startsWith('image/')) {
+      toast.show('Hãy chọn một tệp ảnh (JPG, PNG hoặc WebP).');
+      return;
+    }
+    anhBusy = true;
+    try {
+      const nho = await nenAnhDaiDien(tep);
+      const fd = new FormData();
+      fd.append('file', nho, nho.type === 'image/webp' ? 'avatar.webp' : 'avatar.jpg');
+      await api.upload<{ avatarUrl: string }>('/me/avatar', fd);
+      await session.refresh();
+      toast.ok('Đã đổi ảnh đại diện.');
+    } catch (err) {
+      toast.show(err instanceof ApiError ? err.message : 'Không đọc được ảnh này, thử ảnh khác nhé.');
+    } finally {
+      anhBusy = false;
+    }
+  }
+
+  async function goAnh(): Promise<void> {
+    anhBusy = true;
+    try {
+      await api.del('/me/avatar');
+      await session.refresh();
+      toast.ok('Đã gỡ ảnh đại diện.');
+    } catch {
+      toast.show('Không gỡ được ảnh.');
+    } finally {
+      anhBusy = false;
+    }
+  }
 
   const user = $derived(session.user);
 
@@ -115,12 +158,14 @@
   async function deleteAccount(): Promise<void> {
     if (delConfirm.trim().toUpperCase() !== 'XOA') return;
     delBusy = true;
+    delErr = '';
     try {
-      await api.del('/me');
+      // Server đòi chữ xác nhận và mật khẩu (nếu có) — trước đây không gửi nên lần nào cũng hỏng.
+      await api.del('/me', { confirm: delConfirm, password: delPassword });
       session.clear();
       void goto('/login', { replaceState: true });
-    } catch {
-      toast.show('Không xoá được tài khoản.');
+    } catch (e) {
+      delErr = e instanceof ApiError ? (e.fields.password ?? e.fields.confirm ?? e.message) : 'Không xoá được tài khoản.';
       delBusy = false;
     }
   }
@@ -135,7 +180,24 @@
   {#if user}
     <!-- Hồ sơ -->
     <section class="block" style="padding: {m ? 18 : 24}px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap">
-      <span class="ava" style="width: {m ? 56 : 64}px; height: {m ? 56 : 64}px; font-size: {m ? 18 : 20}px">{user.initials}</span>
+      <div class="anh-dd">
+        <span class="ava" style="width: {m ? 72 : 80}px; height: {m ? 72 : 80}px; font-size: {m ? 22 : 24}px">
+          {#if user.avatarUrl}
+            <img src={user.avatarUrl} alt="Ảnh đại diện" width={m ? 72 : 80} height={m ? 72 : 80} referrerpolicy="no-referrer" />
+          {:else}
+            {user.initials}
+          {/if}
+        </span>
+        <div class="anh-dd-nut">
+          <label class="btn" class:btn-sm={!m} class:dang-tai={anhBusy}>
+            <Icon name="upload" size={15} /> {anhBusy ? 'Đang tải…' : user.avatarUrl ? 'Đổi ảnh' : 'Thêm ảnh'}
+            <input type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" disabled={anhBusy} onchange={doiAnh} />
+          </label>
+          {#if user.avatarUrl && !anhBusy}
+            <button type="button" class="btn btn-bare-chu" class:btn-sm={!m} onclick={goAnh}>Gỡ ảnh</button>
+          {/if}
+        </div>
+      </div>
       <div style="flex: 1 1 200px; min-width: 0">
         <h1 style="font-size: {m ? 22 : 26}px">{user.displayName}</h1>
         <p class="muted" style="font-size: 14px">{user.email}</p>
@@ -291,7 +353,14 @@
 {#if delOpen}
   <Modal title="Xoá tài khoản?" onclose={() => (delOpen = false)}>
     <p style="font-size: 14px">Mọi tiến độ học sẽ mất và không lấy lại được. Gõ <b>XOA</b> để xác nhận.</p>
-    <input class="inp" bind:value={delConfirm} placeholder="XOA" />
+    <input class="inp" bind:value={delConfirm} placeholder="XOA" aria-label="Gõ XOA để xác nhận" />
+    {#if user?.hasPassword}
+      <div class="field">
+        <label class="lbl" for="del-pw">Mật khẩu hiện tại</label>
+        <input id="del-pw" class="inp" type="password" bind:value={delPassword} autocomplete="current-password" />
+      </div>
+    {/if}
+    {#if delErr}<p class="err">{delErr}</p>{/if}
     {#snippet actions()}
       <button type="button" class="btn btn-sm" onclick={() => (delOpen = false)}>Giữ lại tài khoản</button>
       <button type="button" class="btn btn-danger btn-sm" disabled={delBusy || delConfirm.trim().toUpperCase() !== 'XOA'} onclick={deleteAccount}>
@@ -306,6 +375,32 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
+  }
+  /* Ảnh đại diện + nút đổi/gỡ xếp dọc, canh giữa dưới ảnh. */
+  .anh-dd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .anh-dd-nut {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .anh-dd-nut label {
+    cursor: pointer;
+  }
+  .dang-tai {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .btn-bare-chu {
+    border-color: transparent;
+    background: none;
+    box-shadow: none;
+    color: var(--text-2);
   }
   .dev {
     display: flex;

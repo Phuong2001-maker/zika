@@ -5,9 +5,11 @@ namespace Zika\Controllers;
 
 use Zika\Core\Auth;
 use Zika\Core\Clock;
+use Zika\Core\Config;
 use Zika\Core\Csrf;
 use Zika\Core\Db;
 use Zika\Core\HttpError;
+use Zika\Core\RateLimit;
 use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Core\Settings;
@@ -57,12 +59,47 @@ final class MeController
         return ['user' => UserService::toApi(UserService::find($r->userId()))];
     }
 
-    /** POST /me/avatar (multipart file) → WebP 256×256 */
+    /** POST /me/avatar (multipart file) → WebP 192×192, xoá tệp ảnh cũ. */
     public function avatar(Request $r): array
     {
+        // Mỗi lần đổi là một tệp mới trên ổ của hosting (dung lượng có hạn): chặn bấm đổi liên tục.
+        RateLimit::enforce('avatar:' . $r->userId(), 10, 3600, 'Bạn đổi ảnh nhiều quá, thử lại sau ít phút nhé.');
+        $cu = (string) Db::val('SELECT avatar_path FROM users WHERE id = ?', [$r->userId()]);
         $img = Upload::image($r->files['file'] ?? null, 'avatar');
         Db::update('users', ['avatar_path' => $img['path']], ['id' => $r->userId()]);
+        if ($cu !== $img['path']) {
+            self::xoaAnhDaiDien($cu);
+        }
         return ['avatarUrl' => $img['url']];
+    }
+
+    /** DELETE /me/avatar — về lại chữ cái đầu tên. */
+    public function removeAvatar(Request $r): array
+    {
+        $cu = (string) Db::val('SELECT avatar_path FROM users WHERE id = ?', [$r->userId()]);
+        Db::update('users', ['avatar_path' => null], ['id' => $r->userId()]);
+        self::xoaAnhDaiDien($cu);
+        return ['avatarUrl' => null];
+    }
+
+    /**
+     * Xoá tệp ảnh đại diện không còn ai dùng. Chỉ đụng tệp trong uploads/avatar/ (ảnh Google là URL
+     * ngoài; ảnh cũ trước đây nằm chung uploads/img/ với ảnh bài học nên để nguyên). Tên tệp theo
+     * sha1 nội dung nên hai người chọn cùng một ảnh sẽ dùng chung tệp — còn người dùng thì giữ.
+     */
+    public static function xoaAnhDaiDien(string $path): void
+    {
+        $goc = Config::uploadsUrl('avatar/');
+        if (!str_starts_with($path, $goc) || str_contains($path, '..')) {
+            return;
+        }
+        if ((int) Db::val('SELECT COUNT(*) FROM users WHERE avatar_path = ?', [$path]) > 0) {
+            return;
+        }
+        $tep = Config::uploadsDir('avatar/' . substr($path, strlen($goc)));
+        if (is_file($tep)) {
+            @unlink($tep);
+        }
     }
 
     /** PUT /me/password — bắt buộc mật khẩu hiện tại nếu đã có; thu hồi các phiên khác. */
@@ -122,7 +159,8 @@ final class MeController
     {
         $user = $r->requireUser();
         $confirm = mb_strtoupper((string) preg_replace('/\s+/u', '', Str::nfc((string) $r->input('confirm', ''))));
-        if (!in_array($confirm, [Str::nfc('XOÁ'), Str::nfc('XÓA')], true)) {
+        // Màn Tài khoản bảo gõ "XOA" (bàn phím không dấu vẫn gõ được) — nhận cả có dấu lẫn không.
+        if (!in_array($confirm, ['XOA', Str::nfc('XOÁ'), Str::nfc('XÓA')], true)) {
             throw HttpError::validation(['confirm' => 'Hãy gõ XOÁ để xác nhận.']);
         }
         if (!empty($user['password_hash']) && !Auth::verifyPassword($user, (string) $r->input('password', ''))) {
@@ -133,6 +171,7 @@ final class MeController
         }
         // Khoá ngoại ON DELETE CASCADE xoá sạch tiến độ, phiên, cài đặt; góp ý được giữ lại ẩn danh.
         Db::exec('DELETE FROM users WHERE id = ?', [(int) $user['id']]);
+        self::xoaAnhDaiDien((string) ($user['avatar_path'] ?? ''));
         Auth::logout($r);
         return Response::noContent();
     }

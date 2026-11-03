@@ -88,6 +88,28 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | GT4 | Đổi quyển qua URL; thay đổi chiều rộng qua 768px | Hiện đúng quyển, nội dung và trạng thái đọc dùng chung giữa hai bố cục | | | |
 | GT5 | Giả lập một ảnh trang lỗi | Chỉ trang đó báo lỗi và có nút Thử lại; vẫn đọc được các trang khác | | | |
 
+## F. Giao diện đồng bộ — mọi màn học một khuôn (04/11/2026)
+
+| # | Bước | Mong đợi | ĐT | MTB | MT |
+|---|---|---|---|---|---|
+| F1 | Mở từng màn học theo bài: Lật thẻ, Bài tập, Kiểm tra, Luyện viết, Hội thoại, Ngữ pháp | MT: đầu bài (← Chọn bài, "HSK · Bài · …", tên bài) + **một khung trắng** chứa trọn nội dung và nút; ĐT: thanh trên + một khung. Không còn nút/dãy số câu nằm rời ngoài khung | | | |
+| F2 | Danh sách bài của 5 phần (Bài tập, Kiểm tra, Luyện viết, Hội thoại, Ngữ pháp) | Khung đầu lớn tô màu cấp, chữ "HSK" + số to, tiến độ "a/b bài" — giống màn chọn bài Lật thẻ | | | |
+| F3 | 6 màn ôn tổng hợp | Cùng khuôn đầu bài + khung; ôn Lật thẻ có ← Lật thẻ → dưới thẻ, phím Space / ← / → | | | |
+| F4 | Kiểm tra: tới câu cuối | Nút "Câu tiếp" đổi thành "Nộp bài"; dãy số câu và nút Nộp bài trong khung | | | |
+| F5 | Ngữ pháp HSK 1 Bài 1–2 (chưa có điểm) | Khung báo "Bài này chưa có phần ngữ pháp.", không còn màn trắng | | | |
+| F6 | Quét 375 / 768 / 1024 / 1280px, sáng + tối | Không tràn ngang; nút chính trên ĐT ≥ 44px | | | |
+
+## G. Ảnh đại diện và tài khoản (`/account`)
+
+| # | Bước | Mong đợi | ĐT | MTB | MT |
+|---|---|---|---|---|---|
+| G1 | Bấm **Thêm ảnh / Đổi ảnh**, chọn ảnh chụp điện thoại (vài MB, cả ảnh dọc) | Ảnh hiện tròn, đúng chiều (không bị xoay ngang); ảnh góc phải thanh trên đổi theo | | | |
+| G2 | Xem dung lượng (DevTools → Network) | Trình duyệt gửi ~50KB WebP 384px; server lưu `uploads/avatar/…webp` 192×192 ~10–15KB | | | |
+| G3 | Đổi ảnh lần hai | Đường dẫn ảnh cũ trả 404 (đã xoá tệp, không đầy ổ) | | | |
+| G4 | **Gỡ ảnh** | Về chữ cái đầu tên; tệp ảnh bị xoá | | | |
+| G5 | Chọn tệp không phải ảnh / đổi ảnh > 10 lần trong 1 giờ | Báo "Không đọc được ảnh này…" / "Bạn đổi ảnh nhiều quá…" | | | |
+| G6 | Xoá tài khoản (tài khoản thử, có mật khẩu): gõ `XOA` + mật khẩu | Xoá được, về màn đăng nhập (trước đây nút này luôn hỏng) | | | |
+
 ## E. Kiểm tra tự động (chạy ở máy dev)
 
 ```bash

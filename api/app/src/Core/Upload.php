@@ -12,12 +12,14 @@ use GdImage;
 final class Upload
 {
     public const IMAGE_MAX = 5 * 1024 * 1024;
+    public const IMAGE_MAX_PIXELS = 24_000_000;
     public const AUDIO_MAX = 2 * 1024 * 1024;
     public const STROKE_MAX = 200 * 1024;
 
     /** Cạnh dài tối đa và kiểu cắt theo loại ảnh. */
     private const IMAGE_KINDS = [
-        'avatar'   => ['max' => 256, 'square' => true, 'dir' => 'img'],
+        // Ảnh đại diện hiện to nhất 72px: 192px vẫn nét trên màn 2–3x mà mỗi tệp chỉ vài KB.
+        'avatar'   => ['max' => 192, 'square' => true, 'dir' => 'avatar'],
         'shopee'   => ['max' => 400, 'square' => true, 'dir' => 'img'],
         'qr'       => ['max' => 800, 'square' => false, 'dir' => 'qr'],
         'logo'     => ['max' => 512, 'square' => false, 'dir' => 'img'],
@@ -38,6 +40,12 @@ final class Upload
         if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp'], true)) {
             throw new HttpError(415, 'BAD_FILE', 'Chỉ nhận ảnh JPG, PNG hoặc WebP.');
         }
+        // GD giải nén cả ảnh vào RAM (~4 byte/điểm): ảnh 6000×4000 đã ~100MB, vượt memory_limit
+        // của hosting chia sẻ. Đọc kích thước từ phần đầu tệp và chặn trước khi giải nén.
+        $kt = @getimagesizefromstring($bytes);
+        if ($kt === false || $kt[0] * $kt[1] > self::IMAGE_MAX_PIXELS) {
+            throw new HttpError(413, 'TOO_LARGE', 'Ảnh quá lớn (tối đa khoảng 24 megapixel).');
+        }
         $src = @imagecreatefromstring($bytes);
         if (!$src instanceof GdImage) {
             throw new HttpError(415, 'BAD_FILE', 'Không đọc được ảnh này.');
@@ -57,7 +65,8 @@ final class Upload
         imagesavealpha($dst, true);
         imagecopyresampled($dst, $src, 0, 0, $sx, $sy, $dw, $dh, $sw, $sh);
         ob_start();
-        imagewebp($dst, null, 85);
+        // Ảnh đại diện nhỏ, 80 đã đủ mịn; các loại khác giữ 85 cho chữ trên ảnh bài học khỏi nhoè.
+        imagewebp($dst, null, $kind === 'avatar' ? 80 : 85);
         $out = (string) ob_get_clean();
         $stored = self::store($out, $cfg['dir'], 'webp');
         return $stored + ['width' => $dw, 'height' => $dh];

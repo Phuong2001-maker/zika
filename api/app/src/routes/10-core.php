@@ -30,6 +30,7 @@ return [
     ['PATCH',  '/me', [Me::class, 'update'], 'L'],
     ['DELETE', '/me', [Me::class, 'destroy'], 'L'],
     ['POST',   '/me/avatar', [Me::class, 'avatar'], 'L'],
+    ['DELETE', '/me/avatar', [Me::class, 'removeAvatar'], 'L'],
     ['PUT',    '/me/password', [Me::class, 'password'], 'L'],
     ['GET',    '/me/sessions', [Me::class, 'sessions'], 'L'],
     ['DELETE', '/me/sessions/{id}', [Me::class, 'revokeSession'], 'L'],

@@ -35,7 +35,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 72/72 test; API 53/53; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 73/73 test; API 57/57; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -48,7 +48,7 @@ web/src/lib/admin/import/ nhập Excel cho 6 phần soạn bài — xem bẫy s�
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
 web/src/lib/learn/che-do/  3 chế độ luyện ở màn Lật thẻ (Ghép cặp, Trắc nghiệm, Gõ chữ)
 web/src/lib/learn/sach.ts  3 quyển giáo trình ở /learn/books — chỉ admin, ảnh qua /api/admin/books (ngoài git)
-web/src/app.css          tokens + class dùng chung TOÀN CỤC (xem bẫy số 1)
+web/src/app.css          tokens + class dùng chung TOÀN CỤC (xem bẫy số 1); cuối file là khung học `zk-*`
 api/app/src/             Controllers/, Services/, Core/
 api/app/config.php       bí mật (DB, Google, SMTP) — gitignore, KHÔNG commit
 ```
@@ -114,9 +114,16 @@ Lọc ở trình duyệt **không thay** cho kiểm tra ở server: 4 endpoint `
 `QuestionPayload::clean()` / `Validator` như khi soạn tay, dòng nào sai thì bỏ qua kèm số dòng
 chứ không làm hỏng cả mẻ.
 
+### 7. Vite ở máy dev đôi khi bỏ lỡ file vừa sửa
+
+Sửa file lúc trang đang mở (nhất là khi nhiều tiến trình cùng ghi) có lúc Vite vẫn phát CSS cũ của
+component — giao diện "không ăn" dù code đúng, tải lại trang cũng không hết. Chạm lại file (`touch`)
+hoặc khởi động lại `npm run dev`. Bản build không bị.
+
 ## Nếp viết
 
 - **Tiếng Việt** cho chữ hiển thị, comment và thông điệp commit. Tên biến/hàm có thể tiếng Việt khi rõ nghĩa hơn.
+- Màn học mới dùng khuôn chung: `DauBai.svelte` + một `section.block.zk-khung` (xem màn Lật thẻ theo bài).
 - Mỗi màn phức tạp tách trạng thái ra `state.svelte.ts` (class runes), bố cục máy tính và điện thoại **dùng chung** trạng thái đó — kéo cửa sổ qua 768px không mất chữ đang gõ.
 - Bố cục điện thoại/máy tính chọn bằng `media.isMobile` (quản trị dùng `media.isAdminMobile`, ngắt ở 900px).
 - Comment giải thích **vì sao**, không mô tả lại code.

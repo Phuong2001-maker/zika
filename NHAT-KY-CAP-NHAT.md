@@ -23,6 +23,46 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 04/11/2026 — Đồng bộ giao diện mọi màn học; học viên đổi ảnh đại diện
+
+**Giao diện một khuôn.** Thêm khối "Khung học dùng chung" cuối `web/src/app.css` (lớp `zk-*`: `.zk-khung`,
+`.zk-khung-dau`, `.zk-so`, `.zk-chan`, `.zk-o`, `.zk-tab`, `.zk-nut`…) và component `DauBai.svelte`
+(đường về + "HSK · Bài · …" + tên bài). Mọi màn học theo bài và 6 màn ôn tổng hợp dùng chung khuôn:
+đầu bài + một khung trắng chứa trọn nội dung, nút, điều hướng. Cụ thể:
+- Bài tập, Kiểm tra: nút Kiểm tra / Câu trước / Câu tiếp / dãy số câu / Nộp bài vào trong khung;
+  Kiểm tra câu cuối nút "Câu tiếp" thành "Nộp bài" như trước.
+- Luyện viết: dải chữ, ô viết, 3 cách viết (`.zk-tab`), thông tin chữ trong một khung; ĐT ô viết vẫn
+  trong màn hình đầu.
+- Ngữ pháp: dãy điểm `.zk-tab`, ví dụ mỗi câu một ô; thêm "← Điểm trước / Điểm sau →" cuối khung;
+  bài chưa có điểm (HSK 1 Bài 1–2) báo "Bài này chưa có phần ngữ pháp." thay vì màn trắng.
+- Hội thoại: bài khoá trong khung, "Đã đọc xong / Bài tiếp" ở chân khung; nút Pinyin / Nghĩa giữ nguyên.
+- `PartLevel` (chọn bài của 5 phần) có khung đầu lớn tô màu cấp giống màn chọn bài Lật thẻ.
+- Ôn Lật thẻ cả cấp: cùng khuôn màn Lật thẻ theo bài, thêm phím Space / ← / → (gợi ý phím đã hiện
+  sẵn nhưng trước đây không chạy).
+Class riêng từng màn có tiền tố (`btp-`, `kt-`, `vt-`, `np-`, `th-`, `ht-`, `pl-`), đã grep `app.css`.
+
+**Ảnh đại diện.** Màn Tài khoản có **Thêm/Đổi ảnh** và **Gỡ ảnh**. Tối ưu cho dung lượng có hạn:
+- Trình duyệt cắt vuông giữa, đọc đúng chiều EXIF, thu về 384px WebP (`web/src/lib/utils/anh.ts`):
+  ảnh 1MB gửi đi còn ~51KB.
+- Server (`Upload::image`, loại `avatar`) lưu 192×192 WebP q80 vào `uploads/avatar/` (~14KB), chặn ảnh
+  > 24 megapixel trước khi GD giải nén (tránh vượt memory_limit hosting).
+- Đổi ảnh / gỡ ảnh / xoá tài khoản thì xoá tệp cũ nếu không ai còn dùng (tên tệp theo sha1 nên hai
+  người cùng ảnh dùng chung một tệp). Ảnh Google (URL ngoài) và ảnh cũ trong `uploads/img/` không đụng.
+- Giới hạn 10 lần đổi / giờ / người. Thêm `DELETE /me/avatar`.
+
+**Sửa lỗi có sẵn:** nút Xoá tài khoản luôn hỏng — web không gửi chữ xác nhận, server đòi "XOÁ" có dấu
+trong khi màn bảo gõ "XOA", và không có ô mật khẩu. Nay gửi đủ, server nhận cả "XOA", hộp thoại có ô mật khẩu.
+
+**Kiểm tra:** Svelte 0 lỗi/0 cảnh báo, lint sạch, 73/73 test web; API 57/57 (thêm `AvatarTest`: nén 192px
+< 20KB, xoá ảnh cũ, ảnh dùng chung không xoá, ảnh Google không đụng, chặn ảnh 24.6MP, xoá tài khoản "xoa"
++ mật khẩu). Trình duyệt: quét 24 màn học viên ở 375px — không tràn ngang, không lỗi JS; xem từng màn ở
+375 và 1280px, giao diện tối; đổi ảnh thật 1MB → gửi 51KB → lưu 14KB 192×192, ảnh cũ 404, gỡ ảnh, báo lỗi
+tệp hỏng. Chưa kiểm trên điện thoại thật: chạy `web-lan` trong `.claude/launch.json` (cổng 5174, nghe mạng
+LAN) rồi mở `http://<IP máy>:5174` trên điện thoại cùng Wi-Fi.
+
+Lên server: chép code PHP mới (Upload, MeController, routes) cùng web; thư mục `uploads/avatar/` tự tạo khi
+có người đổi ảnh đầu tiên (uploads phải cho PHP ghi).
+
 ### 04/11/2026 — Làm lại giao diện màn Lật thẻ: một khung học, thẻ phẳng
 
 Người dùng thấy màn lật thẻ rối và xấu hơn trang mẫu. Đổi:
