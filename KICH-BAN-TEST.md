@@ -24,7 +24,7 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | A2 | Mở HSK 1 → Bài 3 | Thẻ đầu hiện mặt trước, có chữ "Chạm để lật"/"Bấm để lật"; thẻ nằm trọn trong màn hình đầu, không bị tràn ngang | | | |
 | A3 | Chạm/bấm thẻ | Thẻ **lật dọc từ trên xuống**, mượt, không giật; cả hai mặt và chồng thẻ phía sau **nền trắng**; mặt sau có pinyin tô màu thanh, chữ Hán, âm Hán Việt, nghĩa | | | |
 | A4 | Ngay sau khi lật | **Tự đọc từ giọng nam Yunxi**, dùng file theo chữ + pinyin; chậm, rõ từng âm | | | |
-| A5 | Khối "Câu ví dụ" | Hiện **2 câu** ngắn đúng cấp (HSK 1 ≤ 12 chữ, HSK 2 ≤ 16, HSK 3 ≤ 22), từ đang học tô màu; **mặc định chỉ hiện chữ Hán**, bấm icon mắt từng câu mới hiện pinyin tô màu thanh + nghĩa tiếng Việt, bấm lại thì ẩn; sang thẻ khác lại ẩn hết | | | |
+| A5 | Khối "Câu ví dụ" | Hiện **2 câu** ngắn đúng cấp (HSK 1 ≤ 12 chữ, HSK 2 ≤ 16, HSK 3 ≤ 22), từ đang học tô màu; **mặc định chỉ hiện chữ Hán**; cặp nút **Pinyin | Nghĩa** ở hàng tiêu đề bật/tắt riêng pinyin tô màu thanh và nghĩa tiếng Việt cho cả khối; sang thẻ khác vẫn giữ lựa chọn, mở bài khác thì tắt lại | | | |
 | A6 | Bấm loa cạnh mỗi câu ví dụ | Đọc đúng câu đó, giọng người, tốc độ vừa | | | |
 | A7 | Bấm loa ở góc thẻ | Đọc lại từ | | | |
 | A8 | ĐT: bấm nút ← / →; chạm thẻ để lật, vuốt trái/phải không chuyển từ. Kiểm cả theo bài và tổng hợp. MTB/MT: nút chuyển từ; phím ← / → chuyển từ, Space lật thẻ ở màn theo bài | Bấm nút mới chuyển thẻ; thẻ mới hiện mặt trước. Chạm thẻ chỉ lật, không đổi từ | | | |
@@ -59,14 +59,13 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | C3 | HSK 1 Bài 2, khoá 1–3 | Có nút Nghe (Kokoro), khoá 4 là file thu thật | | | |
 | C4 | Bấm từng câu thoại | Đọc câu đó, giọng đúng nhân vật | | | |
 | C5 | Bấm "Nghe" rồi "Dừng" | Dừng ngay | | | |
-| C6 | Màn bài và "Ôn cả cấp": icon mắt ở đầu (thay hai nút Pinyin / Nghĩa) | Mở bài theo Cài đặt; bấm mắt ẩn cùng lúc pinyin + nghĩa cả bài, bấm lại hiện lại | | | |
 
 ## D. Phát âm ở các màn khác
 
 | # | Bước | Mong đợi | ĐT | MTB | MT |
 |---|---|---|---|---|---|
 | D1 | Ngữ pháp → loa cạnh câu ví dụ | Giọng người | | | |
-| D1b | Ngữ pháp → câu ví dụ (HSK 1 Bài 4) | Mặc định chỉ hiện chữ Hán; icon mắt từng câu ẩn/hiện pinyin + nghĩa; đổi điểm ngữ pháp thì ẩn lại | | | |
+| D1b | Ngữ pháp → câu ví dụ (HSK 1 Bài 4) | Mặc định chỉ hiện chữ Hán; cặp nút **Pinyin | Nghĩa** ở đầu phần ví dụ bật/tắt riêng từng thứ; đổi điểm ngữ pháp thì tắt lại | | | |
 | D2 | Bài tập/Kiểm tra → câu "Nghe và chọn" | Giọng người, nghe lại được theo giới hạn | | | |
 | D3 | Cài đặt → "Nghe thử" | Giọng người theo giọng đã chọn | | | |
 | D4 | Tắt mạng sau khi đã nghe một lượt (MT) | Âm thanh đã nghe vẫn phát từ bộ nhớ đệm trình duyệt | | | |

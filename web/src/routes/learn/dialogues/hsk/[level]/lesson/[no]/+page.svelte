@@ -14,7 +14,6 @@
   import BackLink from '$lib/components/BackLink.svelte';
   import { completePart, lessonByNo, saveProgress } from '$lib/learn/lesson';
   import { speak } from '$lib/learn/speech';
-  import NutMat from '$lib/learn/NutMat.svelte';
   import type { LessonRef, NextLesson } from '$lib/api/types';
 
   // Đọc hội thoại (07 §10).
@@ -144,9 +143,10 @@
         <h1 style="font-size: {m ? 19 : 24}px; line-height: 1.25; margin-top: 2px">{data.lesson.title}</h1>
         <p class="muted" style="font-size: 13px">{khoi.length} bài khoá · {tongCau} câu</p>
       </div>
-      <!-- Một icon mắt ẩn/hiện cùng lúc pinyin và nghĩa cả bài, giống câu ví dụ ở lật thẻ và ngữ pháp.
-           Lúc mở bài vẫn theo hai tuỳ chọn trong Cài đặt. -->
-      <NutMat bind:mo={() => showPy || showVi, (v) => { showPy = v; showVi = v; }} />
+      <div class="seg">
+        <button type="button" class:on={showPy} aria-pressed={showPy} onclick={() => (showPy = !showPy)}>Pinyin</button>
+        <button type="button" class:on={showVi} aria-pressed={showVi} onclick={() => (showVi = !showVi)}>Nghĩa</button>
+      </div>
     </div>
 
     <!-- Mỗi bài khoá một khối riêng: đọc tới đâu biết đang ở cảnh nào. -->

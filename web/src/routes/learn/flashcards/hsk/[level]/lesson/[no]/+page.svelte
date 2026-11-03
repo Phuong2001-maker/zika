@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { SvelteSet } from 'svelte/reactivity';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
   import type { FlashcardsData, Word } from '$lib/api/types';
@@ -18,7 +17,6 @@
   import { completePart, lessonByNo, saveProgress, seededShuffle } from '$lib/learn/lesson';
   import { speak } from '$lib/learn/speech';
   import { toneParts } from '$lib/utils/pinyin';
-  import NutMat from '$lib/learn/NutMat.svelte';
 
   // Lật thẻ — màn học chính (07 §5.1).
   const levelId = $derived(Number(page.params.level));
@@ -31,8 +29,10 @@
   let flipped = $state(false);
   let finished = $state(false);
   let huong = $state(1); // 1 = sang thẻ sau, -1 = lùi lại — thẻ mới trượt vào từ phía tương ứng
-  /** Câu ví dụ đang mở pinyin + nghĩa (theo câu chữ Hán). Mặc định ẩn, sang thẻ khác lại ẩn hết. */
-  const moViDu = new SvelteSet<string>();
+  // Pinyin / nghĩa của câu ví dụ: mặc định tắt để tự đọc chữ Hán trước. Giữ nguyên khi sang thẻ
+  // khác, kẻo người đã bật phải bấm lại ở từng thẻ; mở bài mới thì tắt lại.
+  let vdPinyin = $state(false);
+  let vdNghia = $state(false);
 
   const cards = $derived(data?.words ?? []);
   const total = $derived(order.length);
@@ -56,6 +56,8 @@
       i = 0;
       flipped = false;
       finished = d.words.length === 0;
+      vdPinyin = false;
+      vdNghia = false;
       heartbeat.setActivity({ part: 'lt', screen: 'do', level: levelId, lessonId: l.id, lessonNo: l.no });
     } catch {
       failed = true;
@@ -63,12 +65,6 @@
   }
 
   onMount(load);
-
-  // Sang thẻ khác (tới, lùi, học lại, đổi bài) thì câu ví dụ của thẻ mới lại ẩn lời giải.
-  $effect(() => {
-    void card;
-    moViDu.clear();
-  });
 
   // Đổi bài trên URL → tải lại từ đầu.
   $effect(() => {
@@ -200,7 +196,13 @@
 {#snippet examples()}
   {#if card && flipped && settings.value.showExamples && card.examples.length > 0}
     <section class="block vidu" style="padding: 18px 20px; display: flex; flex-direction: column; gap: 14px">
-      <p class="kicker">Câu ví dụ</p>
+      <div class="vd-dau">
+        <p class="kicker">Câu ví dụ</p>
+        <div class="seg">
+          <button type="button" class:on={vdPinyin} aria-pressed={vdPinyin} onclick={() => (vdPinyin = !vdPinyin)}>Pinyin</button>
+          <button type="button" class:on={vdNghia} aria-pressed={vdNghia} onclick={() => (vdNghia = !vdNghia)}>Nghĩa</button>
+        </div>
+      </div>
       {#each card.examples as ex, k (ex.zh)}
         {#if k > 0}<hr class="rule" />{/if}
         <div style="display: flex; flex-direction: column; gap: 4px">
@@ -211,17 +213,10 @@
                 {parts[0]}<b class="hl">{ex.highlight}</b>{parts.slice(1).join(ex.highlight)}
               {:else}{ex.zh}{/if}
             </span>
-            {#if ex.pinyin || ex.vi}
-              <NutMat bind:mo={() => moViDu.has(ex.zh), (v) => (v ? moViDu.add(ex.zh) : moViDu.delete(ex.zh))} />
-            {/if}
             <button type="button" class="loa-cau" aria-label="Nghe câu" onclick={() => speak(ex.zh, null, undefined, 'nam')}><Icon name="speaker" size={17} /></button>
           </div>
-          {#if moViDu.has(ex.zh)}
-            <div class="loi-giai">
-              {#if ex.pinyin}{@render pinyinRow(ex.pinyin, 13.5)}{/if}
-              {#if ex.vi}<span class="muted" style="font-size: 14px">{ex.vi}</span>{/if}
-            </div>
-          {/if}
+          {#if vdPinyin && ex.pinyin}{@render pinyinRow(ex.pinyin, 13.5)}{/if}
+          {#if vdNghia && ex.vi}<span class="muted" style="font-size: 14px">{ex.vi}</span>{/if}
         </div>
       {/each}
     </section>
@@ -454,17 +449,17 @@
       transform: none;
     }
   }
-  /* Pinyin + nghĩa mở bằng nút mắt: đổ xuống nhẹ như khối ví dụ. */
-  .loi-giai {
+  /* Tiêu đề khối ví dụ và cặp nút Pinyin | Nghĩa chung một hàng. */
+  .vd-dau {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    animation: hienra 0.2s ease both;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
   }
   @media (prefers-reduced-motion: reduce) {
     .vao,
-    .vidu,
-    .loi-giai {
+    .vidu {
       animation: none;
     }
   }

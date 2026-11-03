@@ -16,7 +16,6 @@
   import { tileOrder } from '$lib/utils/shuffle';
   import { speak } from '$lib/learn/speech';
   import { normZh } from '$lib/utils/grade';
-  import NutMat from '$lib/learn/NutMat.svelte';
   import type { LessonRef, NextLesson } from '$lib/api/types';
 
   // Cấu trúc ngữ pháp (07 §11).
@@ -46,8 +45,9 @@
   let done = $state(false);
   /** Các điểm ngữ pháp đã mở trong lượt này — xem hết thì tự ghi “xong phần” (không còn nút Xong bài). */
   const daXem = new SvelteSet<number>();
-  /** Câu ví dụ đang mở pinyin + nghĩa (theo thứ tự trong điểm). Mặc định ẩn, đổi điểm lại ẩn hết. */
-  const moViDu = new SvelteSet<number>();
+  // Pinyin / nghĩa của câu ví dụ: mặc định tắt để tự đọc chữ Hán trước, đổi điểm thì tắt lại.
+  let vdPinyin = $state(false);
+  let vdNghia = $state(false);
 
   const points = $derived(data?.points ?? []);
   const g = $derived<Point | null>(points[pi] ?? null);
@@ -76,11 +76,12 @@
   onMount(load);
   $effect(() => { void levelId; void lessonNo; void load(); });
 
-  // Gọi mỗi khi mở điểm khác hoặc tải bài, nên câu ví dụ cũng ẩn lời giải lại ở đây.
+  // Gọi mỗi khi mở điểm khác hoặc tải bài, nên câu ví dụ cũng tắt pinyin / nghĩa lại ở đây.
   function resetPractice(): void {
     picked = [];
     checked = false;
-    moViDu.clear();
+    vdPinyin = false;
+    vdNghia = false;
   }
 
   function goPoint(k: number): void {
@@ -158,6 +159,15 @@
 
       <!-- Ví dụ -->
       <div style="display: flex; flex-direction: column; gap: 10px">
+        {#if g.examples.length > 0}
+          <div class="vd-dau">
+            <p class="kicker">Ví dụ</p>
+            <div class="seg">
+              <button type="button" class:on={vdPinyin} aria-pressed={vdPinyin} onclick={() => (vdPinyin = !vdPinyin)}>Pinyin</button>
+              <button type="button" class:on={vdNghia} aria-pressed={vdNghia} onclick={() => (vdNghia = !vdNghia)}>Nghĩa</button>
+            </div>
+          </div>
+        {/if}
         {#each g.examples as ex, k (k)}
           {@const [pre, hl, post] = parts(ex.zh, ex.highlight)}
           <div class="paper" style="padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
@@ -165,18 +175,11 @@
               {#if ex.kind}<span class="tag">{ex.kind}</span>{/if}
               {#if ex.formula}<span class="muted num" style="font-size: 13px">{ex.formula}</span>{/if}
               <span style="flex: 1"></span>
-              {#if ex.pinyin || ex.vi}
-                <NutMat size={36} bind:mo={() => moViDu.has(k), (v) => (v ? moViDu.add(k) : moViDu.delete(k))} />
-              {/if}
               <button type="button" class="btn btn-bare btn-sm" aria-label="Nghe câu" onclick={() => speak(ex.zh)}><Icon name="speaker" size={16} /></button>
             </div>
             <span class="hz" lang="zh" style="font-size: {m ? 19 : 22}px">{pre}{#if hl}<b class="hl">{hl}</b>{/if}{post}</span>
-            {#if moViDu.has(k)}
-              <span class="loi-giai">
-                {#if ex.pinyin}<span class="muted" style="font-size: 13.5px">{ex.pinyin}</span>{/if}
-                {#if ex.vi}<span style="font-size: 14px">{ex.vi}</span>{/if}
-              </span>
-            {/if}
+            {#if vdPinyin && ex.pinyin}<span class="muted" style="font-size: 13.5px">{ex.pinyin}</span>{/if}
+            {#if vdNghia && ex.vi}<span style="font-size: 14px">{ex.vi}</span>{/if}
           </div>
         {/each}
       </div>
@@ -293,25 +296,12 @@
   .drop.trong {
     justify-content: center;
   }
-  .loi-giai {
+  /* Tiêu đề phần ví dụ và cặp nút Pinyin | Nghĩa chung một hàng. */
+  .vd-dau {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    animation: hienra 0.2s ease both;
-  }
-  @keyframes hienra {
-    from {
-      opacity: 0;
-      transform: translateY(-6px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .loi-giai {
-      animation: none;
-    }
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
   }
 </style>

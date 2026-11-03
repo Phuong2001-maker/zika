@@ -11,7 +11,6 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import BackLink from '$lib/components/BackLink.svelte';
   import { speak, stopSpeak } from '$lib/learn/speech';
-  import NutMat from '$lib/learn/NutMat.svelte';
 
   // Nghe liền các hội thoại của cả cấp (04 §4.9 part = ht).
   interface Speaker { id: number; name: string; avatarChar: string; color: string }
@@ -73,8 +72,8 @@
     <Skeleton h="300px" r={16} />
   {:else}
     <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
-      <!-- Một icon mắt ẩn/hiện cùng lúc pinyin và nghĩa, như màn hội thoại theo bài. -->
-      <NutMat size={36} bind:mo={() => showPy || showVi, (v) => { showPy = v; showVi = v; }} />
+      <button type="button" class="btn btn-sm" class:apps-on={showPy} onclick={() => (showPy = !showPy)}>Pinyin</button>
+      <button type="button" class="btn btn-sm" class:apps-on={showVi} onclick={() => (showVi = !showVi)}>Nghĩa</button>
       {#if playing}
         <button type="button" class="btn btn-sm" onclick={stop}><Icon name="x" size={15} /> Dừng</button>
       {/if}

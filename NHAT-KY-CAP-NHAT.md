@@ -32,14 +32,14 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
   giới hạn 300 request/phút. Service worker bỏ kho `zika-book`, lần kích hoạt tới tự xoá ảnh đã lưu.
 - **Lật thẻ:** mặt trước, mặt sau và chồng thẻ phía sau đều nền trắng; lật dọc từ trên xuống
   (`rotateX`), 0,6 giây, đường cong vào–ra đều.
-- **Câu ví dụ ở lật thẻ và ngữ pháp:** mặc định chỉ hiện chữ Hán, mỗi câu có icon mắt để hiện/ẩn
-  pinyin + nghĩa; sang thẻ khác hoặc đổi điểm ngữ pháp thì ẩn lại.
-- **Hội thoại (theo bài và ôn cả cấp):** hai nút chữ Pinyin / Nghĩa thay bằng một icon mắt ẩn/hiện
-  cùng lúc cả hai cho cả bài. Giao diện còn lại và hai tuỳ chọn hội thoại trong Cài đặt giữ nguyên.
+- **Câu ví dụ ở lật thẻ và ngữ pháp:** mặc định chỉ hiện chữ Hán; cặp nút **Pinyin | Nghĩa** (kiểu
+  `.seg` giống màn hội thoại) ở đầu khối ví dụ bật/tắt riêng từng thứ. Lật thẻ giữ lựa chọn khi sang
+  thẻ khác, mở bài khác thì tắt lại; ngữ pháp đổi điểm thì tắt lại. Đã thử icon mắt từng câu rồi bỏ
+  vì nhìn rối (bộ icon không có mắt gạch chéo) và không bật riêng pinyin được. Hội thoại giữ nguyên.
 
 Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 54/54 test web, 53/53 test API. Trên trình duyệt:
 học viên bị 403 ở cả hai đường ảnh, quản trị lấy được ảnh (200 `image/webp`); thẻ trắng, lật
-`rotateX`; icon mắt ở HSK 1 Bài 2 (lật thẻ) và Bài 4 (ngữ pháp). Chưa kiểm trên máy thật.
+`rotateX`; nút Pinyin | Nghĩa ở HSK 1 Bài 2 (lật thẻ) và Bài 4 (ngữ pháp). Chưa kiểm trên máy thật.
 Ngữ pháp HSK 1 Bài 1–2 không có điểm nào nên màn trắng trơn — lỗi có từ trước, chưa sửa.
 
 Lên server: phải chép **`.htaccess` gốc mới** (có luật chặn `uploads/giao-trinh/`) cùng code PHP,
