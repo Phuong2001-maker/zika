@@ -207,16 +207,6 @@
       {@render row('Âm báo khi bài kiểm tra còn 1 phút')}
       <label class="sw"><input type="checkbox" bind:checked={draft.testBeep} /><span></span></label>
     </div>
-
-    <div class="line">
-      {@render row('Hội thoại: hiện pinyin')}
-      <label class="sw"><input type="checkbox" bind:checked={draft.dialogue.showPinyin} /><span></span></label>
-    </div>
-
-    <div class="line">
-      {@render row('Hội thoại: hiện nghĩa tiếng Việt')}
-      <label class="sw"><input type="checkbox" bind:checked={draft.dialogue.showVi} /><span></span></label>
-    </div>
   </section>
 {/snippet}
 

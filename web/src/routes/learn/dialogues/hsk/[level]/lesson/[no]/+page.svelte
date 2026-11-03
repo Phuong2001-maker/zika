@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { SvelteSet } from 'svelte/reactivity';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
-  import { settings } from '$lib/stores/settings.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import { toast } from '$lib/stores/toast.svelte';
   import Icon from '$lib/components/Icon.svelte';
@@ -14,6 +14,7 @@
   import BackLink from '$lib/components/BackLink.svelte';
   import { completePart, lessonByNo, saveProgress } from '$lib/learn/lesson';
   import { speak } from '$lib/learn/speech';
+  import NutMat from '$lib/learn/NutMat.svelte';
   import type { LessonRef, NextLesson } from '$lib/api/types';
 
   // Đọc hội thoại (07 §10).
@@ -33,8 +34,8 @@
   let data = $state<Data | null>(null);
   let failed = $state(false);
   let dangDoc = $state<string>('');   // 'chỉ số bài khoá:chỉ số câu' đang đọc
-  let showPy = $state(true);
-  let showVi = $state(true);
+  /** Câu thoại đang mở pinyin + nghĩa (theo id câu). Mặc định ẩn như câu ví dụ ở lật thẻ, ngữ pháp. */
+  const moCau = new SvelteSet<number>();
   let moTa = $state<Record<number, boolean>>({});   // bài khoá nào đang mở rộng phần tình huống
   let done = $state(false);
 
@@ -52,8 +53,7 @@
       dangDoc = '';
       moTa = {};
       done = false;
-      showPy = settings.value.dialogue.showPinyin;
-      showVi = settings.value.dialogue.showVi;
+      moCau.clear();
       heartbeat.setActivity({ part: 'ht', screen: 'do', level: levelId, lessonId: l.id, lessonNo: l.no });
     } catch {
       failed = true;
@@ -136,17 +136,10 @@
   {:else if khoi.length === 0}
     <EmptyState title="Bài này chưa có hội thoại." />
   {:else}
-    <!-- Hàng công cụ của cả bài: chỉ còn bật/tắt pinyin và nghĩa. -->
-    <div class="dau">
-      <div style="min-width: 0">
-        <span class="kicker">Hội thoại · Bài {lessonNo}</span>
-        <h1 style="font-size: {m ? 19 : 24}px; line-height: 1.25; margin-top: 2px">{data.lesson.title}</h1>
-        <p class="muted" style="font-size: 13px">{khoi.length} bài khoá · {tongCau} câu</p>
-      </div>
-      <div class="seg">
-        <button type="button" class:on={showPy} aria-pressed={showPy} onclick={() => (showPy = !showPy)}>Pinyin</button>
-        <button type="button" class:on={showVi} aria-pressed={showVi} onclick={() => (showVi = !showVi)}>Nghĩa</button>
-      </div>
+    <div style="min-width: 0">
+      <span class="kicker">Hội thoại · Bài {lessonNo}</span>
+      <h1 style="font-size: {m ? 19 : 24}px; line-height: 1.25; margin-top: 2px">{data.lesson.title}</h1>
+      <p class="muted" style="font-size: 13px">{khoi.length} bài khoá · {tongCau} câu</p>
     </div>
 
     <!-- Mỗi bài khoá một khối riêng: đọc tới đâu biết đang ở cảnh nào. -->
@@ -187,9 +180,17 @@
               >
                 {#if sp}<span class="muted" style="font-size: 12px; font-weight: 700">{sp.name}{sp.roleVi ? ` · ${sp.roleVi}` : ''}</span>{/if}
                 <span class="hz" lang="zh" style="font-size: {m ? 19 : 22}px">{pre}{#if hl}<b class="hl">{hl}</b>{/if}{post}</span>
-                {#if showPy && line.pinyin}<span class="muted" style="font-size: 13.5px">{line.pinyin}</span>{/if}
-                {#if showVi && line.vi}<span style="font-size: 14px">{line.vi}</span>{/if}
+                {#if moCau.has(line.id)}
+                  <span class="loi-giai">
+                    {#if line.pinyin}<span class="muted" style="font-size: 13.5px">{line.pinyin}</span>{/if}
+                    {#if line.vi}<span style="font-size: 14px">{line.vi}</span>{/if}
+                  </span>
+                {/if}
               </button>
+              <!-- Nút mắt đứng ngoài bong bóng: bong bóng đã là nút nghe câu, không lồng nút được. -->
+              {#if line.pinyin || line.vi}
+                <NutMat size={36} bind:mo={() => moCau.has(line.id), (v) => (v ? moCau.add(line.id) : moCau.delete(line.id))} />
+              {/if}
             </li>
           {/each}
         </ul>
@@ -231,13 +232,6 @@
 {/if}
 
 <style>
-  .dau {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
   .khoi {
     display: flex;
     flex-direction: column;
@@ -282,5 +276,26 @@
   }
   .them {
     padding: 0;
+  }
+  .loi-giai {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    animation: hienra 0.2s ease both;
+  }
+  @keyframes hienra {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .loi-giai {
+      animation: none;
+    }
   }
 </style>

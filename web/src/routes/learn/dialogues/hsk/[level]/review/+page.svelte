@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { SvelteSet } from 'svelte/reactivity';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
-  import { settings } from '$lib/stores/settings.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import Icon from '$lib/components/Icon.svelte';
   import Avatar from '$lib/components/Avatar.svelte';
@@ -11,6 +11,7 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import BackLink from '$lib/components/BackLink.svelte';
   import { speak, stopSpeak } from '$lib/learn/speech';
+  import NutMat from '$lib/learn/NutMat.svelte';
 
   // Nghe liền các hội thoại của cả cấp (04 §4.9 part = ht).
   interface Speaker { id: number; name: string; avatarChar: string; color: string }
@@ -24,8 +25,8 @@
   let failed = $state(false);
   let openId = $state<number | null>(null);
   let playing = $state(false);
-  let showPy = $state(true);
-  let showVi = $state(true);
+  /** Câu thoại đang mở pinyin + nghĩa (theo id câu). Mặc định ẩn, giống màn hội thoại theo bài. */
+  const moCau = new SvelteSet<number>();
 
   async function load(): Promise<void> {
     failed = false;
@@ -33,8 +34,7 @@
       const res = await api.get<{ dialogues: Dlg[] }>(`/learn/levels/${levelId}/review/ht`);
       list = res.dialogues;
       openId = res.dialogues[0]?.id ?? null;
-      showPy = settings.value.dialogue.showPinyin;
-      showVi = settings.value.dialogue.showVi;
+      moCau.clear();
       heartbeat.setActivity({ part: 'ht', screen: 'review', level: levelId });
     } catch {
       failed = true;
@@ -71,13 +71,11 @@
   {:else if list === null}
     <Skeleton h="300px" r={16} />
   {:else}
-    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
-      <button type="button" class="btn btn-sm" class:apps-on={showPy} onclick={() => (showPy = !showPy)}>Pinyin</button>
-      <button type="button" class="btn btn-sm" class:apps-on={showVi} onclick={() => (showVi = !showVi)}>Nghĩa</button>
-      {#if playing}
+    {#if playing}
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
         <button type="button" class="btn btn-sm" onclick={stop}><Icon name="x" size={15} /> Dừng</button>
-      {/if}
-    </div>
+      </div>
+    {/if}
 
     {#each list as d (d.id)}
       <section class="block" style="padding: {m ? 16 : 20}px; display: flex; flex-direction: column; gap: 10px">
@@ -106,9 +104,14 @@
                 </span>
                 <button type="button" class="bub" style="flex: 1; text-align: left; cursor: pointer" onclick={() => speak(l.zh, l.audioUrl)}>
                   <span class="hz" lang="zh" style="font-size: {m ? 17 : 19}px">{l.zh}</span>
-                  {#if showPy && l.pinyin}<span class="muted" style="font-size: 13px">{l.pinyin}</span>{/if}
-                  {#if showVi && l.vi}<span style="font-size: 13.5px">{l.vi}</span>{/if}
+                  {#if moCau.has(l.id)}
+                    {#if l.pinyin}<span class="muted" style="font-size: 13px">{l.pinyin}</span>{/if}
+                    {#if l.vi}<span style="font-size: 13.5px">{l.vi}</span>{/if}
+                  {/if}
                 </button>
+                {#if l.pinyin || l.vi}
+                  <NutMat size={34} bind:mo={() => moCau.has(l.id), (v) => (v ? moCau.add(l.id) : moCau.delete(l.id))} />
+                {/if}
               </li>
             {/each}
           </ul>

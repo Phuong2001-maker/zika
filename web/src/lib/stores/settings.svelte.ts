@@ -16,6 +16,8 @@ export const DEFAULT_SETTINGS: UserSettings = {
   theme: 'light',
   remindAt: '20:00',
   testBeep: true,
+  // Không còn màn nào đọc: hội thoại đã chuyển sang icon mắt từng câu, mặc định ẩn. Giữ trường
+  // để cài đặt cũ lưu trên server vẫn đúng kiểu khi tải về và gửi lại.
   dialogue: { showPinyin: true, showVi: true },
 };
 
