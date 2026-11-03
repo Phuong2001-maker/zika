@@ -35,7 +35,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 54/54 test; API 53/53; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 72/72 test; API 53/53; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -46,6 +46,7 @@ web/src/lib/components/  component dùng chung (Select, Modal, Icon, Switcher…
 web/src/lib/admin/       riêng khu quản trị (menu.ts, api.ts, LessonHeader.svelte)
 web/src/lib/admin/import/ nhập Excel cho 6 phần soạn bài — xem bẫy số 6
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
+web/src/lib/learn/che-do/  3 chế độ luyện ở màn Lật thẻ (Ghép cặp, Trắc nghiệm, Gõ chữ)
 web/src/lib/learn/sach.ts  3 quyển giáo trình ở /learn/books — chỉ admin, ảnh qua /api/admin/books (ngoài git)
 web/src/app.css          tokens + class dùng chung TOÀN CỤC (xem bẫy số 1)
 api/app/src/             Controllers/, Services/, Core/

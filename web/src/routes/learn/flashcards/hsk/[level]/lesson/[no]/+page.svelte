@@ -17,6 +17,11 @@
   import { completePart, lessonByNo, saveProgress, seededShuffle } from '$lib/learn/lesson';
   import { speak } from '$lib/learn/speech';
   import { toneParts } from '$lib/utils/pinyin';
+  import { CHE_DO, GhepCap, GoChu, TracNghiem, type CheDo } from '$lib/learn/che-do/state.svelte';
+  import GhepCapView from '$lib/learn/che-do/GhepCap.svelte';
+  import TracNghiemView from '$lib/learn/che-do/TracNghiem.svelte';
+  import GoChuView from '$lib/learn/che-do/GoChu.svelte';
+  import TongKet from '$lib/learn/che-do/TongKet.svelte';
 
   // Lật thẻ — màn học chính (07 §5.1).
   const levelId = $derived(Number(page.params.level));
@@ -33,6 +38,13 @@
   // khác, kẻo người đã bật phải bấm lại ở từng thẻ; mở bài mới thì tắt lại.
   let vdPinyin = $state(false);
   let vdNghia = $state(false);
+
+  // Chế độ học: Lật thẻ là màn cũ, 3 chế độ còn lại luyện cùng bộ từ. Mỗi chế độ giữ lượt đang
+  // làm khi đổi qua lại; đối tượng nằm ở trang nên đổi bố cục điện thoại/máy tính không mất.
+  let che = $state<CheDo>('the');
+  let ghep = $state.raw<GhepCap | null>(null);
+  let tn = $state.raw<TracNghiem | null>(null);
+  let go = $state.raw<GoChu | null>(null);
 
   const cards = $derived(data?.words ?? []);
   const total = $derived(order.length);
@@ -58,6 +70,8 @@
       finished = d.words.length === 0;
       vdPinyin = false;
       vdNghia = false;
+      ghep = tn = go = null;
+      if (che !== 'the') batDau(che);
       heartbeat.setActivity({ part: 'lt', screen: 'do', level: levelId, lessonId: l.id, lessonNo: l.no });
     } catch {
       failed = true;
@@ -115,9 +129,28 @@
     finished = false;
   }
 
+  /** Xong một chế độ luyện cũng tính là học xong phần Lật thẻ, như lật hết thẻ. */
+  function xongCheDo(): void {
+    if (!data) return;
+    completePart(data.lesson.id, 'lt').catch(() => toast.show('Đã học xong nhưng chưa lưu được tiến độ.'));
+  }
+
+  /** Mở lượt mới của một chế độ; `tu` bỏ trống là cả bài, truyền danh sách từ sai để luyện lại. */
+  function batDau(c: CheDo, tu: Word[] = cards): void {
+    if (c === 'ghep') ghep = new GhepCap(tu, xongCheDo);
+    else if (c === 'tn') tn = new TracNghiem(tu, cards, xongCheDo);
+    else if (c === 'go') go = new GoChu(tu, xongCheDo);
+  }
+
+  function chonCheDo(c: CheDo): void {
+    che = c;
+    if ((c === 'ghep' && !ghep) || (c === 'tn' && !tn) || (c === 'go' && !go)) batDau(c);
+  }
+
   // Phím tắt vẫn còn cho người quen dùng bàn phím, chỉ không bày gợi ý trên màn nữa.
+  // Ba chế độ luyện có phím riêng trong component của chúng.
   function onKey(e: KeyboardEvent): void {
-    if (finished || !card) return;
+    if (che !== 'the' || finished || !card) return;
     const tag = (e.target as HTMLElement | null)?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
     if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); }
@@ -239,6 +272,40 @@
   </section>
 {/snippet}
 
+<!-- Hàng chọn chế độ: cùng kiểu .seg với cặp Pinyin | Nghĩa. Điện thoại chia đều hết bề ngang. -->
+{#snippet chonCheDoRow(m: boolean)}
+  <div class="seg cd-chon" class:cd-chon-m={m} role="tablist" aria-label="Chế độ học">
+    {#each CHE_DO as c (c.ma)}
+      <button type="button" role="tab" aria-selected={che === c.ma} class:on={che === c.ma} onclick={() => chonCheDo(c.ma)}>{c.ten}</button>
+    {/each}
+  </div>
+{/snippet}
+
+{#snippet luyen(m: boolean)}
+  {#if che === 'ghep' && ghep}
+    {#if ghep.xong}
+      {@const kq = ghep.ketQua()}
+      <TongKet {kq} ten="Ghép cặp" {m} onLamLai={() => batDau('ghep')} onLuyenSai={() => batDau('ghep', kq.sai)} />
+    {:else}
+      <GhepCapView st={ghep} {m} />
+    {/if}
+  {:else if che === 'tn' && tn}
+    {#if tn.xong}
+      {@const kq = tn.ketQua()}
+      <TongKet {kq} ten="Trắc nghiệm" {m} onLamLai={() => batDau('tn')} onLuyenSai={() => batDau('tn', kq.sai)} />
+    {:else}
+      <TracNghiemView st={tn} {m} />
+    {/if}
+  {:else if che === 'go' && go}
+    {#if go.xong}
+      {@const kq = go.ketQua()}
+      <TongKet {kq} ten="Gõ chữ" {m} onLamLai={() => batDau('go')} onLuyenSai={() => batDau('go', kq.sai)} />
+    {:else}
+      <GoChuView st={go} {m} />
+    {/if}
+  {/if}
+{/snippet}
+
 {#if failed}
   <main class="page">
     <EmptyState title="Không mở được bài này." desc="Bài có thể đang ẩn hoặc đã bị xoá.">
@@ -252,27 +319,34 @@
       <a href="/learn/flashcards/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px">{data?.lesson.title ?? '…'}</b>
-        <span class="muted num" style="font-size: 12px">Thẻ {Math.min(i + 1, total)} / {total}</span>
+        <span class="muted num" style="font-size: 12px">
+          {che === 'the' ? `Thẻ ${Math.min(i + 1, total)} / ${total}` : CHE_DO.find((c) => c.ma === che)?.ten}
+        </span>
       </span>
       <Avatar size={36} />
     </header>
-    <div style="padding: 0 16px"><Bar value={i} {total} /></div>
+    {#if che === 'the'}<div style="padding: 0 16px"><Bar value={i} {total} /></div>{/if}
 
     <!-- overflow-x: clip — lá thẻ chồng phía sau trượt vào lệch 40px, không được tạo thanh cuộn ngang. -->
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px; overflow-x: clip">
       {#if data === null}
         <Skeleton h="300px" r={20} />
-      {:else if finished}
-        {@render done(true)}
       {:else}
-        <div>
-          {@render cardFace(true)}
-        </div>
-        {@render examples()}
+        {@render chonCheDoRow(true)}
+        {#if che !== 'the'}
+          {@render luyen(true)}
+        {:else if finished}
+          {@render done(true)}
+        {:else}
+          <div>
+            {@render cardFace(true)}
+          </div>
+          {@render examples()}
+        {/if}
       {/if}
     </main>
 
-    {#if data !== null && !finished}
+    {#if data !== null && che === 'the' && !finished}
       <div class="msheet">{@render controls()}</div>
     {/if}
   </div>
@@ -292,27 +366,34 @@
   <main class="page" style="display: flex; flex-direction: column; gap: 20px">
     {#if data === null}
       <Skeleton h="420px" r={22} />
-    {:else if finished}
-      {@render done(false)}
     {:else}
       <!-- Một cột, mọi thứ xoay quanh thẻ: chỉ còn đường về bài và tiến độ ở hàng trên. -->
       <div class="hud">
         <BackLink href="/learn/flashcards/hsk/{levelId}" label="Chọn bài" />
-        <span class="num" style="font-weight: 700; white-space: nowrap">Thẻ {Math.min(i + 1, total)} / {total}</span>
-        <span style="flex: 1 1 160px; min-width: 120px"><Bar value={i} {total} /></span>
-        <span class="muted num" style="font-size: 13px">{pct}%</span>
+        {#if che === 'the' && !finished}
+          <span class="num" style="font-weight: 700; white-space: nowrap">Thẻ {Math.min(i + 1, total)} / {total}</span>
+          <span style="flex: 1 1 160px; min-width: 120px"><Bar value={i} {total} /></span>
+          <span class="muted num" style="font-size: 13px">{pct}%</span>
+        {/if}
       </div>
+      <div class="cd-hang">{@render chonCheDoRow(false)}</div>
 
-      <div class="deck">
-        <!-- Máy tính: nút chuyển từ nằm hai bên thẻ, tay không phải rời khỏi vùng nhìn. -->
-        <div class="sanh">
-          <button type="button" class="tron" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={22} /></button>
-          <div class="o-the">{@render cardFace(false)}</div>
-          <button type="button" class="tron" aria-label="Từ sau" onclick={next}><Icon name="right" size={22} /></button>
+      {#if che !== 'the'}
+        <div class="deck">{@render luyen(false)}</div>
+      {:else if finished}
+        {@render done(false)}
+      {:else}
+        <div class="deck">
+          <!-- Máy tính: nút chuyển từ nằm hai bên thẻ, tay không phải rời khỏi vùng nhìn. -->
+          <div class="sanh">
+            <button type="button" class="tron" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={22} /></button>
+            <div class="o-the">{@render cardFace(false)}</div>
+            <button type="button" class="tron" aria-label="Từ sau" onclick={next}><Icon name="right" size={22} /></button>
+          </div>
+          <!-- Thụt vào đúng bề ngang hai nút tròn để khối ví dụ thẳng mép với thẻ. -->
+          <div class="duoi">{@render examples()}</div>
         </div>
-        <!-- Thụt vào đúng bề ngang hai nút tròn để khối ví dụ thẳng mép với thẻ. -->
-        <div class="duoi">{@render examples()}</div>
-      </div>
+      {/if}
     {/if}
   </main>
 {/if}
@@ -335,6 +416,29 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
+  }
+
+  /* Hàng chọn chế độ: máy tính canh giữa trên thẻ; điện thoại chia đều 4 nút hết bề ngang. */
+  .cd-hang {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .cd-chon button {
+    padding: 4px 16px;
+    white-space: nowrap;
+  }
+  .cd-chon-m {
+    display: flex;
+    width: 100%;
+  }
+  .cd-chon-m button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 4px 2px;
+    font-size: 12.5px;
   }
 
   /* Thẻ và hai nút chuyển từ nằm cùng một hàng; thẻ co giãn, nút giữ nguyên cỡ. */

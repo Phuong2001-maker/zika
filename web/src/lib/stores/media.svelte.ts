@@ -5,6 +5,8 @@ class Media {
   isMobile = $state(false);
   isAdminMobile = $state(false);
   reducedMotion = $state(false);
+  /** Có chuột/bàn di: mới bày nhãn phím tắt (1–6, Q–Y…). Điện thoại, máy tính bảng thì ẩn cho đỡ chật. */
+  coBanPhim = $state(false);
 
   constructor() {
     if (typeof window === 'undefined') return;
@@ -16,6 +18,7 @@ class Media {
     bind('(max-width: 767px)', (v) => (this.isMobile = v));
     bind('(max-width: 899px)', (v) => (this.isAdminMobile = v));
     bind('(prefers-reduced-motion: reduce)', (v) => (this.reducedMotion = v));
+    bind('(hover: hover) and (pointer: fine)', (v) => (this.coBanPhim = v));
   }
 }
 

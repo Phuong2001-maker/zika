@@ -23,6 +23,25 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 04/11/2026 — Lật thẻ có thêm 3 chế độ luyện: Ghép cặp, Trắc nghiệm, Gõ chữ
+
+Theo mẫu "Chế độ học tập" của một trang học tiếng Trung khác: lấy cách bố trí, dựng lại bằng màu,
+font, góc bo của Zìkǎ, và tránh các lỗi đã thấy ở trang mẫu (chữ Hán bẻ dòng "为什/么", nghĩa bị
+cắt "…", nhãn phím chiếm chỗ trên điện thoại, máy tính bảng tràn ngang 942/768px, mỗi chế độ một màu).
+
+- Đầu màn lật thẻ theo bài có hàng `.seg` chọn chế độ, mặc định Lật thẻ như cũ. Không đổi API.
+- **Ghép cặp**: lượt ≤ 6 cặp chia đều; trùng nghĩa trong bài (12 chỗ) ghép cặp nào cũng đúng.
+- **Trắc nghiệm**: 4 nghĩa lấy từ cùng bài, bỏ nghĩa trùng; trả lời sai thì hỏi lại một lần ở cuối.
+- **Gõ chữ**: nhận chữ Hán hoặc pinyin không dấu, mọi cách đọc khi pinyin có "/" (`shéi/shuí`).
+- Hết chế độ: tổng kết + "Luyện lại từ sai"; xong chế độ nào cũng ghi xong phần Lật thẻ.
+- Mã: `web/src/lib/learn/che-do/` (hàm chấm `cham.ts`, trạng thái `state.svelte.ts` dùng chung hai
+  bố cục, component từng chế độ). `media.coBanPhim` quyết định có bày nhãn phím tắt hay không.
+
+Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 72/72 test web (thêm 18 test cho chấm và trạng thái).
+Trên trình duyệt ở 375 / 767 / 768 / 1024 / 1280px, sáng và tối: không tràn ngang, chơi hết Ghép cặp
+HSK 1 Bài 2 (ghi `lt/complete` 200), Trắc nghiệm hỏi lại câu sai, Gõ chữ nhận `nimen`, đổi bố cục giữa
+chừng không mất tiến độ. Chưa kiểm trên máy thật; màn ôn tổng hợp cả cấp chưa có các chế độ này.
+
 ### 04/11/2026 — Giáo trình chỉ cho quản trị; lật thẻ nền trắng lật dọc; ẩn lời giải câu ví dụ
 
 - **Giáo trình có bản quyền, chỉ quản trị đọc.** Học viên và biên tập không thấy mục trong Chuyển
