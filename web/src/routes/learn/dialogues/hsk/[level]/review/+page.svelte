@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { SvelteSet } from 'svelte/reactivity';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
+  import { settings } from '$lib/stores/settings.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import Icon from '$lib/components/Icon.svelte';
   import Avatar from '$lib/components/Avatar.svelte';
@@ -25,8 +25,8 @@
   let failed = $state(false);
   let openId = $state<number | null>(null);
   let playing = $state(false);
-  /** Câu thoại đang mở pinyin + nghĩa (theo id câu). Mặc định ẩn, giống màn hội thoại theo bài. */
-  const moCau = new SvelteSet<number>();
+  let showPy = $state(true);
+  let showVi = $state(true);
 
   async function load(): Promise<void> {
     failed = false;
@@ -34,7 +34,8 @@
       const res = await api.get<{ dialogues: Dlg[] }>(`/learn/levels/${levelId}/review/ht`);
       list = res.dialogues;
       openId = res.dialogues[0]?.id ?? null;
-      moCau.clear();
+      showPy = settings.value.dialogue.showPinyin;
+      showVi = settings.value.dialogue.showVi;
       heartbeat.setActivity({ part: 'ht', screen: 'review', level: levelId });
     } catch {
       failed = true;
@@ -71,11 +72,13 @@
   {:else if list === null}
     <Skeleton h="300px" r={16} />
   {:else}
-    {#if playing}
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+      <!-- Một icon mắt ẩn/hiện cùng lúc pinyin và nghĩa, như màn hội thoại theo bài. -->
+      <NutMat size={36} bind:mo={() => showPy || showVi, (v) => { showPy = v; showVi = v; }} />
+      {#if playing}
         <button type="button" class="btn btn-sm" onclick={stop}><Icon name="x" size={15} /> Dừng</button>
-      </div>
-    {/if}
+      {/if}
+    </div>
 
     {#each list as d (d.id)}
       <section class="block" style="padding: {m ? 16 : 20}px; display: flex; flex-direction: column; gap: 10px">
@@ -104,14 +107,9 @@
                 </span>
                 <button type="button" class="bub" style="flex: 1; text-align: left; cursor: pointer" onclick={() => speak(l.zh, l.audioUrl)}>
                   <span class="hz" lang="zh" style="font-size: {m ? 17 : 19}px">{l.zh}</span>
-                  {#if moCau.has(l.id)}
-                    {#if l.pinyin}<span class="muted" style="font-size: 13px">{l.pinyin}</span>{/if}
-                    {#if l.vi}<span style="font-size: 13.5px">{l.vi}</span>{/if}
-                  {/if}
+                  {#if showPy && l.pinyin}<span class="muted" style="font-size: 13px">{l.pinyin}</span>{/if}
+                  {#if showVi && l.vi}<span style="font-size: 13.5px">{l.vi}</span>{/if}
                 </button>
-                {#if l.pinyin || l.vi}
-                  <NutMat size={34} bind:mo={() => moCau.has(l.id), (v) => (v ? moCau.add(l.id) : moCau.delete(l.id))} />
-                {/if}
               </li>
             {/each}
           </ul>

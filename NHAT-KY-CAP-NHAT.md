@@ -34,9 +34,8 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
   (`rotateX`), 0,6 giây, đường cong vào–ra đều.
 - **Câu ví dụ ở lật thẻ và ngữ pháp:** mặc định chỉ hiện chữ Hán, mỗi câu có icon mắt để hiện/ẩn
   pinyin + nghĩa; sang thẻ khác hoặc đổi điểm ngữ pháp thì ẩn lại.
-- **Hội thoại (theo bài và ôn cả cấp)** đổi theo cho đồng bộ: bỏ hai nút Pinyin / Nghĩa chung cả
-  bài, mỗi câu thoại có icon mắt riêng, mặc định ẩn. Cài đặt bỏ hai dòng "Hội thoại: hiện pinyin /
-  nghĩa" vì không còn màn nào đọc (trường `dialogue` vẫn giữ trong dữ liệu cài đặt).
+- **Hội thoại (theo bài và ôn cả cấp):** hai nút chữ Pinyin / Nghĩa thay bằng một icon mắt ẩn/hiện
+  cùng lúc cả hai cho cả bài. Giao diện còn lại và hai tuỳ chọn hội thoại trong Cài đặt giữ nguyên.
 
 Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 54/54 test web, 53/53 test API. Trên trình duyệt:
 học viên bị 403 ở cả hai đường ảnh, quản trị lấy được ảnh (200 `image/webp`); thẻ trắng, lật
