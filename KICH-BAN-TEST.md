@@ -67,6 +67,7 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | C4 | Bấm từng câu thoại | Đọc câu đó, giọng đúng nhân vật | | | |
 | C5 | Bấm "Nghe" rồi "Dừng" | Dừng ngay | | | |
 | C6 | Mở bài và "Ôn cả cấp" (tài khoản chưa bật trong Cài đặt) | Chỉ hiện chữ Hán, hai nút Pinyin / Nghĩa đều tắt; bật Cài đặt "Hội thoại: hiện …" thì mở bài thấy sẵn | | | |
+| C7 | Mở hội thoại, thử mô tả dài trên điện thoại và máy tính | Hiện đầy đủ mô tả tình huống ngay từ đầu, xuống dòng tự nhiên; không có nút Xem tình huống/Thu gọn | | | |
 
 ## D. Phát âm ở các màn khác
 

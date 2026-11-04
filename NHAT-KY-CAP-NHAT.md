@@ -23,6 +23,13 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 04/11/2026 — Hiện đầy đủ tình huống ở hội thoại
+
+Theo yêu cầu cuối của người dùng, bỏ nút Xem tình huống/Thu gọn và hiển thị đầy đủ mô tả
+ngay từ đầu. Bỏ rút gọn chữ và giới hạn hai dòng; xuống dòng tự nhiên trên điện thoại/máy tính.
+Giữ nguyên phần nghe và lời thoại.
+Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 73/73 test web đạt. Chưa cập nhật hosting.
+
 ### 04/11/2026 — Chuyển nhanh chỉ hiện Bài tập/Kiểm tra cho admin
 
 Lọc hai mục Bài tập và Kiểm tra theo `session.isAdmin` trong menu Chuyển nhanh, áp dụng cả lưới

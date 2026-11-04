@@ -35,7 +35,6 @@
   let dangDoc = $state<string>('');   // 'chỉ số bài khoá:chỉ số câu' đang đọc
   let showPy = $state(true);
   let showVi = $state(true);
-  let moTa = $state<Record<number, boolean>>({});   // bài khoá nào đang mở rộng phần tình huống
   let done = $state(false);
 
   const khoi = $derived(data?.dialogues ?? []);
@@ -50,7 +49,6 @@
       const res = await api.get<Data>(`/learn/lessons/${l.id}/dialogue`);
       data = res;
       dangDoc = '';
-      moTa = {};
       done = false;
       showPy = settings.value.dialogue.showPinyin;
       showVi = settings.value.dialogue.showVi;
@@ -150,12 +148,7 @@
             <div style="flex: 1 1 180px; min-width: 0">
               <h3 style="font-size: {m ? 16 : 18}px; line-height: 1.3">{k.title}</h3>
               {#if k.scene}
-                <p class="ht-mota" class:ht-mota-mo={moTa[ki]}>{k.scene}</p>
-                {#if k.scene.length > 90}
-                  <button type="button" class="btn btn-text btn-sm ht-them" onclick={() => (moTa = { ...moTa, [ki]: !moTa[ki] })}>
-                    {moTa[ki] ? 'Thu gọn' : 'Xem tình huống'}
-                  </button>
-                {/if}
+                <p class="ht-mota">{k.scene}</p>
               {/if}
             </div>
             {#if k.audioUrl}
@@ -289,23 +282,12 @@
   .ht-nghe-m {
     min-height: 44px;
   }
-  /* Tình huống có thể dài vài câu, thu lại hai dòng cho khỏi đè mất phần thoại. */
+  /* Hiện đủ tình huống, xuống dòng tự nhiên trên mọi khổ màn hình. */
   .ht-mota {
     margin: 2px 0 0;
     font-size: 13.5px;
+    line-height: 1.5;
     color: var(--text-2);
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
-  }
-  .ht-mota-mo {
-    -webkit-line-clamp: unset;
-    line-clamp: unset;
-  }
-  .ht-them {
-    padding: 0;
   }
   /* Nút cuối khung nằm bên phải; điện thoại thì trải hết bề ngang cho ngón cái. */
   .ht-xong {
