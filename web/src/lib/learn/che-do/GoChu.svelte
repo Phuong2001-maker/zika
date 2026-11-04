@@ -55,9 +55,6 @@
   <KhungCheDo
     nhan="Gõ chữ Hán hoặc pinyin"
     so="{st.vt + 1}/{st.ds.length}"
-    batDau={st.batDau}
-    xongLuc={st.xongLuc}
-    phimTat="Enter để kiểm tra / sang câu sau"
     {m}
   >
     <div class="cd-de">

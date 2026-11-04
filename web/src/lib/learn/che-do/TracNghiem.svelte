@@ -49,9 +49,6 @@
   <KhungCheDo
     nhan="Chọn nghĩa đúng"
     so="Câu {st.vt + 1}/{st.hangDoi.length}"
-    batDau={st.batDau}
-    xongLuc={st.xongLuc}
-    phimTat="Phím 1–{st.dapAn.length} để chọn · Enter để tiếp"
     {m}
   >
     <div class="cd-de">

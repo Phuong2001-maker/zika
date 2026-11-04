@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type { Part } from '$lib/api/types';
-  import { PART, PARTS } from '$lib/parts';
+  import { PARTS } from '$lib/parts';
   import { session } from '$lib/stores/session.svelte';
   import { feedback } from '$lib/stores/feedback.svelte';
   import { neo } from '$lib/utils/neo';
@@ -13,8 +13,9 @@
   let open = $state(false);
   let root: HTMLDivElement | undefined = $state();
   let nut: HTMLButtonElement | undefined = $state();
-  const cur = $derived(PART[current]);
-  const others = $derived(PARTS.filter((p) => p.code !== current));
+  const visibleParts = $derived(PARTS.filter((p) => session.isAdmin || (p.code !== 'bt' && p.code !== 'kt')));
+  const cur = $derived(visibleParts.find((p) => p.code === current));
+  const others = $derived(visibleParts.filter((p) => p.code !== current));
   const showFeedback = $derived(session.config?.showFeedbackButton ?? true);
 
   onMount(() => {
@@ -61,17 +62,19 @@
             <span class="muted" style="font-size: 13px">Chọn phần bạn muốn học</span>
           </span>
         </div>
-        <a href="/learn/{cur.slug}" class="cur" onclick={() => (open = false)}>
-          <span class="ib" style="width: 44px; height: 44px; background: {cur.accent}; border: 1px solid var(--line); border-radius: 12px"
-            ><Icon name={cur.icon} size={22} /></span
-          >
-          <span style="display: flex; flex-direction: column">
-            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #0D6B3E"
-              ><span class="dot"></span>Đang dùng</span
+        {#if cur}
+          <a href="/learn/{cur.slug}" class="cur" onclick={() => (open = false)}>
+            <span class="ib" style="width: 44px; height: 44px; background: {cur.accent}; border: 1px solid var(--line); border-radius: 12px"
+              ><Icon name={cur.icon} size={22} /></span
             >
-            <b style="font-size: 16px">{cur.name}</b>
-          </span>
-        </a>
+            <span style="display: flex; flex-direction: column">
+              <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #0D6B3E"
+                ><span class="dot"></span>Đang dùng</span
+              >
+              <b style="font-size: 16px">{cur.name}</b>
+            </span>
+          </a>
+        {/if}
         <p style="font-size: 11.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted)">
           Chuyển sang
         </p>

@@ -137,7 +137,6 @@
       <button type="button" class="zk-nut zk-nut-chinh nut-lat" onclick={flip}><Icon name="flip" size={17} /> {flipped ? 'Mặt trước' : 'Lật thẻ'}</button>
       <button type="button" class="zk-nut" aria-label="Từ sau" onclick={next}><Icon name="right" size={20} /></button>
     </div>
-    {#if !m}<p class="dh-phim">Phím Space để lật · ← / → để chuyển từ</p>{/if}
   </div>
 {/snippet}
 
@@ -294,10 +293,6 @@
   .dh-nut-m .nut-lat {
     flex: 2 1 0;
     min-width: 0;
-  }
-  .dh-phim {
-    font-size: 12px;
-    color: var(--text-3);
   }
 
   .xong {

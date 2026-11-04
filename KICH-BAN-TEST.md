@@ -35,11 +35,12 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | A13 | Chữ đa âm: HSK 1 还 (hái), HSK 2 得 (de/děi), 觉得, 长 (cháng/zhǎng) | Đọc **đúng** âm như pinyin trên thẻ | | | |
 | A14 | Tìm thẻ `还 hái`, `还 huán`, `头 tóu`, `道 dào` | File khác nhau theo pinyin; không lấy thanh nhẹ từ chữ tách trong từ ghép; URL `?v=6` | | | |
 | A15 | Hàng chọn chế độ **Lật thẻ · Ghép cặp · Trắc nghiệm · Gõ chữ** (theo bài) | Mặc định Lật thẻ, như cũ; ĐT 4 nút chia đều không cắt chữ; đổi qua lại giữa các chế độ vẫn giữ lượt đang làm | | | |
-| A16 | Ghép cặp | Mỗi lượt ≤ 6 cặp, chia đều (13 từ = 5+4+4); chữ Hán không bẻ dòng, nghĩa dài (HSK 2 Bài 8: 着) xuống dòng không cắt; đúng thì mờ đi và đọc chữ, sai thì rung đỏ; MT có nhãn phím 1–6 / Q–Y, ĐT ẩn | | | |
+| A16 | Ghép cặp | Mỗi lượt ≤ 6 cặp, chia đều (13 từ = 5+4+4); chữ Hán không bẻ dòng, nghĩa dài (HSK 2 Bài 8: 着) xuống dòng không cắt; đúng thì mờ đi và đọc chữ, sai thì rung đỏ; ẩn nhãn số/chữ phím ở ô, nhãn Lượt và chân đồng hồ/gợi ý phím; tiến độ vẫn hiện | | | |
 | A17 | Trắc nghiệm | ĐT 4 hàng dài, MT lưới 2×2; chọn xong hiện pinyin không xô đáp án; sai thì câu đó hỏi lại ở cuối (tổng câu +1); Enter sang câu sau, không tự chọn đáp án câu mới | | | |
 | A18 | Gõ chữ | Nhận chữ Hán hoặc pinyin không dấu / thanh bằng số (`nimen`, `ni3men`); Gợi ý lần 1 pinyin, lần 2 chữ Hán; Bỏ qua; ĐT ô gõ ≥ 16px (iPhone không tự phóng to) | | | |
 | A19 | Hết một chế độ | Màn tổng kết: số đúng, thời gian, danh sách từ cần ôn có loa; "Luyện lại N từ sai" chỉ chơi lại các từ đó; ghi "xong phần Lật thẻ" như lật hết thẻ | | | |
 | A20 | Kéo cửa sổ qua 768px giữa chừng; giao diện tối | Không mất tiến độ; không tràn ngang ở 375 / 767 / 768 / 1024 / 1280px; màu đúng/sai đọc rõ ở giao diện tối | | | |
+| A21 | Mở Chuyển nhanh bằng admin, học viên và biên tập; thử cả khi đang ở Bài tập/Kiểm tra | Chỉ admin thấy Bài tập/Kiểm tra, kể cả ô Đang dùng. Các mục khác giữ nguyên | | | |
 
 ## B. Luyện viết (`/learn/writing`)
 

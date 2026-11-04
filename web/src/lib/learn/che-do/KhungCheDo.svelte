@@ -1,50 +1,28 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import Icon from '$lib/components/Icon.svelte';
-  import { media } from '$lib/stores/media.svelte';
-  import { dinhDangGiay } from './cham';
 
-  // Khung chung của 3 chế độ luyện: hàng trên (nhãn + số), thân, hàng dưới (đồng hồ + phím tắt).
-  // Style ô bấm `.cd-o` và nhãn phím `.cd-phim` để ở đây cho cả Ghép cặp lẫn Trắc nghiệm dùng chung.
+  // Khung chung của 3 chế độ luyện: nhãn tiến độ, số câu (nếu có) và nội dung.
+  // Ô `.cd-o` dùng chung; `.cd-phim` dành cho nhãn số ở đáp án Trắc nghiệm.
   let {
     nhan,
-    so,
-    batDau,
-    xongLuc,
-    phimTat = '',
+    so = '',
     m = false,
     children,
   }: {
     nhan: string;
-    so: string;
-    batDau: number;
-    xongLuc: number | null;
-    /** Gợi ý phím, chỉ hiện ở máy có bàn phím. */
-    phimTat?: string;
+    so?: string;
     m?: boolean;
     children: Snippet;
   } = $props();
-
-  let now = $state(Date.now());
-  $effect(() => {
-    if (xongLuc !== null) return;
-    const t = setInterval(() => (now = Date.now()), 500);
-    return () => clearInterval(t);
-  });
-  const giay = $derived(((xongLuc ?? now) - batDau) / 1000);
 </script>
 
 <!-- Nằm trong khung học của trang (đã có nền trắng, viền, bóng) nên ở đây không vẽ khung nữa. -->
 <section class="cd-khung" class:cd-m={m}>
   <div class="cd-tren">
     <span class="cd-nhan">{nhan}</span>
-    <span class="cd-so num">{so}</span>
+    {#if so}<span class="cd-so num">{so}</span>{/if}
   </div>
   {@render children()}
-  <div class="cd-duoi">
-    <span class="cd-gio num"><Icon name="clock" size={14} /> {dinhDangGiay(giay)}</span>
-    {#if phimTat && media.coBanPhim}<span class="cd-goi-phim">{phimTat}</span>{/if}
-  </div>
 </section>
 
 <style>
@@ -78,24 +56,6 @@
     font-weight: 700;
     color: var(--text-2);
     white-space: nowrap;
-  }
-  .cd-duoi {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    flex-wrap: wrap;
-    font-size: 13px;
-    color: var(--text-2);
-  }
-  .cd-gio {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-weight: 600;
-  }
-  .cd-goi-phim {
-    color: var(--text-3);
   }
 
   /* Ô bấm dùng chung: ô ghép cặp và lựa chọn trắc nghiệm. */

@@ -23,6 +23,19 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 04/11/2026 — Chuyển nhanh chỉ hiện Bài tập/Kiểm tra cho admin
+
+Lọc hai mục Bài tập và Kiểm tra theo `session.isAdmin` trong menu Chuyển nhanh, áp dụng cả lưới
+chuyển phần và ô Đang dùng. Học viên và biên tập không thấy hai mục này; các mục còn lại giữ nguyên.
+Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 73/73 test web đạt. Chưa cập nhật hosting.
+
+### 04/11/2026 — Gọn giao diện học từ theo yêu cầu
+
+Bỏ dòng gợi ý Space/mũi tên ở Lật thẻ theo bài và tổng hợp. Bỏ chân đồng hồ giây và gợi ý
+phím của Ghép cặp, Trắc nghiệm, Gõ chữ. Ghép cặp bỏ nhãn Lượt và các ký hiệu số/chữ phím
+ở hai cột. Giữ tiến độ, số câu ở các chế độ còn lại, cách chấm, phát âm, phím tắt và thống kê kết quả.
+Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, 73/73 test web đạt. Chưa cập nhật hosting.
+
 ### 04/11/2026 (chiều) — Làm web nổi bật hơn: khối "Hôm nay", ô chữ điền, dấu triện
 
 **1. Bàn học có khối "Hôm nay"** (`web/src/routes/learn/flashcards/+page.svelte`):

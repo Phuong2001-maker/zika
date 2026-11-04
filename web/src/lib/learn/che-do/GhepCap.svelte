@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { media } from '$lib/stores/media.svelte';
   import { settings } from '$lib/stores/settings.svelte';
   import { speak } from '$lib/learn/speech';
   import KhungCheDo from './KhungCheDo.svelte';
@@ -39,10 +38,6 @@
 
 <KhungCheDo
   nhan="Tiến độ {st.daGhep}/{st.tu.length}"
-  so="Lượt {st.trang + 1}/{st.luot.length}"
-  batDau={st.batDau}
-  xongLuc={st.xongLuc}
-  phimTat="Phím 1–{st.trai.length} bên trái · Q–{PHIM_PHAI[st.phai.length - 1]?.toUpperCase()} bên phải"
   {m}
 >
   <p class="muted" style="font-size: 13.5px; text-align: center">Chọn một chữ Hán, rồi chọn nghĩa của nó.</p>
@@ -60,7 +55,6 @@
         aria-pressed={st.chonTrai === i}
         onclick={() => bam('trai', i)}
       >
-        {#if media.coBanPhim}<span class="cd-phim">{i + 1}</span>{/if}
         <span class="hz cd-chu" lang="zh">{w.hanzi}</span>
       </button>
       <button
@@ -74,7 +68,6 @@
         aria-pressed={st.chonPhai === i}
         onclick={() => bam('phai', i)}
       >
-        {#if media.coBanPhim}<span class="cd-phim">{PHIM_PHAI[i]}</span>{/if}
         <span class="cd-nghia">{p.meaning}</span>
       </button>
     {/each}
