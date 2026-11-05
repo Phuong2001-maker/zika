@@ -35,7 +35,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 88/88 test; API 59/59; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 89/89 test; API 112/112; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -137,7 +137,9 @@ hoặc khởi động lại `npm run dev`. Bản build không bị.
   [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md) trước khi tiếp tục. Chỉ frontend/dữ liệu mẫu;
   mỗi học viên một giáo trình do admin gán, không thêm màn chọn giáo trình cho học viên.
   Bé túi hiện lại ngay sau F5 để test; chính sách một ngày chưa áp dụng; bé không hiện ở màn đang làm bài.
-  Tiền quỹ/top chưa nối Shopee/API thật. Checklist UI: phần I của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+  Link Shopee đã có API thật (Icon 1 link, Quỹ tháng nhiều link, công tắc ở `/admin/support`), tiền quỹ do admin nhập tay ở cùng màn đó;
+  cuộc thi tạo ở `/admin/contests`, dùng lại đề thi thử, đề Nháp chỉ làm được trong giờ thi, hết giờ tự nộp, xếp hạng theo câu đúng rồi thời gian, mỗi người 1 lượt.
+  đăng ký trước giờ thi mới được làm, cơ cấu giải chỉnh ở cùng màn. Trang soạn đề là bản tạm. **Server thật còn cần migration 007 đến 011** rồi gắn link Icon thì bé mới hiện. Top chăm học vẫn minh hoạ. Checklist: phần I, J, K của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 - **ĐANG DỞ — giọng đọc mới toàn bộ + sửa UI/UX (03/11/2026), chỉ còn đưa lên server:** mọi file đọc
   mẫu chuyển sang giọng Microsoft (edge-tts), câu thoại giọng riêng từng nhân vật, `TTS_VERSION = 6`;

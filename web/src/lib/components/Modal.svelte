@@ -13,6 +13,7 @@
     width = 460,
     closable = true,
     labelledby,
+    anchor = 'sheet',
   }: {
     title?: string;
     onclose: () => void;
@@ -21,6 +22,8 @@
     width?: number;
     closable?: boolean;
     labelledby?: string;
+    /** Điện thoại: 'sheet' là tấm trượt từ đáy; 'top' treo ngay dưới thanh đầu trang, cho hộp mở từ nút trên thanh đó. */
+    anchor?: 'sheet' | 'top';
   } = $props();
 
   let box: HTMLDivElement | undefined = $state();
@@ -60,7 +63,10 @@
     void tick().then(() => {
       const f = focusables();
       // Ưu tiên ô nhập đầu tiên, không thì nút đầu tiên sau nút ×.
-      (f.find((el) => el.matches('input, textarea, select')) ?? f[1] ?? f[0])?.focus();
+      // Nút đó có thể nằm cuối hộp dài: không cuộn theo, kẻo vừa mở đã mất tiêu đề.
+      const input = f.find((el) => el.matches('input, textarea, select'));
+      if (input) input.focus();
+      else (f[1] ?? f[0])?.focus({ preventScroll: true });
     });
     return () => {
       document.body.style.overflow = prevOverflow;
@@ -69,7 +75,7 @@
   });
 </script>
 
-<div class="modal-backdrop" role="presentation" onclick={(e) => e.target === e.currentTarget && closable && onclose()} {onkeydown}>
+<div class="modal-backdrop" class:modal-backdrop-top={anchor === 'top'} role="presentation" onclick={(e) => e.target === e.currentTarget && closable && onclose()} {onkeydown}>
   <div
     class="modal"
     role="dialog"

@@ -2,9 +2,11 @@
 declare(strict_types=1);
 
 use Zika\Controllers\AuthController as AuthC;
+use Zika\Controllers\ContestController as ContestC;
 use Zika\Controllers\InstallController as Inst;
 use Zika\Controllers\MeController as Me;
 use Zika\Controllers\PublicController as Pub;
+use Zika\Controllers\SupportController as Support;
 
 // Công khai, xác thực, tài khoản của tôi, phiên truy cập (04 §2–3).
 return [
@@ -42,4 +44,15 @@ return [
     ['POST',   '/announcements/{id}/{action:seen|dismiss|click}', [Me::class, 'announcement'], 'L'],
     ['GET',    '/me/notifications', [Me::class, 'notifications'], 'L'],
     ['POST',   '/me/notifications/read-all', [Me::class, 'readAllNotifications'], 'L'],
+
+    ['GET',    '/contest/current', [ContestC::class, 'current'], 'L'],
+    ['GET',    '/contest/ranking', [ContestC::class, 'ranking'], 'L'],
+    ['GET',    '/contest/registrants', [ContestC::class, 'registrants'], 'L'],
+    ['POST',   '/contest/register', [ContestC::class, 'register'], 'L'],
+    ['DELETE', '/contest/register', [ContestC::class, 'unregister'], 'L'],
+
+    // Link Shopee phía người học
+    ['GET',    '/support/links', [Support::class, 'links'], 'L'],
+    ['POST',   '/support/view', [Support::class, 'view'], 'L'],
+    ['GET',    '/go/{id}', [Support::class, 'go'], 'P', ['csrf' => false]],
 ];

@@ -4,6 +4,7 @@
   import { toast } from '$lib/stores/toast.svelte';
   import { media } from '$lib/stores/media.svelte';
   import { buddyShownOn } from './shopee-buddy';
+  import { supportLinks } from './support-links.svelte';
 
   // Chữ trôi theo hình làm người đọc hoa mắt, nhưng giấu chữ thì không ai biết bấm để làm gì.
   // Nên bé đứng nói là chính, mỗi lần chỉ đi một quãng ngắn, và chữ chỉ hiện khi đã đứng yên.
@@ -23,8 +24,10 @@
   let leaving = $state(false);
   let hovering = $state(false);
   let covered = $state(false);
+  const link = $derived(supportLinks.icon);
   // Giữ component sống khi sang màn làm bài rồi quay lại, để bé đã ẩn thì vẫn ẩn.
-  const blocked = $derived(covered || !buddyShownOn(page.url.pathname));
+  // Bé tồn tại để dẫn sang Shopee: admin tắt công tắc hoặc chưa gắn link Icon thì không hiện.
+  const blocked = $derived(covered || !link || !buddyShownOn(page.url.pathname));
   let ready = $state(false);
   let reducedMotion = $state(false);
   let x = $state(16);
@@ -121,16 +124,29 @@
     phase = 'walk';
   }
 
-  function hide(): void {
+  function visitAndHide(): void {
     if (leaving) return;
+    if (link) window.open(link.url, '_blank', 'noopener');
     leaving = true;
     exitTimer = setTimeout(() => {
       hidden = true;
-      toast.show('Bé túi đi nghỉ rồi nhé! Đây là bản xem trước, chưa mở liên kết Shopee thật.', 'info', 5000);
+      toast.show('Bé túi đi nghỉ rồi nhé!', 'info', 5000);
     }, 500);
   }
 
+  let viewLogged = false;
+  $effect(() => {
+    if (blocked || hidden || viewLogged) return;
+    viewLogged = true;
+    supportLinks.logView('icon');
+  });
+
   onMount(() => {
+    void supportLinks.refresh();
+    // Admin bật/tắt ở tab khác: quay lại tab học là thấy đúng, khỏi phải tải lại trang.
+    const refreshOnFocus = (): void => void supportLinks.refresh();
+    window.addEventListener('focus', refreshOnFocus);
+
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     reducedMotion = preference.matches;
     const changePreference = (): void => {
@@ -237,6 +253,7 @@
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('resize', resize);
+      window.removeEventListener('focus', refreshOnFocus);
       window.removeEventListener('pointermove', trackPointer);
       clearInterval(interval);
       clearTimeout(exitTimer);
@@ -262,7 +279,7 @@
     onfocusout={() => (hovering = false)}
   >
     <div class="sb-speech" class:sb-speaking={speaking} class:sb-from-right={onRightSide}>
-      <button type="button" class="sb-message" onclick={hide}>
+      <button type="button" class="sb-message" onclick={visitAndHide}>
         <b>Chạm tớ, tớ ẩn nhé!</b>
         <span>Chạm là góp quỹ thưởng rồi, không cần mua gì nhé 🧡</span>
         <small>Liên kết tiếp thị</small>
@@ -272,8 +289,8 @@
     <button
       type="button"
       class="sb-character"
-      aria-label="Chạm để ẩn bé túi Shopee, thao tác minh họa chưa mở liên kết thật"
-      onclick={hide}
+      aria-label="Mở liên kết tiếp thị Shopee ở tab mới và ẩn bé túi"
+      onclick={visitAndHide}
     >
       <!-- Lúc đi không có chữ, dấu tay nhỏ này vẫn báo được là bấm vào bé được. -->
       <span class="sb-tap-hint" class:sb-tap-off={speaking} aria-hidden="true">👆</span>

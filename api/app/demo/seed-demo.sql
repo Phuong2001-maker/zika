@@ -217,10 +217,10 @@ INSERT INTO dict_words (hanzi, pinyin, han_viet, meaning_vi, pos) VALUES
   ('媒体', 'méitǐ', 'Môi thể', 'truyền thông', 'n');
 
 -- Link Shopee mẫu: URL giả, đều đang tắt; công tắc tổng support.enabled = false
-INSERT INTO affiliate_links (name, url, place_desk, place_done, is_active, sort_order) VALUES
+INSERT INTO affiliate_links (name, url, place_icon, place_fund, is_active, sort_order) VALUES
   ('Vở ô 田 luyện viết chữ Hán', 'https://s.shopee.vn/THAY-BANG-LINK-THAT', 1, 1, 0, 0),
-  ('Bút lông luyện thư pháp', 'https://s.shopee.vn/THAY-BANG-LINK-THAT', 1, 0, 0, 1),
-  ('Sách luyện thi HSK 1–2', 'https://s.shopee.vn/THAY-BANG-LINK-THAT', 1, 0, 0, 2),
+  ('Bút lông luyện thư pháp', 'https://s.shopee.vn/THAY-BANG-LINK-THAT', 0, 1, 0, 1),
+  ('Sách luyện thi HSK 1–2', 'https://s.shopee.vn/THAY-BANG-LINK-THAT', 0, 1, 0, 2),
   ('Hộp thẻ giấy trắng 500 tờ', 'https://s.shopee.vn/THAY-BANG-LINK-THAT', 0, 1, 0, 3),
   ('Tai nghe học online', 'https://s.shopee.vn/THAY-BANG-LINK-THAT', 0, 1, 0, 4),
   ('Giá đỡ điện thoại để bàn', 'https://s.shopee.vn/THAY-BANG-LINK-THAT', 0, 0, 0, 5),

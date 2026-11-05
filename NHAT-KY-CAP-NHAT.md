@@ -23,13 +23,36 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 06/11/2026 — Lịch thi gọn, đăng ký thi, cơ cấu giải, trang soạn đề tạm
+
+Tạo bài thi chỉ còn giờ bắt đầu và số phút thi, mọi người cùng dừng khi hết giờ. Chỉ ai đăng ký trước giờ bắt đầu mới được làm bài, có danh sách đăng ký.
+Thêm cơ cấu giải theo phần trăm Quỹ tháng, admin tự chỉnh. Trang soạn đề `/admin/mock-tests/{id}` là bản tạm, người dùng sẽ tự nạp đề từ ngoài và sửa sau.
+**Migration 011** đã chạy ở máy local, server thật chưa. Rà toàn bộ 48 màn ở máy tính và điện thoại: sửa bé túi che nút ở màn chọn bài, ô tên giải bị bóp trên điện thoại,
+ghi chú sai khi đang làm dở bài thi.
+
+### 06/11/2026 — Cuộc thi: tạo bài thi, đồng hồ đếm ngược; màn sản phẩm Shopee có tìm kiếm
+
+Thêm `/admin/contests` để tạo bài thi từ đề thi thử và đặt giờ; người học thấy đồng hồ ngày, giờ, phút, giây, tới giờ có nút Vào thi ngay.
+Nút Xem cuộc thi rộng hết hộp. "Ghé Shopee" mở màn sản phẩm có ô tìm không dấu. Hết giờ thì màn khoá và tự nộp dù chưa bấm, hạn nộp không vượt giờ đóng cuộc thi.
+Bảng xếp hạng thật: đúng nhiều hơn, rồi làm nhanh hơn; mỗi người 1 lượt; còn mở thì giấu đáp án. **Migration 009, 010** đã chạy ở máy local, server thật chưa.
+Sửa kèm: `used_sec` tính tới hạn nộp và dùng `Clock`, không còn phụ thuộc lúc cron chấm. Chi tiết: mục "Cuộc thi" trong [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md),
+kịch bản: phần K trong [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+
+### 06/11/2026 — Nối link Shopee thật: admin chọn vị trí, người học thấy theo công tắc
+
+Form Thêm link bỏ "Hiện từ ngày", "Đến ngày", "Bật ngay sau khi lưu". Vị trí đổi thành Icon (bé túi, 1 link) và Quỹ tháng (nhiều link);
+đã có link giữ Icon thì 2 ô bị khoá, link mới vào Quỹ tháng. Admin tự nhập tiền quỹ tháng, người học thấy đúng số đó.
+Thêm API `GET /support/links`, `POST /support/view`, `GET /go/{id}`, `PUT /admin/support/fund`. **Migration 007, 008** đổi cột trong `affiliate_links`,
+đã chạy ở máy local, server thật chưa. Chi tiết: mục "Link Shopee" trong [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md),
+kịch bản: phần J trong [KICH-BAN-TEST.md](KICH-BAN-TEST.md). Top vẫn là số minh hoạ.
+
 ### 06/11/2026 — Rà UI/UX quỹ thưởng, top chăm học và vẽ lại bé túi (giao diện)
 
 Vẫn chỉ là giao diện, chưa có backend. Rà ở 320/375/768/1280px, sáng và tối, kết quả ở phần I của
 [KICH-BAN-TEST.md](KICH-BAN-TEST.md). Lỗi đã sửa: lời nhắn của bé che nút "Kiểm tra" trong bài (nay bé không hiện ở
 màn đang làm bài); chữ 8–10px khó đọc ở thanh đầu trang và hộp thoại; điện thoại chỉ Bàn học có cụm quỹ/top;
-hộp quỹ lặp tiêu đề và lồng khung; hộp Shopee cảm ơn khi người học chưa làm gì; nhãn thẻ cấp bị cắt ở 320px.
-Bé túi vẽ lại, chữ chỉ hiện khi bé đứng yên để bớt hoa mắt, bỏ dấu × ở lời nhắn.
+hộp quỹ lặp tiêu đề và lồng khung; nhãn thẻ cấp bị cắt ở 320px. Bỏ hộp Shopee riêng, bấm túi hay số tiền đều mở hộp quỹ.
+Bé túi vẽ lại, chữ chỉ hiện khi bé đứng yên để bớt hoa mắt, bỏ dấu × ở lời nhắn, bỏ lớp bóng mờ, thêm cử động.
 Chi tiết: [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md).
 
 ### 05/11/2026 — Giáo trình admin, quỹ thưởng tháng và bé túi Shopee (giao diện)

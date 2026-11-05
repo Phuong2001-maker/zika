@@ -18,7 +18,7 @@ use Zika\Core\Json;
 final class TestService
 {
     /** Cho phép trễ 10 giây so với hạn cứng, bù độ lệch đồng hồ và độ trễ mạng. */
-    private const GRACE_SEC = 10;
+    public const GRACE_SEC = 10;
 
     /* ------------------------------------------------------------------ */
     /* Tạo / lấy lượt làm bài                                              */
@@ -31,6 +31,11 @@ final class TestService
     {
         [$cfg, $questions] = self::source($lessonId, $mockTestId);
 
+        $contest = $mockTestId === null ? null : ContestService::openContest($mockTestId);
+        if ($contest !== null) {
+            return self::startContest($userId, (int) $mockTestId, $contest, $cfg, $questions);
+        }
+
         // 1. Còn lượt dở trong hạn → trả lại đúng lượt đó.
         $open = Db::one(
             'SELECT * FROM test_attempts
@@ -39,7 +44,7 @@ final class TestService
             [$userId, $lessonId ?? $mockTestId],
         );
         if ($open !== null) {
-            if (strtotime((string) $open['deadline_at']) + self::GRACE_SEC > time()) {
+            if (!self::isOverdue($open)) {
                 return self::payload($open, $cfg);
             }
             // Quá hạn mà chưa nộp → chấm luôn rồi báo có kết quả chờ xem.
@@ -80,11 +85,60 @@ final class TestService
     }
 
     /**
+     * Cuộc thi: mỗi người một lượt để bảng xếp hạng rõ ràng. Đã nộp thì mở lại kết quả, không cho làm lại.
+     * @param array<string,mixed> $contest
      * @param array<string,mixed> $cfg
      * @param list<array<string,mixed>> $questions
+     * @return array<string,mixed>
+     */
+    private static function startContest(int $userId, int $mockTestId, array $contest, array $cfg, array $questions): array
+    {
+        $contestId = (int) $contest['id'];
+        $cfg['durationSec'] = (int) $contest['duration_min'] * 60;
+        $find = static fn (): ?array => Db::one('SELECT * FROM test_attempts WHERE user_id = ? AND contest_id = ?', [$userId, $contestId]);
+
+        $mine = $find();
+        if ($mine === null) {
+            if (!ContestService::isRegistered($contestId, $userId)) {
+                throw HttpError::forbidden('Bạn chưa đăng ký bài thi này trước giờ bắt đầu nên không vào thi được.');
+            }
+            if ($questions === []) {
+                throw HttpError::invalid('Bài này chưa có câu kiểm tra nào.');
+            }
+            try {
+                return self::payload(self::create($userId, null, $mockTestId, $cfg, $questions, $contest), $cfg);
+            } catch (\PDOException) {
+                // Mở hai tab cùng lúc: tab sau vấp UNIQUE (contest_id, user_id), lấy lại lượt tab trước vừa tạo.
+                $mine = $find();
+                if ($mine === null) {
+                    throw HttpError::invalid('Không vào thi được, thử lại nhé.');
+                }
+            }
+        }
+
+        if ($mine['submitted_at'] !== null) {
+            return ['resultAttemptId' => (int) $mine['id']];
+        }
+        if (self::isOverdue($mine)) {
+            self::grade((int) $mine['id'], true);
+            return ['resultAttemptId' => (int) $mine['id']];
+        }
+        return self::payload($mine, $cfg);
+    }
+
+    /** @param array<string,mixed> $a */
+    private static function isOverdue(array $a): bool
+    {
+        return strtotime((string) $a['deadline_at']) + self::GRACE_SEC <= Clock::now()->getTimestamp();
+    }
+
+    /**
+     * @param array<string,mixed> $cfg
+     * @param list<array<string,mixed>> $questions
+     * @param array<string,mixed>|null $contest
      * @return array<string,mixed> dòng test_attempts vừa tạo
      */
-    private static function create(int $userId, ?int $lessonId, ?int $mockTestId, array $cfg, array $questions): array
+    private static function create(int $userId, ?int $lessonId, ?int $mockTestId, array $cfg, array $questions, ?array $contest = null): array
     {
         if ($cfg['shuffleQuestions']) {
             shuffle($questions);
@@ -101,18 +155,21 @@ final class TestService
         $now = Clock::now();
         // Tự nộp: hạn cứng = đúng thời lượng. Không tự nộp: nới gấp 3 (hết giờ vẫn làm tiếp được).
         $hard = (int) $cfg['durationSec'] * ($cfg['autoSubmit'] ? 1 : 3);
+        // Cuộc thi: mọi người cùng dừng lúc hết giờ thi, vào muộn thì còn ít thời gian hơn như thi thật.
+        $deadline = $contest !== null ? Clock::parse((string) $contest['ends_at']) : $now->modify("+$hard seconds");
 
         $id = Db::insert('test_attempts', [
             'user_id' => $userId,
             'lesson_id' => $lessonId,
             'mock_test_id' => $mockTestId,
+            'contest_id' => $contest === null ? null : (int) $contest['id'],
             'question_ids' => Json::encode($ids),
             'option_maps' => Json::encode($maps),
             'answers' => Json::encode([]),
             'flags' => Json::encode([]),
             'listen_counts' => Json::encode([]),
             'started_at' => $now->format('Y-m-d H:i:s.v'),
-            'deadline_at' => $now->modify("+$hard seconds")->format('Y-m-d H:i:s.v'),
+            'deadline_at' => $deadline->format('Y-m-d H:i:s.v'),
         ]);
 
         return Db::one('SELECT * FROM test_attempts WHERE id = ?', [$id]) ?? [];
@@ -193,11 +250,31 @@ final class TestService
             'maxScore' => array_sum(array_map(static fn (array $q): float => (float) $q['score'], $rows)),
             'passScore' => (float) $cfg['passScore'],
             'autoSubmit' => (bool) $cfg['autoSubmit'],
+            'contestTitle' => self::contestTitle($a),
             'questions' => $out,
             'answers' => ContentBuilder::json($a['answers'], []),
             'flags' => ContentBuilder::json($a['flags'], []),
             'listenCounts' => ContentBuilder::json($a['listen_counts'], []),
         ];
+    }
+
+    /** @param array<string,mixed> $a */
+    private static function contestStillOpen(array $a): bool
+    {
+        if (($a['contest_id'] ?? null) === null) {
+            return false;
+        }
+        return Db::val('SELECT id FROM contests WHERE id = ? AND ends_at > ?', [(int) $a['contest_id'], Clock::sql()]) !== null;
+    }
+
+    /** @param array<string,mixed> $a */
+    private static function contestTitle(array $a): ?string
+    {
+        if (($a['contest_id'] ?? null) === null) {
+            return null;
+        }
+        $title = Db::val('SELECT title FROM contests WHERE id = ?', [(int) $a['contest_id']]);
+        return $title === null ? null : (string) $title;
     }
 
     /**
@@ -272,6 +349,7 @@ final class TestService
         [$cfg] = self::source(
             $a['lesson_id'] === null ? null : (int) $a['lesson_id'],
             $a['mock_test_id'] === null ? null : (int) $a['mock_test_id'],
+            true,
         );
 
         $ids = array_map('intval', ContentBuilder::json($a['question_ids'], []));
@@ -281,6 +359,7 @@ final class TestService
 
         $score = 0.0;
         $max = 0.0;
+        $correct = 0;
         $results = [];
 
         foreach ($ids as $i => $id) {
@@ -298,6 +377,7 @@ final class TestService
             $ok = $orig !== null && QuestionGrader::check($type, $payload, $orig);
             if ($ok) {
                 $score += $pt;
+                $correct++;
             }
 
             $results[] = [
@@ -312,8 +392,10 @@ final class TestService
             ];
         }
 
+        // Tính tới hạn nộp chứ không tới lúc chấm: cron chấm muộn vài phút cũng không làm người ta tụt hạng.
         $started = strtotime((string) $a['started_at']);
-        $used = max(0, min(time() - $started, (int) $cfg['durationSec'] * 3));
+        $finished = min(Clock::now()->getTimestamp(), strtotime((string) $a['deadline_at']));
+        $used = max(0, $finished - $started);
         $passed = $score >= (float) $cfg['passScore'];
 
         Db::update('test_attempts', [
@@ -321,6 +403,7 @@ final class TestService
             'auto_submitted' => $auto ? 1 : 0,
             'score' => $score,
             'max_score' => $max,
+            'correct_count' => $correct,
             'passed' => $passed ? 1 : 0,
             'used_sec' => $used,
             'results' => Json::encode($results),
@@ -394,11 +477,13 @@ final class TestService
         [$cfg] = self::source(
             $a['lesson_id'] === null ? null : (int) $a['lesson_id'],
             $a['mock_test_id'] === null ? null : (int) $a['mock_test_id'],
+            true,
         );
 
-        $all = ContentBuilder::json($a['results'], []);
+        $all =ContentBuilder::json($a['results'], []);
         // Chỉ trả câu sai, và chỉ khi admin cho xem đáp án sau khi nộp.
-        $show = (bool) $cfg['showAnswersAfter'];
+        // Cuộc thi còn mở thì giấu, kẻo người nộp sớm truyền đáp án cho người chưa thi.
+        $show = (bool) $cfg['showAnswersAfter'] && !self::contestStillOpen($a);
         $wrong = array_values(array_filter($all, static fn (array $x): bool => empty($x['correct'])));
 
         $used = (int) ($a['used_sec'] ?? 0);
@@ -419,6 +504,9 @@ final class TestService
             'results' => $show ? $wrong : [],
             'answeredCount' => count(array_filter($all, static fn (array $x): bool => ($x['yourAnswerText'] ?? '') !== 'Chưa trả lời')),
             'questionCount' => count($all),
+            'contestTitle' => self::contestTitle($a),
+            'correctCount' => (int) ($a['correct_count'] ?? 0),
+            'answersHidden' => (bool) $cfg['showAnswersAfter'] && !$show,
         ];
 
         if ($a['lesson_id'] !== null) {
@@ -498,7 +586,7 @@ final class TestService
         if ($a['submitted_at'] !== null) {
             throw new HttpError(409, 'TEST_EXPIRED', 'Bài này đã nộp rồi.', [], ['resultReady' => true, 'attemptId' => (int) $a['id']]);
         }
-        if (strtotime((string) $a['deadline_at']) + self::GRACE_SEC <= time()) {
+        if (self::isOverdue($a)) {
             self::grade((int) $a['id'], true);
             throw new HttpError(409, 'TEST_EXPIRED', '', [], ['resultReady' => true, 'attemptId' => (int) $a['id']]);
         }
@@ -511,9 +599,10 @@ final class TestService
 
     /**
      * Cấu hình + danh sách câu của bài kiểm tra hoặc đề thi thử.
+     * $hasAttempt: người học đã vào làm rồi, nên hết giờ thi hoặc đề bị ẩn vẫn phải chấm và xem lại được.
      * @return array{0:array<string,mixed>,1:list<array<string,mixed>>}
      */
-    private static function source(?int $lessonId, ?int $mockTestId): array
+    private static function source(?int $lessonId, ?int $mockTestId, bool $hasAttempt = false): array
     {
         if ($lessonId !== null) {
             ProgressService::visibleLesson($lessonId);
@@ -523,8 +612,9 @@ final class TestService
             ];
         }
 
-        $m = Db::one("SELECT * FROM mock_tests WHERE id = ? AND status = 'published'", [$mockTestId]);
-        if ($m === null) {
+        $m = Db::one('SELECT * FROM mock_tests WHERE id = ?', [$mockTestId]);
+        $canEnter = $m !== null && ($hasAttempt || $m['status'] === 'published' || ContestService::isOpen((int) $mockTestId));
+        if (!$canEnter) {
             throw HttpError::notFound('Đề thi thử này chưa mở.');
         }
         return [[

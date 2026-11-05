@@ -34,6 +34,8 @@
     maxScore: number;
     passScore: number;
     autoSubmit: boolean;
+    /** Có giá trị khi lượt này thuộc một cuộc thi. */
+    contestTitle: string | null;
     questions: TQ[];
     answers: Record<string, Answer>;
     listenCounts: Record<string, number>;
@@ -45,6 +47,10 @@
     passed: boolean;
     usedSec: number;
     autoSubmitted: boolean;
+    contestTitle: string | null;
+    correctCount: number;
+    questionCount: number;
+    answersHidden: boolean;
     results: { qid: number; no: number; promptText: string; yourAnswerText: string; rightAnswerText: string; explain: string | null }[];
   }
 
@@ -79,6 +85,7 @@
 
   let timer: ReturnType<typeof setInterval> | null = null;
   let saveTimer: ReturnType<typeof setTimeout> | null = null;
+  let retryTimer: ReturnType<typeof setTimeout> | null = null;
   /** Lệch giờ giữa máy người học và server (ms). */
   let skew = 0;
   let beeped = false;
@@ -193,6 +200,9 @@
     } catch (e) {
       if (e instanceof ApiError && (e.extra as { attemptId?: number })?.attemptId) {
         result = await api.get<Result>(`/tests/attempts/${(e.extra as { attemptId: number }).attemptId}`);
+      } else if (auto) {
+        // Hết giờ mà mất mạng: màn đã khoá nên cứ thử lại, người học không phải làm gì. Server vẫn giữ câu đã lưu.
+        retryTimer = setTimeout(() => void submit(true), 5000);
       } else {
         toast.show('Không nộp được bài, thử lại nhé.');
         startTimer();
@@ -206,14 +216,20 @@
   onDestroy(() => {
     stopTimer();
     if (saveTimer) clearTimeout(saveTimer);
+    if (retryTimer) clearTimeout(retryTimer);
   });
 
   const lowTime = $derived(left > 0 && left < 60);
   const conLai = $derived(total - answeredCount);
-  const tenBai = $derived(lessonTitle || heading);
+  const contestTitle = $derived(at?.contestTitle ?? result?.contestTitle ?? null);
+  const tenBai = $derived(contestTitle ?? (lessonTitle || heading));
+  const quayLai = $derived(contestTitle ? '/learn/flashcards' : backHref);
+  // Hết giờ là khoá màn làm bài cho tới khi nộp xong, không cho chọn thêm đáp án.
+  const hetGio = $derived(at !== null && at.autoSubmit && left === 0 && result === null);
   // Đề thi thử không có số bài, nên dòng nhỏ trên đầu bài ghi theo loại bài kiểm tra.
   const kicker = $derived.by(() => {
-    const dau = mockTestId !== null ? `HSK ${levelId} · Thi thử cuối cấp` : `HSK ${levelId} · Bài ${lessonNo} · Kiểm tra`;
+    const loai = contestTitle ? 'Cuộc thi' : 'Thi thử cuối cấp';
+    const dau = mockTestId !== null ? `HSK ${levelId} · ${loai}` : `HSK ${levelId} · Bài ${lessonNo} · Kiểm tra`;
     return at ? `${dau} · ${total} câu · ${Math.round(at.durationSec / 60)} phút` : dau;
   });
   const qnClass = (x: TQ, k: number): string => {
@@ -250,8 +266,18 @@
         <Icon name={result.passed ? 'check' : 'x'} size={m ? 30 : 34} />
       </span>
       <p class="bignum disp" style="font-size: {m ? 26 : 32}px">{num(result.score)} / {num(result.maxScore)} điểm</p>
-      <p class="muted">{result.percent}% · {result.passed ? 'Đạt' : 'Chưa đạt'}{result.autoSubmitted ? ' · hết giờ tự nộp' : ''}</p>
+      {#if result.contestTitle}
+        <p class="muted">Đúng {result.correctCount} / {result.questionCount} câu{result.autoSubmitted ? ' · hết giờ tự nộp' : ''}</p>
+      {:else}
+        <p class="muted">{result.percent}% · {result.passed ? 'Đạt' : 'Chưa đạt'}{result.autoSubmitted ? ' · hết giờ tự nộp' : ''}</p>
+      {/if}
     </div>
+
+    {#if result.contestTitle}
+      <p class="muted" style="text-align: center; font-size: 14px">
+        Xem hạng của bạn ở mục Top chăm học, tab Cuộc thi.{result.answersHidden ? ' Đáp án sẽ hiện khi cuộc thi kết thúc.' : ''}
+      </p>
+    {/if}
 
     {#if result.results.length > 0}
       <div class="kt-sai">
@@ -268,8 +294,10 @@
     {/if}
 
     <div class="zk-chan" class:kt-chan-m={m}>
-      <button type="button" class="btn" class:btn-lg={m} onclick={load}><Icon name="repeat" size={16} /> Làm lại</button>
-      <a href={backHref} class="btn btn-son" class:btn-lg={m}>Quay lại</a>
+      {#if !result.contestTitle}
+        <button type="button" class="btn" class:btn-lg={m} onclick={load}><Icon name="repeat" size={16} /> Làm lại</button>
+      {/if}
+      <a href={quayLai} class="btn btn-son" class:btn-lg={m}>Quay lại</a>
     </div>
   {/if}
 {/snippet}
@@ -347,14 +375,14 @@
 {#snippet body(m: boolean)}
   {#if failed}
     <EmptyState title="Không mở được bài kiểm tra." desc={failMsg}>
-      {#snippet action()}<a href={backHref} class="btn btn-sm">Về danh sách bài</a>{/snippet}
+      {#snippet action()}<a href={quayLai} class="btn btn-sm">Về danh sách bài</a>{/snippet}
     </EmptyState>
   {:else if result === null && at === null}
     <Skeleton h={m ? '420px' : '520px'} r={22} />
   {:else if m}
     {@render khung(true)}
   {:else}
-    <DauBai href={backHref} label={mockTestId !== null ? 'Chọn đề' : 'Chọn bài'} {kicker} title={tenBai} right={result ? undefined : dongHoDau} />
+    <DauBai href={quayLai} label={contestTitle ? 'Bàn học' : mockTestId !== null ? 'Chọn đề' : 'Chọn bài'} {kicker} title={tenBai} right={result ? undefined : dongHoDau} />
     {@render khung(false)}
   {/if}
 {/snippet}
@@ -362,7 +390,7 @@
 {#if media.isMobile}
   <div class="mscreen">
     <header class="mtop">
-      <a href={backHref} class="btn btn-bare" aria-label="Thoát"><Icon name="left" size={20} /></a>
+      <a href={quayLai} class="btn btn-bare" aria-label="Thoát"><Icon name="left" size={20} /></a>
       <b style="flex: 1; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{tenBai}</b>
       <Avatar size={36} />
     </header>
@@ -371,7 +399,11 @@
 {:else}
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href={backHref}>Kiểm tra · HSK {levelId}</a> / <b>{heading}</b></nav>
+    {#if contestTitle}
+      <nav class="crumb" style="margin-left: 8px"><a href={quayLai}>Bàn học</a> / <b>Cuộc thi</b></nav>
+    {:else}
+      <nav class="crumb" style="margin-left: 8px"><a href={backHref}>Kiểm tra · HSK {levelId}</a> / <b>{heading}</b></nav>
+    {/if}
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">{@render body(false)}</main>
@@ -387,6 +419,12 @@
       <button type="button" class="btn btn-sm" onclick={() => (confirmOpen = false)}>Làm tiếp</button>
       <button type="button" class="btn btn-son btn-sm" disabled={submitting} onclick={() => submit(false)}>Nộp bài</button>
     {/snippet}
+  </Modal>
+{/if}
+
+{#if hetGio}
+  <Modal title="Hết giờ" closable={false} onclose={() => {}}>
+    <p style="font-size: 14px">Bài của bạn đang được nộp với các câu đã làm, chờ một chút nhé.</p>
   </Modal>
 {/if}
 

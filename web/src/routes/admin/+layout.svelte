@@ -47,7 +47,7 @@
   // Biên tập viên mở trang chỉ dành cho quản trị → đẩy về Bài học (08 §0).
   $effect(() => {
     if (!session.user || isAdmin) return;
-    const adminOnly = ['overview', 'users', 'sessions', 'news', 'support', 'settings', 'curricula'];
+    const adminOnly = ['overview', 'users', 'sessions', 'news', 'support', 'settings', 'curricula', 'contests'];
     if (adminOnly.includes(current)) {
       toast.show('Bạn không có quyền xem mục này.');
       void goto('/admin/lessons', { replaceState: true });

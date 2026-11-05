@@ -128,7 +128,7 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 
 ## I. Quỹ thưởng, top chăm học và bé túi Shopee — giao diện chưa có backend (06/11/2026)
 
-Tiền, tháng, danh sách top đều là dữ liệu minh hoạ. Kiểm ở 320 / 375 / 768 / 1280px, sáng và tối.
+Danh sách top là dữ liệu minh hoạ; tiền quỹ do admin nhập (phần J). Kiểm ở 320 / 375 / 768 / 1280px, sáng và tối.
 "Máy" là đã chạy trên trình duyệt máy dev ngày 06/11 bằng khổ giả lập; cột "ĐT thật" còn trống, chưa thử trên thiết bị thật.
 
 | # | Làm gì | Mong đợi | Máy | ĐT thật |
@@ -136,20 +136,79 @@ Tiền, tháng, danh sách top đều là dữ liệu minh hoạ. Kiểm ở 320
 | I1 | Học viên mở Bàn học và các màn chọn cấp (Luyện viết, Ngữ pháp…) trên điện thoại | Cùng một cụm túi, số tiền quỹ, cúp ở thanh đầu trang; không còn nơi có nơi không | Đạt | |
 | I2 | Khổ 320px, xem thanh đầu trang | Cả cụm + chuyển nhanh + chuông + tài khoản vừa một hàng, không tràn ngang; chữ tiền ≥ 12px | Đạt | |
 | I3 | Khổ 320px, xem thẻ cấp có nhãn "Đang học"/"Sắp có" | Nhãn xuống dòng, không bị cắt, trang không tràn ngang | Đạt | |
-| I4 | Bấm số tiền quỹ | Hộp "Cùng học, cùng tiến bộ": tiêu đề chỉ một lần, không có khung lồng khung, ghi rõ "Số tiền minh họa" | Đạt | |
+| I4 | Bấm số tiền quỹ | Hộp "Cùng học, cùng tiến bộ": tiêu đề chỉ một lần, không có khung lồng khung, có ngày cập nhật số tiền | Đạt | |
 | I5 | Bấm Xem cuộc thi rồi Xem bảng xếp hạng | Tiêu đề ghi đúng tháng/năm; tab Cuộc thi báo chưa có kết quả, có đường về Thông tin cuộc thi | Đạt | |
 | I6 | Bấm cúp | Top 10; ba hạng đầu có huy chương; tên và số phút đọc rõ; cuộn được, không tràn ngang | Đạt | |
-| I7 | Bấm túi ở thanh đầu trang | Hộp Shopee không cảm ơn trước khi người học làm gì; nút "Ghé Shopee · Sắp mở" không bấm được nhưng đọc được | Đạt | |
+| I7 | Bấm túi, rồi bấm số tiền ở thanh đầu trang | Cả hai đều mở cùng hộp quỹ, không còn hộp Shopee riêng | Đạt | |
 | I8 | Mở bất kỳ hộp thoại nào | Bé túi tạm ẩn, đóng hộp thì hiện lại | Đạt | |
-| I9 | Vào màn đang làm bài (lật thẻ, bài tập, kiểm tra, ôn tập, đọc giáo trình) | **Không có bé túi**, nút chính không bị che | Đạt | |
-| I10 | Bấm bé hoặc lời nhắn để ẩn, rồi đổi sang màn học khác | Bé vẫn ẩn; F5 thì hiện lại (chính sách đang để test) | Đạt | |
+| I9 | Vào màn chọn bài hoặc đang làm bài (lật thẻ, bài tập, kiểm tra, ôn tập, đọc giáo trình) | **Không có bé túi**, nút chính không bị che | Đạt | |
+| I10 | Bấm bé hoặc lời nhắn, rồi đổi sang màn học khác | Mở link ở tab mới, bé ẩn và vẫn ẩn khi đổi màn; F5 thì hiện lại (chính sách đang để test) | Đạt | |
 | I11 | Xem bé đi trên màn chọn cấp | Chữ chỉ hiện khi bé đứng yên; lúc đi có dấu 👆; rê chuột vào thì dừng và hiện chữ | Đạt | |
+| I16 | Điện thoại: bấm quỹ, cuộc thi, cúp | Hộp nằm sát dưới thanh đầu trang, không bị đẩy xuống đáy; hộp dài cuộn được, thấy đủ nút cuối ở màn 320×568 | Đạt | |
 | I14 | Nhìn bé đi trên nền trơn | Không có lớp mờ hay vệt bóng đi theo; bé nhún, nghiêng theo đà, chân tay cử động | Đạt | |
 | I15 | Nhìn bé đứng khoảng 10 giây | Tự đổi động tác (vẫy tay, nhảy, nhún nhảy, ngó, nháy mắt, xoay), chữ lời nhắn đứng yên | Đạt | |
 | I12 | Bật "giảm chuyển động" ở hệ điều hành | Bé đứng yên, nói một lần rồi im; không có nhún, chớp | Chưa thử | |
-| I13 | Giao diện tối: thanh đầu trang và 4 hộp thoại | Chữ đọc rõ, không chói | Đạt (trừ hộp Shopee, chưa xem ở nền tối) | |
+| I13 | Giao diện tối: thanh đầu trang và 3 hộp thoại | Chữ đọc rõ, không chói | Đạt | |
 
-Chưa đồng nhất, đang chờ quyết định: lời nhắn của bé nói "Chạm là góp quỹ thưởng rồi", còn hộp Shopee nói "Bấm liên kết chưa làm tăng quỹ".
+Cần đối chiếu với điều khoản tiếp thị: lời nhắn của bé nói "Chạm là góp quỹ thưởng rồi", nhưng chưa có căn cứ là chỉ bấm đã sinh hoa hồng.
+
+## J. Link Shopee: quản trị và người học (06/11/2026)
+
+Mở `/admin/support` bằng tài khoản admin, một tab khác mở `/learn/flashcards`. "Máy" là đã chạy trên web local ngày 06/11. Lưu ý bước J8 không đi hết sang Shopee vì đó là link thử.
+
+| # | Làm gì | Mong đợi | Máy |
+|---|---|---|---|
+| J1 | Bấm Thêm link | Không còn "Hiện từ ngày", "Đến ngày", "Bật ngay sau khi lưu"; Hiện ở đâu có Icon và Quỹ tháng | Đạt |
+| J2 | Lưu link không phải shopee.vn, s.shopee.vn, shope.ee | Báo lỗi ở link, không lưu | Có sẵn từ trước, chưa thử lại |
+| J3 | Gắn Icon cho link A, rồi bấm Thêm link hoặc sửa link B | Cả 2 ô vị trí mờ và không bấm được, Quỹ tháng được chọn sẵn, có dòng báo link A đang giữ Icon | Đạt |
+| J3b | Sửa link A đang giữ Icon | 2 ô vẫn bấm được; bỏ Icon xong thì link khác gắn được | Sửa được đạt; nhường Icon có test API |
+| J4 | Gắn Quỹ tháng cho nhiều link, bấm "Ghé Shopee" trong hộp quỹ | Mở màn sản phẩm liệt kê đủ link, bấm link mở tab mới, có nút Quay lại quỹ | Đạt, 9 link; chưa đi hết sang Shopee |
+| J4b | Ở màn sản phẩm, gõ `khan giay`, gõ `田`, gõ từ không có | Lọc đúng cả khi không dấu; từ không có thì báo "Không tìm thấy sản phẩm"; cuộn danh sách thì ô tìm vẫn ở trên cùng | Đạt |
+| J5 | Công tắc tổng **tắt** | Người học không có bé túi, hộp quỹ không có phần Shopee, `/go/{id}` về Bàn học | Đạt |
+| J6 | Công tắc tổng **bật** rồi quay lại tab học | Bé và link hiện đúng vị trí, không cần tải lại trang | Bé và link đạt khi tải lại trang; tự cập nhật khi quay lại tab chưa thử |
+| J7 | Tắt riêng một link, hoặc xoá | Link đó không hiện nữa | Có test API |
+| J8 | Bấm bé, bấm link trong hộp quỹ | Mở tab mới qua `/go/{id}`, bé ẩn; số Bấm trong bảng admin tăng ngay | Đạt |
+| J9 | Mở hộp quỹ khi có link | Số Hiển thị trong bảng admin tăng | Đạt |
+| J10 | Khối Quỹ tháng: gõ `1250000abc` | Ô chỉ nhận số, tự thành `1.250.000` | Đạt |
+| J11 | Bấm Lưu số tiền, mở trang học | Thanh đầu trang, hộp quỹ, hộp cuộc thi đều hiện đúng số; có tháng và ngày cập nhật; không còn chữ "minh họa" ở hai hộp này | Đạt |
+| J12 | Để trống rồi lưu | Người học thấy "Đang cập nhật", khổ 320px không tràn | Hiển thị đạt; xoá có test API |
+| J13 | Sang tháng mới mà chưa lưu lại | Vẫn hiện tháng cũ của số tiền đó; bấm Lưu thì đổi sang tháng mới | Có test API |
+
+Kiểm tra tự động: `api/tests/Unit/SupportLinksTest.php`.
+
+## K. Cuộc thi: tạo bài thi và đếm ngược (06/11/2026)
+
+| # | Làm gì | Mong đợi | Máy |
+|---|---|---|---|
+| K1 | Vào `/admin/contests` bằng tài khoản biên tập | Bị chặn, chỉ quản trị mở được | Có test route API; màn chưa thử |
+| K2 | Tạo bài thi: tên, giờ bắt đầu, số phút thi, cấp, "+ Tạo đề mới" | Không còn ô giờ kết thúc; bảng có dòng mới, nhãn Sắp diễn ra; đề mới là Nháp | Đạt |
+| K2b | Nút Soạn đề ở mục Đề thi thử | Mở trang đề tạm: danh sách câu, thêm tay, nhập Excel | Mở trang đạt; nhập Excel có test API |
+| K3 | Số phút thi sai, hoặc chọn đề chưa có câu | Báo lỗi, không lưu; đề mới vừa tạo không bị bỏ lại | Có test API; dọn đề thừa chưa thử |
+| K4 | Chọn đề đang Công khai | Form cảnh báo người học làm trước được | Chưa thử |
+| K5 | Xoá đề đang gắn bài thi ở `/admin/mock-tests` | Báo đề đang dùng, không xoá | Có test API |
+| K6 | Người học mở hộp quỹ khi chưa có bài thi | Nhãn "Chưa có lịch", không có đồng hồ | Có test API; màn chưa thử |
+| K7 | Có bài thi sắp diễn ra | Nhãn Sắp diễn ra, đồng hồ chạy từng giây; còn trên 1 ngày thì có ô Ngày | Đạt |
+| K8 | Chờ đồng hồ về 0 | Không tải lại trang, tự thành Đang diễn ra, đồng hồ đếm tới giờ đóng, nút Vào thi ngay | Đạt |
+| K9 | Bấm Vào thi ngay | Vào được đề Nháp, làm bài được, không có bé túi | Đạt |
+| K10 | Trước giờ thi, gõ thẳng đường dẫn đề Nháp | Báo đề chưa mở | Có test API |
+| K11 | Vào thi muộn, để đồng hồ về 0, không bấm nộp | Đồng hồ đếm tới lúc hết giờ thi của cả cuộc thi; về 0 thì màn khoá "Hết giờ", tự nộp câu đã chọn, ra kết quả "hết giờ tự nộp" | Đạt |
+| K11b | Đóng tab trước khi hết giờ, người khác mở bảng xếp hạng sau giờ đóng | Lượt đó được chấm theo câu đã lưu, thời gian tính tới hạn nộp | Có test API |
+| K11c | Tắt mạng đúng lúc hết giờ | Màn vẫn khoá, tự thử nộp lại mỗi 5 giây | Chưa thử |
+| K13 | Bấm Nộp bài khi cuộc thi còn mở | Có kết quả đúng mấy câu, không hiện đáp án, báo đáp án hiện khi kết thúc; không có nút Làm lại | Đạt |
+| K14 | Đã nộp, mở lại hộp quỹ | Nút thành Xem bảng xếp hạng; gõ thẳng đường dẫn đề chỉ thấy kết quả | Nút đạt; đường dẫn có test API |
+| K15 | Bảng xếp hạng có nhiều người | Đúng nhiều xếp trên; bằng câu đúng thì làm nhanh hơn xếp trên; dòng của mình tô nền, có "(bạn)"; 3 hạng đầu có huy chương | Đạt |
+| K16 | Mình ngoài top 50 | Vẫn có dòng hạng của mình ở cuối | Có test API |
+| K17 | Hết giờ cuộc thi, mở lại kết quả | Đáp án các câu sai hiện ra | Có test API; màn đã thấy ở K11 |
+| K18 | Thi thử thường | Vẫn làm lại được nhiều lần như cũ | Có test API |
+| K12 | Nút Xem cuộc thi | Rộng hết hộp, nền đỏ khi có bài thi, dễ thấy; 320px và nền tối không vỡ | Đạt |
+
+| K19 | Trước giờ thi bấm Đăng ký thi | Báo đã đăng ký, số người tăng, nút Huỷ đăng ký có trong hộp cuộc thi | Đạt (giả lập trạng thái sắp thi vì bài thi của bạn đang mở; lệnh đăng ký chạy thật) |
+| K20 | Tab Đăng ký ở Top chăm học; nút số người ở admin | Thấy danh sách theo thứ tự đăng ký; admin có thêm email | Tab đạt; admin chưa mở |
+| K21 | Đến giờ mà chưa đăng ký | Không có nút vào thi, báo chưa đăng ký; gõ thẳng đường dẫn bị chặn; không đăng ký muộn được | Đạt; chặn có test API |
+| K22 | Đã đăng ký, đến giờ | Có nút Vào thi ngay, làm bài được | Đạt |
+| K23 | Sửa cơ cấu giải ở admin, tổng quá 100% | Không cho lưu; hợp lệ thì hộp cuộc thi hiện đúng tên và số tiền | Hiện đạt; chặn có test API |
+
+Kiểm tra tự động: `api/tests/Unit/ContestTest.php`.
 
 ## E. Kiểm tra tự động (chạy ở máy dev)
 

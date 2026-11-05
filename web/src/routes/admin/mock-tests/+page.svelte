@@ -93,8 +93,8 @@
       await api.del(`/admin/mock-tests/${m.id}`);
       await load();
       toast.ok('Đã xoá đề.');
-    } catch {
-      toast.show('Không xoá được.');
+    } catch (e) {
+      toast.show(e instanceof ApiError ? e.message : 'Không xoá được.');
     }
   }
 </script>
@@ -141,6 +141,7 @@
           <p class="err">Đề chưa có câu nào, người học sẽ không thấy.</p>
         {/if}
         <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <a class="btn btn-son btn-sm" href="/admin/mock-tests/{m.id}"><Icon name="edit" size={15} /> Soạn đề</a>
           <button type="button" class="btn btn-sm" onclick={() => addMore(m)}><Icon name="download" size={15} /> Lấy thêm câu</button>
           <button type="button" class="btn btn-sm" onclick={() => toggleStatus(m)}>
             {m.status === 'published' ? 'Chuyển về nháp' : 'Cho hiện'}

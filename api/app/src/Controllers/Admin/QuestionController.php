@@ -358,6 +358,10 @@ final class QuestionController
     public function deleteMock(Request $r): Response
     {
         $m = self::mock($r->id());
+        $contest = Db::val('SELECT title FROM contests WHERE mock_test_id = ? LIMIT 1', [(int) $m['id']]);
+        if ($contest !== null) {
+            throw HttpError::conflict("Đề này đang dùng cho bài thi “{$contest}”. Hãy xoá hoặc đổi đề của bài thi đó trước.");
+        }
         Db::exec('DELETE FROM mock_tests WHERE id = ?', [(int) $m['id']]);
         ContentBuilder::forgetLevel((int) $m['level_id']);
         Audit::log($r, 'mock.delete', 'mock_test', (int) $m['id'], ['title' => $m['title']]);
@@ -368,7 +372,75 @@ final class QuestionController
     public function mockQuestions(Request $r): array
     {
         $m = self::mock($r->id());
-        return ['questions' => self::rows('mock_test_id = ?', [(int) $m['id']], true)];
+        return [
+            'mock' => [
+                'id' => (int) $m['id'],
+                'levelId' => (int) $m['level_id'],
+                'title' => (string) $m['title'],
+                'status' => (string) $m['status'],
+                'durationSec' => (int) $m['duration_sec'],
+            ],
+            'questions' => self::rows('mock_test_id = ?', [(int) $m['id']], true),
+        ];
+    }
+
+    /**
+     * POST /admin/mock-tests/{id}/questions/bulk — nạp đề từ Excel, cùng cách với bài kiểm tra:
+     * dòng sai thì bỏ qua và báo số dòng, các dòng khác vẫn vào.
+     */
+    public function bulkMock(Request $r): array
+    {
+        $m = self::mock($r->id());
+        $mockId = (int) $m['id'];
+
+        $v = new Validator($r->body);
+        $mode = (string) $v->in('mode', 'Cách nhập', ['append', 'replace'], 'append');
+        $items = $v->arr('items', 'Danh sách câu');
+        $v->done();
+        if (count($items) > self::BULK_MAX) {
+            throw HttpError::validation(['items' => 'Mỗi lần nhập tối đa ' . self::BULK_MAX . ' câu.']);
+        }
+
+        $created = 0;
+        $skipped = [];
+        Db::tx(static function () use ($items, $mockId, $mode, &$created, &$skipped): void {
+            if ($mode === 'replace') {
+                Db::exec('DELETE FROM questions WHERE mock_test_id = ?', [$mockId]);
+            }
+            $sort = (int) Db::val('SELECT COALESCE(MAX(sort_order), 0) FROM questions WHERE mock_test_id = ?', [$mockId]);
+
+            foreach (array_values($items) as $i => $raw) {
+                $row = is_array($raw) ? $raw : [];
+                $type = (string) ($row['type'] ?? '');
+                if (!in_array($type, QuestionGrader::KT_TYPES, true)) {
+                    $skipped[] = ['row' => $i + 1, 'reason' => 'Dạng câu không dùng được trong đề thi.'];
+                    continue;
+                }
+                try {
+                    $payload = QuestionPayload::clean($type, (array) ($row['payload'] ?? []));
+                } catch (HttpError $e) {
+                    $fields = $e->fields;
+                    $skipped[] = ['row' => $i + 1, 'reason' => reset($fields) ?: $e->getMessage()];
+                    continue;
+                }
+                $score = isset($row['score']) && is_numeric($row['score']) ? (float) $row['score'] : 1.0;
+                Db::insert('questions', [
+                    'part' => 'mock',
+                    'mock_test_id' => $mockId,
+                    'type' => $type,
+                    'payload' => Json::encode($payload),
+                    'explain_vi' => mb_substr(trim((string) ($row['explain'] ?? '')), 0, 2000) ?: null,
+                    'score' => $score > 0 ? min($score, 100) : 1.0,
+                    'section' => $type === 'listen' ? 'listening' : 'reading',
+                    'sort_order' => ++$sort,
+                ]);
+                $created++;
+            }
+        });
+
+        ContentBuilder::forgetLevel((int) $m['level_id']);
+        Audit::log($r, 'mock.bulk', 'mock_test', $mockId, ['mode' => $mode, 'created' => $created, 'skipped' => count($skipped)]);
+        return ['created' => $created, 'skipped' => $skipped];
     }
 
     /** POST /admin/mock-tests/{id}/questions */

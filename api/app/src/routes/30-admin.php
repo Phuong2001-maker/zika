@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use Zika\Controllers\Admin\BookController as Book;
 use Zika\Controllers\Admin\ContentController as Content;
+use Zika\Controllers\Admin\ContestController as Contest;
 use Zika\Controllers\Admin\DialogueController as Dialogue;
 use Zika\Controllers\Admin\MiscController as Misc;
 use Zika\Controllers\Admin\OpsController as Ops;
@@ -58,6 +59,7 @@ return [
     ['DELETE', '/admin/mock-tests/{id}', [Question::class, 'deleteMock'], 'E'],
     ['GET',    '/admin/mock-tests/{id}/questions', [Question::class, 'mockQuestions'], 'E'],
     ['POST',   '/admin/mock-tests/{id}/questions', [Question::class, 'createMockQuestion'], 'E'],
+    ['POST',   '/admin/mock-tests/{id}/questions/bulk', [Question::class, 'bulkMock'], 'E'],
     ['PUT',    '/admin/mock-tests/{id}/questions/order', [Question::class, 'reorderMockQuestions'], 'E'],
     ['POST',   '/admin/mock-tests/{id}/copy-from-tests', [Question::class, 'copyIntoMockTest'], 'E'],
 
@@ -110,9 +112,18 @@ return [
     ['PATCH',  '/admin/feedback/{id}', [Ops::class, 'updateFeedback'], 'E'],
     ['POST',   '/admin/feedback/{id}/reply', [Ops::class, 'replyFeedback'], 'E'],
 
+    // Cuộc thi tháng
+    ['GET',    '/admin/contests', [Contest::class, 'index'], 'A'],
+    ['POST',   '/admin/contests', [Contest::class, 'save'], 'A'],
+    ['PUT',    '/admin/contests/prizes', [Contest::class, 'savePrizes'], 'A'],
+    ['GET',    '/admin/contests/{id}/registrants', [Contest::class, 'registrants'], 'A'],
+    ['PUT',    '/admin/contests/{id}', [Contest::class, 'save'], 'A'],
+    ['DELETE', '/admin/contests/{id}', [Contest::class, 'delete'], 'A'],
+
     // Ủng hộ & Shopee (04 §10.10)
     ['GET',    '/admin/support', [Ops::class, 'support'], 'A'],
     ['PATCH',  '/admin/support', [Ops::class, 'toggleSupport'], 'A'],
+    ['PUT',    '/admin/support/fund', [Ops::class, 'saveFund'], 'A'],
     ['POST',   '/admin/support/links', [Ops::class, 'saveLink'], 'A'],
     ['PUT',    '/admin/support/links/order', [Ops::class, 'reorderLinks'], 'A'],
     ['PUT',    '/admin/support/links/{id}', [Ops::class, 'saveLink'], 'A'],

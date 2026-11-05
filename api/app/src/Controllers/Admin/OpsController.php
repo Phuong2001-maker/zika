@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Zika\Controllers\Admin;
 
+use Zika\Controllers\SupportController;
 use Zika\Core\Audit;
+use Zika\Core\Clock;
 use Zika\Core\Config;
 use Zika\Core\Db;
 use Zika\Core\HttpError;
@@ -358,23 +360,31 @@ final class OpsController
     public function support(Request $r): array
     {
         $links = Db::all('SELECT * FROM affiliate_links ORDER BY sort_order, id');
-        $stat = Db::one('SELECT COALESCE(SUM(views),0) v, COALESCE(SUM(clicks),0) c FROM affiliate_daily WHERE d > (CURDATE() - INTERVAL 7 DAY)')
-            ?? ['v' => 0, 'c' => 0];
 
+        // affiliate_daily chỉ có số tới hôm qua (cron gộp ban đêm); cộng thêm sự kiện thô hôm nay
+        // để admin bấm thử là thấy số tăng ngay, không tưởng là hỏng.
         $per = [];
+        $totalViews = 0;
+        $totalClicks = 0;
         foreach (Db::all(
-            'SELECT link_id, COALESCE(SUM(views),0) v, COALESCE(SUM(clicks),0) c
-               FROM affiliate_daily WHERE d > (CURDATE() - INTERVAL 7 DAY) GROUP BY link_id',
+            'SELECT link_id, SUM(views) v, SUM(clicks) c FROM affiliate_daily WHERE d > ? GROUP BY link_id
+             UNION ALL
+             SELECT link_id, SUM(kind = \'view\') v, SUM(kind = \'click\') c FROM affiliate_events WHERE created_at >= ? GROUP BY link_id',
+            [Clock::now()->modify('-7 days')->format('Y-m-d'), Clock::today() . ' 00:00:00'],
         ) as $x) {
-            $per[(int) $x['link_id']] = $x;
+            $linkId = (int) $x['link_id'];
+            $per[$linkId]['v'] = ($per[$linkId]['v'] ?? 0) + (int) $x['v'];
+            $per[$linkId]['c'] = ($per[$linkId]['c'] ?? 0) + (int) $x['c'];
+            $totalViews += (int) $x['v'];
+            $totalClicks += (int) $x['c'];
         }
 
         return [
             'enabled' => (bool) Settings::value('support', 'enabled', false),
             'kpi' => [
-                'views' => (int) $stat['v'],
-                'clicks' => (int) $stat['c'],
-                'ctr' => ((int) $stat['v']) > 0 ? round(((int) $stat['c']) / ((int) $stat['v']) * 100, 1) : 0.0,
+                'views' => $totalViews,
+                'clicks' => $totalClicks,
+                'ctr' => $totalViews > 0 ? round($totalClicks / $totalViews * 100, 1) : 0.0,
                 'active' => (int) Db::val('SELECT COUNT(*) FROM affiliate_links WHERE is_active = 1'),
                 'total' => count($links),
             ],
@@ -385,10 +395,8 @@ final class OpsController
                     'name' => (string) $l['name'],
                     'url' => (string) $l['url'],
                     'imageUrl' => $l['image_path'],
-                    'placeDesk' => (bool) $l['place_desk'],
-                    'placeDone' => (bool) $l['place_done'],
-                    'startsOn' => $l['starts_on'],
-                    'endsOn' => $l['ends_on'],
+                    'placeIcon' => (bool) $l['place_icon'],
+                    'placeFund' => (bool) $l['place_fund'],
                     'active' => (bool) $l['is_active'],
                     'views' => (int) $s['v'],
                     'clicks' => (int) $s['c'],
@@ -396,7 +404,24 @@ final class OpsController
                 ];
             }, $links),
             'donate' => Settings::get('donate'),
+            'fund' => SupportController::monthlyFund(),
         ];
+    }
+
+    /** PUT /admin/support/fund — admin tự nhập tiền quỹ tháng; để trống là xoá, người học thấy "Đang cập nhật". */
+    public function saveFund(Request $r): array
+    {
+        $v = new Validator($r->body);
+        $amount = $v->int('amount', 'Số tiền quỹ', 0, 100_000_000_000, false);
+        $v->done();
+
+        Settings::set('fund', [
+            'amount' => $amount,
+            'month' => $amount === null ? null : Clock::now()->format('m/Y'),
+            'updated_on' => $amount === null ? null : Clock::now()->format('d/m/Y'),
+        ]);
+        Audit::log($r, 'support.fund', 'settings', null, ['amount' => $amount]);
+        return SupportController::monthlyFund();
     }
 
     /** PATCH /admin/support — công tắc tổng. */
@@ -419,11 +444,17 @@ final class OpsController
         $name = $v->str('name', 'Tên hiển thị', min: 1, max: 160);
         $url = $v->str('url', 'Link', min: 1, max: 500);
         $image = $v->strOrNull('imagePath', 'Ảnh', 255);
-        $deskPlace = $v->bool('placeDesk');
-        $donePlace = $v->bool('placeDone');
-        $startsOn = $v->date('startsOn', 'Hiện từ ngày');
-        $endsOn = $v->date('endsOn', 'Đến ngày');
-        $active = $v->bool('active', true);
+        $iconPlace = $v->bool('placeIcon');
+        $fundPlace = $v->bool('placeFund');
+
+        // Icon chỉ có một link: link khác đang giữ thì link này mặc định ở Quỹ tháng, muốn đổi phải bỏ Icon ở link kia trước.
+        $iconHolder = Db::val('SELECT name FROM affiliate_links WHERE place_icon = 1 AND id <> ? LIMIT 1', [$id]);
+        if ($iconHolder !== null) {
+            if ($iconPlace) {
+                $v->error('placeIcon', "Icon đang dùng link “{$iconHolder}”. Hãy bỏ chọn Icon ở link đó trước.");
+            }
+            $fundPlace = true;
+        }
 
         $host = strtolower((string) parse_url($url, PHP_URL_HOST));
         if (!str_starts_with($url, 'https://') || !in_array($host, self::SHOPEE_HOSTS, true)) {
@@ -435,11 +466,8 @@ final class OpsController
             'name' => $name,
             'url' => $url,
             'image_path' => $image,
-            'place_desk' => $deskPlace ? 1 : 0,
-            'place_done' => $donePlace ? 1 : 0,
-            'starts_on' => $startsOn,
-            'ends_on' => $endsOn,
-            'is_active' => $active ? 1 : 0,
+            'place_icon' => $iconPlace ? 1 : 0,
+            'place_fund' => $fundPlace ? 1 : 0,
         ];
 
         if ($id > 0) {
@@ -451,6 +479,7 @@ final class OpsController
             return Response::json(['id' => $id]);
         }
 
+        // Link mới luôn bật; muốn tắt thì dùng công tắc ở từng dòng trong bảng.
         $row['sort_order'] = 1 + (int) Db::val('SELECT COALESCE(MAX(sort_order), 0) FROM affiliate_links');
         $newId = Db::insert('affiliate_links', $row);
         Audit::log($r, 'support.link.create', 'affiliate_link', $newId);

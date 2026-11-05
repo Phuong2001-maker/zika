@@ -13,6 +13,16 @@ final class Settings
         'privacy' => ['visit_log_days' => 90, 'mask_emails' => true, 'privacy_page' => '', 'terms_page' => ''],
         'backup'  => ['daily' => true, 'last_at' => null, 'last_size' => 0],
         'support' => ['enabled' => false],
+        // Tiền quỹ tháng do admin tự nhập, chưa đồng bộ từ Shopee.
+        'fund'    => ['amount' => null, 'month' => null, 'updated_on' => null],
+        // Cơ cấu giải mặc định, admin tự chỉnh ở /admin/contests. Thứ tự dòng là thứ hạng nhận giải.
+        'prizes'  => ['rows' => [
+            ['label' => 'Giải Nhất', 'percent' => 50],
+            ['label' => 'Giải Nhì', 'percent' => 25],
+            ['label' => 'Giải Ba', 'percent' => 15],
+            ['label' => 'Khuyến khích 1', 'percent' => 5],
+            ['label' => 'Khuyến khích 2', 'percent' => 5],
+        ]],
         'donate'  => ['enabled' => true, 'qr_path' => null, 'bank' => '', 'owner' => '', 'account' => '', 'memo' => 'UNG HO ZIKA'],
     ];
 
