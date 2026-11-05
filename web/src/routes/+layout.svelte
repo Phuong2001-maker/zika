@@ -9,6 +9,7 @@
   import { heartbeat } from '$lib/stores/heartbeat';
   import { toast } from '$lib/stores/toast.svelte';
   import Toaster from '$lib/components/Toaster.svelte';
+  import ShopeeBuddy from '$lib/learn/ShopeeBuddy.svelte';
   import { canView, homePath, isAdminRoute, isGuestOnly, isPublicRoute, landingPath, loginUrl } from '$lib/auth/routes';
   import { registerServiceWorker } from '$lib/utils/pwa';
 
@@ -89,6 +90,7 @@
 
 {#if allowed}
   {@render children()}
+  {#if page.url.pathname.startsWith('/learn/')}<ShopeeBuddy />{/if}
 {:else}
   <div class="boot center" aria-busy="true" aria-label="Đang tải">
     <span class="seal" lang="zh" style="width: 48px; height: 48px; font-size: 26px">字</span>

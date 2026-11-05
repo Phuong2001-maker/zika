@@ -67,6 +67,8 @@
 <style>
   .lv-top {
     display: flex;
+    /* Máy 320px không đủ chỗ cho số cấp và nhãn trên một hàng, nhãn phải xuống dòng thay vì bị cắt. */
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
     gap: 8px;

@@ -7,6 +7,7 @@
   import Topbar from '$lib/components/Topbar.svelte';
   import Switcher from '$lib/components/Switcher.svelte';
   import Avatar from '$lib/components/Avatar.svelte';
+  import MonthlyCommunity from '$lib/learn/MonthlyCommunity.svelte';
   import LevelCard from '$lib/components/LevelCard.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
@@ -51,10 +52,10 @@
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 30px; height: 30px; font-size: 17px">字</span>Zìkǎ</a>
-      <div style="margin-left: auto; display: flex; align-items: center; gap: 10px">
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 6px">
+        <MonthlyCommunity />
         <Switcher current={part} />
-        <Avatar size={44} />
+        <Avatar size={32} />
       </div>
     </header>
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 18px">

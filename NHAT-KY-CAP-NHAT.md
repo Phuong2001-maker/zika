@@ -23,6 +23,27 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 06/11/2026 — Rà UI/UX quỹ thưởng, top chăm học và vẽ lại bé túi (giao diện)
+
+Vẫn chỉ là giao diện, chưa có backend. Rà ở 320/375/768/1280px, sáng và tối, kết quả ở phần I của
+[KICH-BAN-TEST.md](KICH-BAN-TEST.md). Lỗi đã sửa: lời nhắn của bé che nút "Kiểm tra" trong bài (nay bé không hiện ở
+màn đang làm bài); chữ 8–10px khó đọc ở thanh đầu trang và hộp thoại; điện thoại chỉ Bàn học có cụm quỹ/top;
+hộp quỹ lặp tiêu đề và lồng khung; hộp Shopee cảm ơn khi người học chưa làm gì; nhãn thẻ cấp bị cắt ở 320px.
+Bé túi vẽ lại, chữ chỉ hiện khi bé đứng yên để bớt hoa mắt, bỏ dấu × ở lời nhắn.
+Chi tiết: [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md).
+
+### 05/11/2026 — Giáo trình admin, quỹ thưởng tháng và bé túi Shopee (giao diện)
+
+Thêm `/admin/curricula` với danh sách giáo trình và bảng phân cho mỗi học viên một bộ, tìm tên/email
+không dấu. Giữ giao diện học viên theo HSK/bài như cũ, không cho tự chọn giáo trình. Bổ sung nút quỹ
+thưởng và top chăm học trên thanh đầu trang; túi Shopee SVG chạy nhảy toàn màn học, bấm thì ẩn,
+F5 hiện lại để test. Di chuyển bằng requestAnimationFrame/translate3d và vận tốc làm mềm (cách đi đã đổi ngày 06/11).
+
+Chỉ frontend, dữ liệu giáo trình lưu localStorage; tiền/top minh họa, link Shopee chưa nối. Không có
+API, migration, đồng bộ hoa hồng hay thi thật. Đã loại các khối/thống kê/text theo góp ý người dùng.
+Chi tiết trạng thái cuối, đường dẫn code, hạn chế và việc cần tiếp tục:
+[BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md). Kiểm thủ công bổ sung ở cuối KICH-BAN-TEST.md.
+
 ### 04/11/2026 — Hiện đầy đủ tình huống ở hội thoại
 
 Theo yêu cầu cuối của người dùng, bỏ nút Xem tình huống/Thu gọn và hiển thị đầy đủ mô tả

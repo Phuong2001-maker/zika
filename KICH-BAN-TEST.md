@@ -126,6 +126,29 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | H8 | Học xong một bài | Dấu "完成" đập xuống rồi đứng yên; máy bật "giảm chuyển động" thì hiện luôn, không chạy |
 | H9 | Giao diện tối | Khối Hôm nay, ô chữ điền, dấu triện, hoạ tiết cấp đều đọc rõ, không chói |
 
+## I. Quỹ thưởng, top chăm học và bé túi Shopee — giao diện chưa có backend (06/11/2026)
+
+Tiền, tháng, danh sách top đều là dữ liệu minh hoạ. Kiểm ở 320 / 375 / 768 / 1280px, sáng và tối.
+"Máy" là đã chạy trên trình duyệt máy dev ngày 06/11 bằng khổ giả lập; cột "ĐT thật" còn trống, chưa thử trên thiết bị thật.
+
+| # | Làm gì | Mong đợi | Máy | ĐT thật |
+|---|---|---|---|---|
+| I1 | Học viên mở Bàn học và các màn chọn cấp (Luyện viết, Ngữ pháp…) trên điện thoại | Cùng một cụm túi, số tiền quỹ, cúp ở thanh đầu trang; không còn nơi có nơi không | Đạt | |
+| I2 | Khổ 320px, xem thanh đầu trang | Cả cụm + chuyển nhanh + chuông + tài khoản vừa một hàng, không tràn ngang; chữ tiền ≥ 12px | Đạt | |
+| I3 | Khổ 320px, xem thẻ cấp có nhãn "Đang học"/"Sắp có" | Nhãn xuống dòng, không bị cắt, trang không tràn ngang | Đạt | |
+| I4 | Bấm số tiền quỹ | Hộp "Cùng học, cùng tiến bộ": tiêu đề chỉ một lần, không có khung lồng khung, ghi rõ "Số tiền minh họa" | Đạt | |
+| I5 | Bấm Xem cuộc thi rồi Xem bảng xếp hạng | Tiêu đề ghi đúng tháng/năm; tab Cuộc thi báo chưa có kết quả, có đường về Thông tin cuộc thi | Đạt | |
+| I6 | Bấm cúp | Top 10; ba hạng đầu có huy chương; tên và số phút đọc rõ; cuộn được, không tràn ngang | Đạt | |
+| I7 | Bấm túi ở thanh đầu trang | Hộp Shopee không cảm ơn trước khi người học làm gì; nút "Ghé Shopee · Sắp mở" không bấm được nhưng đọc được | Đạt | |
+| I8 | Mở bất kỳ hộp thoại nào | Bé túi tạm ẩn, đóng hộp thì hiện lại | Đạt | |
+| I9 | Vào màn đang làm bài (lật thẻ, bài tập, kiểm tra, ôn tập, đọc giáo trình) | **Không có bé túi**, nút chính không bị che | Đạt | |
+| I10 | Bấm bé hoặc lời nhắn để ẩn, rồi đổi sang màn học khác | Bé vẫn ẩn; F5 thì hiện lại (chính sách đang để test) | Đạt | |
+| I11 | Xem bé đi trên màn chọn cấp | Chữ chỉ hiện khi bé đứng yên; lúc đi có dấu 👆; rê chuột vào thì dừng và hiện chữ | Đạt | |
+| I12 | Bật "giảm chuyển động" ở hệ điều hành | Bé đứng yên, nói một lần rồi im; không có nhún, chớp | Chưa thử | |
+| I13 | Giao diện tối: thanh đầu trang và 4 hộp thoại | Chữ đọc rõ, không chói | Đạt (trừ hộp Shopee, chưa xem ở nền tối) | |
+
+Chưa đồng nhất, đang chờ quyết định: lời nhắn của bé nói "Chạm là góp quỹ thưởng rồi", còn hộp Shopee nói "Bấm liên kết chưa làm tăng quỹ".
+
 ## E. Kiểm tra tự động (chạy ở máy dev)
 
 ```bash
