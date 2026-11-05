@@ -144,6 +144,8 @@ Tiền, tháng, danh sách top đều là dữ liệu minh hoạ. Kiểm ở 320
 | I9 | Vào màn đang làm bài (lật thẻ, bài tập, kiểm tra, ôn tập, đọc giáo trình) | **Không có bé túi**, nút chính không bị che | Đạt | |
 | I10 | Bấm bé hoặc lời nhắn để ẩn, rồi đổi sang màn học khác | Bé vẫn ẩn; F5 thì hiện lại (chính sách đang để test) | Đạt | |
 | I11 | Xem bé đi trên màn chọn cấp | Chữ chỉ hiện khi bé đứng yên; lúc đi có dấu 👆; rê chuột vào thì dừng và hiện chữ | Đạt | |
+| I14 | Nhìn bé đi trên nền trơn | Không có lớp mờ hay vệt bóng đi theo; bé nhún, nghiêng theo đà, chân tay cử động | Đạt | |
+| I15 | Nhìn bé đứng khoảng 10 giây | Tự đổi động tác (vẫy tay, nhảy, nhún nhảy, ngó, nháy mắt, xoay), chữ lời nhắn đứng yên | Đạt | |
 | I12 | Bật "giảm chuyển động" ở hệ điều hành | Bé đứng yên, nói một lần rồi im; không có nhún, chớp | Chưa thử | |
 | I13 | Giao diện tối: thanh đầu trang và 4 hộp thoại | Chữ đọc rõ, không chói | Đạt (trừ hộp Shopee, chưa xem ở nền tối) | |
 

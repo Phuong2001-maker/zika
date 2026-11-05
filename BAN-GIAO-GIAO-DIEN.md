@@ -51,7 +51,11 @@ hay nút nào mở nhánh đó. Khi dọn code có thể tách thành component 
 - **Không hiện ở màn đang làm bài** (`lesson`, `review`, `mock`, đọc giáo trình) vì lời nhắn từng che nút "Kiểm tra" làm
   người học bấm nhầm. Luật ở `shopee-buddy.ts`, có test. Component vẫn sống khi sang các màn đó để bé đã ẩn thì không hiện lại.
 - Túi SVG vẽ lại 06/11: mắt to chớp và nhìn theo con trỏ, má hồng, bùa tim đung đưa, rê chuột vào thì cười
-  tít mắt và thả tim. Lời nhắn hiện tại:
+  tít mắt và thả tim. **Không có bóng dưới chân và không dùng `filter: drop-shadow`**: người dùng thấy như lớp mờ
+  đi theo bé nên đã bỏ, đừng thêm lại.
+- Cử động: đi có nhún và nén, chân nhấc lần lượt, tay đánh ngược, quai và bùa đung đưa, người nghiêng theo đà.
+  Đến nơi thì nén xuống như vừa đáp. Lúc đứng tự đổi ngẫu nhiên giữa vẫy tay, nhảy, nhún nhảy, ngó nghiêng, nháy mắt,
+  xoay người (`data-gesture`, chỉ hình cử động, chữ lời nhắn đứng yên). Lời nhắn hiện tại:
   **“Chạm tớ, tớ ẩn nhé!” / “Chạm là góp quỹ thưởng rồi, không cần mua gì nhé 🧡” / “Liên kết tiếp thị”.**
   Câu giữa **người dùng đã chốt giữ ngày 06/11** dù đã được báo về quy tắc ở cuối mục này, đừng tự đổi lại.
 - Chữ trôi theo hình gây hoa mắt nên **chữ chỉ hiện khi bé đứng yên**: vào trang đứng nói 12 giây, sau đó đi
