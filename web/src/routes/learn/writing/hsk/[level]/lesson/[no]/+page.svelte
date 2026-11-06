@@ -205,7 +205,7 @@
       <button type="button" class="zk-nut" onclick={() => pad?.goiY()}><Icon name="eye" size={16} /> Gợi ý nét</button>
     {/if}
     {#if m && conChu}
-      <button type="button" class="zk-nut" aria-label="Bỏ qua chữ này" onclick={() => pickChar(ci + 1)}>Bỏ qua <Icon name="right" size={16} /></button>
+      <button type="button" class="zk-nut" aria-label="Bỏ qua chữ này" onclick={() => pickChar(ci + 1)}>Bỏ qua </button>
     {/if}
   </div>
 {/snippet}
@@ -285,7 +285,7 @@
           <a href="/learn/writing/hsk/{levelId}" class="btn btn-son btn-lg">Về danh sách bài</a>
         {/if}
       {:else if ci + 1 < chars.length}
-        <button type="button" class="zk-nut" onclick={() => pickChar(ci + 1)}>Bỏ qua chữ này <Icon name="right" size={16} /></button>
+        <button type="button" class="zk-nut" onclick={() => pickChar(ci + 1)}>Bỏ qua chữ này </button>
       {:else}
         <button type="button" class="zk-nut zk-nut-chinh" onclick={finish}>Đánh dấu xong bài</button>
       {/if}
@@ -324,7 +324,7 @@
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/writing/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
+      <a href="/learn/writing/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{data?.lesson.title ?? 'Luyện viết'}</b>
         <span class="muted" style="font-size: 12px">Luyện viết · HSK {levelId} · Bài {lessonNo}</span>

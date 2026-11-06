@@ -150,7 +150,7 @@
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/exercises/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
+      <a href="/learn/exercises/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px">Bài tập tổng hợp</b>
         <span class="muted" style="font-size: 12px">HSK {levelId} · Cả cấp</span>

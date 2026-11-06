@@ -6,7 +6,7 @@
   let { href, label }: { href: string; label: string } = $props();
 </script>
 
-<a {href} class="ve btn btn-sm"><Icon name="left" size={16} /> {label}</a>
+<a {href} class="ve btn btn-sm"><Icon name="chev" size={16} style="transform: rotate(180deg)" /> {label}</a>
 
 <style>
   .ve {

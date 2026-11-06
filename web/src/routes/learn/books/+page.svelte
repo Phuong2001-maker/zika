@@ -34,7 +34,7 @@
           {:else}
             <span class="muted num">{q.soTrang} trang</span>
           {/if}
-          <Icon name="right" size={16} />
+          <Icon name="chev" size={16} />
         </span>
       </a>
     {/each}

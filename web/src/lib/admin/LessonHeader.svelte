@@ -184,7 +184,7 @@
   {#if media.isAdminMobile}
     <!-- ============ Điện thoại ============ -->
     <header class="mhead">
-      <a href="/admin/lessons?curriculum={lesson.curriculumId}&level={lesson.levelId}" class="btn btn-bare" aria-label="Về Bài học HSK"><Icon name="left" size={20} /></a>
+      <a href="/admin/lessons?curriculum={lesson.curriculumId}&level={lesson.levelId}" class="btn btn-bare" aria-label="Về Bài học HSK"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0">
         <span class="muted" style="font-size: 11.5px; font-weight: 700; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{lesson.curriculumName} · HSK {lesson.levelId} · Bài {lesson.no}</span>
         <b class="disp" style="font-size: 17px; font-weight: 800; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{lesson.title}</b>

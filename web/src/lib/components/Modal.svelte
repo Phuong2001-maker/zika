@@ -90,7 +90,7 @@
   >
     {#if title || closable}
       <div class="row" class:md-full-head={mobileFullscreen} style="align-items: flex-start">
-        {#if mobileFullscreen && closable}<button type="button" class="btn btn-bare md-back" aria-label="Quay lại" onclick={onclose}><Icon name="left" size={21} /></button>{/if}
+        {#if mobileFullscreen && closable}<button type="button" class="btn btn-bare md-back" aria-label="Quay lại" onclick={onclose}><Icon name="chev" size={21} style="transform: rotate(180deg)" /></button>{/if}
         {#if title}<h2 id={titleId} class="grow">{title}</h2>{:else}<span class="grow"></span>{/if}
         {#if closable}
           <button type="button" class="btn btn-bare btn-sm" class:md-full-close={mobileFullscreen} aria-label="Đóng" onclick={onclose} style="margin: -6px -8px 0 0">

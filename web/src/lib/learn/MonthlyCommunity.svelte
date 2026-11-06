@@ -303,11 +303,11 @@
           href={examHref}
           onclick={() => {
             dialog = null;
-          }}>{examLabel} <Icon name="right" size={17} /></a
+          }}>{examLabel} </a
         >
       {:else if submitted}
         <button type="button" class="btn btn-son btn-lg mc-cta" onclick={() => showRanking('contest')}
-          >Xem bảng xếp hạng <Icon name="right" size={17} /></button
+          >Xem bảng xếp hạng </button
         >
       {:else if !contest}
         <p class="mc-history-hint">Lịch thi mới sẽ được thông báo tại đây.</p>
@@ -537,7 +537,7 @@
         class="btn"
         onclick={() => {
           dialog = 'overview';
-        }}><Icon name="left" size={16} /> Quay lại quỹ</button
+        }}><Icon name="chev" size={16} style="transform: rotate(180deg)" /> Quay lại quỹ</button
       >{/snippet}
   </Modal>
 {/if}

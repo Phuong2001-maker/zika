@@ -110,7 +110,7 @@
 {#if media.isMobile}
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/tests/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
+      <a href="/learn/tests/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <b style="flex: 1; min-width: 0; font-size: 15px">Thi thử HSK {levelId}</b>
       <Avatar size={36} />
     </header>

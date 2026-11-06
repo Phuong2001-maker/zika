@@ -245,6 +245,20 @@ Kiểm tra tự động: `api/tests/Unit/ContestTest.php`.
 
 Kiểm tra tự động: `api/tests/Unit/CurriculumTest.php`.
 
+## M. Nút không dùng mũi tên thẳng (06/11/2026)
+
+Kiểm ở 375px và 1280px, giao diện sáng/tối. Các mục dưới là checklist thủ công, chưa đánh dấu đạt chỉ dựa vào build/test.
+
+| # | Làm gì | Mong đợi | Kết quả |
+|---|---|---|---|
+| M1 | Mở hộp cuộc thi đang diễn ra và đã nộp | Vào thi ngay/Tiếp tục làm bài, Xem bảng xếp hạng chỉ có chữ; nút vẫn mở đúng nơi | Chờ kiểm tay |
+| M2 | Mở Bàn học, thẻ cấp HSK | Học tiếp/Bắt đầu học, Xem các bài không có mũi tên; nút Tổng hợp dùng chevron | Chờ kiểm tay |
+| M3 | Gõ chữ/Trắc nghiệm, kiểm tra, Ngữ pháp, Luyện viết | Tiếp tục, Câu tiếp, Điểm sau, Bỏ qua không có mũi tên; bấm vẫn chuyển đúng nội dung | Chờ kiểm tay |
+| M4 | Mở chuông và trang thông báo | Xem tất cả thông báo và nút liên kết không có mũi tên; liên kết hoạt động | Chờ kiểm tay |
+| M5 | Quay lại ở màn học/tài khoản/cài đặt/đăng nhập/hộp toàn màn | Chevron hướng trái, nhãn hỗ trợ đọc màn hình còn nguyên; bấm về đúng nơi | Chờ kiểm tay |
+| M6 | Chuyển từ trước/sau, trang sách, phân trang học viên/phiên admin | Chevron đúng chiều; không có nút trống; nút đầu/cuối bị vô hiệu đúng như trước | Chờ kiểm tay |
+| M7 | Mở sách, học viên, Bài tiếp Ngữ pháp; bung hội thoại tổng hợp | Chevron gọn, hành động/mở gập đúng; không tràn chữ ở điện thoại | Chờ kiểm tay |
+
 ## E. Kiểm tra tự động (chạy ở máy dev)
 
 ```bash

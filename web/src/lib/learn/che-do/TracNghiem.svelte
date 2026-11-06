@@ -84,7 +84,7 @@
         <b style="color: {st.chon === st.dungIdx ? 'var(--green-text)' : 'var(--bad-text)'}">
           {st.chon === st.dungIdx ? 'Chính xác!' : 'Chưa đúng — câu này sẽ được hỏi lại.'}
         </b>
-        <button type="button" class="btn btn-son" bind:this={nutTiep} onclick={() => st.tiep()}>Tiếp tục <Icon name="right" size={16} /></button>
+        <button type="button" class="btn btn-son" bind:this={nutTiep} onclick={() => st.tiep()}>Tiếp tục </button>
       </div>
     {/if}
   </KhungCheDo>

@@ -100,7 +100,7 @@
 <div class:mscreen={media.isMobile}>
   {#if media.isMobile}
     <header class="mtop">
-      <a href="/learn/books" class="btn btn-bare" aria-label="Về kệ sách"><Icon name="left" size={20} /></a>
+      <a href="/learn/books" class="btn btn-bare" aria-label="Về kệ sách"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <b style="flex: 1; font-size: 15px">{quyen?.ten ?? 'Giáo trình'}</b>
       <Avatar size={36} />
     </header>
@@ -121,10 +121,10 @@
     {:else}
       <div class="book-tools">
         {#if !media.isMobile}
-          <a class="book-back" href="/learn/books"><Icon name="left" size={16} /> Kệ sách</a>
+          <a class="book-back" href="/learn/books"><Icon name="chev" size={16} style="transform: rotate(180deg)" /> Kệ sách</a>
         {/if}
         <form class="book-pager" aria-label="Điều hướng trang sách" onsubmit={(e) => { e.preventDefault(); const data = new FormData(e.currentTarget); di(Number(data.get('trang'))); }}>
-          <button type="button" class="book-arrow" disabled={trang <= 1} aria-label="Trang trước" title="Trang trước" onclick={() => di(trang - 1)}><Icon name="left" size={16} /></button>
+          <button type="button" class="book-arrow" disabled={trang <= 1} aria-label="Trang trước" title="Trang trước" onclick={() => di(trang - 1)}><Icon name="chev" size={16} style="transform: rotate(180deg)" /></button>
           <label class="book-jump">
             <span class="sr-only">Trang</span>
             <input class="book-number" name="trang" type="number" inputmode="numeric" min="1" max={quyen.soTrang} value={trang} required aria-label="Số trang cần đến"
@@ -132,7 +132,7 @@
               onchange={(e) => { di(Number(e.currentTarget.value)); e.currentTarget.value = String(trang); }} />
             <span class="book-total">/ {quyen.soTrang}</span>
           </label>
-          <button type="button" class="book-arrow" disabled={trang >= quyen.soTrang} aria-label="Trang sau" title="Trang sau" onclick={() => di(trang + 1)}><Icon name="right" size={16} /></button>
+          <button type="button" class="book-arrow" disabled={trang >= quyen.soTrang} aria-label="Trang sau" title="Trang sau" onclick={() => di(trang + 1)}><Icon name="chev" size={16} /></button>
         </form>
       </div>
 

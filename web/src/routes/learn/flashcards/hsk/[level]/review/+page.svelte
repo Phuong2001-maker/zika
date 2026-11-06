@@ -133,9 +133,9 @@
       <span class="dh-bar"><Bar value={i} {total} /></span>
     </div>
     <div class="dh-nut" class:dh-nut-m={m}>
-      <button type="button" class="zk-nut" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="left" size={20} /></button>
+      <button type="button" class="zk-nut" aria-label="Từ trước" disabled={i === 0} onclick={prev}><Icon name="chev" size={20} style="transform: rotate(180deg)" /></button>
       <button type="button" class="zk-nut zk-nut-chinh nut-lat" onclick={flip}><Icon name="flip" size={17} /> {flipped ? 'Mặt trước' : 'Lật thẻ'}</button>
-      <button type="button" class="zk-nut" aria-label="Từ sau" onclick={next}><Icon name="right" size={20} /></button>
+      <button type="button" class="zk-nut" aria-label="Từ sau" onclick={next}><Icon name="chev" size={20} /></button>
     </div>
   </div>
 {/snippet}
@@ -179,7 +179,7 @@
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/flashcards/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
+      <a href="/learn/flashcards/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Tổng hợp HSK {levelId}</b>
         <span class="muted" style="font-size: 12px">Lật thẻ{words ? ` · ${words.length} từ` : ''}</span>

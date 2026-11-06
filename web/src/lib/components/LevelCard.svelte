@@ -2,7 +2,6 @@
   import type { LevelInfo } from '$lib/api/types';
   import { num } from '$lib/utils/format';
   import Bar from './Bar.svelte';
-  import Icon from './Icon.svelte';
   import { SO_HAN, taiChuBut } from '$lib/learn/hoa-tiet';
 
   taiChuBut();
@@ -59,7 +58,7 @@
     </span>
     <Bar value={done} {total} trackStyle="background: rgba(255,255,255,.7)" />
     {#if !mobile}
-      <span class="lv-more">Xem các bài <Icon name="right" size={16} /></span>
+      <span class="lv-more">Xem các bài </span>
     {/if}
   </a>
 {/if}

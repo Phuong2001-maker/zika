@@ -223,7 +223,7 @@
 {#if media.isMobile}
   <div class="mscreen">
     <header class="mtop">
-      <a href="/account" class="btn btn-bare" aria-label="Về Tài khoản"><Icon name="left" size={20} /></a>
+      <a href="/account" class="btn btn-bare" aria-label="Về Tài khoản"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <b style="flex: 1; font-size: 16px">Cài đặt học</b>
     </header>
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">

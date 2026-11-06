@@ -308,7 +308,7 @@
 {#if media.isMobile}
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/flashcards" class="btn btn-bare" aria-label="Về Bàn học"><Icon name="left" size={20} /></a>
+      <a href="/learn/flashcards" class="btn btn-bare" aria-label="Về Bàn học"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <b style="flex: 1; font-size: 16px">Tài khoản</b>
       <NotificationBell size={40} />
     </header>

@@ -101,7 +101,7 @@
           {/if}
         </div>
 
-        <a href="/notifications" class="nb-cuoi" onclick={() => (mo = false)}>Xem tất cả thông báo <Icon name="right" size={15} /></a>
+        <a href="/notifications" class="nb-cuoi" onclick={() => (mo = false)}>Xem tất cả thông báo </a>
       </div>
     </div>
   {/if}

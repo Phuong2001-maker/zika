@@ -190,7 +190,7 @@
             {lastSeen(u.lastSeenAt)} · {u.currentLevelId ? `HSK ${u.currentLevelId}` : '—'} · {duration(u.totalStudySec)}
           </span>
         </span>
-        <Icon name="right" size={16} />
+        <Icon name="chev" size={16} />
       </a>
     {/each}
   </div>
@@ -258,9 +258,9 @@
         Hiển thị {(meta.page - 1) * meta.per + 1}–{Math.min(meta.page * meta.per, meta.total)} trên {num(meta.total)}
       </span>
       <span style="flex: 1"></span>
-      <button type="button" class="btn btn-sm btn-icon" aria-label="Trang trước" disabled={pageNo === 1} onclick={() => pageNo--}><Icon name="left" size={15} /></button>
+      <button type="button" class="btn btn-sm btn-icon" aria-label="Trang trước" disabled={pageNo === 1} onclick={() => pageNo--}><Icon name="chev" size={15} style="transform: rotate(180deg)" /></button>
       <span class="num" style="font-size: 13.5px">{pageNo} / {pages}</span>
-      <button type="button" class="btn btn-sm btn-icon" aria-label="Trang sau" disabled={pageNo >= pages} onclick={() => pageNo++}><Icon name="right" size={15} /></button>
+      <button type="button" class="btn btn-sm btn-icon" aria-label="Trang sau" disabled={pageNo >= pages} onclick={() => pageNo++}><Icon name="chev" size={15} /></button>
     </div>
   {/if}
 {/if}

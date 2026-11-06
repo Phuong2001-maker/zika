@@ -62,7 +62,7 @@
               <div class="tb-nut">
                 {#if x.ctaRoute && x.ctaRoute.startsWith('/')}
                   <a href={x.ctaRoute} class="btn btn-son btn-sm" onclick={() => notifications.docMot(x.id)}
-                    >{x.ctaText || 'Xem ngay'} <Icon name="right" size={15} /></a
+                    >{x.ctaText || 'Xem ngay'} </a
                   >
                 {/if}
                 {#if !x.read}
@@ -82,7 +82,7 @@
 {#if media.isMobile}
   <div class="mscreen">
     <header class="mtop">
-      <button type="button" class="btn btn-bare" aria-label="Quay lại" onclick={() => history.back()}><Icon name="left" size={20} /></button
+      <button type="button" class="btn btn-bare" aria-label="Quay lại" onclick={() => history.back()}><Icon name="chev" size={20} style="transform: rotate(180deg)" /></button
       >
       <b style="flex: 1; font-size: 15px">Thông báo</b>
       <Avatar size={36} bell={false} />

@@ -239,7 +239,7 @@
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/flashcards" class="btn btn-bare" aria-label="Về Bàn học"><Icon name="left" size={22} /></a>
+      <a href="/learn/flashcards" class="btn btn-bare" aria-label="Về Bàn học"><Icon name="chev" size={22} style="transform: rotate(180deg)" /></a>
       <span class="lv{level}" style="padding: 4px 10px; border: 1px solid var(--line); border-radius: 10px; font-weight: 800; font-size: 13px">HSK {level}</span>
       <b style="font-size: 15px">Chọn bài</b>
       <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 8px"><NotificationBell size={40} /><Switcher current="lt" /></span>

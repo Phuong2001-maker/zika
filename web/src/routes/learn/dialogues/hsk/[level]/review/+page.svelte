@@ -88,7 +88,7 @@
           <div class="ht-muc-dau">
             <button type="button" class="btn btn-bare btn-sm" class:ht-mo-m={m} aria-label="Mở hoặc đóng" aria-expanded={openId === d.id}
                     onclick={() => (openId = openId === d.id ? null : d.id)}>
-              <Icon name={openId === d.id ? 'down' : 'right'} size={18} />
+              <Icon name={openId === d.id ? 'down' : 'chev'} size={18} />
             </button>
             <div class="ht-muc-chu">
               <b style="font-size: 16px">{d.title}</b>
@@ -135,7 +135,7 @@
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/dialogues/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
+      <a href="/learn/dialogues/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Ôn hội thoại</b>
         <span class="muted" style="font-size: 12px">HSK {levelId} · Ôn cả cấp</span>

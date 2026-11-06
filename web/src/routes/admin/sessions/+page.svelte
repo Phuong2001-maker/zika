@@ -189,9 +189,9 @@
       </span>
     {/if}
     <span style="flex: 1"></span>
-    <button type="button" class="btn btn-sm btn-icon" aria-label="Trang trước" disabled={pageNo === 1} onclick={() => pageNo--}><Icon name="left" size={15} /></button>
+    <button type="button" class="btn btn-sm btn-icon" aria-label="Trang trước" disabled={pageNo === 1} onclick={() => pageNo--}><Icon name="chev" size={15} style="transform: rotate(180deg)" /></button>
     <span class="num" style="font-size: 13.5px">{pageNo} / {pages}</span>
-    <button type="button" class="btn btn-sm btn-icon" aria-label="Trang sau" disabled={pageNo >= pages} onclick={() => pageNo++}><Icon name="right" size={15} /></button>
+    <button type="button" class="btn btn-sm btn-icon" aria-label="Trang sau" disabled={pageNo >= pages} onclick={() => pageNo++}><Icon name="chev" size={15} /></button>
   </div>
 
   {#if meta}

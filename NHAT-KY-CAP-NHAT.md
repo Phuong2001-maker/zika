@@ -23,6 +23,15 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 06/11/2026 — Bỏ mũi tên thẳng trên nút, đồng bộ điều hướng bằng chevron
+
+Bỏ mũi tên trang trí cạnh chữ ở các nút cuộc thi, Bàn học, thẻ cấp, Gõ chữ, Trắc nghiệm, chuyển câu kiểm tra,
+Ngữ pháp, Luyện viết và thông báo. Các nút quay lại, chuyển từ, trang sách, phân trang admin và mở chi tiết
+đổi sang chevron; giữ nhãn hỗ trợ đọc màn hình, trạng thái vô hiệu và hành động bấm.
+Ghi quy ước cho người/AI tiếp tục trong `BAN-GIAO-GIAO-DIEN.md`, thêm checklist phần M trong `KICH-BAN-TEST.md`.
+Kiểm tra web: Svelte 0 lỗi/0 cảnh báo, lint sạch, 88/88 test và build thành công; API 133/133 test (934 assertions) đạt.
+Checklist hình ảnh trên thiết bị thật còn chờ kiểm tay.
+
 ### 06/11/2026 — Hoàn thiện giao diện cuộc thi, lịch sử thưởng và luồng vào thi muộn
 
 Rà lại toàn bộ hộp cuộc thi trên máy tính/điện thoại: thông tin hiện tại gọn theo hai cột, điện thoại toàn màn,

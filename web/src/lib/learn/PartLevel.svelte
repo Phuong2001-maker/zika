@@ -244,7 +244,7 @@
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/{info.slug}" class="btn btn-bare" aria-label="Về chọn cấp"><Icon name="left" size={22} /></a>
+      <a href="/learn/{info.slug}" class="btn btn-bare" aria-label="Về chọn cấp"><Icon name="chev" size={22} style="transform: rotate(180deg)" /></a>
       <span class="lv{levelId}" style="flex: none; padding: 4px 10px; border: 1px solid var(--line); border-radius: 10px; font-weight: 800; font-size: 13px">HSK {levelId}</span>
       <!-- Tên phần dài ("Cấu trúc ngữ pháp") được co lại bằng dấu …, không đẩy nút ra ngoài màn 375px. -->
       <b style="flex: 1 1 auto; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{info.name}</b>

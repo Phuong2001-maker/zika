@@ -334,12 +334,12 @@
     <div class="zk-chan kt-chan">
       <div class="kt-dieu" class:kt-dieu-m={m}>
         <button type="button" class="zk-nut" disabled={cur === 0} aria-label="Câu trước" onclick={() => cur--}>
-          <Icon name="left" size={18} />{#if !m}Câu trước{/if}
+          <Icon name="chev" size={18} style="transform: rotate(180deg)" />{#if !m}Câu trước{/if}
         </button>
         <!-- Câu cuối: nút này thành Nộp bài như trước, không để người học bấm vào nút mờ. -->
         {#if cur + 1 < total}
           <button type="button" class="zk-nut zk-nut-chinh kt-tiep" onclick={() => cur++}>
-            Câu tiếp <Icon name="right" size={18} />
+            Câu tiếp
           </button>
         {:else}
           <button type="button" class="zk-nut zk-nut-chinh kt-tiep" disabled={submitting} onclick={() => (confirmOpen = true)}>Nộp bài</button>
@@ -391,7 +391,7 @@
 {#if media.isMobile}
   <div class="mscreen">
     <header class="mtop">
-      {#if !contestInProgress}<a href={quayLai} class="btn btn-bare" aria-label="Thoát"><Icon name="left" size={20} /></a>{/if}
+      {#if !contestInProgress}<a href={quayLai} class="btn btn-bare" aria-label="Thoát"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>{/if}
       <b style="flex: 1; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{tenBai}</b>
       {#if !contestInProgress}<Avatar size={36} />{/if}
     </header>

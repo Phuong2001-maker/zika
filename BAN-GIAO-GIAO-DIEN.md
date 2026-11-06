@@ -161,6 +161,13 @@ sau đó bấm ảnh đại diện để kiểm tra vẫn vào `/account`. Lặp
 
 ## Kiểm tra
 
+- Quy ước giao diện (06/11): không dùng mũi tên thẳng cạnh chữ trên nút/link. Nút hành động dùng chữ rõ nghĩa;
+  các nút điều hướng chỉ có biểu tượng dùng chevron (`chev`, quay 180 độ cho chiều trước/quay lại).
+  Đã bỏ biểu tượng cạnh Vào thi ngay/Tiếp tục làm bài, Xem bảng xếp hạng, Học tiếp/Bắt đầu học, Xem các bài,
+  Tiếp tục (Gõ chữ/Trắc nghiệm), Câu tiếp, Điểm sau, Bỏ qua/Bỏ qua chữ này, Xem tất cả thông báo và nút liên kết trong thông báo.
+  Nút quay lại, chuyển từ/trang sách, phân trang admin, mở sách/học viên, mở Tổng hợp và Bài tiếp dùng chevron để vẫn dễ nhận biết.
+  Khi thêm màn mới, áp dụng quy ước này; không khôi phục icon `right`/`left` trên nút. Checklist thủ công ở phần M của `KICH-BAN-TEST.md`.
+
 - Tự động: `cd web`, chạy `npm run check`, `npm run lint`, `npm test`, `npm run build`.
 - Giáo trình: `api/tests/Unit/CurriculumTest.php`, kịch bản phần L trong `KICH-BAN-TEST.md`.
 - Kịch bản UI: `KICH-BAN-TEST.md` phần I (quỹ, top, bé túi; đã chạy khổ giả lập ngày 06/11, chưa thử thiết bị thật).

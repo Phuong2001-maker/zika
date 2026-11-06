@@ -74,7 +74,7 @@
             <span class="num">{c.position > 0 ? `Thẻ ${c.position}/${c.total}` : `${c.total} từ`}</span>
             <span class="hn-tien-bar"><Bar value={c.position} total={c.total} /></span>
           </span>
-          <span class="btn btn-son hn-nut">{c.position > 0 ? 'Học tiếp' : 'Bắt đầu học'} <Icon name="right" size={17} /></span>
+          <span class="btn btn-son hn-nut">{c.position > 0 ? 'Học tiếp' : 'Bắt đầu học'} </span>
         </a>
       {:else if moLevels.length === 0}
         <div class="hn-tiep hn-het">
@@ -135,7 +135,7 @@
     <section class="suggest">
       <span class="ib" style="width: 46px; height: 46px; background: var(--surface); border-radius: 12px"><Icon name="cards" size={22} /></span>
       <span style="flex: 1; font-size: 14px"><b style="display: block">Tổng hợp HSK {s.levelId}</b>Bạn đã học xong {s.done}/{s.total} bài. Lật bài Tổng hợp để ôn cả cấp.</span>
-      <a href="/learn/flashcards/hsk/{s.levelId}?review=1" class="btn btn-icon btn-sm" aria-label="Mở Tổng hợp HSK {s.levelId}"><Icon name="right" size={18} /></a>
+      <a href="/learn/flashcards/hsk/{s.levelId}?review=1" class="btn btn-icon btn-sm" aria-label="Mở Tổng hợp HSK {s.levelId}"><Icon name="chev" size={18} /></a>
     </section>
   {/if}
 {/snippet}

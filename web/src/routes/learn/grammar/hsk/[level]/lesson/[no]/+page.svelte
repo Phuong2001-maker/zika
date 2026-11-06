@@ -257,15 +257,15 @@
       <!-- Chuyển điểm ngay cuối khung: đọc xong một điểm dài khỏi phải cuộn ngược lên dãy tab. -->
       <div class="zk-chan" class:np-chan-m={m}>
         <button type="button" class="zk-nut" disabled={pi === 0} onclick={() => goPoint(pi - 1)}>
-          <Icon name="left" size={18} /> Điểm trước
+          <Icon name="chev" size={18} style="transform: rotate(180deg)" /> Điểm trước
         </button>
         {#if pi < points.length - 1}
           <button type="button" class="zk-nut zk-nut-chinh" onclick={() => goPoint(pi + 1)}>
-            Điểm sau <Icon name="right" size={18} />
+            Điểm sau
           </button>
         {:else if data?.next}
           <a href="/learn/grammar/hsk/{levelId}/lesson/{data.next.no}" class="zk-nut zk-nut-chinh np-tiep">
-            <span class="np-tiep-chu">Bài tiếp: {data.next.title}</span> <Icon name="right" size={18} />
+            <span class="np-tiep-chu">Bài tiếp: {data.next.title}</span> <Icon name="chev" size={18} />
           </a>
         {:else}
           <a href="/learn/grammar/hsk/{levelId}" class="zk-nut zk-nut-chinh">Về danh sách bài</a>
@@ -279,7 +279,7 @@
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/grammar/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="left" size={20} /></a>
+      <a href="/learn/grammar/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{data?.lesson.title ?? 'Ngữ pháp'}</b>
         <span class="muted" style="font-size: 12px">Ngữ pháp · HSK {levelId} · Bài {lessonNo}</span>

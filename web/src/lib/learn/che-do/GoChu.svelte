@@ -110,7 +110,7 @@
           <button type="button" class="btn" onclick={boQua}>Bỏ qua</button>
           <button type="submit" class="btn btn-son" disabled={st.nhap.trim() === ''}>Kiểm tra</button>
         {:else}
-          <button type="submit" class="btn btn-son" bind:this={nutTiep}>Tiếp tục <Icon name="right" size={16} /></button>
+          <button type="submit" class="btn btn-son" bind:this={nutTiep}>Tiếp tục </button>
         {/if}
       </div>
     </form>

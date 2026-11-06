@@ -134,9 +134,9 @@
   <div class="head">
     <div style="min-width: 0">
       {#if mock.forContest}
-        <a class="muted back" href="/admin/exams"><Icon name="left" size={15} /> Đề thi</a>
+        <a class="muted back" href="/admin/exams"><Icon name="chev" size={15} style="transform: rotate(180deg)" /> Đề thi</a>
       {:else}
-        <a class="muted back" href="/admin/mock-tests?level={mock.levelId}"><Icon name="left" size={15} /> Đề thi thử HSK {mock.levelId}</a>
+        <a class="muted back" href="/admin/mock-tests?level={mock.levelId}"><Icon name="chev" size={15} style="transform: rotate(180deg)" /> Đề thi thử HSK {mock.levelId}</a>
       {/if}
       <h1>{mock.title}</h1>
       <p class="muted" style="font-size: 14px">{questions.length} câu</p>
