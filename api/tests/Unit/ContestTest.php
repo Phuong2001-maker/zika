@@ -234,6 +234,23 @@ final class ContestTest extends DbTestCase
         self::assertSame(3600, $p['durationSec'], 'Đồng hồ theo thời gian thi của cuộc thi');
     }
 
+    public function testDaDangKyVaoMuonVanThayNutVaVaoDuocTruocGioDong(): void
+    {
+        $uid = $this->makeUser();
+        $mock = $this->de();
+        $contest = $this->cuocThi($mock, '2026-11-20 09:00:00', '2026-11-20 10:10:00');
+        Db::exec('INSERT INTO contest_registrations (contest_id, user_id, created_at) VALUES (?, ?, ?)', [$contest, $uid, '2026-11-20 08:30:00']);
+
+        Clock::freeze(new DateTimeImmutable('2026-11-20 10:09:30'));
+        $current = $this->hienTai($uid);
+        self::assertSame('open', $current['status']);
+        self::assertSame(30, $current['endsInSec']);
+        self::assertSame($mock, $current['mockTestId'], 'Còn trong giờ thì giao diện phải có đường vào thi');
+
+        $attempt = TestService::start($uid, null, $mock);
+        self::assertSame('2026-11-20 10:10:00.000', Db::val('SELECT deadline_at FROM test_attempts WHERE id = ?', [$attempt['attemptId']]));
+    }
+
     public function testChuaDangKyThiKhongDuocVao(): void
     {
         $mock = $this->de();
@@ -491,6 +508,28 @@ final class ContestTest extends DbTestCase
 
         self::assertSame($truoc, $this->hienTai()['id']);
         self::assertSame($truoc, $this->xepHang()['contest']['id']);
+    }
+
+    public function testDangKyNhungKhongThiKetThucDuocTinhKhongDiem(): void
+    {
+        $mock = $this->de(2);
+        $contest = $this->cuocThi($mock, '2026-11-20 08:00:00', '2026-11-20 09:00:00');
+        $coThi = $this->makeUser(['display_name' => 'Có thi']);
+        $vang = $this->makeUser(['display_name' => 'Vắng thi']);
+        Db::exec('INSERT INTO contest_registrations (contest_id, user_id, created_at) VALUES (?, ?, ?), (?, ?, ?)', [
+            $contest, $coThi, '2026-11-20 07:30:00', $contest, $vang, '2026-11-20 07:31:00',
+        ]);
+        $this->luotDaNop($contest, $mock, $coThi, 0, 500, '2026-11-20 08:10:00');
+
+        $bang = ContestService::ranking($vang);
+
+        self::assertSame(2, $bang['participants']);
+        self::assertSame(['Có thi', 'Vắng thi'], array_column($bang['rows'], 'name'));
+        self::assertTrue($bang['rows'][0]['participated']);
+        self::assertFalse($bang['rows'][1]['participated']);
+        self::assertSame(0, $bang['rows'][1]['correct']);
+        self::assertSame(2, $bang['rows'][1]['total']);
+        self::assertSame(2, $bang['me']['rank']);
     }
 
     public function testConMoThiGiauDapAnHetGioMoiHien(): void

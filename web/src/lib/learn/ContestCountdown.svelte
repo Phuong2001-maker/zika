@@ -1,6 +1,6 @@
 <script lang="ts">
   // Đồng hồ đếm ngược ngày, giờ, phút, giây. Tính từ số giây server trả về nên đồng hồ máy người học chạy sai cũng không lệch.
-  let { seconds, onend }: { seconds: number; onend?: () => void } = $props();
+  let { seconds, active = false, unified = false, onend }: { seconds: number; active?: boolean; unified?: boolean; onend?: () => void } = $props();
 
   let now = $state(Date.now());
   const endAt = $derived(Date.now() + seconds * 1000);
@@ -31,7 +31,7 @@
   });
 </script>
 
-<div class="cd" role="timer" aria-label={spoken}>
+<div class="cd" class:cd-unified={unified} class:cd-live={active} class:cd-urgent={active && left <= 300} role="timer" aria-label={spoken}>
   {#each units as u (u.key)}
     <div class="cd-unit">
       <b class="bignum">{pad(u.value)}</b>
@@ -39,6 +39,9 @@
     </div>
   {/each}
 </div>
+{#if active}
+  <p class="cd-note">{left === 0 ? 'Đã hết thời gian thi' : left <= 300 ? 'Sắp hết giờ · Cuộc thi sẽ đóng khi đồng hồ về 0' : 'Cuộc thi đang mở · Đồng hồ đếm đến lúc kết thúc'}</p>
+{/if}
 
 <style>
   .cd {
@@ -65,7 +68,56 @@
     font-size: 12px;
     color: var(--muted);
   }
+  .cd-live .cd-unit {
+    background: #ecfdf5;
+    border-color: #a7e3c4;
+    box-shadow: inset 0 2px 0 #22a766;
+    padding-top: 14px;
+  }
+  .cd-live .cd-unit b {
+    color: #087443;
+    font-size: clamp(30px, 6vw, 38px);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.15;
+  }
+  .cd-live .cd-unit span { color: #38634e; }
+  .cd-urgent .cd-unit {
+    background: #fff1f2;
+    border-color: #f6b6bd;
+    box-shadow: inset 0 2px 0 #e64555;
+  }
+  .cd-urgent .cd-unit b { color: #be2336; }
+  .cd-urgent .cd-unit span { color: #87434b; }
+  .cd-note {
+    margin: 8px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .cd-unified { gap: 0; }
+  .cd-unified .cd-unit {
+    position: relative;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0 4px;
+    gap: 3px;
+  }
+  .cd-unified .cd-unit b { font-size: 30px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .cd-unified .cd-unit + .cd-unit::before {
+    content: ':';
+    position: absolute;
+    left: -3px;
+    top: 1px;
+    font-size: 25px;
+    line-height: 1.15;
+    color: var(--muted);
+    opacity: .45;
+  }
   :global(html[data-theme='dark']) .cd-unit b {
     color: var(--bad-text);
   }
+  :global(html[data-theme='dark']) .cd-live .cd-unit b { color: #087443; }
+  :global(html[data-theme='dark']) .cd-urgent .cd-unit b { color: #be2336; }
 </style>

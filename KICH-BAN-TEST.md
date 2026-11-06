@@ -208,6 +208,10 @@ Kiểm tra tự động: `api/tests/Unit/SupportLinksTest.php`.
 | K21 | Đến giờ mà chưa đăng ký | Không có nút vào thi, báo chưa đăng ký; gõ thẳng đường dẫn bị chặn; không đăng ký muộn được | Đạt; chặn có test API |
 | K22 | Đã đăng ký, đến giờ | Có nút Vào thi ngay, làm bài được | Đạt |
 | K23 | Sửa cơ cấu giải ở admin, tổng quá 100% | Không cho lưu; hợp lệ thì hộp cuộc thi hiện đúng tên và số tiền | Hiện đạt; chặn có test API |
+| K23b | Đã đăng ký, mở trang sau giờ bắt đầu nhưng trước giờ đóng | Hiện ngay nút **Vào thi ngay**; vào được dù muộn, đồng hồ/hạn nộp chỉ còn tới giờ đóng chung | Có test API |
+| K23c | Đã đăng ký nhưng không bấm vào thi; chờ quá giờ đóng rồi mở bảng xếp hạng | Có tên ở cuối bảng, `0/tổng số câu`, nhãn **Không tham gia · 0 điểm**; không tạo lượt thi giả | Có test API |
+| K23d | Đang ở hộp quỹ khi đồng hồ bắt đầu về 0 | Tự tải lại trạng thái, nút **Đăng ký/Xem thông tin** đổi thành **Vào thi ngay** mà không cần F5 | Luồng có `onend`; cần kiểm tay |
+| K23e | Bấm vào đúng hoặc sau giờ đóng | Không còn nút Vào thi; server không cho tạo lượt mới | Có test API |
 
 Kiểm tra tự động: `api/tests/Unit/ContestTest.php`.
 
@@ -219,6 +223,9 @@ Kiểm tra tự động: `api/tests/Unit/ContestTest.php`.
 | K25 | Điện thoại 375px, bấm Quỹ tháng | Shopee và cơ cấu giải trong màn đầu; nút chính cuộn nhẹ khoảng 25px là đủ | Đạt |
 | K26 | Bấm Xem thể lệ | Hộp cuộc thi hiện đủ các giải kèm phần trăm | Đạt |
 | K27 | Bảng xếp hạng có người | Hạng có giải hiện tên giải và số tiền dưới tên người | Đạt |
+| K28 | Chưa có lịch thi, mở hộp quỹ | Không có nút Xem cuộc thi; có **Lịch sử thi & thưởng** để xem các tháng trước | Giao diện đạt; lịch sử đang dùng dữ liệu mẫu |
+| K29 | Mở Lịch sử thi & thưởng, chọn một tháng và thử nhận thưởng | Thấy tháng, hạng, số tiền, trạng thái; form ngân hàng chỉ là bản xem trước và ghi rõ chưa gửi dữ liệu thật | Giao diện mẫu, chưa có API |
+| K30 | Rê chuột/focus vào các nút có tooltip trên các màn vừa sửa | Tooltip đồng bộ nền, màu, cỡ chữ; không còn tooltip mặc định của trình duyệt | Cần kiểm tay |
 
 ## L. Giáo trình: cha của bài học (06/11/2026)
 

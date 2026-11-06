@@ -222,6 +222,7 @@
   const lowTime = $derived(left > 0 && left < 60);
   const conLai = $derived(total - answeredCount);
   const contestTitle = $derived(at?.contestTitle ?? result?.contestTitle ?? null);
+  const contestInProgress = $derived(!!at?.contestTitle && result === null);
   const tenBai = $derived(contestTitle ?? (lessonTitle || heading));
   const quayLai = $derived(contestTitle ? '/learn/flashcards' : backHref);
   // Hết giờ là khoá màn làm bài cho tới khi nộp xong, không cho chọn thêm đáp án.
@@ -382,7 +383,7 @@
   {:else if m}
     {@render khung(true)}
   {:else}
-    <DauBai href={quayLai} label={contestTitle ? 'Bàn học' : mockTestId !== null ? 'Chọn đề' : 'Chọn bài'} {kicker} title={tenBai} right={result ? undefined : dongHoDau} />
+    <DauBai href={quayLai} hideBack={contestInProgress} label={contestTitle ? 'Bàn học' : mockTestId !== null ? 'Chọn đề' : 'Chọn bài'} {kicker} title={tenBai} right={result ? undefined : dongHoDau} />
     {@render khung(false)}
   {/if}
 {/snippet}
@@ -390,21 +391,25 @@
 {#if media.isMobile}
   <div class="mscreen">
     <header class="mtop">
-      <a href={quayLai} class="btn btn-bare" aria-label="Thoát"><Icon name="left" size={20} /></a>
+      {#if !contestInProgress}<a href={quayLai} class="btn btn-bare" aria-label="Thoát"><Icon name="left" size={20} /></a>{/if}
       <b style="flex: 1; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{tenBai}</b>
-      <Avatar size={36} />
+      {#if !contestInProgress}<Avatar size={36} />{/if}
     </header>
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">{@render body(true)}</main>
   </div>
 {:else}
   <header class="topbar">
-    <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
+    {#if contestInProgress}
+      <span class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</span>
+    {:else}
+      <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
+    {/if}
     {#if contestTitle}
-      <nav class="crumb" style="margin-left: 8px"><a href={quayLai}>Bàn học</a> / <b>Cuộc thi</b></nav>
+      <nav class="crumb" style="margin-left: 8px">{#if !contestInProgress}<a href={quayLai}>Bàn học</a> / {/if}<b>Cuộc thi</b></nav>
     {:else}
       <nav class="crumb" style="margin-left: 8px"><a href={backHref}>Kiểm tra · HSK {levelId}</a> / <b>{heading}</b></nav>
     {/if}
-    <div style="margin-left: auto"><Avatar size={44} /></div>
+    <div style="margin-left: auto">{#if contestInProgress}<span class="tag">Đang làm bài</span>{:else}<Avatar size={44} />{/if}</div>
   </header>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">{@render body(false)}</main>
 {/if}

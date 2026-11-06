@@ -10,11 +10,12 @@
     kicker,
     title,
     right,
-  }: { href: string; label?: string; kicker: string; title: string; right?: Snippet } = $props();
+    hideBack = false,
+  }: { href: string; label?: string; kicker: string; title: string; right?: Snippet; hideBack?: boolean } = $props();
 </script>
 
 <div class="zk-dau">
-  <BackLink {href} {label} />
+  {#if !hideBack}<BackLink {href} {label} />{/if}
   <div class="zk-dau-chu">
     <p class="kicker zk-dau-kicker">{kicker}</p>
     <h1 class="zk-dau-ten">{title}</h1>

@@ -75,13 +75,20 @@ Mã: `api/app/src/Services/Curricula.php`, `Controllers/Admin/CurriculumControll
 - Người học thấy ở hộp quỹ và hộp cuộc thi: nhãn **Sắp diễn ra** kèm đồng hồ ngày, giờ, phút, giây (`ContestCountdown.svelte`).
   Về 0 thì tự chuyển sang **Đang diễn ra**, đồng hồ đếm tới giờ đóng, nút thành **Vào thi ngay**. Chưa có bài thi thì nhãn "Chưa có lịch".
   API `GET /contest/current` trả số giây còn lại chứ không trả giờ, để đồng hồ máy người học sai cũng không đếm lệch; mã đề chỉ có khi đã mở thi.
+- **Đã đăng ký thì có thể vào muộn trong suốt thời gian thi:** khi đồng hồ bắt đầu về 0, giao diện tự tải lại trạng thái và hiện **Vào thi ngay**;
+  nếu mở trang sau giờ bắt đầu thì nút cũng hiện ngay. Hạn nộp luôn là giờ đóng chung, không cộng lại đủ số phút từ lúc người đó bấm vào.
+  Đúng giờ đóng thì API không còn trả mã đề và server từ chối tạo lượt mới.
 - **Hết giờ tự dừng và nộp** dù chưa bấm nộp: mọi người cùng dừng lúc "giờ bắt đầu + số phút thi", vào muộn thì còn ít thời gian hơn. Màn khoá lại bằng hộp "Hết giờ", nộp các câu đã làm, mất mạng thì tự thử lại. Đóng tab trước thì server chấm theo câu
   đã lưu, khi có người mở bảng xếp hạng hoặc khi cron chạy. Quá hạn (cộng 10 giây bù độ trễ mạng) thì server từ chối lưu thêm.
 - **Bảng xếp hạng** (`GET /contest/ranking`, tab Cuộc thi trong Top chăm học, top 50 và luôn có hạng của mình): đúng nhiều hơn xếp trên,
   bằng nhau thì làm nhanh hơn, vẫn bằng thì nộp sớm hơn. Thời gian tính tới hạn nộp chứ không tới lúc chấm. Đang thi thì bảng cập nhật mỗi lần mở.
+  Sau khi đóng thi, người đã đăng ký nhưng chưa từng vào làm vẫn có trong bảng với **0 điểm**, nhãn **Không tham gia**, xếp sau người đã thực sự làm bài
+  và không được gắn giải thưởng chỉ vì số người thực thi ít.
 - **Mỗi người 1 lượt** (đề xuất đã nêu với người dùng, họ chưa phản đối): `UNIQUE (contest_id, user_id)`. Đã nộp thì nút thành Xem bảng xếp hạng, vào lại chỉ thấy kết quả.
   Thi thử thường không bị giới hạn. **Cuộc thi còn mở thì giấu đáp án** để người nộp sớm không truyền cho người chưa thi; hết giờ mới hiện.
 - Hai bài thi trùng giờ: hộp quỹ và bảng xếp hạng cùng chọn bài bắt đầu sớm nhất còn mở. Nên tránh đặt trùng giờ, form chưa chặn.
+- **Lịch sử thi & thưởng / nhận thưởng qua ngân hàng hiện mới là giao diện và dữ liệu mẫu ở trình duyệt.** Chưa có API lưu lịch sử,
+  trạng thái chi thưởng hay thông tin ngân hàng; khi nối thật phải lấy kết quả cuộc thi đã đóng và không đưa thẻ nhận thưởng trở lại hộp cuộc thi hiện tại.
 - **Chưa làm:** trao thưởng theo hạng; tính top chăm học thật (tab Chăm học vẫn minh hoạ). Bảng xếp hạng tính cả tài khoản quản trị nếu họ vào thi.
 - **Migration 009** (`009_cuoc_thi.sql`) tạo bảng `contests`; **010** (`010_lan_thi_cuoc_thi.sql`) thêm `contest_id`, `correct_count` vào `test_attempts`;
   **011** (`011_dang_ky_thi.sql`) thêm `duration_min` và bảng `contest_registrations`. Máy local đã chạy, server thật chưa.

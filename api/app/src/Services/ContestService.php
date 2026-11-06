@@ -138,6 +138,7 @@ final class ContestService
 
         $rows = [];
         $me = null;
+        $count = 0;
         foreach (Db::all(
             'SELECT a.user_id, a.correct_count, a.used_sec, JSON_LENGTH(a.question_ids) AS total, u.display_name
                FROM test_attempts a JOIN users u ON u.id = a.user_id
@@ -151,6 +152,7 @@ final class ContestService
                 'correct' => (int) $a['correct_count'],
                 'total' => (int) $a['total'],
                 'usedSec' => (int) $a['used_sec'],
+                'participated' => true,
                 'isMe' => (int) $a['user_id'] === $userId,
             ];
             if ($row['isMe']) {
@@ -162,11 +164,42 @@ final class ContestService
             $count = $i + 1;
         }
 
+        // Sau khi đóng thi, người đã đăng ký nhưng không hề vào làm vẫn thuộc danh sách dự thi.
+        // Không tạo lượt thi giả trong test_attempts: chỉ ghép họ vào cuối bảng với 0 điểm để lịch sử đúng sự thật.
+        if (self::status($c) === 'ended') {
+            $total = (int) Db::val('SELECT COUNT(*) FROM questions WHERE mock_test_id = ?', [(int) $c['mock_test_id']]);
+            foreach (Db::all(
+                'SELECT r.user_id, u.display_name
+                   FROM contest_registrations r JOIN users u ON u.id = r.user_id
+                  WHERE r.contest_id = ?
+                    AND NOT EXISTS (SELECT 1 FROM test_attempts a WHERE a.contest_id = r.contest_id AND a.user_id = r.user_id)
+                  ORDER BY r.created_at, r.user_id',
+                [(int) $c['id']],
+            ) as $absent) {
+                $count++;
+                $row = [
+                    'rank' => $count,
+                    'name' => (string) $absent['display_name'],
+                    'correct' => 0,
+                    'total' => $total,
+                    'usedSec' => (int) $c['duration_min'] * 60,
+                    'participated' => false,
+                    'isMe' => (int) $absent['user_id'] === $userId,
+                ];
+                if ($row['isMe']) {
+                    $me = $row;
+                }
+                if ($count <= $limit) {
+                    $rows[] = $row;
+                }
+            }
+        }
+
         return [
             'contest' => ['id' => (int) $c['id'], 'title' => (string) $c['title'], 'status' => self::status($c)],
             'rows' => $rows,
             'me' => $me,
-            'participants' => $count ?? 0,
+            'participants' => $count,
         ];
     }
 

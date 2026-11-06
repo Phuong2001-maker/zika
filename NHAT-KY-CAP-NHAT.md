@@ -23,6 +23,18 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 06/11/2026 — Hoàn thiện giao diện cuộc thi, lịch sử thưởng và luồng vào thi muộn
+
+Rà lại toàn bộ hộp cuộc thi trên máy tính/điện thoại: thông tin hiện tại gọn theo hai cột, điện thoại toàn màn,
+nút đăng ký/vào thi rõ trạng thái, bỏ chữ và hành động lặp; tooltip dùng một giao diện chung. Thêm màn **Lịch sử thi & thưởng**
+và bản xem trước nhận thưởng qua ngân hàng; phần lịch sử, ngân hàng và trạng thái chuyển thưởng vẫn chỉ là dữ liệu mẫu phía web, chưa gửi/lưu thật.
+
+Sửa logic giờ thi: người đã đăng ký có thể bấm **Vào thi ngay** bất kỳ lúc nào từ giờ mở đến trước giờ đóng, vào muộn chỉ còn
+thời gian tới giờ đóng chung. Sau khi kết thúc, người đăng ký nhưng chưa từng vào thi vẫn xuất hiện cuối bảng với 0 điểm và
+nhãn **Không tham gia**, không tạo bản ghi lượt thi giả. Test trọng tâm `ContestTest`: 36/36 đạt (117 assertions).
+Toàn bộ kiểm tra: web check 0 lỗi/0 cảnh báo, lint sạch, 88/88 test, build thành công; API 133/133 test (934 assertions).
+Checklist chi tiết ở K23b–K30 trong [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+
 ### 06/11/2026 — Hiện bé túi trên mọi màn học; đăng nhập về lật thẻ
 
 Theo yêu cầu, bỏ giới hạn màn chọn bài/đang làm bài của bé túi: mọi đường `/learn/` đều được phép hiện,

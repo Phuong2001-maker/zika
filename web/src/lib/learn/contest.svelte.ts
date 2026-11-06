@@ -37,6 +37,8 @@ export interface RankRow {
   correct: number;
   total: number;
   usedSec: number;
+  /** false khi đã đăng ký nhưng không vào làm bài trước lúc đóng thi. */
+  participated: boolean;
   isMe: boolean;
 }
 

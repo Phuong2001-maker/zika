@@ -31,6 +31,8 @@
   let formOpen = $state(false);
   let saving = $state(false);
   let editing = $state<Contest | null>(null);
+  let deleting = $state<Contest | null>(null);
+  let removing = $state(false);
 
   let title = $state('');
   let mockId = $state<number | null>(null);
@@ -97,13 +99,17 @@
   }
 
   async function remove(c: Contest): Promise<void> {
-    if (!confirm(`Xoá bài thi “${c.title}”? Danh sách đăng ký và bảng xếp hạng của bài này sẽ mất, đề thi vẫn còn.`)) return;
+    if (removing) return;
+    removing = true;
     try {
       await api.del(`/admin/contests/${c.id}`);
+      deleting = null;
       toast.ok('Đã xoá bài thi.');
       await load();
     } catch {
       toast.show('Không xoá được.');
+    } finally {
+      removing = false;
     }
   }
 
@@ -177,7 +183,7 @@
               <td><span class="tag {STATUS[c.status].cls}">{STATUS[c.status].label}</span></td>
               <td style="white-space: nowrap">
                 <button type="button" class="btn btn-bare btn-sm" aria-label="Sửa {c.title}" onclick={() => openEdit(c)}><Icon name="edit" size={15} /></button>
-                <button type="button" class="btn btn-bare btn-sm" aria-label="Xoá {c.title}" onclick={() => remove(c)}><Icon name="trash" size={15} /></button>
+                <button type="button" class="btn btn-bare btn-sm" aria-label="Xoá {c.title}" onclick={() => (deleting = c)}><Icon name="trash" size={15} /></button>
               </td>
             </tr>
           {/each}
@@ -212,6 +218,21 @@
       <button type="button" class="btn btn-son btn-sm" disabled={savingPrizes || prizeTotal > 100} onclick={savePrizes}>Lưu cơ cấu giải</button>
     </div>
   </section>
+{/if}
+
+{#if deleting}
+  <Modal title="Xoá bài thi?" onclose={() => (deleting = null)} closable={!removing} width={460}>
+    <p style="font-size: 14px; line-height: 1.7">Bạn muốn xoá bài thi <strong>“{deleting.title}”</strong>?</p>
+    <p class="muted" style="font-size: 13.5px; line-height: 1.7; margin-top: 8px">
+      Danh sách đăng ký và bảng xếp hạng của bài thi sẽ bị xoá. Đề thi vẫn được giữ lại.
+    </p>
+    {#snippet actions()}
+      <button type="button" class="btn btn-sm" disabled={removing} onclick={() => (deleting = null)}>Huỷ</button>
+      <button type="button" class="btn btn-son btn-sm" disabled={removing} onclick={() => deleting && remove(deleting)}>
+        <Icon name="trash" size={15} /> {removing ? 'Đang xoá…' : 'Xoá bài thi'}
+      </button>
+    {/snippet}
+  </Modal>
 {/if}
 
 {#if formOpen}
