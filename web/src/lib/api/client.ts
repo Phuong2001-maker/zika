@@ -42,13 +42,31 @@ export function getCsrf(): string {
   return csrf;
 }
 
-/** Chế độ “Xem như người học” của admin: thêm ?preview=1 cho mọi lời gọi /learn/**. */
+/**
+ * Chế độ “Xem như người học” của admin: thêm ?preview=1 cho mọi lời gọi /learn/** và /progress/**
+ * (server không ghi tiến độ khi xem trước). Kèm giáo trình của bài đang soạn để xem đúng bộ đó.
+ */
 let preview = false;
-export function setPreview(on: boolean): void {
+let previewCurriculum: number | null = null;
+export function setPreview(on: boolean, curriculumId: number | null = null): void {
   preview = on;
+  previewCurriculum = on ? curriculumId : null;
 }
 export function isPreview(): boolean {
   return preview;
+}
+/** Khoá cho bộ nhớ tạm: bản xem trước và bản thật khác nội dung nên không được dùng chung. */
+export function previewKey(): string {
+  return preview ? `p${previewCurriculum ?? ''}` : '';
+}
+
+/**
+ * Service worker lưu nội dung học theo URL mà URL thì giống nhau ở mọi giáo trình. Thêm ?c= để học viên vừa đổi
+ * giáo trình, hoặc người khác dùng chung máy, không nhận phải bản đã lưu của bộ kia. Server không đọc tham số này.
+ */
+let contentScope: number | null = null;
+export function setContentScope(curriculumId: number | null): void {
+  contentScope = curriculumId;
 }
 
 export interface RequestOptions {
@@ -63,7 +81,11 @@ function buildUrl(path: string, query?: RequestOptions['query']): string {
   for (const [k, v] of Object.entries(query ?? {})) {
     if (v !== undefined && v !== null && v !== '') params.set(k, String(v));
   }
-  if (preview && path.startsWith('/learn/')) params.set('preview', '1');
+  if (preview && (path.startsWith('/learn/') || path.startsWith('/progress/'))) {
+    params.set('preview', '1');
+    if (previewCurriculum !== null && path.startsWith('/learn/')) params.set('curriculum', String(previewCurriculum));
+  }
+  if (contentScope !== null && path.startsWith('/learn/')) params.set('c', String(contentScope));
   const qs = params.toString();
   return `${BASE}/api${path}${qs ? (path.includes('?') ? '&' : '?') + qs : ''}`;
 }

@@ -8,6 +8,7 @@ use Zika\Core\HttpError;
 use Zika\Core\Request;
 use Zika\Core\Validator;
 use Zika\Services\ContentBuilder;
+use Zika\Services\Curricula;
 use Zika\Services\PartContent;
 
 /** Luyện viết — kết quả từng chữ (04 §8). */
@@ -57,7 +58,7 @@ final class WritingController
         if ($lv === null) {
             throw HttpError::notFound();
         }
-        $lessonIds = ContentBuilder::reviewLessonIds($lv, false);
+        $lessonIds = ContentBuilder::reviewLessonIds($lv, false, Curricula::ofUser($r->userId()));
         if ($lessonIds === []) {
             return ['charIds' => []];
         }

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
@@ -77,7 +76,6 @@
     }
   }
 
-  onMount(load);
   $effect(() => {
     void levelId;
     void lessonNo;

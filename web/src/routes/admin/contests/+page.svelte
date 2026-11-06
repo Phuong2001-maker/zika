@@ -13,20 +13,18 @@
   type Status = 'upcoming' | 'open' | 'ended';
   interface Contest {
     id: number; title: string; mockTestId: number; mockTitle: string; mockStatus: 'draft' | 'published';
-    levelId: number; startsAt: string; durationMin: number; registrants: number; status: Status;
+    questionCount: number; startsAt: string; durationMin: number; registrants: number; status: Status;
   }
-  interface Mock { id: number; levelId: number; title: string; status: 'draft' | 'published'; durationSec: number; questionCount: number }
+  interface Exam { id: number; title: string; status: 'draft' | 'published'; questionCount: number }
   interface Prize { label: string; percent: number; amount: number | null }
-  interface Data { contests: Contest[]; mocks: Mock[]; prizes: Prize[] }
+  interface Data { contests: Contest[]; exams: Exam[]; prizes: Prize[] }
   interface Registrant { name: string; email: string; at: string }
 
-  const NEW_MOCK = 'new';
   const STATUS: Record<Status, { label: string; cls: string }> = {
     upcoming: { label: 'Sắp diễn ra', cls: 'tag-warn' },
     open: { label: 'Đang thi', cls: 'tag-ok' },
     ended: { label: 'Đã kết thúc', cls: '' },
   };
-  const LEVELS = [1, 2, 3, 4, 5, 6].map((n) => ({ v: n, label: `HSK ${n}` }));
 
   let d = $state<Data | null>(null);
   let failed = $state(false);
@@ -35,9 +33,7 @@
   let editing = $state<Contest | null>(null);
 
   let title = $state('');
-  let levelId = $state(1);
-  let mockId = $state<number | string>(NEW_MOCK);
-  let newCount = $state(40);
+  let mockId = $state<number | null>(null);
   let startsAt = $state('');
   let durationMin = $state(60);
 
@@ -48,13 +44,11 @@
   let listOf = $state<Contest | null>(null);
   let registrants = $state<Registrant[] | null>(null);
 
-  const mockOptions = $derived([
-    { v: NEW_MOCK, label: '+ Tạo đề mới' },
-    ...(d?.mocks ?? [])
-      .filter((m) => m.levelId === levelId)
-      .map((m) => ({ v: m.id, label: `${m.title} · ${m.questionCount} câu · ${m.status === 'published' ? 'Công khai' : 'Nháp'}` })),
+  const examOptions = $derived([
+    { v: null, label: '— Chọn đề thi —' },
+    ...(d?.exams ?? []).map((x) => ({ v: x.id, label: x.questionCount > 0 ? `${x.title} · ${x.questionCount} câu` : `${x.title} · chưa có câu` })),
   ]);
-  const selectedMock = $derived(d?.mocks.find((m) => m.id === mockId) ?? null);
+  const selectedExam = $derived(d?.exams.find((x) => x.id === mockId) ?? null);
 
   /** "2026-11-30 20:00:00" → "20:00, 30/11/2026" */
   const showTime = (sql: string): string => `${sql.slice(11, 16)}, ${sql.slice(8, 10)}/${sql.slice(5, 7)}/${sql.slice(0, 4)}`;
@@ -75,40 +69,27 @@
 
   function openNew(): void {
     editing = null;
-    title = ''; levelId = 1; mockId = NEW_MOCK; newCount = 40; startsAt = ''; durationMin = 60;
+    title = ''; mockId = null; startsAt = ''; durationMin = 60;
     formOpen = true;
   }
 
   function openEdit(c: Contest): void {
     editing = c;
-    title = c.title; levelId = c.levelId; mockId = c.mockTestId;
+    title = c.title; mockId = c.mockTestId;
     startsAt = toInput(c.startsAt); durationMin = c.durationMin;
     formOpen = true;
   }
 
   async function save(): Promise<void> {
     saving = true;
-    let createdMock: number | null = null;
     try {
-      let useMock = mockId;
-      if (useMock === NEW_MOCK) {
-        const res = await api.post<{ id: number; copied: number }>(`/admin/levels/${levelId}/mock-tests`, {
-          title: title.slice(0, 80),
-          durationSec: durationMin * 60,
-          copyFromTests: { count: newCount },
-        });
-        createdMock = res.id;
-        useMock = res.id;
-      }
-      const body = { title, mockTestId: useMock, startsAt, durationMin };
+      const body = { title, mockTestId: mockId, startsAt, durationMin };
       if (editing) await api.put(`/admin/contests/${editing.id}`, body);
       else await api.post('/admin/contests', body);
       formOpen = false;
       toast.ok('Đã lưu bài thi.');
       await load();
     } catch (e) {
-      // Lưu bài thi hỏng thì đừng để lại đề rỗng vừa tạo trong danh sách Đề thi thử.
-      if (createdMock !== null) await api.del(`/admin/mock-tests/${createdMock}`).catch(() => {});
       toast.show(errorText(e, 'Không lưu được bài thi.'));
     } finally {
       saving = false;
@@ -183,8 +164,10 @@
             <tr>
               <td><b>{c.title}</b></td>
               <td>
-                <a href="/admin/mock-tests/{c.mockTestId}">HSK {c.levelId} · {c.mockTitle}</a>
-                {#if c.mockStatus === 'published' && c.status === 'upcoming'}
+                <a href="/admin/mock-tests/{c.mockTestId}">{c.mockTitle}</a>
+                {#if c.questionCount === 0}
+                  <span class="err" style="display: block; font-size: 12.5px">Đề chưa có câu, người học chưa làm được</span>
+                {:else if c.mockStatus === 'published' && c.status === 'upcoming'}
                   <span class="err" style="display: block; font-size: 12.5px">Đề đang công khai, làm trước giờ thi được</span>
                 {/if}
               </td>
@@ -239,28 +222,21 @@
     </div>
     <div class="grid2">
       <div class="field"><label class="lbl" for="c-start">Bắt đầu lúc</label><input id="c-start" class="inp" type="datetime-local" bind:value={startsAt} /></div>
-      <div class="field"><label class="lbl" for="c-min">Thời gian thi (phút)</label><input id="c-min" class="inp" type="number" min="1" max="1440" bind:value={durationMin} /></div>
+      <div class="field"><label class="lbl" for="c-min">Thời gian thi (phút)</label><input id="c-min" class="inp" type="number" min="1" max="10080" bind:value={durationMin} /></div>
     </div>
     <p class="hint" style="margin-top: 0">Tới giờ bắt đầu ai đã đăng ký mới vào làm được. Hết số phút này tất cả tự nộp bài.</p>
-    <div class="grid2">
-      <div class="field">
-        <span class="lbl">Cấp</span>
-        <Select bind:value={levelId} options={LEVELS} ariaLabel="Cấp HSK" onchange={() => (mockId = NEW_MOCK)} />
-      </div>
-      <div class="field">
-        <span class="lbl">Đề thi</span>
-        <Select bind:value={mockId} options={mockOptions} ariaLabel="Đề thi" />
-      </div>
+    <div class="field">
+      <span class="lbl">Đề thi</span>
+      <Select bind:value={mockId} options={examOptions} ariaLabel="Đề thi" />
     </div>
-    {#if mockId === NEW_MOCK}
-      <div class="field"><label class="lbl" for="c-count">Số câu lấy từ các bài kiểm tra của cấp</label><input id="c-count" class="inp" type="number" min="1" max="200" bind:value={newCount} /></div>
-      <p class="hint" style="margin-top: 0">Đề mới ở trạng thái Nháp nên người học không làm trước được. Sửa câu hoặc nhập Excel ở nút Soạn đề của mục Đề thi thử.</p>
-    {:else if selectedMock}
-      {#if selectedMock.status === 'published'}
-        <p class="err">Đề này đang công khai ở mục Thi thử, người học làm trước giờ thi được. Nên chuyển về Nháp.</p>
-      {:else}
-        <p class="hint" style="margin-top: 0">{selectedMock.questionCount} câu. <a href="/admin/mock-tests/{selectedMock.id}">Mở trang soạn đề</a></p>
-      {/if}
+    {#if selectedExam?.status === 'published'}
+      <p class="err">Đề này đang công khai ở mục Thi thử, người học làm trước giờ thi được. Nên chuyển về Nháp.</p>
+    {:else if selectedExam?.questionCount === 0}
+      <p class="hint" style="margin-top: 0">Đề chưa có câu. Vẫn lưu được, nhớ <a href="/admin/mock-tests/{selectedExam.id}">soạn câu</a> trước giờ thi.</p>
+    {:else if (d?.exams.length ?? 0) === 0}
+      <p class="hint" style="margin-top: 0">Chưa có đề nào. <a href="/admin/exams">Thêm đề ở mục Đề thi</a> trước nhé.</p>
+    {:else}
+      <p class="hint" style="margin-top: 0">Danh sách lấy từ <a href="/admin/exams">mục Đề thi</a>.</p>
     {/if}
     {#snippet actions()}
       <button type="button" class="btn btn-sm" onclick={() => (formOpen = false)}>Huỷ</button>

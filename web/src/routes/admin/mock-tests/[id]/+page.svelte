@@ -11,7 +11,7 @@
   import { questionsImport, type ImportMode, type ImportOutcome, type QuestionRow } from '$lib/admin/import';
 
   // Soạn đề thi (bản tạm): danh sách câu, thêm tay hoặc nạp Excel. Dạng câu dùng chung với bài kiểm tra.
-  interface Mock { id: number; levelId: number; title: string; status: 'draft' | 'published'; durationSec: number }
+  interface Mock { id: number; levelId: number; title: string; status: 'draft' | 'published'; durationSec: number; forContest: boolean }
 
   const TYPES: [string, string][] = [
     ['blank', 'Chọn từ điền câu'],
@@ -133,7 +133,11 @@
 {:else}
   <div class="head">
     <div style="min-width: 0">
-      <a class="muted back" href="/admin/mock-tests?level={mock.levelId}"><Icon name="left" size={15} /> Đề thi thử HSK {mock.levelId}</a>
+      {#if mock.forContest}
+        <a class="muted back" href="/admin/exams"><Icon name="left" size={15} /> Đề thi</a>
+      {:else}
+        <a class="muted back" href="/admin/mock-tests?level={mock.levelId}"><Icon name="left" size={15} /> Đề thi thử HSK {mock.levelId}</a>
+      {/if}
       <h1>{mock.title}</h1>
       <p class="muted" style="font-size: 14px">{questions.length} câu</p>
     </div>

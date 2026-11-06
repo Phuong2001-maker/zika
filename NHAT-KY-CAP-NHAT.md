@@ -23,6 +23,14 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 06/11/2026 — Giáo trình làm cha của bài học, tab Đề thi, hộp quỹ sắp lại
+
+**Giáo trình:** thêm bảng `curricula`, `lessons`, `words`, `users` có `curriculum_id` (**migration 013**). Dữ liệu cũ về giáo trình số 1, đã chạy thử trên bản sao DB: 40 bài, 932 từ, số dòng không đổi.
+`/admin/curricula` bỏ bản demo, nối API thật; `/admin/lessons` và `/admin/words` chọn giáo trình trước. Người học chỉ thấy bài của bộ được gán, cache tách theo giáo trình.
+**Đề thi:** tab `/admin/exams` chỉ cần tên (**migration 012**), form tạo bài thi chọn đề từ đó. **Hộp quỹ:** Shopee chung khối với số tiền, giải thu gọn ba ô, bản đủ ở Xem thể lệ; bảng xếp hạng hiện giải theo hạng.
+**Lỗi tìm thấy khi rà:** nút Xem như người học không có tác dụng (`setPreview` chưa được gọi), `/admin/mock-tests` tải hai lần và mặc định HSK 2, bài thi dài hơn 1 ngày không sửa được.
+Hai migration đã chạy ở máy local, server thật chưa; khi đưa lên nhớ xoá `storage/cache/content`. Chi tiết: [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md), kịch bản: phần L trong [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+
 ### 06/11/2026 — Lịch thi gọn, đăng ký thi, cơ cấu giải, trang soạn đề tạm
 
 Tạo bài thi chỉ còn giờ bắt đầu và số phút thi, mọi người cùng dừng khi hết giờ. Chỉ ai đăng ký trước giờ bắt đầu mới được làm bài, có danh sách đăng ký.

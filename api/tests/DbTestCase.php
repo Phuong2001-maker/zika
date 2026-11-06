@@ -21,7 +21,7 @@ abstract class DbTestCase extends TestCase
     private static bool $migrated = false;
 
     /** Bảng giữ nguyên dữ liệu nền giữa các test. */
-    private const KEEP = ['schema_migrations', 'levels', 'site_settings', 'announcements'];
+    private const KEEP = ['schema_migrations', 'levels', 'site_settings', 'announcements', 'curricula'];
 
     protected function setUp(): void
     {
@@ -42,6 +42,7 @@ abstract class DbTestCase extends TestCase
             }
         }
         $pdo->exec("DELETE FROM announcements WHERE is_auto_welcome = 0");
+        $pdo->exec('DELETE FROM curricula WHERE id <> 1');
         $pdo->exec('UPDATE levels SET is_visible = 0');
         $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
         Settings::clearCache();

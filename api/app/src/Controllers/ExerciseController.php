@@ -10,6 +10,7 @@ use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Core\Validator;
 use Zika\Services\ContentBuilder;
+use Zika\Services\Curricula;
 use Zika\Services\ProgressService;
 use Zika\Services\QuestionGrader;
 
@@ -38,7 +39,7 @@ final class ExerciseController
                 throw HttpError::validation(['levelId' => 'Thiếu cấp.']);
             }
             $lv = ProgressService::visibleLevel($levelId);
-            $ids = $this->reviewQuestionIds($lv);
+            $ids = $this->reviewQuestionIds($lv, $userId);
             if ($ids === []) {
                 throw HttpError::invalid('Cấp này chưa có câu bài tập nào.');
             }
@@ -50,7 +51,7 @@ final class ExerciseController
         if ($lessonId === null) {
             throw HttpError::validation(['lessonId' => 'Thiếu bài.']);
         }
-        $lesson = ProgressService::visibleLesson($lessonId);
+        $lesson = ProgressService::visibleLesson($lessonId, $userId);
 
         $ids = $mode === 'retry_wrong'
             ? $this->wrongQuestionIds($userId, $lessonId)
@@ -220,9 +221,9 @@ final class ExerciseController
      * @param array<string,mixed> $lv dòng levels
      * @return list<int>
      */
-    private function reviewQuestionIds(array $lv): array
+    private function reviewQuestionIds(array $lv, int $userId): array
     {
-        $ids = ContentBuilder::reviewLessonIds($lv, false);
+        $ids = ContentBuilder::reviewLessonIds($lv, false, Curricula::ofUser($userId));
         if ($ids === []) {
             return [];
         }

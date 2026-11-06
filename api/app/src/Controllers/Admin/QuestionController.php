@@ -279,7 +279,7 @@ final class QuestionController
         $rows = Db::all(
             'SELECT m.*, COUNT(q.id) AS qn FROM mock_tests m
              LEFT JOIN questions q ON q.mock_test_id = m.id
-             WHERE m.level_id = ? GROUP BY m.id ORDER BY m.sort_order, m.id',
+             WHERE m.level_id = ? AND m.for_contest = 0 GROUP BY m.id ORDER BY m.sort_order, m.id',
             [$r->id()],
         );
         return array_map(static fn (array $m): array => [
@@ -379,6 +379,7 @@ final class QuestionController
                 'title' => (string) $m['title'],
                 'status' => (string) $m['status'],
                 'durationSec' => (int) $m['duration_sec'],
+                'forContest' => (bool) $m['for_contest'],
             ],
             'questions' => self::rows('mock_test_id = ?', [(int) $m['id']], true),
         ];

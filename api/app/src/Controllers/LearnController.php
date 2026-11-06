@@ -7,6 +7,7 @@ use Zika\Core\HttpError;
 use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Services\ContentBuilder;
+use Zika\Services\Curricula;
 
 /**
  * Nội dung học (04 §4): đọc từ cache file, có ETag → 304.
@@ -20,7 +21,7 @@ final class LearnController
      */
     private static array $lessonBuilders = [];
 
-    /** @var array<string,callable(int,bool):array<string,mixed>> */
+    /** @var array<string,callable(int,bool,int):array<string,mixed>> */
     private static array $reviewBuilders = [];
 
     public static function registerLesson(string $slug, callable $fn): void
@@ -36,14 +37,16 @@ final class LearnController
     /** GET /learn/levels */
     public function levels(Request $r): Response
     {
-        return $this->serve($r, 'levels', static fn (bool $p) => ContentBuilder::levels($p));
+        $c = Curricula::forRequest($r);
+        return $this->serve($r, "levels-c{$c}", static fn (bool $p) => ContentBuilder::levels($p, $c));
     }
 
     /** GET /learn/levels/{id}/lessons */
     public function levelLessons(Request $r): Response
     {
         $id = $r->id();
-        return $this->serve($r, "l{$id}-lessons", static fn (bool $p) => ContentBuilder::levelLessons($id, $p));
+        $c = Curricula::forRequest($r);
+        return $this->serve($r, "l{$id}-c{$c}-lessons", static fn (bool $p) => ContentBuilder::levelLessons($id, $p, $c));
     }
 
     /** GET /learn/lessons/{id}/{part:flashcards|exercises|test|writing|dialogue|grammar} */
@@ -53,6 +56,10 @@ final class LearnController
         $slug = $r->param('part');
         self::boot();
         $fn = self::$lessonBuilders[$slug] ?? throw HttpError::notFound();
+        // Biên tập và quản trị được mở bài của mọi giáo trình; cache theo bài nên phải chặn trước khi đọc cache.
+        if (!$r->isStaff()) {
+            Curricula::assertLesson($id, Curricula::ofUser($r->userId()));
+        }
         return $this->serve($r, "x{$id}-{$slug}", static fn (bool $p) => $fn($id, $p));
     }
 
@@ -63,7 +70,8 @@ final class LearnController
         $part = $r->param('part');
         self::boot();
         $fn = self::$reviewBuilders[$part] ?? throw HttpError::notFound();
-        return $this->serve($r, "l{$id}-review-{$part}", static fn (bool $p) => $fn($id, $p));
+        $c = Curricula::forRequest($r);
+        return $this->serve($r, "l{$id}-c{$c}-review-{$part}", static fn (bool $p) => $fn($id, $p, $c));
     }
 
     /** Đăng ký các hàm dựng nội dung (một lần cho mỗi request). */

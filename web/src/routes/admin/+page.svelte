@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { api } from '$lib/api/client';
   import { num, pct } from '$lib/utils/format';
   import Skeleton from '$lib/components/Skeleton.svelte';
@@ -37,7 +36,6 @@
     }
   }
 
-  onMount(load);
   $effect(() => {
     void range;
     void load();

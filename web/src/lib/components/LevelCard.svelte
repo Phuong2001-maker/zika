@@ -35,15 +35,15 @@
   );
 </script>
 
-{#if !level.visible}
-  <!-- Cấp sắp có: nét đứt, không bấm được. -->
+{#if !level.visible || total === 0}
+  <!-- Cấp sắp có, hoặc giáo trình của học viên chưa có bài ở cấp này: nét đứt, không bấm được. -->
   <div class="lv soon">
     <span class="lv-top">
       <span class="lv-hsk"><span class="disp lv-lbl">HSK</span><span class="bignum" style="font-size: {mobile ? 40 : 58}px">{n}</span></span>
       <span class="tag">Sắp có</span>
     </span>
     {#if !mobile}<span class="hz" lang="zh" style="font-size: 24px; line-height: 1.1">{level.sampleText}</span>{/if}
-    <span class="num" style="font-size: 14px"><b>{num(level.targetWords)} từ</b> · admin đang soạn</span>
+    <span class="num" style="font-size: 14px"><b>Đang soạn</b></span>
   </div>
 {:else}
   <a {href} class="lv lv{n} lv-nen" style="text-decoration: none; --mau: var(--hsk{n})">

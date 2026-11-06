@@ -181,9 +181,10 @@ Kiểm tra tự động: `api/tests/Unit/SupportLinksTest.php`.
 | # | Làm gì | Mong đợi | Máy |
 |---|---|---|---|
 | K1 | Vào `/admin/contests` bằng tài khoản biên tập | Bị chặn, chỉ quản trị mở được | Có test route API; màn chưa thử |
-| K2 | Tạo bài thi: tên, giờ bắt đầu, số phút thi, cấp, "+ Tạo đề mới" | Không còn ô giờ kết thúc; bảng có dòng mới, nhãn Sắp diễn ra; đề mới là Nháp | Đạt |
-| K2b | Nút Soạn đề ở mục Đề thi thử | Mở trang đề tạm: danh sách câu, thêm tay, nhập Excel | Mở trang đạt; nhập Excel có test API |
-| K3 | Số phút thi sai, hoặc chọn đề chưa có câu | Báo lỗi, không lưu; đề mới vừa tạo không bị bỏ lại | Có test API; dọn đề thừa chưa thử |
+| K2 | Tạo bài thi: tên, giờ bắt đầu, số phút thi, chọn đề | Không còn ô giờ kết thúc, ô Cấp và "+ Tạo đề mới"; danh sách đề lấy từ tab Đề thi | Form đạt; lưu có test API |
+| K2b | Tab Đề thi: nhập tên, Thêm đề; nút Soạn câu | Đề mới hiện "Chưa có câu"; mở trang soạn tạm, nút quay lại về tab Đề thi; không hiện ở Thi thử cuối cấp | Đạt |
+| K3 | Số phút thi sai | Báo lỗi, không lưu | Có test API |
+| K3b | Chọn đề chưa có câu | Lưu được, form và bảng cảnh báo; người học đến giờ thấy "Đề thi đang được cập nhật" | Form đạt; lưu có test API |
 | K4 | Chọn đề đang Công khai | Form cảnh báo người học làm trước được | Chưa thử |
 | K5 | Xoá đề đang gắn bài thi ở `/admin/mock-tests` | Báo đề đang dùng, không xoá | Có test API |
 | K6 | Người học mở hộp quỹ khi chưa có bài thi | Nhãn "Chưa có lịch", không có đồng hồ | Có test API; màn chưa thử |
@@ -209,6 +210,33 @@ Kiểm tra tự động: `api/tests/Unit/SupportLinksTest.php`.
 | K23 | Sửa cơ cấu giải ở admin, tổng quá 100% | Không cho lưu; hợp lệ thì hộp cuộc thi hiện đúng tên và số tiền | Hiện đạt; chặn có test API |
 
 Kiểm tra tự động: `api/tests/Unit/ContestTest.php`.
+
+### Hộp quỹ sau khi sắp lại
+
+| # | Làm gì | Mong đợi | Máy |
+|---|---|---|---|
+| K24 | Máy tính, bấm Quỹ tháng | Thấy đủ đồng hồ, số tiền, dòng Shopee ngay dưới số tiền, ba giải đầu, nút chính, không phải cuộn | Đạt (cao 758px trong màn 846px) |
+| K25 | Điện thoại 375px, bấm Quỹ tháng | Shopee và cơ cấu giải trong màn đầu; nút chính cuộn nhẹ khoảng 25px là đủ | Đạt |
+| K26 | Bấm Xem thể lệ | Hộp cuộc thi hiện đủ các giải kèm phần trăm | Đạt |
+| K27 | Bảng xếp hạng có người | Hạng có giải hiện tên giải và số tiền dưới tên người | Đạt |
+
+## L. Giáo trình: cha của bài học (06/11/2026)
+
+| # | Làm gì | Mong đợi | Máy |
+|---|---|---|---|
+| L1 | Sau migration 013 mở `/admin/curricula` | Có "Giáo trình HSK chuẩn" giữ đủ 40 bài, 932 từ; số dòng các bảng không đổi | Đạt (chạy thử trên bản sao DB trước) |
+| L2 | Thêm giáo trình mới | Khối mới, mọi cấp "Chưa có"; có nút xoá, giáo trình mặc định không có | Đạt |
+| L3 | Soạn bài ở giáo trình mới, Thêm bài | Bài là Bài 1 của giáo trình đó, không đụng Bài 1 của bộ cũ; đường dẫn giữ giáo trình | Đạt |
+| L4 | Thêm từ đã có ở bộ khác | Không báo trùng; thêm lần hai trong cùng bộ thì báo trùng | Đạt; có test API |
+| L5 | Xem như người học ở bài Nháp | Mở đúng bài của giáo trình đó, không ghi tiến độ | Mở bài đạt; phần không ghi tiến độ chưa thử trên màn |
+| L6 | Gán học viên vào bộ mới | Bàn học và mọi phần chỉ còn bài của bộ đó; cấp chưa có bài hiện Đang soạn; mở bài bộ khác báo 404 | Đạt |
+| L7 | Gán lại bộ cũ | Tiến độ bộ cũ còn nguyên | Có test API |
+| L8 | Xoá giáo trình còn bài, xoá giáo trình mặc định | Báo lỗi, không xoá | Đạt |
+| L9 | Xoá giáo trình trống đang gán học viên | Học viên về giáo trình mặc định | Có test API |
+| L10 | Giáo trình nhớ ở máy đã bị xoá, mở Bài học | Tự về giáo trình mặc định, không báo lỗi | Đạt |
+| L11 | Đăng nhập biên tập, mở Bài học | Chọn được giáo trình, không có nút Tạo giáo trình; không vào được `/admin/curricula`, `/admin/exams` | Đạt |
+
+Kiểm tra tự động: `api/tests/Unit/CurriculumTest.php`.
 
 ## E. Kiểm tra tự động (chạy ở máy dev)
 

@@ -1,23 +1,24 @@
 // Tiện ích dùng chung cho các màn học: đổi “số bài” trên URL thành id thật,
 // và lấy tiến độ của một phần.
-import { api } from '$lib/api/client';
+import { api, previewKey } from '$lib/api/client';
 import type { LevelLessons, LessonItem, Part, ProgressRow, LevelProgress } from '$lib/api/types';
 
 /** Bộ nhớ tạm trong phiên: map (cấp → danh sách bài) để không gọi lại mỗi lần đổi bài. */
-const cache = new Map<number, LevelLessons>();
+const cache = new Map<string, LevelLessons>();
 
 export async function levelLessons(levelId: number, fresh = false): Promise<LevelLessons> {
+  const key = `${previewKey()}:${levelId}`;
   if (!fresh) {
-    const hit = cache.get(levelId);
+    const hit = cache.get(key);
     if (hit) return hit;
   }
   const data = await api.get<LevelLessons>(`/learn/levels/${levelId}/lessons`);
-  cache.set(levelId, data);
+  cache.set(key, data);
   return data;
 }
 
 export function forgetLevel(levelId: number): void {
-  cache.delete(levelId);
+  cache.delete(`${previewKey()}:${levelId}`);
 }
 
 /** URL dùng “Bài {no}” cho dễ đọc, nhưng API cần id — đổi ở đây. */

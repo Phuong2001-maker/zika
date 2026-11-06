@@ -555,7 +555,7 @@ final class ContestTest extends DbTestCase
         $list = (new AdminContest())->index(new Request('GET', '/admin/contests'));
         self::assertSame('Đổi tên', $list['contests'][0]['title']);
         self::assertSame('upcoming', $list['contests'][0]['status']);
-        self::assertSame(2, $list['mocks'][0]['questionCount']);
+        self::assertSame(2, $list['exams'][0]['questionCount']);
     }
 
     public function testThoiGianThiPhaiHopLe(): void
@@ -564,10 +564,37 @@ final class ContestTest extends DbTestCase
         $this->luu(['title' => 'Thi', 'mockTestId' => $this->de(), 'startsAt' => '2026-11-30T20:00', 'durationMin' => 0]);
     }
 
-    public function testKhongNhanDeChuaCoCau(): void
+    public function testNhanDeChuaCoCauVaBaoSoCauChoAdmin(): void
     {
-        $this->expectException(HttpError::class);
         $this->luu(['title' => 'Thi', 'mockTestId' => $this->de(0), 'startsAt' => '2026-11-30T20:00', 'durationMin' => 60]);
+
+        $ds = (new AdminContest())->index(new Request('GET', '/admin/contests'));
+        self::assertSame(0, $ds['contests'][0]['questionCount']);
+    }
+
+    public function testDeTaoTuTabDeThiChiCanTenVaKhongLotVaoThiThu(): void
+    {
+        $r = new Request('POST', '/admin/exams', [], ['title' => 'Đề tháng 12']);
+        $r->user = ['id' => $this->makeUser(['role' => 'admin']), 'role' => 'admin'];
+        (new AdminContest())->createExam($r);
+
+        $ds = (new AdminContest())->exams(new Request('GET', '/admin/exams'));
+        self::assertSame('Đề tháng 12', $ds[0]['title']);
+        self::assertSame(0, $ds[0]['questionCount']);
+
+        // Mục Thi thử cuối cấp và người học đều không thấy đề này.
+        $mockReq = new Request('GET', '/admin/levels/1/mock-tests');
+        $mockReq->params = ['id' => '1'];
+        self::assertSame([], (new QuestionController())->mockTests($mockReq));
+        self::assertSame('draft', Db::val('SELECT status FROM mock_tests WHERE id = ?', [$ds[0]['id']]));
+    }
+
+    public function testDeThiThuDangGanBaiThiVanHienOTabDeThi(): void
+    {
+        $mock = $this->de();
+        self::assertSame([], (new AdminContest())->exams(new Request('GET', '/admin/exams')));
+        $this->cuocThi($mock, '2026-11-30 20:00:00', '2026-11-30 21:00:00');
+        self::assertSame($mock, (new AdminContest())->exams(new Request('GET', '/admin/exams'))[0]['id']);
     }
 
     public function testKhongXoaDeDangGanCuocThi(): void

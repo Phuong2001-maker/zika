@@ -58,7 +58,6 @@
     }
   }
 
-  onMount(load);
   $effect(() => { void levelId; void lessonNo; void load(); });
 
   /** Số câu đã đi qua tính từ đầu bài, để lưu tiến độ chung cho cả bài. */

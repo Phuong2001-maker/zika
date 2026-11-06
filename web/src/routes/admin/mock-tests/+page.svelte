@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
   import { api, ApiError } from '$lib/api/client';
@@ -16,7 +15,7 @@
     questionCount: number; durationSec: number; maxPoints: number; passPoints: number; listenLimit: number;
   }
 
-  const levelId = $derived(Number(page.url.searchParams.get('level')) || 2);
+  const levelId = $derived(Number(page.url.searchParams.get('level')) || 1);
 
   let list = $state<Mock[] | null>(null);
   let failed = $state(false);
@@ -40,7 +39,6 @@
     }
   }
 
-  onMount(load);
   $effect(() => {
     void levelId;
     void load();

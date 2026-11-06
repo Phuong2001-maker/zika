@@ -2,27 +2,34 @@
 
 ## Phạm vi và quyết định đã chốt
 
-Đây là **bản local để người dùng duyệt**, chưa triển khai hosting. Link Shopee, tiền quỹ tháng, cuộc thi và bảng xếp hạng cuộc thi đã có backend thật (06/11);
-giáo trình và top chăm học vẫn chưa nối backend. Không coi số liệu mẫu là dữ liệu thật.
+Đây là **bản local để người dùng duyệt**, chưa triển khai hosting. Link Shopee, tiền quỹ tháng, cuộc thi, bảng xếp hạng cuộc thi, Đề thi và Giáo trình đã có backend thật (06/11);
+top chăm học vẫn chưa nối backend. Không coi số liệu mẫu là dữ liệu thật.
 
-### Giáo trình: chỉ admin chọn cho học viên
+### Giáo trình: cha của bài học, admin gán cho từng học viên (đã có backend 06/11)
 
-- `/admin/curricula` có hai tab **Giáo trình** và **Phân quyền học**, chỉ admin được mở.
-- Mỗi học viên được admin gán **một giáo trình**. Đổi bộ mới phải thay bộ cũ. Chưa gán là trạng thái
-  chờ admin xử lý, không phải học viên được tự chọn.
-- **Giữ nguyên luồng học HSK → bài → phần học của học viên.** Chỉ nội dung khác theo bộ admin gán.
-  Đã gỡ màn `/learn/curricula` và các nút chọn giáo trình của học viên. Không khôi phục chúng.
-- Tab Giáo trình: bảng tên bộ, cấp HSK, số bài, trạng thái, số học viên; có nút Thêm giáo trình.
-  Người dùng đã yêu cầu bỏ thống kê, tìm/lọc giáo trình và cột Thao tác (Soạn bài/cài đặt).
-- Hộp thêm giáo trình chỉ có thông tin, giới thiệu, màu, công tắc hiển thị; **không có tab Quyền học**.
-- Tab Phân quyền học: tìm tên/email (có thể gõ không dấu), bảng học viên với một ô chọn giáo trình
-  cho mỗi người, trạng thái, nút Hủy/Lưu. Đã bỏ tiêu đề, mô tả, số liệu, bộ lọc và ghi chú dữ liệu mẫu
-  theo yêu cầu người dùng. Tìm kiếm không làm mất thay đổi đang chọn ở các học viên bị lọc khỏi bảng.
-- Trạng thái mẫu lưu ở `localStorage['zk.curricula.preview.single.v2']`; không tác động quyền thật/API.
+- Thứ bậc: **giáo trình → cấp HSK → bài → 6 phần**. Tạo giáo trình ở `/admin/curricula`, rồi `/admin/lessons` chọn giáo trình, chọn cấp, thêm bài và nhập bài.
+- **Dữ liệu cũ:** migration 013 tạo giáo trình số 1 "Giáo trình HSK chuẩn" và đưa toàn bộ bài, từ về đó, số dòng không đổi, tiến độ giữ nguyên.
+  Giáo trình số 1 đổi tên được nhưng **không xoá được**, vì học viên chưa gán (`users.curriculum_id` NULL) học theo nó và công cụ nạp cũ (`data/`) không gửi giáo trình thì vào đó.
+- Khoá duy nhất đã thêm `curriculum_id`: mỗi giáo trình có "Bài 1" và bộ từ riêng, cùng một chữ Hán có ở hai giáo trình không bị coi là trùng.
+- **Người học không chọn giáo trình**, luồng HSK → bài → phần học giữ nguyên. Server lọc theo giáo trình được gán: danh sách cấp, bài, tổng hợp, tiến độ, Bàn học;
+  mở bài của bộ khác trả 404. Biên tập và quản trị mở được mọi bộ. Đã gỡ màn `/learn/curricula`, không khôi phục.
+- Đổi giáo trình cho học viên: tiến độ bài của bộ cũ vẫn giữ (gán lại là học tiếp), lượt Tổng hợp đang dở bị xoá vì nó lưu theo cấp, không theo bài.
+- Cấp mà giáo trình của học viên chưa có bài thì hiện "Đang soạn", không cho bấm vào trang rỗng.
+- **Vẫn dùng chung mọi giáo trình:** đề thi thử cuối cấp, cấu hình cấp (ẩn/hiện, số từ mục tiêu), cuộc thi. Nút "Lấy câu từ bài kiểm tra" lấy từ bài của cấp ở mọi giáo trình.
+- Tab Giáo trình: mỗi bộ một khối có số bài theo từng HSK (bấm để vào đúng cấp), số từ, số học viên, nút Soạn bài, sửa, xoá. Còn bài hoặc từ thì không xoá được.
+  Đã bỏ trạng thái "Bản nháp" của bản demo: bài đã có Nháp/Đang hiện riêng, chưa gán học viên thì chưa ai thấy.
+- Tab Phân quyền học: tìm tên/email, mỗi học viên một ô chọn, chỉ lưu dòng có thay đổi. Giữ chọn chưa lưu khi tìm kiếm.
+- Service worker lưu nội dung học theo URL, nên client thêm `?c=<giáo trình>` vào `/learn/**` (`setContentScope`) để không nhận bản đã lưu của bộ khác.
+- Sửa kèm: nút "Xem như người học" trước đây không có tác dụng vì `setPreview` chưa bao giờ được gọi. Nay `routes/+layout.ts` bật theo `?preview=1&curriculum=`, rời khu học thì tắt.
 
-Mã: `web/src/lib/curricula/` và `web/src/routes/admin/curricula/+page.svelte`.
-`CurriculumPreview.svelte` còn nhánh xem thử học viên từ bản thiết kế ban đầu, nhưng không còn route
-hay nút nào mở nhánh đó. Khi dọn code có thể tách thành component thuần admin; không tạo thêm luồng học viên.
+Mã: `api/app/src/Services/Curricula.php`, `Controllers/Admin/CurriculumController.php`, `web/src/lib/curricula/`. Test: `api/tests/Unit/CurriculumTest.php`.
+
+### Đề thi (tab riêng, 06/11)
+
+- `/admin/exams`: chỉ cần nhập tên đề, có đổi tên, xoá, nút Soạn câu mở trang soạn tạm. Đề nằm chung bảng `mock_tests`, cột `for_contest = 1` (migration 012), luôn là Nháp, không lọt vào Thi thử cuối cấp.
+- Form tạo bài thi bỏ ô Cấp và "+ Tạo đề mới", chỉ chọn đề từ tab này (cộng đề thi thử cũ đang gắn bài thi để sửa bài thi đó không mất ô đã chọn).
+- Đề chưa có câu vẫn lưu được: admin thấy cảnh báo ở bảng, người học đến giờ thấy "Đề thi đang được cập nhật" thay vì nút Vào thi.
+- Số phút thi tối đa nới lên 7 ngày (10080 phút) vì bài thi đang có kéo dài 3 ngày, giới hạn cũ làm không sửa được.
 
 ### Quỹ thưởng và top chăm học trên thanh đầu trang
 
@@ -53,9 +60,10 @@ hay nút nào mở nhánh đó. Khi dọn code có thể tách thành component 
 
 ### Cuộc thi: tạo bài thi, đếm ngược, vào thi
 
-- Admin ở `/admin/contests` (chỉ quản trị): tên bài thi, **giờ bắt đầu, số phút thi**, cấp, đề. Giờ kết thúc do server tính.
-  Đề chọn từ **Đề thi thử** có sẵn hoặc "+ Tạo đề mới" (lấy N câu từ bài kiểm tra của cấp).
-- **Trang soạn đề là bản tạm** (`/admin/mock-tests/{id}`, nút Soạn đề): danh sách câu, thêm tay, nhập Excel, dùng chung dạng câu với bài kiểm tra.
+- Admin ở `/admin/contests` (chỉ quản trị): tên bài thi, **giờ bắt đầu, số phút thi**, đề chọn từ tab Đề thi. Giờ kết thúc do server tính.
+- **Hộp quỹ người học:** Shopee nằm chung khối với số tiền quỹ (quỹ đến từ hoa hồng Shopee); cơ cấu giải thu gọn thành ba ô Nhất, Nhì, Ba cộng một dòng giải còn lại,
+  bản đủ có phần trăm ở "Xem thể lệ". Máy tính không phải cuộn; điện thoại ẩn câu phụ để nút chính vẫn trong màn. Bảng xếp hạng cuộc thi hiện tên giải và số tiền ở từng hạng.
+- **Trang soạn đề là bản tạm** (`/admin/mock-tests/{id}`, nút Soạn câu): danh sách câu, thêm tay, nhập Excel, dùng chung dạng câu với bài kiểm tra.
   Người dùng sẽ tự lấy đề từ bên ngoài và sửa lại trang này sau, nên cố ý chưa có khung HSK, phần Nghe/Đọc/Viết hay ảnh trong đề.
 - **Đăng ký thi:** chỉ ai đăng ký trước giờ bắt đầu mới được làm bài (server chặn 403), huỷ được trước giờ đó. Danh sách ở tab Đăng ký của Top chăm học,
   admin xem cả email bằng nút số người trong bảng.
@@ -129,10 +137,8 @@ hay nút nào mở nhánh đó. Khi dọn code có thể tách thành component 
 ## Việc cần làm tiếp
 
 1. Tiếp tục duyệt giao diện và chạy checklist trong `KICH-BAN-TEST.md` phần mới cuối file.
-2. Khi người dùng yêu cầu backend: thêm quan hệ giáo trình → cấp → bài, mỗi học viên một bộ;
-   API trả nội dung theo bộ được gán, bảo toàn tiến độ và xác thực quyền ở server. Phải thiết kế
-   migration dữ liệu/tiến độ đang có trước khi chuyển, không chỉ lọc ở frontend.
-3. Đưa lên server thật: chạy migration 007 đến 011, gắn link Icon, nhập số tiền quỹ, tạo bài thi.
+2. Đề thi thử cuối cấp đang dùng chung mọi giáo trình; tách riêng nếu người dùng cần.
+3. Đưa lên server thật: chạy migration 007 đến 013, xoá `storage/cache/content`, gắn link Icon, nhập số tiền quỹ, tạo bài thi.
    Nếu sau này đồng bộ hoa hồng tự động thì cần mốc đối soát và thống nhất dùng hoa hồng nào để lập quỹ/thưởng.
 4. Chốt mức thưởng từng hạng; làm top chăm học thật khi người dùng yêu cầu.
 5. Sau khi test bé túi đạt, mới đổi chính sách xuất hiện lại sang một ngày theo yêu cầu tiếp theo.
@@ -140,8 +146,7 @@ hay nút nào mở nhánh đó. Khi dọn code có thể tách thành component 
 ## Kiểm tra
 
 - Tự động: `cd web`, chạy `npm run check`, `npm run lint`, `npm test`, `npm run build`.
-- Quy tắc một giáo trình/người được kiểm trong `web/src/lib/curricula/demo.svelte.test.ts`.
+- Giáo trình: `api/tests/Unit/CurriculumTest.php`, kịch bản phần L trong `KICH-BAN-TEST.md`.
 - Kịch bản UI: `KICH-BAN-TEST.md` phần I (quỹ, top, bé túi; đã chạy khổ giả lập ngày 06/11, chưa thử thiết bị thật).
   Không coi build/test tự động là bằng chứng đã kiểm hình ảnh hay chuyển động trên thiết bị thật.
-  Chưa có checklist riêng cho `/admin/curricula`.
-- Trước commit phải chạy thêm PHPUnit theo `CLAUDE.md`. API mới có ở phần link Shopee, tiền quỹ và cuộc thi; giáo trình và top chăm học vẫn chưa có API.
+- Trước commit phải chạy thêm PHPUnit theo `CLAUDE.md`. Top chăm học vẫn chưa có API.

@@ -35,6 +35,7 @@ final class UserService
             'selfLevel' => (string) $u['self_level'],
             'dailyGoalMin' => (int) $u['daily_goal_min'],
             'currentLevelId' => $u['current_level_id'] === null ? null : (int) $u['current_level_id'],
+            'curriculumId' => isset($u['curriculum_id']) ? (int) $u['curriculum_id'] : null,
             'createdAt' => Clock::iso((string) $u['created_at']),
             'stats' => ['studySec' => (int) $u['total_study_sec'], 'lessonsDone' => (int) $u['lessons_done']],
         ];

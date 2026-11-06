@@ -30,6 +30,7 @@ export interface User {
   selfLevel: SelfLevel;
   dailyGoalMin: number;
   currentLevelId: number | null;
+  curriculumId: number | null;
   createdAt: string;
   stats: { studySec: number; lessonsDone: number };
 }

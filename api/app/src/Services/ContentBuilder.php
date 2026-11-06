@@ -11,7 +11,7 @@ use Zika\Core\Json;
 /**
  * Dựng JSON nội dung học (04 §4) và cache thành file (02 §4.3).
  *
- * Khoá cache:  "levels" · "l{cấp}-lessons" · "l{cấp}-review-{mã phần}" · "x{bài}-{slug phần}".
+ * Khoá cache:  "levels-c{giáo trình}" · "l{cấp}-c{giáo trình}-lessons" · "l{cấp}-c{giáo trình}-review-{mã phần}" · "x{bài}-{slug phần}".
  * Hai phần cuối đặt tên khác nhau: tổng hợp theo mã 2 chữ (lt, bt…), nội dung bài theo slug trong
  * URL (flashcards, exercises…) vì LearnController::lesson lấy thẳng tham số route làm khoá.
  * Chỉ dựng bản cho NGƯỜI HỌC (bài đang hiện, cấp đang hiện); bài ẩn → 404 và không ghi cache.
@@ -112,12 +112,13 @@ final class ContentBuilder
     /* ------------------------------------------------------------------ */
 
     /** GET /learn/levels (04 §4.1). Số bài/từ chỉ tính bài đang hiện. @return list<array<string,mixed>> */
-    public static function levels(bool $preview): array
+    public static function levels(bool $preview, int $curriculumId): array
     {
         $rows = Db::all(
             "SELECT v.*, COUNT(l.id) AS lesson_count, COALESCE(SUM(l.cnt_words), 0) AS word_count
-             FROM levels v LEFT JOIN lessons l ON l.level_id = v.id AND " . self::statusSql($preview) . '
+             FROM levels v LEFT JOIN lessons l ON l.level_id = v.id AND l.curriculum_id = ? AND " . self::statusSql($preview) . '
              GROUP BY v.id ORDER BY v.id',
+            [$curriculumId],
         );
         return array_map(static fn (array $v) => [
             'id' => (int) $v['id'],
@@ -131,7 +132,7 @@ final class ContentBuilder
     }
 
     /** GET /learn/levels/{id}/lessons (04 §4.2). @return array<string,mixed> */
-    public static function levelLessons(int $levelId, bool $preview): array
+    public static function levelLessons(int $levelId, bool $preview, int $curriculumId): array
     {
         $lv = self::level($levelId, $preview);
         $lessons = Db::all(
@@ -141,8 +142,8 @@ final class ContentBuilder
                     (SELECT COUNT(*) FROM dialogues d WHERE d.lesson_id = l.id) AS so_bai_khoa
              FROM lessons l
              LEFT JOIN test_configs tc ON tc.lesson_id = l.id
-             WHERE l.level_id = ? AND ' . self::statusSql($preview) . ' ORDER BY l.lesson_no',
-            [$levelId],
+             WHERE l.level_id = ? AND l.curriculum_id = ? AND ' . self::statusSql($preview) . ' ORDER BY l.lesson_no',
+            [$levelId, $curriculumId],
         );
         $ids = array_map(static fn (array $l) => (int) $l['id'], $lessons);
         $grammar = [];
@@ -179,12 +180,12 @@ final class ContentBuilder
         }
 
         // Tổng hợp gộp bài đang hiện (hoặc mọi bài nếu admin tắt “Chỉ gộp các bài đang hiện”).
-        $rIds = self::reviewLessonIds($lv, $preview);
+        $rIds = self::reviewLessonIds($lv, $preview, $curriculumId);
         $in = Db::in($rIds);
         $mock = Db::all(
             "SELECT m.id, m.title, m.duration_sec, m.max_points, m.pass_points, COUNT(q.id) AS qn
              FROM mock_tests m LEFT JOIN questions q ON q.mock_test_id = m.id
-             WHERE m.level_id = ? AND " . ($preview ? '1 = 1' : "m.status = 'published'") . '
+             WHERE m.level_id = ? AND m.for_contest = 0 AND " . ($preview ? '1 = 1' : "m.status = 'published'") . '
              GROUP BY m.id ORDER BY m.sort_order, m.id',
             [$levelId],
         );
@@ -214,13 +215,13 @@ final class ContentBuilder
      * @param array<string,mixed> $lv dòng levels
      * @return list<int>
      */
-    public static function reviewLessonIds(array $lv, bool $preview): array
+    public static function reviewLessonIds(array $lv, bool $preview, int $curriculumId): array
     {
         // Xem trước: mọi bài. Người học: bài đang hiện, trừ khi admin tắt “Chỉ gộp các bài đang hiện”.
         $publishedOnly = !$preview && (int) $lv['review_published_only'] === 1;
         return array_map('intval', Db::col(
-            'SELECT id FROM lessons WHERE level_id = ?' . ($publishedOnly ? " AND status = 'published'" : '') . ' ORDER BY lesson_no',
-            [(int) $lv['id']],
+            'SELECT id FROM lessons WHERE level_id = ? AND curriculum_id = ?' . ($publishedOnly ? " AND status = 'published'" : '') . ' ORDER BY lesson_no',
+            [(int) $lv['id'], $curriculumId],
         ));
     }
 
@@ -232,8 +233,8 @@ final class ContentBuilder
     public static function nextLesson(array $l, bool $preview, ?string $countCol = 'cnt_words'): ?array
     {
         $n = Db::one(
-            'SELECT * FROM lessons l WHERE l.level_id = ? AND l.lesson_no > ? AND ' . self::statusSql($preview) . ' ORDER BY l.lesson_no LIMIT 1',
-            [(int) $l['level_id'], (int) $l['lesson_no']],
+            'SELECT * FROM lessons l WHERE l.level_id = ? AND l.curriculum_id = ? AND l.lesson_no > ? AND ' . self::statusSql($preview) . ' ORDER BY l.lesson_no LIMIT 1',
+            [(int) $l['level_id'], (int) $l['curriculum_id'], (int) $l['lesson_no']],
         );
         if ($n === null) {
             return null;
@@ -313,12 +314,12 @@ final class ContentBuilder
     }
 
     /** GET /learn/levels/{id}/review/lt. @return array<string,mixed> */
-    public static function reviewLt(int $levelId, bool $preview): array
+    public static function reviewLt(int $levelId, bool $preview, int $curriculumId): array
     {
         $lv = self::level($levelId, $preview);
         return [
             'level' => ['id' => (int) $lv['id'], 'name' => (string) $lv['name']],
-            'words' => self::words(self::reviewLessonIds($lv, $preview), true),
+            'words' => self::words(self::reviewLessonIds($lv, $preview, $curriculumId), true),
         ];
     }
 

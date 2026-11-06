@@ -8,11 +8,15 @@
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import Modal from '$lib/components/Modal.svelte';
-  import { adminApi, PART_COL, PART_SLUG, type AdminLevel, type LessonsPage } from '$lib/admin/api';
-  import { rememberLesson } from '$lib/admin/menu';
+  import Select from '$lib/components/Select.svelte';
+  import { adminApi, PART_COL, PART_SLUG, type AdminCurriculum, type AdminLevel, type LessonsPage } from '$lib/admin/api';
+  import { lastCurriculum, rememberCurriculum, rememberLesson } from '$lib/admin/menu';
+  import { session } from '$lib/stores/session.svelte';
   import { ApiError } from '$lib/api/client';
 
-  // Bài học HSK (08 §6).
+  // Bài học HSK (08 §6): giáo trình → cấp → bài. Giáo trình là cha nên phải chọn trước khi thêm bài.
+  let curricula = $state<AdminCurriculum[]>([]);
+  let chonGiaoTrinh = $state<number>(0);
   let levels = $state<AdminLevel[] | null>(null);
   let data = $state<LessonsPage | null>(null);
   let failed = $state(false);
@@ -22,43 +26,68 @@
   let addTitle = $state('');
   let addError = $state('');
 
-  const levelId = $derived(Number(page.url.searchParams.get('level')) || 2);
+  // Giáo trình nhớ ở máy có thể đã bị xoá nên phải đối chiếu danh sách, không thì màn báo lỗi mãi.
+  const curriculumId = $derived.by(() => {
+    const fromUrl = Number(page.url.searchParams.get('curriculum'));
+    if (fromUrl) return fromUrl;
+    const last = lastCurriculum();
+    return curricula.some((c) => c.id === last) ? last : 1;
+  });
+  const curriculum = $derived(curricula.find((c) => c.id === curriculumId) ?? null);
+  const levelId = $derived(Number(page.url.searchParams.get('level')) || 1);
   const level = $derived(levels?.find((l) => l.id === levelId) ?? null);
 
-  async function loadLevels(): Promise<void> {
+  async function loadLevels(c: number): Promise<void> {
     try {
-      levels = await adminApi.levels();
+      levels = await adminApi.levels(c);
     } catch {
       failed = true;
     }
   }
 
-  async function loadLessons(id: number): Promise<void> {
+  async function loadLessons(id: number, c: number): Promise<void> {
     data = null;
     failed = false;
     try {
-      data = await adminApi.lessons(id);
+      data = await adminApi.lessons(id, c);
     } catch {
       failed = true;
     }
   }
 
-  onMount(loadLevels);
+  onMount(async () => {
+    try {
+      curricula = await adminApi.curricula();
+    } catch {
+      failed = true;
+    }
+  });
 
-  // Đổi cấp trên URL → tải lại danh sách bài.
+  // Đổi giáo trình hoặc cấp trên URL → tải lại số bài và danh sách bài.
   $effect(() => {
-    void loadLessons(levelId);
+    if (curricula.length === 0) return;
+    chonGiaoTrinh = curriculumId;
+    rememberCurriculum(curriculumId);
+    void loadLevels(curriculumId);
+  });
+  $effect(() => {
+    if (curricula.length === 0) return;
+    void loadLessons(levelId, curriculumId);
   });
 
   function pickLevel(id: number): void {
-    void goto(`/admin/lessons?level=${id}`, { keepFocus: true, noScroll: true });
+    void goto(`/admin/lessons?curriculum=${curriculumId}&level=${id}`, { keepFocus: true, noScroll: true });
+  }
+
+  function pickCurriculum(): void {
+    void goto(`/admin/lessons?curriculum=${chonGiaoTrinh}&level=${levelId}`, { keepFocus: true, noScroll: true });
   }
 
   /** Mở một phần của bài; nhớ bài để menu trái trỏ đúng. */
   function openPart(lessonId: number, part: keyof typeof PART_SLUG): void {
     rememberLesson(lessonId);
     const slug = PART_SLUG[part];
-    void goto(slug === 'words' ? `/admin/words?level=${levelId}&lesson=${lessonId}` : `/admin/lessons/${lessonId}/${slug}`);
+    void goto(slug === 'words' ? `/admin/words?curriculum=${curriculumId}&level=${levelId}&lesson=${lessonId}` : `/admin/lessons/${lessonId}/${slug}`);
   }
 
   async function addLesson(): Promise<void> {
@@ -70,7 +99,7 @@
     busy = true;
     addError = '';
     try {
-      const res = await adminApi.createLesson(levelId, title);
+      const res = await adminApi.createLesson(levelId, curriculumId, title);
       addOpen = false;
       addTitle = '';
       toast.ok('Đã thêm bài.');
@@ -150,12 +179,28 @@
   <div>
     <h1>Bài học HSK</h1>
     <p class="muted" style="font-size: 14px">
-      Mỗi cấp gồm nhiều bài. Mỗi bài có 6 phần: từ vựng, bài tập, kiểm tra, luyện viết, hội thoại, ngữ pháp.
+      Chọn giáo trình, chọn cấp rồi thêm bài. Mỗi bài có 6 phần: từ vựng, bài tập, kiểm tra, luyện viết, hội thoại, ngữ pháp.
     </p>
   </div>
   <button type="button" class="btn btn-son btn-sm" onclick={() => (addOpen = true)}>
     <Icon name="plus" size={16} /> Thêm bài
   </button>
+</div>
+
+<!-- Chọn giáo trình -->
+<div class="block cur-pick">
+  <span class="lbl">Giáo trình</span>
+  <div class="cur-select">
+    <Select
+      bind:value={chonGiaoTrinh}
+      ariaLabel="Chọn giáo trình"
+      options={curricula.map((c) => ({ v: c.id, label: c.name }))}
+      onchange={pickCurriculum}
+    />
+  </div>
+  {#if session.user?.role === 'admin'}
+    <a class="btn btn-sm" href="/admin/curricula"><Icon name="plus" size={15} /> Tạo giáo trình</a>
+  {/if}
 </div>
 
 <!-- Chọn cấp -->
@@ -179,7 +224,7 @@
 
 {#if failed}
   <EmptyState title="Không tải được danh sách bài.">
-    {#snippet action()}<button type="button" class="btn btn-sm" onclick={() => loadLessons(levelId)}>Thử lại</button>{/snippet}
+    {#snippet action()}<button type="button" class="btn btn-sm" onclick={() => loadLessons(levelId, curriculumId)}>Thử lại</button>{/snippet}
   </EmptyState>
 {:else if !data}
   <Skeleton h="120px" r={16} />
@@ -284,7 +329,7 @@
       onkeydown={(e) => e.key === 'Enter' && addLesson()}
     />
     {#if addError}<p class="err">{addError}</p>{/if}
-    <p class="hint">Bài mới được thêm vào cuối cấp HSK {levelId} ở trạng thái Nháp.</p>
+    <p class="hint">Bài mới được thêm vào cuối HSK {levelId} của {curriculum?.name ?? 'giáo trình đang chọn'}, ở trạng thái Nháp.</p>
     {#snippet actions()}
       <button type="button" class="btn btn-sm" onclick={() => (addOpen = false)}>Huỷ</button>
       <button type="button" class="btn btn-son btn-sm" disabled={busy} onclick={addLesson}>Thêm bài</button>
@@ -303,6 +348,19 @@
   }
   .head h1 {
     font-size: 28px;
+  }
+  .cur-pick {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+  }
+  .cur-select {
+    flex: 1 1 240px;
+    min-width: 0;
+    max-width: 420px;
   }
   .lv-tabs {
     display: flex;

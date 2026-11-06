@@ -20,15 +20,11 @@ final class ContestController
     public function index(Request $r): array
     {
         $rows = Db::all(
-            'SELECT c.*, m.title AS mock_title, m.level_id, m.status AS mock_status,
+            'SELECT c.*, m.title AS mock_title, m.status AS mock_status,
+                    (SELECT COUNT(*) FROM questions q WHERE q.mock_test_id = m.id) AS qn,
                     (SELECT COUNT(*) FROM contest_registrations x WHERE x.contest_id = c.id) AS registrants
                FROM contests c JOIN mock_tests m ON m.id = c.mock_test_id
               ORDER BY c.starts_at DESC, c.id DESC',
-        );
-        $mocks = Db::all(
-            'SELECT m.id, m.level_id, m.title, m.status, m.duration_sec, COUNT(q.id) AS qn
-               FROM mock_tests m LEFT JOIN questions q ON q.mock_test_id = m.id
-              GROUP BY m.id ORDER BY m.level_id, m.sort_order, m.id',
         );
 
         return [
@@ -38,22 +34,57 @@ final class ContestController
                 'mockTestId' => (int) $c['mock_test_id'],
                 'mockTitle' => (string) $c['mock_title'],
                 'mockStatus' => (string) $c['mock_status'],
-                'levelId' => (int) $c['level_id'],
+                'questionCount' => (int) $c['qn'],
                 'startsAt' => (string) $c['starts_at'],
                 'durationMin' => (int) $c['duration_min'],
                 'registrants' => (int) $c['registrants'],
                 'status' => ContestService::status($c),
             ], $rows),
-            'mocks' => array_map(static fn (array $m): array => [
-                'id' => (int) $m['id'],
-                'levelId' => (int) $m['level_id'],
-                'title' => (string) $m['title'],
-                'status' => (string) $m['status'],
-                'durationSec' => (int) $m['duration_sec'],
-                'questionCount' => (int) $m['qn'],
-            ], $mocks),
+            'exams' => self::examRows(),
             'prizes' => ContestService::prizes(),
         ];
+    }
+
+    /** GET /admin/exams */
+    public function exams(Request $r): array
+    {
+        return self::examRows();
+    }
+
+    /** POST /admin/exams { title } — chỉ cần tên để chọn khi tạo bài thi, câu hỏi nạp sau. */
+    public function createExam(Request $r): Response
+    {
+        $v = new Validator($r->body);
+        $title = $v->str('title', 'Tên đề', min: 1, max: 80);
+        $v->done();
+
+        // Đề luôn là Nháp nên không lọt vào mục Thi thử của người học; cấp 1 chỉ để lấp cột bắt buộc,
+        // cuộc thi không phân cấp và mọi người học đều vào được cấp 1.
+        $id = Db::insert('mock_tests', ['level_id' => 1, 'title' => $title, 'status' => 'draft', 'for_contest' => 1]);
+        Audit::log($r, 'exam.create', 'mock_test', $id, ['title' => $title]);
+        return Response::json(['id' => $id], 201);
+    }
+
+    /**
+     * Đề của tab Đề thi, cộng đề thi thử cũ đang gắn với bài thi để sửa bài thi đó không mất ô đã chọn.
+     * @return list<array<string,mixed>>
+     */
+    private static function examRows(): array
+    {
+        return array_map(static fn (array $m): array => [
+            'id' => (int) $m['id'],
+            'title' => (string) $m['title'],
+            'status' => (string) $m['status'],
+            'questionCount' => (int) $m['qn'],
+            'contestCount' => (int) $m['used'],
+        ], Db::all(
+            'SELECT m.id, m.title, m.status,
+                    (SELECT COUNT(*) FROM questions q WHERE q.mock_test_id = m.id) AS qn,
+                    (SELECT COUNT(*) FROM contests c WHERE c.mock_test_id = m.id) AS used
+               FROM mock_tests m
+              WHERE m.for_contest = 1 OR EXISTS (SELECT 1 FROM contests c WHERE c.mock_test_id = m.id)
+              ORDER BY m.id DESC',
+        ));
     }
 
     /** POST /admin/contests · PUT /admin/contests/{id} */
@@ -64,19 +95,11 @@ final class ContestController
         $title = $v->str('title', 'Tên bài thi', min: 1, max: 120);
         $mockId = $v->int('mockTestId', 'Đề thi', 1);
         $startsAt = $v->datetime('startsAt', 'giờ bắt đầu', true);
-        $minutes = $v->int('durationMin', 'Thời gian thi', 1, 1440);
+        $minutes = $v->int('durationMin', 'Thời gian thi', 1, 10080);
 
-        if ($mockId !== null) {
-            $qn = Db::one(
-                'SELECT m.id, COUNT(q.id) AS qn FROM mock_tests m LEFT JOIN questions q ON q.mock_test_id = m.id
-                  WHERE m.id = ? GROUP BY m.id',
-                [$mockId],
-            );
-            if ($qn === null) {
-                $v->error('mockTestId', 'Không có đề này.');
-            } elseif ((int) $qn['qn'] === 0) {
-                $v->error('mockTestId', 'Đề này chưa có câu nào, người học vào sẽ không có gì để làm.');
-            }
+        // Đề chưa có câu vẫn nhận: đề nạp sau được, trang quản trị cảnh báo còn người học thấy "đang cập nhật".
+        if ($mockId !== null && Db::val('SELECT id FROM mock_tests WHERE id = ?', [$mockId]) === null) {
+            $v->error('mockTestId', 'Không có đề này.');
         }
         $v->done();
 

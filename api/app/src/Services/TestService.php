@@ -29,6 +29,10 @@ final class TestService
      */
     public static function start(int $userId, ?int $lessonId, ?int $mockTestId): array
     {
+        // Chỉ chặn lúc vào làm: lượt đã làm vẫn phải chấm và xem lại được dù học viên đã đổi giáo trình.
+        if ($lessonId !== null) {
+            ProgressService::visibleLesson($lessonId, $userId);
+        }
         [$cfg, $questions] = self::source($lessonId, $mockTestId);
 
         $contest = $mockTestId === null ? null : ContestService::openContest($mockTestId);
@@ -605,7 +609,7 @@ final class TestService
     private static function source(?int $lessonId, ?int $mockTestId, bool $hasAttempt = false): array
     {
         if ($lessonId !== null) {
-            ProgressService::visibleLesson($lessonId);
+            ProgressService::publishedLesson($lessonId);
             return [
                 PartContent::testConfig($lessonId),
                 Db::all("SELECT * FROM questions WHERE part = 'kt' AND lesson_id = ? ORDER BY sort_order, id", [$lessonId]),

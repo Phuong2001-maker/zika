@@ -9,6 +9,7 @@ use Zika\Core\Pinyin;
 use Zika\Core\Request;
 use Zika\Core\Upload;
 use Zika\Core\Validator;
+use Zika\Services\Curricula;
 
 /** Quản trị · tiện ích dùng chung: số trên menu, danh sách nhân sự, tra từ điển, tải ảnh/âm thanh (04 §10.1). */
 final class MiscController
@@ -64,8 +65,8 @@ final class MiscController
         if (($level = $r->qInt('level')) > 0) {
             $w = Db::one(
                 'SELECT w.id, w.lesson_id, l.lesson_no FROM words w LEFT JOIN lessons l ON l.id = w.lesson_id
-                 WHERE w.level_id = ? AND w.hanzi = ?',
-                [$level, $hanzi],
+                 WHERE w.curriculum_id = ? AND w.level_id = ? AND w.hanzi = ?',
+                [Curricula::resolve($r->qInt('curriculum')), $level, $hanzi],
             );
             if ($w !== null) {
                 $existing = [

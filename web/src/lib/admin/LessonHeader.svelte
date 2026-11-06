@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { media } from '$lib/stores/media.svelte';
   import { toast } from '$lib/stores/toast.svelte';
@@ -7,7 +6,7 @@
   import Icon from '$lib/components/Icon.svelte';
   import Select from '$lib/components/Select.svelte';
   import { adminApi, PART_COL, PART_SLUG, type AdminLesson, type AdminLevel } from '$lib/admin/api';
-  import { rememberLesson } from '$lib/admin/menu';
+  import { rememberCurriculum, rememberLesson } from '$lib/admin/menu';
   import type { Part } from '$lib/api/types';
 
   // Đầu 5 trang soạn theo bài (08 §1.3): đường dẫn, khối thông tin bài, tabs 6 phần.
@@ -29,7 +28,7 @@
     onsave?: () => void;
   } = $props();
 
-  let lesson = $state<(AdminLesson & { levelId: number }) | null>(null);
+  let lesson = $state<(AdminLesson & { levelId: number; curriculumId: number; curriculumName: string }) | null>(null);
   let busy = $state(false);
 
   // Bộ chọn cấp + bài: soạn phần nào cũng đổi được bài ngay tại chỗ, khỏi quay về danh sách.
@@ -50,29 +49,29 @@
     try {
       lesson = await adminApi.lesson(lessonId);
       rememberLesson(lessonId);
-      void loadLessons(lesson.levelId);
+      rememberCurriculum(lesson.curriculumId);
+      void loadLevels(lesson.curriculumId);
+      void loadLessons(lesson.levelId, lesson.curriculumId);
     } catch {
       toast.show('Không tải được thông tin bài.');
     }
   }
 
-  async function loadLevels(): Promise<void> {
+  async function loadLevels(curriculum: number): Promise<void> {
     try {
-      levels = await adminApi.levels();
+      levels = await adminApi.levels(curriculum);
     } catch {
       // Không tải được danh sách cấp: ô chọn để trống, phần còn lại vẫn dùng bình thường.
     }
   }
 
-  async function loadLessons(levelId: number): Promise<void> {
+  async function loadLessons(levelId: number, curriculum: number): Promise<void> {
     try {
-      lessons = (await adminApi.lessons(levelId)).lessons;
+      lessons = (await adminApi.lessons(levelId, curriculum)).lessons;
     } catch {
       lessons = [];
     }
   }
-
-  onMount(loadLevels);
 
   // Đổi bài mà vẫn ở cùng một phần thì trang không dựng lại, nên bám theo lessonId.
   $effect(() => {
@@ -96,7 +95,7 @@
     const lv = capChon;
     let ds: AdminLesson[] = [];
     try {
-      ds = (await adminApi.lessons(lv)).lessons;
+      ds = (await adminApi.lessons(lv, lesson.curriculumId)).lessons;
     } catch {
       toast.show('Không tải được bài của cấp này.');
       capChon = lesson.levelId;
@@ -104,7 +103,7 @@
     }
     if (ds.length === 0) {
       toast.show(`HSK ${lv} chưa có bài nào.`);
-      void goto(`/admin/lessons?level=${lv}`);
+      void goto(`/admin/lessons?curriculum=${lesson.curriculumId}&level=${lv}`);
       return;
     }
     void goto(`/admin/lessons/${ds[0].id}/${PART_SLUG[part]}`);
@@ -157,12 +156,12 @@
     if (p === part) return;
     if (dirty && !confirm('Bạn có thay đổi chưa lưu. Rời trang và bỏ thay đổi?')) return;
     const slug = PART_SLUG[p];
-    void goto(slug === 'words' ? `/admin/words?level=${lesson?.levelId}&lesson=${lessonId}` : `/admin/lessons/${lessonId}/${slug}`);
+    void goto(slug === 'words' ? `/admin/words?curriculum=${lesson?.curriculumId}&level=${lesson?.levelId}&lesson=${lessonId}` : `/admin/lessons/${lessonId}/${slug}`);
   }
 
   /** Mở màn người học tương ứng kèm ?preview=1 để xem cả bài Nháp. */
   const previewHref = $derived(
-    lesson ? `/learn/${{ lt: 'flashcards', bt: 'exercises', kt: 'tests', lv: 'writing', ht: 'dialogues', np: 'grammar' }[part]}/hsk/${lesson.levelId}/lesson/${lesson.no}?preview=1` : '#',
+    lesson ? `/learn/${{ lt: 'flashcards', bt: 'exercises', kt: 'tests', lv: 'writing', ht: 'dialogues', np: 'grammar' }[part]}/hsk/${lesson.levelId}/lesson/${lesson.no}?preview=1&curriculum=${lesson.curriculumId}` : '#',
   );
 </script>
 
@@ -185,9 +184,9 @@
   {#if media.isAdminMobile}
     <!-- ============ Điện thoại ============ -->
     <header class="mhead">
-      <a href="/admin/lessons?level={lesson.levelId}" class="btn btn-bare" aria-label="Về Bài học HSK"><Icon name="left" size={20} /></a>
+      <a href="/admin/lessons?curriculum={lesson.curriculumId}&level={lesson.levelId}" class="btn btn-bare" aria-label="Về Bài học HSK"><Icon name="left" size={20} /></a>
       <span style="flex: 1; min-width: 0">
-        <span class="muted" style="font-size: 11.5px; font-weight: 700; display: block">HSK {lesson.levelId} · Bài {lesson.no}</span>
+        <span class="muted" style="font-size: 11.5px; font-weight: 700; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{lesson.curriculumName} · HSK {lesson.levelId} · Bài {lesson.no}</span>
         <b class="disp" style="font-size: 17px; font-weight: 800; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{lesson.title}</b>
       </span>
       {#if onsave}
@@ -205,8 +204,8 @@
   {:else}
     <!-- ============ Máy tính ============ -->
     <nav class="crumb" aria-label="Đường dẫn">
-      <a href="/admin/lessons">Bài học HSK</a> /
-      <a href="/admin/lessons?level={lesson.levelId}">HSK {lesson.levelId}</a> /
+      <a href="/admin/lessons?curriculum={lesson.curriculumId}">{lesson.curriculumName}</a> /
+      <a href="/admin/lessons?curriculum={lesson.curriculumId}&level={lesson.levelId}">HSK {lesson.levelId}</a> /
       <b>Bài {lesson.no} · {lesson.title}</b>
     </nav>
 

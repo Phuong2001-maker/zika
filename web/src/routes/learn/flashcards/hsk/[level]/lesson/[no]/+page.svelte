@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
   import type { FlashcardsData, Word } from '$lib/api/types';
@@ -78,7 +77,6 @@
     }
   }
 
-  onMount(load);
 
   // Đổi bài trên URL → tải lại từ đầu.
   $effect(() => {

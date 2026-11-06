@@ -36,11 +36,13 @@ final class ProgressService
         $cnt = self::cntCol($part);
         $user = Db::one('SELECT current_level_id FROM users WHERE id = ?', [$userId]);
         $currentLevel = $user['current_level_id'] === null ? null : (int) $user['current_level_id'];
+        $curriculum = Curricula::ofUser($userId);
 
         $totals = [];
         foreach (Db::all(
             "SELECT l.level_id, COUNT(*) AS n FROM lessons l JOIN levels v ON v.id = l.level_id
-             WHERE v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0 GROUP BY l.level_id",
+             WHERE l.curriculum_id = ? AND v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0 GROUP BY l.level_id",
+            [$curriculum],
         ) as $row) {
             $totals[(int) $row['level_id']] = (int) $row['n'];
         }
@@ -48,9 +50,9 @@ final class ProgressService
         foreach (Db::all(
             "SELECT l.level_id, COUNT(*) AS n FROM lesson_progress p
              JOIN lessons l ON l.id = p.lesson_id JOIN levels v ON v.id = l.level_id
-             WHERE p.user_id = ? AND p.part = ? AND p.status = 'done' AND v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0
+             WHERE p.user_id = ? AND p.part = ? AND p.status = 'done' AND l.curriculum_id = ? AND v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0
              GROUP BY l.level_id",
-            [$userId, $part],
+            [$userId, $part, $curriculum],
         ) as $row) {
             $done[(int) $row['level_id']] = (int) $row['n'];
         }
@@ -65,9 +67,9 @@ final class ProgressService
             $cont = Db::one(
                 "SELECT l.*, p.position AS p_position, p.total AS p_total, p.updated_at AS p_updated_at FROM lesson_progress p
                  JOIN lessons l ON l.id = p.lesson_id JOIN levels v ON v.id = l.level_id
-                 WHERE p.user_id = ? AND p.part = ? AND p.position > 0 AND v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0
+                 WHERE p.user_id = ? AND p.part = ? AND p.position > 0 AND l.curriculum_id = ? AND v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0
                  ORDER BY p.updated_at DESC LIMIT 1",
-                [$userId, $part],
+                [$userId, $part, $curriculum],
             );
         }
         if ($cont === null) {
@@ -75,9 +77,9 @@ final class ProgressService
             $cont = Db::one(
                 "SELECT l.*, 0 AS p_position, l.$cnt AS p_total, NULL AS p_updated_at FROM lessons l JOIN levels v ON v.id = l.level_id
                  LEFT JOIN lesson_progress p ON p.lesson_id = l.id AND p.user_id = ? AND p.part = ?
-                 WHERE v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0 AND (p.status IS NULL OR p.status <> 'done')
+                 WHERE l.curriculum_id = ? AND v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0 AND (p.status IS NULL OR p.status <> 'done')
                  $order LIMIT 1",
-                [$userId, $part],
+                [$userId, $part, $curriculum],
             );
         }
 
@@ -178,9 +180,10 @@ final class ProgressService
     public static function level(int $userId, int $levelId, string $part): array
     {
         $cnt = self::cntCol($part);
+        $curriculum = Curricula::ofUser($userId);
         $rows = Db::all(
-            'SELECT p.* FROM lesson_progress p JOIN lessons l ON l.id = p.lesson_id WHERE p.user_id = ? AND p.part = ? AND l.level_id = ? ORDER BY l.lesson_no',
-            [$userId, $part, $levelId],
+            'SELECT p.* FROM lesson_progress p JOIN lessons l ON l.id = p.lesson_id WHERE p.user_id = ? AND p.part = ? AND l.level_id = ? AND l.curriculum_id = ? ORDER BY l.lesson_no',
+            [$userId, $part, $levelId, $curriculum],
         );
         $out = [];
         foreach ($rows as $p) {
@@ -197,11 +200,11 @@ final class ProgressService
             $out[] = $item;
         }
         $rv = Db::one('SELECT * FROM review_progress WHERE user_id = ? AND level_id = ? AND part = ?', [$userId, $levelId, $part]);
-        $lessonCount = (int) Db::val("SELECT COUNT(*) FROM lessons WHERE level_id = ? AND status = 'published' AND $cnt > 0", [$levelId]);
+        $lessonCount = (int) Db::val("SELECT COUNT(*) FROM lessons WHERE level_id = ? AND curriculum_id = ? AND status = 'published' AND $cnt > 0", [$levelId, $curriculum]);
         $doneCount = (int) Db::val(
             "SELECT COUNT(*) FROM lesson_progress p JOIN lessons l ON l.id = p.lesson_id
-             WHERE p.user_id = ? AND p.part = ? AND p.status = 'done' AND l.level_id = ? AND l.status = 'published' AND l.$cnt > 0",
-            [$userId, $part, $levelId],
+             WHERE p.user_id = ? AND p.part = ? AND p.status = 'done' AND l.level_id = ? AND l.curriculum_id = ? AND l.status = 'published' AND l.$cnt > 0",
+            [$userId, $part, $levelId, $curriculum],
         );
         return [
             'lessons' => $out,
@@ -239,8 +242,19 @@ final class ProgressService
     /* Ghi                                                                 */
     /* ------------------------------------------------------------------ */
 
-    /** @return array<string,mixed> dòng lessons đang hiện (404 nếu ẩn) */
-    public static function visibleLesson(int $lessonId): array
+    /** @return array<string,mixed> dòng lessons đang hiện (404 nếu ẩn hoặc không thuộc giáo trình của học viên) */
+    public static function visibleLesson(int $lessonId, int $userId): array
+    {
+        $l = self::publishedLesson($lessonId);
+        // Biên tập và quản trị được làm thử bài của mọi giáo trình.
+        if (Db::val('SELECT role FROM users WHERE id = ?', [$userId]) === 'learner') {
+            Curricula::assertLesson($lessonId, Curricula::ofUser($userId));
+        }
+        return $l;
+    }
+
+    /** @return array<string,mixed> dòng lessons đang hiện, không xét giáo trình (404 nếu ẩn) */
+    public static function publishedLesson(int $lessonId): array
     {
         $l = Db::one(
             "SELECT l.* FROM lessons l JOIN levels v ON v.id = l.level_id WHERE l.id = ? AND l.status = 'published' AND v.is_visible = 1",
@@ -261,7 +275,7 @@ final class ProgressService
      */
     public static function save(int $userId, int $lessonId, string $part, int $position, int $total, ?array $state): void
     {
-        $l = self::visibleLesson($lessonId);
+        $l = self::visibleLesson($lessonId, $userId);
         Db::tx(static function () use ($userId, $lessonId, $part, $position, $total, $state, $l): void {
             $old = self::row($userId, $lessonId, $part);
             $now = Clock::sql();
@@ -290,7 +304,7 @@ final class ProgressService
      */
     public static function complete(int $userId, int $lessonId, string $part): array
     {
-        $l = self::visibleLesson($lessonId);
+        $l = self::visibleLesson($lessonId, $userId);
         $levelId = (int) $l['level_id'];
         return Db::tx(static function () use ($userId, $lessonId, $part, $l, $levelId): array {
             $old = self::row($userId, $lessonId, $part);
@@ -333,10 +347,10 @@ final class ProgressService
                 'levelDone' => [
                     'done' => (int) Db::val(
                         "SELECT COUNT(*) FROM lesson_progress p JOIN lessons x ON x.id = p.lesson_id
-                         WHERE p.user_id = ? AND p.part = ? AND p.status = 'done' AND x.level_id = ? AND x.status = 'published' AND x.$cnt > 0",
-                        [$userId, $part, $levelId],
+                         WHERE p.user_id = ? AND p.part = ? AND p.status = 'done' AND x.level_id = ? AND x.curriculum_id = ? AND x.status = 'published' AND x.$cnt > 0",
+                        [$userId, $part, $levelId, (int) $l['curriculum_id']],
                     ),
-                    'total' => (int) Db::val("SELECT COUNT(*) FROM lessons WHERE level_id = ? AND status = 'published' AND $cnt > 0", [$levelId]),
+                    'total' => (int) Db::val("SELECT COUNT(*) FROM lessons WHERE level_id = ? AND curriculum_id = ? AND status = 'published' AND $cnt > 0", [$levelId, (int) $l['curriculum_id']]),
                 ],
                 'lessonsDone' => (int) Db::val('SELECT lessons_done FROM users WHERE id = ?', [$userId]),
             ];
@@ -346,7 +360,7 @@ final class ProgressService
     /** POST …/restart: bỏ lượt dở. */
     public static function restart(int $userId, int $lessonId, string $part): void
     {
-        self::visibleLesson($lessonId);
+        self::visibleLesson($lessonId, $userId);
         Db::exec(
             'UPDATE lesson_progress SET position = 0, state = NULL, updated_at = ? WHERE user_id = ? AND lesson_id = ? AND part = ?',
             [Clock::sql(), $userId, $lessonId, $part],

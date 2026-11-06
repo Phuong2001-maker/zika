@@ -19,7 +19,9 @@
   const contest = $derived(contestStore.current);
   // Đã nộp bài thì không còn đường vào thi: mỗi người một lượt.
   const examHref = $derived(
-    contest?.mockTestId && contest.myAttempt !== 'submitted' ? `/learn/tests/hsk/${contest.levelId}/mock/${contest.mockTestId}` : null,
+    contest?.mockTestId && contest.questionCount > 0 && contest.myAttempt !== 'submitted'
+      ? `/learn/tests/hsk/${contest.levelId}/mock/${contest.mockTestId}`
+      : null,
   );
   const examLabel = $derived(contest?.myAttempt === 'doing' ? 'Tiếp tục làm bài' : 'Vào thi ngay');
   const submitted = $derived(contest?.myAttempt === 'submitted');
@@ -78,6 +80,8 @@
   }
   let ranking = $state<'study' | 'registrants' | 'contest'>('study');
   const MEDALS = ['🥇', '🥈', '🥉'];
+  // Quỹ chưa nhập thì chưa có số tiền, hiện phần trăm chứ đừng ghi 0 đồng.
+  const prizeMoney = (p: { percent: number; amount: number | null }): string => (p.amount === null ? `${p.percent}% quỹ` : currency(p.amount));
 
   function openFund(): void {
     dialog = 'overview';
@@ -113,7 +117,9 @@
 {#snippet regNote()}
   {#if contest}
     <p class="mc-reg-note">
-      {#if contest.status === 'open' && !contest.mockTestId}
+      {#if contest.status === 'open' && contest.mockTestId && contest.questionCount === 0}
+        Đề thi đang được cập nhật, bạn quay lại sau ít phút nhé.
+      {:else if contest.status === 'open' && !contest.mockTestId}
         Bài thi đã bắt đầu, bạn chưa đăng ký nên không vào làm được.
       {:else if contest.myAttempt === 'doing'}
         <Icon name="clock" size={15} /> Bạn đang làm dở bài thi này
@@ -129,16 +135,53 @@
 {#snippet prizeList()}
   {#if contestStore.prizes.length > 0}
     <div class="mc-prizes">
-      <b>Cơ cấu giải thưởng</b>
+      <div class="mc-prizes-head">
+        <b>Cơ cấu giải thưởng</b>
+        <small>Trích từ quỹ tháng {month}</small>
+      </div>
       <ul>
         {#each contestStore.prizes as p, i (i)}
-          <li>
-            <span class="mc-place" class:mc-medal-place={i < 3}>{MEDALS[i] ?? i + 1}</span>
-            <span class="mc-prize-name">{p.label}</span>
-            <span class="mc-prize-money">{p.amount === null ? `${p.percent}% quỹ` : currency(p.amount)}</span>
+          <li class:mc-prize-top={i < 3}>
+            <span class="mc-place" class:mc-medal-place={i < 3} role="img" aria-label={`Hạng ${i + 1}`}>{MEDALS[i] ?? i + 1}</span>
+            <span class="mc-prize-name"><b>{p.label}</b><small>{p.percent}% quỹ</small></span>
+            <span class="mc-prize-money">{prizeMoney(p)}</span>
           </li>
         {/each}
       </ul>
+    </div>
+  {/if}
+{/snippet}
+
+<!-- Hộp quỹ cần thấy cả Shopee lẫn giải trong một màn: ba giải đầu xếp ngang, giải còn lại gom một dòng. Bản đủ nằm ở Thể lệ. -->
+{#snippet prizeCompact()}
+  {#if contestStore.prizes.length > 0}
+    <div class="mc-prizes mc-prizes-compact">
+      <div class="mc-prizes-head">
+        <b>Cơ cấu giải thưởng</b>
+        <button
+          type="button"
+          class="mc-rule-link"
+          onclick={() => {
+            dialog = 'contest';
+          }}>Xem thể lệ <Icon name="right" size={13} /></button
+        >
+      </div>
+      <ul class="mc-podium" style="--cot: {Math.min(contestStore.prizes.length, 3)}">
+        {#each contestStore.prizes.slice(0, 3) as p, i (i)}
+          <li>
+            <span class="mc-podium-medal" role="img" aria-label={`Hạng ${i + 1}`}>{MEDALS[i]}</span>
+            <span class="mc-podium-name">{p.label}</span>
+            <b>{prizeMoney(p)}</b>
+          </li>
+        {/each}
+      </ul>
+      {#if contestStore.prizes.length > 3}
+        <ul class="mc-prize-rest">
+          {#each contestStore.prizes.slice(3) as p, i (i)}
+            <li>{p.label} <b>{prizeMoney(p)}</b></li>
+          {/each}
+        </ul>
+      {/if}
     </div>
   {/if}
 {/snippet}
@@ -195,28 +238,34 @@
       </div>
       <div class="mc-contest-copy">
         <h3>{contest?.title ?? 'Giải đề hay, rinh thưởng nhé!'}</h3>
-        <p class="muted">Một cuộc thi mỗi tháng. Cùng thử sức và nhận phần thưởng cho những vị trí dẫn đầu.</p>
+        <p class="muted">Thử sức mỗi tháng, nhận thưởng cho những vị trí dẫn đầu.</p>
       </div>
       {@render countdown()}
-      <div class="mc-fund">
-        <div>
-          <span class="mc-fund-label">Quỹ thưởng tháng {month}</span><strong class="num">{money}</strong><span class="mc-source"
-            >Tổng hoa hồng Shopee{#if updatedOn}&nbsp;· Cập nhật {updatedOn}{/if}</span
-          >
+      <!-- Quỹ đến từ hoa hồng Shopee nên hai thứ nằm chung một khối, thấy số tiền là thấy ngay chỗ góp quỹ. -->
+      <div class="mc-fund-box">
+        <div class="mc-fund">
+          <div>
+            <span class="mc-fund-label">Quỹ thưởng tháng {month}</span><strong class="num">{money}</strong><span class="mc-source"
+              >Tổng hoa hồng Shopee{#if updatedOn}&nbsp;· Cập nhật {updatedOn}{/if}</span
+            >
+          </div>
+          <span class="mc-fund-mark" lang="zh" aria-hidden="true">奖</span>
         </div>
-        <span class="mc-fund-mark" lang="zh" aria-hidden="true">奖</span>
+        {#if supportLinks.fund.length > 0}
+          <button type="button" class="mc-shopee" onclick={openShop}>
+            {@render bag()}<span
+              ><b>Ghé Shopee, góp một chút niềm vui</b><small
+                >{supportLinks.fund.length} sản phẩm · <span class="mc-shop-why">Mua khi cần, cùng góp vào quỹ · </span>Liên kết tiếp thị</small
+              ></span
+            ><Icon name="right" size={17} />
+          </button>
+        {/if}
       </div>
+      {@render prizeCompact()}
       {@render regNote()}
       {#if canRegister}
         <button type="button" class="btn btn-son btn-lg mc-cta" disabled={registering} onclick={() => setRegistered(true)}
           >Đăng ký thi <Icon name="right" size={17} /></button
-        >
-        <button
-          type="button"
-          class="btn mc-cta mc-cta-sub"
-          onclick={() => {
-            dialog = 'contest';
-          }}>Xem thể lệ và giải thưởng</button
         >
       {:else if examHref}
         <a
@@ -239,17 +288,6 @@
             dialog = 'contest';
           }}>Xem cuộc thi <Icon name="right" size={17} /></button
         >
-      {/if}
-      {#if supportLinks.fund.length > 0}
-        <div class="mc-support">
-          <button type="button" class="mc-shopee" onclick={openShop}>
-            {@render bag()}<span
-              ><b>Ghé Shopee, góp một chút niềm vui</b><small>Mua khi bạn cần, cùng góp vào quỹ thưởng.</small><small class="mc-affiliate"
-                >{supportLinks.fund.length} sản phẩm · Liên kết tiếp thị</small
-              ></span
-            ><Icon name="right" size={17} />
-          </button>
-        </div>
       {/if}
     </section>
   </Modal>
@@ -278,7 +316,7 @@
           <Icon name="clock" size={18} /><span>
             {#if contest}
               <b>Bắt đầu {contest.startsLabel}</b><small
-                >Thi {contest.durationMin} phút, {contest.questionCount} câu. Hết giờ lúc {contest.endsLabel} là tự nộp bài.</small
+                >Thi {contest.durationMin} phút{contest.questionCount > 0 ? `, ${contest.questionCount} câu` : ''}. Hết giờ lúc {contest.endsLabel} là tự nộp bài.</small
               >
             {:else}
               <b>Thi vào cuối tháng</b><small>Ngày thi và thời lượng sẽ được thông báo tại đây.</small>
@@ -406,7 +444,10 @@
             <span class="mc-place" class:mc-medal-place={row.rank <= 3} role="img" aria-label={`Hạng ${row.rank}`}
               >{MEDALS[row.rank - 1] ?? row.rank}</span
             ><span class="mc-avatar" style="background: var(--lv{((row.rank - 1) % 3) + 1})">{initials(row.name)}</span><span class="mc-person"
-              ><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>Làm trong {clock(row.usedSec * 1000)}</small></span
+              ><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>Làm trong {clock(row.usedSec * 1000)}</small
+              >{#if contestStore.prizes[row.rank - 1]}{@const p = contestStore.prizes[row.rank - 1]}<small class="mc-row-prize"
+                  >{p.label} · {prizeMoney(p)}</small
+                >{/if}</span
             ><span class="mc-minutes"><b>{row.correct}/{row.total}</b><small>câu đúng</small></span>
           </li>
         {/snippet}
@@ -619,15 +660,18 @@
     line-height: 1.5;
     margin-top: 6px;
   }
+  .mc-fund-box {
+    margin-top: 14px;
+    border: 1px solid var(--bo-dot);
+    border-radius: 14px;
+    overflow: hidden;
+  }
   .mc-fund {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid var(--bo-dot);
-    border-radius: 14px;
     background: var(--bo-paper);
-    padding: 16px 20px;
-    margin-top: 16px;
+    padding: 12px 18px;
     position: relative;
     overflow: hidden;
   }
@@ -642,7 +686,7 @@
     color: var(--text-2);
   }
   .mc-fund strong {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 800;
     line-height: 1.3;
     color: var(--warn-text);
@@ -681,9 +725,6 @@
     justify-content: center;
     gap: 8px;
   }
-  .mc-cta-sub {
-    margin-top: 8px;
-  }
   .mc-reg-note {
     display: flex;
     align-items: center;
@@ -698,11 +739,25 @@
   .mc-prizes {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     padding: 14px 16px;
     border: 1px solid var(--line);
     border-radius: 14px;
     font-size: 14px;
+  }
+  .mc-prizes-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2px 10px;
+  }
+  .mc-prizes-head b {
+    font-size: 15px;
+  }
+  .mc-prizes-head small {
+    font-size: 12px;
+    color: var(--muted);
   }
   .mc-prizes ul {
     list-style: none;
@@ -710,37 +765,115 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
   }
   .mc-prizes li {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 10px;
+  }
+  /* Ba giải đầu nổi hơn để lướt qua là thấy ngay phần thưởng lớn nhất. */
+  .mc-prizes li.mc-prize-top {
+    background: var(--bo-paper);
   }
   .mc-prize-name {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+  }
+  .mc-prize-name small {
+    font-size: 12px;
+    color: var(--muted);
   }
   .mc-prize-money {
     flex-shrink: 0;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 800;
     color: var(--warn-text);
     font-variant-numeric: tabular-nums;
   }
-  .mc-support {
-    margin-top: 14px;
-    border-top: 1px dashed var(--line);
-    padding-top: 8px;
+  .mc-prizes-compact {
+    margin-top: 12px;
+    padding: 12px 14px;
+    gap: 8px;
+  }
+  .mc-rule-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text-2);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .mc-rule-link:hover {
+    color: var(--son-text);
+  }
+  .mc-prizes ul.mc-podium {
+    display: grid;
+    grid-template-columns: repeat(var(--cot), minmax(0, 1fr));
+    gap: 8px;
+  }
+  .mc-prizes .mc-podium li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 8px 4px;
+    background: var(--bo-paper);
+    text-align: center;
+  }
+  .mc-podium-medal {
+    font-size: 20px;
+    line-height: 1.1;
+  }
+  .mc-podium-name {
+    font-size: 12.5px;
+    color: var(--text-2);
+    line-height: 1.3;
+  }
+  .mc-podium b {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--warn-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .mc-prizes ul.mc-prize-rest {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2px 14px;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .mc-prizes .mc-prize-rest li {
+    display: inline;
+    padding: 0;
+  }
+  .mc-prize-rest b {
+    color: var(--warn-text);
+    font-variant-numeric: tabular-nums;
+  }
+  .mc-person small.mc-row-prize {
+    color: var(--warn-text);
+    font-weight: 700;
   }
   .mc-shopee {
     display: flex;
     align-items: center;
     gap: 12px;
     width: 100%;
-    padding: 8px;
+    padding: 8px 14px;
     border: 0;
-    border-radius: 12px;
-    background: transparent;
+    border-top: 1px solid var(--bo-dot);
+    background: var(--surface);
     color: var(--text);
     font: inherit;
     text-align: left;
@@ -821,8 +954,12 @@
     display: block;
     font-size: 12px;
     color: var(--muted);
-    margin-top: 3px;
-    line-height: 1.4;
+    margin-top: 2px;
+    line-height: 1.35;
+  }
+  .mc-shopee .mc-bag {
+    width: 32px;
+    height: 35px;
   }
   .mc-affiliate {
     display: block;
@@ -1022,13 +1159,18 @@
     .mc-search {
       top: -18px;
     }
+    /* Điện thoại: bỏ câu phụ để nút Đăng ký/Vào thi vẫn nằm trong màn, không phải cuộn mới thấy. */
+    .mc-contest-copy p,
+    .mc-shop-why {
+      display: none;
+    }
   }
   @media (max-width: 700px) {
     .mc-contest-copy h3 {
       font-size: 20px;
     }
     .mc-fund strong {
-      font-size: 28px;
+      font-size: 26px;
     }
   }
 </style>

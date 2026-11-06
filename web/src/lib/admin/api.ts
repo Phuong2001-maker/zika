@@ -6,6 +6,26 @@ import type { ImportMode, ImportOutcome } from './import/core';
 
 /* ---------------- Cấp, bài, từ ---------------- */
 
+export interface AdminCurriculum {
+  id: number;
+  name: string;
+  description: string;
+  color: string;
+  isDefault: boolean;
+  /** Số bài của HSK 1–6. */
+  levels: number[];
+  lessonCount: number;
+  wordCount: number;
+  learnerCount: number;
+}
+
+export interface CurriculumLearner {
+  id: number;
+  name: string;
+  email: string;
+  curriculumId: number | null;
+}
+
 export interface AdminLevel {
   id: number;
   name: string;
@@ -197,25 +217,33 @@ export interface AdminGrammarPoint {
 export const adminApi = {
   badges: () => api.get<{ users: number; lessons: number; words: number; unreadFeedback: number }>('/admin/badges'),
 
-  levels: () => api.get<AdminLevel[]>('/admin/levels'),
+  curricula: () => api.get<AdminCurriculum[]>('/admin/curricula'),
+  saveCurriculum: (id: number | null, body: { name: string; description: string; color: string }) =>
+    id === null ? api.post<{ id: number }>('/admin/curricula', body) : api.put<{ id: number }>(`/admin/curricula/${id}`, body),
+  deleteCurriculum: (id: number) => api.del(`/admin/curricula/${id}`),
+  curriculumLearners: (q: Record<string, string | number>) => api.getFull<CurriculumLearner[]>('/admin/curricula/learners', { query: q }),
+  assignCurricula: (rows: { userId: number; curriculumId: number | null }[]) => api.put<{ changed: number }>('/admin/curricula/assign', { rows }),
+
+  levels: (curriculum: number) => api.get<AdminLevel[]>('/admin/levels', { query: { curriculum } }),
   patchLevel: (id: number, body: Partial<AdminLevel>) => api.patch(`/admin/levels/${id}`, body),
 
-  lessons: (levelId: number) => api.get<LessonsPage>(`/admin/levels/${levelId}/lessons`),
-  createLesson: (levelId: number, title: string) => api.post<{ id: number; no: number }>(`/admin/levels/${levelId}/lessons`, { title }),
-  lesson: (id: number) => api.get<AdminLesson & { levelId: number }>(`/admin/lessons/${id}`),
+  lessons: (levelId: number, curriculum: number) => api.get<LessonsPage>(`/admin/levels/${levelId}/lessons`, { query: { curriculum } }),
+  createLesson: (levelId: number, curriculumId: number, title: string) =>
+    api.post<{ id: number; no: number }>(`/admin/levels/${levelId}/lessons`, { title, curriculumId }),
+  lesson: (id: number) => api.get<AdminLesson & { levelId: number; curriculumId: number; curriculumName: string }>(`/admin/lessons/${id}`),
   patchLesson: (id: number, body: { title?: string; status?: string; sampleText?: string }) => api.patch(`/admin/lessons/${id}`, body),
   deleteLesson: (id: number, confirm: string) => api.del(`/admin/lessons/${id}`, { confirm }),
   reorderLessons: (levelId: number, ids: number[]) => api.put(`/admin/levels/${levelId}/lessons/order`, { ids }),
 
   words: (q: Record<string, string | number>) => api.getFull<AdminWord[]>('/admin/words', { query: q }),
   word: (id: number) => api.get<AdminWord>(`/admin/words/${id}`),
-  createWord: (body: Partial<AdminWord> & { examples: WordExample[] }) => api.post<AdminWord>('/admin/words', body),
+  createWord: (body: Partial<AdminWord> & { examples: WordExample[]; curriculumId: number }) => api.post<AdminWord>('/admin/words', body),
   updateWord: (id: number, body: Partial<AdminWord> & { examples: WordExample[] }) => api.put<AdminWord>(`/admin/words/${id}`, body),
   deleteWord: (id: number) => api.del(`/admin/words/${id}`),
-  bulkWords: (body: { levelId: number; lessonId: number | null; mode?: ImportMode; items: Partial<AdminWord>[] }) =>
+  bulkWords: (body: { curriculumId: number; levelId: number; lessonId: number | null; mode?: ImportMode; items: Partial<AdminWord>[] }) =>
     api.post<ImportOutcome>('/admin/words/bulk', body),
   reorderWords: (lessonId: number, ids: number[]) => api.put(`/admin/lessons/${lessonId}/words/order`, { ids }),
-  dict: (hanzi: string, level: number) => api.get<DictLookup>('/admin/dict', { query: { hanzi, level } }),
+  dict: (hanzi: string, level: number, curriculum: number) => api.get<DictLookup>('/admin/dict', { query: { hanzi, level, curriculum } }),
 
   questions: (lessonId: number, part: 'bt' | 'kt') =>
     api.get<{ questions: AdminQuestion[]; config?: TestConfig }>(`/admin/lessons/${lessonId}/questions`, { query: { part } }),

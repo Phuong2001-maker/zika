@@ -1,5 +1,5 @@
 // Phiên đăng nhập: { user, csrf, loaded } — nạp bằng GET /public/config rồi GET /me khi mở app (02 §3.2).
-import { api, ApiError, setCsrf } from '$lib/api/client';
+import { api, ApiError, setContentScope, setCsrf } from '$lib/api/client';
 import type { Announcement, MeResponse, PublicConfig, User } from '$lib/api/types';
 import { notifications } from './notifications.svelte';
 import { settings } from './settings.svelte';
@@ -45,6 +45,7 @@ class Session {
 
   applyMe(me: MeResponse): void {
     this.user = me.user;
+    setContentScope(me.user.curriculumId);
     setCsrf(me.csrf);
     this.supportEnabled = me.support.enabled;
     this.announcements = me.announcements;

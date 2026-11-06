@@ -11,7 +11,8 @@
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import ImportModal from '$lib/admin/ImportModal.svelte';
-  import { adminApi, type AdminLevel, type AdminWord, type DictLookup, type WordExample } from '$lib/admin/api';
+  import { adminApi, type AdminCurriculum, type AdminLevel, type AdminWord, type DictLookup, type WordExample } from '$lib/admin/api';
+  import { lastCurriculum, rememberCurriculum } from '$lib/admin/menu';
   import { wordsImport, type ImportMode, type WordRow } from '$lib/admin/import';
   import { toneParts } from '$lib/utils/pinyin';
 
@@ -22,6 +23,8 @@
     ['prep', 'Giới từ'], ['conj', 'Liên từ'], ['part', 'Trợ từ'], ['other', 'Khác'],
   ];
 
+  let curricula = $state<AdminCurriculum[]>([]);
+  let chonGiaoTrinh = $state<number>(0);
   let levels = $state<AdminLevel[] | null>(null);
   let lessons = $state<{ id: number; no: number; title: string }[]>([]);
   let words = $state<AdminWord[]>([]);
@@ -47,18 +50,25 @@
 
   /** Nhập vào đúng bài đang chọn ở ô “Thuộc bài”; chưa chọn bài thì từ nằm ở mức cấp. */
   async function nhapExcel(items: WordRow[], mode: ImportMode) {
-    const out = await adminApi.bulkWords({ levelId, lessonId, mode, items });
+    const out = await adminApi.bulkWords({ curriculumId, levelId, lessonId, mode, items });
     await Promise.all([loadWords(), loadLevels()]);
     return out;
   }
   let side = $state<'front' | 'back'>('front');
 
+  // Giáo trình nhớ ở máy có thể đã bị xoá nên phải đối chiếu danh sách, không thì màn báo lỗi mãi.
+  const curriculumId = $derived.by(() => {
+    const fromUrl = Number(page.url.searchParams.get('curriculum'));
+    if (fromUrl) return fromUrl;
+    const last = lastCurriculum();
+    return curricula.some((c) => c.id === last) ? last : 1;
+  });
   const levelId = $derived(Number(page.url.searchParams.get('level')) || 1);
   const level = $derived(levels?.find((l) => l.id === levelId) ?? null);
 
   async function loadLevels(): Promise<void> {
     try {
-      levels = await adminApi.levels();
+      levels = await adminApi.levels(curriculumId);
     } catch {
       failed = true;
     }
@@ -66,7 +76,7 @@
 
   async function loadWords(): Promise<void> {
     try {
-      const res = await adminApi.words({ level: levelId, q: search, per: 200 });
+      const res = await adminApi.words({ curriculum: curriculumId, level: levelId, q: search, per: 200 });
       words = res.data;
       total = Number(res.meta?.total ?? res.data.length);
     } catch {
@@ -76,17 +86,32 @@
 
   async function loadLessons(): Promise<void> {
     try {
-      const res = await adminApi.lessons(levelId);
+      const res = await adminApi.lessons(levelId, curriculumId);
       lessons = res.lessons.map((l) => ({ id: l.id, no: l.no, title: l.title }));
     } catch {
       lessons = [];
     }
   }
 
-  onMount(loadLevels);
+  onMount(async () => {
+    try {
+      curricula = await adminApi.curricula();
+    } catch {
+      failed = true;
+    }
+  });
 
   $effect(() => {
+    if (curricula.length === 0) return;
+    chonGiaoTrinh = curriculumId;
+    rememberCurriculum(curriculumId);
+    void loadLevels();
+  });
+
+  $effect(() => {
+    if (curricula.length === 0) return;
     void levelId;
+    void curriculumId;
     void loadWords();
     void loadLessons();
     // Bài mặc định lấy từ URL (khi bấm từ màn Bài học HSK sang).
@@ -101,7 +126,13 @@
   });
 
   function pickLevel(id: number): void {
-    void goto(`/admin/words?level=${id}`, { keepFocus: true, noScroll: true });
+    void goto(`/admin/words?curriculum=${curriculumId}&level=${id}`, { keepFocus: true, noScroll: true });
+  }
+
+  function pickCurriculum(): void {
+    lessonId = null;
+    clearForm();
+    void goto(`/admin/words?curriculum=${chonGiaoTrinh}&level=${levelId}`, { keepFocus: true, noScroll: true });
   }
 
   /** Gõ chữ Hán xong thì tra từ điển để điền nhanh. */
@@ -112,7 +143,7 @@
     if (v === '') return;
     dictTimer = setTimeout(async () => {
       try {
-        dict = await adminApi.dict(v, levelId);
+        dict = await adminApi.dict(v, levelId, curriculumId);
       } catch {
         dict = null;
       }
@@ -170,6 +201,7 @@
     saving = true;
     errors = {};
     const body = {
+      curriculumId,
       levelId,
       lessonId,
       hanzi: hanzi.trim(),
@@ -427,6 +459,15 @@
       {(levels ?? []).filter((l) => l.visible).length} cấp đang hiện cho người học
     </p>
   </div>
+  <div class="cur-select">
+    <span class="lbl">Giáo trình</span>
+    <Select
+      bind:value={chonGiaoTrinh}
+      ariaLabel="Chọn giáo trình"
+      options={curricula.map((c) => ({ v: c.id, label: c.name }))}
+      onchange={pickCurriculum}
+    />
+  </div>
 </div>
 
 {#if failed}
@@ -477,6 +518,13 @@
 {/if}
 
 <style>
+  .cur-select {
+    flex: 0 1 300px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
   .head {
     margin-bottom: 16px;
   }

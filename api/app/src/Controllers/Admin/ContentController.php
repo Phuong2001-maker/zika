@@ -11,6 +11,7 @@ use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Core\Validator;
 use Zika\Services\ContentBuilder;
+use Zika\Services\Curricula;
 use Zika\Services\ContentWriter;
 
 /** Quản trị · Cấp, Bài học, Từ vựng (04 §10.3). Quyền E (biên tập + quản trị). */
@@ -32,14 +33,16 @@ final class ContentController
     /* Cấp                                                                 */
     /* ------------------------------------------------------------------ */
 
-    /** GET /admin/levels */
+    /** GET /admin/levels?curriculum= — số bài và số từ đếm trong giáo trình đang chọn. */
     public function levels(Request $r): array
     {
+        $c = Curricula::resolve($r->qInt('curriculum'));
         $rows = Db::all(
             'SELECT v.*,
-                    (SELECT COUNT(*) FROM words w WHERE w.level_id = v.id) AS entered_words,
-                    (SELECT COUNT(*) FROM lessons l WHERE l.level_id = v.id) AS lesson_count
+                    (SELECT COUNT(*) FROM words w WHERE w.level_id = v.id AND w.curriculum_id = ?) AS entered_words,
+                    (SELECT COUNT(*) FROM lessons l WHERE l.level_id = v.id AND l.curriculum_id = ?) AS lesson_count
              FROM levels v ORDER BY v.id',
+            [$c, $c],
         );
         return array_map(static fn (array $v): array => [
             'id' => (int) $v['id'],
@@ -93,15 +96,16 @@ final class ContentController
     /* Bài học                                                             */
     /* ------------------------------------------------------------------ */
 
-    /** GET /admin/levels/{id}/lessons — ma trận 6 phần của cấp. */
+    /** GET /admin/levels/{id}/lessons?curriculum= — ma trận 6 phần của cấp trong một giáo trình. */
     public function lessons(Request $r): array
     {
         $levelId = $r->id();
+        $curriculumId = Curricula::resolve($r->qInt('curriculum'));
         $rows = Db::all(
             'SELECT l.*, u.display_name AS updated_by_name
              FROM lessons l LEFT JOIN users u ON u.id = l.updated_by
-             WHERE l.level_id = ? ORDER BY l.lesson_no',
-            [$levelId],
+             WHERE l.level_id = ? AND l.curriculum_id = ? ORDER BY l.lesson_no',
+            [$levelId, $curriculumId],
         );
 
         $lessons = [];
@@ -137,7 +141,7 @@ final class ContentController
             'SELECT COUNT(DISTINCT m.id) AS n, COUNT(q.id) AS qn,
                     MAX(m.duration_sec) AS dur, MAX(m.pass_points) AS pass, MAX(m.max_points) AS maxp
              FROM mock_tests m LEFT JOIN questions q ON q.mock_test_id = m.id
-             WHERE m.level_id = ?',
+             WHERE m.level_id = ? AND m.for_contest = 0',
             [$levelId],
         ) ?? [];
 
@@ -154,7 +158,7 @@ final class ContentController
         ];
     }
 
-    /** POST /admin/levels/{id}/lessons — thêm bài mới ở cuối, trạng thái Nháp. */
+    /** POST /admin/levels/{id}/lessons { title, curriculumId } — thêm bài mới ở cuối, trạng thái Nháp. */
     public function createLesson(Request $r): Response
     {
         $levelId = $r->id();
@@ -164,10 +168,12 @@ final class ContentController
 
         $v = new Validator($r->body);
         $title = $v->str('title', 'Tên bài', min: 1, max: 120);
+        $curriculumId = Curricula::resolve((int) $v->int('curriculumId', 'Giáo trình', 1, null, false, 0));
         $v->done();
 
-        $no = 1 + (int) Db::val('SELECT COALESCE(MAX(lesson_no), 0) FROM lessons WHERE level_id = ?', [$levelId]);
+        $no = 1 + (int) Db::val('SELECT COALESCE(MAX(lesson_no), 0) FROM lessons WHERE level_id = ? AND curriculum_id = ?', [$levelId, $curriculumId]);
         $id = Db::insert('lessons', [
+            'curriculum_id' => $curriculumId,
             'level_id' => $levelId,
             'lesson_no' => $no,
             'title' => $title,
@@ -176,7 +182,7 @@ final class ContentController
         ]);
 
         ContentBuilder::forgetLevel($levelId);
-        Audit::log($r, 'lesson.create', 'lesson', $id, ['levelId' => $levelId, 'no' => $no, 'title' => $title]);
+        Audit::log($r, 'lesson.create', 'lesson', $id, ['curriculumId' => $curriculumId, 'levelId' => $levelId, 'no' => $no, 'title' => $title]);
         return Response::json(['id' => $id, 'no' => $no], 201);
     }
 
@@ -190,6 +196,8 @@ final class ContentController
 
         return [
             'id' => (int) $l['id'],
+            'curriculumId' => (int) $l['curriculum_id'],
+            'curriculumName' => (string) Db::val('SELECT name FROM curricula WHERE id = ?', [(int) $l['curriculum_id']]),
             'levelId' => (int) $l['level_id'],
             'no' => (int) $l['lesson_no'],
             'title' => (string) $l['title'],
@@ -263,13 +271,15 @@ final class ContentController
         $ids = $v->ids('ids', 'Danh sách bài');
         $v->done();
 
-        Db::tx(static function () use ($ids, $levelId): void {
-            // Đổi sang số âm trước để không đụng khoá duy nhất (level_id, lesson_no).
+        // Danh sách phải cùng một giáo trình: đánh số lẫn thì bài của giáo trình khác mất thứ tự.
+        $curriculumId = (int) Db::val('SELECT curriculum_id FROM lessons WHERE id = ?', [$ids[0] ?? 0]);
+        Db::tx(static function () use ($ids, $levelId, $curriculumId): void {
+            // Đổi sang số âm trước để không đụng khoá duy nhất (curriculum_id, level_id, lesson_no).
             foreach ($ids as $i => $id) {
-                Db::exec('UPDATE lessons SET lesson_no = ? WHERE id = ? AND level_id = ?', [-($i + 1), $id, $levelId]);
+                Db::exec('UPDATE lessons SET lesson_no = ? WHERE id = ? AND level_id = ? AND curriculum_id = ?', [-($i + 1), $id, $levelId, $curriculumId]);
             }
             foreach ($ids as $i => $id) {
-                Db::exec('UPDATE lessons SET lesson_no = ? WHERE id = ? AND level_id = ?', [$i + 1, $id, $levelId]);
+                Db::exec('UPDATE lessons SET lesson_no = ? WHERE id = ? AND level_id = ? AND curriculum_id = ?', [$i + 1, $id, $levelId, $curriculumId]);
             }
         });
 
@@ -282,11 +292,11 @@ final class ContentController
     /* Từ vựng                                                             */
     /* ------------------------------------------------------------------ */
 
-    /** GET /admin/words?level=&lesson=&q=&page=&per= */
+    /** GET /admin/words?curriculum=&level=&lesson=&q=&page=&per= */
     public function words(Request $r): Response
     {
-        $where = ['1 = 1'];
-        $params = [];
+        $where = ['w.curriculum_id = ?'];
+        $params = [Curricula::resolve($r->qInt('curriculum'))];
         if (($level = $r->qInt('level')) > 0) {
             $where[] = 'w.level_id = ?';
             $params[] = $level;
@@ -427,12 +437,18 @@ final class ContentController
         $v = new Validator($r->body);
         $levelId = (int) $v->int('levelId', 'Cấp', 1, 6);
         $lessonId = $v->int('lessonId', 'Bài', 1, null, false);
+        $curriculumId = Curricula::resolve((int) $v->int('curriculumId', 'Giáo trình', 1, null, false, 0));
         $mode = (string) $v->in('mode', 'Cách nhập', ['append', 'replace'], 'append');
         $items = $v->arr('items', 'Danh sách từ');
         $v->done();
 
-        if ($lessonId !== null && (int) Db::val('SELECT level_id FROM lessons WHERE id = ?', [$lessonId]) !== $levelId) {
-            throw HttpError::validation(['lessonId' => 'Bài này không thuộc cấp đã chọn.']);
+        if ($lessonId !== null) {
+            $owner = Db::one('SELECT level_id, curriculum_id FROM lessons WHERE id = ?', [$lessonId]);
+            if ($owner === null || (int) $owner['level_id'] !== $levelId) {
+                throw HttpError::validation(['lessonId' => 'Bài này không thuộc cấp đã chọn.']);
+            }
+            // Có bài thì giáo trình theo bài: nhập từ không thể lệch khỏi bài nó thuộc về.
+            $curriculumId = (int) $owner['curriculum_id'];
         }
         if (count($items) > self::BULK_MAX) {
             throw HttpError::validation(['items' => 'Mỗi lần nhập tối đa ' . self::BULK_MAX . ' từ.']);
@@ -452,7 +468,7 @@ final class ContentController
                 $skipped[] = ['hanzi' => $hanzi, 'reason' => 'Không phải chữ Hán.'];
                 continue;
             }
-            if (Db::val('SELECT id FROM words WHERE level_id = ? AND hanzi = ?', [$levelId, $hanzi]) !== null) {
+            if (Db::val('SELECT id FROM words WHERE curriculum_id = ? AND level_id = ? AND hanzi = ?', [$curriculumId, $levelId, $hanzi]) !== null) {
                 $skipped[] = ['hanzi' => $hanzi, 'reason' => 'Cấp này đã có từ đó.'];
                 continue;
             }
@@ -477,6 +493,7 @@ final class ContentController
             }
 
             $wordId = Db::insert('words', [
+                'curriculum_id' => $curriculumId,
                 'level_id' => $levelId,
                 'lesson_id' => $lessonId,
                 'hanzi' => $hanzi,
@@ -519,23 +536,30 @@ final class ContentController
         $meaning = $v->str('meaning', 'Nghĩa tiếng Việt', min: 1, max: 255);
         $pos = $v->in('pos', 'Loại từ', self::POS, 'n');
         $note = $v->strOrNull('note', 'Ghi chú', 2000);
+        $curriculumId = $cur !== null
+            ? (int) $cur['curriculum_id']
+            : Curricula::resolve((int) $v->int('curriculumId', 'Giáo trình', 1, null, false, 0));
 
         if ($hanzi !== '' && !Pinyin::isHanzi($hanzi)) {
             $v->error('hanzi', 'Chỉ nhập chữ Hán.');
         }
         if ($lessonId !== null) {
-            $lv = Db::val('SELECT level_id FROM lessons WHERE id = ?', [$lessonId]);
-            if ($lv === null) {
+            $owner = Db::one('SELECT level_id, curriculum_id FROM lessons WHERE id = ?', [$lessonId]);
+            if ($owner === null) {
                 $v->error('lessonId', 'Không có bài này.');
-            } elseif ((int) $lv !== $levelId) {
+            } elseif ((int) $owner['level_id'] !== $levelId) {
                 $v->error('lessonId', 'Bài này không thuộc cấp đã chọn.');
+            } elseif ($cur !== null && (int) $owner['curriculum_id'] !== $curriculumId) {
+                $v->error('lessonId', 'Bài này thuộc giáo trình khác.');
+            } else {
+                $curriculumId = (int) $owner['curriculum_id'];
             }
         }
 
-        // Mỗi cấp không được có 2 từ cùng chữ Hán.
+        // Trong một giáo trình, mỗi cấp không được có 2 từ cùng chữ Hán.
         $dupe = Db::val(
-            'SELECT id FROM words WHERE level_id = ? AND hanzi = ?' . ($cur !== null ? ' AND id <> ?' : ''),
-            $cur !== null ? [$levelId, $hanzi, (int) $cur['id']] : [$levelId, $hanzi],
+            'SELECT id FROM words WHERE curriculum_id = ? AND level_id = ? AND hanzi = ?' . ($cur !== null ? ' AND id <> ?' : ''),
+            $cur !== null ? [$curriculumId, $levelId, $hanzi, (int) $cur['id']] : [$curriculumId, $levelId, $hanzi],
         );
         if ($dupe !== null) {
             $v->error('hanzi', 'Cấp này đã có từ “' . $hanzi . '”.');
@@ -571,6 +595,7 @@ final class ContentController
             : 1 + (int) Db::val('SELECT COALESCE(MAX(sort_order), 0) FROM words WHERE lesson_id = ?', [$lessonId]);
 
         return [[
+            'curriculum_id' => $curriculumId,
             'level_id' => $levelId,
             'lesson_id' => $lessonId,
             'hanzi' => $hanzi,

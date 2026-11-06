@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { SvelteSet } from 'svelte/reactivity';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
@@ -73,7 +72,6 @@
     }
   }
 
-  onMount(load);
   $effect(() => { void levelId; void lessonNo; void load(); });
 
   // Gọi mỗi khi mở điểm khác hoặc tải bài, nên câu ví dụ cũng tắt pinyin / nghĩa lại ở đây.

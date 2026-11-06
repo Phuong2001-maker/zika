@@ -51,6 +51,7 @@ export function menuGroups(lessonId: number | null): MenuGroup[] {
       items: [
         { key: 'curricula', label: 'Giáo trình', href: '/admin/curricula', icon: 'book', role: 'A' },
         { key: 'contests', label: 'Cuộc thi', href: '/admin/contests', icon: 'flag', role: 'A' },
+        { key: 'exams', label: 'Đề thi', href: '/admin/exams', icon: 'quiz', role: 'A' },
         { key: 'lessons', label: 'Bài học HSK', href: '/admin/lessons', icon: 'cards', role: 'E', count: (b) => b.lessons },
         { key: 'news', label: 'Thông báo', href: '/admin/news', icon: 'megaphone', role: 'A' },
         { key: 'feedback', label: 'Góp ý', href: '/admin/feedback', icon: 'msg', role: 'E', badge: (b) => b.unreadFeedback },
@@ -76,6 +77,7 @@ export function menuGroups(lessonId: number | null): MenuGroup[] {
 export function activeKey(path: string): string {
   if (path.startsWith('/admin/curricula')) return 'curricula';
   if (path.startsWith('/admin/contests')) return 'contests';
+  if (path.startsWith('/admin/exams')) return 'exams';
   const m = path.match(/^\/admin\/lessons\/\d+\/([a-z]+)/);
   if (m) return m[1];
   if (path.startsWith('/admin/users')) return 'users';
@@ -88,6 +90,25 @@ export function activeKey(path: string): string {
   if (path.startsWith('/admin/support')) return 'support';
   if (path.startsWith('/admin/settings')) return 'settings';
   return 'overview';
+}
+
+/** Giáo trình đang soạn: mở Bài học hay Từ vựng từ menu vẫn ở đúng bộ đang làm dở. */
+const LAST_CURRICULUM = 'zk.admin.lastCurriculum';
+
+export function rememberCurriculum(id: number): void {
+  try {
+    localStorage.setItem(LAST_CURRICULUM, String(id));
+  } catch {
+    // Trình duyệt chặn localStorage: bỏ qua, về giáo trình mặc định.
+  }
+}
+
+export function lastCurriculum(): number {
+  try {
+    return Number(localStorage.getItem(LAST_CURRICULUM)) || 1;
+  } catch {
+    return 1;
+  }
 }
 
 /** Bài admin mở gần nhất — nhớ giữa các phiên để menu trỏ đúng chỗ (08 §1.1). */

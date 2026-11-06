@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { api, ApiError } from '$lib/api/client';
   import { toast } from '$lib/stores/toast.svelte';
   import { ago } from '$lib/utils/format';
@@ -57,7 +56,6 @@
     }
   }
 
-  onMount(load);
   $effect(() => {
     void tab;
     void load();

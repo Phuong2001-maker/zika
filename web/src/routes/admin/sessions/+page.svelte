@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { api } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
   import { num } from '$lib/utils/format';
@@ -44,7 +43,6 @@
     }
   }
 
-  onMount(load);
   $effect(() => {
     void range;
     void device;

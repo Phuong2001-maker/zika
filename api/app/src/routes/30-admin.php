@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Zika\Controllers\Admin\BookController as Book;
 use Zika\Controllers\Admin\ContentController as Content;
 use Zika\Controllers\Admin\ContestController as Contest;
+use Zika\Controllers\Admin\CurriculumController as Curriculum;
 use Zika\Controllers\Admin\DialogueController as Dialogue;
 use Zika\Controllers\Admin\MiscController as Misc;
 use Zika\Controllers\Admin\OpsController as Ops;
@@ -20,6 +21,14 @@ return [
     ['POST', '/admin/media/image', [Misc::class, 'image'], 'E'],
     ['POST', '/admin/media/audio', [Misc::class, 'audio'], 'E'],
     ['POST', '/admin/media/tts', [Misc::class, 'tts'], 'E'],
+
+    // Giáo trình: biên tập cần danh sách để chọn khi soạn bài, còn tạo và gán chỉ quản trị.
+    ['GET',    '/admin/curricula', [Curriculum::class, 'index'], 'E'],
+    ['POST',   '/admin/curricula', [Curriculum::class, 'save'], 'A'],
+    ['GET',    '/admin/curricula/learners', [Curriculum::class, 'learners'], 'A'],
+    ['PUT',    '/admin/curricula/assign', [Curriculum::class, 'assign'], 'A'],
+    ['PUT',    '/admin/curricula/{id}', [Curriculum::class, 'save'], 'A'],
+    ['DELETE', '/admin/curricula/{id}', [Curriculum::class, 'delete'], 'A'],
 
     // Cấp
     ['GET',   '/admin/levels', [Content::class, 'levels'], 'E'],
@@ -113,6 +122,8 @@ return [
     ['POST',   '/admin/feedback/{id}/reply', [Ops::class, 'replyFeedback'], 'E'],
 
     // Cuộc thi tháng
+    ['GET',    '/admin/exams', [Contest::class, 'exams'], 'A'],
+    ['POST',   '/admin/exams', [Contest::class, 'createExam'], 'A'],
     ['GET',    '/admin/contests', [Contest::class, 'index'], 'A'],
     ['POST',   '/admin/contests', [Contest::class, 'save'], 'A'],
     ['PUT',    '/admin/contests/prizes', [Contest::class, 'savePrizes'], 'A'],

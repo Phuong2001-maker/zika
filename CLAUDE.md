@@ -35,7 +35,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 89/89 test; API 112/112; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 87/87 test; API 131/131; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -45,6 +45,7 @@ web/src/routes/          màn hình (SvelteKit)
 web/src/lib/components/  component dùng chung (Select, Modal, Icon, Switcher…)
 web/src/lib/admin/       riêng khu quản trị (menu.ts, api.ts, LessonHeader.svelte)
 web/src/lib/admin/import/ nhập Excel cho 6 phần soạn bài — xem bẫy số 6
+web/src/lib/curricula/   màn Giáo trình + Phân quyền học (giáo trình → cấp → bài, API thật)
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
 web/src/lib/learn/che-do/  3 chế độ luyện ở màn Lật thẻ (Ghép cặp, Trắc nghiệm, Gõ chữ)
 web/src/lib/learn/sach.ts  3 quyển giáo trình ở /learn/books — chỉ admin, ảnh qua /api/admin/books (ngoài git)
@@ -54,6 +55,8 @@ api/app/config.php       bí mật (DB, Google, SMTP) — gitignore, KHÔNG comm
 ```
 
 Ba vai trò: `learner`, `editor`, `admin`.
+
+Giáo trình là cha của bài: truy vấn bài/từ cho người học phải lọc `curriculum_id` (`Services/Curricula.php`). Giáo trình số 1 là mặc định, không xoá được.
 
 ## Bẫy — đọc kỹ, đã sa vào thật
 
@@ -137,9 +140,10 @@ hoặc khởi động lại `npm run dev`. Bản build không bị.
   [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md) trước khi tiếp tục. Chỉ frontend/dữ liệu mẫu;
   mỗi học viên một giáo trình do admin gán, không thêm màn chọn giáo trình cho học viên.
   Bé túi hiện lại ngay sau F5 để test; chính sách một ngày chưa áp dụng; bé không hiện ở màn đang làm bài.
+  Giáo trình và tab Đề thi đã có API thật; đề thi thử cuối cấp vẫn dùng chung mọi giáo trình.
   Link Shopee đã có API thật (Icon 1 link, Quỹ tháng nhiều link, công tắc ở `/admin/support`), tiền quỹ do admin nhập tay ở cùng màn đó;
-  cuộc thi tạo ở `/admin/contests`, dùng lại đề thi thử, đề Nháp chỉ làm được trong giờ thi, hết giờ tự nộp, xếp hạng theo câu đúng rồi thời gian, mỗi người 1 lượt.
-  đăng ký trước giờ thi mới được làm, cơ cấu giải chỉnh ở cùng màn. Trang soạn đề là bản tạm. **Server thật còn cần migration 007 đến 011** rồi gắn link Icon thì bé mới hiện. Top chăm học vẫn minh hoạ. Checklist: phần I, J, K của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+  cuộc thi tạo ở `/admin/contests`, chọn đề từ tab `/admin/exams` (chỉ cần tên, câu nạp sau), đề Nháp chỉ làm được trong giờ thi, hết giờ tự nộp, xếp hạng theo câu đúng rồi thời gian, mỗi người 1 lượt.
+  đăng ký trước giờ thi mới được làm, cơ cấu giải chỉnh ở cùng màn. Trang soạn đề là bản tạm. **Server thật còn cần migration 007 đến 013 và xoá `storage/cache/content`** rồi gắn link Icon thì bé mới hiện. Top chăm học vẫn minh hoạ. Checklist: phần I, J, K, L của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 - **ĐANG DỞ — giọng đọc mới toàn bộ + sửa UI/UX (03/11/2026), chỉ còn đưa lên server:** mọi file đọc
   mẫu chuyển sang giọng Microsoft (edge-tts), câu thoại giọng riêng từng nhân vật, `TTS_VERSION = 6`;

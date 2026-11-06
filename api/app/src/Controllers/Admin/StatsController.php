@@ -12,6 +12,7 @@ use Zika\Core\Settings;
 use Zika\Core\Str;
 use Zika\Core\Validator;
 use Zika\Services\UserService;
+use Zika\Services\Curricula;
 
 /** Quản trị · Tổng quan, Người dùng, Phiên truy cập (04 §10.2). Quyền A. */
 final class StatsController
@@ -206,31 +207,33 @@ final class StatsController
     {
         $levels = Db::all('SELECT id, is_visible FROM levels ORDER BY id');
 
+        // Thanh tiến độ nhập từ so với mục tiêu của cấp nên chỉ tính giáo trình mặc định, cộng dồn mọi bộ thì vượt 100%.
         $entered = [];
-        foreach (Db::all('SELECT level_id, COUNT(*) AS n FROM words GROUP BY level_id') as $x) {
+        foreach (Db::all('SELECT level_id, COUNT(*) AS n FROM words WHERE curriculum_id = ? GROUP BY level_id', [Curricula::DEFAULT_ID]) as $x) {
             $entered[(int) $x['level_id']] = (int) $x['n'];
         }
 
+        // Học xong cấp là xong đủ số bài của giáo trình người đó học, nên đếm theo từng giáo trình.
         $published = [];
-        foreach (Db::all("SELECT level_id, COUNT(*) AS n FROM lessons WHERE status = 'published' GROUP BY level_id") as $x) {
-            $published[(int) $x['level_id']] = (int) $x['n'];
+        foreach (Db::all("SELECT curriculum_id, level_id, COUNT(*) AS n FROM lessons WHERE status = 'published' GROUP BY curriculum_id, level_id") as $x) {
+            $published[(int) $x['curriculum_id']][(int) $x['level_id']] = (int) $x['n'];
         }
 
         // Mỗi (cấp, người học): đã xong bao nhiêu bài phần Lật thẻ.
         $learning = [];
         $completed = [];
         foreach (Db::all(
-            "SELECT l.level_id, p.user_id,
+            "SELECT l.curriculum_id, l.level_id, p.user_id,
                     COUNT(*) AS touched,
                     SUM(p.status = 'done') AS done
                FROM lesson_progress p
                JOIN lessons l ON l.id = p.lesson_id
               WHERE p.part = 'lt'
-              GROUP BY l.level_id, p.user_id",
+              GROUP BY l.curriculum_id, l.level_id, p.user_id",
         ) as $x) {
             $lv = (int) $x['level_id'];
             $learning[$lv] = ($learning[$lv] ?? 0) + 1;
-            $need = $published[$lv] ?? 0;
+            $need = $published[(int) $x['curriculum_id']][$lv] ?? 0;
             if ($need > 0 && (int) $x['done'] >= $need) {
                 $completed[$lv] = ($completed[$lv] ?? 0) + 1;
             }
@@ -359,9 +362,9 @@ final class StatsController
                FROM lessons l
                LEFT JOIN lesson_progress p ON p.lesson_id = l.id AND p.user_id = ? AND p.part = 'lt'
                JOIN levels v ON v.id = l.level_id
-              WHERE l.status = 'published' AND v.is_visible = 1
+              WHERE l.curriculum_id = ? AND l.status = 'published' AND v.is_visible = 1
               GROUP BY l.level_id ORDER BY l.level_id",
-            [(int) $u['id']],
+            [(int) $u['id'], $u['curriculum_id'] === null ? Curricula::DEFAULT_ID : (int) $u['curriculum_id']],
         );
 
         $devices = Db::all(

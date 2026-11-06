@@ -5,7 +5,7 @@ namespace Zika\Core;
 
 /**
  * Cache nội dung học dạng file JSON + ETag (02 §4.3): API học đọc file, không chạm MySQL.
- * Khoá theo cấp để xoá gọn: "levels", "l2-lessons", "l2-review-lt", "x21-flashcards".
+ * Khoá theo cấp để xoá gọn: "levels-c1", "l2-c1-lessons", "l2-c1-review-lt", "x21-flashcards" (c = giáo trình).
  */
 final class FileCache
 {
@@ -51,7 +51,9 @@ final class FileCache
         foreach (glob(self::dir('content') . '/l' . $levelId . '-*.json') ?: [] as $f) {
             @unlink($f);
         }
-        @unlink(self::file('content', 'levels'));
+        foreach (glob(self::dir('content') . '/levels-c*.json') ?: [] as $f) {
+            @unlink($f);
+        }
     }
 
     public static function forgetAllContent(): void
