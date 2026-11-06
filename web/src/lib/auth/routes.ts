@@ -57,5 +57,7 @@ export function canView(role: Role, path: string): boolean {
 export function landingPath(role: Role, next?: string | null): string {
   const home = homePath(role);
   const target = safeNext(next, home);
+  // Phiên hết ở trang tài khoản vẫn đưa học viên về bàn học sau khi đăng nhập.
+  if (role === 'learner' && matches(target.split(/[?#]/)[0], '/account')) return home;
   return canView(role, target) ? target : home;
 }

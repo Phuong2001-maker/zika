@@ -141,7 +141,7 @@ Danh sách top là dữ liệu minh hoạ; tiền quỹ do admin nhập (phần 
 | I6 | Bấm cúp | Top 10; ba hạng đầu có huy chương; tên và số phút đọc rõ; cuộn được, không tràn ngang | Đạt | |
 | I7 | Bấm túi, rồi bấm số tiền ở thanh đầu trang | Cả hai đều mở cùng hộp quỹ, không còn hộp Shopee riêng | Đạt | |
 | I8 | Mở bất kỳ hộp thoại nào | Bé túi tạm ẩn, đóng hộp thì hiện lại | Đạt | |
-| I9 | Vào màn chọn bài hoặc đang làm bài (lật thẻ, bài tập, kiểm tra, ôn tập, đọc giáo trình) | **Không có bé túi**, nút chính không bị che | Đạt | |
+| I9 | Bật link Icon, F5 rồi vào màn chọn bài hoặc đang làm bài (lật thẻ, bài tập, kiểm tra, ôn tập, đọc giáo trình) trên điện thoại/máy tính | Bé túi được phép hiện trên mọi màn `/learn/`, kể cả có thể che nút theo yêu cầu 06/11; dialog/nhập liệu vẫn tạm ẩn | Test route đạt; chưa kiểm lại UI | |
 | I10 | Bấm bé hoặc lời nhắn, rồi đổi sang màn học khác | Mở link ở tab mới, bé ẩn và vẫn ẩn khi đổi màn; F5 thì hiện lại (chính sách đang để test) | Đạt | |
 | I11 | Xem bé đi trên màn chọn cấp | Chữ chỉ hiện khi bé đứng yên; lúc đi có dấu 👆; rê chuột vào thì dừng và hiện chữ | Đạt | |
 | I16 | Điện thoại: bấm quỹ, cuộc thi, cúp | Hộp nằm sát dưới thanh đầu trang, không bị đẩy xuống đáy; hộp dài cuộn được, thấy đủ nút cuối ở màn 320×568 | Đạt | |
@@ -190,7 +190,7 @@ Kiểm tra tự động: `api/tests/Unit/SupportLinksTest.php`.
 | K6 | Người học mở hộp quỹ khi chưa có bài thi | Nhãn "Chưa có lịch", không có đồng hồ | Có test API; màn chưa thử |
 | K7 | Có bài thi sắp diễn ra | Nhãn Sắp diễn ra, đồng hồ chạy từng giây; còn trên 1 ngày thì có ô Ngày | Đạt |
 | K8 | Chờ đồng hồ về 0 | Không tải lại trang, tự thành Đang diễn ra, đồng hồ đếm tới giờ đóng, nút Vào thi ngay | Đạt |
-| K9 | Bấm Vào thi ngay | Vào được đề Nháp, làm bài được, không có bé túi | Đạt |
+| K9 | Bấm Vào thi ngay | Vào được đề Nháp, làm bài được; bé túi được phép hiện như các màn học khác | Chưa kiểm lại UI sau đổi phạm vi bé túi |
 | K10 | Trước giờ thi, gõ thẳng đường dẫn đề Nháp | Báo đề chưa mở | Có test API |
 | K11 | Vào thi muộn, để đồng hồ về 0, không bấm nộp | Đồng hồ đếm tới lúc hết giờ thi của cả cuộc thi; về 0 thì màn khoá "Hết giờ", tự nộp câu đã chọn, ra kết quả "hết giờ tự nộp" | Đạt |
 | K11b | Đóng tab trước khi hết giờ, người khác mở bảng xếp hạng sau giờ đóng | Lượt đó được chấm theo câu đã lưu, thời gian tính tới hạn nộp | Có test API |

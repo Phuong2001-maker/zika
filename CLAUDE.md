@@ -139,7 +139,7 @@ hoặc khởi động lại `npm run dev`. Bản build không bị.
 - **Giao diện giáo trình admin + quỹ thưởng/top chăm học/bé túi Shopee (05–06/11/2026):** đọc
   [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md) trước khi tiếp tục. Chỉ frontend/dữ liệu mẫu;
   mỗi học viên một giáo trình do admin gán, không thêm màn chọn giáo trình cho học viên.
-  Bé túi hiện lại ngay sau F5 để test; chính sách một ngày chưa áp dụng; bé không hiện ở màn đang làm bài.
+  Bé túi hiện trên mọi màn `/learn/`, kể cả đang làm bài (người dùng chấp nhận che nút, 06/11); hiện lại ngay sau F5 để test, chính sách một ngày chưa áp dụng.
   Giáo trình và tab Đề thi đã có API thật; đề thi thử cuối cấp vẫn dùng chung mọi giáo trình.
   Link Shopee đã có API thật (Icon 1 link, Quỹ tháng nhiều link, công tắc ở `/admin/support`), tiền quỹ do admin nhập tay ở cùng màn đó;
   cuộc thi tạo ở `/admin/contests`, chọn đề từ tab `/admin/exams` (chỉ cần tên, câu nạp sau), đề Nháp chỉ làm được trong giờ thi, hết giờ tự nộp, xếp hạng theo câu đúng rồi thời gian, mỗi người 1 lượt.

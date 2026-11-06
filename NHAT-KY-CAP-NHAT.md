@@ -23,6 +23,15 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 06/11/2026 — Hiện bé túi trên mọi màn học; đăng nhập về lật thẻ
+
+Theo yêu cầu, bỏ giới hạn màn chọn bài/đang làm bài của bé túi: mọi đường `/learn/` đều được phép hiện,
+người dùng chấp nhận che nút. Giữ nguyên link, chuyển động, bấm ẩn, F5 hiện lại và tạm ẩn khi có dialog/nhập liệu.
+Học viên đăng nhập với `next=/account` nay về `/learn/flashcards`; vẫn mở Tài khoản và quay lại link bài học được.
+Đã cập nhật test route và hướng dẫn trong `BAN-GIAO-GIAO-DIEN.md`, checklist I9/K9 trong `KICH-BAN-TEST.md`.
+Kiểm tra: web 88/88 test đạt, Svelte 0 lỗi/0 cảnh báo, lint sạch, build thành công; API 131/131 test (923 assertions) đạt.
+Chưa kiểm lại chuyển động trên thiết bị thật.
+
 ### 06/11/2026 — Giáo trình làm cha của bài học, tab Đề thi, hộp quỹ sắp lại
 
 **Giáo trình:** thêm bảng `curricula`, `lessons`, `words`, `users` có `curriculum_id` (**migration 013**). Dữ liệu cũ về giáo trình số 1, đã chạy thử trên bản sao DB: 40 bài, 932 từ, số dòng không đổi.

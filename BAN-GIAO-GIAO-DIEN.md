@@ -110,8 +110,9 @@ Mã: `api/app/src/Services/Curricula.php`, `Controllers/Admin/CurriculumControll
 ### Bé túi Shopee chạy quanh giao diện học
 
 - `ShopeeBuddy.svelte` gắn một lần ở layout gốc, chỉ khi đường dẫn bắt đầu `/learn/` và route được phép hiển thị.
-- **Chỉ hiện ở Bàn học và màn chọn cấp**, không hiện ở màn chọn bài và màn đang làm bài vì lời nhắn từng che nút "Kiểm tra", "Bắt đầu" làm
-  người học bấm nhầm. Luật ở `shopee-buddy.ts`, có test. Component vẫn sống khi sang các màn đó để bé đã ẩn thì không hiện lại.
+- **Hiện trên tất cả màn `/learn/`**, kể cả chọn bài, lật thẻ, bài tập, kiểm tra và đọc giáo trình (yêu cầu 06/11/2026, người dùng chấp nhận che nút).
+  Luật ở `shopee-buddy.ts`, test ở `shopee-buddy.test.ts`. Không mở rộng sang `/account`, admin hay trang công khai.
+  Vẫn cần link Icon đang bật; vẫn tạm ẩn khi có dialog/nhập liệu. Bấm ẩn rồi chuyển màn không làm bé hiện lại; F5 thì hiện lại.
 - Túi SVG vẽ lại 06/11: mắt to chớp và nhìn theo con trỏ, má hồng, bùa tim đung đưa, rê chuột vào thì cười
   tít mắt và thả tim. **Không có bóng dưới chân và không dùng `filter: drop-shadow`**: người dùng thấy như lớp mờ
   đi theo bé nên đã bỏ, đừng thêm lại.
@@ -135,6 +136,14 @@ Mã: `api/app/src/Services/Curricula.php`, `Controllers/Admin/CurriculumControll
   không tự tăng quỹ hay hiển thị thông báo đã góp tiền chỉ vì bấm. Khi nối link thật, cần đối chiếu lại câu này với điều khoản tiếp thị.
 
 ## Việc cần làm tiếp
+
+### Điều hướng sau đăng nhập (06/11/2026)
+
+Học viên mặc định vào `/learn/flashcards`. Nếu link đăng nhập có `next=/account` (kể cả query), cũng về lật thẻ;
+vẫn mở Tài khoản trực tiếp được sau đăng nhập. Link quay lại bài học và điều hướng admin/editor giữ nguyên.
+Luật tập trung ở `web/src/lib/auth/routes.ts`, test ở `routes.test.ts`.
+Kiểm thủ công: đăng xuất, mở `/login?next=%2Faccount`, đăng nhập học viên và xác nhận URL là `/learn/flashcards`;
+sau đó bấm ảnh đại diện để kiểm tra vẫn vào `/account`. Lặp lại với link bài học để kiểm tra quay về đúng bài.
 
 1. Tiếp tục duyệt giao diện và chạy checklist trong `KICH-BAN-TEST.md` phần mới cuối file.
 2. Đề thi thử cuối cấp đang dùng chung mọi giáo trình; tách riêng nếu người dùng cần.

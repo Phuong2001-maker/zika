@@ -61,6 +61,13 @@ describe('vào trang nào sau khi đăng nhập', () => {
     expect(landingPath('editor', '/admin/words')).toBe('/admin/words');
   });
 
+  it('học viên đăng nhập từ trang tài khoản thì về lật thẻ', () => {
+    expect(landingPath('learner', '/account')).toBe('/learn/flashcards');
+    expect(landingPath('learner', '/account?tab=settings')).toBe('/learn/flashcards');
+    expect(canView('learner', '/account')).toBe(true);
+    expect(landingPath('admin', '/account')).toBe('/account');
+  });
+
   it('“next” trỏ vào chỗ không có quyền thì bỏ, về trang nhà', () => {
     expect(landingPath('learner', '/admin/users')).toBe('/learn/flashcards');
   });

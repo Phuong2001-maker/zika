@@ -18,8 +18,8 @@ describe('buddyShownOn', () => {
     '/learn/tests/hsk/1/lesson/3',
     '/learn/tests/hsk/1/mock/5',
     '/learn/books/hsk1',
-  ])('không che nút ở màn chọn bài và màn đang làm bài: %s', (path) => {
-    expect(buddyShownOn(path)).toBe(false);
+  ])('hiện cả ở màn chọn bài và màn đang làm bài: %s', (path) => {
+    expect(buddyShownOn(path)).toBe(true);
   });
 
   it('không hiện ngoài khu học', () => {
