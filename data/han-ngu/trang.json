@@ -1,0 +1,156 @@
+{
+ "1": {
+  "bai_dau": 1,
+  "trang_dau": [
+   26,
+   39,
+   46,
+   56,
+   66,
+   77,
+   88,
+   96,
+   104,
+   111,
+   121,
+   135,
+   148,
+   163,
+   178
+  ],
+  "trang_cuoi": 192,
+  "dac_diem": {
+   "pinyin_bai_khoa": true,
+   "ban_dich_cau": true,
+   "viet_chu": true,
+   "ten_rieng": true,
+   "ghi_chu": "Cau hoi thoai co pinyin + dich Viet duoi tung cau; bai 1-4 co phan ngu am dai; 写汉字 o cuoi bai; 专名 o phu luc (trang 205); tu vung 193+"
+  }
+ },
+ "2": {
+  "bai_dau": 16,
+  "trang_dau": [
+   20,
+   34,
+   49,
+   62,
+   80,
+   95,
+   111,
+   127,
+   148,
+   166
+  ],
+  "trang_cuoi": 183,
+  "dac_diem": {
+   "pinyin_bai_khoa": true,
+   "ban_dich_cau": true,
+   "viet_chu": true,
+   "ten_rieng": true,
+   "ghi_chu": "Giong tap 1: pinyin duoi tung cau, dich Viet; 写汉字 cuoi bai; 专名 o phu luc (trang 195); tu vung tu 184"
+  }
+ },
+ "3": {
+  "bai_dau": 1,
+  "trang_dau": [
+   16,
+   35,
+   54,
+   71,
+   90,
+   110,
+   134,
+   152,
+   171,
+   190,
+   212,
+   231
+  ],
+  "trang_cuoi": 248,
+  "dac_diem": {
+   "pinyin_bai_khoa": false,
+   "ban_dich_cau": false,
+   "viet_chu": true,
+   "ten_rieng": false,
+   "ghi_chu": "Khong co pinyin trong bai khoa; chi co dau de/ghi chu bang tieng Viet, khong dich tung cau; 写汉字 cuoi bai; khong thay 专名; tu vung tu 249"
+  }
+ },
+ "4": {
+  "bai_dau": 13,
+  "trang_dau": [
+   16,
+   32,
+   55,
+   71,
+   88,
+   108,
+   125,
+   143,
+   165,
+   182,
+   200,
+   219,
+   236
+  ],
+  "trang_cuoi": 259,
+  "dac_diem": {
+   "pinyin_bai_khoa": false,
+   "ban_dich_cau": false,
+   "viet_chu": true,
+   "ten_rieng": false,
+   "ghi_chu": "Nhu tap 3; 写汉字 o 258-259 cuoi bai 25; tu vung tu 260"
+  }
+ },
+ "5": {
+  "bai_dau": 1,
+  "trang_dau": [
+   26,
+   45,
+   62,
+   78,
+   95,
+   113,
+   129,
+   148,
+   163,
+   181,
+   200,
+   218,
+   236
+  ],
+  "trang_cuoi": 254,
+  "dac_diem": {
+   "pinyin_bai_khoa": false,
+   "ban_dich_cau": false,
+   "viet_chu": false,
+   "ten_rieng": false,
+   "ghi_chu": "Khong co 写汉字 cuoi bai (bai ket thuc bang bai tap giao tiep); khong 专名; tu vung tu 255; trang 278 ban quyen"
+  }
+ },
+ "6": {
+  "bai_dau": 14,
+  "trang_dau": [
+   26,
+   43,
+   62,
+   81,
+   100,
+   123,
+   140,
+   160,
+   182,
+   204,
+   220,
+   240,
+   261
+  ],
+  "trang_cuoi": 284,
+  "dac_diem": {
+   "pinyin_bai_khoa": false,
+   "ban_dich_cau": false,
+   "viet_chu": false,
+   "ten_rieng": false,
+   "ghi_chu": "Nhu tap 5, khong 写汉字; tu vung tu 285; bai 14 va 15 mo dau khong co header chay"
+  }
+ }
+}

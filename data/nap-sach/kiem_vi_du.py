@@ -15,6 +15,9 @@ import sys
 from chung import THU_MUC, chu_han, ghi_json
 from kiem_tra import so_pinyin
 
+# Console Windows mặc định cp1252/cp1258 nên in chữ Hán là sập; ép UTF-8 ngay từ đầu.
+sys.stdout.reconfigure(encoding="utf-8")
+
 DAI_TOI_DA = {1: 12, 2: 16, 3: 22}  # số chữ Hán của một câu
 
 

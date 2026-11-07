@@ -191,7 +191,8 @@ class Bai:
 
     # ---------------- Hội thoại
     def dialogues(self) -> list[dict]:
-        tu_dai = sorted({w["hanzi"] for w in self.d["tu_moi"]}, key=len, reverse=True)
+        # Xếp thêm theo chữ để sinh lại cho cùng kết quả: thứ tự của set đổi theo từng lần chạy.
+        tu_dai = sorted({w["hanzi"] for w in self.d["tu_moi"]}, key=lambda t: (-len(t), t))
         ra = []
         for i, k in enumerate(self.d["bai_khoa"][:10], 1):
             cau = [c for c in k["cau"] if chu_han(c.get("zh", ""))][:60]
