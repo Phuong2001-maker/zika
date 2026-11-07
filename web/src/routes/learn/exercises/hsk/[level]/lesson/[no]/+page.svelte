@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
+  import { untrack } from 'svelte';
   import { page } from '$app/state';
+  import { replaceState } from '$app/navigation';
   import { api } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
@@ -12,7 +15,8 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import DauBai from '$lib/components/DauBai.svelte';
   import QuestionView from '$lib/learn/QuestionView.svelte';
-  import { lessonByNo } from '$lib/learn/lesson';
+  import { lessonByNo, levelProgress, progressOf } from '$lib/learn/lesson';
+  import { khoiPhucLuot, luotBaiTapDo, type KetQuaLuot } from '$lib/learn/resume';
   import { answered, check, CHOICE_TYPES, rightAnswerText, TYPE_LABEL, type Answer, type Payload } from '$lib/utils/grade';
   import type { LessonRef, NextLesson } from '$lib/api/types';
 
@@ -47,7 +51,8 @@
   const isRight = $derived(checked && q ? check(q.type, q.payload, answer) : false);
   const canCheck = $derived(!checked && q !== null && answered(q.type, q.payload, answer));
 
-  async function load(): Promise<void> {
+  /** `moiHan` = “Làm lại”: bỏ lượt dở, mở lượt mới. */
+  async function load(moiHan = false): Promise<void> {
     failed = false;
     try {
       const l = await lessonByNo(levelId, lessonNo);
@@ -60,15 +65,40 @@
       next = data.next;
       questions = data.questions;
 
-      // Server quyết thứ tự câu của lượt làm bài.
-      const at = await api.post<{ attemptId: number; questionIds: number[] }>('/exercises/attempts', { lessonId: l.id, mode: 'full' });
-      attemptId = at.attemptId;
-      order = at.questionIds.map((id) => questions.findIndex((x) => x.id === id)).filter((k) => k >= 0);
+      const st = untrack(() => page.state);
+      const fromStart = moiHan || st.fromStart === true;
+      if (st.fromStart !== undefined || st.shuffle !== undefined) {
+        try { replaceState('', {}); } catch { /* router chưa sẵn sàng thì để nguyên */ }
+      }
 
-      i = 0;
+      // Còn lượt dở thì làm tiếp, không mở lượt mới bỏ rơi lượt cũ. Không đọc được tiến độ thì mở lượt mới.
+      let khoi: ReturnType<typeof khoiPhucLuot> = null;
+      let dangDo: number | null = null;
+      if (!fromStart) {
+        dangDo = await levelProgress(levelId, 'bt').then((p) => luotBaiTapDo(progressOf(p, l.id), false)).catch(() => null);
+        if (dangDo !== null) {
+          const cu = await api
+            .get<{ questionIds: number[]; results: KetQuaLuot[]; finishedAt: string | null }>(`/exercises/attempts/${dangDo}`)
+            .catch(() => null);
+          if (cu && !cu.finishedAt) khoi = khoiPhucLuot(cu.questionIds, cu.results, (id) => questions.findIndex((x) => x.id === id));
+        }
+      }
+
+      if (khoi && dangDo !== null) {
+        attemptId = dangDo;
+        order = khoi.order;
+        i = khoi.i;
+        results = khoi.results;
+      } else {
+        // Server quyết thứ tự câu của lượt làm bài.
+        const at = await api.post<{ attemptId: number; questionIds: number[] }>('/exercises/attempts', { lessonId: l.id, mode: 'full' });
+        attemptId = at.attemptId;
+        order = at.questionIds.map((id) => questions.findIndex((x) => x.id === id)).filter((k) => k >= 0);
+        i = 0;
+        results = [];
+      }
       answer = null;
       checked = false;
-      results = [];
       finished = questions.length === 0;
       heartbeat.setActivity({ part: 'bt', screen: 'do', level: levelId, lessonId: l.id, lessonNo: l.no });
     } catch {
@@ -112,7 +142,7 @@
   }
 
   async function restart(): Promise<void> {
-    await load();
+    await load(true);
   }
 
   const gridCls = (k: number): string => {
@@ -209,7 +239,7 @@
       <a href="/learn/exercises/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{lesson?.title ?? 'Bài tập'}</b>
-        <span class="muted" style="font-size: 12px">HSK {levelId} · Bài {lessonNo}</span>
+        <span class="muted" style="font-size: 12px">{cap.ten(levelId)} · Bài {lessonNo}</span>
       </span>
       <Avatar size={36} />
     </header>
@@ -226,7 +256,7 @@
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
     <nav class="crumb" style="margin-left: 8px">
-      <a href="/learn/exercises/hsk/{levelId}">Bài tập · HSK {levelId}</a> / <b>Bài {lessonNo}</b>
+      <a href="/learn/exercises/hsk/{levelId}">Bài tập · {cap.ten(levelId)}</a> / <b>Bài {lessonNo}</b>
     </nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="bt" /><Avatar size={44} /></div>
   </header>
@@ -234,7 +264,7 @@
     {#if lesson === null}
       <Skeleton h="420px" r={22} />
     {:else}
-      <DauBai href="/learn/exercises/hsk/{levelId}" kicker="HSK {levelId} · Bài {lessonNo} · {total} câu" title={lesson.title} />
+      <DauBai href="/learn/exercises/hsk/{levelId}" kicker="{cap.ten(levelId)} · Bài {lessonNo} · {total} câu" title={lesson.title} />
       {@render khung(false)}
     {/if}
   </main>

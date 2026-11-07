@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
+  import { untrack } from 'svelte';
   import { page } from '$app/state';
+  import { replaceState } from '$app/navigation';
   import { api } from '$lib/api/client';
   import type { FlashcardsData, Word } from '$lib/api/types';
   import { media } from '$lib/stores/media.svelte';
@@ -13,7 +16,8 @@
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import DauBai from '$lib/components/DauBai.svelte';
-  import { completePart, lessonByNo, saveProgress, seededShuffle } from '$lib/learn/lesson';
+  import { completePart, lessonByNo, levelProgress, progressOf, saveProgress, seededShuffle } from '$lib/learn/lesson';
+  import { hocTiepThe } from '$lib/learn/resume';
   import { speak } from '$lib/learn/speech';
   import { toneParts } from '$lib/utils/pinyin';
   import { CHE_DO, GhepCap, GoChu, TracNghiem, type CheDo } from '$lib/learn/che-do/state.svelte';
@@ -62,9 +66,22 @@
       const d = await api.get<FlashcardsData>(`/learn/lessons/${l.id}/flashcards`);
       data = d;
 
+      // Lựa chọn “Từ đầu / Lật tiếp” và xáo trộn từ màn Chọn bài đi theo history state. Đọc xong thì xoá
+      // đi, không thì F5 sau khi đã học dở lại bị đưa về thẻ đầu.
+      const st = untrack(() => page.state);
+      const fromStart = st.fromStart === true;
+      const shuffle = st.shuffle ?? settings.value.shuffle;
+      if (st.fromStart !== undefined || st.shuffle !== undefined) {
+        try { replaceState('', {}); } catch { /* router chưa sẵn sàng thì để nguyên */ }
+      }
+
+      // Học tiếp: lấy vị trí + thứ tự đã lưu; lỗi mạng thì coi như học mới, không chặn người học.
+      const saved = fromStart ? null : await levelProgress(levelId, 'lt').then((p) => progressOf(p, l.id)).catch(() => null);
+      const back = hocTiepThe(saved, d.words.length, fromStart);
+
       const idx = d.words.map((_, k) => k);
-      order = settings.value.shuffle ? seededShuffle(idx, l.id) : idx;
-      i = 0;
+      order = back ? back.order : shuffle ? seededShuffle(idx, l.id) : idx;
+      i = back ? back.i : 0;
       flipped = false;
       finished = d.words.length === 0;
       vdPinyin = false;
@@ -118,6 +135,8 @@
       huong = -1;
       i--;
       flipped = false;
+      // Lùi cũng lưu, kẻo thoát ra rồi mở lại bị nhảy tới thẻ xa hơn chỗ đang đứng.
+      if (data) void saveProgress(data.lesson.id, 'lt', i, total, { order }).catch(() => {});
     }
   }
 
@@ -239,7 +258,7 @@
           <button type="button" class:on={vdNghia} aria-pressed={vdNghia} onclick={() => (vdNghia = !vdNghia)}>Nghĩa</button>
         </div>
       </div>
-      {#each card.examples as ex (ex.zh)}
+      {#each card.examples as ex, ei (ei)}
         <div class="zk-o vd-cau">
           <div style="display: flex; align-items: flex-start; gap: 8px">
             <span class="hz" lang="zh" style="font-size: 20px; line-height: 1.45; flex: 1">
@@ -343,7 +362,7 @@
       <a href="/learn/flashcards/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{data?.lesson.title ?? '…'}</b>
-        <span class="muted" style="font-size: 12px">HSK {levelId} · Bài {lessonNo}</span>
+        <span class="muted" style="font-size: 12px">{cap.ten(levelId)} · Bài {lessonNo}</span>
       </span>
       <Avatar size={36} />
     </header>
@@ -364,7 +383,7 @@
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
     <nav class="crumb" style="margin-left: 8px">
-      <a href="/learn/flashcards/hsk/{levelId}">HSK {levelId}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b>
+      <a href="/learn/flashcards/hsk/{levelId}">{cap.ten(levelId)}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b>
     </nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px">
       <Switcher current="lt" />
@@ -376,7 +395,7 @@
     {#if data === null}
       <Skeleton h="520px" r={22} />
     {:else}
-      <DauBai href="/learn/flashcards/hsk/{levelId}" kicker="HSK {levelId} · Bài {lessonNo} · {cards.length} từ" title={data.lesson.title} />
+      <DauBai href="/learn/flashcards/hsk/{levelId}" kicker="{cap.ten(levelId)} · Bài {lessonNo} · {cards.length} từ" title={data.lesson.title} />
       {@render khung(false)}
     {/if}
   </main>

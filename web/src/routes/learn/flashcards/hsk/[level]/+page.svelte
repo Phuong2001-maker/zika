@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
@@ -18,6 +19,7 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import BackLink from '$lib/components/BackLink.svelte';
   import { SO_HAN, taiChuBut } from '$lib/learn/hoa-tiet';
+  import { soHienThi } from '$lib/learn/resume';
 
   // Chọn bài — Lật thẻ (07 §4.2).
   const level = $derived(Number(page.params.level));
@@ -111,8 +113,8 @@
       const n = content.lessons.length;
       const chips = content.lessons.slice(0, 6).map((l) => ({ hz: (l.sampleText || '').split('·')[0].trim(), vi: `Bài ${l.no}` }));
       return {
-        kicker: `HSK ${level} · ${n} bài`,
-        title: `Tổng hợp HSK ${level}`,
+        kicker: `${cap.ten(level)} · ${n} bài`,
+        title: `Tổng hợp ${cap.ten(level)}`,
         countText: num(content.review.lt.wordCount),
         status: `${prog?.doneCount ?? 0} / ${prog?.lessonCount ?? 0} bài đã học xong`,
         ppct: (r?.position ?? 0) > 0 && (r?.total ?? 0) > 0 ? ((r!.position / r!.total) * 100) : 0,
@@ -120,7 +122,7 @@
         chips,
         more: Math.max(0, content.review.lt.wordCount - chips.length),
         canResume: (r?.position ?? 0) > 0,
-        at: (r?.position ?? 0) + 1,
+        at: soHienThi(r?.position ?? 0, content.review.lt.wordCount),
       };
     }
     if (typeof selected === 'number') {
@@ -133,16 +135,16 @@
       const words = wordsCache[selected]?.words ?? [];
       const chips = words.slice(0, 6).map((w) => ({ hz: w.hanzi, vi: w.meaning }));
       return {
-        kicker: `HSK ${level} · Bài ${l.no}`,
+        kicker: `${cap.ten(level)} · Bài ${l.no}`,
         title: l.title,
         countText: num(total),
-        status: done ? 'Đã học xong · lật lại để ôn' : pos > 0 ? `Đang ở thẻ ${pos + 1} / ${total}` : 'Chưa học',
+        status: done ? 'Đã học xong · lật lại để ôn' : pos > 0 ? `Đang ở thẻ ${soHienThi(pos, total)} / ${total}` : 'Chưa học',
         ppct: done ? 100 : pos > 0 ? (pos / Math.max(1, total)) * 100 : 0,
         wordsLabel: 'Từ trong bài',
         chips,
         more: Math.max(0, total - chips.length),
         canResume: pos > 0,
-        at: pos + 1,
+        at: soHienThi(pos, total),
       };
     }
     return null;
@@ -171,7 +173,7 @@
   }
 </script>
 
-<svelte:head><title>Chọn bài · HSK {level} · Zìkǎ</title></svelte:head>
+<svelte:head><title>Chọn bài · {cap.ten(level)} · Zìkǎ</title></svelte:head>
 
 {#snippet lessonGrid(mobile: boolean)}
   {#each content?.lessons ?? [] as l (l.id)}
@@ -201,7 +203,7 @@
     <button type="button" class="les les-all" class:on={selected === 'all'} aria-pressed={selected === 'all'} onclick={() => (selected = 'all')}>
       <span class="ib" style="width: {mobile ? 44 : 56}px; height: {mobile ? 44 : 56}px; background: var(--surface); border-radius: 14px; border-width: 2px"><Icon name="cards" size={mobile ? 22 : 26} /></span>
       <span style="flex: 1 1 240px; min-width: 0; display: flex; flex-direction: column; gap: 2px">
-        <b class="disp" style="font-size: {mobile ? 16 : 18}px; font-weight: 800">Tổng hợp HSK {level}</b>
+        <b class="disp" style="font-size: {mobile ? 16 : 18}px; font-weight: 800">Tổng hợp {cap.ten(level)}</b>
         <span style="font-size: 13.5px">Ôn toàn bộ {num(content.review.lt.wordCount)} từ của {content.lessons.length} bài.{mobile ? '' : ' Nên lật sau khi học xong các bài.'}</span>
       </span>
       {#if !mobile}
@@ -231,7 +233,7 @@
 {#if notFound}
   <Topbar current="lt" />
   <main class="page">
-    <EmptyState title="Cấp này chưa có hoặc đã bị ẩn.">
+    <EmptyState title="{cap.tuHoa} này chưa có hoặc đã bị ẩn.">
       {#snippet action()}<a href="/learn/flashcards" class="btn">Về Bàn học</a>{/snippet}
     </EmptyState>
   </main>
@@ -240,7 +242,7 @@
   <div class="mscreen">
     <header class="mtop">
       <a href="/learn/flashcards" class="btn btn-bare" aria-label="Về Bàn học"><Icon name="chev" size={22} style="transform: rotate(180deg)" /></a>
-      <span class="lv{level}" style="padding: 4px 10px; border: 1px solid var(--line); border-radius: 10px; font-weight: 800; font-size: 13px">HSK {level}</span>
+      <span class="lv{level}" style="padding: 4px 10px; border: 1px solid var(--line); border-radius: 10px; font-weight: 800; font-size: 13px">{cap.ten(level)}</span>
       <b style="font-size: 15px">Chọn bài</b>
       <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 8px"><NotificationBell size={40} /><Switcher current="lt" /></span>
     </header>
@@ -298,7 +300,7 @@
   <Topbar current="lt" />
   <main class="page page-wide" style="max-width: 1240px; display: flex; flex-direction: column; gap: 24px">
     <nav aria-label="Đường dẫn" class="crumb">
-      <a href="/learn/flashcards">Bàn học</a><span>/</span><b>HSK {level}</b>
+      <a href="/learn/flashcards">Bàn học</a><span>/</span><b>{cap.ten(level)}</b>
     </nav>
 
     {#if failed}
@@ -312,7 +314,7 @@
       <section class="lv{level} lv-nen" style="border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--sh-md); padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center; --mau: var(--hsk{level})">
         <span class="lv-hoa" lang="zh" aria-hidden="true" style="right: 22%; top: -34px; font-size: 200px">{SO_HAN[level]}</span>
         <BackLink href="/learn/flashcards" label="Bàn học" />
-        <div style="display: flex; align-items: baseline; gap: 6px"><span class="disp" style="font-size: 20px; font-weight: 800">HSK</span><span class="bignum" style="font-size: 72px">{level}</span></div>
+        <div style="display: flex; align-items: baseline; gap: 6px"><span class="disp" style="font-size: 20px; font-weight: 800">{cap.nhan}</span><span class="bignum" style="font-size: 72px">{level}</span></div>
         <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 8px">
           <h1 style="font-size: 30px; line-height: 1.2">Chọn bài để lật</h1>
           <p class="num" style="font-weight: 600">{content.lessons.length} bài · {num(content.review.lt.wordCount)} từ</p>

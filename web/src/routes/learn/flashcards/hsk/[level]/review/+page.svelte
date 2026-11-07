@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
+  import { untrack } from 'svelte';
   import { page } from '$app/state';
+  import { replaceState } from '$app/navigation';
   import { api } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
   import { settings } from '$lib/stores/settings.svelte';
@@ -13,7 +16,8 @@
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import DauBai from '$lib/components/DauBai.svelte';
-  import { completeReview, saveReviewProgress, seededShuffle } from '$lib/learn/lesson';
+  import { completeReview, levelProgress, saveReviewProgress, seededShuffle } from '$lib/learn/lesson';
+  import { hocTiepThe } from '$lib/learn/resume';
   import { speak } from '$lib/learn/speech';
   import { toneParts } from '$lib/utils/pinyin';
   import type { Word } from '$lib/api/types';
@@ -39,9 +43,19 @@
     try {
       const res = await api.get<{ level: { name: string }; words: Word[] }>(`/learn/levels/${levelId}/review/lt`);
       words = res.words;
+      // Như màn theo bài: “Từ đầu” và xáo trộn đi theo history state, đọc xong thì xoá để F5 không lặp lại.
+      const st = untrack(() => page.state);
+      const fromStart = st.fromStart === true;
+      const shuffle = st.shuffle ?? settings.value.shuffle;
+      if (st.fromStart !== undefined || st.shuffle !== undefined) {
+        try { replaceState('', {}); } catch { /* router chưa sẵn sàng thì để nguyên */ }
+      }
+      const saved = fromStart ? null : await levelProgress(levelId, 'lt').then((p) => p.review).catch(() => null);
+      const back = hocTiepThe(saved, res.words.length, fromStart);
+
       const idx = res.words.map((_, k) => k);
-      order = settings.value.shuffle ? seededShuffle(idx, levelId * 7919) : idx;
-      i = 0;
+      order = back ? back.order : shuffle ? seededShuffle(idx, levelId * 7919) : idx;
+      i = back ? back.i : 0;
       flipped = false;
       finished = res.words.length === 0;
       heartbeat.setActivity({ part: 'lt', screen: 'review', level: levelId });
@@ -61,6 +75,7 @@
       huong = -1;
       i--;
       flipped = false;
+      void saveReviewProgress(levelId, 'lt', i, total, { order }).catch(() => {});
     }
   }
 
@@ -78,7 +93,7 @@
       return;
     }
     i = at;
-    void saveReviewProgress(levelId, 'lt', at, total).catch(() => {});
+    void saveReviewProgress(levelId, 'lt', at, total, { order }).catch(() => {});
   }
 
   // Cùng bộ phím với màn lật thẻ theo bài, để người quen bàn phím không phải đổi thói quen.
@@ -92,7 +107,7 @@
   }
 </script>
 
-<svelte:head><title>Tổng hợp HSK {levelId} · Zìkǎ</title></svelte:head>
+<svelte:head><title>Tổng hợp {cap.ten(levelId)} · Zìkǎ</title></svelte:head>
 <svelte:window onkeydown={onKey} />
 
 {#snippet cardFace(m: boolean)}
@@ -143,8 +158,8 @@
 {#snippet done(m: boolean)}
   <div class="xong" style="padding: {m ? 12 : 20}px 0">
     <span class="stamp" style="font-size: {m ? 26 : 32}px">完成</span>
-    <h2 style="font-size: {m ? 22 : 26}px">Xong Tổng hợp HSK {levelId}</h2>
-    <p class="muted">Bạn đã lật hết {total} thẻ của cấp này.</p>
+    <h2 style="font-size: {m ? 22 : 26}px">Xong Tổng hợp {cap.ten(levelId)}</h2>
+    <p class="muted">Bạn đã lật hết {total} thẻ của {cap.tu} này.</p>
     <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center">
       <button type="button" class="btn" onclick={load}><Icon name="repeat" size={16} /> Lật lại</button>
       <a href="/learn/flashcards/hsk/{levelId}" class="btn btn-son">Về danh sách bài</a>
@@ -160,7 +175,7 @@
       {@render done(m)}
     {:else}
       <div class="zk-khung-dau">
-        <h2 class="zk-khung-ten">Lật thẻ cả cấp</h2>
+        <h2 class="zk-khung-ten">Lật thẻ cả {cap.tu}</h2>
         {#if card?.lessonNo}<span class="zk-so">Từ Bài {card.lessonNo}</span>{/if}
       </div>
       {@render cardFace(m)}
@@ -170,7 +185,7 @@
 {/snippet}
 
 {#snippet loi()}
-  <EmptyState title="Cấp này chưa có từ nào.">
+  <EmptyState title="{cap.tuHoa} này chưa có từ nào.">
     {#snippet action()}<a href="/learn/flashcards/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
   </EmptyState>
 {/snippet}
@@ -181,7 +196,7 @@
     <header class="mtop">
       <a href="/learn/flashcards/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
-        <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Tổng hợp HSK {levelId}</b>
+        <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Tổng hợp {cap.ten(levelId)}</b>
         <span class="muted" style="font-size: 12px">Lật thẻ{words ? ` · ${words.length} từ` : ''}</span>
       </span>
       <Avatar size={36} />
@@ -202,7 +217,7 @@
   <!-- ============ Máy tính ============ -->
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href="/learn/flashcards/hsk/{levelId}">HSK {levelId}</a> / <b>Tổng hợp</b></nav>
+    <nav class="crumb" style="margin-left: 8px"><a href="/learn/flashcards/hsk/{levelId}">{cap.ten(levelId)}</a> / <b>Tổng hợp</b></nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px">
       <Switcher current="lt" />
       <Avatar size={44} />
@@ -215,7 +230,7 @@
     {:else if words === null}
       <Skeleton h="520px" r={22} />
     {:else}
-      <DauBai href="/learn/flashcards/hsk/{levelId}" kicker="HSK {levelId} · Tổng hợp · {words.length} từ" title="Tổng hợp HSK {levelId}" />
+      <DauBai href="/learn/flashcards/hsk/{levelId}" kicker="{cap.ten(levelId)} · Tổng hợp · {words.length} từ" title="Tổng hợp {cap.ten(levelId)}" />
       {@render khung(false)}
     {/if}
   </main>

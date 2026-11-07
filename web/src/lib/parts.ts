@@ -1,5 +1,6 @@
 // 6 phần học: mã, tên, slug route, màu, icon (README §2) và chữ riêng từng phần (07 §5.3).
 import type { Part } from '$lib/api/types';
+import { cap } from '$lib/stores/cap.svelte';
 
 export interface PartInfo {
   code: Part;
@@ -57,14 +58,15 @@ export const PART_TEXTS: Record<Exclude<Part, 'lt'>, PartTexts> = {
     nextTitle: 'Bài tiếp theo',
     nextStart: 'Bắt đầu làm bài',
     doingTag: 'Đang làm',
-    allTitle: (n) => `Bài tập tổng hợp HSK ${n}`,
+    allTitle: (n) => `Bài tập tổng hợp ${cap.ten(n)}`,
     allDesc: (_n, count, lessons) => `${count} câu trộn từ cả ${lessons} bài.`,
     allLines: (count, lessons) => [`${count} câu trộn từ ${lessons} bài`, 'Nên làm sau khi xong các bài'],
     allStart: 'Làm bài tổng hợp',
   },
   kt: {
-    homeDesc:
-      'Mỗi bài có một bài kiểm tra 10 câu với 10 dạng khác nhau và đồng hồ đếm ngược. Cuối cấp có đề thi thử giống đề HSK thật.',
+    get homeDesc() {
+      return `Mỗi bài có một bài kiểm tra 10 câu với 10 dạng khác nhau và đồng hồ đếm ngược. Cuối ${cap.tu} có đề thi thử giống đề HSK thật.`;
+    },
     past: 'kiểm tra',
     contTitle: 'Bài kiểm tra tiếp theo',
     contStart: 'Bắt đầu kiểm tra',
@@ -84,7 +86,7 @@ export const PART_TEXTS: Record<Exclude<Part, 'lt'>, PartTexts> = {
     nextTitle: 'Bài tiếp theo',
     nextStart: 'Bắt đầu luyện viết',
     doingTag: 'Đang viết',
-    allTitle: (n) => `Luyện viết cả cấp HSK ${n}`,
+    allTitle: (n) => `Luyện viết ${cap.caTen(n)}`,
     allDesc: (_n, _c, lessons) => `Ôn viết tất cả chữ Hán của ${lessons} bài.`,
     allLines: (_c, lessons) => [`Tất cả chữ của ${lessons} bài`, 'Có thể chọn chỉ viết lại chữ hay sai'],
     allStart: 'Bắt đầu luyện viết',
@@ -97,10 +99,12 @@ export const PART_TEXTS: Record<Exclude<Part, 'lt'>, PartTexts> = {
     nextTitle: 'Bài tiếp theo',
     nextStart: 'Bắt đầu đọc',
     doingTag: 'Đang đọc',
-    allTitle: (n) => `Ôn hội thoại HSK ${n}`,
-    allDesc: (_n, _c, lessons) => `Nghe liền ${lessons} đoạn hội thoại của cả cấp.`,
+    allTitle: (n) => `Ôn hội thoại ${cap.ten(n)}`,
+    allDesc: (_n, _c, lessons) => `Nghe liền ${lessons} đoạn hội thoại của cả ${cap.tu}.`,
     allLines: (_c, lessons) => [`${lessons} đoạn hội thoại`, 'Nghe liền như podcast'],
-    allStart: 'Nghe cả cấp',
+    get allStart() {
+      return `Nghe cả ${cap.tu}`;
+    },
   },
   np: {
     homeDesc: 'Mỗi bài có 2–3 cấu trúc ngữ pháp: công thức, ví dụ khẳng định, phủ định, câu hỏi và bài sắp xếp câu.',
@@ -110,7 +114,7 @@ export const PART_TEXTS: Record<Exclude<Part, 'lt'>, PartTexts> = {
     nextTitle: 'Bài tiếp theo',
     nextStart: 'Xem ngữ pháp',
     doingTag: 'Đang xem',
-    allTitle: (n) => `Tổng hợp ngữ pháp HSK ${n}`,
+    allTitle: (n) => `Tổng hợp ngữ pháp ${cap.ten(n)}`,
     allDesc: (_n, _c, lessons) => `Bảng tóm tắt mọi cấu trúc của ${lessons} bài.`,
     allLines: (_c, lessons) => [`Mọi cấu trúc của ${lessons} bài`, 'Tra nhanh theo công thức'],
     allStart: 'Xem bảng tổng hợp',

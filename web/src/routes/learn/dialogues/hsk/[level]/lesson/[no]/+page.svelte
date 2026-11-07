@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
@@ -60,9 +61,9 @@
 
   $effect(() => { void levelId; void lessonNo; void load(); });
 
-  /** Số câu đã đi qua tính từ đầu bài, để lưu tiến độ chung cho cả bài. */
+  /** Chỉ số (từ 0) của câu trong cả bài — cùng quy ước với mọi phần học khác, màn chọn bài cộng 1 khi hiển thị. */
   function viTri(ki: number, i: number): number {
-    return khoi.slice(0, ki).reduce((n, k) => n + k.lines.length, 0) + i + 1;
+    return khoi.slice(0, ki).reduce((n, k) => n + k.lines.length, 0) + i;
   }
 
   function playLine(ki: number, i: number): void {
@@ -211,7 +212,7 @@
       <a href="/learn/dialogues/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{data?.lesson.title ?? 'Hội thoại'}</b>
-        <span class="muted" style="font-size: 12px">Hội thoại · HSK {levelId} · Bài {lessonNo}</span>
+        <span class="muted" style="font-size: 12px">Hội thoại · {cap.ten(levelId)} · Bài {lessonNo}</span>
       </span>
       <Avatar size={36} />
     </header>
@@ -230,7 +231,7 @@
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
     <nav class="crumb" style="margin-left: 8px">
-      <a href="/learn/dialogues/hsk/{levelId}">Hội thoại · HSK {levelId}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b>
+      <a href="/learn/dialogues/hsk/{levelId}">Hội thoại · {cap.ten(levelId)}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b>
     </nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="ht" /><Avatar size={44} /></div>
   </header>
@@ -240,7 +241,7 @@
     {:else if data === null}
       <Skeleton h="520px" r={22} />
     {:else}
-      <DauBai href="/learn/dialogues/hsk/{levelId}" kicker="HSK {levelId} · Bài {lessonNo} · {tongCau} câu" title={data.lesson.title} />
+      <DauBai href="/learn/dialogues/hsk/{levelId}" kicker="{cap.ten(levelId)} · Bài {lessonNo} · {tongCau} câu" title={data.lesson.title} />
       {@render khung(false)}
     {/if}
   </main>

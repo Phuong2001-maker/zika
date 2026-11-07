@@ -421,7 +421,7 @@
           Top 10 theo thời gian học trong tháng. Cùng thời gian thì ưu tiên số bài hoàn thành. Dữ liệu minh họa.
         </p>
         <ol class="mc-full-list">
-          {#each students as student, i (student.name)}<li>
+          {#each students as student, i (i)}<li>
               <span class="mc-place" class:mc-medal-place={i < 3} role="img" aria-label={`Hạng ${i + 1}`}>{MEDALS[i] ?? i + 1}</span><span
                 class="mc-avatar"
                 style="background: var(--lv{(i % 3) + 1})">{student.initials}</span
@@ -481,7 +481,7 @@
           </li>
         {/snippet}
         <ol class="mc-full-list">
-          {#each contestRanking.rows as row (row.rank)}{@render rankRow(row)}{/each}
+          {#each contestRanking.rows as row, ri (ri)}{@render rankRow(row)}{/each}
         </ol>
         {#if contestRanking.me && contestRanking.me.rank > contestRanking.rows.length}
           <ol class="mc-full-list mc-my-rank">{@render rankRow(contestRanking.me)}</ol>

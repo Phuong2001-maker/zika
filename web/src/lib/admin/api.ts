@@ -11,8 +11,9 @@ export interface AdminCurriculum {
   name: string;
   description: string;
   color: string;
+  levelLabel: string;
   isDefault: boolean;
-  /** Số bài của HSK 1–6. */
+  /** Số bài của cấp 1–6. */
   levels: number[];
   lessonCount: number;
   wordCount: number;
@@ -218,7 +219,7 @@ export const adminApi = {
   badges: () => api.get<{ users: number; lessons: number; words: number; unreadFeedback: number }>('/admin/badges'),
 
   curricula: () => api.get<AdminCurriculum[]>('/admin/curricula'),
-  saveCurriculum: (id: number | null, body: { name: string; description: string; color: string }) =>
+  saveCurriculum: (id: number | null, body: { name: string; description: string; color: string; levelLabel: string }) =>
     id === null ? api.post<{ id: number }>('/admin/curricula', body) : api.put<{ id: number }>(`/admin/curricula/${id}`, body),
   deleteCurriculum: (id: number) => api.del(`/admin/curricula/${id}`),
   curriculumLearners: (q: Record<string, string | number>) => api.getFull<CurriculumLearner[]>('/admin/curricula/learners', { query: q }),
@@ -230,7 +231,7 @@ export const adminApi = {
   lessons: (levelId: number, curriculum: number) => api.get<LessonsPage>(`/admin/levels/${levelId}/lessons`, { query: { curriculum } }),
   createLesson: (levelId: number, curriculumId: number, title: string) =>
     api.post<{ id: number; no: number }>(`/admin/levels/${levelId}/lessons`, { title, curriculumId }),
-  lesson: (id: number) => api.get<AdminLesson & { levelId: number; curriculumId: number; curriculumName: string }>(`/admin/lessons/${id}`),
+  lesson: (id: number) => api.get<AdminLesson & { levelId: number; curriculumId: number; curriculumName: string; levelLabel: string }>(`/admin/lessons/${id}`),
   patchLesson: (id: number, body: { title?: string; status?: string; sampleText?: string }) => api.patch(`/admin/lessons/${id}`, body),
   deleteLesson: (id: number, confirm: string) => api.del(`/admin/lessons/${id}`, { confirm }),
   reorderLessons: (levelId: number, ids: number[]) => api.put(`/admin/levels/${levelId}/lessons/order`, { ids }),

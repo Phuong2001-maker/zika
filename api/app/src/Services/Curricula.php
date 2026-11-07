@@ -13,6 +13,16 @@ final class Curricula
     /** Giáo trình giữ toàn bộ dữ liệu cũ (migration 013), không xoá được. Học viên chưa gán học theo bộ này. */
     public const DEFAULT_ID = 1;
 
+    /** Danh sách đóng vì web phải biết viết "Chọn cấp HSK" hay "Chọn quyển"; chữ tự do thì không ghép câu được. */
+    public const LEVEL_LABELS = ['HSK', 'Quyển'];
+
+    /** Học viên chưa gán ($curriculumId null) học giáo trình mặc định. */
+    public static function levelLabel(?int $curriculumId): string
+    {
+        $label = Db::val('SELECT level_label FROM curricula WHERE id = ?', [$curriculumId ?? self::DEFAULT_ID]);
+        return $label === null ? self::LEVEL_LABELS[0] : (string) $label;
+    }
+
     public static function ofUser(int $userId): int
     {
         $id = Db::val('SELECT curriculum_id FROM users WHERE id = ?', [$userId]);

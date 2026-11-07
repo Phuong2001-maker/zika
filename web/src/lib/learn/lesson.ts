@@ -17,6 +17,11 @@ export async function levelLessons(levelId: number, fresh = false): Promise<Leve
   return data;
 }
 
+/** Xoá hết bài đã nhớ: gọi khi đổi người dùng hoặc giáo trình, kẻo nhận id bài của người/bộ trước (404). */
+export function clearLessonCache(): void {
+  cache.clear();
+}
+
 export function forgetLevel(levelId: number): void {
   cache.delete(`${previewKey()}:${levelId}`);
 }

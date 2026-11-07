@@ -75,6 +75,14 @@
       const el = trigger(e);
       if (el?.matches(':focus-visible')) show(el, 0);
     }
+    // Xoá phần tử đang có focus làm trình duyệt bắn focusout ngay giữa lúc Svelte dựng lại DOM; đổi $state lúc đó
+    // sẽ ném state_unsafe_mutation nên phải chờ xong lượt dựng. Trong lúc chờ nếu đã sang phần tử khác thì thôi.
+    function focusOut(): void {
+      const luc = target;
+      queueMicrotask(() => {
+        if (target === luc) hide();
+      });
+    }
     function keyDown(e: KeyboardEvent): void {
       if (e.key === 'Escape' && target) {
         e.stopPropagation();
@@ -94,7 +102,7 @@
     document.addEventListener('pointerover', pointerOver);
     document.addEventListener('pointerout', pointerOut);
     document.addEventListener('focusin', focusIn);
-    document.addEventListener('focusout', hide);
+    document.addEventListener('focusout', focusOut);
     document.addEventListener('pointerdown', hide);
     document.addEventListener('keydown', keyDown, true);
     document.addEventListener('scroll', hide, true);
@@ -105,7 +113,7 @@
       document.removeEventListener('pointerover', pointerOver);
       document.removeEventListener('pointerout', pointerOut);
       document.removeEventListener('focusin', focusIn);
-      document.removeEventListener('focusout', hide);
+      document.removeEventListener('focusout', focusOut);
       document.removeEventListener('pointerdown', hide);
       document.removeEventListener('keydown', keyDown, true);
       document.removeEventListener('scroll', hide, true);

@@ -166,7 +166,7 @@ final class MeController
         if (!empty($user['password_hash']) && !Auth::verifyPassword($user, (string) $r->input('password', ''))) {
             throw HttpError::validation(['password' => 'Mật khẩu chưa đúng.']);
         }
-        if ($user['role'] === 'admin' && (int) Db::val("SELECT COUNT(*) FROM users WHERE role = 'admin'") <= 1) {
+        if ($user['role'] === 'admin' && UserService::activeAdminCount([(int) $user['id']]) < 1) {
             throw HttpError::invalid('Bạn là quản trị viên duy nhất. Hãy mời người khác làm quản trị trước khi xoá tài khoản.');
         }
         // Khoá ngoại ON DELETE CASCADE xoá sạch tiến độ, phiên, cài đặt; góp ý được giữ lại ẩn danh.

@@ -237,8 +237,13 @@ final class OpsController
     public function updateFeedback(Request $r): array
     {
         $id = $r->id();
-        if (Db::val('SELECT id FROM feedback WHERE id = ?', [$id]) === null) {
+        $cat = Db::val('SELECT category FROM feedback WHERE id = ?', [$id]);
+        if ($cat === null) {
             throw HttpError::notFound('Không có góp ý này.');
+        }
+        // Cùng luật với feedbackDetail: biên tập chỉ đụng được góp ý về nội dung.
+        if (!$this->isAdmin($r) && !in_array((string) $cat, self::EDITOR_KINDS, true)) {
+            throw HttpError::forbidden();
         }
 
         $v = new Validator($r->body);
@@ -267,6 +272,9 @@ final class OpsController
         $f = Db::one('SELECT f.*, u.email, u.display_name FROM feedback f LEFT JOIN users u ON u.id = f.user_id WHERE f.id = ?', [$r->id()]);
         if ($f === null) {
             throw HttpError::notFound('Không có góp ý này.');
+        }
+        if (!$this->isAdmin($r) && !in_array((string) $f['category'], self::EDITOR_KINDS, true)) {
+            throw HttpError::forbidden();
         }
 
         $v = new Validator($r->body);

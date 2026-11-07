@@ -235,11 +235,7 @@ final class AuthController
             $user = UserService::findByEmail($g['email']);
             if ($user !== null) {
                 // Liên kết vào tài khoản email sẵn có cùng địa chỉ.
-                Db::exec(
-                    'UPDATE users SET google_sub = ?, email_verified_at = COALESCE(email_verified_at, NOW()),
-                       avatar_path = COALESCE(avatar_path, ?), full_name = IF(full_name = \'\', ?, full_name) WHERE id = ?',
-                    [$g['sub'], $g['picture'], $g['name'], $user['id']],
-                );
+                self::linkGoogle($user, $g);
                 $user = UserService::find((int) $user['id']);
             }
         }
@@ -266,6 +262,28 @@ final class AuthController
         }
         Auth::login($r, $user, (bool) ($ctx['remember'] ?? true));
         return Response::redirect(self::safeNext((string) ($ctx['next'] ?? '/')));
+    }
+
+    /**
+     * Gắn tài khoản Google vào tài khoản email sẵn có.
+     * Email chưa từng xác minh nghĩa là ai đó có thể đã đăng ký trước bằng địa chỉ của người khác và đặt
+     * mật khẩu; để nguyên thì kẻ đó vẫn vào được tài khoản sau khi chủ thật liên kết Google. Vì vậy xoá mật
+     * khẩu và thu hồi mọi phiên cũ, chủ thật vẫn vào bằng Google hoặc “Quên mật khẩu”.
+     * @param array<string,mixed> $user dòng users sẵn có
+     * @param array<string,mixed> $g thông tin Google (sub, picture, name)
+     */
+    public static function linkGoogle(array $user, array $g): void
+    {
+        $unverified = $user['email_verified_at'] === null;
+        Db::exec(
+            'UPDATE users SET google_sub = ?, email_verified_at = COALESCE(email_verified_at, ?),
+               avatar_path = COALESCE(avatar_path, ?), full_name = IF(full_name = \'\', ?, full_name) WHERE id = ?',
+            [$g['sub'], Clock::sql(), $g['picture'], $g['name'], $user['id']],
+        );
+        if ($unverified) {
+            Db::exec('UPDATE users SET password_hash = NULL WHERE id = ?', [(int) $user['id']]);
+            Auth::revokeAll((int) $user['id']);
+        }
     }
 
     /** GET /auth/invite/{token} */

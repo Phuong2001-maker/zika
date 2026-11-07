@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
@@ -66,7 +67,7 @@
       {#if mocks && mocks.length > 0}<span class="zk-so">{mocks.length} đề</span>{/if}
     </div>
     {#if mocks && mocks.length === 0}
-      <EmptyState title="Cấp này chưa có đề thi thử." desc="Admin đang soạn, bạn quay lại sau nhé." />
+      <EmptyState title="{cap.tuHoa} này chưa có đề thi thử." desc="Admin đang soạn, bạn quay lại sau nhé." />
     {:else if mocks}
       <div class="kt-ds-de">
         {#each mocks as mk (mk.id)}
@@ -119,11 +120,11 @@
 {:else}
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href="/learn/tests/hsk/{levelId}">Kiểm tra · HSK {levelId}</a> / <b>Thi thử</b></nav>
+    <nav class="crumb" style="margin-left: 8px"><a href="/learn/tests/hsk/{levelId}">Kiểm tra · {cap.ten(levelId)}</a> / <b>Thi thử</b></nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="kt" /><Avatar size={44} /></div>
   </header>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
-    <DauBai href="/learn/tests/hsk/{levelId}" kicker="HSK {levelId} · Kiểm tra cuối cấp" title="Thi thử HSK {levelId}" />
+    <DauBai href="/learn/tests/hsk/{levelId}" kicker="{cap.ten(levelId)} · Kiểm tra cuối {cap.tu}" title="Thi thử HSK {levelId}" />
     {@render body(false)}
   </main>
 {/if}

@@ -141,6 +141,7 @@ final class QuestionController
     public function update(Request $r): array
     {
         $q = self::find($r->id());
+        self::guardQuestion($q, $r);
         $part = (string) $q['part'];
         [$type, $payload, $explain, $score] = $this->read($r, $part === 'mock' ? 'kt' : $part);
 
@@ -160,6 +161,7 @@ final class QuestionController
     public function delete(Request $r): Response
     {
         $q = self::find($r->id());
+        self::guardQuestion($q, $r);
         Db::exec('DELETE FROM questions WHERE id = ?', [(int) $q['id']]);
         self::touch($q, $r);
         Audit::log($r, 'question.delete', 'question', (int) $q['id'], ['part' => $q['part']]);
@@ -329,7 +331,7 @@ final class QuestionController
     /** PATCH /admin/mock-tests/{id} */
     public function updateMock(Request $r): array
     {
-        $m = self::mock($r->id());
+        $m = self::mock($r->id(), $r);
         $v = new Validator($r->body);
         $set = [];
         foreach ([
@@ -357,7 +359,7 @@ final class QuestionController
     /** DELETE /admin/mock-tests/{id} */
     public function deleteMock(Request $r): Response
     {
-        $m = self::mock($r->id());
+        $m = self::mock($r->id(), $r);
         $contest = Db::val('SELECT title FROM contests WHERE mock_test_id = ? LIMIT 1', [(int) $m['id']]);
         if ($contest !== null) {
             throw HttpError::conflict("Đề này đang dùng cho bài thi “{$contest}”. Hãy xoá hoặc đổi đề của bài thi đó trước.");
@@ -371,7 +373,7 @@ final class QuestionController
     /** GET /admin/mock-tests/{id}/questions */
     public function mockQuestions(Request $r): array
     {
-        $m = self::mock($r->id());
+        $m = self::mock($r->id(), $r);
         return [
             'mock' => [
                 'id' => (int) $m['id'],
@@ -391,7 +393,7 @@ final class QuestionController
      */
     public function bulkMock(Request $r): array
     {
-        $m = self::mock($r->id());
+        $m = self::mock($r->id(), $r);
         $mockId = (int) $m['id'];
 
         $v = new Validator($r->body);
@@ -447,7 +449,7 @@ final class QuestionController
     /** POST /admin/mock-tests/{id}/questions */
     public function createMockQuestion(Request $r): Response
     {
-        $m = self::mock($r->id());
+        $m = self::mock($r->id(), $r);
         [$type, $payload, $explain, $score] = $this->read($r, 'kt');
 
         $v = new Validator($r->body);
@@ -473,7 +475,7 @@ final class QuestionController
     /** PUT /admin/mock-tests/{id}/questions/order */
     public function reorderMockQuestions(Request $r): Response
     {
-        $m = self::mock($r->id());
+        $m = self::mock($r->id(), $r);
         $v = new Validator($r->body);
         $ids = $v->ids('ids', 'Danh sách câu');
         $v->done();
@@ -486,7 +488,7 @@ final class QuestionController
     /** POST /admin/mock-tests/{id}/copy-from-tests */
     public function copyIntoMockTest(Request $r): array
     {
-        $m = self::mock($r->id());
+        $m = self::mock($r->id(), $r);
         $v = new Validator($r->body);
         $lessonIds = $v->arr('lessonIds', 'Danh sách bài', false);
         $count = (int) $v->int('count', 'Số câu', 1, 200, false, 60);
@@ -576,13 +578,42 @@ final class QuestionController
     }
 
     /** @return array<string,mixed> */
-    private static function mock(int $id): array
+    private static function mock(int $id, Request $r): array
     {
         $m = Db::one('SELECT * FROM mock_tests WHERE id = ?', [$id]);
         if ($m === null) {
             throw HttpError::notFound('Không tìm thấy đề thi thử.');
         }
+        self::guardContest($m, $r);
         return $m;
+    }
+
+    /** @param array<string,mixed> $q dòng questions */
+    private static function guardQuestion(array $q, Request $r): void
+    {
+        if ($q['mock_test_id'] !== null) {
+            $m = Db::one('SELECT * FROM mock_tests WHERE id = ?', [(int) $q['mock_test_id']]);
+            if ($m !== null) {
+                self::guardContest($m, $r);
+            }
+        }
+    }
+
+    /**
+     * Đề dành cho cuộc thi (hoặc đã gắn vào một cuộc thi) chứa đáp án thật nên chỉ quản trị viên được đụng tới:
+     * biên tập viên đọc được khoá và có thể đăng đề trước giờ thi.
+     * @param array<string,mixed> $m dòng mock_tests
+     */
+    private static function guardContest(array $m, Request $r): void
+    {
+        if ($r->role() === 'admin') {
+            return;
+        }
+        $inContest = (int) ($m['for_contest'] ?? 0) === 1
+            || Db::val('SELECT 1 FROM contests WHERE mock_test_id = ? LIMIT 1', [(int) $m['id']]) !== null;
+        if ($inContest) {
+            throw HttpError::forbidden('Đề của cuộc thi chỉ quản trị viên được xem và sửa.');
+        }
     }
 
     /** Xoá cache sau khi sửa một câu: câu của bài thì đếm lại bài, câu của đề thì xoá cache cấp. */

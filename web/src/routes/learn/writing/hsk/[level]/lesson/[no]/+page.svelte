@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
@@ -11,7 +12,10 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import DauBai from '$lib/components/DauBai.svelte';
   import HanziPad from '$lib/learn/HanziPad.svelte';
-  import { completePart, lessonByNo, saveProgress } from '$lib/learn/lesson';
+  import { untrack } from 'svelte';
+  import { replaceState } from '$app/navigation';
+  import { completePart, lessonByNo, levelProgress, progressOf, saveProgress } from '$lib/learn/lesson';
+  import { viTriDaLuu } from '$lib/learn/resume';
   import { speak } from '$lib/learn/speech';
   import type { LessonRef, NextLesson } from '$lib/api/types';
 
@@ -77,9 +81,17 @@
       const res = await api.get<Data>(`/learn/lessons/${l.id}/writing`);
       data = res;
       mode = res.config.startMode;
-      ci = 0;
       done = false;
-      await pickChar(0);
+      // Mở lại đúng chữ đang viết dở. Không gọi pickChar ở đây: nó lưu vị trí ngay, mà lúc này chưa biết
+      // vị trí thật nên sẽ ghi đè chữ đã lưu bằng chữ đầu.
+      const st = untrack(() => page.state);
+      const fromStart = st.fromStart === true;
+      if (st.fromStart !== undefined) {
+        try { replaceState('', {}); } catch { /* router chưa sẵn sàng thì để nguyên */ }
+      }
+      const saved = fromStart ? null : await levelProgress(levelId, 'lv').then((p) => progressOf(p, l.id)).catch(() => null);
+      ci = viTriDaLuu(saved, res.chars.length, fromStart) ?? 0;
+      passes = 0;
       heartbeat.setActivity({ part: 'lv', screen: 'do', level: levelId, lessonId: l.id, lessonNo: l.no });
     } catch {
       failed = true;
@@ -255,7 +267,7 @@
       <div>
         <p class="vt-nhan">Chữ khác cùng bộ {cc.radicalInfo.form}</p>
         <div class="vt-cung">
-          {#each cc.radicalExamples as e (e.hanzi)}
+          {#each cc.radicalExamples as e, ei (ei)}
             <button type="button" class="vt-cung-o" onclick={() => speak(e.hanzi)} aria-label="Nghe {e.hanzi}">
               <span class="hz" lang="zh" style="font-size: 26px; line-height: 1">{e.hanzi}</span>
               <span style="min-width: 0; text-align: left">
@@ -327,7 +339,7 @@
       <a href="/learn/writing/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{data?.lesson.title ?? 'Luyện viết'}</b>
-        <span class="muted" style="font-size: 12px">Luyện viết · HSK {levelId} · Bài {lessonNo}</span>
+        <span class="muted" style="font-size: 12px">Luyện viết · {cap.ten(levelId)} · Bài {lessonNo}</span>
       </span>
       <Avatar size={36} />
     </header>
@@ -345,7 +357,7 @@
   <!-- ============ Máy tính ============ -->
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href="/learn/writing/hsk/{levelId}">Luyện viết · HSK {levelId}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b></nav>
+    <nav class="crumb" style="margin-left: 8px"><a href="/learn/writing/hsk/{levelId}">Luyện viết · {cap.ten(levelId)}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b></nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="lv" /><Avatar size={44} /></div>
   </header>
   <main class="page zk-cot-rong" style="display: flex; flex-direction: column; gap: 18px">
@@ -354,7 +366,7 @@
     {:else if data === null}
       <Skeleton h="520px" r={22} />
     {:else}
-      <DauBai href="/learn/writing/hsk/{levelId}" kicker="HSK {levelId} · Bài {lessonNo} · {chars.length} chữ" title={data.lesson.title} />
+      <DauBai href="/learn/writing/hsk/{levelId}" kicker="{cap.ten(levelId)} · Bài {lessonNo} · {chars.length} chữ" title={data.lesson.title} />
       {@render khung(false)}
     {/if}
   </main>

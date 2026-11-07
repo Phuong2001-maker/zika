@@ -133,7 +133,7 @@ final class ContestService
             [(int) $c['id'], Clock::sql(Clock::now()->modify('-' . TestService::GRACE_SEC . ' seconds'))],
         );
         foreach ($overdue as $attemptId) {
-            TestService::grade((int) $attemptId, true);
+            TestService::gradeSafely((int) $attemptId);
         }
 
         $rows = [];

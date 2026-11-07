@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import type { LevelInfo } from '$lib/api/types';
   import { num } from '$lib/utils/format';
   import Bar from './Bar.svelte';
@@ -38,20 +39,20 @@
   <!-- Cấp sắp có, hoặc giáo trình của học viên chưa có bài ở cấp này: nét đứt, không bấm được. -->
   <div class="lv soon">
     <span class="lv-top">
-      <span class="lv-hsk"><span class="disp lv-lbl">HSK</span><span class="bignum" style="font-size: {mobile ? 40 : 58}px">{n}</span></span>
+      <span class="lv-hsk"><span class="disp lv-lbl">{cap.nhan}</span><span class="bignum" style="font-size: {mobile ? 40 : 58}px">{n}</span></span>
       <span class="tag">Sắp có</span>
     </span>
-    {#if !mobile}<span class="hz" lang="zh" style="font-size: 24px; line-height: 1.1">{level.sampleText}</span>{/if}
+    {#if !mobile && level.sampleText}<span class="hz" lang="zh" style="font-size: 24px; line-height: 1.1">{level.sampleText}</span>{/if}
     <span class="num" style="font-size: 14px"><b>Đang soạn</b></span>
   </div>
 {:else}
   <a {href} class="lv lv{n} lv-nen" style="text-decoration: none; --mau: var(--hsk{n})">
     <span class="lv-hoa" lang="zh" aria-hidden="true" style="font-size: {mobile ? 96 : 150}px; right: {mobile ? -4 : 6}px; bottom: {mobile ? -18 : -30}px">{SO_HAN[n]}</span>
     <span class="lv-top">
-      <span class="lv-hsk"><span class="disp lv-lbl">HSK</span><span class="bignum" style="font-size: {mobile ? 40 : 58}px">{n}</span></span>
+      <span class="lv-hsk"><span class="disp lv-lbl">{cap.nhan}</span><span class="bignum" style="font-size: {mobile ? 40 : 58}px">{n}</span></span>
       {#if current}<span class="tag tag-bad">Đang học</span>{/if}
     </span>
-    {#if !mobile}<span class="hz" lang="zh" style="font-size: 24px; line-height: 1.1">{level.sampleText}</span>{/if}
+    {#if !mobile && level.sampleText}<span class="hz" lang="zh" style="font-size: 24px; line-height: 1.1">{level.sampleText}</span>{/if}
     <span class="lv-meta">
       <b class="num">{meta}</b>
       {#if !past && !mobile}<span class="num" style="color: var(--text-2)">{state}</span>{/if}

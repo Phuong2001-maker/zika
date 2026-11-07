@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import NotificationBell from '$lib/components/NotificationBell.svelte';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
@@ -218,7 +219,7 @@
     <section class="kpi">
       <div><span class="muted">Đã học</span><b class="bignum" style="font-size: 26px">{duration(user.stats.studySec)}</b></div>
       <div><span class="muted">Bài học xong</span><b class="bignum" style="font-size: 26px">{user.stats.lessonsDone}</b></div>
-      <div><span class="muted">Đang học</span><b class="bignum" style="font-size: 26px">{user.currentLevelId ? `HSK ${user.currentLevelId}` : '—'}</b></div>
+      <div><span class="muted">Đang học</span><b class="bignum" style="font-size: 26px">{user.currentLevelId ? `${cap.ten(user.currentLevelId)}` : '—'}</b></div>
     </section>
 
     <!-- Thông tin cá nhân -->

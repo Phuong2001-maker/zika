@@ -1,5 +1,6 @@
 // Phiên đăng nhập: { user, csrf, loaded } — nạp bằng GET /public/config rồi GET /me khi mở app (02 §3.2).
 import { api, ApiError, setContentScope, setCsrf } from '$lib/api/client';
+import { clearLessonCache } from '$lib/learn/lesson';
 import type { Announcement, MeResponse, PublicConfig, User } from '$lib/api/types';
 import { notifications } from './notifications.svelte';
 import { settings } from './settings.svelte';
@@ -44,6 +45,8 @@ class Session {
   }
 
   applyMe(me: MeResponse): void {
+    // Đổi tài khoản (không F5) hoặc admin gán giáo trình khác: danh sách bài đã nhớ không còn đúng.
+    if (this.user?.id !== me.user.id || this.user?.curriculumId !== me.user.curriculumId) clearLessonCache();
     this.user = me.user;
     setContentScope(me.user.curriculumId);
     setCsrf(me.csrf);
@@ -64,6 +67,7 @@ class Session {
 
   clear(): void {
     this.user = null;
+    clearLessonCache();
     notifications.xoa(); // đổi tài khoản trên cùng máy không được thấy thông báo của người trước
     this.announcements = [];
     this.supportEnabled = false;

@@ -18,6 +18,20 @@ final class UserService
     public const SELF_LEVEL_LABELS = ['beginner' => 'Mới bắt đầu', 'hsk12' => 'HSK 1–2', 'hsk34' => 'HSK 3–4', 'hsk5' => 'HSK 5 trở lên'];
     public const ROLE_LABELS = ['learner' => 'Người học', 'editor' => 'Biên tập nội dung', 'admin' => 'Quản trị viên'];
 
+    /**
+     * Số quản trị viên còn dùng được (không bị khoá). Đếm cả người bị khoá thì khoá quản trị viên kia rồi
+     * tự xoá mình vẫn qua được kiểm tra “còn ít nhất một quản trị”, để lại hệ thống không ai vào được.
+     * @param list<int> $except bỏ các id này ra khỏi phép đếm (những người sắp bị khoá/xoá/hạ quyền)
+     */
+    public static function activeAdminCount(array $except = []): int
+    {
+        $sql = "SELECT COUNT(*) FROM users WHERE role = 'admin' AND status = 'active'";
+        if ($except !== []) {
+            $sql .= ' AND id NOT IN (' . Db::in($except) . ')';
+        }
+        return (int) Db::val($sql, array_values($except));
+    }
+
     /** @param array<string,mixed> $u dòng bảng users @return array<string,mixed> */
     public static function toApi(array $u): array
     {
@@ -36,6 +50,7 @@ final class UserService
             'dailyGoalMin' => (int) $u['daily_goal_min'],
             'currentLevelId' => $u['current_level_id'] === null ? null : (int) $u['current_level_id'],
             'curriculumId' => isset($u['curriculum_id']) ? (int) $u['curriculum_id'] : null,
+            'levelLabel' => Curricula::levelLabel(isset($u['curriculum_id']) ? (int) $u['curriculum_id'] : null),
             'createdAt' => Clock::iso((string) $u['created_at']),
             'stats' => ['studySec' => (int) $u['total_study_sec'], 'lessonsDone' => (int) $u['lessons_done']],
         ];

@@ -36,6 +36,18 @@ describe('goDung', () => {
     expect(goDung('shuí', shei)).toBe(true);
     expect(goDung('li', tu(3, '里', 'lǐ / li', 'trong'))).toBe(true);
   });
+  it('cụm có dấu lược “…” gõ có hay không đều đúng', () => {
+    const cum = tu(4, '太…了', 'tài…le', 'quá…rồi');
+    expect(goDung('太了', cum)).toBe(true);
+    expect(goDung('太…了', cum)).toBe(true);
+    expect(goDung('太...了', cum)).toBe(true);
+    expect(goDung('taile', cum)).toBe(true);
+    expect(goDung('tai…le', cum)).toBe(true);
+    expect(goDung('太', cum)).toBe(false);
+    const dau = tu(5, '…似的', '…shìde', 'giống như');
+    expect(goDung('似的', dau)).toBe(true);
+    expect(goDung('shide', dau)).toBe(true);
+  });
   it('ô trống không bao giờ đúng', () => {
     expect(goDung('', w)).toBe(false);
     expect(goDung('  ', w)).toBe(false);

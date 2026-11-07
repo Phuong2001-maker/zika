@@ -236,10 +236,10 @@
             <span class="muted num" style="font-size: 13px">{day.count} phiên · {day.totalMin} phút</span>
           </div>
           <span class="track">
-            {#each day.blocks as b (b.start)}<i style={blockStyle(b)} title="{b.start}–{b.end}"></i>{/each}
+            {#each day.blocks as b, bi (bi)}<i style={blockStyle(b)} title="{b.start}–{b.end}"></i>{/each}
           </span>
           <ul style="display: flex; flex-direction: column; gap: 4px">
-            {#each day.rows as r (r.start)}
+            {#each day.rows as r, ri (ri)}
               <li style="display: flex; gap: 10px; font-size: 13.5px; flex-wrap: wrap">
                 <b class="num" style="flex: 0 0 140px">{r.start} → {r.end ?? 'đang online'}</b>
                 <span class="num" style="flex: 0 0 64px">{r.durationMin} phút</span>

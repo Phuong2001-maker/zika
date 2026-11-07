@@ -7,6 +7,7 @@ use Zika\Core\Clock;
 use Zika\Core\Db;
 use Zika\Core\HttpError;
 use Zika\Core\Json;
+use Zika\Core\Log;
 
 /**
  * Bài kiểm tra của bài học và đề thi thử (04 §7).
@@ -29,6 +30,13 @@ final class TestService
      */
     public static function start(int $userId, ?int $lessonId, ?int $mockTestId): array
     {
+        // Sau khi cuộc thi đóng, đề thường lui về Nháp nên source() sẽ 404. Người đã thi vẫn phải mở được kết quả của mình.
+        if ($mockTestId !== null && $lessonId === null) {
+            $done = self::submittedContestAttempt($userId, $mockTestId);
+            if ($done !== null) {
+                return ['resultAttemptId' => $done];
+            }
+        }
         // Chỉ chặn lúc vào làm: lượt đã làm vẫn phải chấm và xem lại được dù học viên đã đổi giáo trình.
         if ($lessonId !== null) {
             ProgressService::visibleLesson($lessonId, $userId);
@@ -86,6 +94,23 @@ final class TestService
 
         // 4. Tạo lượt mới.
         return self::payload(self::create($userId, $lessonId, $mockTestId, $cfg, $questions), $cfg);
+    }
+
+    /**
+     * Lượt đã nộp của người này ở cuộc thi gần nhất dùng đề, nhưng chỉ khi cuộc thi đó không còn mở:
+     * đang mở thì startContest tự lo (mở lại kết quả hoặc làm tiếp).
+     */
+    private static function submittedContestAttempt(int $userId, int $mockTestId): ?int
+    {
+        $c = Db::one('SELECT id, ends_at FROM contests WHERE mock_test_id = ? ORDER BY starts_at DESC, id DESC LIMIT 1', [$mockTestId]);
+        if ($c === null || (string) $c['ends_at'] > Clock::sql()) {
+            return null;
+        }
+        $id = Db::val(
+            'SELECT id FROM test_attempts WHERE user_id = ? AND contest_id = ? AND submitted_at IS NOT NULL',
+            [$userId, (int) $c['id']],
+        );
+        return $id === null ? null : (int) $id;
     }
 
     /**
@@ -199,11 +224,11 @@ final class TestService
         }
 
         $map = range(0, $n - 1);
-        // Câu sắp xếp luôn phải xáo, nếu không thứ tự ô đã là đáp án.
-        if ($shuffle || $q['type'] === 'order') {
+        // Câu sắp xếp và nối từ luôn phải xáo: cột phải của nối từ mà giữ nguyên thì dòng nào cũng thẳng hàng với đáp án.
+        if ($shuffle || $q['type'] === 'order' || $q['type'] === 'match') {
             shuffle($map);
-            // Tránh xáo ra đúng thứ tự gốc ở câu sắp xếp.
-            if ($q['type'] === 'order' && $n > 1 && $map === range(0, $n - 1)) {
+            // Tránh xáo ra đúng thứ tự gốc.
+            if (($q['type'] === 'order' || $q['type'] === 'match') && $n > 1 && $map === range(0, $n - 1)) {
                 [$map[0], $map[1]] = [$map[1], $map[0]];
             }
         }
@@ -334,6 +359,10 @@ final class TestService
         if ($set !== []) {
             Db::update('test_attempts', $set, ['id' => (int) $a['id']]);
         }
+        // Mở đề rồi để đó không phải là học; có câu trả lời mới tính.
+        if (!empty($in['answers']) && is_array($in['answers'])) {
+            ProgressService::markStudied((int) $a['user_id']);
+        }
     }
 
     /**
@@ -400,7 +429,8 @@ final class TestService
         $started = strtotime((string) $a['started_at']);
         $finished = min(Clock::now()->getTimestamp(), strtotime((string) $a['deadline_at']));
         $used = max(0, $finished - $started);
-        $passed = $score >= (float) $cfg['passScore'];
+        // Cuộc thi chỉ xếp hạng, không có điểm đạt.
+        $passed = $a['contest_id'] !== null || $score >= (float) $cfg['passScore'];
 
         Db::update('test_attempts', [
             'submitted_at' => Clock::now()->format('Y-m-d H:i:s.v'),
@@ -414,10 +444,14 @@ final class TestService
         ], ['id' => $attemptId]);
 
         // Ghi tiến độ cho bài kiểm tra của bài học (đề thi thử không gắn vào bài nào).
-        if ($a['lesson_id'] !== null) {
+        // Chấm luôn thắng: bài bị ẩn hoặc học viên đã đổi giáo trình giữa chừng thì bỏ qua ghi tiến độ, không làm hỏng việc chấm.
+        if (!$auto) {
+            ProgressService::markStudied((int) $a['user_id']);
+        }
+        if ($a['lesson_id'] !== null && ProgressService::canSee((int) $a['lesson_id'], (int) $a['user_id'])) {
             $userId = (int) $a['user_id'];
             $lessonId = (int) $a['lesson_id'];
-            ProgressService::complete($userId, $lessonId, 'kt');
+            ProgressService::complete($userId, $lessonId, 'kt', !$auto);
             Db::exec(
                 "UPDATE lesson_progress
                     SET last_score = ?, max_score = ?, best_score = GREATEST(COALESCE(best_score, 0), ?)
@@ -499,7 +533,7 @@ final class TestService
             'score' => (float) ($a['score'] ?? 0),
             'maxScore' => $max,
             'percent' => $max > 0 ? (int) round(((float) $a['score']) / $max * 100) : 0,
-            'passed' => (bool) $a['passed'],
+            'passed' => $a['contest_id'] !== null ? true : (bool) $a['passed'],
             'passScore' => (float) $cfg['passScore'],
             'usedSec' => $used,
             'durationSec' => (int) $cfg['durationSec'],
@@ -567,22 +601,40 @@ final class TestService
         ];
     }
 
-    /** Cron 5 phút: chấm các lượt đã quá hạn cứng. */
+    /** Cron 5 phút: chấm các lượt đã quá hạn cứng. Trả về số lượt chấm được. */
     public static function gradeOverdue(): int
     {
+        // Mốc cắt tính bằng Clock, không dùng NOW() của DB (bẫy số 4).
         $ids = Db::col(
-            'SELECT id FROM test_attempts WHERE submitted_at IS NULL AND deadline_at < (NOW() - INTERVAL ? SECOND) LIMIT 200',
-            [self::GRACE_SEC],
+            'SELECT id FROM test_attempts WHERE submitted_at IS NULL AND deadline_at < ? LIMIT 200',
+            [Clock::sql(Clock::now()->modify('-' . self::GRACE_SEC . ' seconds'))],
         );
+        $ok = 0;
         foreach ($ids as $id) {
-            self::grade((int) $id, true);
+            // Một lượt hỏng không được chặn các lượt còn lại, nếu không cron kẹt mãi ở dòng đó.
+            try {
+                self::grade((int) $id, true);
+                $ok++;
+            } catch (\Throwable $e) {
+                Log::error('Không chấm được lượt quá hạn', ['attemptId' => (int) $id, 'error' => $e->getMessage()]);
+            }
         }
-        return count($ids);
+        return $ok;
     }
 
     /* ------------------------------------------------------------------ */
     /* Helper                                                              */
     /* ------------------------------------------------------------------ */
+
+    /** Chấm tự động một lượt quá hạn mà không ném lỗi ra ngoài (dùng ở bảng xếp hạng). */
+    public static function gradeSafely(int $attemptId): void
+    {
+        try {
+            self::grade($attemptId, true);
+        } catch (\Throwable $e) {
+            Log::error('Không chấm được lượt quá hạn', ['attemptId' => $attemptId, 'error' => $e->getMessage()]);
+        }
+    }
 
     /** @param array<string,mixed> $a */
     public static function assertOpen(array $a): void
@@ -609,7 +661,9 @@ final class TestService
     private static function source(?int $lessonId, ?int $mockTestId, bool $hasAttempt = false): array
     {
         if ($lessonId !== null) {
-            ProgressService::publishedLesson($lessonId);
+            if (!$hasAttempt) {
+                ProgressService::publishedLesson($lessonId);
+            }
             return [
                 PartContent::testConfig($lessonId),
                 Db::all("SELECT * FROM questions WHERE part = 'kt' AND lesson_id = ? ORDER BY sort_order, id", [$lessonId]),

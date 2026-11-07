@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import type { LessonItem, LevelLessons, LevelProgress, Part, ProgressRow } from '$lib/api/types';
@@ -15,6 +16,7 @@
   import BackLink from '$lib/components/BackLink.svelte';
   import { PART, PART_TEXTS } from '$lib/parts';
   import { levelLessons, levelProgress, progressOf } from '$lib/learn/lesson';
+  import { soHienThi } from '$lib/learn/resume';
   import { SO_HAN, taiChuBut } from '$lib/learn/hoa-tiet';
 
   // Khuôn “Chọn bài” dùng chung cho 5 phần (07 §5.3). Bố cục theo màn Chọn bài của Lật thẻ
@@ -107,7 +109,7 @@
   });
 </script>
 
-<svelte:head><title>{info.name} · HSK {levelId} · Zìkǎ</title></svelte:head>
+<svelte:head><title>{info.name} · {cap.ten(levelId)} · Zìkǎ</title></svelte:head>
 
 <!-- Nhãn góc phải thẻ bài: dấu triện “完” khi xong, không thì nhãn trạng thái (đang làm, điểm, sắp có). -->
 {#snippet nhan(l: LessonItem, m: boolean)}
@@ -190,7 +192,7 @@
       <div style="display: flex; align-items: center; gap: 14px">
         <span class="ib lv{levelId}" style="width: 60px; height: 60px; border-radius: 16px"><span class="bignum" style="font-size: 30px">{levelId}</span></span>
         <div style="min-width: 0">
-          <p class="muted" style="font-size: 13px; font-weight: 700">HSK {levelId} · cuối cấp</p>
+          <p class="muted" style="font-size: 13px; font-weight: 700">{cap.ten(levelId)} · cuối {cap.tu}</p>
           <h2 style="font-size: 24px; font-weight: 800; line-height: 1.15">{texts.allTitle(levelId)}</h2>
         </div>
       </div>
@@ -209,7 +211,7 @@
       <div style="display: flex; align-items: center; gap: 14px">
         <span class="ib lv{levelId}" style="width: 60px; height: 60px; border-radius: 16px"><span class="bignum" style="font-size: 30px">{levelId}</span></span>
         <div style="min-width: 0">
-          <p class="muted" style="font-size: 13px; font-weight: 700">HSK {levelId} · Bài {current.no}</p>
+          <p class="muted" style="font-size: 13px; font-weight: 700">{cap.ten(levelId)} · Bài {current.no}</p>
           <h2 style="font-size: 24px; font-weight: 800; line-height: 1.15">{current.title}</h2>
           <p class="num" style="font-size: 14px; font-weight: 600">{subOf(current)}</p>
         </div>
@@ -220,7 +222,7 @@
         {#if part === 'kt' && currentProg?.bestScore != null}
           <span style="font-size: 13.5px; font-weight: 700">Điểm cao nhất: {num(currentProg.bestScore)} / {num(currentProg.maxScore ?? 0)}</span>
         {:else if currentProg && currentProg.position > 0 && currentProg.total > 0}
-          <span class="num" style="font-size: 13.5px; font-weight: 700">Đang ở {currentProg.position + 1} / {currentProg.total}</span>
+          <span class="num" style="font-size: 13.5px; font-weight: 700">Đang ở {soHienThi(currentProg.position, currentProg.total)} / {currentProg.total}</span>
         {:else if currentProg?.status === 'done'}
           <span style="font-size: 13.5px; font-weight: 700; color: var(--green-text)">Đã {texts.past} xong · làm lại để ôn</span>
         {:else}
@@ -244,8 +246,8 @@
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <header class="mtop">
-      <a href="/learn/{info.slug}" class="btn btn-bare" aria-label="Về chọn cấp"><Icon name="chev" size={22} style="transform: rotate(180deg)" /></a>
-      <span class="lv{levelId}" style="flex: none; padding: 4px 10px; border: 1px solid var(--line); border-radius: 10px; font-weight: 800; font-size: 13px">HSK {levelId}</span>
+      <a href="/learn/{info.slug}" class="btn btn-bare" aria-label="Về chọn {cap.tu}"><Icon name="chev" size={22} style="transform: rotate(180deg)" /></a>
+      <span class="lv{levelId}" style="flex: none; padding: 4px 10px; border: 1px solid var(--line); border-radius: 10px; font-weight: 800; font-size: 13px">{cap.ten(levelId)}</span>
       <!-- Tên phần dài ("Cấu trúc ngữ pháp") được co lại bằng dấu …, không đẩy nút ra ngoài màn 375px. -->
       <b style="flex: 1 1 auto; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{info.name}</b>
       <span style="flex: none; display: inline-flex; align-items: center; gap: 8px"><NotificationBell size={40} /><Switcher current={part} /></span>
@@ -267,7 +269,7 @@
           <Bar value={doneCount} total={lessons.length} trackStyle="background: var(--surface)" />
         </div>
         {#if lessons.length === 0}
-          <EmptyState title="Cấp này chưa có bài nào." desc="Admin đang soạn, bạn quay lại sau nhé." />
+          <EmptyState title="{cap.tuHoa} này chưa có bài nào." desc="Admin đang soạn, bạn quay lại sau nhé." />
         {:else}
           <div style="display: flex; justify-content: space-between; align-items: baseline">
             <h2 class="h2">Các bài</h2>
@@ -285,7 +287,7 @@
         <div style="display: flex; align-items: center; gap: 12px">
           <span class="ib lv{levelId}" style="width: 46px; height: 46px; border-radius: 12px"><span class="bignum" style="font-size: 22px">{levelId}</span></span>
           <div style="flex: 1; min-width: 0">
-            <p class="muted" style="font-size: 12px; font-weight: 700">{picked === 'all' ? `HSK ${levelId} · Tổng hợp` : `HSK ${levelId} · Bài ${current?.no}`}</p>
+            <p class="muted" style="font-size: 12px; font-weight: 700">{picked === 'all' ? `${cap.ten(levelId)} · Tổng hợp` : `${cap.ten(levelId)} · Bài ${current?.no}`}</p>
             <b style="display: block; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{picked === 'all' ? texts.allTitle(levelId) : current?.title}</b>
             <p class="muted" style="font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
               {picked === 'all' ? texts.allDesc(levelId, reviewCount, lessons.length) : current ? subOf(current) : ''}
@@ -303,7 +305,7 @@
   <Topbar current={part} />
   <main class="page page-wide" style="max-width: 1240px; display: flex; flex-direction: column; gap: 24px">
     <nav aria-label="Đường dẫn" class="crumb">
-      <a href="/learn/{info.slug}">{info.name}</a><span>/</span><b>HSK {levelId}</b>
+      <a href="/learn/{info.slug}">{info.name}</a><span>/</span><b>{cap.ten(levelId)}</b>
     </nav>
 
     {#if failed}
@@ -317,8 +319,8 @@
       <!-- Khung đầu tô màu cấp, chép đúng khuôn màn Chọn bài của Lật thẻ. -->
       <section class="lv{levelId} lv-nen" style="border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--sh-md); padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 18px 32px; align-items: center; --mau: var(--hsk{levelId})">
         <span class="lv-hoa" lang="zh" aria-hidden="true" style="right: 22%; top: -34px; font-size: 200px">{SO_HAN[levelId]}</span>
-        <BackLink href="/learn/{info.slug}" label="Chọn cấp" />
-        <div style="display: flex; align-items: baseline; gap: 6px"><span class="disp" style="font-size: 20px; font-weight: 800">HSK</span><span class="bignum" style="font-size: 72px">{levelId}</span></div>
+        <BackLink href="/learn/{info.slug}" label="Chọn {cap.tu}" />
+        <div style="display: flex; align-items: baseline; gap: 6px"><span class="disp" style="font-size: 20px; font-weight: 800">{cap.nhan}</span><span class="bignum" style="font-size: 72px">{levelId}</span></div>
         <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 8px">
           <h1 style="font-size: 30px; line-height: 1.2">{info.name}</h1>
           <p class="num" style="font-weight: 600">{lessons.length} bài · {num(tongSo)} {donVi}</p>
@@ -331,7 +333,7 @@
       </section>
 
       {#if lessons.length === 0}
-        <EmptyState title="Cấp này chưa có bài nào." desc="Admin đang soạn, bạn quay lại sau nhé." />
+        <EmptyState title="{cap.tuHoa} này chưa có bài nào." desc="Admin đang soạn, bạn quay lại sau nhé." />
       {:else}
         <div style="display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start">
           <section style="flex: 999 1 620px; min-width: 0; display: flex; flex-direction: column; gap: 14px" aria-label="Các bài">

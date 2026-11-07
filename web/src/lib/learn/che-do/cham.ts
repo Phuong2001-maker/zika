@@ -15,14 +15,22 @@ export function chuanPinyin(s: string): string {
     .replace(/\p{Mark}/gu, '')
     .toLowerCase()
     .replace(/v/g, 'u')
-    .replace(/[0-5\s'’·\-–—.,;:!?，。！？…]/g, '');
+    .replace(/[0-5\s'’·\-–—.,;:!?，。！？…⋯～~]/g, '');
+}
+
+/**
+ * Chữ Hán về dạng so sánh, bỏ cả dấu lược “…” của cụm có chỗ trống (太…了, 又…又…, …似的): không bàn phím
+ * nào gõ tiện dấu đó, nên người học gõ 太了 hay 太…了 đều được tính đúng.
+ */
+function chuanHan(s: string): string {
+  return normZh(s.replace(/[…⋯～~]|\.{2,}|。{2,}/gu, ''));
 }
 
 /** Đáp án gõ có đúng từ này không: nhận chữ Hán, hoặc bất kỳ cách đọc nào (pinyin "shéi/shuí"). */
 export function goDung(nhap: string, w: Pick<Word, 'hanzi' | 'pinyin'>): boolean {
-  const zh = normZh(nhap);
+  const zh = chuanHan(nhap);
   if (zh === '') return false;
-  if (zh === normZh(w.hanzi)) return true;
+  if (zh === chuanHan(w.hanzi)) return true;
   const py = chuanPinyin(nhap);
   if (py === '') return false;
   return w.pinyin.split('/').some((cach) => chuanPinyin(cach) === py);

@@ -34,6 +34,7 @@
     return curricula.some((c) => c.id === last) ? last : 1;
   });
   const curriculum = $derived(curricula.find((c) => c.id === curriculumId) ?? null);
+  const nhanCap = $derived(curriculum?.levelLabel ?? 'HSK');
   const levelId = $derived(Number(page.url.searchParams.get('level')) || 1);
   const level = $derived(levels?.find((l) => l.id === levelId) ?? null);
 
@@ -138,7 +139,7 @@
 
 {#snippet endOfLevel()}
   {#if level && data}
-    <h2 class="h2" style="margin-top: 28px">Cuối cấp HSK {level.id}</h2>
+    <h2 class="h2" style="margin-top: 28px">Cuối {nhanCap === 'HSK' ? 'cấp HSK' : 'quyển'} {level.id}</h2>
     <div class="end-grid">
       <section class="block" style="background: var(--tim)">
         <b style="font-size: 17px">Các bài Tổng hợp</b>
@@ -205,7 +206,7 @@
 
 <!-- Chọn cấp -->
 {#if levels}
-  <div class="lv-tabs" role="tablist" aria-label="Chọn cấp HSK">
+  <div class="lv-tabs" role="tablist" aria-label="Chọn cấp">
     {#each levels as l (l.id)}
       <button
         type="button"
@@ -214,7 +215,7 @@
         class="btn btn-sm {l.id === levelId ? 'btn-muc' : 'btn-paper'}"
         onclick={() => pickLevel(l.id)}
       >
-        {l.name} <span class="num" style="opacity: .75">{l.lessonCount} bài</span>
+        {nhanCap} {l.id} <span class="num" style="opacity: .75">{l.lessonCount} bài</span>
       </button>
     {/each}
   </div>
@@ -329,7 +330,7 @@
       onkeydown={(e) => e.key === 'Enter' && addLesson()}
     />
     {#if addError}<p class="err">{addError}</p>{/if}
-    <p class="hint">Bài mới được thêm vào cuối HSK {levelId} của {curriculum?.name ?? 'giáo trình đang chọn'}, ở trạng thái Nháp.</p>
+    <p class="hint">Bài mới được thêm vào cuối {nhanCap} {levelId} của {curriculum?.name ?? 'giáo trình đang chọn'}, ở trạng thái Nháp.</p>
     {#snippet actions()}
       <button type="button" class="btn btn-sm" onclick={() => (addOpen = false)}>Huỷ</button>
       <button type="button" class="btn btn-son btn-sm" disabled={busy} onclick={addLesson}>Thêm bài</button>

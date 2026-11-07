@@ -198,6 +198,7 @@ final class ContentController
             'id' => (int) $l['id'],
             'curriculumId' => (int) $l['curriculum_id'],
             'curriculumName' => (string) Db::val('SELECT name FROM curricula WHERE id = ?', [(int) $l['curriculum_id']]),
+            'levelLabel' => Curricula::levelLabel((int) $l['curriculum_id']),
             'levelId' => (int) $l['level_id'],
             'no' => (int) $l['lesson_no'],
             'title' => (string) $l['title'],
@@ -254,7 +255,7 @@ final class ContentController
         $confirm = $v->str('confirm', 'Xác nhận', min: 1, max: 40);
         $v->done();
         if (trim($confirm) !== $expect) {
-            throw HttpError::validation(['confirm' => "Gõ đúng “$expect” để xoá bài này."]);
+            throw HttpError::validation(['confirm' => "Gõ đúng “{$expect}” để xoá bài này."]);
         }
 
         Db::exec('DELETE FROM lessons WHERE id = ?', [(int) $l['id']]);
@@ -274,9 +275,10 @@ final class ContentController
         // Danh sách phải cùng một giáo trình: đánh số lẫn thì bài của giáo trình khác mất thứ tự.
         $curriculumId = (int) Db::val('SELECT curriculum_id FROM lessons WHERE id = ?', [$ids[0] ?? 0]);
         Db::tx(static function () use ($ids, $levelId, $curriculumId): void {
-            // Đổi sang số âm trước để không đụng khoá duy nhất (curriculum_id, level_id, lesson_no).
+            // Dời tạm lên vùng số cao để không đụng khoá duy nhất (curriculum_id, level_id, lesson_no).
+            // Không dùng số âm: lesson_no là SMALLINT UNSIGNED nên số âm làm lệnh UPDATE lỗi.
             foreach ($ids as $i => $id) {
-                Db::exec('UPDATE lessons SET lesson_no = ? WHERE id = ? AND level_id = ? AND curriculum_id = ?', [-($i + 1), $id, $levelId, $curriculumId]);
+                Db::exec('UPDATE lessons SET lesson_no = ? WHERE id = ? AND level_id = ? AND curriculum_id = ?', [30000 + $i + 1, $id, $levelId, $curriculumId]);
             }
             foreach ($ids as $i => $id) {
                 Db::exec('UPDATE lessons SET lesson_no = ? WHERE id = ? AND level_id = ? AND curriculum_id = ?', [$i + 1, $id, $levelId, $curriculumId]);
@@ -464,7 +466,7 @@ final class ContentController
 
         foreach ($items as $raw) {
             $hanzi = trim((string) ($raw['hanzi'] ?? ''));
-            if (!Pinyin::isHanzi($hanzi) || mb_strlen($hanzi) > 32) {
+            if (!Pinyin::isWordForm($hanzi) || mb_strlen($hanzi) > 32) {
                 $skipped[] = ['hanzi' => $hanzi, 'reason' => 'Không phải chữ Hán.'];
                 continue;
             }
@@ -540,7 +542,7 @@ final class ContentController
             ? (int) $cur['curriculum_id']
             : Curricula::resolve((int) $v->int('curriculumId', 'Giáo trình', 1, null, false, 0));
 
-        if ($hanzi !== '' && !Pinyin::isHanzi($hanzi)) {
+        if ($hanzi !== '' && !Pinyin::isWordForm($hanzi)) {
             $v->error('hanzi', 'Chỉ nhập chữ Hán.');
         }
         if ($lessonId !== null) {

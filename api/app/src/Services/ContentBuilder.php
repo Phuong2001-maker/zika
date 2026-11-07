@@ -115,16 +115,20 @@ final class ContentBuilder
     public static function levels(bool $preview, int $curriculumId): array
     {
         $rows = Db::all(
-            "SELECT v.*, COUNT(l.id) AS lesson_count, COALESCE(SUM(l.cnt_words), 0) AS word_count
+            "SELECT v.*, COUNT(l.id) AS lesson_count, COALESCE(SUM(l.cnt_words), 0) AS word_count,
+                    (SELECT b.sample_text FROM lessons b
+                     WHERE b.level_id = v.id AND b.curriculum_id = ? AND " . self::statusSql($preview, 'b') . "
+                     ORDER BY b.lesson_no LIMIT 1) AS mau_bai_dau
              FROM levels v LEFT JOIN lessons l ON l.level_id = v.id AND l.curriculum_id = ? AND " . self::statusSql($preview) . '
              GROUP BY v.id ORDER BY v.id',
-            [$curriculumId],
+            [$curriculumId, $curriculumId],
         );
         return array_map(static fn (array $v) => [
             'id' => (int) $v['id'],
             'name' => (string) $v['name'],
             'visible' => (bool) $v['is_visible'],
-            'sampleText' => (string) $v['sample_text'],
+            // levels.sample_text là chữ mẫu của HSK; giáo trình khác lấy từ bài đầu của chính nó.
+            'sampleText' => $curriculumId === Curricula::DEFAULT_ID ? (string) $v['sample_text'] : (string) $v['mau_bai_dau'],
             'targetWords' => (int) $v['target_words'],
             'lessonCount' => (int) $v['lesson_count'],
             'wordCount' => (int) $v['word_count'],

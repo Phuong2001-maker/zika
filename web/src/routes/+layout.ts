@@ -1,4 +1,5 @@
 import { setPreview } from '$lib/api/client';
+import { cap } from '$lib/stores/cap.svelte';
 import type { LayoutLoad } from './$types';
 
 // SPA tĩnh (02 §3.1): không render phía server, không prerender, URL không có “/” cuối.
@@ -12,9 +13,12 @@ export const trailingSlash = 'never';
  */
 export const load: LayoutLoad = ({ url }) => {
   if (url.searchParams.get('preview') === '1') {
-    setPreview(true, Number(url.searchParams.get('curriculum')) || null);
+    const curriculum = Number(url.searchParams.get('curriculum')) || null;
+    setPreview(true, curriculum);
+    void cap.xemTruoc(curriculum);
   } else if (!url.pathname.startsWith('/learn/')) {
     setPreview(false);
+    void cap.xemTruoc(null);
   }
   return {};
 };

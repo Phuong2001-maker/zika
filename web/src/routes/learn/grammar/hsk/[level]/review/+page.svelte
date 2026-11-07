@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
@@ -50,7 +51,7 @@
   const totalPoints = $derived((groups ?? []).reduce((s, g) => s + g.points.length, 0));
 </script>
 
-<svelte:head><title>Tổng hợp ngữ pháp HSK {levelId} · Zìkǎ</title></svelte:head>
+<svelte:head><title>Tổng hợp ngữ pháp {cap.ten(levelId)} · Zìkǎ</title></svelte:head>
 
 <!-- Một khung chứa cả bảng tra: ô tìm ở đầu khung, mỗi bài một nhóm, mỗi cấu trúc một ô nền nhạt. -->
 {#snippet khung(m: boolean)}
@@ -64,7 +65,7 @@
     </div>
 
     {#if shown.length === 0}
-      <EmptyState title={totalPoints === 0 ? 'Cấp này chưa có điểm ngữ pháp nào.' : 'Không tìm thấy cấu trúc nào khớp.'} />
+      <EmptyState title={totalPoints === 0 ? `${cap.tuHoa} này chưa có điểm ngữ pháp nào.` : 'Không tìm thấy cấu trúc nào khớp.'} />
     {:else}
       {#each shown as g (g.lessonId)}
         <div class="th-bai">
@@ -106,7 +107,7 @@
 {/snippet}
 
 {#snippet loi()}
-  <EmptyState title="Cấp này chưa có điểm ngữ pháp nào.">
+  <EmptyState title="{cap.tuHoa} này chưa có điểm ngữ pháp nào.">
     {#snippet action()}<a href="/learn/grammar/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
   </EmptyState>
 {/snippet}
@@ -118,7 +119,7 @@
       <a href="/learn/grammar/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Tổng hợp ngữ pháp</b>
-        <span class="muted" style="font-size: 12px">HSK {levelId}{groups ? ` · ${totalPoints} cấu trúc` : ''}</span>
+        <span class="muted" style="font-size: 12px">{cap.ten(levelId)}{groups ? ` · ${totalPoints} cấu trúc` : ''}</span>
       </span>
       <Avatar size={36} />
     </header>
@@ -136,7 +137,7 @@
   <!-- ============ Máy tính ============ -->
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href="/learn/grammar/hsk/{levelId}">Ngữ pháp · HSK {levelId}</a> / <b>Tổng hợp</b></nav>
+    <nav class="crumb" style="margin-left: 8px"><a href="/learn/grammar/hsk/{levelId}">Ngữ pháp · {cap.ten(levelId)}</a> / <b>Tổng hợp</b></nav>
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
@@ -147,8 +148,8 @@
     {:else}
       <DauBai
         href="/learn/grammar/hsk/{levelId}"
-        kicker="HSK {levelId} · Tổng hợp · {totalPoints} cấu trúc"
-        title="Tổng hợp ngữ pháp HSK {levelId}"
+        kicker="{cap.ten(levelId)} · Tổng hợp · {totalPoints} cấu trúc"
+        title="Tổng hợp ngữ pháp {cap.ten(levelId)}"
       />
       {@render khung(false)}
     {/if}

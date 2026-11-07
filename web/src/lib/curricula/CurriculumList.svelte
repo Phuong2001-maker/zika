@@ -6,6 +6,7 @@
   import { num } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
   import Modal from '$lib/components/Modal.svelte';
+  import Select from '$lib/components/Select.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
 
@@ -17,7 +18,7 @@
   let failed = $state(false);
   let saving = $state(false);
   let error = $state('');
-  let edit = $state<{ id: number | null; name: string; description: string; color: string } | null>(null);
+  let edit = $state<{ id: number | null; name: string; description: string; color: string; levelLabel: string } | null>(null);
 
   async function load(): Promise<void> {
     failed = false;
@@ -30,12 +31,12 @@
   onMount(load);
 
   function openNew(): void {
-    edit = { id: null, name: '', description: '', color: COLORS[0] };
+    edit = { id: null, name: '', description: '', color: COLORS[0], levelLabel: 'HSK' };
     error = '';
   }
 
   function openEdit(c: AdminCurriculum): void {
-    edit = { id: c.id, name: c.name, description: c.description, color: c.color };
+    edit = { id: c.id, name: c.name, description: c.description, color: c.color, levelLabel: c.levelLabel };
     error = '';
   }
 
@@ -48,7 +49,7 @@
     saving = true;
     error = '';
     try {
-      await adminApi.saveCurriculum(edit.id, { name: edit.name.trim(), description: edit.description.trim(), color: edit.color });
+      await adminApi.saveCurriculum(edit.id, { name: edit.name.trim(), description: edit.description.trim(), color: edit.color, levelLabel: edit.levelLabel });
       edit = null;
       toast.ok('Đã lưu giáo trình.');
       await load();
@@ -76,7 +77,7 @@
 <div class="ct-head">
   <div>
     <h1>Bộ giáo trình</h1>
-    <p class="muted">Tạo giáo trình trước, rồi vào Soạn bài để thêm bài theo từng cấp HSK.</p>
+    <p class="muted">Tạo giáo trình trước, rồi vào Soạn bài để thêm bài theo từng cấp.</p>
   </div>
   <button type="button" class="btn btn-son btn-sm" onclick={openNew}><Icon name="plus" size={15} /> Thêm giáo trình</button>
 </div>
@@ -102,7 +103,7 @@
         <div class="ct-levels" aria-label="Số bài theo cấp">
           {#each c.levels as n, i (i)}
             <a class="ct-level" class:ct-level-empty={n === 0} href="/admin/lessons?curriculum={c.id}&level={i + 1}">
-              <b>HSK {i + 1}</b><span class="num">{n > 0 ? `${n} bài` : 'Chưa có'}</span>
+              <b>{c.levelLabel} {i + 1}</b><span class="num">{n > 0 ? `${n} bài` : 'Chưa có'}</span>
             </a>
           {/each}
         </div>
@@ -133,6 +134,10 @@
         <textarea id="ct-desc" class="inp" rows="3" maxlength="300" bind:value={edit.description}></textarea>
       </div>
       <div class="ct-field">
+        <label class="lbl" for="ct-cap">Học viên thấy cấp là</label>
+        <Select id="ct-cap" bind:value={edit.levelLabel} options={[{ v: 'HSK', label: 'HSK 1, HSK 2…' }, { v: 'Quyển', label: 'Quyển 1, Quyển 2…' }]} />
+      </div>
+      <div class="ct-field">
         <span class="lbl">Màu nhận diện</span>
         <div class="ct-colors">
           {#each COLORS as color (color)}
@@ -149,7 +154,7 @@
           {/each}
         </div>
       </div>
-      {#if edit.id === null}<p class="hint" style="margin-top: 0">Mỗi giáo trình có sẵn HSK 1–6. Lưu xong bấm Soạn bài để thêm bài vào từng cấp.</p>{/if}
+      {#if edit.id === null}<p class="hint" style="margin-top: 0">Mỗi giáo trình có sẵn 6 cấp. Lưu xong bấm Soạn bài để thêm bài vào từng cấp.</p>{/if}
       {#if error}<p class="err" role="alert">{error}</p>{/if}
     </div>
     {#snippet actions()}

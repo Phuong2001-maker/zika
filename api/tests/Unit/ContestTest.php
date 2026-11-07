@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Zika\Controllers\Admin\ContestController as AdminContest;
 use Zika\Controllers\Admin\QuestionController;
 use Zika\Controllers\ContestController;
+use Zika\Controllers\TestController;
 use Zika\Core\Clock;
 use Zika\Core\Db;
 use Zika\Core\HttpError;
@@ -642,6 +643,7 @@ final class ContestTest extends DbTestCase
         $this->cuocThi($mock, '2026-11-30 20:00:00', '2026-11-30 21:00:00');
         $r = new Request('DELETE', "/admin/mock-tests/$mock");
         $r->params = ['id' => (string) $mock];
+        $r->user = ['id' => $this->makeUser(['role' => 'admin']), 'role' => 'admin'];
 
         try {
             (new QuestionController())->deleteMock($r);
@@ -650,5 +652,174 @@ final class ContestTest extends DbTestCase
             self::assertSame(409, $e->status);
         }
         self::assertNotNull(Db::val('SELECT id FROM mock_tests WHERE id = ?', [$mock]));
+    }
+
+    /* ---------------- Sửa lỗi sau rà soát ---------------- */
+
+    private function batDau(int $uid, array $body): int
+    {
+        $r = new Request('POST', '/tests/start', [], $body);
+        $r->user = ['id' => $uid, 'role' => 'learner'];
+        try {
+            (new TestController())->start($r);
+            return 201;
+        } catch (HttpError $e) {
+            return $e->status;
+        }
+    }
+
+    public function testGuiCaBaiVaDeThiThiBiTuChoi(): void
+    {
+        $uid = $this->makeUser();
+        $mock = $this->de();
+        $this->cuocThi($mock, '2026-11-20 09:00:00', '2026-11-20 18:00:00');
+        $lesson = Db::insert('lessons', ['level_id' => 1, 'lesson_no' => 1, 'title' => 'B1', 'status' => 'published',
+            'created_at' => '2026-11-01 08:00:00', 'updated_at' => '2026-11-01 08:00:00']);
+
+        self::assertSame(422, $this->batDau($uid, ['lessonId' => $lesson, 'mockTestId' => $mock]));
+        self::assertSame(0, (int) Db::val('SELECT COUNT(*) FROM test_attempts'));
+    }
+
+    public function testThiDaiHonMuoiTamGioVanChamVaXepHangDuoc(): void
+    {
+        $uid = $this->makeUser();
+        $mock = $this->de();
+        $this->cuocThi($mock, '2026-11-20 09:00:00', '2026-11-22 09:00:00');
+        $p = $this->vaoThi($uid, $mock);
+
+        Clock::freeze(new DateTimeImmutable('2026-11-21 20:00:00'));   // 34 giờ sau
+        $out = TestService::grade($p['attemptId']);
+
+        self::assertSame(34 * 3600, $out['usedSec']);
+        self::assertSame(34 * 3600, (int) Db::val('SELECT used_sec FROM test_attempts WHERE id = ?', [$p['attemptId']]));
+        self::assertSame(1, $this->xepHang($uid)['participants']);
+    }
+
+    public function testBaiBiAnGiuaChungVanChamDuocVaKhongGhiTienDo(): void
+    {
+        $uid = $this->makeUser();
+        $lesson = Db::insert('lessons', ['level_id' => 1, 'lesson_no' => 1, 'title' => 'B1', 'status' => 'published', 'cnt_kt' => 1,
+            'created_at' => '2026-11-01 08:00:00', 'updated_at' => '2026-11-01 08:00:00']);
+        Db::insert('questions', ['part' => 'kt', 'lesson_id' => $lesson, 'type' => 'pick',
+            'payload' => json_encode(['prompt' => 'Q', 'options' => ['a', 'b'], 'answer' => 0]), 'sort_order' => 1]);
+        Db::exec('UPDATE levels SET is_visible = 1 WHERE id = 1');
+        $p = TestService::start($uid, $lesson, null);
+
+        Db::exec("UPDATE lessons SET status = 'draft' WHERE id = ?", [$lesson]);
+        $out = TestService::grade($p['attemptId']);
+
+        self::assertNotNull(Db::val('SELECT submitted_at FROM test_attempts WHERE id = ?', [$p['attemptId']]));
+        self::assertSame(1, $out['questionCount']);
+        self::assertSame(0, (int) Db::val('SELECT COUNT(*) FROM lesson_progress WHERE user_id = ?', [$uid]));
+        // Xem lại kết quả vẫn được.
+        self::assertSame($p['attemptId'], TestService::result(Db::one('SELECT * FROM test_attempts WHERE id = ?', [$p['attemptId']]))['attemptId']);
+    }
+
+    public function testMotLuotHongKhongChanCronVaBangXepHang(): void
+    {
+        $mock = $this->de();
+        $this->cuocThi($mock, '2026-11-20 09:00:00', '2026-11-20 10:10:00');
+        $hong = $this->makeUser();
+        $tot = $this->makeUser();
+        $this->vaoThi($hong, $mock);
+        $this->vaoThi($tot, $mock);
+        // Lượt “hỏng”: đề mà lượt trỏ tới đã biến mất nên chấm sẽ ném 404.
+        $hongId = (int) Db::val('SELECT id FROM test_attempts WHERE user_id = ?', [$hong]);
+        Db::exec('SET FOREIGN_KEY_CHECKS = 0');
+        Db::exec('UPDATE test_attempts SET mock_test_id = 999999 WHERE id = ?', [$hongId]);
+        Db::exec('SET FOREIGN_KEY_CHECKS = 1');
+
+        Clock::freeze(new DateTimeImmutable('2026-11-20 10:20:00'));
+        $chamDuoc = TestService::gradeOverdue();
+        self::assertNotNull(Db::val('SELECT submitted_at FROM test_attempts WHERE user_id = ?', [$tot]), 'Lượt tốt vẫn được chấm');
+        self::assertSame(1, $chamDuoc);
+        self::assertNull(Db::val('SELECT submitted_at FROM test_attempts WHERE id = ?', [$hongId]));
+
+        // Bảng xếp hạng không 500 dù còn lượt hỏng quá hạn.
+        self::assertSame(1, $this->xepHang($tot)['participants']);
+    }
+
+    public function testThiXongKhongTinhTruot(): void
+    {
+        $uid = $this->makeUser();
+        $r = new Request('POST', '/admin/exams', [], ['title' => 'Đề']);
+        $r->user = ['id' => $this->makeUser(['role' => 'admin']), 'role' => 'admin'];
+        $mock = (int) json_decode((new AdminContest())->createExam($r)->body, true)['data']['id'];
+        self::assertSame(0, (int) Db::val('SELECT pass_points FROM mock_tests WHERE id = ?', [$mock]));
+        Db::insert('questions', ['part' => 'mock', 'mock_test_id' => $mock, 'type' => 'pick',
+            'payload' => json_encode(['prompt' => 'Q', 'options' => ['a', 'b'], 'answer' => 0]), 'sort_order' => 1]);
+        // Đề cũ còn pass_points mặc định cao cũng không được báo trượt.
+        Db::exec('UPDATE mock_tests SET pass_points = 120 WHERE id = ?', [$mock]);
+        $this->cuocThi($mock, '2026-11-20 09:00:00', '2026-11-20 18:00:00');
+        $p = $this->vaoThi($uid, $mock);
+        TestService::patch(Db::one('SELECT * FROM test_attempts WHERE id = ?', [$p['attemptId']]), ['answers' => $this->dapAnDung($p['attemptId'])]);
+
+        $out = TestService::grade($p['attemptId']);
+        self::assertTrue($out['passed']);
+        self::assertTrue(TestService::result(Db::one('SELECT * FROM test_attempts WHERE id = ?', [$p['attemptId']]))['passed']);
+    }
+
+    public function testDongThiRoiDeNhapVanMoDuocKetQuaCuaMinh(): void
+    {
+        $nguoiThi = $this->makeUser();
+        $nguoiLa = $this->makeUser();
+        $mock = $this->de();
+        $this->cuocThi($mock, '2026-11-20 09:00:00', '2026-11-20 10:30:00');
+        $p = $this->vaoThi($nguoiThi, $mock);
+        TestService::grade($p['attemptId']);
+
+        Clock::freeze(new DateTimeImmutable('2026-11-20 11:00:00'));
+        self::assertSame(['resultAttemptId' => $p['attemptId']], TestService::start($nguoiThi, null, $mock));
+        try {
+            TestService::start($nguoiLa, null, $mock);
+            self::fail('Người không thi vẫn 404');
+        } catch (HttpError $e) {
+            self::assertSame(404, $e->status);
+        }
+    }
+
+    public function testBienTapKhongDuocDungDeCuaCuocThi(): void
+    {
+        $mock = $this->de();
+        Db::exec('UPDATE mock_tests SET for_contest = 1 WHERE id = ?', [$mock]);
+        $thuong = $this->de();
+        $cauId = (int) Db::val('SELECT id FROM questions WHERE mock_test_id = ? LIMIT 1', [$mock]);
+
+        $goi = function (string $role, string $method, int $id, array $body = []): int {
+            $r = new Request('GET', '/x', [], $body);
+            $r->params = ['id' => (string) $id];
+            $r->user = ['id' => $this->makeUser(['role' => $role]), 'role' => $role];
+            try {
+                (new QuestionController())->$method($r);
+                return 200;
+            } catch (HttpError $e) {
+                return $e->status;
+            }
+        };
+
+        foreach (['mockQuestions', 'updateMock', 'deleteMock', 'createMockQuestion', 'bulkMock', 'reorderMockQuestions', 'copyIntoMockTest'] as $m) {
+            self::assertSame(403, $goi('editor', $m, $mock), "$m phải chặn editor");
+        }
+        // Gắn vào cuộc thi thì cũng khoá, dù không đánh dấu for_contest.
+        $this->cuocThi($thuong, '2026-11-30 20:00:00', '2026-11-30 21:00:00');
+        self::assertSame(403, $goi('editor', 'mockQuestions', $thuong));
+        // Sửa từng câu qua /admin/questions/{id} cũng bị chặn.
+        self::assertSame(403, $goi('editor', 'delete', $cauId));
+        self::assertNotNull(Db::val('SELECT id FROM questions WHERE id = ?', [$cauId]));
+
+        self::assertSame(200, $goi('admin', 'mockQuestions', $mock));
+        $binhThuong = $this->de();
+        self::assertSame(200, $goi('editor', 'mockQuestions', $binhThuong));
+    }
+
+    public function testNoiTuLuonXaoCotPhai(): void
+    {
+        $q = ['id' => 1, 'type' => 'match', 'payload' => json_encode(['pairs' => [['a', '1'], ['b', '2'], ['c', '3'], ['d', '4']]])];
+        $bien = new \ReflectionMethod(TestService::class, 'buildMap');
+        for ($i = 0; $i < 30; $i++) {
+            $map = $bien->invoke(null, $q, false);
+            self::assertNotSame([0, 1, 2, 3], $map, 'Không được để nguyên thứ tự gốc');
+            self::assertCount(4, array_unique($map));
+        }
     }
 }

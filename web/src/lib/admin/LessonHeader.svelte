@@ -28,7 +28,8 @@
     onsave?: () => void;
   } = $props();
 
-  let lesson = $state<(AdminLesson & { levelId: number; curriculumId: number; curriculumName: string }) | null>(null);
+  let lesson = $state<(AdminLesson & { levelId: number; curriculumId: number; curriculumName: string; levelLabel: string }) | null>(null);
+  const nhanCap = $derived(lesson?.levelLabel ?? 'HSK');
   let busy = $state(false);
 
   // Bộ chọn cấp + bài: soạn phần nào cũng đổi được bài ngay tại chỗ, khỏi quay về danh sách.
@@ -102,7 +103,7 @@
       return;
     }
     if (ds.length === 0) {
-      toast.show(`HSK ${lv} chưa có bài nào.`);
+      toast.show(`${nhanCap} ${lv} chưa có bài nào.`);
       void goto(`/admin/lessons?curriculum=${lesson.curriculumId}&level=${lv}`);
       return;
     }
@@ -169,9 +170,9 @@
   {#snippet boChon()}
     <div class="chon">
       <span class="o">
-        <span class="lbl">Cấp HSK</span>
-        <Select bind:value={capChon} onchange={doiCap} ariaLabel="Chọn cấp HSK"
-          options={levels.map((l) => ({ v: l.id, label: `HSK ${l.id}` }))} />
+        <span class="lbl">{nhanCap === 'HSK' ? 'Cấp HSK' : nhanCap}</span>
+        <Select bind:value={capChon} onchange={doiCap} ariaLabel="Chọn {nhanCap === 'HSK' ? 'cấp HSK' : nhanCap}"
+          options={levels.map((l) => ({ v: l.id, label: `${nhanCap} ${l.id}` }))} />
       </span>
       <span class="o">
         <span class="lbl">Bài</span>
@@ -186,7 +187,7 @@
     <header class="mhead">
       <a href="/admin/lessons?curriculum={lesson.curriculumId}&level={lesson.levelId}" class="btn btn-bare" aria-label="Về Bài học HSK"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0">
-        <span class="muted" style="font-size: 11.5px; font-weight: 700; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{lesson.curriculumName} · HSK {lesson.levelId} · Bài {lesson.no}</span>
+        <span class="muted" style="font-size: 11.5px; font-weight: 700; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{lesson.curriculumName} · {nhanCap} {lesson.levelId} · Bài {lesson.no}</span>
         <b class="disp" style="font-size: 17px; font-weight: 800; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{lesson.title}</b>
       </span>
       {#if onsave}
@@ -205,7 +206,7 @@
     <!-- ============ Máy tính ============ -->
     <nav class="crumb" aria-label="Đường dẫn">
       <a href="/admin/lessons?curriculum={lesson.curriculumId}">{lesson.curriculumName}</a> /
-      <a href="/admin/lessons?curriculum={lesson.curriculumId}&level={lesson.levelId}">HSK {lesson.levelId}</a> /
+      <a href="/admin/lessons?curriculum={lesson.curriculumId}&level={lesson.levelId}">{nhanCap} {lesson.levelId}</a> /
       <b>Bài {lesson.no} · {lesson.title}</b>
     </nav>
 
@@ -216,7 +217,7 @@
       </span>
       <div style="flex: 1 1 260px; min-width: 0">
         <p class="muted" style="font-size: 13px; font-weight: 700">
-          HSK {lesson.levelId} · sửa lần cuối {ago(lesson.updatedAt)}{lesson.updatedByName ? ` · ${lesson.updatedByName}` : ''}
+          {nhanCap} {lesson.levelId} · sửa lần cuối {ago(lesson.updatedAt)}{lesson.updatedByName ? ` · ${lesson.updatedByName}` : ''}
         </p>
         <h1 style="font-size: 28px; display: flex; align-items: center; gap: 8px">
           {lesson.title}

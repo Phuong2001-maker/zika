@@ -382,6 +382,7 @@ final class StatsController
                 'device' => $u['last_device'],
                 'selfLevelInitial' => (string) $u['self_level_initial'],
                 'lockedReason' => $u['locked_reason'],
+                'lastSeenAt' => $u['last_seen_at'] === null ? null : date('c', strtotime((string) $u['last_seen_at'])),
             ],
             'kpi' => [
                 'studySec' => (int) $u['total_study_sec'],
@@ -485,6 +486,9 @@ final class StatsController
         $v = new Validator($r->body);
         $reason = $v->strOrNull('reason', 'Lý do', 255);
         $v->done();
+        if ($u['role'] === 'admin' && UserService::activeAdminCount([(int) $u['id']]) < 1) {
+            throw HttpError::invalid('Phải còn ít nhất một quản trị viên đang hoạt động.');
+        }
 
         Db::update('users', ['status' => 'locked', 'locked_at' => date('Y-m-d H:i:s'), 'locked_reason' => $reason], ['id' => (int) $u['id']]);
         // Khoá thì cắt luôn mọi phiên đăng nhập đang mở.
@@ -516,7 +520,7 @@ final class StatsController
             throw HttpError::invalid('Không tự hạ quyền của mình được.');
         }
         if ($u['role'] === 'admin' && $role !== 'admin'
-            && (int) Db::val("SELECT COUNT(*) FROM users WHERE role = 'admin'") <= 1) {
+            && UserService::activeAdminCount([(int) $u['id']]) < 1) {
             throw HttpError::invalid('Phải còn ít nhất một quản trị viên.');
         }
 
@@ -531,6 +535,9 @@ final class StatsController
         $u = $this->find($r->id());
         if ((int) $u['id'] === $r->userId()) {
             throw HttpError::invalid('Không tự xoá tài khoản của mình được.');
+        }
+        if ($u['role'] === 'admin' && UserService::activeAdminCount([(int) $u['id']]) < 1) {
+            throw HttpError::invalid('Phải còn ít nhất một quản trị viên đang hoạt động.');
         }
         Db::exec('DELETE FROM users WHERE id = ?', [(int) $u['id']]);
         Audit::log($r, 'user.delete', 'user', (int) $u['id'], ['email' => $u['email']]);
@@ -552,6 +559,9 @@ final class StatsController
 
         $in = Db::in($ids);
         if ($action === 'lock') {
+            if (UserService::activeAdminCount($ids) < 1) {
+                throw HttpError::invalid('Phải còn ít nhất một quản trị viên đang hoạt động.');
+            }
             $n = Db::exec("UPDATE users SET status = 'locked', locked_at = NOW() WHERE id IN ($in)", $ids);
             Db::exec("UPDATE auth_sessions SET revoked_at = NOW() WHERE user_id IN ($in) AND revoked_at IS NULL", $ids);
         } else {

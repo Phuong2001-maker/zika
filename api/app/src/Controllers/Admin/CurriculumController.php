@@ -43,6 +43,7 @@ final class CurriculumController
                 'name' => (string) $c['name'],
                 'description' => (string) $c['description'],
                 'color' => (string) $c['color'],
+                'levelLabel' => (string) $c['level_label'],
                 'isDefault' => $id === Curricula::DEFAULT_ID,
                 'levels' => $levels,
                 'lessonCount' => array_sum($levels),
@@ -62,6 +63,10 @@ final class CurriculumController
             'description' => $v->str('description', 'Giới thiệu', false, 0, 300),
             'color' => $v->in('color', 'Màu nhận diện', self::COLORS, self::COLORS[0]),
         ];
+        // Không gửi thì giữ nguyên: công cụ nạp chỉ sửa giới thiệu, không được đưa giáo trình về "HSK".
+        if ($v->present('levelLabel')) {
+            $row['level_label'] = $v->in('levelLabel', 'Cách gọi cấp', Curricula::LEVEL_LABELS);
+        }
         if (Db::val('SELECT id FROM curricula WHERE name = ? AND id <> ?', [$row['name'], $id]) !== null) {
             $v->error('name', 'Đã có giáo trình tên này.');
         }

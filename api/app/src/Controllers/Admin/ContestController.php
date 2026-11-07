@@ -58,9 +58,10 @@ final class ContestController
         $title = $v->str('title', 'Tên đề', min: 1, max: 80);
         $v->done();
 
+        // pass_points = 0: cuộc thi chỉ xếp hạng, không có điểm đạt (mặc định 120 làm bài điểm tối đa vẫn “trượt”).
         // Đề luôn là Nháp nên không lọt vào mục Thi thử của người học; cấp 1 chỉ để lấp cột bắt buộc,
         // cuộc thi không phân cấp và mọi người học đều vào được cấp 1.
-        $id = Db::insert('mock_tests', ['level_id' => 1, 'title' => $title, 'status' => 'draft', 'for_contest' => 1]);
+        $id = Db::insert('mock_tests', ['level_id' => 1, 'title' => $title, 'status' => 'draft', 'for_contest' => 1, 'pass_points' => 0]);
         Audit::log($r, 'exam.create', 'mock_test', $id, ['title' => $title]);
         return Response::json(['id' => $id], 201);
     }

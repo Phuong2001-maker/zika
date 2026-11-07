@@ -37,6 +37,11 @@ final class TestController
             throw HttpError::validation(['lessonId' => 'Thiếu bài hoặc đề thi thử.']);
         }
 
+        // Gửi cả hai thì nhánh bài sẽ dựng lượt cuộc thi từ câu của bài: kẻ gian chọn câu dễ cho mình.
+        if ($lessonId !== null && $mockId !== null) {
+            throw HttpError::validation(['lessonId' => 'Chỉ chọn bài hoặc đề thi thử, không chọn cả hai.']);
+        }
+
         return Response::json(TestService::start($r->userId(), $lessonId, $mockId), 201);
     }
 

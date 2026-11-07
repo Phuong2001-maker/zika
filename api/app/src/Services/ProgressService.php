@@ -115,21 +115,21 @@ final class ProgressService
 
     /**
      * Khối “Hôm nay” ở Bàn học: chuỗi ngày học liên tiếp, 7 ngày gần nhất, số từ đã lật xong.
-     * “Ngày có học” = ngày có ghi tiến độ hoặc làm bài, không tính mở web rồi đóng (visits).
+     * “Ngày có học” = ngày có dòng trong study_days (xem markStudied), không tính mở web rồi đóng (visits)
+     * và không tính chỉ mở trang bài.
      * Hôm nay chưa học thì chuỗi vẫn giữ tính đến hôm qua — sáng ra mở web không thấy về 0.
      * @return array{streak:int, week:list<bool>, words:int}
      */
     public static function today(int $userId): array
     {
         $now = Clock::now();
-        $from = Clock::sql($now->setTime(0, 0)->modify('-60 days'));
-        $days = array_flip(Db::col(
-            'SELECT DATE(updated_at) FROM lesson_progress WHERE user_id = ? AND updated_at >= ?
-             UNION SELECT DATE(updated_at) FROM review_progress WHERE user_id = ? AND updated_at >= ?
-             UNION SELECT DATE(started_at) FROM exercise_attempts WHERE user_id = ? AND started_at >= ?
-             UNION SELECT DATE(started_at) FROM test_attempts WHERE user_id = ? AND started_at >= ?',
-            [$userId, $from, $userId, $from, $userId, $from, $userId, $from],
-        ));
+        // Đọc riêng study_days (đã có khoá chính theo người + ngày) và không giới hạn 60 ngày như trước:
+        // chuỗi dài hơn mức đó mới đếm đúng. 400 ngày là đủ cho mọi chuỗi thực tế mà truy vấn vẫn rẻ.
+        $from = $now->setTime(0, 0)->modify('-400 days')->format('Y-m-d');
+        $days = array_flip(array_map('strval', Db::col(
+            'SELECT day FROM study_days WHERE user_id = ? AND day >= ?',
+            [$userId, $from],
+        )));
         $co = static fn (int $back): bool => isset($days[$now->modify("-$back days")->format('Y-m-d')]);
 
         $streak = 0;
@@ -263,6 +263,26 @@ final class ProgressService
         return $l ?? throw HttpError::notFound('Bài này chưa có hoặc đã bị ẩn.');
     }
 
+    /**
+     * Ghi nhận hôm nay là một ngày học. Chỉ gọi khi có hành động học thật (đã lật/trả lời/nộp),
+     * không gọi khi mới mở trang, kẻo mở rồi thoát cũng giữ được chuỗi.
+     */
+    public static function markStudied(int $userId): void
+    {
+        Db::exec('INSERT IGNORE INTO study_days (user_id, day) VALUES (?, ?)', [$userId, Clock::now()->format('Y-m-d')]);
+    }
+
+    /** Bài còn hiện và nằm trong giáo trình của người này không (không ném lỗi). */
+    public static function canSee(int $lessonId, int $userId): bool
+    {
+        try {
+            self::visibleLesson($lessonId, $userId);
+            return true;
+        } catch (HttpError) {
+            return false;
+        }
+    }
+
     /** @return array<string,mixed>|null */
     public static function row(int $userId, int $lessonId, string $part): ?array
     {
@@ -286,6 +306,9 @@ final class ProgressService
                 [$userId, $lessonId, $part, $position, $total, $state === null ? null : Json::encode($state), $now, $now],
             );
             self::touchLevel($userId, (int) $l['level_id']);
+            if ($position > 0) {
+                self::markStudied($userId);
+            }
             if ($part === 'lt') {
                 $moved = max(0, $position - (int) ($old['position'] ?? 0));
                 if ($moved > 0) {
@@ -302,11 +325,11 @@ final class ProgressService
      * POST …/complete (lt, lv, ht, np). Lần đầu xong phần Lật thẻ → +1 “bài đã học xong”.
      * @return array{firstTime:bool,levelDone:array{done:int,total:int},lessonsDone:int}
      */
-    public static function complete(int $userId, int $lessonId, string $part): array
+    public static function complete(int $userId, int $lessonId, string $part, bool $markDay = true): array
     {
         $l = self::visibleLesson($lessonId, $userId);
         $levelId = (int) $l['level_id'];
-        return Db::tx(static function () use ($userId, $lessonId, $part, $l, $levelId): array {
+        return Db::tx(static function () use ($userId, $lessonId, $part, $l, $levelId, $markDay): array {
             $old = self::row($userId, $lessonId, $part);
             $first = $old === null || $old['status'] !== 'done';
             $now = Clock::sql();
@@ -319,6 +342,10 @@ final class ProgressService
                 [$userId, $lessonId, $part, $total, $now, $now, $now, $now],
             );
             self::touchLevel($userId, $levelId);
+            // Bài kiểm tra bị cron chấm hộ (quá hạn) không phải lúc người học đang học nên không tính ngày.
+            if ($markDay) {
+                self::markStudied($userId);
+            }
             if ($part === 'lt' && $first) {
                 Db::exec('UPDATE users SET lessons_done = lessons_done + 1 WHERE id = ?', [$userId]);
             }
@@ -385,6 +412,9 @@ final class ProgressService
             [$userId, $levelId, $part, $position, $total, $state === null ? null : Json::encode($state), $now],
         );
         self::touchLevel($userId, $levelId);
+        if ($position > 0) {
+            self::markStudied($userId);
+        }
     }
 
     /** @return array{timesDone:int} */
@@ -398,6 +428,7 @@ final class ProgressService
             [$userId, $levelId, $part, $now],
         );
         self::touchLevel($userId, $levelId);
+        self::markStudied($userId);
         return ['timesDone' => (int) Db::val('SELECT times_done FROM review_progress WHERE user_id = ? AND level_id = ? AND part = ?', [$userId, $levelId, $part])];
     }
 

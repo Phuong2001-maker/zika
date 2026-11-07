@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
@@ -85,7 +86,7 @@
   }
 </script>
 
-<svelte:head><title>Bài tập tổng hợp HSK {levelId} · Zìkǎ</title></svelte:head>
+<svelte:head><title>Bài tập tổng hợp {cap.ten(levelId)} · Zìkǎ</title></svelte:head>
 
 <!-- Một khung chứa trọn màn làm bài, cùng khuôn với màn bài tập từng bài và màn Lật thẻ:
      loại câu + số câu ở đầu khung, nút Kiểm tra ở chân khung. -->
@@ -95,7 +96,7 @@
       <div class="btr-xong" style="padding: {m ? 12 : 20}px 0">
         <span class="stamp" style="font-size: {m ? 26 : 34}px">完成</span>
         <h2 style="font-size: {m ? 24 : 30}px">{score} / {total} câu đúng</h2>
-        <p class="muted">Bài tập tổng hợp HSK {levelId}.</p>
+        <p class="muted">Bài tập tổng hợp {cap.ten(levelId)}.</p>
         <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center">
           <button type="button" class="btn" onclick={load}><Icon name="repeat" size={16} /> Làm lại</button>
           <a href="/learn/exercises/hsk/{levelId}" class="btn btn-son">Về danh sách bài</a>
@@ -142,7 +143,7 @@
 
 {#if failed}
   <main class="page">
-    <EmptyState title="Cấp này chưa có câu bài tập nào.">
+    <EmptyState title="{cap.tuHoa} này chưa có câu bài tập nào.">
       {#snippet action()}<a href="/learn/exercises/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
     </EmptyState>
   </main>
@@ -153,7 +154,7 @@
       <a href="/learn/exercises/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px">Bài tập tổng hợp</b>
-        <span class="muted" style="font-size: 12px">HSK {levelId} · Cả cấp</span>
+        <span class="muted" style="font-size: 12px">{cap.ten(levelId)} · Cả {cap.tu}</span>
       </span>
       <Avatar size={36} />
     </header>
@@ -169,14 +170,14 @@
   <!-- ============ Máy tính ============ -->
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href="/learn/exercises/hsk/{levelId}">Bài tập · HSK {levelId}</a> / <b>Tổng hợp</b></nav>
+    <nav class="crumb" style="margin-left: 8px"><a href="/learn/exercises/hsk/{levelId}">Bài tập · {cap.ten(levelId)}</a> / <b>Tổng hợp</b></nav>
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
     {#if loading}
       <Skeleton h="420px" r={22} />
     {:else}
-      <DauBai href="/learn/exercises/hsk/{levelId}" kicker="HSK {levelId} · Tổng hợp cả cấp · {total} câu" title="Bài tập tổng hợp" />
+      <DauBai href="/learn/exercises/hsk/{levelId}" kicker="{cap.ten(levelId)} · Tổng hợp cả {cap.tu} · {total} câu" title="Bài tập tổng hợp" />
       {@render khung(false)}
     {/if}
   </main>

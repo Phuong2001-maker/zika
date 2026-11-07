@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { SvelteSet } from 'svelte/reactivity';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
@@ -85,7 +86,7 @@
   function goPoint(k: number): void {
     pi = k;
     resetPractice();
-    if (data) void saveProgress(data.lesson.id, 'np', k + 1, points.length).catch(() => {});
+    if (data) void saveProgress(data.lesson.id, 'np', k, points.length).catch(() => {});
     daXem.add(k);
     xemHet();
   }
@@ -282,7 +283,7 @@
       <a href="/learn/grammar/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{data?.lesson.title ?? 'Ngữ pháp'}</b>
-        <span class="muted" style="font-size: 12px">Ngữ pháp · HSK {levelId} · Bài {lessonNo}</span>
+        <span class="muted" style="font-size: 12px">Ngữ pháp · {cap.ten(levelId)} · Bài {lessonNo}</span>
       </span>
       <Avatar size={36} />
     </header>
@@ -303,7 +304,7 @@
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
     <nav class="crumb" style="margin-left: 8px">
-      <a href="/learn/grammar/hsk/{levelId}">Ngữ pháp · HSK {levelId}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b>
+      <a href="/learn/grammar/hsk/{levelId}">Ngữ pháp · {cap.ten(levelId)}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b>
     </nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="np" /><Avatar size={44} /></div>
   </header>
@@ -317,7 +318,7 @@
     {:else}
       <DauBai
         href="/learn/grammar/hsk/{levelId}"
-        kicker="HSK {levelId} · Bài {lessonNo} · {points.length > 0 ? `${points.length} điểm ngữ pháp` : 'Ngữ pháp'}"
+        kicker="{cap.ten(levelId)} · Bài {lessonNo} · {points.length > 0 ? `${points.length} điểm ngữ pháp` : 'Ngữ pháp'}"
         title={data.lesson.title}
       />
       {@render khung(false)}

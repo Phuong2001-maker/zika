@@ -31,6 +31,8 @@ export interface User {
   dailyGoalMin: number;
   currentLevelId: number | null;
   curriculumId: number | null;
+  /** Cách gọi cấp của giáo trình đang học: "HSK" hoặc "Quyển". */
+  levelLabel: string;
   createdAt: string;
   stats: { studySec: number; lessonsDone: number };
 }

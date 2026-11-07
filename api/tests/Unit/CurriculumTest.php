@@ -57,6 +57,42 @@ final class CurriculumTest extends DbTestCase
         return Json::decode($res->body, [])['data'];
     }
 
+    public function testHocVienThayCachGoiCapCuaGiaoTrinhMinh(): void
+    {
+        $quyen = Db::insert('curricula', ['name' => 'Theo quyển', 'level_label' => 'Quyển']);
+
+        $this->assertSame('HSK', \Zika\Services\UserService::toApi(\Zika\Services\UserService::find($this->nguoiHoc()))['levelLabel']);
+        $this->assertSame('Quyển', \Zika\Services\UserService::toApi(\Zika\Services\UserService::find($this->nguoiHoc($quyen)))['levelLabel']);
+    }
+
+    public function testSuaGiaoTrinhKhongGuiCachGoiThiGiuNguyen(): void
+    {
+        $id = Db::insert('curricula', ['name' => 'Theo quyển', 'level_label' => 'Quyển']);
+        $admin = $this->makeUser(['role' => 'admin']);
+
+        $r = $this->req('PUT', "/admin/curricula/$id", $admin, 'admin', [], ['name' => 'Theo quyển', 'description' => 'mới']);
+        $r->params = ['id' => (string) $id];
+        (new CurriculumController())->save($r);
+        $this->assertSame('Quyển', Db::val('SELECT level_label FROM curricula WHERE id = ?', [$id]));
+
+        $r = $this->req('PUT', "/admin/curricula/$id", $admin, 'admin', [], ['name' => 'Theo quyển', 'levelLabel' => 'Chương']);
+        $r->params = ['id' => (string) $id];
+        $this->expectException(HttpError::class);
+        (new CurriculumController())->save($r);
+    }
+
+    public function testChuMauCuaCapLayTuBaiCuaChinhGiaoTrinh(): void
+    {
+        Db::exec("UPDATE levels SET sample_text = 'mẫu HSK' WHERE id = 1");
+        $c = $this->giaoTrinh();
+        $this->bai($c, 2);
+        Db::update('lessons', ['sample_text' => 'bài đầu'], ['id' => $this->bai($c, 1)]);
+
+        $capCua = static fn (int $id): array => array_values(array_filter(ContentBuilder::levels(false, $id), static fn (array $l) => $l['id'] === 1))[0];
+        $this->assertSame('mẫu HSK', $capCua(Curricula::DEFAULT_ID)['sampleText']);
+        $this->assertSame('bài đầu', $capCua($c)['sampleText']);
+    }
+
     public function testDuLieuCuThuocGiaoTrinhMacDinh(): void
     {
         $id = Db::insert('lessons', ['level_id' => 1, 'lesson_no' => 1, 'title' => 'Bài cũ']);

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { api } from '$lib/api/client';
   import type { HomeProgress, LevelInfo, Part } from '$lib/api/types';
@@ -61,7 +62,7 @@
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 18px">
       <div>
         <h1 style="font-size: 22px; line-height: 1.2">{info.name}</h1>
-        <p class="muted" style="margin-top: 4px; font-size: 14px">Bấm vào một cấp để chọn bài.</p>
+        <p class="muted" style="margin-top: 4px; font-size: 14px">Bấm vào một {cap.tu} để chọn bài.</p>
       </div>
       {#if failed}
         <EmptyState title="Không tải được dữ liệu.">
@@ -70,7 +71,7 @@
       {:else if loading}
         <div class="lv-grid m"><Skeleton h="120px" r={16} /><Skeleton h="120px" r={16} /></div>
       {:else}
-        <section aria-label="Các cấp HSK" class="lv-grid m">
+        <section aria-label={cap.cacCap} class="lv-grid m">
           {#each levels ?? [] as l (l.id)}
             <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} slug={info.slug} past={texts.past} mobile />
           {/each}
@@ -92,7 +93,7 @@
         {#snippet action()}<button type="button" class="btn" onclick={load}>Thử lại</button>{/snippet}
       </EmptyState>
     {:else}
-      <section aria-label="Các cấp HSK" class="lv-grid">
+      <section aria-label={cap.cacCap} class="lv-grid">
         {#if loading}
           {#each Array.from({ length: 6 }) as _, k (k)}<Skeleton h="190px" r={16} />{/each}
         {:else}

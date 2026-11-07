@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount, onDestroy } from 'svelte';
   import { api, ApiError } from '$lib/api/client';
   import { media } from '$lib/stores/media.svelte';
@@ -223,6 +224,8 @@
   const conLai = $derived(total - answeredCount);
   const contestTitle = $derived(at?.contestTitle ?? result?.contestTitle ?? null);
   const contestInProgress = $derived(!!at?.contestTitle && result === null);
+  /** Cuộc thi không có điểm đạt: không bao giờ hiện dấu “trượt”. */
+  const dat = $derived(contestTitle ? true : (result?.passed ?? false));
   const tenBai = $derived(contestTitle ?? (lessonTitle || heading));
   const quayLai = $derived(contestTitle ? '/learn/flashcards' : backHref);
   // Hết giờ là khoá màn làm bài cho tới khi nộp xong, không cho chọn thêm đáp án.
@@ -230,7 +233,7 @@
   // Đề thi thử không có số bài, nên dòng nhỏ trên đầu bài ghi theo loại bài kiểm tra.
   const kicker = $derived.by(() => {
     const loai = contestTitle ? 'Cuộc thi' : 'Thi thử cuối cấp';
-    const dau = mockTestId !== null ? `HSK ${levelId} · ${loai}` : `HSK ${levelId} · Bài ${lessonNo} · Kiểm tra`;
+    const dau = mockTestId !== null ? `HSK ${levelId} · ${loai}` : `${cap.ten(levelId)} · Bài ${lessonNo} · Kiểm tra`;
     return at ? `${dau} · ${total} câu · ${Math.round(at.durationSec / 60)} phút` : dau;
   });
   const qnClass = (x: TQ, k: number): string => {
@@ -263,8 +266,9 @@
     </div>
 
     <div class="kt-diem" style="padding: {m ? 4 : 10}px 0">
-      <span class="ib kt-diem-dau" style="background: {result.passed ? 'var(--ngoc-soft)' : 'var(--son-soft)'}; color: {result.passed ? 'var(--green-text)' : 'var(--bad-text)'}">
-        <Icon name={result.passed ? 'check' : 'x'} size={m ? 30 : 34} />
+      <!-- Cuộc thi không có điểm đạt nên không có “trượt”: luôn dấu tích, kể cả khi điểm thấp. -->
+      <span class="ib kt-diem-dau" style="background: {dat ? 'var(--ngoc-soft)' : 'var(--son-soft)'}; color: {dat ? 'var(--green-text)' : 'var(--bad-text)'}">
+        <Icon name={dat ? 'check' : 'x'} size={m ? 30 : 34} />
       </span>
       <p class="bignum disp" style="font-size: {m ? 26 : 32}px">{num(result.score)} / {num(result.maxScore)} điểm</p>
       {#if result.contestTitle}
@@ -407,7 +411,7 @@
     {#if contestTitle}
       <nav class="crumb" style="margin-left: 8px">{#if !contestInProgress}<a href={quayLai}>Bàn học</a> / {/if}<b>Cuộc thi</b></nav>
     {:else}
-      <nav class="crumb" style="margin-left: 8px"><a href={backHref}>Kiểm tra · HSK {levelId}</a> / <b>{heading}</b></nav>
+      <nav class="crumb" style="margin-left: 8px"><a href={backHref}>Kiểm tra · {cap.ten(levelId)}</a> / <b>{heading}</b></nav>
     {/if}
     <div style="margin-left: auto">{#if contestInProgress}<span class="tag">Đang làm bài</span>{:else}<Avatar size={44} />{/if}</div>
   </header>

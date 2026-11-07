@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { api } from '$lib/api/client';
@@ -61,14 +62,14 @@
   const speakerOf = (d: Dlg, id: number): Speaker | undefined => d.speakers.find((s) => s.id === id);
 </script>
 
-<svelte:head><title>Ôn hội thoại HSK {levelId} · Zìkǎ</title></svelte:head>
+<svelte:head><title>Ôn hội thoại {cap.ten(levelId)} · Zìkǎ</title></svelte:head>
 
 <!-- Một khung chứa cả danh sách: Pinyin | Nghĩa (cùng kiểu nút với màn đọc bài) ở đầu khung,
      mỗi bài khoá một ô nền nhạt mở ra được. -->
 {#snippet khung(m: boolean)}
   <section class="block zk-khung" class:zk-khung-m={m}>
     {#if list === null || list.length === 0}
-      <EmptyState title="Cấp này chưa có hội thoại nào." />
+      <EmptyState title="{cap.tuHoa} này chưa có hội thoại nào." />
     {:else}
       <div class="zk-khung-dau">
         <h2 class="zk-khung-ten">{list.length} bài khoá</h2>
@@ -126,7 +127,7 @@
 {/snippet}
 
 {#snippet loi()}
-  <EmptyState title="Cấp này chưa có hội thoại nào.">
+  <EmptyState title="{cap.tuHoa} này chưa có hội thoại nào.">
     {#snippet action()}<a href="/learn/dialogues/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
   </EmptyState>
 {/snippet}
@@ -138,7 +139,7 @@
       <a href="/learn/dialogues/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
       <span style="flex: 1; min-width: 0; text-align: center">
         <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Ôn hội thoại</b>
-        <span class="muted" style="font-size: 12px">HSK {levelId} · Ôn cả cấp</span>
+        <span class="muted" style="font-size: 12px">{cap.ten(levelId)} · Ôn cả {cap.tu}</span>
       </span>
       <Avatar size={36} />
     </header>
@@ -156,7 +157,7 @@
   <!-- ============ Máy tính ============ -->
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href="/learn/dialogues/hsk/{levelId}">Hội thoại · HSK {levelId}</a> / <b>Ôn cả cấp</b></nav>
+    <nav class="crumb" style="margin-left: 8px"><a href="/learn/dialogues/hsk/{levelId}">Hội thoại · {cap.ten(levelId)}</a> / <b>Ôn cả {cap.tu}</b></nav>
     <div style="margin-left: auto"><Avatar size={44} /></div>
   </header>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
@@ -167,8 +168,8 @@
     {:else}
       <DauBai
         href="/learn/dialogues/hsk/{levelId}"
-        kicker="HSK {levelId} · Ôn cả cấp · {list.length} bài khoá"
-        title="Ôn hội thoại HSK {levelId}"
+        kicker="{cap.ten(levelId)} · Ôn cả {cap.tu} · {list.length} bài khoá"
+        title="Ôn hội thoại {cap.ten(levelId)}"
       />
       {@render khung(false)}
     {/if}

@@ -51,9 +51,12 @@ final class QuestionPayload
     private static function options(array $in, array &$errors, bool $hanziOnly = false): array
     {
         $opts = [];
-        foreach ((array) ($in['options'] ?? []) as $o) {
+        // Ô trống bị lọc bỏ làm lệch chỉ số: đáp án phải được đổi theo vị trí mới, nếu không đáp án lưu sẽ trỏ sang phương án khác.
+        $newIndex = [];
+        foreach (array_values((array) ($in['options'] ?? [])) as $old => $o) {
             $t = trim((string) $o);
             if ($t !== '') {
+                $newIndex[$old] = count($opts);
                 $opts[] = mb_substr($t, 0, 200);
             }
         }
@@ -84,7 +87,7 @@ final class QuestionPayload
             }
         }
 
-        $answer = (int) ($in['answer'] ?? -1);
+        $answer = $newIndex[(int) ($in['answer'] ?? -1)] ?? -1;
         if ($answer < 0 || $answer >= count($opts)) {
             $errors['answer'] = 'Chưa chọn đáp án đúng.';
             $answer = 0;

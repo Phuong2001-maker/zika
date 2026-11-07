@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { api } from '$lib/api/client';
   import type { HomeProgress, LevelInfo } from '$lib/api/types';
@@ -15,6 +16,7 @@
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import MonthlyCommunity from '$lib/learn/MonthlyCommunity.svelte';
+  import { soHienThi } from '$lib/learn/resume';
 
   // Bàn học — Lật thẻ · Chọn cấp (07 §4.1).
   heartbeat.setActivity({ part: 'lt', screen: 'home' });
@@ -67,11 +69,11 @@
         {@const c = home.continue}
         <a href="/learn/flashcards/hsk/{c.levelId}/lesson/{c.lessonNo}" class="hn-tiep" style="--mau: var(--hsk{c.levelId}, var(--son))">
           <span class="hn-chu-nen" lang="zh" aria-hidden="true">{chuNen}</span>
-          <span class="kicker hn-kicker">{c.position > 0 ? 'Học tiếp' : 'Bài tiếp theo'} · HSK {c.levelId} · Bài {c.lessonNo}</span>
+          <span class="kicker hn-kicker">{c.position > 0 ? 'Học tiếp' : 'Bài tiếp theo'} · {cap.ten(c.levelId)} · Bài {c.lessonNo}</span>
           <span class="hn-ten">{c.title}</span>
           <span class="hz hn-mau" lang="zh">{c.sampleText}</span>
           <span class="hn-tien">
-            <span class="num">{c.position > 0 ? `Thẻ ${c.position}/${c.total}` : `${c.total} từ`}</span>
+            <span class="num">{c.position > 0 ? `Thẻ ${soHienThi(c.position, c.total)}/${c.total}` : `${c.total} từ`}</span>
             <span class="hn-tien-bar"><Bar value={c.position} total={c.total} /></span>
           </span>
           <span class="btn btn-son hn-nut">{c.position > 0 ? 'Học tiếp' : 'Bắt đầu học'} </span>
@@ -85,7 +87,7 @@
         <div class="hn-tiep hn-het">
           <span class="stamp" style="font-size: 26px">完成</span>
           <span class="hn-ten">Bạn đã lật hết các bài đang có</span>
-          <span class="muted" style="font-size: 14px">Ôn lại bằng bài Tổng hợp của từng cấp, bài mới sẽ hiện ở đây.</span>
+          <span class="muted" style="font-size: 14px">Ôn lại bằng bài Tổng hợp của từng {cap.tu}, bài mới sẽ hiện ở đây.</span>
         </div>
       {/if}
 
@@ -123,7 +125,7 @@
   {#if sapCo.length > 0}
     <p class="hn-sapco">
       <span>Sắp có</span>
-      {#each sapCo as l (l.id)}<span class="tag">HSK {l.id}</span>{/each}
+      {#each sapCo as l (l.id)}<span class="tag">{cap.ten(l.id)}</span>{/each}
       <span>· đang soạn</span>
     </p>
   {/if}
@@ -134,8 +136,8 @@
     {@const s = home.reviewSuggest}
     <section class="suggest">
       <span class="ib" style="width: 46px; height: 46px; background: var(--surface); border-radius: 12px"><Icon name="cards" size={22} /></span>
-      <span style="flex: 1; font-size: 14px"><b style="display: block">Tổng hợp HSK {s.levelId}</b>Bạn đã học xong {s.done}/{s.total} bài. Lật bài Tổng hợp để ôn cả cấp.</span>
-      <a href="/learn/flashcards/hsk/{s.levelId}?review=1" class="btn btn-icon btn-sm" aria-label="Mở Tổng hợp HSK {s.levelId}"><Icon name="chev" size={18} /></a>
+      <span style="flex: 1; font-size: 14px"><b style="display: block">Tổng hợp {cap.ten(s.levelId)}</b>Bạn đã học xong {s.done}/{s.total} bài. Lật bài Tổng hợp để ôn cả {cap.tu}.</span>
+      <a href="/learn/flashcards/hsk/{s.levelId}?review=1" class="btn btn-icon btn-sm" aria-label="Mở Tổng hợp {cap.ten(s.levelId)}"><Icon name="chev" size={18} /></a>
     </section>
   {/if}
 {/snippet}
@@ -161,8 +163,8 @@
         <div class="lv-grid m"><Skeleton h="120px" r={20} /><Skeleton h="120px" r={20} /></div>
       {:else}
         {@render homNay(true)}
-        <h2 class="hn-muc">Chọn cấp HSK</h2>
-        <section aria-label="Các cấp HSK" class="lv-grid m">
+        <h2 class="hn-muc">{cap.chon}</h2>
+        <section aria-label={cap.cacCap} class="lv-grid m">
           {#each moLevels as l (l.id)}
             <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} mobile />
           {/each}
@@ -185,9 +187,9 @@
     {:else}
       {#if loading}<Skeleton h="240px" r={20} />{:else}{@render homNay(false)}{/if}
       <div style="display: flex; flex-direction: column; gap: 14px">
-        <h2 class="hn-muc">Chọn cấp HSK</h2>
+        <h2 class="hn-muc">{cap.chon}</h2>
         <div style="display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start">
-          <section aria-label="Các cấp HSK" class="lv-grid" style="flex: 999 1 640px; min-width: 0">
+          <section aria-label={cap.cacCap} class="lv-grid" style="flex: 999 1 640px; min-width: 0">
             {#if loading}
               {#each Array.from({ length: 3 }) as _, i (i)}<Skeleton h="190px" r={20} />{/each}
             {:else}

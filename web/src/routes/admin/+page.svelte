@@ -113,7 +113,7 @@
       <p class="muted" style="font-size: 13.5px">Số người online theo từng giờ. Rê chuột lên ô để xem số.</p>
       <div style="overflow-x: auto">
         <div style="min-width: 560px; display: flex; flex-direction: column; gap: 3px">
-          {#each data.heatmap.rows as r (r.label)}
+          {#each data.heatmap.rows as r, ri (ri)}
             <div class="hm-row">
               <span class="muted num" style="font-size: 12px">{r.label}</span>
               {#each r.cells as v, h (h)}

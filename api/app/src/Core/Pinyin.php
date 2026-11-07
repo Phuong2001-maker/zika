@@ -36,6 +36,12 @@ final class Pinyin
         return $s !== '' && (bool) preg_match('/^\p{Han}+$/u', $s);
     }
 
+    /** Từ trong bảng từ vựng: chữ Hán, hoặc dạng khung sách in có dấu ba chấm như 太…了, 又…又…, …似的. */
+    public static function isWordForm(string $s): bool
+    {
+        return (bool) preg_match('/^…?\p{Han}+(…\p{Han}+)*…?$/u', $s);
+    }
+
     /** Tách một chuỗi thành từng chữ Hán, bỏ trùng, giữ thứ tự xuất hiện. */
     public static function chars(string $s): array
     {

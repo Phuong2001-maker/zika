@@ -105,7 +105,7 @@
   <!-- Đề bài -->
   {#if isWordQ}
     <div class="word">
-      {#each Array.from(String(payload.word ?? '')) as ch (ch)}
+      {#each Array.from(String(payload.word ?? '')) as ch, ci (ci)}
         <span class="tian hz" lang="zh" style="width: {mobile ? 86 : 106}px; height: {mobile ? 86 : 106}px; font-size: {mobile ? 58 : 74}px">{ch}</span>
       {/each}
     </div>
