@@ -23,6 +23,26 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 07/11/2026 — Học viên Hán ngữ thấy "Quyển n" thay cho "HSK n"
+
+Thêm cột `curricula.level_label` (migration 015, chọn ở form giáo trình), API trả `user.levelLabel`, màn học đọc qua
+`lib/stores/cap.svelte.ts`. Chữ mẫu trên thẻ cấp của giáo trình khác HSK lấy từ bài đầu của chính nó. Không đổi: URL `/hsk/n`,
+tên "Thi thử HSK n" (đề HSK dùng chung), màn thống kê của quản trị (Người dùng, Phiên truy cập, Tổng quan). Gói server phải đóng lại
+vì `01-cau-truc.sql` thêm migration 015. Lúc làm có chạy nhầm `install.php` không tham số ở DB dev: 3 tài khoản mẫu bị đặt lại mật khẩu
+`Zika@2026`, nội dung và tiến độ không đổi. Muốn chỉ chạy migration thì dùng `--migrate`.
+Kiểm tra: web 0 lỗi/0 cảnh báo, lint sạch, 103/103 test, build được; API 161/161 (1088 assertions); `thu_server.php` ĐẠT với gói mới.
+Trình duyệt: học viên Hán ngữ qua trang học của 4 phần có nội dung, danh sách Bài tập và Kiểm tra, trang Tài khoản (N13); học viên HSK qua
+Bàn học và Luyện viết (N14); quản trị và Xem thử (N15); Bàn học và màn chọn bài ở 375px không tràn ngang. Chưa đưa lên server.
+
+### 07/11/2026 — Nạp giáo trình Hán ngữ 6 tập, sửa lỗi sau đợt rà toàn hệ thống
+
+Giáo trình mới 76 bài, 2.959 từ, 129 bài khóa, 1.774 câu, 682 mục ngữ pháp, 3.090 chữ luyện viết, chỉ gồm Lật thẻ, Luyện viết,
+Hội thoại, Ngữ pháp. Quy trình và các quyết định ở `data/han-ngu/README.md`. Âm thanh bài khóa: 69 dùng file băng, 35 cắt từ file
+chung, 25 ghép giọng mẫu vì băng đọc khác sách.
+Sửa ở API: chấm bài cuộc thi dài, ngày học thật (`study_days`, migration 014), editor bị chặn đúng chỗ, tái mở kết quả cuộc thi đã
+đóng, xếp lại bài, luật admin hoạt động. Sửa ở web: học tiếp ở lật thẻ, ôn tập, bài tập, luyện viết; khoá trùng ở trang người dùng;
+cache bài theo giáo trình; tooltip ném lỗi khi nút đang focus biến mất.
+
 ### 06/11/2026 — Bỏ mũi tên thẳng trên nút, đồng bộ điều hướng bằng chevron
 
 Bỏ mũi tên trang trí cạnh chữ ở các nút cuộc thi, Bàn học, thẻ cấp, Gõ chữ, Trắc nghiệm, chuyển câu kiểm tra,

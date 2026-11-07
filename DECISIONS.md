@@ -17,6 +17,8 @@
 | 9 | Cron 5 phút | Bước “chấm bài kiểm tra quá hạn” chỉ chạy khi đã có `TestService` (Giai đoạn 2). Bước chuyển trạng thái thông báo theo lịch làm luôn từ Giai đoạn 0. | Cron dựng một lần, các giai đoạn sau chỉ bổ sung. |
 | 10 | Kiểm thử PHP cần DB | Dùng database riêng `zika_test` (đổi bằng `ZIKA_TEST_DB`), lấy tài khoản DB từ `config.php` máy dev; mỗi test xoá sạch bảng trừ dữ liệu nền. Không kết nối được DB thì bỏ qua thay vì báo đỏ. | Không bao giờ chạm DB thật; test độc lập nhau. |
 | 11 | Đặc tả trong repo | Không chép `zika-spec/` vào repo; README trỏ tới thư mục đặc tả nằm cạnh. | Tránh 2 bản đặc tả lệch nhau. |
+| 12 | Cách gọi cấp theo giáo trình | Cột `curricula.level_label`, chỉ nhận `HSK` hoặc `Quyển`; web đọc qua `user.levelLabel`. Giữ URL `/hsk/n` và tên "Thi thử HSK n". | Id giáo trình trên server khác local và tên đổi được nên không so id hay tên. Chữ tự do không ghép được câu như "Chọn quyển", "ôn cả quyển". Thi thử là đề HSK thật, dùng chung mọi giáo trình. |
+| 13 | Quyển sách trong giáo trình Hán ngữ | Quyển n nằm ở cấp n, số bài giữ đúng số in trong sách (Q2 từ Bài 16). | Không phải thêm bảng cấp riêng cho từng giáo trình, người học đối chiếu được với sách giấy. |
 
 ## Nhật ký giai đoạn
 

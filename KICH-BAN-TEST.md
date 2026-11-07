@@ -259,6 +259,29 @@ Kiểm ở 375px và 1280px, giao diện sáng/tối. Các mục dưới là che
 | M6 | Chuyển từ trước/sau, trang sách, phân trang học viên/phiên admin | Chevron đúng chiều; không có nút trống; nút đầu/cuối bị vô hiệu đúng như trước | Chờ kiểm tay |
 | M7 | Mở sách, học viên, Bài tiếp Ngữ pháp; bung hội thoại tổng hợp | Chevron gọn, hành động/mở gập đúng; không tràn chữ ở điện thoại | Chờ kiểm tay |
 
+## N. Giáo trình Hán ngữ 6 tập (07/11/2026)
+
+"Đạt" là đã chạy ở local: N1–N12 trên bản sao DB, N13–N15 trên DB dev. Trên server chưa kiểm vì gói chưa đưa lên.
+Chưa bấm thử trên trình duyệt: nút Lưu ở form giáo trình (API đã có test), nhãn "Quyển n" ở màn làm Bài tập và Kiểm tra của một bài.
+
+| # | Làm gì | Mong đợi | Kết quả |
+|---|---|---|---|
+| N1 | Gán học viên vào Hán ngữ, mở Bàn học | 6 quyển: 15, 10, 12, 13, 13, 13 bài; số bài theo sách (Q2 từ Bài 16) | Đạt |
+| N2 | Quét cả 76 bài qua API người học (`quet_hn.py`) | Mọi từ, chữ, câu thoại, bài khóa có dữ liệu; 13.000+ file âm thanh và nét chữ tải được, đúng bản đã kiểm | Đạt |
+| N3 | Lật thẻ, Ghép cặp, Trắc nghiệm, Gõ chữ ở bài có từ 又…又… | Đủ thẻ, 4 chế độ chạy, từ loại không ghi "Danh từ" sai | Đạt |
+| N4 | Hội thoại Q6 Bài 22, bấm Nghe | Phát đủ 8 phút; bấm từng câu đọc đúng câu | Nghe cả bài đạt về kỹ thuật; **người chưa nghe** |
+| N5 | Ngữ pháp Q1 Bài 12 | Câu sách đánh dấu sai có nhãn "Câu sai"; không thành ví dụ lật thẻ, không thành bài xếp câu | Đạt |
+| N6 | Học Q1 Bài 1 rồi xem Q3 Bài 1 | Tiến độ không lẫn dù cùng số bài | Đạt |
+| N7 | Học viên HSK mở bài Hán ngữ và ngược lại | 404; HSK cấp 4–6 hiện "Sắp có", không có bài | Đạt |
+| N8 | Bài tập, Kiểm tra của Hán ngữ | Danh sách bài ghi Sắp có, không lỗi | Đạt |
+| N9 | Lưu lại hội thoại trong quản trị | Không mất âm thanh | Đạt |
+| N10 | Chạy `01-cau-truc.sql` + `02-han-ngu.sql` hai lần trên DB giống server cũ (`thu_server.php`) | Cấu trúc và nội dung khớp local; HSK, chữ có sẵn, tài khoản không đổi | Đạt |
+| N11 | Mở 375px: Bàn học, Lật thẻ, Luyện viết, Hội thoại, Ngữ pháp | Không tràn ngang | Đạt |
+| N12 | Người nghe thử giọng: danh sách máy nghe khác chữ (`ra/doc_edge_kq.json`, trạng thái `nghi`) | Giọng đọc đúng | **Chờ người nghe** |
+| N13 | Học viên Hán ngữ đi qua 6 phần và trang Tài khoản | Ghi "Quyển n", "Chọn quyển", "ôn cả quyển"; chữ mẫu lấy từ bài đầu của quyển; riêng "Thi thử HSK n" giữ vì là đề HSK dùng chung | Đạt |
+| N14 | Học viên HSK đi qua các màn đó | Vẫn "HSK n", "Chọn cấp HSK", chữ mẫu cũ | Đạt ở Bàn học và Luyện viết; **các màn còn lại chưa bấm** |
+| N15 | Quản trị: thẻ giáo trình, tab cấp và đầu trang soạn bài của Hán ngữ; Xem thử `?preview=1&curriculum=` | Ghi "Quyển n" theo giáo trình đang xem; rời Xem thử thì về nhãn của tài khoản | Đạt |
+
 ## E. Kiểm tra tự động (chạy ở máy dev)
 
 ```bash

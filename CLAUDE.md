@@ -25,6 +25,8 @@ Quên thì `cd api && php app/tools/install.php --reset-demo-password`.
 
 Email ở máy dev không gửi thật, ghi vào `api/app/storage/logs/mail-*.log`.
 
+Chạy migration mới: `cd api && php app/tools/install.php --migrate`. Không có tham số (kể cả `--help`) là cài đặt thật: ở máy dev nó đặt lại mật khẩu và vai trò 3 tài khoản mẫu.
+
 ## Kiểm tra trước khi commit — bắt buộc chạy hết
 
 ```bash
@@ -35,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 88/88 test; API 133/133; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 103/103 test; API 161/161; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -47,8 +49,10 @@ web/src/lib/admin/       riêng khu quản trị (menu.ts, api.ts, LessonHeader.
 web/src/lib/admin/import/ nhập Excel cho 6 phần soạn bài — xem bẫy số 6
 web/src/lib/curricula/   màn Giáo trình + Phân quyền học (giáo trình → cấp → bài, API thật)
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
+web/src/lib/stores/cap.svelte.ts  cách gọi cấp theo giáo trình ("HSK 1" / "Quyển 1"), màn học lấy chữ từ đây
 web/src/lib/learn/che-do/  3 chế độ luyện ở màn Lật thẻ (Ghép cặp, Trắc nghiệm, Gõ chữ)
 web/src/lib/learn/sach.ts  3 quyển giáo trình ở /learn/books — chỉ admin, ảnh qua /api/admin/books (ngoài git)
+data/han-ngu/            nạp giáo trình Hán ngữ 6 tập: chép từ ảnh → sinh → nạp → giọng → quét → gói server
 web/src/app.css          tokens + class dùng chung TOÀN CỤC (xem bẫy số 1); cuối file là khung học `zk-*`
 api/app/src/             Controllers/, Services/, Core/
 api/app/config.php       bí mật (DB, Google, SMTP) — gitignore, KHÔNG commit
@@ -136,6 +140,11 @@ hoặc khởi động lại `npm run dev`. Bản build không bị.
 
 ## Việc còn treo
 
+- **Giáo trình "Hán ngữ 6 tập" (07/11/2026):** 76 bài đã nạp ở local, quy trình ở [data/han-ngu/README.md](data/han-ngu/README.md).
+  Chỉ có 4 phần, Bài tập và Kiểm tra cố ý để trống. Gói server ở `../dong-goi-han-ngu/`, **chưa đưa lên**: cần code mới trước,
+  rồi chạy `01-cau-truc.sql` (migration 006–015, đã chạy thì tự bỏ qua) và `02-han-ngu.sql`, chép zip uploads, xoá `storage/cache/content`.
+  Màn học gọi cấp theo `curricula.level_label` qua `lib/stores/cap.svelte.ts` ("Quyển n"), đừng viết cứng "HSK n" ở màn học; riêng "Thi thử HSK n" giữ vì là đề HSK dùng chung. Góp ý ở màn học chưa nối (không có nút gửi, không có route POST).
+
 - **Giao diện giáo trình admin + quỹ thưởng/top chăm học/bé túi Shopee (05–06/11/2026):** đọc
   [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md) trước khi tiếp tục. Chỉ frontend/dữ liệu mẫu;
   mỗi học viên một giáo trình do admin gán, không thêm màn chọn giáo trình cho học viên.
@@ -143,7 +152,7 @@ hoặc khởi động lại `npm run dev`. Bản build không bị.
   Giáo trình và tab Đề thi đã có API thật; đề thi thử cuối cấp vẫn dùng chung mọi giáo trình.
   Link Shopee đã có API thật (Icon 1 link, Quỹ tháng nhiều link, công tắc ở `/admin/support`), tiền quỹ do admin nhập tay ở cùng màn đó;
   cuộc thi tạo ở `/admin/contests`, chọn đề từ tab `/admin/exams` (chỉ cần tên, câu nạp sau), đề Nháp chỉ làm được trong giờ thi, hết giờ tự nộp, xếp hạng theo câu đúng rồi thời gian, mỗi người 1 lượt.
-  đăng ký trước giờ thi mới được làm, cơ cấu giải chỉnh ở cùng màn. Trang soạn đề là bản tạm. **Server thật còn cần migration 007 đến 013 và xoá `storage/cache/content`** rồi gắn link Icon thì bé mới hiện. Top chăm học vẫn minh hoạ. Checklist: phần I, J, K, L của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+  đăng ký trước giờ thi mới được làm, cơ cấu giải chỉnh ở cùng màn. Trang soạn đề là bản tạm. **Server thật còn cần migration 007 đến 015 và xoá `storage/cache/content`** rồi gắn link Icon thì bé mới hiện. Top chăm học vẫn minh hoạ. Checklist: phần I, J, K, L của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 - **ĐANG DỞ — giọng đọc mới toàn bộ + sửa UI/UX (03/11/2026), chỉ còn đưa lên server:** mọi file đọc
   mẫu chuyển sang giọng Microsoft (edge-tts), câu thoại giọng riêng từng nhân vật, `TTS_VERSION = 6`;

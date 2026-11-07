@@ -87,6 +87,16 @@ Máy dev thì thư mục uploads là `api/dev-uploads`, hosting là `public_html
 Kế hoạch nạp nội dung 3 quyển này vào 6 phần học ghi ở
 [data/giao-trinh/TIEN-DO.md](data/giao-trinh/TIEN-DO.md).
 
+## Nhiều bộ giáo trình
+
+Mỗi học viên học một giáo trình do quản trị gán ở **Giáo trình → Phân quyền học**; chưa gán thì học giáo trình mặc định.
+Mọi giáo trình dùng chung 6 cấp, form giáo trình có mục **Học viên thấy cấp là** để chọn cách gọi: `HSK 1, HSK 2…` hoặc
+`Quyển 1, Quyển 2…`. Màn học lấy chữ này qua `web/src/lib/stores/cap.svelte.ts`, nên đừng viết cứng "HSK n" ở màn học.
+"Thi thử HSK n" là ngoại lệ vì đó là đề HSK dùng chung mọi giáo trình. Đường dẫn vẫn là `/hsk/n` ở mọi giáo trình.
+
+Giáo trình **Hán ngữ 6 tập** có 76 bài, chỉ gồm Lật thẻ, Luyện viết, Hội thoại và Ngữ pháp. Cách nạp và cách đưa lên server
+ở [data/han-ngu/README.md](data/han-ngu/README.md).
+
 ## Kiểm thử
 
 ```bash
