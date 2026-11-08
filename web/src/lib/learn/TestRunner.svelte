@@ -403,15 +403,10 @@
   </div>
 {:else}
   <header class="topbar">
-    {#if contestInProgress}
-      <span class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</span>
-    {:else}
-      <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    {/if}
     {#if contestTitle}
-      <nav class="crumb" style="margin-left: 8px">{#if !contestInProgress}<a href={quayLai}>Bàn học</a> / {/if}<b>Cuộc thi</b></nav>
+      <nav class="crumb">{#if !contestInProgress}<a href={quayLai}>Bàn học</a> / {/if}<b>Cuộc thi</b></nav>
     {:else}
-      <nav class="crumb" style="margin-left: 8px"><a href={backHref}>Kiểm tra · {cap.ten(levelId)}</a> / <b>{heading}</b></nav>
+      <nav class="crumb"><a href={backHref}>Kiểm tra · {cap.ten(levelId)}</a> / <b>{heading}</b></nav>
     {/if}
     <div style="margin-left: auto">{#if contestInProgress}<span class="tag">Đang làm bài</span>{:else}<Avatar size={44} />{/if}</div>
   </header>

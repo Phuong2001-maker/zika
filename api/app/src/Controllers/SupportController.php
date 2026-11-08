@@ -9,6 +9,7 @@ use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Core\Settings;
 use Zika\Core\Validator;
+use Zika\Services\BookAccess;
 
 /** Link Shopee phía người học: bé túi (một link) và hộp Quỹ tháng (nhiều link). */
 final class SupportController
@@ -32,7 +33,9 @@ final class SupportController
                 $fund[] = ['id' => $id, 'name' => (string) $l['name'], 'url' => "/go/$id?place=fund"];
             }
         }
-        return ['icon' => $icon, 'fund' => $fund, 'monthlyFund' => self::monthlyFund()];
+        // Bấm rồi thì bé túi nghỉ đến 0h hôm sau: bấm thêm trong ngày không được thêm điểm mở bài.
+        $claimed = $r->user !== null && BookAccess::daNhanHomNay($r->userId());
+        return ['icon' => $icon, 'fund' => $fund, 'monthlyFund' => self::monthlyFund(), 'claimedToday' => $claimed];
     }
 
     /**
@@ -86,12 +89,14 @@ final class SupportController
         if ($r->method === 'GET' && $r->user !== null) {
             $place = in_array($r->q('place'), self::PLACES, true) ? (string) $r->q('place') : 'fund';
             self::logEvent($id, 'click', $place, $r->userId());
+            // Điểm mở bài giáo trình chỉ cộng ở đây, phía server: web không tự báo "đã bấm" được.
+            BookAccess::nhanDiemNgay($r->userId());
         }
         return Response::redirect((string) $link['url']);
     }
 
     /** @return list<array<string,mixed>> */
-    private static function visibleLinks(): array
+    public static function visibleLinks(): array
     {
         if (!(bool) Settings::value('support', 'enabled', false)) {
             return [];

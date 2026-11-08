@@ -1,4 +1,6 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
+  import Topbar from '$lib/components/Topbar.svelte';
   import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
@@ -9,8 +11,6 @@
   import { toast } from '$lib/stores/toast.svelte';
   import { num } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
-  import Switcher from '$lib/components/Switcher.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import DauBai from '$lib/components/DauBai.svelte';
@@ -110,19 +110,13 @@
 
 {#if media.isMobile}
   <div class="mscreen">
-    <header class="mtop">
-      <a href="/learn/tests/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
-      <b style="flex: 1; min-width: 0; font-size: 15px">Thi thử HSK {levelId}</b>
-      <Avatar size={36} />
-    </header>
+    <MTopbar current="kt" back="/learn/tests/hsk/{levelId}" backLabel="Về danh sách bài" title="Thi thử HSK {levelId}" />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">{@render body(true)}</main>
   </div>
 {:else}
-  <header class="topbar">
-    <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href="/learn/tests/hsk/{levelId}">Kiểm tra · {cap.ten(levelId)}</a> / <b>Thi thử</b></nav>
-    <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="kt" /><Avatar size={44} /></div>
-  </header>
+  <Topbar current="kt">
+    <nav class="crumb"><a href="/learn/tests/hsk/{levelId}">Kiểm tra · {cap.ten(levelId)}</a> / <b>Thi thử</b></nav>
+  </Topbar>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
     <DauBai href="/learn/tests/hsk/{levelId}" kicker="{cap.ten(levelId)} · Kiểm tra cuối {cap.tu}" title="Thi thử HSK {levelId}" />
     {@render body(false)}

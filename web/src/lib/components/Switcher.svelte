@@ -89,6 +89,10 @@
           <a href="/learn/books" class="swi" onclick={() => (open = false)}
             ><span class="swi-ic" style="background: #EFE0C8"><Icon name="book" size={24} /></span>Giáo trình</a
           >
+          <!-- Quán trà: phòng trò chuyện chung (08/11/2026). Màu trà xanh, không lẫn với 6 phần học và Giáo trình. -->
+          <a href="/learn/chat" class="swi" onclick={() => (open = false)}
+            ><span class="swi-ic" style="background: #DDEFD9"><Icon name="cup" size={24} /></span>Quán trà</a
+          >
         </nav>
         {#if showFeedback && feedback.available}
           <span class="rule"></span>

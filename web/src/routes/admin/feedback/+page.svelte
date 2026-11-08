@@ -174,12 +174,12 @@
           <span class={CAT_CLASS[detail.category] ?? 'tag'}>{CAT_LABEL[detail.category] ?? detail.category}</span>
         </div>
 
-        {#if detail.ctx && (detail.ctx.lessonId || detail.ctx.part)}
+        {#if detail.ctx && (detail.ctx.lessonId || detail.ctx.part || detail.ctx.book)}
           <div class="ctx">
             <Icon name="quiz" size={18} />
             <span style="flex: 1; font-size: 14px; font-weight: 700">
-              Gửi từ: {PART_LABEL[String(detail.ctx.part ?? '')] ?? 'Màn học'}
-              {detail.ctx.levelId ? ` · HSK ${detail.ctx.levelId}` : ''}
+              Gửi từ: {detail.ctx.book ? `Giáo trình ${String(detail.ctx.book).toUpperCase()}${detail.ctx.trang ? ` · trang ${detail.ctx.trang}` : ''}` : (PART_LABEL[String(detail.ctx.part ?? '')] ?? 'Màn học')}
+              {detail.ctx.levelId ? ` · ${detail.ctx.capTen ?? `HSK ${detail.ctx.levelId}`}` : ''}
               {detail.ctx.lessonNo ? ` · Bài ${detail.ctx.lessonNo}` : ''}
               {detail.ctx.questionNo ? ` · Câu ${detail.ctx.questionNo}` : ''}
             </span>
@@ -211,7 +211,7 @@
         </div>
 
         <div class="field">
-          <label class="lbl" for="f-reply">Trả lời qua email</label>
+          <label class="lbl" for="f-reply">Trả lời (học viên đọc trong hộp Góp ý; có SMTP thì gửi kèm email)</label>
           <textarea id="f-reply" class="inp" rows="3" bind:value={reply}
                     placeholder="Cảm ơn bạn! Mình đã sửa lại câu này."></textarea>
           {#if detail.repliedAt}<p class="hint">Đã trả lời {ago(detail.repliedAt)}.</p>{/if}

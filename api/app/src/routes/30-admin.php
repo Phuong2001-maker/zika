@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 use Zika\Controllers\BookController as Book;
+use Zika\Controllers\Admin\BookPointsController as BookPoints;
+use Zika\Controllers\Admin\ChatController as ChatAdmin;
 use Zika\Controllers\Admin\ContentController as Content;
 use Zika\Controllers\Admin\ContestController as Contest;
 use Zika\Controllers\Admin\CurriculumController as Curriculum;
@@ -141,6 +143,20 @@ return [
     ['PATCH',  '/admin/support/links/{id}', [Ops::class, 'toggleLink'], 'A'],
     ['DELETE', '/admin/support/links/{id}', [Ops::class, 'deleteLink'], 'A'],
     ['PUT',    '/admin/support/donate', [Ops::class, 'donate'], 'A'],
+
+    // Điểm mở bài giáo trình (migration 019)
+    ['GET',    '/admin/book-points', [BookPoints::class, 'settings'], 'A'],
+    ['PUT',    '/admin/book-points/test-mode', [BookPoints::class, 'testMode'], 'A'],
+    ['GET',    '/admin/book-points/user', [BookPoints::class, 'user'], 'A'],
+    ['POST',   '/admin/book-points/adjust', [BookPoints::class, 'adjust'], 'A'],
+
+    // Quán trà (migration 020)
+    ['GET',    '/admin/chat', [ChatAdmin::class, 'index'], 'A'],
+    ['PATCH',  '/admin/chat', [ChatAdmin::class, 'toggle'], 'A'],
+    ['POST',   '/admin/chat/mute', [ChatAdmin::class, 'mute'], 'A'],
+    ['DELETE', '/admin/chat/mute/{id}', [ChatAdmin::class, 'unmute'], 'A'],
+    ['POST',   '/admin/chat/rooms', [ChatAdmin::class, 'saveRoom'], 'A'],
+    ['PUT',    '/admin/chat/rooms/{id}', [ChatAdmin::class, 'saveRoom'], 'A'],
 
     // Cài đặt (04 §10.11)
     ['GET',    '/admin/settings', [Ops::class, 'settings'], 'A'],

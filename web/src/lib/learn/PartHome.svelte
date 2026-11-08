@@ -1,4 +1,5 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
   import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { api } from '$lib/api/client';
@@ -6,9 +7,6 @@
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import Topbar from '$lib/components/Topbar.svelte';
-  import Switcher from '$lib/components/Switcher.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
-  import MonthlyCommunity from '$lib/learn/MonthlyCommunity.svelte';
   import LevelCard from '$lib/components/LevelCard.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
@@ -52,13 +50,7 @@
 {#if media.isMobile}
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
-    <header class="mtop">
-      <div style="margin-left: auto; display: flex; align-items: center; gap: 6px">
-        <MonthlyCommunity />
-        <Switcher current={part} />
-        <Avatar size={32} />
-      </div>
-    </header>
+    <MTopbar current={part} />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 18px">
       <div>
         <h1 style="font-size: 22px; line-height: 1.2">{info.name}</h1>

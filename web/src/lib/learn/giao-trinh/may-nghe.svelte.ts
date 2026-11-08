@@ -11,6 +11,9 @@ export class MayNghe {
   ma = $state('');
   phien = $state('');
   tenSach = $state('');
+  /** Mã ký của quyển, gắn vào đường dẫn file nghe (server từ chối đường dẫn không có mã hợp lệ). */
+  ve = $state('');
+  /** Chỉ các file của bài đã mở. */
   ds = $state<BaiNghe[]>([]);
   /** File đang mở trên thanh phát; null = thanh phát đóng. */
   dang = $state<BaiNghe | null>(null);
@@ -22,7 +25,10 @@ export class MayNghe {
   tocDo = $state(1);
   lap = $state(false);
 
+  /** Lấy mã ký mới khi file lỗi giữa chừng (mã hết hạn lúc tạm dừng lâu); null = không lấy được. */
+  lamMoiVe: (() => Promise<string | null>) | null = null;
   #audio: HTMLAudioElement | null = null;
+  #daThuLai = false;
 
   constructor() {
     try {
@@ -38,11 +44,16 @@ export class MayNghe {
     return this.dang ? this.ds.findIndex((b) => b.so === this.dang?.so) : -1;
   }
 
-  napSach(ma: string, phien: string, tenSach: string, ds: BaiNghe[]): void {
+  napSach(ma: string, phien: string, tenSach: string): void {
     if (this.ma !== ma) this.dong();
     this.ma = ma;
     this.phien = phien;
     this.tenSach = tenSach;
+  }
+
+  /** Mã ký mới hoặc danh sách file đọc được đổi (vừa mở bài): không ngắt file đang phát. */
+  capNhat(ve: string, ds: BaiNghe[]): void {
+    this.ve = ve;
     this.ds = ds;
   }
 
@@ -54,7 +65,8 @@ export class MayNghe {
       this.hienTai = 0;
       this.tongGiay = bai.giay;
       this.loi = false;
-      a.src = urlNghe(this, bai.so);
+      a.src = urlNghe(this, this.ve, bai.so);
+      this.#daThuLai = false;
       a.playbackRate = this.tocDo;
       a.loop = this.lap;
       this.#manHinhKhoa();
@@ -154,10 +166,25 @@ export class MayNghe {
     a.addEventListener('playing', () => {
       this.dangTai = false;
       this.loi = false;
+      this.#daThuLai = false;
     });
     a.addEventListener('canplay', () => (this.dangTai = false));
     a.addEventListener('error', () => {
       if (!a.getAttribute('src')) return;
+      // Lỗi đầu tiên của một file: thường là mã ký đã hết hạn sau khi tạm dừng lâu. Lấy mã mới, phát tiếp đúng chỗ.
+      const dang = this.dang;
+      if (dang && !this.#daThuLai && this.lamMoiVe) {
+        this.#daThuLai = true;
+        const luc = this.hienTai;
+        void this.lamMoiVe().then((ve) => {
+          if (!ve || this.dang?.so !== dang.so) return;
+          this.ve = ve;
+          a.src = urlNghe(this, ve, dang.so);
+          a.currentTime = luc;
+          this.choi();
+        });
+        return;
+      }
       this.loi = true;
       this.dangTai = false;
       this.phat = false;

@@ -23,6 +23,32 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 08/11/2026 — Mở bài giáo trình bằng điểm, chặn tải
+
+- **Luật:** học viên chỉ đọc được bài đã mở. Lần đầu bấm bé túi/link Shopee +3 điểm, từ hôm sau mỗi ngày bấm +1 (giữ điểm chưa
+  dùng, không bù ngày không bấm). 1 điểm mở 1 bài, lần lượt; quyển sau khoá đến khi mở hết quyển trước.
+  Bé túi: giai đoạn test vẫn hiện mỗi lần tải trang (người dùng yêu cầu); khi chốt thì nghỉ đến 0h hôm sau.
+- **Chặn tải:** server trả 403 cho ảnh trang, đáp án, file nghe của bài chưa mở; mọi đường dẫn file phải kèm mã ký của chính
+  tài khoản (sống 6 giờ). Màn đọc tắt chuột phải, giữ ngón tay, kéo ảnh, Ctrl+S/P, không in trang sách.
+- **Code:** migration `019_diem_mo_bai.sql` (`book_points`, `book_unlocks`); `Services/BookAccess.php`,
+  `Controllers/BookPointsController.php`, `Controllers/Admin/BookPointsController.php`; web: `lib/learn/diem-doc.svelte.ts`,
+  `lib/learn/DiemChip.svelte`, `giao-trinh/KhoaBai.svelte`, `/admin/book-points`. Cài đặt mới `points.test_mode`.
+- **Đã test:** API 19 test giáo trình (chặn, mã ký, điểm theo ngày, mở lần lượt, chế độ test); web `sach.test.ts` luật mở trang.
+  Trình duyệt (local, tài khoản mẫu): kệ sách, thẻ khoá, nhận điểm, mở Bài 1, file nghe 206, Bài 2 vẫn 403,
+  màn quản trị điểm; máy tính và 375px. Kịch bản: phần O của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+- **Sửa thêm cùng ngày:** đã làm phần **bán gói học** (trọn bộ, một lần dùng mãi mãi, chuyển khoản + quản trị duyệt) rồi
+  **bỏ hẳn** theo người dùng vì rủi ro pháp lý khi thu tiền bản scan sách — xoá code, bảng `book_packages/orders/owned`,
+  cài đặt `payment`, trang `/learn/books/goi`;
+  thanh đầu trang thống nhất ở mọi màn (máy tính `Topbar`, điện thoại `MTopbar`), bỏ logo; ô điểm ở mọi màn; lời bé túi giữ
+  ý "góp quỹ thưởng" cùng dòng điểm; **Chế độ test điểm** (mỗi lần bấm bé túi +1) — đang **bật** ở máy local cho người dùng thử.
+- **Góp ý cho người học:** Chuyển nhanh → "Góp ý · báo lỗi màn này" (`FeedbackModal`, `POST /feedback`, `GET /feedback/mine`),
+  tự kèm phần/cấp/bài/trang sách, server tra đúng bài để quản trị "Mở để sửa"; học viên đọc trả lời ngay trong hộp. Phần P.
+- **Quán trà:** phòng trò chuyện chia bàn theo chủ đề (`/learn/chat`, `/learn/chat/<bàn>`, migration 020 + 021, `Services/QuanTra.php`,
+  quản trị `/admin/chat`). Tin quản trị không báo cáo được. Phần Q.
+- **Còn treo:** chưa lên server (cần code mới + chạy migration 019, 020, 021 + gắn lại link Shopee ở quản trị; **tắt Chế độ test**).
+  Chưa thử giữ ngón tay trên điện thoại thật. Rủi ro bản quyền của sách scan vẫn còn (đã báo người dùng).
+  Điểm, bài đã mở của `hocvien@zika.local` ở local là dữ liệu dev, không đóng gói lên server.
+
 ### 08/11/2026 — Đã đưa lên server thật và kiểm
 
 - Thứ tự đã làm: xoá DB (giữ tài khoản) → `01-cau-truc.sql` (dừng ở 013: bảng words trên server có `uq_words_lesson_hanzi`

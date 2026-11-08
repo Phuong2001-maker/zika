@@ -1,20 +1,22 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
+  import Topbar from '$lib/components/Topbar.svelte';
   import { SvelteSet } from 'svelte/reactivity';
-  import { onDestroy, untrack } from 'svelte';
+  import { onDestroy, onMount, untrack } from 'svelte';
   import { page } from '$app/state';
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import Icon from '$lib/components/Icon.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
-  import Switcher from '$lib/components/Switcher.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
-  import { dinhDangPhut, nhoTrang, urlTrang } from '$lib/learn/sach';
+  import { baiCuaTrang, dinhDangPhut, nhoTrang, urlBia, urlTrang } from '$lib/learn/sach';
+  import { diemDoc } from '$lib/learn/diem-doc.svelte';
   import { DocSach } from '$lib/learn/giao-trinh/doc-sach.svelte';
   import NganKeo from '$lib/learn/giao-trinh/NganKeo.svelte';
   import MucLuc from '$lib/learn/giao-trinh/MucLuc.svelte';
   import DanhSachNghe from '$lib/learn/giao-trinh/DanhSachNghe.svelte';
   import TrinhPhat from '$lib/learn/giao-trinh/TrinhPhat.svelte';
+  import KhoaBai from '$lib/learn/giao-trinh/KhoaBai.svelte';
 
   // Đọc một quyển giáo trình: trang sách cuộn dọc, kèm mục lục, file nghe và đáp án (nút nào sách không có thì ẩn).
   const st = new DocSach();
@@ -23,9 +25,67 @@
   const cacTrang = $derived(Array.from({ length: st.soTrang }, (_, i) => i + 1));
   const thieuAnh = new SvelteSet<number>();
   let khung: HTMLDivElement | undefined = $state();
+  /** Chiều cao thanh đầu trang (máy tính): thanh công cụ sách dính ngay dưới nó, trang sách cuộn tới chừa đúng chỗ. */
+  let caoThanh = $state(61);
+  /** Điện thoại: thanh chung có thể hai dòng (nút lùi + tên sách ở dòng 2). */
+  let caoThanhM = $state(57);
 
   const tongPhut = $derived(Math.round((sach?.nghe ?? []).reduce((t, n) => t + n.giay, 0) / 60));
-  const ngheBaiNay = $derived(st.dapAn ? [] : (st.baiHienTai ? (st.ngheTheoBai[st.baiHienTai.so] ?? []) : []));
+  const ngheBaiNay = $derived(st.dapAn || !st.baiHienTai || !st.baiMo(st.baiHienTai.so) ? [] : (st.ngheTheoBai[st.baiHienTai.so] ?? []));
+
+  /** Số trang của bài bắt đầu ở trang `b.trang` trong phần đang xem — để thẻ khoá ghi "14 trang". */
+  function soTrangBai(b: { so: number; trang: number }): number {
+    const i = st.mucLuc.findIndex((x) => x.so === b.so);
+    return (st.mucLuc[i + 1]?.trang ?? st.soTrang + 1) - b.trang;
+  }
+
+  // Vừa nhận điểm ở tab khác (bé túi, link Shopee mở app) thì quay lại là thấy số điểm mới; mã ký đường dẫn ảnh
+  // sống 6 giờ, đi quá nửa thì lấy mã mới trước khi hết hạn giữa lúc đọc.
+  onMount(() => {
+    void diemDoc.refresh();
+    const lamMoi = () => {
+      if (document.visibilityState !== 'visible') return;
+      void st.lamMoiQuyen();
+      void diemDoc.refresh();
+    };
+    document.addEventListener('visibilitychange', lamMoi);
+    window.addEventListener('focus', lamMoi);
+    const dongHo = setInterval(() => {
+      if (st.sach && st.veSapHet()) void st.lamMoiQuyen();
+    }, 10 * 60 * 1000);
+    return () => {
+      document.removeEventListener('visibilitychange', lamMoi);
+      window.removeEventListener('focus', lamMoi);
+      clearInterval(dongHo);
+    };
+  });
+
+  /**
+   * Không cho lưu trang sách bằng các lối thông thường: chuột phải "Lưu hình ảnh", giữ ngón tay trên điện thoại,
+   * kéo ảnh ra màn hình, Ctrl+S / Ctrl+P. Chặn được người dùng bình thường; ai chụp màn hình thì vẫn chụp được —
+   * phần chặn thật là server không gửi ảnh của bài chưa mở.
+   */
+  function chanPhim(e: KeyboardEvent): void {
+    if ((e.ctrlKey || e.metaKey) && ['s', 'p'].includes(e.key.toLowerCase())) e.preventDefault();
+  }
+  onMount(() => {
+    // Bắt ở document thay vì gắn lên khung trang: khung là vùng đọc, không phải nút bấm (luật a11y của Svelte).
+    const chan = (e: Event) => {
+      if (e.target instanceof Element && e.target.closest('.book-pages, .gt-ca-khoa')) e.preventDefault();
+    };
+    document.addEventListener('contextmenu', chan);
+    document.addEventListener('dragstart', chan);
+    return () => {
+      document.removeEventListener('contextmenu', chan);
+      document.removeEventListener('dragstart', chan);
+    };
+  });
+
+  /** Ảnh lỗi (mất mạng, hay mã ký hết hạn khi máy ngủ lâu): lấy mã mới rồi tải lại trang đó. */
+  async function thuLai(n: number): Promise<void> {
+    await st.lamMoiQuyen(true);
+    thieuAnh.delete(n);
+  }
 
   // Đổi quyển (/learn/books/hn1 → hn2) là cùng route, component không dựng lại (bẫy số 2): bám theo mã.
   // untrack: phần thân đọc cả thieuAnh và trạng thái sách, không được để ảnh lỗi làm tải lại cả quyển.
@@ -106,7 +166,10 @@
     st.ngan = '';
     st.trang = dich;
     nhoTrang(sach.ma, dich, st.dapAn);
-    khung?.querySelector<HTMLElement>(`[data-trang="${dich}"]`)?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    // Trang thuộc bài chưa mở không có trên màn (cả bài gom thành một thẻ khoá): đến thẻ khoá của bài đó.
+    const el = khung?.querySelector<HTMLElement>(`[data-trang="${dich}"]`)
+      ?? khung?.querySelector<HTMLElement>(`[data-trang="${baiCuaTrang(st.mucLuc, dich)?.trang ?? 1}"]`);
+    el?.scrollIntoView({ block: 'start', behavior: 'instant' });
   }
 
   /** Nút "Mở bài trong sách" ở đầu trang đáp án, và nút ở thanh phát khi đang xem đáp án. */
@@ -119,6 +182,8 @@
     } else di(trang);
   }
 </script>
+
+<svelte:window onkeydown={chanPhim} />
 
 <svelte:head><title>{sach ? `${st.dapAn ? 'Đáp án · ' : ''}${sach.ten}` : 'Giáo trình'} · Zìkǎ</title></svelte:head>
 
@@ -140,24 +205,24 @@
 
 <div class:mscreen={media.isMobile}>
   {#if media.isMobile}
-    <header class="mtop">
-      <a href="/learn/books" class="btn btn-bare" aria-label="Về kệ sách"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
+    <MTopbar back="/learn/books" backLabel="Về kệ sách" bind:cao={caoThanhM}>
       <div class="gt-mten">
         <b>{sach?.ten ?? 'Giáo trình'}</b>
         {#if st.dapAn}<span class="gt-nhan-da">Đáp án</span>{:else if sach}<span class="muted">{sach.phu}</span>{/if}
       </div>
-      <Avatar size={36} />
-    </header>
+    </MTopbar>
   {:else}
-    <header class="topbar">
-      <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-      <nav class="crumb" style="margin-left: 8px"><a href="/learn/books">Giáo trình</a> / <b>{sach?.ten ?? ''}</b>{#if st.dapAn} / <b>Đáp án</b>{/if}</nav>
-      <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="lt" /><Avatar size={44} /></div>
-    </header>
+    <!-- Thanh đầu trang dính trên cùng khi cuộn sách, như .mtop ở điện thoại: đang đọc vẫn sang được phần học khác. -->
+    <div class="gt-thanh-dinh" bind:clientHeight={caoThanh}>
+      <Topbar current="lt">
+        <nav class="crumb"><a href="/learn/books">Giáo trình</a> / <b>{sach?.ten ?? ''}</b>{#if st.dapAn} / <b>Đáp án</b>{/if}</nav>
+      </Topbar>
+    </div>
   {/if}
 
   <!-- Dùng cùng khung đọc để đổi bố cục không dựng lại danh sách trang. -->
-  <main class={media.isMobile ? 'mcontent book-main book-mobile' : 'page book-main'} class:gt-co-may={st.may.dang !== null}>
+  <main class={media.isMobile ? 'mcontent book-main book-mobile' : 'page book-main'} class:gt-co-may={st.may.dang !== null}
+    style:--book-tools-top="{media.isMobile ? caoThanhM : caoThanh}px">
     {#if st.dangTai && !sach}
       <div class="book-tools" aria-hidden="true"><span></span><Skeleton w="180px" h="42px" r={999} /><span></span></div>
       <Skeleton h="70vh" r={4} />
@@ -169,6 +234,23 @@
           <a href="/learn/books" class="btn btn-sm">Về kệ sách</a>
         {/snippet}
       </EmptyState>
+    {:else if st.quyen?.khoa}
+      <!-- Chưa học tới quyển này: server khoá cả trang đầu sách, chỉ còn bìa. -->
+      {@const ke = st.quyen.ke}
+      <section class="gt-ca-khoa">
+        <img class="gt-ca-khoa-bia" src={urlBia(sach)} alt="" draggable="false" />
+        <div class="gt-ca-khoa-chu">
+          <span class="gt-ca-khoa-nhan"><Icon name="lock" size={15} />Quyển này chưa mở</span>
+          <h1>{sach.ten}</h1>
+          <p class="muted">{sach.bai.length} bài · {sach.soTrang} trang{sach.nghe.length ? ` · ${sach.nghe.length} file nghe` : ''}</p>
+          <p>
+            {#if ke}Bài mở lần lượt theo thứ tự. Mở hết <b>{ke.tenSach}</b> (bài tiếp theo: Bài {ke.bai}) là đọc được quyển này.{/if}
+          </p>
+          <div class="gt-ca-khoa-nut">
+            {#if ke}<a class="btn btn-son" href="/learn/books/{ke.ma}">Đến {ke.tenSach}</a>{/if}
+          </div>
+        </div>
+      </section>
     {:else}
       <div class="book-tools" class:gt-tools-m={media.isMobile}>
         <div class="gt-trai">
@@ -214,6 +296,12 @@
           {#each cacTrang as n (n)}
             {@const cao = st.cao[n - 1] ?? 1600}
             {@const bai = st.dauBai[n]}
+            {#if !st.trangMo(n)}
+              <!-- Bài chưa mở: cả bài gom thành một thẻ ở trang đầu bài, các trang còn lại không dựng. -->
+              {#if bai}
+                <figure class="book-sheet" data-trang={n}><KhoaBai {st} {bai} soTrang={soTrangBai(bai)} ondi={di} /></figure>
+              {/if}
+            {:else}
             <figure class="book-sheet" data-trang={n}>
               {#if bai}
                 {@const soNghe = st.ngheTheoBai[bai.so]?.length ?? 0}
@@ -242,14 +330,15 @@
               {#if thieuAnh.has(n)}
                 <div class="book-error" style="aspect-ratio: {sach.rong} / {cao}">
                   <p>Không tải được trang {n}.</p>
-                  <button type="button" class="btn btn-sm" onclick={() => thieuAnh.delete(n)}>Thử lại</button>
+                  <button type="button" class="btn btn-sm" onclick={() => thuLai(n)}>Thử lại</button>
                 </div>
               {:else}
-                <img class="book-image" src={urlTrang(sach, n, st.dapAn)} alt="{st.dapAn ? 'Đáp án ' : ''}{sach.ten} — trang {n}" width={sach.rong} height={cao}
-                  loading="lazy" decoding="async" onerror={() => thieuAnh.add(n)} />
+                <img class="book-image" src={urlTrang(sach, st.ve, n, st.dapAn)} alt="{st.dapAn ? 'Đáp án ' : ''}{sach.ten} — trang {n}" width={sach.rong} height={cao}
+                  loading="lazy" decoding="async" draggable="false" onerror={() => thieuAnh.add(n)} />
               {/if}
               <figcaption class="book-caption">{st.dapAn ? 'Đáp án · ' : ''}Trang {n}</figcaption>
             </figure>
+            {/if}
           {/each}
         </div>
       {/key}
@@ -271,7 +360,9 @@
 
 <style>
   .book-main { max-width: 900px; display: flex; flex-direction: column; gap: 12px; }
-  .book-mobile { --book-tools-top: 56px; padding: 12px 8px 24px; }
+  /* Trên thanh công cụ sách (10) và bé túi (19), dưới ngăn mục lục/hộp thoại (80). */
+  .gt-thanh-dinh { position: sticky; top: 0; z-index: 31; }
+  .book-mobile { padding: 12px 8px 24px; }
   /* Chừa chỗ cho thanh phát dính đáy để trang cuối không bị che. */
   .gt-co-may { padding-bottom: 150px; }
   .book-tools {
@@ -323,7 +414,35 @@
   .book-pages { display: flex; flex-direction: column; gap: 16px; }
   /* Chừa đúng phần thanh dính phía trên; chừa dư thì lộ chú thích "Trang n−1" ngay trên trang vừa đi tới. */
   .book-sheet { scroll-margin-top: calc(var(--book-tools-top, 0px) + 62px); border: 1px solid var(--line); background: var(--surface); }
-  .book-image { display: block; width: 100%; height: auto; }
+  /* Không bôi chọn, không menu "Lưu hình ảnh" khi giữ ngón tay (iOS), không kéo ảnh ra ngoài. */
+  .book-image {
+    display: block; width: 100%; height: auto;
+    -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-user-drag: none;
+  }
+  /* In trang web ra giấy/PDF thì không in trang sách. */
+  @media print { .book-pages, .gt-ca-khoa { display: none; } }
+
+  .gt-ca-khoa {
+    display: flex; gap: 24px; align-items: flex-start; padding: 24px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+  }
+  .gt-ca-khoa-bia {
+    flex: none; width: 180px; aspect-ratio: 1 / 1.38; object-fit: cover; object-position: top;
+    border-radius: 12px; border: 1px solid var(--line); filter: grayscale(.6); opacity: .85;
+    -webkit-touch-callout: none; user-select: none;
+  }
+  .gt-ca-khoa-chu { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .gt-ca-khoa-chu h1 { font-size: 24px; line-height: 1.25; }
+  .gt-ca-khoa-chu p { font-size: 14px; line-height: 1.55; }
+  .gt-ca-khoa-nhan {
+    display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; padding: 4px 10px; border-radius: 999px;
+    background: var(--surface-3); color: var(--text-2); font-size: 12px; font-weight: 700;
+  }
+  .gt-ca-khoa-nut { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .book-mobile .gt-ca-khoa { flex-direction: column; align-items: center; text-align: center; padding: 18px 14px; }
+  .book-mobile .gt-ca-khoa-nhan { align-self: center; }
+  .book-mobile .gt-ca-khoa-nut { justify-content: center; }
+  .book-mobile .gt-ca-khoa-bia { width: 140px; }
   .book-caption { padding: 6px; text-align: center; color: var(--text-2); font-size: 12px; }
   .book-error { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
 

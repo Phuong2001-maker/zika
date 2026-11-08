@@ -1,4 +1,6 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
+  import Topbar from '$lib/components/Topbar.svelte';
   import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
@@ -8,8 +10,6 @@
   import { heartbeat } from '$lib/stores/heartbeat';
   import { toast } from '$lib/stores/toast.svelte';
   import Icon from '$lib/components/Icon.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
-  import Switcher from '$lib/components/Switcher.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import DauBai from '$lib/components/DauBai.svelte';
@@ -208,14 +208,7 @@
 {#if media.isMobile}
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
-    <header class="mtop">
-      <a href="/learn/dialogues/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
-      <span style="flex: 1; min-width: 0; text-align: center">
-        <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{data?.lesson.title ?? 'Hội thoại'}</b>
-        <span class="muted" style="font-size: 12px">Hội thoại · {cap.ten(levelId)} · Bài {lessonNo}</span>
-      </span>
-      <Avatar size={36} />
-    </header>
+    <MTopbar current="ht" back="/learn/dialogues/hsk/{levelId}" backLabel="Về danh sách bài" title={data?.lesson.title ?? 'Hội thoại'} sub="Hội thoại · {cap.ten(levelId)} · Bài {lessonNo}" />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">
       {#if failed}
         {@render loi()}
@@ -228,14 +221,12 @@
   </div>
 {:else}
   <!-- ============ Máy tính ============ -->
-  <header class="topbar">
-    <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
+  <Topbar current="ht">
     <!-- Chỉ ghi phần và cấp: số bài và tên bài đã ở khối tiêu đề ngay bên dưới, ghi lại ở đây là lặp. -->
-    <nav class="crumb" aria-label="Đường dẫn" style="margin-left: 8px">
-      <a href="/learn/dialogues">Hội thoại</a> / <a href="/learn/dialogues/hsk/{levelId}">{cap.ten(levelId)}</a>
+    <nav class="crumb" aria-label="Đường dẫn">
+    <a href="/learn/dialogues">Hội thoại</a> / <a href="/learn/dialogues/hsk/{levelId}">{cap.ten(levelId)}</a>
     </nav>
-    <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="ht" /><Avatar size={44} /></div>
-  </header>
+  </Topbar>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
     {#if failed}
       {@render loi()}

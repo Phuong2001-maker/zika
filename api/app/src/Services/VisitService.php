@@ -118,6 +118,9 @@ final class VisitService
         if ($screen === 'admin') {
             return 'Ở trang quản trị';
         }
+        if ($screen === 'chat') {
+            return 'Đang ở Quán trà';
+        }
         // Phần Giáo trình không thuộc 6 phần học nên không có mã part, chỉ có số cấp và mã quyển (hn3 = Hán ngữ 3).
         if ($screen === 'book') {
             $bo = str_starts_with((string) ($a['book'] ?? ''), 'hn') ? ' Hán ngữ ' : ' HSK ';

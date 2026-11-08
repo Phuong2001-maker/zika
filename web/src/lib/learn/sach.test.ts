@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { baiCuaTrang, dinhDangGiay, dinhDangPhut, urlBia, urlNghe, urlTrang } from './sach';
+import { baiCuaTrang, baiDaMo, dinhDangGiay, dinhDangPhut, trangDaMo, urlBia, urlNghe, urlTrang, type QuyenDoc } from './sach';
 
 describe('giáo trình', () => {
   const bai = [
@@ -24,12 +24,36 @@ describe('giáo trình', () => {
     expect(dinhDangPhut(107)).toBe('1 giờ 47 phút');
   });
 
-  it('gắn phiên bản vào đường dẫn để bỏ bản cache cũ khi dựng lại sách', () => {
+  it('gắn phiên bản và mã ký vào đường dẫn: bìa không cần mã, trang sách và file nghe thì có', () => {
     const q = { ma: 'hn3', phien: 'abc123' };
     expect(urlBia(q)).toBe('/api/learn/books/hn3/bia?v=abc123');
-    expect(urlTrang(q, 16)).toBe('/api/learn/books/hn3/16?v=abc123');
-    expect(urlTrang(q, 5, true)).toBe('/api/learn/books/hn3/dap-an/5?v=abc123');
-    expect(urlNghe(q, 2)).toBe('/api/learn/books/hn3/nghe/2?v=abc123');
-    expect(urlTrang({ ma: 'hsk1', phien: '' }, 3)).toBe('/api/learn/books/hsk1/3');
+    expect(urlTrang(q, '99.ab', 16)).toBe('/api/learn/books/hn3/16?v=abc123&t=99.ab');
+    expect(urlTrang(q, '99.ab', 5, true)).toBe('/api/learn/books/hn3/dap-an/5?v=abc123&t=99.ab');
+    expect(urlNghe(q, '99.ab', 2)).toBe('/api/learn/books/hn3/nghe/2?v=abc123&t=99.ab');
+    expect(urlTrang({ ma: 'hsk1', phien: '' }, '1.x', 3)).toBe('/api/learn/books/hsk1/3?t=1.x');
+  });
+
+  // Cùng luật với BookAccess ở server; server mới là nơi chặn thật, đây chỉ để vẽ thẻ khoá đúng chỗ.
+  describe('bài nào đọc được', () => {
+    const sach = { bai, dapAn: { soTrang: 6, cao: [], bai: [{ so: 16, trang: 2 }, { so: 17, trang: 4 }] } };
+    const quyen = (q: Partial<QuyenDoc>): QuyenDoc => ({ tuDo: false, khoa: false, mo: [], ke: null, diem: 0, ve: '', veGiay: 0, ...q });
+
+    it('trang đầu sách đọc được khi đã học tới quyển, quyển còn khoá thì không', () => {
+      expect(trangDaMo(sach, quyen({}), 5)).toBe(true);
+      expect(trangDaMo(sach, quyen({ khoa: true }), 5)).toBe(false);
+    });
+
+    it('trang của bài chỉ đọc được khi bài đã mở, kể cả trang đáp án', () => {
+      const q = quyen({ mo: [16] });
+      expect(trangDaMo(sach, q, 20)).toBe(true);
+      expect(trangDaMo(sach, q, 34)).toBe(false);
+      expect(trangDaMo(sach, q, 3, true)).toBe(true);
+      expect(trangDaMo(sach, q, 4, true)).toBe(false);
+    });
+
+    it('quản trị, biên tập đọc mọi bài', () => {
+      expect(baiDaMo(sach, quyen({}), 17)).toBe(false);
+      expect(baiDaMo(sach, quyen({ tuDo: true, khoa: true }), 17)).toBe(true);
+    });
   });
 });

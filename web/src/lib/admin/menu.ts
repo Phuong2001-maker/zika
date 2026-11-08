@@ -55,6 +55,7 @@ export function menuGroups(lessonId: number | null): MenuGroup[] {
         { key: 'lessons', label: 'Bài học HSK', href: '/admin/lessons', icon: 'cards', role: 'E', count: (b) => b.lessons },
         { key: 'news', label: 'Thông báo', href: '/admin/news', icon: 'megaphone', role: 'A' },
         { key: 'feedback', label: 'Góp ý', href: '/admin/feedback', icon: 'msg', role: 'E', badge: (b) => b.unreadFeedback },
+        { key: 'chat', label: 'Quán trà', href: '/admin/chat', icon: 'cup', role: 'A' },
       ],
     },
     {
@@ -68,7 +69,13 @@ export function menuGroups(lessonId: number | null): MenuGroup[] {
         { key: 'grammar', label: 'Ngữ pháp', href: lesson('grammar'), icon: PART.np.icon, tile: PART.np.accent, role: 'E', part: 'np' },
       ],
     },
-    { title: 'Kinh phí', items: [{ key: 'support', label: 'Ủng hộ & Shopee', href: '/admin/support', icon: 'cup', role: 'A' }] },
+    {
+      title: 'Kinh phí',
+      items: [
+        { key: 'support', label: 'Ủng hộ & Shopee', href: '/admin/support', icon: 'cup', role: 'A' },
+        { key: 'book-points', label: 'Điểm mở bài', href: '/admin/book-points', icon: 'lock', role: 'A' },
+      ],
+    },
     { title: 'Hệ thống', items: [{ key: 'settings', label: 'Cài đặt', href: '/admin/settings', icon: 'gear', role: 'A' }] },
   ];
 }
@@ -87,7 +94,9 @@ export function activeKey(path: string): string {
   if (path.startsWith('/admin/mock-tests')) return 'tests';
   if (path.startsWith('/admin/news')) return 'news';
   if (path.startsWith('/admin/feedback')) return 'feedback';
+  if (path.startsWith('/admin/chat')) return 'chat';
   if (path.startsWith('/admin/support')) return 'support';
+  if (path.startsWith('/admin/book-points')) return 'book-points';
   if (path.startsWith('/admin/settings')) return 'settings';
   return 'overview';
 }

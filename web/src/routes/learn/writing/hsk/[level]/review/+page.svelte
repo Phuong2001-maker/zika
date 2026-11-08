@@ -1,4 +1,6 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
+  import Topbar from '$lib/components/Topbar.svelte';
   import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
@@ -6,7 +8,6 @@
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import Icon from '$lib/components/Icon.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import DauBai from '$lib/components/DauBai.svelte';
@@ -119,23 +120,14 @@
 {#if media.isMobile}
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
-    <header class="mtop">
-      <a href="/learn/writing/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
-      <span style="flex: 1; min-width: 0; text-align: center">
-        <b style="display: block; font-size: 15px">Ôn viết {cap.ten(levelId)}</b>
-        <span class="muted" style="font-size: 12px">Luyện viết · Ôn cả {cap.tu}</span>
-      </span>
-      <Avatar size={36} />
-    </header>
+    <MTopbar current="lv" back="/learn/writing/hsk/{levelId}" backLabel="Về danh sách bài" title="Ôn viết {cap.ten(levelId)}" sub="Luyện viết · Ôn cả {cap.tu}" />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">{@render body(true)}</main>
   </div>
 {:else}
   <!-- ============ Máy tính ============ -->
-  <header class="topbar">
-    <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href="/learn/writing/hsk/{levelId}">Luyện viết · {cap.ten(levelId)}</a> / <b>Ôn cả {cap.tu}</b></nav>
-    <div style="margin-left: auto"><Avatar size={44} /></div>
-  </header>
+  <Topbar current="lv">
+    <nav class="crumb"><a href="/learn/writing/hsk/{levelId}">Luyện viết · {cap.ten(levelId)}</a> / <b>Ôn cả {cap.tu}</b></nav>
+  </Topbar>
   <main class="page zk-cot-rong" style="display: flex; flex-direction: column; gap: 18px">
     <DauBai
       href="/learn/writing/hsk/{levelId}"

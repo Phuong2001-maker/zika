@@ -1,6 +1,7 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
+  import Topbar from '$lib/components/Topbar.svelte';
   import { cap } from '$lib/stores/cap.svelte';
-  import NotificationBell from '$lib/components/NotificationBell.svelte';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { api, ApiError } from '$lib/api/client';
@@ -10,8 +11,6 @@
   import { heartbeat } from '$lib/stores/heartbeat';
   import { toast } from '$lib/stores/toast.svelte';
   import { date, duration } from '$lib/utils/format';
-  import Switcher from '$lib/components/Switcher.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import Modal from '$lib/components/Modal.svelte';
   import { nenAnhDaiDien } from '$lib/utils/anh';
@@ -308,21 +307,11 @@
 
 {#if media.isMobile}
   <div class="mscreen">
-    <header class="mtop">
-      <a href="/learn/flashcards" class="btn btn-bare" aria-label="Về Bàn học"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
-      <b style="flex: 1; font-size: 16px">Tài khoản</b>
-      <NotificationBell size={40} />
-    </header>
+    <MTopbar accountCurrent back="/learn/flashcards" backLabel="Về Bàn học" title="Tài khoản" />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">{@render body(true)}</main>
   </div>
 {:else}
-  <header class="topbar">
-    <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <div style="margin-left: auto; display: flex; align-items: center; gap: 12px">
-      <Switcher current="lt" />
-      <Avatar size={44} current />
-    </div>
-  </header>
+  <Topbar current="lt" accountCurrent />
   <main class="page" style="max-width: 820px; display: flex; flex-direction: column; gap: 20px">
     <nav aria-label="Đường dẫn" class="crumb">
       <a href="/learn/flashcards">Bàn học</a><span>/</span><b>Tài khoản</b>

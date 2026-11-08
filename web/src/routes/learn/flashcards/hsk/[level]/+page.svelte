@@ -1,4 +1,5 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
   import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
@@ -10,8 +11,6 @@
   import { heartbeat } from '$lib/stores/heartbeat';
   import { num } from '$lib/utils/format';
   import Topbar from '$lib/components/Topbar.svelte';
-  import Switcher from '$lib/components/Switcher.svelte';
-  import NotificationBell from '$lib/components/NotificationBell.svelte';
   import LessonCard from '$lib/components/LessonCard.svelte';
   import Bar from '$lib/components/Bar.svelte';
   import Icon from '$lib/components/Icon.svelte';
@@ -240,12 +239,10 @@
 {:else if media.isMobile}
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
-    <header class="mtop">
-      <a href="/learn/flashcards" class="btn btn-bare" aria-label="Về Bàn học"><Icon name="chev" size={22} style="transform: rotate(180deg)" /></a>
+    <MTopbar current="lt" back="/learn/flashcards" backLabel="Về Bàn học">
       <span class="lv{level}" style="padding: 4px 10px; border: 1px solid var(--line); border-radius: 10px; font-weight: 800; font-size: 13px">{cap.ten(level)}</span>
       <b style="font-size: 15px">Chọn bài</b>
-      <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 8px"><NotificationBell size={40} /><Switcher current="lt" /></span>
-    </header>
+    </MTopbar>
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">
       {#if failed}
         <EmptyState title="Không tải được dữ liệu.">

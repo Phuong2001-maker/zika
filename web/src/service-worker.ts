@@ -29,7 +29,11 @@ const FONT_TTL = 365 * 24 * 60 * 60 * 1000;
 /** Đường dẫn API không bao giờ được cache — dữ liệu riêng của từng người, phải luôn mới. */
 // Giáo trình (/api/learn/books) cũng không: sách có bản quyền, một quyển hàng trăm ảnh sẽ đẩy hết bài học khỏi kho
 // 300 mục, và file nghe đi theo từng đoạn (206) thì Cache Storage không cất được — cất là file câm.
-const NEVER = ['/api/me', '/api/auth/', '/api/admin/', '/api/visit/', '/api/progress/', '/api/tests/', '/api/learn/books'];
+// Điểm mở bài đổi theo từng lần bấm: bản cũ trong kho làm nút "Nhận điểm" hiện lại sau khi đã nhận.
+const NEVER = [
+  '/api/me', '/api/auth/', '/api/admin/', '/api/visit/', '/api/progress/', '/api/tests/', '/api/learn/books',
+  '/api/learn/points',
+];
 
 // Mọi file build + file tĩnh đều nằm trong precache. Bỏ qua file cài đặt một lần.
 const ASSETS = [...build, ...files.filter((f) => f !== '/robots.txt')];

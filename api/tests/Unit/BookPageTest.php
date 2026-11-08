@@ -3,55 +3,87 @@ declare(strict_types=1);
 
 namespace Zika\Tests\Unit;
 
+use DateTimeImmutable;
 use Zika\Controllers\BookController;
+use Zika\Controllers\BookPointsController;
+use Zika\Controllers\SupportController;
+use Zika\Core\Clock;
 use Zika\Core\Config;
 use Zika\Core\Db;
 use Zika\Core\HttpError;
 use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Core\Router;
+use Zika\Core\Settings;
+use Zika\Services\BookAccess;
 use Zika\Tests\DbTestCase;
 
-/** Giá sách giáo trình: ảnh trang, file nghe tua được, đáp án — đọc từ sach.json do dung-sach.py dựng. */
+/**
+ * Giáo trình: ảnh trang, file nghe tua được, đáp án — đọc từ sach.json do dung-sach.py dựng — và luật chặn:
+ * học viên chỉ nhận được file của bài đã mở bằng điểm hoặc quyển đã mua, kèm mã ký của chính tài khoản.
+ */
 final class BookPageTest extends DbTestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
+        // site_settings giữ nguyên giữa các test (DbTestCase::KEEP): đặt lại hai khối test này có sửa.
+        Settings::set('support', Settings::DEFAULTS['support']);
+        Settings::set('points', Settings::DEFAULTS['points']);
         $goc = Config::uploadsDir('giao-trinh');
         foreach (glob("$goc/*/sach.json") ?: [] as $f) {
             unlink($f);
         }
-        // hsk1: không file nghe, không đáp án · hn3: đủ cả hai.
-        $this->sach('hsk1', 'hsk', 1, [], null);
-        $this->sach('hn3', 'hanngu', 3, [['so' => 1, 'bai' => 1, 'ten' => 'Từ mới', 'giay' => 75, 'kb' => 1]],
-            ['soTrang' => 1, 'cao' => [1600], 'bai' => [['so' => 1, 'trang' => 1]]]);
-        file_put_contents("$goc/hsk1/007.webp", 'RIFF-trang-7');
-        file_put_contents("$goc/hsk1/bia.webp", 'RIFF-bia');
-        @mkdir("$goc/hn3/nghe");
-        @mkdir("$goc/hn3/dap-an");
+        // hsk1: 2 bài (trang 3–5, 6–9), 2 file nghe, không đáp án · hsk2: 1 bài · hn3: đủ file nghe và đáp án.
+        $this->sach('hsk1', 'hsk', 1, [['so' => 1, 'trang' => 3], ['so' => 2, 'trang' => 6]],
+            [['so' => 1, 'bai' => 1, 'ten' => 'Từ mới', 'giay' => 75, 'kb' => 1], ['so' => 2, 'bai' => 2, 'ten' => 'Từ mới', 'giay' => 60, 'kb' => 1]], null);
+        $this->sach('hsk2', 'hsk', 2, [['so' => 1, 'trang' => 3]], [], null);
+        $this->sach('hn3', 'hanngu', 3, [['so' => 1, 'trang' => 3]], [['so' => 1, 'bai' => 1, 'ten' => 'Từ mới', 'giay' => 75, 'kb' => 1]],
+            ['soTrang' => 3, 'cao' => [1600, 1600, 1600], 'bai' => [['so' => 1, 'trang' => 2]]]);
+        foreach (['hsk1', 'hsk2', 'hn3'] as $ma) {
+            @mkdir("$goc/$ma/nghe");
+            @mkdir("$goc/$ma/dap-an");
+            file_put_contents("$goc/$ma/bia.webp", 'RIFF-bia');
+            foreach ([2, 4, 7] as $n) {
+                file_put_contents(sprintf('%s/%s/%03d.webp', $goc, $ma, $n), "RIFF-$ma-$n");
+            }
+        }
+        file_put_contents("$goc/hsk1/nghe/01.mp3", '0123456789');
+        file_put_contents("$goc/hsk1/nghe/02.mp3", 'abcdefghij');
         file_put_contents("$goc/hn3/nghe/01.mp3", '0123456789');
-        file_put_contents("$goc/hn3/dap-an/001.webp", 'RIFF-dap-an');
+        file_put_contents("$goc/hn3/dap-an/001.webp", 'RIFF-dap-an-1');
+        file_put_contents("$goc/hn3/dap-an/002.webp", 'RIFF-dap-an-2');
     }
 
-    /** @param list<array<string,mixed>> $nghe @param array<string,mixed>|null $dapAn */
-    private function sach(string $ma, string $bo, int $cap, array $nghe, ?array $dapAn): void
+    /** @param list<array<string,int>> $bai @param list<array<string,mixed>> $nghe @param array<string,mixed>|null $dapAn */
+    private function sach(string $ma, string $bo, int $cap, array $bai, array $nghe, ?array $dapAn): void
     {
         $dir = Config::uploadsDir("giao-trinh/$ma");
         @mkdir($dir, 0777, true);
         file_put_contents("$dir/sach.json", json_encode([
             'ma' => $ma, 'bo' => $bo, 'cap' => $cap, 'ten' => "Sách $ma", 'phu' => '', 'soTrang' => 9, 'rong' => 1200,
-            'cao' => array_fill(0, 9, 1600), 'bai' => [['so' => 1, 'ten' => '你好', 'tenVi' => 'Xin chào', 'trang' => 3]],
+            'cao' => array_fill(0, 9, 1600),
+            'bai' => array_map(static fn ($b) => $b + ['ten' => '你好', 'tenVi' => 'Xin chào'], $bai),
             'nghe' => $nghe, 'dapAn' => $dapAn,
         ], JSON_UNESCAPED_UNICODE));
     }
 
-    /** @param array<string,string> $params @param array<string,string> $headers */
-    private function req(string $role, array $params = [], array $headers = [], ?int $curriculum = null): Request
+    private function nguoi(string $role = 'learner', ?int $curriculum = null): int
     {
-        $r = new Request('GET', '/learn/books', headers: $headers);
+        return $this->makeUser(['role' => $role, 'curriculum_id' => $curriculum]);
+    }
+
+    /**
+     * Request của người `uid`; `ve` = true thì tự gắn mã ký hợp lệ của quyển trong params.
+     * @param array<string,string> $params @param array<string,string> $headers @param array<string,mixed> $body
+     */
+    private function req(int $uid, array $params = [], bool|string $ve = true, array $headers = [], array $body = []): Request
+    {
+        $role = (string) Db::val('SELECT role FROM users WHERE id = ?', [$uid]);
+        $t = $ve === true ? BookAccess::ve($uid, $params['ma'] ?? '') : ($ve === false ? '' : $ve);
+        $r = new Request('GET', '/learn/books', query: $t === '' ? [] : ['t' => $t], body: $body, headers: $headers);
         $r->params = $params;
-        $r->user = ['id' => $this->makeUser(['role' => $role, 'curriculum_id' => $curriculum]), 'role' => $role];
+        $r->user = ['id' => $uid, 'role' => $role];
         return $r;
     }
 
@@ -59,6 +91,34 @@ final class BookPageTest extends DbTestCase
     {
         return Db::insert('curricula', ['name' => 'Hán ngữ 6 tập', 'level_label' => 'Quyển']);
     }
+
+    /** Mã lỗi khi gọi, '' nếu chạy được. */
+    private function loi(callable $fn): string
+    {
+        try {
+            $fn();
+            return '';
+        } catch (HttpError $e) {
+            return $e->status . ' ' . $e->errorCode;
+        }
+    }
+
+    private function trang(int $uid, string $ma, string $trang, bool|string $ve = true): string
+    {
+        return $this->loi(fn () => (new BookController())->page($this->req($uid, ['ma' => $ma, 'trang' => $trang], $ve)));
+    }
+
+    private function moBai(int $uid, string $ma, int $bai): void
+    {
+        Db::insert('book_unlocks', ['user_id' => $uid, 'ma' => $ma, 'bai' => $bai, 'created_at' => Clock::sql()]);
+    }
+
+    private function ngay(string $ngay): void
+    {
+        Clock::freeze(new DateTimeImmutable("$ngay 09:00:00", Clock::tz()));
+    }
+
+    // ------------------------------------------------------------------ route
 
     public function testRouteDoiDangNhapVaKhongTinhGioiHan(): void
     {
@@ -69,7 +129,9 @@ final class BookPageTest extends DbTestCase
         }
         self::assertSame('L', Router::match('GET', '/learn/books')['auth']);
         self::assertSame('hn1', Router::match('GET', '/learn/books/hn1')['params']['ma']);
-        // Lối cũ của quản trị vẫn chạy cho trình duyệt còn giữ đường dẫn.
+        self::assertSame('L', Router::match('POST', '/learn/books/hn1/mo/5')['auth']);
+        self::assertSame('L', Router::match('GET', '/learn/books/hn1/quyen')['auth']);
+        self::assertSame('A', Router::match('POST', '/admin/book-points/adjust')['auth']);
         self::assertSame('A', Router::match('GET', '/admin/books/hsk1/7')['auth']);
     }
 
@@ -79,65 +141,228 @@ final class BookPageTest extends DbTestCase
         Router::match('GET', '/learn/books/..%2F/7');
     }
 
+    // ------------------------------------------------------------------ kệ sách
+
     public function testHocVienChiThayBoSachCuaGiaoTrinhMinh(): void
     {
         $hn = $this->hanNgu();
         $c = new BookController();
         // Chưa phân quyền → giáo trình mặc định; trong test mặc định là HSK (id 1).
-        self::assertSame(['hsk1'], array_column($c->index($this->req('learner')), 'ma'));
-        self::assertSame(['hn3'], array_column($c->index($this->req('learner', [], [], $hn)), 'ma'));
+        self::assertSame(['hsk1', 'hsk2'], array_column($c->index($this->req($this->nguoi())), 'ma'));
+        self::assertSame(['hn3'], array_column($c->index($this->req($this->nguoi('learner', $hn))), 'ma'));
         // Biên tập, quản trị thấy cả hai bộ, Hán ngữ trước.
-        self::assertSame(['hn3', 'hsk1'], array_column($c->index($this->req('editor')), 'ma'));
+        self::assertSame(['hn3', 'hsk1', 'hsk2'], array_column($c->index($this->req($this->nguoi('editor'))), 'ma'));
+    }
+
+    public function testKeSachKhoaQuyenChuaHocToi(): void
+    {
+        $uid = $this->nguoi();
+        $ds = array_column((new BookController())->index($this->req($uid)), null, 'ma');
+        self::assertSame([false, 0], [$ds['hsk1']['khoa'], $ds['hsk1']['baiMo']]);
+        self::assertTrue($ds['hsk2']['khoa']);
+        $this->moBai($uid, 'hsk1', 1);
+        $this->moBai($uid, 'hsk1', 2);
+        $ds = array_column((new BookController())->index($this->req($uid)), null, 'ma');
+        self::assertSame([2, false], [$ds['hsk1']['baiMo'], $ds['hsk2']['khoa']]);
+        // Quản trị không bị khoá quyển nào.
+        foreach ((new BookController())->index($this->req($this->nguoi('admin'))) as $q) {
+            self::assertFalse($q['khoa'], $q['ma']);
+        }
     }
 
     public function testGiaSachChiBaoCoNgheVaDapAnKhiSachCo(): void
     {
-        $ds = array_column((new BookController())->index($this->req('admin')), null, 'ma');
-        self::assertSame([0, false], [$ds['hsk1']['soNghe'], $ds['hsk1']['coDapAn']]);
+        $ds = array_column((new BookController())->index($this->req($this->nguoi('admin'))), null, 'ma');
+        self::assertSame([0, false], [$ds['hsk2']['soNghe'], $ds['hsk2']['coDapAn']]);
         self::assertSame([1, 1, true, 'Hán ngữ 6 tập'], [$ds['hn3']['soNghe'], $ds['hn3']['phutNghe'], $ds['hn3']['coDapAn'], $ds['hn3']['tenBo']]);
     }
 
     public function testSachCuaBoKhacTraVe404(): void
     {
+        $uid = $this->nguoi();
         $c = new BookController();
-        foreach (['show', 'page', 'audio'] as $ham) {
-            try {
-                $c->$ham($this->req('learner', ['ma' => 'hn3', 'trang' => '1', 'so' => '1']));
-                self::fail("$ham phải 404");
-            } catch (HttpError $e) {
-                self::assertSame(404, $e->status);
-            }
+        foreach (['show', 'page', 'audio', 'access'] as $ham) {
+            self::assertSame('404 NOT_FOUND', $this->loi(fn () => $c->$ham($this->req($uid, ['ma' => 'hn3', 'trang' => '1', 'so' => '1']))), $ham);
         }
     }
 
-    public function testTraAnhRiengTu(): void
+    // ------------------------------------------------------------------ chặn file
+
+    public function testBaiChuaMoKhongTraFileNao(): void
     {
-        $res = (new BookController())->page($this->req('learner', ['ma' => 'hsk1', 'trang' => '7']));
-        self::assertSame(200, $res->status);
-        self::assertSame('image/webp', $res->headers['Content-Type']);
+        $uid = $this->nguoi();
+        $c = new BookController();
+        // Trang đầu sách của quyển đang học tới thì đọc được; bìa luôn xem được.
+        self::assertSame('', $this->trang($uid, 'hsk1', '2'));
+        self::assertSame('', $this->trang($uid, 'hsk2', 'bia', false));
+        // Bài 1 chưa mở: ảnh trang, file nghe đều bị chặn.
+        self::assertSame('403 LOCKED', $this->trang($uid, 'hsk1', '4'));
+        self::assertSame('403 LOCKED', $this->loi(fn () => $c->audio($this->req($uid, ['ma' => 'hsk1', 'so' => '1']))));
+        // Quyển sau còn khoá cả trang đầu.
+        self::assertSame('403 LOCKED', $this->trang($uid, 'hsk2', '2'));
+
+        $this->moBai($uid, 'hsk1', 1);
+        self::assertSame('', $this->trang($uid, 'hsk1', '4'));
+        self::assertSame('', $this->loi(fn () => $c->audio($this->req($uid, ['ma' => 'hsk1', 'so' => '1']))));
+        self::assertSame('403 LOCKED', $this->trang($uid, 'hsk1', '7'));
+        self::assertSame('403 LOCKED', $this->loi(fn () => $c->audio($this->req($uid, ['ma' => 'hsk1', 'so' => '2']))));
+    }
+
+    public function testDapAnTheoBaiDaMo(): void
+    {
+        $hn = $this->hanNgu();
+        $uid = $this->nguoi('learner', $hn);
+        $c = new BookController();
+        $dapAn = fn (string $trang) => $this->loi(fn () => $c->answer($this->req($uid, ['ma' => 'hn3', 'trang' => $trang])));
+        // Trang 1 của đáp án là trang đầu (trước Bài 1), trang 2 là đáp án Bài 1.
+        self::assertSame('', $dapAn('1'));
+        self::assertSame('403 LOCKED', $dapAn('2'));
+        $this->moBai($uid, 'hn3', 1);
+        self::assertSame('', $dapAn('2'));
+        self::assertSame('RIFF-dap-an-2', file_get_contents((string) $c->answer($this->req($uid, ['ma' => 'hn3', 'trang' => '2']))->filePath));
+        // Quyển không có đáp án.
+        self::assertSame('404 NOT_FOUND', $this->loi(fn () => $c->answer($this->req($this->nguoi('admin'), ['ma' => 'hsk1', 'trang' => '7']))));
+    }
+
+    public function testDuongDanPhaiCoMaKyCuaChinhTaiKhoan(): void
+    {
+        $a = $this->nguoi();
+        $b = $this->nguoi();
+        $this->moBai($a, 'hsk1', 1);
+        $this->moBai($b, 'hsk1', 1);
+        self::assertSame('403 TOKEN_INVALID', $this->trang($a, 'hsk1', '4', false));
+        // Link của người khác, của quyển khác, hay bị sửa đều không mở được.
+        self::assertSame('403 TOKEN_INVALID', $this->trang($a, 'hsk1', '4', BookAccess::ve($b, 'hsk1')));
+        self::assertSame('403 TOKEN_INVALID', $this->trang($a, 'hsk1', '4', BookAccess::ve($a, 'hsk2')));
+        self::assertSame('403 TOKEN_INVALID', $this->trang($a, 'hsk1', '4', BookAccess::ve($a, 'hsk1') . 'x'));
+        // Hết hạn sau 6 giờ.
+        $ve = BookAccess::ve($a, 'hsk1');
+        self::assertSame('', $this->trang($a, 'hsk1', '4', $ve));
+        Clock::freeze(Clock::now()->modify('+' . (BookAccess::VE_GIAY + 1) . ' seconds'));
+        self::assertSame('403 TOKEN_INVALID', $this->trang($a, 'hsk1', '4', $ve));
+        // Kiểm cả file nghe (trình duyệt hỏi từng đoạn khi tua).
+        self::assertSame('403 TOKEN_INVALID', $this->loi(fn () => (new BookController())->audio($this->req($a, ['ma' => 'hsk1', 'so' => '1'], false))));
+    }
+
+    public function testQuanTriDocTuDo(): void
+    {
+        $admin = $this->nguoi('admin');
+        $res = (new BookController())->page($this->req($admin, ['ma' => 'hsk1', 'trang' => '7']));
+        self::assertSame([200, 'image/webp'], [$res->status, $res->headers['Content-Type']]);
         self::assertStringStartsWith('private', $res->headers['Cache-Control']);
-        self::assertSame('RIFF-trang-7', file_get_contents((string) $res->filePath));
-        $bia = (new BookController())->page($this->req('admin', ['ma' => 'hsk1', 'trang' => 'bia']));
-        self::assertSame('RIFF-bia', file_get_contents((string) $bia->filePath));
+        self::assertSame('RIFF-hsk1-7', file_get_contents((string) $res->filePath));
+        // Quản trị bấm mở bài không tốn điểm, không ghi gì.
+        (new BookController())->unlock($this->req($admin, ['ma' => 'hsk2', 'bai' => '1']));
+        self::assertSame(0, (int) Db::val('SELECT COUNT(*) FROM book_points'));
+        // Vẫn phải có mã ký.
+        self::assertSame('403 TOKEN_INVALID', $this->trang($admin, 'hsk1', '7', false));
     }
 
     public function testThieuTrangThi404(): void
     {
-        $this->expectException(HttpError::class);
-        (new BookController())->page($this->req('admin', ['ma' => 'hsk1', 'trang' => '8']));
+        self::assertSame('404 NOT_FOUND', $this->trang($this->nguoi('admin'), 'hsk1', '8'));
     }
 
-    public function testDapAnChiCoOSachCoDapAn(): void
+    // ------------------------------------------------------------------ điểm
+
+    public function testDiemNgayKhongBuNgayKhongBam(): void
     {
-        $c = new BookController();
-        self::assertSame('RIFF-dap-an', file_get_contents((string) $c->answer($this->req('admin', ['ma' => 'hn3', 'trang' => '1']))->filePath));
-        $this->expectException(HttpError::class);
-        $c->answer($this->req('admin', ['ma' => 'hsk1', 'trang' => '7']));
+        $uid = $this->nguoi();
+        $this->ngay('2026-11-09');
+        self::assertFalse(BookAccess::daNhanHomNay($uid));
+        self::assertSame(3, BookAccess::nhanDiemNgay($uid));
+        self::assertSame(0, BookAccess::nhanDiemNgay($uid));
+        self::assertTrue(BookAccess::daNhanHomNay($uid));
+        self::assertSame(3, BookAccess::soDiem($uid));
+        $this->ngay('2026-11-10');
+        self::assertSame(1, BookAccess::nhanDiemNgay($uid));
+        self::assertSame(0, BookAccess::nhanDiemNgay($uid));
+        // 11/11 không bấm; 12/11 bấm vẫn chỉ +1.
+        $this->ngay('2026-11-12');
+        self::assertSame(1, BookAccess::nhanDiemNgay($uid));
+        self::assertSame(5, BookAccess::soDiem($uid));
     }
+
+    public function testCheDoThuMoiLanBamDeuCongDiem(): void
+    {
+        $uid = $this->nguoi();
+        Settings::set('points', ['test_mode' => true]);
+        self::assertSame([3, 1, 1], [BookAccess::nhanDiemNgay($uid), BookAccess::nhanDiemNgay($uid), BookAccess::nhanDiemNgay($uid)]);
+        self::assertSame(5, BookAccess::soDiem($uid));
+        self::assertFalse(BookAccess::daNhanHomNay($uid));
+        // Tắt là về luật thật: hôm nay đã nhận rồi, bấm thêm không được.
+        Settings::set('points', ['test_mode' => false]);
+        self::assertTrue(BookAccess::daNhanHomNay($uid));
+        self::assertSame(0, BookAccess::nhanDiemNgay($uid));
+    }
+
+    public function testMoBaiLanLuotVaTruDiem(): void
+    {
+        $uid = $this->nguoi();
+        $c = new BookController();
+        $mo = fn (string $ma, string $bai) => $this->loi(fn () => $c->unlock($this->req($uid, ['ma' => $ma, 'bai' => $bai])));
+        self::assertSame('409 NO_POINTS', $mo('hsk1', '1'));
+        BookAccess::nhanDiemNgay($uid);
+        // Phải mở lần lượt.
+        self::assertSame('422 VALIDATION', $mo('hsk1', '2'));
+        self::assertSame('422 VALIDATION', $mo('hsk2', '1'));
+        self::assertSame('', $mo('hsk1', '1'));
+        // Bấm lại bài đã mở không trừ thêm.
+        self::assertSame('', $mo('hsk1', '1'));
+        self::assertSame(2, BookAccess::soDiem($uid));
+        $q = $c->access($this->req($uid, ['ma' => 'hsk1']));
+        self::assertSame([[1], ['ma' => 'hsk1', 'bai' => 2, 'tenSach' => 'Sách hsk1'], 2, false], [$q['mo'], $q['ke'], $q['diem'], $q['khoa']]);
+        self::assertTrue(BookAccess::veHopLe($q['ve'], $uid, 'hsk1'));
+        self::assertSame('', $mo('hsk1', '2'));
+        // Hết quyển 1 thì quyển 2 mở trang đầu và mở bài được.
+        self::assertSame('', $this->trang($uid, 'hsk2', '2'));
+        self::assertSame('', $mo('hsk2', '1'));
+        self::assertSame(0, BookAccess::soDiem($uid));
+        self::assertNull($c->access($this->req($uid, ['ma' => 'hsk2']))['ke']);
+        self::assertSame(['first', 'daily', 'unlock', 'unlock', 'unlock'], Db::col('SELECT kind FROM book_points WHERE user_id = ? ORDER BY id', [$uid]));
+    }
+
+    public function testBamLinkShopeeMoiCongDiem(): void
+    {
+        Settings::set('support', ['enabled' => true]);
+        $link = Db::insert('affiliate_links', ['name' => 'Túi', 'url' => 'https://s.shopee.vn/abc', 'place_icon' => 1, 'place_fund' => 0]);
+        $uid = $this->nguoi();
+        $s = new SupportController();
+        $go = new Request('GET', "/go/$link", query: ['place' => 'icon']);
+        $go->params = ['id' => (string) $link];
+        $go->user = ['id' => $uid, 'role' => 'learner'];
+        self::assertFalse($s->links($this->req($uid))['claimedToday']);
+        self::assertSame(302, $s->go($go)->status);
+        self::assertSame(3, BookAccess::soDiem($uid));
+        self::assertTrue($s->links($this->req($uid))['claimedToday']);
+        // Có link thì không lách được bằng gọi API nhận điểm.
+        self::assertSame('403 FORBIDDEN', $this->loi(fn () => (new BookPointsController())->daily($this->req($uid))));
+        $p = (new BookPointsController())->points($this->req($uid));
+        self::assertSame([3, true, false, "/go/$link?place=icon"], [$p['diem'], $p['homNay'], $p['lanDau'], $p['link']]);
+    }
+
+    public function testChuaGanLinkThiNutNhanDiemCongThang(): void
+    {
+        $uid = $this->nguoi();
+        $p = (new BookPointsController())->daily($this->req($uid));
+        self::assertSame([3, true, null], [$p['diem'], $p['homNay'], $p['link']]);
+    }
+
+    public function testQuanTriCongTruTayKhongAmDiem(): void
+    {
+        $uid = $this->nguoi();
+        $admin = $this->nguoi('admin');
+        BookAccess::congTay($uid, 2, 'Tặng', $admin);
+        self::assertSame(2, BookAccess::soDiem($uid));
+        $this->expectException(HttpError::class);
+        BookAccess::congTay($uid, -3, '', $admin);
+    }
+
+    // ------------------------------------------------------------------ file nghe
 
     private function nghe(string $range): Response
     {
-        return (new BookController())->audio($this->req('admin', ['ma' => 'hn3', 'so' => '1'], $range === '' ? [] : ['range' => $range]));
+        return (new BookController())->audio($this->req($this->nguoi('admin'), ['ma' => 'hn3', 'so' => '1'], true, $range === '' ? [] : ['range' => $range]));
     }
 
     private function guiRa(Response $res): string

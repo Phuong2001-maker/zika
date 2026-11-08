@@ -1,4 +1,6 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
+  import Topbar from '$lib/components/Topbar.svelte';
   import { onMount } from 'svelte';
   import { api } from '$lib/api/client';
   import type { UserSettings } from '$lib/api/types';
@@ -6,8 +8,6 @@
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import { toast } from '$lib/stores/toast.svelte';
-  import Switcher from '$lib/components/Switcher.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import { speak } from '$lib/learn/speech';
   import { toneParts } from '$lib/utils/pinyin';
@@ -222,10 +222,7 @@
 
 {#if media.isMobile}
   <div class="mscreen">
-    <header class="mtop">
-      <a href="/account" class="btn btn-bare" aria-label="Về Tài khoản"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
-      <b style="flex: 1; font-size: 16px">Cài đặt học</b>
-    </header>
+    <MTopbar accountCurrent back="/account" backLabel="Về Tài khoản" title="Cài đặt học" />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">
       {@render preview()}
       {@render body(true)}
@@ -236,13 +233,7 @@
     </div>
   </div>
 {:else}
-  <header class="topbar">
-    <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <div style="margin-left: auto; display: flex; align-items: center; gap: 12px">
-      <Switcher current="lt" />
-      <Avatar size={44} current />
-    </div>
-  </header>
+  <Topbar current="lt" accountCurrent />
 
   <main class="page" style="display: flex; flex-direction: column; gap: 20px">
     <nav aria-label="Đường dẫn" class="crumb">

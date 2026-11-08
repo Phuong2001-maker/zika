@@ -37,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 106/106 test; API 173/173; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; API 193/193; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -51,7 +51,9 @@ web/src/lib/curricula/   màn Giáo trình + Phân quyền học (giáo trình �
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
 web/src/lib/stores/cap.svelte.ts  cách gọi cấp theo giáo trình ("HSK 1" / "Quyển 1"), màn học lấy chữ từ đây
 web/src/lib/learn/che-do/  3 chế độ luyện ở màn Lật thẻ (Ghép cặp, Trắc nghiệm, Gõ chữ)
+web/src/routes/learn/chat/  Quán trà — trò chuyện chia bàn theo chủ đề (hỏi tin mới 4 giây/lần), quản trị ở /admin/chat
 web/src/lib/learn/sach.ts  giáo trình /learn/books: học viên thấy bộ sách của giáo trình mình (Hán ngữ 1–6 hoặc HSK 1–3)
+api/app/src/Services/BookAccess.php  ai đọc được trang nào: điểm mở bài, bài đã mở, mã ký ?t= (xem bẫy số 9)
 web/src/lib/learn/giao-trinh/  màn đọc: mục lục, thanh phát file nghe, đáp án — dữ liệu từ sach.json (data/giao-trinh/dung-sach.py)
 data/han-ngu/            nạp giáo trình Hán ngữ 6 tập: chép từ ảnh → sinh → nạp → giọng → quét → gói server
 web/src/app.css          tokens + class dùng chung TOÀN CỤC (xem bẫy số 1); cuối file là khung học `zk-*`
@@ -135,10 +137,22 @@ hoặc khởi động lại `npm run dev`. Bản build không bị.
 Phần tử lấy ra từ mảng `$state` là proxy của Svelte 5, `structuredClone(proxy)` ném `DataCloneError`. Ở trang soạn Ngữ pháp lỗi
 này rơi vào `catch` của `load()` nên trang báo "0 điểm" dù API trả đủ. Lấy bản sao bằng `$state.snapshot(x)`.
 
+### 9. Giáo trình: chặn ở server, mọi đường dẫn file cần mã ký
+
+Ảnh trang, trang đáp án, file nghe đi qua `BookController`, kiểm `BookAccess` (bài đã mở) **và** mã `?t=` của
+chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả hai, đừng chỉ dựa vào giao diện ẩn nút. Điểm chỉ cộng ở `/go`
+(`SupportController::go`); test nhớ `site_settings` giữ nguyên giữa các test nên phải đặt lại `support`/`points` trong `setUp`.
+
 ## Nếp viết
 
 - **Tiếng Việt** cho chữ hiển thị, comment và thông điệp commit. Tên biến/hàm có thể tiếng Việt khi rõ nghĩa hơn.
 - Màn học mới dùng khuôn chung: `DauBai.svelte` + một `section.block.zk-khung` (xem màn Lật thẻ theo bài).
+- Thanh đầu trang máy tính của người học **luôn** là `lib/components/Topbar.svelte` (đường dẫn truyền làm nội dung con,
+  điểm mở bài, Quỹ tháng, Top chăm học, chuông, Chuyển nhanh, tài khoản). Đừng tự viết `<header class="topbar">` trong màn mới:
+  trước 08/11 mỗi màn một kiểu, người dùng báo thiếu menu. Ngoại lệ duy nhất: màn đang thi (`TestRunner`).
+  Điện thoại **luôn** là `lib/components/MTopbar.svelte` (dòng 1 giống hệt mọi màn; nút lùi + tên màn ở dòng 2 qua
+  `back`/`title`/`sub` hoặc nội dung con). Hai thanh cùng thứ tự: điểm mở bài, Quỹ tháng, Top chăm học, chuông,
+  Chuyển nhanh, tài khoản. Không đặt logo "字 Zìkǎ" ở thanh đầu trang nào (người dùng bỏ 08/11).
 - Dấu ấn chữ Hán dùng lại, đừng tự chế kiểu khác: `ChuDien.svelte` (chữ trong ô chữ điền), `.dau-xong` (triện "完" bài đã xong),
   `.lv-nen` + `.lv-hoa` với `SO_HAN` trong `lib/learn/hoa-tiet.ts` (hoạ tiết số Hán của cấp).
 - Mỗi màn phức tạp tách trạng thái ra `state.svelte.ts` (class runes), bố cục máy tính và điện thoại **dùng chung** trạng thái đó — kéo cửa sổ qua 768px không mất chữ đang gõ.
@@ -148,6 +162,12 @@ này rơi vào `catch` của `load()` nên trang báo "0 điểm" dù API trả 
 
 ## Việc còn treo
 
+- **Mở bài giáo trình bằng điểm + chặn tải (08/11/2026), chưa lên server:** xong ở local, xem NHAT-KY 08/11 và phần O
+  của KICH-BAN-TEST. Lên server cần code mới, chạy migration 019, 020, 021 (Quán trà và các bàn), rồi ở quản trị gắn lại link Shopee (DB server đã xoá link).
+  **Không bán sách**: phần gói học/chuyển khoản đã làm rồi bỏ (rủi ro pháp lý), đừng thêm lại khi chưa có giấy phép bản quyền.
+  **Chế độ test điểm đang bật ở local**
+  (mỗi lần bấm bé túi +1) — trên server phải để tắt. Chưa có link Shopee thì nút "Nhận điểm hôm nay" cộng thẳng. Bé túi vẫn hiện mỗi lần
+  tải trang để người dùng test; chốt thì thêm `supportLinks.claimedToday` vào điều kiện ẩn của `ShopeeBuddy.svelte`.
 - **Server thật đã lên bản 08/11/2026 (đã kiểm):** DB xoá hết chỉ giữ tài khoản, nạp lại 2 giáo trình; code, âm thanh,
   ảnh sách đã lên. Kiểm trên web thật: 116 bài × 6 phần giống local (bỏ qua `?v=` nét chữ và `updatedByName`), 21.313
   file âm thanh/nét chữ đủ và đúng cỡ, 43 màn chạy ở máy tính/máy tính bảng/điện thoại. Lúc nạp, `01-cau-truc.sql` dừng
@@ -163,7 +183,7 @@ này rơi vào `catch` của `load()` nên trang báo "0 điểm" dù API trả 
 - **Giáo trình "Hán ngữ 6 tập" (07/11/2026):** 76 bài đã nạp ở local, quy trình ở [data/han-ngu/README.md](data/han-ngu/README.md).
   Chỉ có 4 phần, Bài tập và Kiểm tra cố ý để trống. Gói server ở `../dong-goi-han-ngu/`, **chưa đưa lên**: cần code mới trước,
   rồi chạy `01-cau-truc.sql` (migration 006–018, đã chạy thì tự bỏ qua) và `02-han-ngu.sql`, chép zip uploads, xoá `storage/cache/content`.
-  Màn học gọi cấp theo `curricula.level_label` qua `lib/stores/cap.svelte.ts` ("Quyển n"), đừng viết cứng "HSK n" ở màn học; riêng "Thi thử HSK n" giữ vì là đề HSK dùng chung. Góp ý ở màn học chưa nối (không có nút gửi, không có route POST).
+  Màn học gọi cấp theo `curricula.level_label` qua `lib/stores/cap.svelte.ts` ("Quyển n"), đừng viết cứng "HSK n" ở màn học; riêng "Thi thử HSK n" giữ vì là đề HSK dùng chung. Góp ý ở màn học đã nối 08/11 (Chuyển nhanh → Góp ý, `POST /feedback`, học viên đọc trả lời trong hộp).
 
 - **Giao diện giáo trình admin + quỹ thưởng/top chăm học/bé túi Shopee (05–06/11/2026):** đọc
   [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md) trước khi tiếp tục. Chỉ frontend/dữ liệu mẫu;

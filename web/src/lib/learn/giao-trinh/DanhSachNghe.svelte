@@ -15,11 +15,13 @@
 
 {#each nhom as g (g.so)}
   {@const dangDoc = g.so === baiDangDoc}
+  {@const khoa = !st.baiMo(g.so)}
   <section class="gt-ng" class:gt-ng-on={dangDoc} aria-label="File nghe bài {g.so}">
     <header class="gt-ng-dau">
       <span class="gt-ng-bai">Bài {g.so}</span>
       {#if g.bai}<b lang="zh" class="gt-ng-ten">{g.bai.ten}</b>{/if}
       {#if dangDoc}<span class="tag tag-blue">Đang đọc</span>{/if}
+      {#if khoa}<span class="gt-ng-khoa"><Icon name="lock" size={13} />Chưa mở</span>{/if}
       {#if g.bai}
         <button type="button" class="btn btn-text btn-sm gt-ng-trang" onclick={() => g.bai && ondi(g.bai.trang)}>Trang {g.bai.trang}</button>
       {/if}
@@ -28,11 +30,13 @@
       {#each g.ds as f (f.so)}
         {@const mo = st.may.dang?.so === f.so}
         <li>
-          <button type="button" class="gt-ng-file" class:on={mo} aria-current={mo || (dangDoc && f === g.ds[0] && !st.may.dang)}
+          <button type="button" class="gt-ng-file" class:on={mo} disabled={khoa} aria-current={mo || (dangDoc && f === g.ds[0] && !st.may.dang)}
             aria-label="{mo && st.may.phat ? 'Tạm dừng' : 'Nghe'} {f.ten}, bài {g.so}"
             onclick={() => (mo ? st.may.batTat() : st.may.chon(f))}>
             <span class="gt-ng-nut">
-              {#if mo && st.may.phat}
+              {#if khoa}
+                <Icon name="lock" size={14} />
+              {:else if mo && st.may.phat}
                 <span class="gt-song" aria-hidden="true"><i></i><i></i><i></i></span>
               {:else}
                 <Icon name="play" size={14} />
@@ -61,7 +65,9 @@
     width: 100%; min-height: 44px; padding: 6px 8px; border: 0; border-radius: var(--r);
     background: none; color: var(--text); font: inherit; font-size: 14px; text-align: left; cursor: pointer;
   }
-  .gt-ng-file:hover { background: var(--surface); }
+  .gt-ng-file:hover:not(:disabled) { background: var(--surface); }
+  .gt-ng-file:disabled { color: var(--text-3); cursor: default; }
+  .gt-ng-khoa { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 600; color: var(--text-3); }
   .gt-ng-file:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
   .gt-ng-file.on { background: var(--surface); box-shadow: var(--sh-sm); font-weight: 600; }
   .gt-ng-nut {

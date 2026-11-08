@@ -1,14 +1,15 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
   import { onMount } from 'svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import { media } from '$lib/stores/media.svelte';
   import Topbar from '$lib/components/Topbar.svelte';
-  import Switcher from '$lib/components/Switcher.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import { dinhDangPhut, quyenGan, taiKeSach, trangDaDoc, urlBia, type TomTatSach } from '$lib/learn/sach';
+  import { diemDoc } from '$lib/learn/diem-doc.svelte';
+  import { session } from '$lib/stores/session.svelte';
 
   // Giáo trình · kệ sách. Học viên chỉ thấy bộ sách của giáo trình mình học, quản trị thấy cả hai bộ.
   heartbeat.setActivity({ part: null, screen: 'book' });
@@ -29,7 +30,28 @@
       loi = true;
     }
   }
-  onMount(() => void tai());
+  onMount(() => {
+    void tai();
+    void diemDoc.refresh();
+    // Nhận điểm xong ở tab Shopee rồi quay lại: số điểm và quyển vừa mở khoá phải hiện đúng ngay.
+    const lamMoi = () => {
+      if (document.visibilityState !== 'visible') return;
+      void diemDoc.refresh();
+      void tai();
+    };
+    document.addEventListener('visibilitychange', lamMoi);
+    return () => document.removeEventListener('visibilitychange', lamMoi);
+  });
+
+  let dangNhan = $state(false);
+  async function nhanDiem(): Promise<void> {
+    dangNhan = true;
+    try {
+      await diemDoc.nhan();
+    } finally {
+      dangNhan = false;
+    }
+  }
 
   // API đã xếp sẵn theo bộ rồi theo cấp, chỉ cần gom các quyển liền nhau cùng bộ.
   const nhom = $derived.by(() => {
@@ -41,17 +63,25 @@
     }
     return ra;
   });
-  const docTiep = $derived(ds?.find((q) => q.ma === gan && (dangDoc[q.ma] ?? 1) > 1));
+  const docTiep = $derived(ds?.find((q) => q.ma === gan && !q.khoa && (dangDoc[q.ma] ?? 1) > 1));
+  const tongBai = $derived((ds ?? []).reduce((t, q) => t + q.soBai, 0));
+  const baiDaMo = $derived((ds ?? []).reduce((t, q) => t + q.baiMo, 0));
+  /** Quyển đứng trước trong cùng bộ: thẻ quyển khoá ghi "Mở hết <quyển trước>". */
+  const truoc = $derived<Record<string, string>>(
+    Object.fromEntries(nhom.flatMap((g) => g.ds.map((q, i) => [q.ma, i > 0 ? g.ds[i - 1].ten : '']))),
+  );
 </script>
 
 <svelte:head><title>Giáo trình · Zìkǎ</title></svelte:head>
 
 {#snippet the(q: TomTatSach, mobile: boolean)}
   {@const trang = dangDoc[q.ma] ?? 1}
-  <a href="/learn/books/{q.ma}" class="gt-quyen">
+  <a href="/learn/books/{q.ma}" class="gt-quyen" class:gt-quyen-khoa={q.khoa}>
     <span class="gt-bia-khung">
-      <img class="gt-bia" src={urlBia(q)} alt="" loading="lazy" />
-      {#if q.soNghe}<span class="gt-co-nghe" title="Có file nghe"><Icon name="headphones" size={15} /></span>{/if}
+      <img class="gt-bia" src={urlBia(q)} alt="" loading="lazy" draggable="false" />
+      {#if q.khoa}
+        <span class="gt-khoa-bia"><Icon name="lock" size={16} />{truoc[q.ma] ? `Mở hết ${truoc[q.ma]}` : 'Chưa mở'}</span>
+      {:else if q.soNghe}<span class="gt-co-nghe" title="Có file nghe"><Icon name="headphones" size={15} /></span>{/if}
     </span>
     <b class="gt-ten" style="font-size: {mobile ? 14 : 16}px">{q.ten}</b>
     <span class="muted" style="font-size: 13px">{q.phu}</span>
@@ -62,6 +92,11 @@
       {/if}
       {#if q.coDapAn}<span class="gt-chip gt-chip-da"><Icon name="answer" size={14} />Đáp án</span>{/if}
     </span>
+    {#if !session.isStaff}
+      <span class="gt-mo num">
+        <Icon name={q.baiMo ? 'check' : 'lock'} size={14} />Đã mở {q.baiMo}/{q.soBai} bài
+      </span>
+    {/if}
     <span class="gt-chan">
       {#if trang > 1}
         <span class="gt-tien" aria-hidden="true"><i style="width: {Math.min(100, (trang / q.soTrang) * 100)}%"></i></span>
@@ -73,15 +108,47 @@
   </a>
 {/snippet}
 
+{#snippet viDiem()}
+  <!-- Điểm mở bài: chạm bé túi mỗi ngày được điểm, mỗi điểm mở một bài. -->
+  <section class="gt-vi" aria-label="Điểm mở bài">
+    <span class="gt-vi-so" aria-hidden="true"><b class="num">{diemDoc.diem}</b><small>điểm</small></span>
+    <span class="gt-vi-giua">
+      <span class="gt-vi-nhan">Điểm mở bài<span class="sr-only">: {diemDoc.diem}</span></span>
+      <span class="gt-vi-tien" aria-hidden="true"><i style="width: {tongBai ? (baiDaMo / tongBai) * 100 : 0}%"></i></span>
+      <span class="gt-vi-phu num">Đã mở {baiDaMo}/{tongBai} bài</span>
+    </span>
+    <span class="gt-vi-nut">
+      {#if !diemDoc.daTai}
+        <Skeleton w="120px" h="34px" r={999} />
+      {:else if !diemDoc.homNay}
+        <button type="button" class="btn btn-son btn-sm" disabled={dangNhan} onclick={nhanDiem}>Nhận +{diemDoc.lanToi} điểm</button>
+      {:else}
+        <span class="gt-vi-da"><Icon name="check" size={15} />Hôm nay đã nhận</span>
+      {/if}
+    </span>
+  </section>
+{/snippet}
+
 {#snippet ke(mobile: boolean)}
-  <div>
-    <h1 style="font-size: {mobile ? 22 : 34}px; line-height: 1.2">Giáo trình</h1>
-    {#if nhom.length === 1}
-      <p class="muted gt-mo-ta">Sách của <b>{nhom[0].ten}</b> — đọc từng trang, nghe file ghi âm và so đáp án ngay trên web.</p>
-    {:else if nhom.length > 1}
-      <p class="muted gt-mo-ta">Bạn thấy mọi bộ sách; học viên chỉ thấy bộ sách của giáo trình mình đang học.</p>
-    {/if}
-  </div>
+  <header class="gt-dau" class:m={mobile}>
+    <div class="gt-dau-chu">
+      <h1 style="font-size: {mobile ? 24 : 34}px">Giáo trình</h1>
+      {#if nhom.length === 1}
+        <p class="muted gt-mo-ta"><b>{nhom[0].ten}</b> · {nhom[0].ds.length} quyển · {tongBai} bài — đọc sách, nghe file ghi âm, so đáp án.</p>
+      {:else if nhom.length > 1}
+        <p class="muted gt-mo-ta">Bạn thấy mọi bộ sách; học viên chỉ thấy bộ sách của giáo trình mình đang học.</p>
+      {/if}
+    </div>
+    {#if !session.isStaff && ds?.length}{@render viDiem()}{/if}
+  </header>
+  {#if !session.isStaff && ds?.length && diemDoc.lanDau && diemDoc.daTai}
+    <!-- Chỉ người chưa nhận điểm lần nào mới cần đọc luật; sau đó dòng này tự ẩn cho gọn. -->
+    <ol class="gt-luat" aria-label="Cách mở bài">
+      <li><span class="num">1</span>Chạm bé túi hoặc bấm <b>Nhận điểm</b> mỗi ngày — lần đầu được 3 điểm</li>
+      <li><span class="num">2</span>Mỗi điểm mở một bài, mở lần lượt theo sách</li>
+      <li><span class="num">3</span>Bài đã mở là đọc, nghe, xem đáp án mãi</li>
+    </ol>
+  {/if}
 
   {#if loi}
     <EmptyState title="Chưa tải được kệ sách." desc="Kiểm tra kết nối mạng rồi thử lại.">
@@ -126,13 +193,7 @@
 {#if media.isMobile}
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
-    <header class="mtop">
-      <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 30px; height: 30px; font-size: 17px">字</span>Zìkǎ</a>
-      <div style="margin-left: auto; display: flex; align-items: center; gap: 10px">
-        <Switcher current="lt" />
-        <Avatar size={44} />
-      </div>
-    </header>
+    <MTopbar />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 18px">{@render ke(true)}</main>
   </div>
 {:else}
@@ -142,7 +203,7 @@
 {/if}
 
 <style>
-  .gt-mo-ta { margin-top: 6px; font-size: 14px; }
+  .gt-mo-ta { margin-top: 6px; font-size: 14px; line-height: 1.5; }
   .gt-mo-ta b { color: var(--text); }
   .gt-nhom { display: flex; flex-direction: column; gap: 14px; }
   .gt-nhom-ten { display: flex; align-items: baseline; gap: 10px; font-size: 20px; font-weight: 700; }
@@ -162,6 +223,58 @@
     transition: border-color .15s ease, box-shadow .15s ease;
   }
   .gt-quyen:hover { border-color: var(--line-3); box-shadow: var(--sh-md); }
+  /* Quyển chưa học tới: vẫn bấm vào được (màn đọc báo cách mở), nhưng nhìn là biết còn khoá. */
+  .gt-quyen-khoa .gt-bia { filter: grayscale(.85); opacity: .6; }
+  .gt-quyen-khoa .gt-ten, .gt-quyen-khoa .gt-chips { opacity: .7; }
+  .gt-khoa-bia {
+    position: absolute; left: 8px; right: 8px; bottom: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 5px; padding: 6px 8px; border-radius: 10px;
+    background: var(--surface); color: var(--text); box-shadow: var(--sh-md); font-size: 12px; font-weight: 700; text-align: center;
+  }
+  .gt-mo { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 12.5px; font-weight: 600; color: var(--text-2); }
+
+  /* Đầu kệ: tên bên trái, ví điểm bên phải cùng một hàng để kệ sách lên cao, không chồng hai khối chữ. */
+  .gt-dau { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; }
+  .gt-dau h1 { line-height: 1.15; }
+  .gt-dau-chu { min-width: 0; flex: 1 1 320px; }
+  .gt-dau.m { align-items: stretch; }
+
+  .gt-vi {
+    display: flex; align-items: center; gap: 14px; flex: 0 1 auto;
+    padding: 10px 12px 10px 10px; border: 1px solid var(--son-line); border-radius: 18px;
+    background: linear-gradient(120deg, var(--son-soft), var(--surface) 70%);
+  }
+  .gt-dau.m .gt-vi { flex: 1 1 100%; }
+  /* Ô số như con dấu son: nhìn là biết "điểm" là thứ để tiêu, không lẫn với số trang. */
+  .gt-vi-so {
+    flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 54px; height: 54px; border-radius: 14px; background: var(--son); color: var(--on-accent);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .25);
+  }
+  .gt-vi-so b { font-size: 24px; line-height: 1; font-weight: 800; }
+  .gt-vi-so small { font-size: 10.5px; font-weight: 700; opacity: .9; letter-spacing: .02em; }
+  .gt-vi-giua { display: flex; flex-direction: column; gap: 5px; min-width: 130px; flex: 1 1 auto; }
+  .gt-vi-nhan { font-size: 14px; font-weight: 700; }
+  .gt-vi-tien { display: block; width: 100%; max-width: 180px; height: 5px; border-radius: 99px; background: var(--track); overflow: hidden; }
+  .gt-vi-tien i { display: block; height: 100%; border-radius: inherit; background: var(--son); }
+  .gt-vi-phu { font-size: 12.5px; color: var(--text-2); }
+  .gt-vi-nut { display: flex; align-items: center; gap: 10px; flex: none; }
+  .gt-vi-da {
+    display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 12px; border-radius: 999px;
+    background: var(--ngoc-soft); color: var(--green-text); font-size: 13px; font-weight: 700; white-space: nowrap;
+  }
+  .gt-dau.m .gt-vi { flex-wrap: wrap; }
+  .gt-dau.m .gt-vi-nut { width: 100%; justify-content: space-between; padding-top: 2px; }
+
+  .gt-luat {
+    list-style: none; margin: -6px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 18px;
+    font-size: 13px; color: var(--text-2);
+  }
+  .gt-luat li { display: flex; align-items: center; gap: 7px; }
+  .gt-luat span {
+    display: grid; place-items: center; flex: none; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--son-soft); color: var(--son-text); font-size: 11.5px; font-weight: 800;
+  }
   .gt-quyen:hover .gt-bia { transform: translateY(-3px); }
   .gt-quyen:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
   .gt-bia-khung { position: relative; display: block; margin-bottom: 8px; }

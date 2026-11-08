@@ -90,7 +90,7 @@ export interface MeResponse {
 
 export interface Activity {
   part: Part | null;
-  screen: 'home' | 'level' | 'do' | 'review' | 'account' | 'admin' | 'book';
+  screen: 'home' | 'level' | 'do' | 'review' | 'account' | 'admin' | 'book' | 'chat';
   level?: number;
   lessonId?: number;
   lessonNo?: number;

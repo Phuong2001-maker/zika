@@ -25,6 +25,29 @@ export interface TomTatSach {
   soNghe: number;
   phutNghe: number;
   coDapAn: boolean;
+  /** Chưa học tới quyển này (chưa mở hết quyển trước): kệ sách hiện xám kèm ổ khoá. */
+  khoa: boolean;
+  /** Số bài đã mở. */
+  baiMo: number;
+}
+
+/**
+ * Quyền đọc một quyển (GET /learn/books/{ma}/quyen). Server mới là nơi chặn: trang của bài chưa mở thì API trả
+ * 403, ở đây chỉ để vẽ thẻ khoá thay cho ảnh.
+ */
+export interface QuyenDoc {
+  /** Biên tập/quản trị: đọc mọi trang. */
+  tuDo: boolean;
+  /** Chưa học tới quyển này: cả trang đầu sách cũng khoá. */
+  khoa: boolean;
+  /** Bài đã mở. */
+  mo: number[];
+  /** Bài mở tiếp được bằng điểm, có thể ở quyển khác; null = đã mở hết bộ sách. */
+  ke: { ma: string; bai: number; tenSach: string } | null;
+  diem: number;
+  /** Mã ký gắn vào đường dẫn ảnh, file nghe — chỉ dùng được với tài khoản này, sống `veGiay` giây. */
+  ve: string;
+  veGiay: number;
 }
 
 export interface BaiSach {
@@ -66,16 +89,35 @@ export interface Sach {
   bai: BaiSach[];
   nghe: BaiNghe[];
   dapAn: DapAn | null;
+  quyen: QuyenDoc;
 }
 
 export const taiKeSach = () => api.get<TomTatSach[]>('/learn/books');
 export const taiSach = (ma: string) => api.get<Sach>(`/learn/books/${ma}`);
+export const taiQuyen = (ma: string) => api.get<QuyenDoc>(`/learn/books/${ma}/quyen`, { quiet: true });
+export const moBaiSach = (ma: string, bai: number) => api.post<QuyenDoc>(`/learn/books/${ma}/mo/${bai}`);
+
+/** Bài `bai` của quyển đọc được chưa. null = phần không thuộc bài nào (trang đầu sách): theo quyển có khoá không. */
+type MucTrang = { so: number; trang: number };
+
+export function baiDaMo(sach: { bai: MucTrang[] }, q: QuyenDoc, bai: number | null): boolean {
+  if (q.tuDo) return true;
+  if (bai === null || !sach.bai.some((b) => b.so === bai)) return !q.khoa;
+  return q.mo.includes(bai);
+}
+
+/** Trang `trang` của sách (hay của phần đáp án) đọc được chưa — cùng luật với BookAccess ở server. */
+export function trangDaMo(sach: { bai: MucTrang[]; dapAn: { bai: MucTrang[] } | null }, q: QuyenDoc, trang: number, dapAn = false): boolean {
+  const ds = dapAn ? (sach.dapAn?.bai ?? []) : sach.bai;
+  return baiDaMo(sach, q, baiCuaTrang(ds, trang)?.so ?? null);
+}
 
 // Ảnh và file nghe đi qua API đòi đăng nhập; đường /uploads/giao-trinh/ bị chặn vì sách có bản quyền.
 
-// Mọi đường dẫn gắn ?v=<phien>: server cho trình duyệt giữ ảnh 30 ngày, dựng lại sách mà không đổi đường dẫn thì
-// người học vẫn thấy ảnh cũ.
+// Bìa gắn ?v=<phien>: server cho trình duyệt giữ ảnh lâu, dựng lại sách mà không đổi đường dẫn thì người học vẫn
+// thấy ảnh cũ. Trang sách và file nghe gắn thêm mã ký ?t= (đổi mỗi lần lấy quyền đọc) nên tự đổi đường dẫn.
 const v = (phien: string) => (phien ? `?v=${phien}` : '');
+const t = (phien: string, ve: string) => `?${phien ? `v=${phien}&` : ''}t=${encodeURIComponent(ve)}`;
 
 /** Ảnh bìa ở kệ sách — bản render nhỏ, rộng 800px. */
 export function urlBia(q: { ma: string; phien: string }): string {
@@ -83,12 +125,12 @@ export function urlBia(q: { ma: string; phien: string }): string {
 }
 
 /** Ảnh một trang sách (rộng 1200px) hoặc một trang đáp án. Số trang đánh từ 1. */
-export function urlTrang(q: { ma: string; phien: string }, trang: number, dapAn = false): string {
-  return `/api/learn/books/${q.ma}/${dapAn ? 'dap-an/' : ''}${trang}${v(q.phien)}`;
+export function urlTrang(q: { ma: string; phien: string }, ve: string, trang: number, dapAn = false): string {
+  return `/api/learn/books/${q.ma}/${dapAn ? 'dap-an/' : ''}${trang}${t(q.phien, ve)}`;
 }
 
-export function urlNghe(q: { ma: string; phien: string }, so: number): string {
-  return `/api/learn/books/${q.ma}/nghe/${so}${v(q.phien)}`;
+export function urlNghe(q: { ma: string; phien: string }, ve: string, so: number): string {
+  return `/api/learn/books/${q.ma}/nghe/${so}${t(q.phien, ve)}`;
 }
 
 /** Bài chứa trang `trang` — bài cuối cùng bắt đầu trước hoặc đúng trang đó. Trang đầu sách (lời nói đầu) thì null. */

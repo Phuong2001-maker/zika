@@ -20,6 +20,7 @@
   {#each st.mucLuc as b (b.so)}
     {@const soNghe = st.ngheTheoBai[b.so]?.length ?? 0}
     {@const dangDoc = st.baiHienTai?.so === b.so}
+    {@const khoa = !st.baiMo(b.so)}
     <li>
       <button type="button" class="gt-ml-dong" class:on={dangDoc} aria-current={dangDoc} onclick={() => ondi(b.trang)}>
         <span class="gt-ml-so num">{b.so}</span>
@@ -28,7 +29,8 @@
           {#if b.tenVi}<span class="muted">{b.tenVi}</span>{/if}
         </span>
         <span class="gt-ml-phai">
-          {#if !st.dapAn && soNghe}<span class="gt-ml-co" title="{soNghe} file nghe"><Icon name="headphones" size={14} />{soNghe}</span>{/if}
+          {#if khoa}<span class="gt-ml-khoa" title={st.laBaiKe(b.so) ? 'Bài mở tiếp được bằng 1 điểm' : 'Chưa mở'}><Icon name="lock" size={14} />{st.laBaiKe(b.so) ? 'Mở được' : ''}</span>{/if}
+          {#if !st.dapAn && soNghe && !khoa}<span class="gt-ml-co" title="{soNghe} file nghe"><Icon name="headphones" size={14} />{soNghe}</span>{/if}
           {#if !st.dapAn && b.so in st.dapAnTheoBai}<span class="gt-ml-co" title="Có đáp án"><Icon name="answer" size={14} /></span>{/if}
           <span class="num">tr. {b.trang}</span>
         </span>
@@ -57,4 +59,5 @@
   .gt-ml-ten .muted { font-size: 12.5px; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .gt-ml-phai { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); white-space: nowrap; }
   .gt-ml-co { display: inline-flex; align-items: center; gap: 2px; color: var(--blue-text); }
+  .gt-ml-khoa { display: inline-flex; align-items: center; gap: 3px; color: var(--text-3); font-weight: 600; }
 </style>

@@ -34,8 +34,6 @@
 <svelte:head><title>{doc?.title ?? 'Zìkǎ'} · Zìkǎ</title></svelte:head>
 
 <header class="topbar">
-  <a href="/" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-  <span class="grow"></span>
   <a href="/" class="btn btn-sm" onclick={goBack}><Icon name="chev" size={16} style="transform: rotate(180deg)" /> Quay lại</a>
 </header>
 

@@ -312,6 +312,49 @@ Chưa bấm thử trên trình duyệt: nút Lưu ở form giáo trình (API đ�
 | N19 | Bật "Giáo trình mặc định" ở giáo trình khác rồi lưu; thử xoá giáo trình mặc định | Bộ cũ tự tắt, học viên chưa phân quyền đổi theo, người đã gán giữ nguyên; không xoá được bộ mặc định | Đạt ở test API |
 | N15 | Quản trị: thẻ giáo trình, tab cấp và đầu trang soạn bài của Hán ngữ; Xem thử `?preview=1&curriculum=` | Ghi "Quyển n" theo giáo trình đang xem; rời Xem thử thì về nhãn của tài khoản | Đạt |
 
+## O. Điểm mở bài, chặn tải giáo trình (08/11/2026)
+
+"Đạt" là đã chạy ở local (API test + bấm trên trình duyệt bằng tài khoản mẫu). Server thật **chưa** có (cần migration 019 + code mới).
+
+| # | Làm gì | Mong đợi | Kết quả |
+|---|---|---|---|
+| O1 | Học viên mới mở Giáo trình | Thẻ "0 điểm mở bài", nút "Nhận 3 điểm hôm nay"; Quyển 1 mở, Quyển 2–6 xám, ghi "Mở hết Giáo trình Hán ngữ n" | Đạt (máy tính, điện thoại) |
+| O2 | Mở Quyển 1 | Trang đầu sách đọc được; mỗi bài là một thẻ khoá ("Bài 1 chưa mở", số trang, số file nghe), các trang của bài không hiện | Đạt |
+| O3 | Gõ thẳng `/api/learn/books/hn1/30?t=…` (trang Bài 1) và `/nghe/1` khi chưa mở bài | 403 | Đạt |
+| O4 | Bấm bé túi (hoặc link Quỹ tháng) 2 lần trong ngày đầu, tải lại trang | +3 điểm, không phải 4; giai đoạn test: bé hiện lại sau khi tải trang, lời nhắn "Hôm nay bạn đã nhận điểm rồi!" | Đạt (giả lập `/go`); **bấm bé túi thật chưa thử** |
+| O5 | Mở Bài 1 bằng 1 điểm | Hỏi lại "Dùng 1 trong 3 điểm…"; mở xong hiện trang, nút Nghe bài này phát được (206); còn 2 điểm | Đạt |
+| O6 | Bấm mở Bài 3 khi Bài 2 chưa mở | Thẻ ghi "Mở Bài 2 trước nhé", nút "Đến Bài 2" | Đạt |
+| O7 | Hôm sau bấm bé túi; bỏ một ngày rồi bấm | Mỗi ngày bấm +1; ngày bỏ qua không được bù | Đạt ở test API (đổi đồng hồ) |
+| O8 | Đường dẫn ảnh không có `?t=`, mã của tài khoản khác, mã sửa 1 ký tự, mã quá 6 giờ | 403 | Đạt (test API + trình duyệt) |
+| O9 | Chuột phải, kéo ảnh, Ctrl+S, Ctrl+P trên trang sách | Không ra menu lưu, không kéo được, không lưu/in | Đạt (máy tính); **giữ ngón tay trên iPhone/Android thật chưa thử** |
+| O17 | Bật Chế độ test điểm, học viên bấm bé túi 3 lần | +3 điểm; tắt chế độ là về mỗi ngày +1 | Đạt (test API + giả lập `/go`) |
+| O14 | Quản trị → Điểm mở bài: tìm email, cộng 2 điểm kèm lý do, trừ quá số đang có | Sổ điểm hiện từng dòng; trừ quá thì báo lỗi | Đạt ở test API; tìm và xem sổ đạt trên trình duyệt |
+| O15 | Quản trị/biên tập mở mọi quyển | Đọc tự do, không bị trừ điểm | Đạt |
+| O18 | Học viên mở kệ sách, màn đọc, thẻ khoá; gõ `/api/learn/packages` | Không còn nút hay chữ mua gói nào; API 404 | Đạt |
+
+## P. Góp ý · báo lỗi từ người học (08/11/2026)
+
+| # | Làm gì | Mong đợi | Kết quả |
+|---|---|---|---|
+| P1 | Học viên ở màn Lật thẻ Quyển 1 Bài 2 → Chuyển nhanh → "Góp ý · báo lỗi màn này" | Hộp mở, ghi "Gửi kèm màn đang mở: Từ vựng · Quyển 1 · Bài 2", mặc định "Lỗi nội dung"; điện thoại hộp treo ngay dưới thanh đầu trang | Đạt (máy tính, 375px) |
+| P2 | Gửi góp ý | Báo "Cảm ơn bạn! Góp ý đã gửi tới đội Zìkǎ."; quản trị → Góp ý thấy "Gửi từ: Lật thẻ · Quyển 1 · Bài 2", nút "Mở để sửa" | Đạt |
+| P3 | Quản trị trả lời; học viên mở lại hộp Góp ý | "Góp ý bạn đã gửi · có phản hồi", đọc được câu trả lời | Đạt ở test API; **trên trình duyệt chưa thử** |
+| P4 | Gửi quá 10 góp ý trong một giờ, hoặc nội dung dưới 5 ký tự | Báo lỗi, không lưu | Đạt ở test API |
+
+## Q. Quán trà — phòng trò chuyện chung (08/11/2026)
+
+| # | Làm gì | Mong đợi | Kết quả |
+|---|---|---|---|
+| Q1 | Chuyển nhanh → Quán trà | Danh sách 5 bàn (tin mới nhất, số tin 24 giờ, "Tin mới"); bấm một bàn mở `/learn/chat/<bàn>`, ô gõ sát đáy màn hình | Đạt (máy tính); **danh sách bàn trên 375px chưa xem lại** |
+| Q7 | Thanh chọn bàn trong một bàn → bấm bàn khác | Đổi tin theo bàn, không lẫn tin bàn cũ | Đạt |
+| Q8 | Học viên mở ⋯ ở tin của quản trị | Chỉ có "Trả lời", không có "Báo cáo"; gọi thẳng API báo cáo thì bị từ chối | Đạt |
+| Q9 | Quản trị → Quán trà → Các bàn: thêm "Luyện thi HSK 3", rồi đóng bàn | Bàn mới có đường dẫn `luyen-thi-hsk-3`; đóng thì học viên chỉ đọc | Đạt ở test API; **màn quản trị chưa bấm thử** |
+| Q2 | Gõ tin, Enter (máy tính) / nút gửi (điện thoại) | Tin hiện ngay bên phải, nền hồng | Đạt |
+| Q3 | Người khác trả lời tin của mình | Sau ≤ 4 giây tin hiện bên trái, có trích tin gốc, nhãn "Quản trị" nếu là quản trị | Đạt |
+| Q4 | ⋯ → Trả lời / Xoá tin / Báo cáo | Trả lời có khung trích; xoá thành "Tin đã bị xoá" ở mọi máy; báo cáo chọn lý do | Đạt ở test API; **xoá và báo cáo trên trình duyệt chưa bấm** |
+| Q5 | Gửi 2 tin trong 2 giây; 21 tin trong 5 phút | Báo "gửi nhanh quá" / "nghỉ chút" | Đạt ở test API |
+| Q6 | Quản trị cấm chat 1 giờ; tắt "Đang mở cửa" | Học viên thấy "Bạn đang bị tạm cấm…" / "Quán trà đang tạm đóng cửa", không gửi được, vẫn đọc được | Đạt ở test API |
+
 ## E. Kiểm tra tự động (chạy ở máy dev)
 
 ```bash

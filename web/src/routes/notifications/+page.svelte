@@ -1,4 +1,5 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
   import { onMount, tick } from 'svelte';
   import { page } from '$app/state';
   import { media } from '$lib/stores/media.svelte';
@@ -6,7 +7,6 @@
   import { ago, date, time } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
   import Topbar from '$lib/components/Topbar.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
 
@@ -81,12 +81,7 @@
 
 {#if media.isMobile}
   <div class="mscreen">
-    <header class="mtop">
-      <button type="button" class="btn btn-bare" aria-label="Quay lại" onclick={() => history.back()}><Icon name="chev" size={20} style="transform: rotate(180deg)" /></button
-      >
-      <b style="flex: 1; font-size: 15px">Thông báo</b>
-      <Avatar size={36} bell={false} />
-    </header>
+    <MTopbar onback={() => history.back()} title="Thông báo" />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 14px">{@render body(true)}</main>
   </div>
 {:else}

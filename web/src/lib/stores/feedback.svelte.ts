@@ -1,5 +1,6 @@
 // Hộp Góp ý (07 §1.3): màn nào cũng mở được từ bảng Chuyển nhanh, kèm ngữ cảnh tự động.
-// Màn đang hiển thị cập nhật ngữ cảnh bằng feedback.setContext(); component FeedbackModal (gắn ở layout) đọc store này.
+// Màn đang hiển thị có thể đặt ngữ cảnh riêng bằng feedback.setContext(); không đặt thì FeedbackModal (gắn ở layout gốc)
+// tự lấy phần, cấp, bài, trang sách từ đường dẫn.
 import type { Part } from '$lib/api/types';
 
 export interface FeedbackContext {

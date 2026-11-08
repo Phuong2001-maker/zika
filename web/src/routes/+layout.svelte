@@ -11,6 +11,7 @@
   import Toaster from '$lib/components/Toaster.svelte';
   import TooltipLayer from '$lib/components/TooltipLayer.svelte';
   import ShopeeBuddy from '$lib/learn/ShopeeBuddy.svelte';
+  import FeedbackModal from '$lib/components/FeedbackModal.svelte';
   import { canView, homePath, isAdminRoute, isGuestOnly, isPublicRoute, landingPath, loginUrl } from '$lib/auth/routes';
   import { registerServiceWorker } from '$lib/utils/pwa';
 
@@ -92,6 +93,8 @@
 {#if allowed}
   {@render children()}
   {#if page.url.pathname.startsWith('/learn/')}<ShopeeBuddy />{/if}
+  <!-- Hộp Góp ý cho mọi màn người học đã đăng nhập (mở từ bảng Chuyển nhanh); khu quản trị không cần. -->
+  {#if session.user && !isAdminRoute(page.url.pathname)}<FeedbackModal />{/if}
 {:else}
   <div class="boot center" aria-busy="true" aria-label="Đang tải">
     <span class="seal" lang="zh" style="width: 48px; height: 48px; font-size: 26px">字</span>

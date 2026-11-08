@@ -1,4 +1,5 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
   import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { api } from '$lib/api/client';
@@ -7,15 +8,12 @@
   import { media } from '$lib/stores/media.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import Topbar from '$lib/components/Topbar.svelte';
-  import Switcher from '$lib/components/Switcher.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
   import LevelCard from '$lib/components/LevelCard.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import Bar from '$lib/components/Bar.svelte';
   import { taiChuBut } from '$lib/learn/hoa-tiet';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
-  import MonthlyCommunity from '$lib/learn/MonthlyCommunity.svelte';
   import { soHienThi } from '$lib/learn/resume';
 
   // Bàn học — Lật thẻ · Chọn cấp (07 §4.1).
@@ -145,13 +143,7 @@
 {#if media.isMobile}
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
-    <header class="mtop">
-      <div style="margin-left: auto; display: flex; align-items: center; gap: 6px">
-        <MonthlyCommunity />
-        <Switcher current="lt" />
-        <Avatar size={32} />
-      </div>
-    </header>
+    <MTopbar current="lt" />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 16px">
       <h1 style="font-size: 22px; line-height: 1.2">Chào {greeting}, hôm nay học gì?</h1>
       {#if failed}

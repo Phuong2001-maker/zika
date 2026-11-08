@@ -97,6 +97,49 @@ Cần `pymupdf`, `Pillow`, `imageio-ffmpeg`. Cả 9 quyển ~740MB.
 > Service worker không cache gì dưới `/api/learn/books`. Sau khi deploy, mở thử
 > `https://<tên miền>/uploads/giao-trinh/hn1/001.webp` — phải ra 403, không được ra ảnh.
 
+### Điểm mở bài (migration 019)
+
+Học viên **không đọc được bài chưa mở**: trang sách, trang đáp án và file nghe của bài đó server trả 403, kể cả khi gõ
+thẳng đường dẫn hay dùng công cụ tải. Biên tập và quản trị đọc tự do.
+
+- **Điểm:** lần đầu bấm bé túi (hoặc một link Shopee ở Quỹ tháng) được **3 điểm**, từ hôm sau mỗi ngày bấm được **1 điểm**
+  (ngày tính 0h–24h giờ Việt Nam). Bấm nhiều lần trong ngày vẫn chỉ 1; điểm chưa dùng giữ lại, ngày không bấm thì không bù.
+  Điểm chỉ cộng ở lối `/go/{id}` phía server. Quản trị chưa gắn link Shopee nào thì nút "Nhận điểm hôm nay" cộng thẳng
+  (`POST /learn/points/daily`); có link thì lối đó trả 403.
+- **Xem điểm ở đâu:** mọi màn học đều có ô điểm đứng đầu cụm nút ở thanh đầu trang — máy tính: "2 điểm mở bài · Nhận +1
+  hôm nay" (`Topbar`), điện thoại: ô số (`MTopbar`); hôm nay chưa nhận thì có nhãn vàng "+1". Bấm là về kệ Giáo trình; đầu kệ
+  có ví điểm (số điểm, đã mở bao nhiêu bài, nút Nhận điểm); thẻ khoá trong màn đọc có nút dùng điểm và nhận điểm.
+- **Mở bài:** 1 điểm mở 1 bài, **lần lượt theo thứ tự** trong bộ sách (Quyển 1 bài 1 → … → Quyển 2 bài 16…). Bài đã mở là
+  mở mãi. Trang trước bài đầu (bìa trong, lời nói đầu, mục lục) đọc tự do, nhưng chỉ ở quyển đã học tới — quyển sau còn khoá
+  cả trang đầu, kệ sách hiện xám kèm "Mở hết <quyển trước>".
+- **Bé túi:** đang trong giai đoạn test nên tải lại trang là bé hiện, kể cả hôm nay đã nhận điểm (bấm thêm chỉ báo "đã nhận
+  rồi", không cộng). Khi chốt thì cho bé nghỉ đến 0h hôm sau: `/support/links` đã trả `claimedToday`, chỉ cần thêm vào điều
+  kiện ẩn trong `ShopeeBuddy.svelte`.
+- **Không bán sách:** đã làm phần bán gói (trọn bộ, chuyển khoản, quản trị duyệt) rồi bỏ ngày 08/11/2026 — bán bản scan sách
+  có bản quyền rủi ro pháp lý cao. Học viên chỉ mở bài bằng điểm.
+- **Chế độ test điểm** (Quản trị → Điểm mở bài): bật thì mỗi lần bấm bé túi đều +1 điểm, không chờ sang
+  ngày, để thử nhanh. Đang bật thì đầu màn quản trị có dải vàng nhắc. **Phải tắt trước khi chạy thật.**
+- **Mã ký đường dẫn:** mọi đường dẫn ảnh trang và file nghe phải kèm `?t=<hết hạn>.<chữ ký>` do API cấp, gắn với tài khoản
+  và quyển, sống 6 giờ (ký bằng `app_key`). Link dán sang tài khoản khác, sửa một ký tự, hay để quá 6 giờ đều 403. Màn đọc
+  tự lấy mã mới trước khi hết hạn; ảnh hay file nghe lỗi giữa chừng thì lấy mã mới rồi tải lại.
+- **Chặn lưu ở trình duyệt:** màn đọc tắt chuột phải, giữ ngón tay (menu "Lưu hình ảnh" của iOS), kéo ảnh ra ngoài, Ctrl+S,
+  Ctrl+P và không in trang sách. Lớp này chỉ chặn người dùng bình thường — ai chụp màn hình vẫn chụp được; chặn thật là ở server.
+
+Quản trị → **Điểm mở bài**: công tắc Chế độ test, tra học viên theo email (số điểm, số bài đã mở, sổ cộng/trừ), cộng/trừ tay
+kèm lý do.
+
+## Quán trà (phòng trò chuyện chung) và Góp ý
+
+- **Quán trà** (`/learn/chat`, mở từ Chuyển nhanh): phòng trò chuyện chia **bàn** theo chủ đề — Bàn chung, Hỏi bài, Mẹo học,
+  Tìm bạn học, Góc tiếng Trung (quản trị thêm/sửa/đóng bàn; đóng bàn là chỉ đọc). Danh sách bàn hiện tin mới nhất, số tin 24
+  giờ, chấm "Tin mới" (tin cuối đã xem lưu ở máy). Trong bàn: gửi tin, trả lời một tin, xoá tin của mình, báo cáo tin xấu
+  (tin của biên tập/quản trị không báo cáo được — có ý kiến thì gửi Góp ý). Chỉ hiện tên hiển thị, không lộ email. Hosting không có WebSocket nên web hỏi tin
+  mới mỗi 4 giây khi tab đang mở. Chống phá: cách nhau ≥ 2 giây, tối đa 20 tin/5 phút, tin ≤ 1.000 ký tự.
+  Quản trị → **Quán trà**: tin bị báo cáo, tin gần đây (kèm tên bàn), cấm chat (1 giờ… vĩnh viễn), bỏ cấm, các bàn, đóng/mở
+  cả quán. Bảng `chat_messages`, `chat_reports`, `chat_mutes` (migration 020), `chat_rooms` (021); cài đặt `chat.enabled`.
+- **Góp ý · báo lỗi** (Chuyển nhanh → "Góp ý · báo lỗi màn này"): tự kèm phần/cấp/bài/trang sách đang mở; quản trị đọc và
+  trả lời ở **Góp ý**, học viên đọc trả lời ngay trong hộp Góp ý (SMTP chưa chạy thì đây là nơi duy nhất).
+
 ## Nhiều bộ giáo trình
 
 Mỗi học viên học một giáo trình do quản trị gán ở **Giáo trình → Phân quyền học**; chưa gán thì học giáo trình mặc định,

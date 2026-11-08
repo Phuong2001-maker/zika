@@ -21,7 +21,7 @@ abstract class DbTestCase extends TestCase
     private static bool $migrated = false;
 
     /** Bảng giữ nguyên dữ liệu nền giữa các test. */
-    private const KEEP = ['schema_migrations', 'levels', 'site_settings', 'announcements', 'curricula'];
+    private const KEEP = ['schema_migrations', 'levels', 'site_settings', 'announcements', 'curricula', 'chat_rooms'];
 
     protected function setUp(): void
     {

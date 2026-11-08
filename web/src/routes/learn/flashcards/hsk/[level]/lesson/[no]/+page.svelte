@@ -1,4 +1,6 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
+  import Topbar from '$lib/components/Topbar.svelte';
   import { cap } from '$lib/stores/cap.svelte';
   import { untrack } from 'svelte';
   import { page } from '$app/state';
@@ -11,8 +13,6 @@
   import { toast } from '$lib/stores/toast.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import Bar from '$lib/components/Bar.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
-  import Switcher from '$lib/components/Switcher.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import DauBai from '$lib/components/DauBai.svelte';
@@ -359,14 +359,7 @@
 {:else if media.isMobile}
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
-    <header class="mtop">
-      <a href="/learn/flashcards/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
-      <span style="flex: 1; min-width: 0; text-align: center">
-        <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{data?.lesson.title ?? '…'}</b>
-        <span class="muted" style="font-size: 12px">{cap.ten(levelId)} · Bài {lessonNo}</span>
-      </span>
-      <Avatar size={36} />
-    </header>
+    <MTopbar current="lt" back="/learn/flashcards/hsk/{levelId}" backLabel="Về danh sách bài" title={data?.lesson.title ?? '…'} sub="{cap.ten(levelId)} · Bài {lessonNo}" />
 
     <!-- overflow-x: clip — thẻ mới trượt vào lệch 40px, không được tạo thanh cuộn ngang. -->
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px; overflow-x: clip">
@@ -381,17 +374,12 @@
   </div>
 {:else}
   <!-- ============ Máy tính ============ -->
-  <header class="topbar">
-    <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
+  <Topbar current="lt">
     <!-- Chỉ ghi phần và cấp: số bài và tên bài đã ở khối tiêu đề ngay bên dưới, ghi lại ở đây là lặp. -->
-    <nav class="crumb" aria-label="Đường dẫn" style="margin-left: 8px">
-      <a href="/learn/flashcards">Lật thẻ</a> / <a href="/learn/flashcards/hsk/{levelId}">{cap.ten(levelId)}</a>
+    <nav class="crumb" aria-label="Đường dẫn">
+    <a href="/learn/flashcards">Lật thẻ</a> / <a href="/learn/flashcards/hsk/{levelId}">{cap.ten(levelId)}</a>
     </nav>
-    <div style="margin-left: auto; display: flex; align-items: center; gap: 12px">
-      <Switcher current="lt" />
-      <Avatar size={44} />
-    </div>
-  </header>
+  </Topbar>
 
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
     {#if data === null}

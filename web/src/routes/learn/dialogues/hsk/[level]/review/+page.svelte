@@ -1,4 +1,6 @@
 <script lang="ts">
+  import MTopbar from '$lib/components/MTopbar.svelte';
+  import Topbar from '$lib/components/Topbar.svelte';
   import { cap } from '$lib/stores/cap.svelte';
   import { onMount } from 'svelte';
   import { page } from '$app/state';
@@ -7,7 +9,6 @@
   import { settings } from '$lib/stores/settings.svelte';
   import { heartbeat } from '$lib/stores/heartbeat';
   import Icon from '$lib/components/Icon.svelte';
-  import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import DauBai from '$lib/components/DauBai.svelte';
@@ -135,14 +136,7 @@
 {#if media.isMobile}
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
-    <header class="mtop">
-      <a href="/learn/dialogues/hsk/{levelId}" class="btn btn-bare" aria-label="Về danh sách bài"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>
-      <span style="flex: 1; min-width: 0; text-align: center">
-        <b style="display: block; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Ôn hội thoại</b>
-        <span class="muted" style="font-size: 12px">{cap.ten(levelId)} · Ôn cả {cap.tu}</span>
-      </span>
-      <Avatar size={36} />
-    </header>
+    <MTopbar current="ht" back="/learn/dialogues/hsk/{levelId}" backLabel="Về danh sách bài" title="Ôn hội thoại" sub="{cap.ten(levelId)} · Ôn cả {cap.tu}" />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">
       {#if failed}
         {@render loi()}
@@ -155,11 +149,9 @@
   </div>
 {:else}
   <!-- ============ Máy tính ============ -->
-  <header class="topbar">
-    <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px"><a href="/learn/dialogues/hsk/{levelId}">Hội thoại · {cap.ten(levelId)}</a> / <b>Ôn cả {cap.tu}</b></nav>
-    <div style="margin-left: auto"><Avatar size={44} /></div>
-  </header>
+  <Topbar current="ht">
+    <nav class="crumb"><a href="/learn/dialogues/hsk/{levelId}">Hội thoại · {cap.ten(levelId)}</a> / <b>Ôn cả {cap.tu}</b></nav>
+  </Topbar>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
     {#if failed}
       {@render loi()}
