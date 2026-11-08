@@ -23,6 +23,16 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 09/11/2026 00:50 — Đã lên server: Nhận điểm riêng, bé túi nghỉ theo ngày, bỏ Chế độ test, mở cả quyển
+
+- **Đã lên server** code `main` `9f033b5` bằng `dong-goi-code/zika-code-20261109-0045.zip` (cùng cấu trúc, cùng 403 file như
+  gói 08/11 13:43; `api/index.php` bản server). Không có SQL, không đụng `config.php`. Gồm 4 mục 08–09/11 ngay dưới.
+- **Kiểm web thật** bằng tài khoản quản trị: `version.json` = `1794159920009`; `PUT /admin/book-points/test-mode` trả 404,
+  `POST /admin/book-points/open-book` có (403 CSRF khi gọi thiếu mã); `/learn/points` không còn `link`; `/support/links` có
+  `clickedToday`. Điểm mở bài không còn công tắc test; Chi tiết học viên có Mở cả quyển 6 quyển Hán ngữ, sổ ghi "Lần đầu nhận
+  điểm". Màn Giáo trình đủ 9 bìa, mọi yêu cầu 200. **Chưa thử bằng tài khoản học viên** (Nhận điểm, bé túi nghỉ sau khi bấm).
+- Dòng `points` cũ trong `site_settings` của server vẫn còn nhưng code mới không đọc, để nguyên.
+
 ### 09/11/2026 — Quản trị mở cả quyển cho học viên
 
 - Quản trị → Điểm mở bài → **Chi tiết** có phần **Mở cả quyển**: liệt kê các quyển thuộc giáo trình học viên đang học
@@ -32,7 +42,7 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 - Thứ tự mở bằng điểm không đổi: mở Quyển 2 khi Quyển 1 còn dở thì học viên vẫn dùng điểm mở nốt Quyển 1, rồi nhảy sang Quyển 3.
 - Hàm chọn bộ sách theo giáo trình chuyển từ `BookController` sang `BookAccess::boCuaNguoi` để dùng chung. Không có migration.
 - Test `BookPageTest::testQuanTriMoCaQuyenKhongTruDiem`. Trình duyệt: hộp Chi tiết hiện đủ 6 quyển Hán ngữ, bước "Bấm lần nữa
-  để mở" chạy; chưa bấm mở thật trên dữ liệu local. **Chưa đưa lên server.**
+  để mở" chạy; chưa bấm mở thật trên dữ liệu local. **Đã lên server 09/11** (xem mục 00:50).
 
 ### 09/11/2026 — Bỏ hẳn Chế độ test điểm
 
@@ -41,7 +51,7 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
   dù DB server còn dòng `points` cũ thì code mới cũng không đọc, Nhận điểm luôn theo luật lần đầu +3, mỗi ngày +1.
 - Sổ điểm: dòng cũ ghi lúc còn chế độ test (khoá `thu:…`) hiện là "Nhận điểm". Điểm đã cộng dư lúc test **không tự trừ**;
   ở local `hocvien@zika.local` còn 127 điểm — cần thì trừ tay ở bảng học viên. Đã xoá dòng `points` trong DB local.
-- **Chưa đưa lên server.**
+- **Đã lên server 09/11** (xem mục 00:50).
 
 ### 08/11/2026 — Bé túi bấm xong nghỉ đến 0h hôm sau
 
@@ -49,7 +59,7 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
   hôm nay của tài khoản trong `affiliate_events` và trả `clickedToday` ở `/support/links`. 0h hôm sau bé hiện lại.
 - Không có migration; không thêm nút tắt, không đổi lời bé, không có chế độ thử cho bé (người dùng chốt). Phía quản trị
   người dùng tự sửa sau.
-- Test `SupportLinksTest::testBamLinkThiBeTuiNghiDenNgayHomSau`. **Chưa đưa lên server.**
+- Test `SupportLinksTest::testBamLinkThiBeTuiNghiDenNgayHomSau`. **Đã lên server 09/11** (xem mục 00:50).
 
 ### 08/11/2026 — Tách nhận điểm khỏi bé túi Shopee
 
@@ -57,7 +67,7 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 - Bé túi và các link trong Quỹ tháng chỉ chuyển sang Shopee, ghi lượt bấm ủng hộ và không thay đổi điểm mở bài.
 - Bỏ trạng thái/lời nhắn tặng điểm khỏi bé túi; sửa lời hướng dẫn ở kệ sách, bài khoá và trang quản trị điểm.
 - Test API khóa hai luồng: bấm `/go` giữ nguyên 0 điểm, sau đó bấm Nhận điểm mới thành 3. Đã chạy đủ: web 0 lỗi/0 cảnh báo,
-  lint sạch, 109/109; API 200/200. README mục "Điểm mở bài" sửa theo luật mới. **Chưa đưa lên server.**
+  lint sạch, 109/109; API 200/200. README mục "Điểm mở bài" sửa theo luật mới. **Đã lên server 09/11** (xem mục 00:50).
 
 ### 08/11/2026 — Bỏ dữ liệu minh hoạ; điểm mở bài + Quán trà đã lên server
 

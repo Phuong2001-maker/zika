@@ -175,7 +175,8 @@ nên phải đặt lại `support` trong `setUp`.
   **Không bán sách**: phần gói học/chuyển khoản đã làm rồi bỏ (rủi ro pháp lý), đừng thêm lại khi chưa có giấy phép bản quyền.
   **Điểm và Shopee đã tách riêng (08/11):** nút "Nhận điểm" gọi `/learn/points/daily`, lần đầu +3, các ngày sau +1;
   bé túi và mọi `/go` chỉ mở link/ghi lượt ủng hộ, không cộng điểm. Chế độ test điểm đã **bỏ hẳn** (09/11, dùng thật).
-  Bấm bé túi hoặc link Quỹ tháng thì bé nghỉ đến 0h hôm sau, nhớ theo tài khoản ở server (`clickedToday`); chưa lên server.
+  Bấm bé túi hoặc link Quỹ tháng thì bé nghỉ đến 0h hôm sau, nhớ theo tài khoản ở server (`clickedToday`). Quản trị mở cả quyển
+  cho học viên ở Điểm mở bài → Chi tiết, không trừ điểm. **Tất cả đã lên server 09/11** (code `9f033b5`, đã kiểm bằng quản trị).
 - **Server thật đã lên bản 08/11/2026 (đã kiểm):** DB xoá hết chỉ giữ tài khoản, nạp lại 2 giáo trình; code, âm thanh,
   ảnh sách đã lên. Kiểm trên web thật: 116 bài × 6 phần giống local (bỏ qua `?v=` nét chữ và `updatedByName`), 21.313
   file âm thanh/nét chữ đủ và đúng cỡ, 43 màn chạy ở máy tính/máy tính bảng/điện thoại. Lúc nạp, `01-cau-truc.sql` dừng
