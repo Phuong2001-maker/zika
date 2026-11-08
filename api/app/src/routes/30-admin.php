@@ -148,6 +148,7 @@ return [
     ['GET',    '/admin/book-points/users', [BookPoints::class, 'users'], 'A'],
     ['GET',    '/admin/book-points/user', [BookPoints::class, 'user'], 'A'],
     ['POST',   '/admin/book-points/adjust', [BookPoints::class, 'adjust'], 'A'],
+    ['POST',   '/admin/book-points/open-book', [BookPoints::class, 'openBook'], 'A'],
 
     // Quán trà (migration 020)
     ['GET',    '/admin/chat', [ChatAdmin::class, 'index'], 'A'],

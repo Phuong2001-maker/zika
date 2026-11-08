@@ -23,6 +23,17 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 09/11/2026 — Quản trị mở cả quyển cho học viên
+
+- Quản trị → Điểm mở bài → **Chi tiết** có phần **Mở cả quyển**: liệt kê các quyển thuộc giáo trình học viên đang học
+  (Hán ngữ 1–6 hoặc HSK 1–3) kèm "đã mở x/y bài"; bấm hai lần là mở mọi bài của quyển, **không trừ điểm** (người dùng chốt).
+- Không mở được quyển của bộ khác, không áp cho biên tập/quản trị (đã đọc tự do). Sổ điểm ghi một dòng 0 điểm
+  "Quản trị mở cả quyển …"; nhật ký quản trị ghi `book_points.open_book`.
+- Thứ tự mở bằng điểm không đổi: mở Quyển 2 khi Quyển 1 còn dở thì học viên vẫn dùng điểm mở nốt Quyển 1, rồi nhảy sang Quyển 3.
+- Hàm chọn bộ sách theo giáo trình chuyển từ `BookController` sang `BookAccess::boCuaNguoi` để dùng chung. Không có migration.
+- Test `BookPageTest::testQuanTriMoCaQuyenKhongTruDiem`. Trình duyệt: hộp Chi tiết hiện đủ 6 quyển Hán ngữ, bước "Bấm lần nữa
+  để mở" chạy; chưa bấm mở thật trên dữ liệu local. **Chưa đưa lên server.**
+
 ### 09/11/2026 — Bỏ hẳn Chế độ test điểm
 
 - Web đã dùng thật nên bỏ công tắc **Chế độ test** cùng dải cảnh báo và đoạn mô tả ở Quản trị → Điểm mở bài (người dùng khoanh).

@@ -12,8 +12,9 @@ use Zika\Core\Response;
 use Zika\Core\Validator;
 use Zika\Services\BookAccess;
 use Zika\Services\Curricula;
+use Zika\Services\UserService;
 
-/** Quản trị điểm mở bài giáo trình: tra sổ điểm từng học viên, cộng/trừ tay. Chỉ admin. */
+/** Quản trị điểm mở bài giáo trình: mở cả quyển, tra sổ điểm từng học viên, cộng/trừ tay. Chỉ admin. */
 final class BookPointsController
 {
     /** GET /admin/book-points — cài đặt chung và tên từng quyển (để đọc sổ điểm "Mở Bài 5 · Hán ngữ 1"). */
@@ -75,6 +76,11 @@ final class BookPointsController
             return ['user' => null];
         }
         $uid = (int) $u['id'];
+        $hocVien = UserService::withEffectiveRole($u)['role'] === 'learner';
+        $daMo = [];
+        foreach (Db::all('SELECT ma, COUNT(*) n FROM book_unlocks WHERE user_id = ? GROUP BY ma', [$uid]) as $x) {
+            $daMo[(string) $x['ma']] = (int) $x['n'];
+        }
         return [
             'user' => ['id' => $uid, 'email' => (string) $u['email'], 'name' => (string) $u['display_name'], 'role' => (string) $u['role']],
             'diem' => BookAccess::soDiem($uid),
@@ -84,7 +90,30 @@ final class BookPointsController
                 'delta' => (int) $x['delta'], 'kind' => (string) $x['kind'], 'khoa' => (string) $x['khoa'],
                 'note' => $x['note'], 'at' => Clock::iso((string) $x['created_at']),
             ], Db::all('SELECT delta, kind, khoa, note, created_at FROM book_points WHERE user_id = ? ORDER BY id DESC LIMIT 60', [$uid])),
+            // Biên tập/quản trị đọc mọi quyển, không cần mở.
+            'books' => $hocVien ? array_map(static fn ($s) => [
+                'ma' => (string) $s['ma'], 'ten' => (string) $s['ten'], 'tong' => count($s['bai']), 'daMo' => $daMo[$s['ma']] ?? 0,
+            ], BookAccess::sachCuaBo(BookAccess::boCuaNguoi($uid))) : [],
         ];
+    }
+
+    /** POST /admin/book-points/open-book {userId, ma} — mở mọi bài của một quyển cho học viên, không trừ điểm. */
+    public function openBook(Request $r): array
+    {
+        $v = new Validator($r->body);
+        $uid = (int) $v->int('userId', 'Học viên', 1);
+        $ma = $v->str('ma', 'Quyển', true, 1, 8);
+        $v->done();
+        $u = Db::one('SELECT id, email, role FROM users WHERE id = ?', [$uid]);
+        if ($u === null) {
+            throw HttpError::notFound('Không có tài khoản này.');
+        }
+        if (UserService::withEffectiveRole($u)['role'] !== 'learner') {
+            throw HttpError::invalid('Biên tập và quản trị đã đọc được mọi quyển.');
+        }
+        $them = BookAccess::moCaQuyen($uid, $ma, $r->userId());
+        Audit::log($r, 'book_points.open_book', 'user', $uid, ['ma' => $ma, 'bai' => $them]);
+        return ['moThem' => $them];
     }
 
     /** POST /admin/book-points/adjust {userId, delta, note} */

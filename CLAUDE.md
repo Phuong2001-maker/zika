@@ -37,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; API 200/200; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; API 201/201; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -142,7 +142,8 @@ này rơi vào `catch` của `load()` nên trang báo "0 điểm" dù API trả 
 
 Ảnh trang, trang đáp án, file nghe đi qua `BookController`, kiểm `BookAccess` (bài đã mở) **và** mã `?t=` của
 chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả hai, đừng chỉ dựa vào giao diện ẩn nút. Điểm chỉ cộng ở
-`POST /learn/points/daily` (lần đầu +3, mỗi ngày +1, không có chế độ test); test nhớ `site_settings` giữ nguyên giữa các test
+`POST /learn/points/daily` (lần đầu +3, mỗi ngày +1, không có chế độ test); quản trị mở cả quyển không trừ điểm qua
+`BookAccess::moCaQuyen` (chỉ quyển thuộc giáo trình của học viên); test nhớ `site_settings` giữ nguyên giữa các test
 nên phải đặt lại `support` trong `setUp`.
 
 ## Nếp viết

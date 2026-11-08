@@ -8,7 +8,6 @@ use Zika\Core\HttpError;
 use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Services\BookAccess;
-use Zika\Services\Curricula;
 
 /**
  * Giáo trình đọc theo ảnh trang: HSK 1–3 (Hanu) và Hán ngữ 1–6, kèm file nghe và đáp án nếu sách có.
@@ -179,10 +178,9 @@ final class BookController
         return BookAccess::sachCuaBo($r->isStaff() ? null : self::boCua($r));
     }
 
-    /** Bộ sách của giáo trình người học: giáo trình gọi cấp "Quyển" là Hán ngữ, còn lại là HSK. */
     private static function boCua(Request $r): string
     {
-        return Curricula::levelLabel(Curricula::ofUser($r->userId())) === 'Quyển' ? 'hanngu' : 'hsk';
+        return BookAccess::boCuaNguoi($r->userId());
     }
 
     /** @return array<string,mixed> */

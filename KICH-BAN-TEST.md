@@ -332,6 +332,7 @@ Chưa bấm thử trên trình duyệt: nút Lưu ở form giáo trình (API đ�
 | O9 | Chuột phải, kéo ảnh, Ctrl+S, Ctrl+P trên trang sách | Không ra menu lưu, không kéo được, không lưu/in | Đạt (máy tính); **giữ ngón tay trên iPhone/Android thật chưa thử** |
 | O17 | Học viên bấm Nhận điểm nhiều lần trong ngày | Chỉ lần đầu được cộng, nút ẩn đến hôm sau; quản trị không còn công tắc Chế độ test (bỏ 09/11) | Đạt test API |
 | O19 | Quản trị → Điểm mở bài: bảng học viên, bấm +1 rồi −1 trên một dòng, mở Chi tiết | Bảng có giáo trình, điểm, bài đã mở, lần nhận gần nhất; điểm đổi ngay; sổ điểm ghi "Quản trị chỉnh tay · Chỉnh nhanh từ bảng học viên" | Đạt |
+| O20 | Quản trị → Điểm mở bài → Chi tiết một học viên → Mở cả quyển (bấm hai lần) | Chỉ có các quyển của giáo trình học viên, mỗi quyển "đã mở x/y bài"; mở xong học viên đọc được mọi bài của quyển, điểm không đổi, sổ ghi "Quản trị mở cả quyển"; quyển đã mở hết ghi "Đã mở hết" | Đạt test API; trình duyệt mới kiểm danh sách quyển và bước hỏi lại |
 | O14 | Quản trị → Điểm mở bài: tìm email, cộng 2 điểm kèm lý do, trừ quá số đang có | Sổ điểm hiện từng dòng; trừ quá thì báo lỗi | Đạt ở test API; tìm và xem sổ đạt trên trình duyệt |
 | O15 | Quản trị/biên tập mở mọi quyển | Đọc tự do, không bị trừ điểm | Đạt |
 | O18 | Học viên mở kệ sách, màn đọc, thẻ khoá; gõ `/api/learn/packages` | Không còn nút hay chữ mua gói nào; API 404 | Đạt |

@@ -51,6 +51,12 @@ final class BookAccess
         return $ra;
     }
 
+    /** Bộ sách của giáo trình người học: giáo trình gọi cấp "Quyển" là Hán ngữ, còn lại là HSK. */
+    public static function boCuaNguoi(int $userId): string
+    {
+        return Curricula::levelLabel(Curricula::ofUser($userId)) === 'Quyển' ? 'hanngu' : 'hsk';
+    }
+
     /**
      * Trạng thái mở của một bộ sách cho một người.
      *
@@ -204,6 +210,45 @@ final class BookAccess
             Db::insert('book_points', [
                 'user_id' => $userId, 'delta' => -1, 'kind' => 'unlock', 'khoa' => "mo:$ma:$bai", 'created_at' => $luc,
             ]);
+        });
+    }
+
+    /**
+     * Quản trị mở mọi bài của quyển `ma` cho học viên, không trừ điểm (người dùng yêu cầu 09/11). Chỉ quyển thuộc
+     * giáo trình học viên đang học: muốn đọc bộ khác thì đổi giáo trình ở Phân quyền học. Bài đã mở thì bỏ qua; mở
+     * thêm được bài nào thì ghi một dòng 0 điểm vào sổ để tra lại ai mở, lúc nào. Trả số bài vừa mở thêm.
+     *
+     * Không đụng tới thứ tự mở bằng điểm: bài tiếp theo vẫn là bài đầu tiên chưa mở, nên mở Quyển 2 khi Quyển 1 còn dở
+     * thì học viên vẫn dùng điểm mở nốt Quyển 1, xong thì nhảy qua Quyển 2 sang Quyển 3.
+     */
+    public static function moCaQuyen(int $userId, string $ma, int $boiAi): int
+    {
+        $s = null;
+        foreach (self::sachCuaBo(self::boCuaNguoi($userId)) as $x) {
+            if ($x['ma'] === $ma) {
+                $s = $x;
+            }
+        }
+        if ($s === null) {
+            throw HttpError::invalid('Quyển này không thuộc giáo trình học viên đang học.');
+        }
+        return Db::tx(static function () use ($userId, $s, $ma, $boiAi): int {
+            Db::val('SELECT id FROM users WHERE id = ? FOR UPDATE', [$userId]);
+            $luc = Clock::sql();
+            $them = 0;
+            foreach ($s['bai'] as $b) {
+                $them += Db::exec(
+                    'INSERT IGNORE INTO book_unlocks (user_id, ma, bai, created_at) VALUES (?, ?, ?, ?)',
+                    [$userId, $ma, (int) $b['so'], $luc],
+                );
+            }
+            if ($them > 0) {
+                Db::insert('book_points', [
+                    'user_id' => $userId, 'delta' => 0, 'kind' => 'admin', 'khoa' => "moquyen:$ma:" . bin2hex(random_bytes(6)),
+                    'note' => "$them bài", 'by_user_id' => $boiAi, 'created_at' => $luc,
+                ]);
+            }
+            return $them;
         });
     }
 

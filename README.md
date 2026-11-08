@@ -127,6 +127,11 @@ Quản trị → **Điểm mở bài**: bảng mọi học viên (giáo trình, 
 xếp theo nhiều điểm nhất hoặc nhận gần đây), nút −1/+1 ngay trên dòng, **Chi tiết** để cộng/trừ số tuỳ ý kèm lý do và xem
 sổ điểm. Mọi lần chỉnh tay đều ghi sổ (`book_points.kind = admin`) để tra lại khi hệ thống tính sai.
 
+**Mở cả quyển** (trong hộp Chi tiết, 09/11/2026): quản trị mở mọi bài của một quyển cho học viên, **không trừ điểm**, bấm hai
+lần để tránh lỡ tay. Chỉ hiện các quyển thuộc giáo trình học viên đang học (`BookAccess::boCuaNguoi`); muốn đọc bộ khác thì đổi
+giáo trình ở Phân quyền học. Sổ điểm ghi một dòng 0 điểm khoá `moquyen:<mã>:…`. Thứ tự mở bằng điểm giữ nguyên: bài tiếp theo
+vẫn là bài đầu tiên chưa mở, quyển đã mở hết thì bỏ qua. API `POST /admin/book-points/open-book {userId, ma}`.
+
 ## Quán trà (phòng trò chuyện chung) và Góp ý
 
 - **Quán trà** (`/learn/chat`, mở từ Chuyển nhanh): phòng trò chuyện chia **bàn** theo chủ đề — Bàn chung, Hỏi bài, Mẹo học,

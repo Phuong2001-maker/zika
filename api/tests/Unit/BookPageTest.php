@@ -357,6 +357,42 @@ final class BookPageTest extends DbTestCase
         BookAccess::congTay($uid, -3, '', $admin);
     }
 
+    public function testQuanTriMoCaQuyenKhongTruDiem(): void
+    {
+        $hv = $this->nguoi();
+        $admin = $this->nguoi('admin');
+        $qt = new \Zika\Controllers\Admin\BookPointsController();
+        $mo = fn (int $uid, string $ma) => $qt->openBook($this->req($admin, ve: false, body: ['userId' => $uid, 'ma' => $ma]));
+        BookAccess::nhanDiemNgay($hv);
+
+        // hsk2 chưa tới lượt (hsk1 còn khoá) vẫn mở được cả quyển, không mất điểm nào.
+        self::assertSame(['moThem' => 1], $mo($hv, 'hsk2'));
+        self::assertSame(3, BookAccess::soDiem($hv));
+        self::assertSame('', $this->trang($hv, 'hsk2', '4'));
+        // Thứ tự mở bằng điểm không đổi: bài tiếp theo vẫn là hsk1 bài 1.
+        self::assertSame(['ma' => 'hsk1', 'bai' => 1], BookAccess::trangThai($hv, 'hsk')['ke']);
+
+        // Mở lại quyển đã mở hết thì không ghi thêm gì; sổ điểm có đúng một dòng 0 điểm.
+        self::assertSame(['moThem' => 0], $mo($hv, 'hsk2'));
+        self::assertSame([[0, 'admin']], array_map(static fn ($x) => [(int) $x['delta'], $x['kind']],
+            Db::all("SELECT delta, kind FROM book_points WHERE user_id = ? AND khoa LIKE 'moquyen:hsk2:%'", [$hv])));
+
+        // Quyển của bộ khác (học viên HSK, quyển Hán ngữ) và tài khoản biên tập: từ chối.
+        self::assertNotSame('', $this->loi(fn () => $mo($hv, 'hn3')));
+        self::assertSame(0, (int) Db::val("SELECT COUNT(*) FROM book_unlocks WHERE user_id = ? AND ma = 'hn3'", [$hv]));
+        self::assertNotSame('', $this->loi(fn () => $mo($this->nguoi('editor'), 'hsk1')));
+
+        // Học viên Hán ngữ mở được quyển Hán ngữ.
+        $hn = $this->nguoi('learner', $this->hanNgu());
+        self::assertSame(['moThem' => 1], $mo($hn, 'hn3'));
+
+        // Hộp Chi tiết liệt kê các quyển của giáo trình học viên kèm số bài đã mở.
+        $q = new Request('GET', '/admin/book-points/user', ['q' => (string) $hv]);
+        $q->user = ['id' => $admin, 'role' => 'admin'];
+        self::assertSame([['hsk1', 2, 0], ['hsk2', 1, 1]],
+            array_map(static fn ($b) => [$b['ma'], $b['tong'], $b['daMo']], $qt->user($q)['books']));
+    }
+
     // ------------------------------------------------------------------ file nghe
 
     private function nghe(string $range): Response

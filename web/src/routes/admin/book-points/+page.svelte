@@ -8,13 +8,15 @@
   import Modal from '$lib/components/Modal.svelte';
 
   // Quản trị · Điểm mở bài giáo trình: bảng mọi học viên kèm điểm, cộng/trừ tay ngay trên dòng (hệ thống có sai số
-  // thì quản trị sửa được — người dùng yêu cầu 08/11), xem sổ điểm từng người.
+  // thì quản trị sửa được — người dùng yêu cầu 08/11), xem sổ điểm từng người, mở cả quyển không trừ điểm (09/11).
   interface HocVien { id: number; email: string; name: string; curriculum: string; diem: number; baiMo: number; lastClaim: string | null }
   interface SoDiem {
     user: { id: number; email: string; name: string; role: string } | null;
     diem?: number;
     unlocks?: { ma: string; bai: number; at: string }[];
     ledger?: { delta: number; kind: string; khoa: string; note: string | null; at: string }[];
+    /** Các quyển thuộc giáo trình của học viên; biên tập/quản trị đọc tự do nên rỗng. */
+    books?: { ma: string; ten: string; tong: number; daMo: number }[];
   }
 
   const ngay = (iso: string | null) =>
@@ -38,6 +40,9 @@
   let congDiem = $state('1');
   let lyDo = $state('');
   let dangLuu = $state(false);
+  /** Mở cả quyển phải bấm hai lần: lần đầu chỉ hỏi lại, tránh lỡ tay tặng nguyên quyển. */
+  let hoiMo = $state<string | null>(null);
+  let dangMo = $state(false);
 
   async function taiDs(): Promise<void> {
     loi = false;
@@ -81,6 +86,7 @@
   async function moChiTiet(id: number): Promise<void> {
     congDiem = '1';
     lyDo = '';
+    hoiMo = null;
     try {
       hv = await api.get<SoDiem>('/admin/book-points/user', { query: { q: String(id) } });
     } catch (e) {
@@ -104,6 +110,27 @@
     }
   }
 
+  async function moQuyen(ma: string): Promise<void> {
+    if (!hv?.user) return;
+    if (hoiMo !== ma) {
+      hoiMo = ma;
+      return;
+    }
+    dangMo = true;
+    try {
+      const id = hv.user.id;
+      const r = await api.post<{ moThem: number }>('/admin/book-points/open-book', { userId: id, ma });
+      toast.ok(r.moThem ? `Đã mở ${r.moThem} bài của ${tenSach[ma] ?? ma} cho ${hv.user.name}.` : 'Quyển này đã mở hết từ trước.');
+      ds = (ds ?? []).map((x) => (x.id === id ? { ...x, baiMo: x.baiMo + r.moThem } : x));
+      await moChiTiet(id);
+    } catch (e) {
+      baoLoi(e, 'Chưa mở được quyển này.');
+    } finally {
+      dangMo = false;
+      hoiMo = null;
+    }
+  }
+
   const TEN_LOAI: Record<string, string> = { first: 'Lần đầu nhận điểm', daily: 'Nhận điểm', unlock: 'Mở bài', admin: 'Quản trị chỉnh tay' };
   function moTaDong(x: { kind: string; khoa: string; note: string | null }): string {
     if (x.kind === 'unlock') {
@@ -113,6 +140,9 @@
     if (x.kind === 'daily') {
       // Dòng ghi lúc còn chế độ test có khoá "thu:…", không mang ngày.
       return x.khoa.startsWith('daily:') ? `Nhận điểm ngày ${x.khoa.slice(6).split('-').reverse().join('/')}` : 'Nhận điểm';
+    }
+    if (x.khoa.startsWith('moquyen:')) {
+      return `Quản trị mở cả quyển ${tenSach[x.khoa.split(':')[1]] ?? ''}`.trim() + (x.note ? ` · ${x.note}` : '');
     }
     return TEN_LOAI[x.kind] + (x.note ? ` · ${x.note}` : '');
   }
@@ -183,6 +213,27 @@
       <button type="button" class="btn btn-son btn-sm" disabled={dangLuu || !Number(congDiem)} onclick={luuChinh}>Lưu</button>
     </div>
     <p class="hint" style="margin: 0">Số âm là trừ điểm (không trừ quá số đang có). Bài đã mở giữ nguyên dù trừ điểm.</p>
+    {#if hv.books?.length}
+      <section class="bp-quyen" aria-label="Mở cả quyển">
+        <h3>Mở cả quyển</h3>
+        <p class="hint" style="margin: 0">Mở mọi bài của quyển cho học viên, không trừ điểm. Chỉ có các quyển thuộc giáo trình đang học.</p>
+        <ul>
+          {#each hv.books as b (b.ma)}
+            {@const du = b.daMo >= b.tong}
+            <li>
+              <span><b>{b.ten}</b> <span class="muted num">· đã mở {b.daMo}/{b.tong} bài</span></span>
+              {#if du}
+                <span class="bp-du">Đã mở hết</span>
+              {:else}
+                <button type="button" class="btn btn-sm" class:btn-son={hoiMo === b.ma} disabled={dangMo} onclick={() => moQuyen(b.ma)}>
+                  {hoiMo === b.ma ? 'Bấm lần nữa để mở' : 'Mở cả quyển'}
+                </button>
+              {/if}
+            </li>
+          {/each}
+        </ul>
+      </section>
+    {/if}
     {#if hv.ledger?.length}
       <div class="bp-so-diem">
         <table class="tbl">
@@ -216,5 +267,10 @@
   .bp-hv-dau { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .bp-diem { padding: 6px 14px; border-radius: 999px; background: var(--son-soft); color: var(--son-text); font-weight: 800; font-size: 18px; }
   .bp-cong { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+  .bp-quyen { display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .bp-quyen h3 { font-size: 15px; margin: 0; }
+  .bp-quyen ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .bp-quyen li { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 14px; }
+  .bp-du { color: var(--muted); font-size: 13px; }
   .bp-so-diem { max-height: 320px; overflow-y: auto; border: 1px solid var(--line); border-radius: 12px; }
 </style>
