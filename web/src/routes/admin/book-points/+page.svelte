@@ -8,7 +8,7 @@
   import Modal from '$lib/components/Modal.svelte';
 
   // Quản trị · Điểm mở bài giáo trình: bảng mọi học viên kèm điểm, cộng/trừ tay ngay trên dòng (hệ thống có sai số
-  // thì quản trị sửa được — người dùng yêu cầu 08/11), xem sổ điểm từng người, chế độ test.
+  // thì quản trị sửa được — người dùng yêu cầu 08/11), xem sổ điểm từng người.
   interface HocVien { id: number; email: string; name: string; curriculum: string; diem: number; baiMo: number; lastClaim: string | null }
   interface SoDiem {
     user: { id: number; email: string; name: string; role: string } | null;
@@ -21,8 +21,6 @@
     iso ? new Date(iso).toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
   const baoLoi = (e: unknown, macDinh: string) => toast.show(e instanceof ApiError ? e.message : macDinh, 'info', 5000);
 
-  /** Chế độ test điểm: mỗi lần bấm Nhận điểm đều +1. */
-  let cheDoThu = $state(false);
   let tenSach = $state<Record<string, string>>({});
 
   // Bảng học viên
@@ -55,8 +53,7 @@
   onMount(async () => {
     void taiDs();
     try {
-      const r = await api.get<{ testMode: boolean; books: { ma: string; ten: string }[] }>('/admin/book-points');
-      cheDoThu = r.testMode;
+      const r = await api.get<{ books: { ma: string; ten: string }[] }>('/admin/book-points');
       tenSach = Object.fromEntries(r.books.map((b) => [b.ma, b.ten]));
     } catch (e) {
       baoLoi(e, 'Chưa tải được cài đặt điểm.');
@@ -66,16 +63,6 @@
   function locLai(): void {
     trang = 1;
     void taiDs();
-  }
-
-  async function doiCheDoThu(bat: boolean): Promise<void> {
-    try {
-      cheDoThu = (await api.put<{ testMode: boolean }>('/admin/book-points/test-mode', { enabled: bat })).testMode;
-      toast.ok(cheDoThu ? 'Đã bật chế độ test: mỗi lần bấm Nhận điểm đều +1 điểm.' : 'Đã tắt chế độ test: mỗi ngày chỉ +1 điểm.');
-    } catch (e) {
-      cheDoThu = !bat;
-      baoLoi(e, 'Chưa đổi được chế độ test.');
-    }
   }
 
   /** Cộng/trừ nhanh ngay trên dòng: ghi vào sổ điểm như mọi lần chỉnh tay, có lý do mặc định. */
@@ -117,14 +104,15 @@
     }
   }
 
-  const TEN_LOAI: Record<string, string> = { first: 'Lần đầu bấm link', daily: 'Bấm link', unlock: 'Mở bài', admin: 'Quản trị chỉnh tay' };
+  const TEN_LOAI: Record<string, string> = { first: 'Lần đầu nhận điểm', daily: 'Nhận điểm', unlock: 'Mở bài', admin: 'Quản trị chỉnh tay' };
   function moTaDong(x: { kind: string; khoa: string; note: string | null }): string {
     if (x.kind === 'unlock') {
       const [, ma, bai] = x.khoa.split(':');
       return `Mở Bài ${bai} · ${tenSach[ma] ?? ma}`;
     }
     if (x.kind === 'daily') {
-      return x.khoa.startsWith('thu:') ? 'Bấm link (chế độ test)' : `Bấm link ngày ${x.khoa.slice(6).split('-').reverse().join('/')}`;
+      // Dòng ghi lúc còn chế độ test có khoá "thu:…", không mang ngày.
+      return x.khoa.startsWith('daily:') ? `Nhận điểm ngày ${x.khoa.slice(6).split('-').reverse().join('/')}` : 'Nhận điểm';
     }
     return TEN_LOAI[x.kind] + (x.note ? ` · ${x.note}` : '');
   }
@@ -132,24 +120,7 @@
 
 <svelte:head><title>Điểm mở bài · Quản trị · Zìkǎ</title></svelte:head>
 
-<div class="bp-dau">
-  <div>
-    <h1>Điểm mở bài giáo trình</h1>
-    <p class="muted" style="font-size: 14px">
-      Lần đầu bấm Nhận điểm được 3 điểm, từ hôm sau mỗi ngày bấm được 1 điểm; điểm chưa dùng giữ lại, ngày không bấm
-      không bù. Mỗi điểm mở một bài, lần lượt theo thứ tự. Hệ thống tính sai thì cộng/trừ tay ở bảng dưới — mọi lần chỉnh đều ghi sổ.
-    </p>
-  </div>
-  <label class="sw"><input type="checkbox" checked={cheDoThu} onchange={(e) => doiCheDoThu(e.currentTarget.checked)} /><span></span> Chế độ test</label>
-</div>
-
-{#if cheDoThu}
-  <!-- Bật quên là ai cũng nhận điểm vô hạn: nhắc cho tới khi tắt. -->
-  <div class="bp-canh-bao" role="status">
-    <b>Đang bật chế độ test điểm</b> — mỗi lần bấm Nhận điểm đều +1 điểm, không giới hạn mỗi ngày. Nhớ tắt trước khi chạy thật.
-    <button type="button" class="btn btn-sm" onclick={() => doiCheDoThu(false)}>Tắt ngay</button>
-  </div>
-{/if}
+<h1 class="bp-tieu-de">Điểm mở bài giáo trình</h1>
 
 <div class="bp-loc">
   <form class="bp-tim" onsubmit={(e) => { e.preventDefault(); locLai(); }}>
@@ -230,13 +201,7 @@
 {/if}
 
 <style>
-  .bp-dau { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
-  .bp-dau > div { flex: 1 1 520px; max-width: 860px; }
-  .bp-dau h1 { font-size: 28px; margin-bottom: 6px; }
-  .bp-canh-bao {
-    display: flex; align-items: center; gap: 10px 14px; flex-wrap: wrap; margin-bottom: 14px; padding: 10px 14px;
-    border: 1px solid var(--bo-dot); border-radius: 12px; background: var(--bo-soft); color: var(--warn-text); font-size: 14px;
-  }
+  .bp-tieu-de { font-size: 28px; margin-bottom: 20px; }
   .bp-loc { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
   .bp-tim { display: flex; gap: 8px; flex: 0 1 420px; }
   .bp-tim .inp { flex: 1; }

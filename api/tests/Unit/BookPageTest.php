@@ -27,9 +27,8 @@ final class BookPageTest extends DbTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // site_settings giữ nguyên giữa các test (DbTestCase::KEEP): đặt lại hai khối test này có sửa.
+        // site_settings giữ nguyên giữa các test (DbTestCase::KEEP): đặt lại khối test này có sửa.
         Settings::set('support', Settings::DEFAULTS['support']);
-        Settings::set('points', Settings::DEFAULTS['points']);
         $goc = Config::uploadsDir('giao-trinh');
         foreach (glob("$goc/*/sach.json") ?: [] as $f) {
             unlink($f);
@@ -280,19 +279,6 @@ final class BookPageTest extends DbTestCase
         $this->ngay('2026-11-12');
         self::assertSame(1, BookAccess::nhanDiemNgay($uid));
         self::assertSame(5, BookAccess::soDiem($uid));
-    }
-
-    public function testCheDoThuMoiLanBamDeuCongDiem(): void
-    {
-        $uid = $this->nguoi();
-        Settings::set('points', ['test_mode' => true]);
-        self::assertSame([3, 1, 1], [BookAccess::nhanDiemNgay($uid), BookAccess::nhanDiemNgay($uid), BookAccess::nhanDiemNgay($uid)]);
-        self::assertSame(5, BookAccess::soDiem($uid));
-        self::assertFalse(BookAccess::daNhanHomNay($uid));
-        // Tắt là về luật thật: hôm nay đã nhận rồi, bấm thêm không được.
-        Settings::set('points', ['test_mode' => false]);
-        self::assertTrue(BookAccess::daNhanHomNay($uid));
-        self::assertSame(0, BookAccess::nhanDiemNgay($uid));
     }
 
     public function testMoBaiLanLuotVaTruDiem(): void

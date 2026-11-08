@@ -7,7 +7,6 @@ use Zika\Core\Clock;
 use Zika\Core\Config;
 use Zika\Core\Db;
 use Zika\Core\HttpError;
-use Zika\Core\Settings;
 
 /**
  * Ai được đọc trang nào của giáo trình (migration 019).
@@ -151,19 +150,9 @@ final class BookAccess
         return Db::val("SELECT 1 FROM book_points WHERE user_id = ? AND khoa = 'first'", [$userId]) !== null;
     }
 
-    /** Chế độ test bật ở quản trị: coi như hôm nay chưa nhận để nút luôn mời nhận tiếp. */
     public static function daNhanHomNay(int $userId): bool
     {
-        if (self::cheDoThu()) {
-            return false;
-        }
         return Db::val('SELECT 1 FROM book_points WHERE user_id = ? AND khoa = ?', [$userId, self::khoaHomNay()]) !== null;
-    }
-
-    /** Chế độ test điểm (Quản trị → Điểm mở bài): mỗi lần bấm nhận đều +1 điểm. */
-    public static function cheDoThu(): bool
-    {
-        return (bool) Settings::value('points', 'test_mode', false);
     }
 
     /**
@@ -184,10 +173,6 @@ final class BookAccess
             if ($them(self::DIEM_LAN_DAU, 'first', 'first') === 1) {
                 $them(0, 'daily', self::khoaHomNay());
                 return self::DIEM_LAN_DAU;
-            }
-            // Chế độ test: khoá ngẫu nhiên nên lần bấm nào cũng ghi được một dòng +1.
-            if (self::cheDoThu()) {
-                return $them(1, 'daily', 'thu:' . bin2hex(random_bytes(8)));
             }
             return $them(1, 'daily', self::khoaHomNay());
         });

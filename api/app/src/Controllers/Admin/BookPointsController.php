@@ -9,32 +9,19 @@ use Zika\Core\Db;
 use Zika\Core\HttpError;
 use Zika\Core\Request;
 use Zika\Core\Response;
-use Zika\Core\Settings;
 use Zika\Core\Validator;
 use Zika\Services\BookAccess;
 use Zika\Services\Curricula;
 
-/** Quản trị điểm mở bài giáo trình: chế độ test, tra sổ điểm từng học viên, cộng/trừ tay. Chỉ admin. */
+/** Quản trị điểm mở bài giáo trình: tra sổ điểm từng học viên, cộng/trừ tay. Chỉ admin. */
 final class BookPointsController
 {
     /** GET /admin/book-points — cài đặt chung và tên từng quyển (để đọc sổ điểm "Mở Bài 5 · Hán ngữ 1"). */
     public function settings(Request $r): array
     {
         return [
-            'testMode' => BookAccess::cheDoThu(),
             'books' => array_map(static fn ($s) => ['ma' => $s['ma'], 'ten' => $s['ten']], BookAccess::sachCuaBo(null)),
         ];
-    }
-
-    /** PUT /admin/book-points/test-mode {enabled} — bật/tắt chế độ test điểm (mỗi lần bấm nhận đều +1). */
-    public function testMode(Request $r): array
-    {
-        $v = new Validator($r->body);
-        $on = $v->bool('enabled');
-        $v->done();
-        Settings::set('points', ['test_mode' => $on]);
-        Audit::log($r, 'book_points.test_mode', 'site_settings', null, ['enabled' => $on]);
-        return ['testMode' => $on];
     }
 
     /**

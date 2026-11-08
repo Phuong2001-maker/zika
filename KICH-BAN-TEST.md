@@ -330,7 +330,7 @@ Chưa bấm thử trên trình duyệt: nút Lưu ở form giáo trình (API đ�
 | O7 | Bấm Nhận điểm ngày đầu, hôm sau bấm lại; bỏ một ngày rồi bấm | Lần đầu +3, các ngày sau +1; ngày bỏ qua không được bù; không mở Shopee | Đạt ở test API (đổi đồng hồ) |
 | O8 | Đường dẫn ảnh không có `?t=`, mã của tài khoản khác, mã sửa 1 ký tự, mã quá 6 giờ | 403 | Đạt (test API + trình duyệt) |
 | O9 | Chuột phải, kéo ảnh, Ctrl+S, Ctrl+P trên trang sách | Không ra menu lưu, không kéo được, không lưu/in | Đạt (máy tính); **giữ ngón tay trên iPhone/Android thật chưa thử** |
-| O17 | Bật Chế độ test điểm, học viên bấm Nhận điểm 3 lần | Lần đầu +3 rồi +1 mỗi lần; tắt chế độ là về mỗi ngày chỉ nhận một lần | Đạt test API |
+| O17 | Học viên bấm Nhận điểm nhiều lần trong ngày | Chỉ lần đầu được cộng, nút ẩn đến hôm sau; quản trị không còn công tắc Chế độ test (bỏ 09/11) | Đạt test API |
 | O19 | Quản trị → Điểm mở bài: bảng học viên, bấm +1 rồi −1 trên một dòng, mở Chi tiết | Bảng có giáo trình, điểm, bài đã mở, lần nhận gần nhất; điểm đổi ngay; sổ điểm ghi "Quản trị chỉnh tay · Chỉnh nhanh từ bảng học viên" | Đạt |
 | O14 | Quản trị → Điểm mở bài: tìm email, cộng 2 điểm kèm lý do, trừ quá số đang có | Sổ điểm hiện từng dòng; trừ quá thì báo lỗi | Đạt ở test API; tìm và xem sổ đạt trên trình duyệt |
 | O15 | Quản trị/biên tập mở mọi quyển | Đọc tự do, không bị trừ điểm | Đạt |

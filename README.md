@@ -117,8 +117,6 @@ thẳng đường dẫn hay dùng công cụ tải. Biên tập và quản trị
   trang cũng không hiện lại trong ngày. Bấm link Quỹ tháng cũng tính là đã bấm. Link Quỹ tháng thì bấm được mọi lúc.
 - **Không bán sách:** đã làm phần bán gói (trọn bộ, chuyển khoản, quản trị duyệt) rồi bỏ ngày 08/11/2026 — bán bản scan sách
   có bản quyền rủi ro pháp lý cao. Học viên chỉ mở bài bằng điểm.
-- **Chế độ test điểm** (Quản trị → Điểm mở bài): bật thì mỗi lần bấm Nhận điểm đều +1 điểm, không chờ sang
-  ngày, để thử nhanh. Đang bật thì đầu màn quản trị có dải vàng nhắc. **Phải tắt trước khi chạy thật.**
 - **Mã ký đường dẫn:** mọi đường dẫn ảnh trang và file nghe phải kèm `?t=<hết hạn>.<chữ ký>` do API cấp, gắn với tài khoản
   và quyển, sống 6 giờ (ký bằng `app_key`). Link dán sang tài khoản khác, sửa một ký tự, hay để quá 6 giờ đều 403. Màn đọc
   tự lấy mã mới trước khi hết hạn; ảnh hay file nghe lỗi giữa chừng thì lấy mã mới rồi tải lại.
@@ -127,7 +125,7 @@ thẳng đường dẫn hay dùng công cụ tải. Biên tập và quản trị
 
 Quản trị → **Điểm mở bài**: bảng mọi học viên (giáo trình, số điểm, số bài đã mở, lần nhận điểm gần nhất; tìm theo tên/email,
 xếp theo nhiều điểm nhất hoặc nhận gần đây), nút −1/+1 ngay trên dòng, **Chi tiết** để cộng/trừ số tuỳ ý kèm lý do và xem
-sổ điểm; công tắc Chế độ test. Mọi lần chỉnh tay đều ghi sổ (`book_points.kind = admin`) để tra lại khi hệ thống tính sai.
+sổ điểm. Mọi lần chỉnh tay đều ghi sổ (`book_points.kind = admin`) để tra lại khi hệ thống tính sai.
 
 ## Quán trà (phòng trò chuyện chung) và Góp ý
 

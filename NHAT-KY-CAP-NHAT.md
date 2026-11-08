@@ -23,6 +23,15 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 09/11/2026 — Bỏ hẳn Chế độ test điểm
+
+- Web đã dùng thật nên bỏ công tắc **Chế độ test** cùng dải cảnh báo và đoạn mô tả ở Quản trị → Điểm mở bài (người dùng khoanh).
+- API bỏ `PUT /admin/book-points/test-mode`, cài đặt `points.test_mode` và nhánh "coi như chưa nhận" trong `BookAccess`:
+  dù DB server còn dòng `points` cũ thì code mới cũng không đọc, Nhận điểm luôn theo luật lần đầu +3, mỗi ngày +1.
+- Sổ điểm: dòng cũ ghi lúc còn chế độ test (khoá `thu:…`) hiện là "Nhận điểm". Điểm đã cộng dư lúc test **không tự trừ**;
+  ở local `hocvien@zika.local` còn 127 điểm — cần thì trừ tay ở bảng học viên. Đã xoá dòng `points` trong DB local.
+- **Chưa đưa lên server.**
+
 ### 08/11/2026 — Bé túi bấm xong nghỉ đến 0h hôm sau
 
 - Bấm bé túi (hoặc một link Quỹ tháng) thì trong ngày bé không hiện lại, kể cả tải lại trang hay đổi máy: server đọc lượt bấm

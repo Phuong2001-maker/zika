@@ -37,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; API 201/201; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; API 200/200; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -141,8 +141,9 @@ này rơi vào `catch` của `load()` nên trang báo "0 điểm" dù API trả 
 ### 9. Giáo trình: chặn ở server, mọi đường dẫn file cần mã ký
 
 Ảnh trang, trang đáp án, file nghe đi qua `BookController`, kiểm `BookAccess` (bài đã mở) **và** mã `?t=` của
-chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả hai, đừng chỉ dựa vào giao diện ẩn nút. Điểm chỉ cộng ở `/go`
-(`SupportController::go`); test nhớ `site_settings` giữ nguyên giữa các test nên phải đặt lại `support`/`points` trong `setUp`.
+chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả hai, đừng chỉ dựa vào giao diện ẩn nút. Điểm chỉ cộng ở
+`POST /learn/points/daily` (lần đầu +3, mỗi ngày +1, không có chế độ test); test nhớ `site_settings` giữ nguyên giữa các test
+nên phải đặt lại `support` trong `setUp`.
 
 ## Nếp viết
 
@@ -172,8 +173,8 @@ chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả h
   của KICH-BAN-TEST. Còn: ở quản trị gắn lại link Shopee (DB server đã xoá link) thì bé túi mới hiện.
   **Không bán sách**: phần gói học/chuyển khoản đã làm rồi bỏ (rủi ro pháp lý), đừng thêm lại khi chưa có giấy phép bản quyền.
   **Điểm và Shopee đã tách riêng (08/11):** nút "Nhận điểm" gọi `/learn/points/daily`, lần đầu +3, các ngày sau +1;
-  bé túi và mọi `/go` chỉ mở link/ghi lượt ủng hộ, không cộng điểm. Chế độ test điểm chỉ làm mỗi lần bấm **Nhận điểm** được +1
-  và trên server phải để tắt. Bấm bé túi hoặc link Quỹ tháng thì bé nghỉ đến 0h hôm sau, nhớ theo tài khoản ở server (`clickedToday`); chưa lên server.
+  bé túi và mọi `/go` chỉ mở link/ghi lượt ủng hộ, không cộng điểm. Chế độ test điểm đã **bỏ hẳn** (09/11, dùng thật).
+  Bấm bé túi hoặc link Quỹ tháng thì bé nghỉ đến 0h hôm sau, nhớ theo tài khoản ở server (`clickedToday`); chưa lên server.
 - **Server thật đã lên bản 08/11/2026 (đã kiểm):** DB xoá hết chỉ giữ tài khoản, nạp lại 2 giáo trình; code, âm thanh,
   ảnh sách đã lên. Kiểm trên web thật: 116 bài × 6 phần giống local (bỏ qua `?v=` nét chữ và `updatedByName`), 21.313
   file âm thanh/nét chữ đủ và đúng cỡ, 43 màn chạy ở máy tính/máy tính bảng/điện thoại. Lúc nạp, `01-cau-truc.sql` dừng

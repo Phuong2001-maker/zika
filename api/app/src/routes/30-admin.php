@@ -145,7 +145,6 @@ return [
 
     // Điểm mở bài giáo trình (migration 019)
     ['GET',    '/admin/book-points', [BookPoints::class, 'settings'], 'A'],
-    ['PUT',    '/admin/book-points/test-mode', [BookPoints::class, 'testMode'], 'A'],
     ['GET',    '/admin/book-points/users', [BookPoints::class, 'users'], 'A'],
     ['GET',    '/admin/book-points/user', [BookPoints::class, 'user'], 'A'],
     ['POST',   '/admin/book-points/adjust', [BookPoints::class, 'adjust'], 'A'],
