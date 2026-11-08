@@ -14,6 +14,9 @@ return [
     ],
     'cors_origins' => [],     // để trống khi frontend và API cùng domain
     'app_key' => '',          // 64 ký tự ngẫu nhiên: php -r "echo bin2hex(random_bytes(32));"
+    // Chỉ các email này được làm quản trị, kể cả khi DB ghi role = admin (DB bị sửa trái phép cũng không lên quyền).
+    // Để trống = không giới hạn. Thêm/bớt người quản trị: sửa dòng này trên máy chủ rồi đổi quyền ở Quản trị → Người dùng.
+    'admin_emails' => [],
     'google' => [
         'client_id'     => '',
         'client_secret' => '',

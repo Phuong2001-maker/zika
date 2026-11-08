@@ -219,6 +219,11 @@ Chép `app/config.example.php` thành `app/config.php` rồi điền. Ba giá tr
 - `db` — thông tin database tạo trong panel hosting.
 - `app_key` — 64 ký tự ngẫu nhiên: `php -r "echo bin2hex(random_bytes(32));"`
 
+Nên điền thêm `admin_emails` — danh sách email được làm quản trị, ví dụ
+`'admin_emails' => ['a@gmail.com', 'b@gmail.com'],`. Có danh sách thì tài khoản ghi `role = admin` trong DB mà email không
+nằm trong đó vẫn chỉ là người học: ai sửa được DB cũng không tự lên quyền quản trị. Để trống là không giới hạn.
+Thêm người quản trị mới: thêm email vào đây trước, rồi mới đổi quyền ở Quản trị → Người dùng (ngoài danh sách thì bị chặn).
+
 `config.php` **không** được commit (đã có trong `.gitignore`) và nằm ngoài `public_html`.
 
 ### 3. Tạo bảng + tài khoản quản trị

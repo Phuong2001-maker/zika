@@ -1,0 +1,835 @@
+{
+ "开张": [
+  {
+   "zh": "街上新开张了一家饭馆。",
+   "pinyin": "Jiē shang xīn kāizhāng le yì jiā fànguǎn.",
+   "vi": "Trên phố mới khai trương một quán ăn."
+  }
+ ],
+ "明星": [
+  {
+   "zh": "这位电影明星来过我们学校。",
+   "pinyin": "Zhè wèi diànyǐng míngxīng láiguo wǒmen xuéxiào.",
+   "vi": "Ngôi sao điện ảnh này từng đến trường chúng tôi."
+  }
+ ],
+ "不由自主": [
+  {
+   "zh": "听到这个好消息，她不由自主地笑了。",
+   "pinyin": "Tīngdào zhège hǎo xiāoxi, tā bùyóuzìzhǔ de xiào le.",
+   "vi": "Nghe tin vui này, cô ấy bất giác bật cười."
+  }
+ ],
+ "忙碌": [
+  {
+   "zh": "爸爸妈妈每天都很忙碌。",
+   "pinyin": "Bàba māma měi tiān dōu hěn mánglù.",
+   "vi": "Bố mẹ ngày nào cũng rất bận rộn."
+  }
+ ],
+ "轻柔": [
+  {
+   "zh": "她的声音很轻柔。",
+   "pinyin": "Tā de shēngyīn hěn qīngróu.",
+   "vi": "Giọng nói của cô ấy rất nhẹ nhàng."
+  }
+ ],
+ "嗓子眼儿": [
+  {
+   "zh": "我紧张得心都提到嗓子眼儿了。",
+   "pinyin": "Wǒ jǐnzhāng de xīn dōu tídào sǎngziyǎnr le.",
+   "vi": "Tôi hồi hộp đến mức tim như nhảy lên tận cổ họng."
+  }
+ ],
+ "嗓子": [
+  {
+   "zh": "我嗓子疼，不想说话。",
+   "pinyin": "Wǒ sǎngzi téng, bù xiǎng shuōhuà.",
+   "vi": "Tôi đau họng, không muốn nói chuyện."
+  }
+ ],
+ "眼儿": [
+  {
+   "zh": "这张纸上有一个小眼儿。",
+   "pinyin": "Zhè zhāng zhǐ shang yǒu yí ge xiǎo yǎnr.",
+   "vi": "Trên tờ giấy này có một cái lỗ nhỏ."
+  }
+ ],
+ "面巾纸": [
+  {
+   "zh": "请给我一张面巾纸。",
+   "pinyin": "Qǐng gěi wǒ yì zhāng miànjīnzhǐ.",
+   "vi": "Làm ơn cho tôi một tờ khăn giấy."
+  }
+ ],
+ "伤口": [
+  {
+   "zh": "你的伤口还疼吗？",
+   "pinyin": "Nǐ de shāngkǒu hái téng ma?",
+   "vi": "Vết thương của bạn còn đau không?"
+  }
+ ],
+ "稿子": [
+  {
+   "zh": "这份稿子我已经改了三遍。",
+   "pinyin": "Zhè fèn gǎozi wǒ yǐjīng gǎi le sān biàn.",
+   "vi": "Bản thảo này tôi đã sửa ba lần rồi."
+  }
+ ],
+ "十全十美": [
+  {
+   "zh": "世界上没有十全十美的人。",
+   "pinyin": "Shìjiè shang méiyǒu shíquán shíměi de rén.",
+   "vi": "Trên đời không có ai hoàn hảo cả."
+  }
+ ],
+ "总编": [
+  {
+   "zh": "这些稿子要先给总编看看。",
+   "pinyin": "Zhèxiē gǎozi yào xiān gěi zǒngbiān kànkan.",
+   "vi": "Những bản thảo này phải đưa tổng biên tập xem trước."
+  }
+ ],
+ "错别字": [
+  {
+   "zh": "你的作业里有好几个错别字。",
+   "pinyin": "Nǐ de zuòyè li yǒu hǎo jǐ ge cuòbiézì.",
+   "vi": "Bài tập của bạn có mấy chữ viết sai."
+  }
+ ],
+ "算账": [
+  {
+   "zh": "他把我的车弄坏了，我要找他算账。",
+   "pinyin": "Tā bǎ wǒ de chē nònghuài le, wǒ yào zhǎo tā suànzhàng.",
+   "vi": "Anh ta làm hỏng xe của tôi, tôi phải tìm anh ta tính sổ."
+  }
+ ],
+ "伤害": [
+  {
+   "zh": "你这样说会伤害她的。",
+   "pinyin": "Nǐ zhèyàng shuō huì shānghài tā de.",
+   "vi": "Bạn nói như vậy sẽ làm tổn thương cô ấy đấy."
+  }
+ ],
+ "停业": [
+  {
+   "zh": "这家饭馆下个月停业。",
+   "pinyin": "Zhè jiā fànguǎn xià ge yuè tíngyè.",
+   "vi": "Quán ăn này tháng sau sẽ đóng cửa."
+  }
+ ],
+ "整顿": [
+  {
+   "zh": "这家公司需要好好整顿一下。",
+   "pinyin": "Zhè jiā gōngsī xūyào hǎohǎo zhěngdùn yíxià.",
+   "vi": "Công ty này cần được chấn chỉnh lại cho tử tế."
+  }
+ ],
+ "赔偿": [
+  {
+   "zh": "你弄坏了我的电脑，得赔偿。",
+   "pinyin": "Nǐ nònghuài le wǒ de diànnǎo, děi péicháng.",
+   "vi": "Bạn làm hỏng máy tính của tôi thì phải bồi thường."
+  }
+ ],
+ "损失": [
+  {
+   "zh": "这场大火给公司带来了很大的损失。",
+   "pinyin": "Zhè chǎng dàhuǒ gěi gōngsī dàilái le hěn dà de sǔnshī.",
+   "vi": "Trận hỏa hoạn này gây tổn thất lớn cho công ty."
+  }
+ ],
+ "营养": [
+  {
+   "zh": "牛奶很有营养。",
+   "pinyin": "Niúnǎi hěn yǒu yíngyǎng.",
+   "vi": "Sữa rất giàu dinh dưỡng."
+  }
+ ],
+ "进入": [
+  {
+   "zh": "考试开始前，学生们都进入了考场。",
+   "pinyin": "Kǎoshì kāishǐ qián, xuéshengmen dōu jìnrù le kǎochǎng.",
+   "vi": "Trước khi bắt đầu thi, các thí sinh đều đã vào phòng thi."
+  }
+ ],
+ "医疗": [
+  {
+   "zh": "这里的医疗条件很好。",
+   "pinyin": "Zhèli de yīliáo tiáojiàn hěn hǎo.",
+   "vi": "Điều kiện y tế ở đây rất tốt."
+  }
+ ],
+ "无声": [
+  {
+   "zh": "他听不见，生活在无声的世界里。",
+   "pinyin": "Tā tīng bu jiàn, shēnghuó zài wúshēng de shìjiè li.",
+   "vi": "Anh ấy không nghe được, sống trong một thế giới không âm thanh."
+  }
+ ],
+ "丧失": [
+  {
+   "zh": "他因为生病丧失了听力。",
+   "pinyin": "Tā yīnwèi shēngbìng sàngshī le tīnglì.",
+   "vi": "Anh ấy mất thính lực vì bị bệnh."
+  }
+ ],
+ "严重": [
+  {
+   "zh": "他的病很严重，需要住院。",
+   "pinyin": "Tā de bìng hěn yánzhòng, xūyào zhùyuàn.",
+   "vi": "Bệnh của anh ấy rất nghiêm trọng, cần phải nằm viện."
+  }
+ ],
+ "破坏": [
+  {
+   "zh": "大风破坏了很多房子。",
+   "pinyin": "Dàfēng pòhuài le hěn duō fángzi.",
+   "vi": "Gió lớn đã làm hư hại nhiều ngôi nhà."
+  }
+ ],
+ "冷静": [
+  {
+   "zh": "你先冷静一下，再想办法。",
+   "pinyin": "Nǐ xiān lěngjìng yíxià, zài xiǎng bànfǎ.",
+   "vi": "Bạn bình tĩnh lại đã, rồi hãy nghĩ cách."
+  }
+ ],
+ "口形": [
+  {
+   "zh": "请大家看我的口形，跟我读。",
+   "pinyin": "Qǐng dàjiā kàn wǒ de kǒuxíng, gēn wǒ dú.",
+   "vi": "Mọi người hãy nhìn khẩu hình của tôi rồi đọc theo."
+  }
+ ],
+ "培养": [
+  {
+   "zh": "学校培养了很多优秀的学生。",
+   "pinyin": "Xuéxiào péiyǎng le hěn duō yōuxiù de xuésheng.",
+   "vi": "Nhà trường đã đào tạo rất nhiều học sinh giỏi."
+  }
+ ],
+ "扑": [
+  {
+   "zh": "孩子一看见妈妈就扑了过去。",
+   "pinyin": "Háizi yí kànjiàn māma jiù pū le guòqu.",
+   "vi": "Đứa bé vừa thấy mẹ là nhào tới."
+  }
+ ],
+ "怀": [
+  {
+   "zh": "她把孩子抱在怀中。",
+   "pinyin": "Tā bǎ háizi bào zài huái zhōng.",
+   "vi": "Cô ấy ôm đứa bé vào lòng."
+  }
+ ],
+ "招生": [
+  {
+   "zh": "我们学校今年招生两千人。",
+   "pinyin": "Wǒmen xuéxiào jīnnián zhāoshēng liǎng qiān rén.",
+   "vi": "Năm nay trường chúng tôi tuyển sinh hai nghìn người."
+  }
+ ],
+ "面授": [
+  {
+   "zh": "这个班每个星期天面授一次。",
+   "pinyin": "Zhège bān měi ge xīngqītiān miànshòu yí cì.",
+   "vi": "Lớp này mỗi chủ nhật học trực tiếp một buổi."
+  }
+ ],
+ "大胆": [
+  {
+   "zh": "你要大胆地说汉语，别怕说错。",
+   "pinyin": "Nǐ yào dàdǎn de shuō Hànyǔ, bié pà shuōcuò.",
+   "vi": "Bạn phải mạnh dạn nói tiếng Trung, đừng sợ nói sai."
+  }
+ ],
+ "听讲": [
+  {
+   "zh": "上课的时候要认真听讲。",
+   "pinyin": "Shàngkè de shíhou yào rènzhēn tīngjiǎng.",
+   "vi": "Trong giờ học phải chăm chú nghe giảng."
+  }
+ ],
+ "笔记": [
+  {
+   "zh": "你能把你的笔记借给我看看吗？",
+   "pinyin": "Nǐ néng bǎ nǐ de bǐjì jiè gěi wǒ kànkan ma?",
+   "vi": "Bạn có thể cho tôi mượn vở ghi chép xem một chút không?"
+  }
+ ],
+ "尽": [
+  {
+   "zh": "我会尽最大的努力帮助你。",
+   "pinyin": "Wǒ huì jìn zuì dà de nǔlì bāngzhù nǐ.",
+   "vi": "Tôi sẽ cố gắng hết sức để giúp bạn."
+  }
+ ],
+ "思维": [
+  {
+   "zh": "他的思维非常清楚。",
+   "pinyin": "Tā de sīwéi fēicháng qīngchu.",
+   "vi": "Tư duy của anh ấy rất mạch lạc."
+  }
+ ],
+ "教材": [
+  {
+   "zh": "这套教材很适合外国学生。",
+   "pinyin": "Zhè tào jiàocái hěn shìhé wàiguó xuésheng.",
+   "vi": "Bộ giáo trình này rất phù hợp với sinh viên nước ngoài."
+  }
+ ],
+ "头昏脑胀": [
+  {
+   "zh": "看了一天书，我觉得头昏脑胀。",
+   "pinyin": "Kàn le yì tiān shū, wǒ juéde tóuhūn nǎozhàng.",
+   "vi": "Đọc sách cả ngày, tôi thấy đầu óc quay cuồng."
+  }
+ ],
+ "任务": [
+  {
+   "zh": "这个任务很重要，你一定要完成。",
+   "pinyin": "Zhège rènwu hěn zhòngyào, nǐ yídìng yào wánchéng.",
+   "vi": "Nhiệm vụ này rất quan trọng, bạn nhất định phải hoàn thành."
+  }
+ ],
+ "占用": [
+  {
+   "zh": "对不起，占用你一点儿时间。",
+   "pinyin": "Duìbuqǐ, zhànyòng nǐ yìdiǎnr shíjiān.",
+   "vi": "Xin lỗi, cho tôi xin một chút thời gian của bạn."
+  }
+ ],
+ "工具书": [
+  {
+   "zh": "词典是学外语的工具书。",
+   "pinyin": "Cídiǎn shì xué wàiyǔ de gōngjùshū.",
+   "vi": "Từ điển là sách công cụ để học ngoại ngữ."
+  }
+ ],
+ "难受": [
+  {
+   "zh": "我感冒了，难受极了。",
+   "pinyin": "Wǒ gǎnmào le, nánshòu jí le.",
+   "vi": "Tôi bị cảm, khó chịu lắm."
+  }
+ ],
+ "打转": [
+  {
+   "zh": "孩子高兴得抱着妈妈直打转。",
+   "pinyin": "Háizi gāoxìng de bàozhe māma zhí dǎzhuàn.",
+   "vi": "Đứa bé mừng quá, ôm mẹ xoay vòng vòng."
+  }
+ ],
+ "病痛": [
+  {
+   "zh": "看到孩子，她忘记了身上的病痛。",
+   "pinyin": "Kàndào háizi, tā wàngjì le shēn shang de bìngtòng.",
+   "vi": "Nhìn thấy con, bà quên hết đau ốm trên người."
+  }
+ ],
+ "消失": [
+  {
+   "zh": "飞机很快就消失在天空中。",
+   "pinyin": "Fēijī hěn kuài jiù xiāoshī zài tiānkōng zhōng.",
+   "vi": "Chiếc máy bay chẳng mấy chốc đã biến mất trên bầu trời."
+  }
+ ],
+ "一干二净": [
+  {
+   "zh": "他把这件事忘得一干二净。",
+   "pinyin": "Tā bǎ zhè jiàn shì wàng de yìgān èrjìng.",
+   "vi": "Anh ấy quên sạch sành sanh chuyện này."
+  }
+ ],
+ "赶紧": [
+  {
+   "zh": "要下雨了，我们赶紧回家吧。",
+   "pinyin": "Yào xià yǔ le, wǒmen gǎnjǐn huí jiā ba.",
+   "vi": "Sắp mưa rồi, chúng ta mau về nhà thôi."
+  }
+ ],
+ "核对": [
+  {
+   "zh": "请核对一下你的名字和电话号码。",
+   "pinyin": "Qǐng héduì yíxià nǐ de míngzi hé diànhuà hàomǎ.",
+   "vi": "Xin hãy đối chiếu lại tên và số điện thoại của bạn."
+  }
+ ],
+ "准考证": [
+  {
+   "zh": "考试那天别忘了带准考证。",
+   "pinyin": "Kǎoshì nà tiān bié wàng le dài zhǔnkǎozhèng.",
+   "vi": "Hôm thi đừng quên mang thẻ dự thi."
+  }
+ ],
+ "相貌": [
+  {
+   "zh": "我们不能只看一个人的相貌。",
+   "pinyin": "Wǒmen bù néng zhǐ kàn yí ge rén de xiàngmào.",
+   "vi": "Chúng ta không thể chỉ nhìn tướng mạo của một người."
+  }
+ ],
+ "自学": [
+  {
+   "zh": "我的汉语是自学的。",
+   "pinyin": "Wǒ de Hànyǔ shì zìxué de.",
+   "vi": "Tiếng Trung của tôi là tự học."
+  }
+ ],
+ "绘画": [
+  {
+   "zh": "她从小就喜欢绘画。",
+   "pinyin": "Tā cóngxiǎo jiù xǐhuan huìhuà.",
+   "vi": "Cô ấy thích hội họa từ nhỏ."
+  }
+ ],
+ "篆刻": [
+  {
+   "zh": "爸爸对篆刻很有研究。",
+   "pinyin": "Bàba duì zhuànkè hěn yǒu yánjiū.",
+   "vi": "Bố tôi rất am hiểu nghề khắc dấu."
+  }
+ ],
+ "盆景": [
+  {
+   "zh": "他家的院子里摆满了盆景。",
+   "pinyin": "Tā jiā de yuànzi li bǎimǎn le pénjǐng.",
+   "vi": "Sân nhà anh ấy bày đầy cây cảnh."
+  }
+ ],
+ "成长": [
+  {
+   "zh": "看着孩子一天天成长，妈妈很高兴。",
+   "pinyin": "Kànzhe háizi yì tiāntiān chéngzhǎng, māma hěn gāoxìng.",
+   "vi": "Nhìn con lớn lên từng ngày, mẹ rất vui."
+  }
+ ],
+ "海伦凯勒": [
+  {
+   "zh": "海伦凯勒写过一本很有名的书。",
+   "pinyin": "Hǎilún Kǎilè xiěguo yì běn hěn yǒumíng de shū.",
+   "vi": "Helen Keller từng viết một cuốn sách rất nổi tiếng."
+  }
+ ],
+ "安妮": [
+  {
+   "zh": "安妮是海伦的老师。",
+   "pinyin": "Ānnī shì Hǎilún de lǎoshī.",
+   "vi": "Anne là cô giáo của Helen."
+  }
+ ],
+ "教务": [
+  {
+   "zh": "他在学校做教务工作。",
+   "pinyin": "Tā zài xuéxiào zuò jiàowù gōngzuò.",
+   "vi": "Anh ấy làm công tác giáo vụ ở trường."
+  }
+ ],
+ "主任": [
+  {
+   "zh": "王主任今天不在办公室。",
+   "pinyin": "Wáng zhǔrèn jīntiān bú zài bàngōngshì.",
+   "vi": "Chủ nhiệm Vương hôm nay không có ở văn phòng."
+  }
+ ],
+ "化学": [
+  {
+   "zh": "我最喜欢的课是化学。",
+   "pinyin": "Wǒ zuì xǐhuan de kè shì huàxué.",
+   "vi": "Môn học tôi thích nhất là hóa học."
+  }
+ ],
+ "原子": [
+  {
+   "zh": "原子非常小，用眼睛看不见。",
+   "pinyin": "Yuánzǐ fēicháng xiǎo, yòng yǎnjing kàn bu jiàn.",
+   "vi": "Nguyên tử cực kỳ nhỏ, mắt thường không nhìn thấy được."
+  }
+ ],
+ "相互": [
+  {
+   "zh": "同学之间要相互帮助。",
+   "pinyin": "Tóngxué zhījiān yào xiānghù bāngzhù.",
+   "vi": "Bạn học với nhau phải giúp đỡ lẫn nhau."
+  }
+ ],
+ "物理": [
+  {
+   "zh": "他的物理成绩非常好。",
+   "pinyin": "Tā de wùlǐ chéngjì fēicháng hǎo.",
+   "vi": "Điểm vật lý của anh ấy rất tốt."
+  }
+ ],
+ "声像": [
+  {
+   "zh": "图书馆里有很多声像资料。",
+   "pinyin": "Túshūguǎn li yǒu hěn duō shēngxiàng zīliào.",
+   "vi": "Trong thư viện có rất nhiều tài liệu nghe nhìn."
+  }
+ ],
+ "动画片": [
+  {
+   "zh": "孩子们都爱看动画片。",
+   "pinyin": "Háizimen dōu ài kàn dònghuàpiàn.",
+   "vi": "Bọn trẻ đều thích xem phim hoạt hình."
+  }
+ ],
+ "中级": [
+  {
+   "zh": "我现在在学中级汉语。",
+   "pinyin": "Wǒ xiànzài zài xué zhōngjí Hànyǔ.",
+   "vi": "Bây giờ tôi đang học tiếng Trung trung cấp."
+  }
+ ],
+ "棉花糖": [
+  {
+   "zh": "孩子们都喜欢吃棉花糖。",
+   "pinyin": "Háizimen dōu xǐhuan chī miánhuātáng.",
+   "vi": "Trẻ con đều thích ăn kẹo bông gòn."
+  }
+ ],
+ "棉花": [
+  {
+   "zh": "天上的白云像棉花一样。",
+   "pinyin": "Tiānshang de báiyún xiàng miánhuā yíyàng.",
+   "vi": "Những đám mây trắng trên trời trông như bông."
+  }
+ ],
+ "欢快": [
+  {
+   "zh": "孩子们唱着欢快的歌。",
+   "pinyin": "Háizimen chàngzhe huānkuài de gē.",
+   "vi": "Bọn trẻ hát những bài ca vui tươi."
+  }
+ ],
+ "银色": [
+  {
+   "zh": "她买了一辆银色的汽车。",
+   "pinyin": "Tā mǎi le yí liàng yínsè de qìchē.",
+   "vi": "Cô ấy mua một chiếc ô tô màu bạc."
+  }
+ ],
+ "交换": [
+  {
+   "zh": "我们交换一下电话号码吧。",
+   "pinyin": "Wǒmen jiāohuàn yíxià diànhuà hàomǎ ba.",
+   "vi": "Chúng ta trao đổi số điện thoại nhé."
+  }
+ ],
+ "各式各样": [
+  {
+   "zh": "商店里有各式各样的月饼。",
+   "pinyin": "Shāngdiàn li yǒu gèshì gèyàng de yuèbing.",
+   "vi": "Trong cửa hàng có đủ loại bánh trung thu."
+  }
+ ],
+ "破碎": [
+  {
+   "zh": "她不想生活在破碎的家里。",
+   "pinyin": "Tā bù xiǎng shēnghuó zài pòsuì de jiā li.",
+   "vi": "Cô ấy không muốn sống trong một gia đình tan vỡ."
+  }
+ ],
+ "董事长": [
+  {
+   "zh": "她是这家公司的董事长。",
+   "pinyin": "Tā shì zhè jiā gōngsī de dǒngshìzhǎng.",
+   "vi": "Bà ấy là chủ tịch hội đồng quản trị của công ty này."
+  }
+ ],
+ "早出晚归": [
+  {
+   "zh": "爸爸工作很忙，每天早出晚归。",
+   "pinyin": "Bàba gōngzuò hěn máng, měi tiān zǎochū wǎnguī.",
+   "vi": "Bố làm việc rất bận, ngày nào cũng đi sớm về muộn."
+  }
+ ],
+ "创造": [
+  {
+   "zh": "幸福的生活要靠自己创造。",
+   "pinyin": "Xìngfú de shēnghuó yào kào zìjǐ chuàngzào.",
+   "vi": "Cuộc sống hạnh phúc phải do chính mình tạo nên."
+  }
+ ],
+ "文具": [
+  {
+   "zh": "开学前，妈妈给我买了很多文具。",
+   "pinyin": "Kāixué qián, māma gěi wǒ mǎi le hěn duō wénjù.",
+   "vi": "Trước khi khai giảng, mẹ mua cho tôi rất nhiều đồ dùng học tập."
+  }
+ ],
+ "时髦": [
+  {
+   "zh": "她总是穿得很时髦。",
+   "pinyin": "Tā zǒngshì chuān de hěn shímáo.",
+   "vi": "Cô ấy lúc nào cũng ăn mặc rất thời thượng."
+  }
+ ],
+ "工程师": [
+  {
+   "zh": "我哥哥是一名电脑工程师。",
+   "pinyin": "Wǒ gēge shì yì míng diànnǎo gōngchéngshī.",
+   "vi": "Anh trai tôi là một kỹ sư máy tính."
+  }
+ ],
+ "专家": [
+  {
+   "zh": "他是一位有名的汉语专家。",
+   "pinyin": "Tā shì yí wèi yǒumíng de Hànyǔ zhuānjiā.",
+   "vi": "Ông ấy là một chuyên gia tiếng Trung nổi tiếng."
+  }
+ ],
+ "争吵": [
+  {
+   "zh": "他们俩常常为小事争吵。",
+   "pinyin": "Tāmen liǎ chángcháng wèi xiǎo shì zhēngchǎo.",
+   "vi": "Hai người họ thường tranh cãi vì chuyện nhỏ."
+  }
+ ],
+ "钻研": [
+  {
+   "zh": "他一直在钻研电脑技术。",
+   "pinyin": "Tā yìzhí zài zuānyán diànnǎo jìshù.",
+   "vi": "Anh ấy luôn miệt mài nghiên cứu kỹ thuật máy tính."
+  }
+ ],
+ "科研": [
+  {
+   "zh": "她在大学里做科研工作。",
+   "pinyin": "Tā zài dàxué li zuò kēyán gōngzuò.",
+   "vi": "Cô ấy làm công tác nghiên cứu khoa học ở trường đại học."
+  }
+ ],
+ "成果": [
+  {
+   "zh": "这是大家努力的成果。",
+   "pinyin": "Zhè shì dàjiā nǔlì de chéngguǒ.",
+   "vi": "Đây là thành quả nỗ lực của mọi người."
+  }
+ ],
+ "奖励": [
+  {
+   "zh": "我考得很好，妈妈奖励了我一台电脑。",
+   "pinyin": "Wǒ kǎo de hěn hǎo, māma jiǎnglì le wǒ yì tái diànnǎo.",
+   "vi": "Tôi thi rất tốt, mẹ thưởng cho tôi một chiếc máy tính."
+  }
+ ],
+ "花白": [
+  {
+   "zh": "爸爸的头发已经花白了。",
+   "pinyin": "Bàba de tóufa yǐjīng huābái le.",
+   "vi": "Tóc bố đã hoa râm rồi."
+  }
+ ],
+ "不禁": [
+  {
+   "zh": "看到这儿，我不禁笑了起来。",
+   "pinyin": "Kàndào zhèr, wǒ bùjīn xiào le qǐlai.",
+   "vi": "Xem đến đây, tôi không nhịn được bật cười."
+  }
+ ],
+ "心酸": [
+  {
+   "zh": "听了他的故事，大家都很心酸。",
+   "pinyin": "Tīng le tā de gùshi, dàjiā dōu hěn xīnsuān.",
+   "vi": "Nghe câu chuyện của anh ấy, mọi người đều thấy xót xa."
+  }
+ ],
+ "怨": [
+  {
+   "zh": "这件事不能怨他。",
+   "pinyin": "Zhè jiàn shì bù néng yuàn tā.",
+   "vi": "Chuyện này không thể trách anh ấy được."
+  }
+ ],
+ "自私": [
+  {
+   "zh": "他这个人太自私，只想着自己。",
+   "pinyin": "Tā zhège rén tài zìsī, zhǐ xiǎngzhe zìjǐ.",
+   "vi": "Anh ta ích kỷ quá, chỉ nghĩ đến bản thân."
+  }
+ ],
+ "分担": [
+  {
+   "zh": "我想帮妈妈分担一些家务。",
+   "pinyin": "Wǒ xiǎng bāng māma fēndān yìxiē jiāwù.",
+   "vi": "Tôi muốn giúp mẹ gánh vác một phần việc nhà."
+  }
+ ],
+ "要强": [
+  {
+   "zh": "她是个很要强的人，什么都想做到最好。",
+   "pinyin": "Tā shì ge hěn yàoqiáng de rén, shénme dōu xiǎng zuòdào zuì hǎo.",
+   "vi": "Cô ấy là người rất mạnh mẽ, không chịu thua, việc gì cũng muốn làm tốt nhất."
+  }
+ ],
+ "出色": [
+  {
+   "zh": "他的工作完成得很出色。",
+   "pinyin": "Tā de gōngzuò wánchéng de hěn chūsè.",
+   "vi": "Anh ấy hoàn thành công việc rất xuất sắc."
+  }
+ ],
+ "吃苦": [
+  {
+   "zh": "年轻人要能吃苦。",
+   "pinyin": "Niánqīngrén yào néng chīkǔ.",
+   "vi": "Người trẻ phải chịu được gian khổ."
+  }
+ ],
+ "闷": [
+  {
+   "zh": "一个人在家很闷，出去走走吧。",
+   "pinyin": "Yí ge rén zài jiā hěn mèn, chūqu zǒuzou ba.",
+   "vi": "Ở nhà một mình buồn lắm, ra ngoài đi dạo đi."
+  }
+ ],
+ "深情": [
+  {
+   "zh": "她深情地看着自己的孩子。",
+   "pinyin": "Tā shēnqíng de kànzhe zìjǐ de háizi.",
+   "vi": "Cô ấy nhìn đứa con của mình đầy trìu mến."
+  }
+ ],
+ "依然": [
+  {
+   "zh": "十年过去了，这里依然那么美。",
+   "pinyin": "Shí nián guòqu le, zhèli yīrán nàme měi.",
+   "vi": "Mười năm trôi qua, nơi đây vẫn đẹp như xưa."
+  }
+ ],
+ "温柔": [
+  {
+   "zh": "妈妈说话总是很温柔。",
+   "pinyin": "Māma shuōhuà zǒngshì hěn wēnróu.",
+   "vi": "Mẹ nói chuyện lúc nào cũng rất dịu dàng."
+  }
+ ],
+ "抚摸": [
+  {
+   "zh": "奶奶抚摸着我的头。",
+   "pinyin": "Nǎinai fǔmōzhe wǒ de tóu.",
+   "vi": "Bà nội vuốt ve đầu tôi."
+  }
+ ],
+ "擦拭": [
+  {
+   "zh": "她用面巾纸擦拭眼泪。",
+   "pinyin": "Tā yòng miànjīnzhǐ cāshì yǎnlèi.",
+   "vi": "Cô ấy dùng khăn giấy lau nước mắt."
+  }
+ ],
+ "眼角儿": [
+  {
+   "zh": "她的眼角儿已经有了皱纹。",
+   "pinyin": "Tā de yǎnjiǎor yǐjīng yǒu le zhòuwén.",
+   "vi": "Khóe mắt bà ấy đã có nếp nhăn."
+  }
+ ],
+ "端": [
+  {
+   "zh": "服务员端来两杯咖啡。",
+   "pinyin": "Fúwùyuán duānlái liǎng bēi kāfēi.",
+   "vi": "Người phục vụ bưng tới hai tách cà phê."
+  }
+ ],
+ "端详": [
+  {
+   "zh": "他端详着镜子里的自己。",
+   "pinyin": "Tā duānxiangzhe jìngzi li de zìjǐ.",
+   "vi": "Anh ấy ngắm nghía chính mình trong gương."
+  }
+ ],
+ "皱纹": [
+  {
+   "zh": "爸爸脸上的皱纹越来越多了。",
+   "pinyin": "Bàba liǎn shang de zhòuwén yuè lái yuè duō le.",
+   "vi": "Nếp nhăn trên mặt bố ngày càng nhiều."
+  }
+ ],
+ "好一会儿": [
+  {
+   "zh": "他想了好一会儿才回答。",
+   "pinyin": "Tā xiǎng le hǎo yíhuìr cái huídá.",
+   "vi": "Anh ấy nghĩ rất lâu mới trả lời."
+  }
+ ],
+ "沉默": [
+  {
+   "zh": "听了这句话，他沉默了很久。",
+   "pinyin": "Tīng le zhè jù huà, tā chénmò le hěn jiǔ.",
+   "vi": "Nghe câu này, anh ấy im lặng rất lâu."
+  }
+ ],
+ "老实": [
+  {
+   "zh": "这个孩子很老实。",
+   "pinyin": "Zhège háizi hěn lǎoshi.",
+   "vi": "Đứa trẻ này rất thật thà."
+  }
+ ],
+ "盼望": [
+  {
+   "zh": "孩子们盼望着春节快点儿到来。",
+   "pinyin": "Háizimen pànwàngzhe Chūnjié kuài diǎnr dàolái.",
+   "vi": "Bọn trẻ mong Tết mau đến."
+  }
+ ],
+ "女生": [
+  {
+   "zh": "我们班女生比男生多。",
+   "pinyin": "Wǒmen bān nǚshēng bǐ nánshēng duō.",
+   "vi": "Lớp chúng tôi nữ sinh nhiều hơn nam sinh."
+  }
+ ],
+ "送别": [
+  {
+   "zh": "我们到机场去送别朋友。",
+   "pinyin": "Wǒmen dào jīchǎng qù sòngbié péngyou.",
+   "vi": "Chúng tôi ra sân bay tiễn bạn."
+  }
+ ],
+ "心思": [
+  {
+   "zh": "她终于说出了自己的心思。",
+   "pinyin": "Tā zhōngyú shuōchū le zìjǐ de xīnsi.",
+   "vi": "Cuối cùng cô ấy đã nói ra tâm tư của mình."
+  }
+ ],
+ "手镯": [
+  {
+   "zh": "这只手镯是妈妈送给我的。",
+   "pinyin": "Zhè zhī shǒuzhuó shì māma sòng gěi wǒ de.",
+   "vi": "Chiếc vòng tay này là mẹ tặng tôi."
+  }
+ ],
+ "信物": [
+  {
+   "zh": "这块玉是他们爱情的信物。",
+   "pinyin": "Zhè kuài yù shì tāmen àiqíng de xìnwù.",
+   "vi": "Miếng ngọc này là tín vật tình yêu của họ."
+  }
+ ],
+ "拜托": [
+  {
+   "zh": "这件事就拜托你了。",
+   "pinyin": "Zhè jiàn shì jiù bàituō nǐ le.",
+   "vi": "Việc này nhờ cả vào bạn nhé."
+  }
+ ],
+ "转交": [
+  {
+   "zh": "请把这封信转交给王老师。",
+   "pinyin": "Qǐng bǎ zhè fēng xìn zhuǎnjiāo gěi Wáng lǎoshī.",
+   "vi": "Làm ơn chuyển bức thư này cho thầy Vương."
+  }
+ ],
+ "化蝶": [
+  {
+   "zh": "传说梁山伯和祝英台死后化蝶飞走了。",
+   "pinyin": "Chuánshuō Liáng Shānbó hé Zhù Yīngtái sǐ hòu huà dié fēi zǒu le.",
+   "vi": "Truyền thuyết kể rằng Lương Sơn Bá và Chúc Anh Đài sau khi chết đã hóa thành bướm bay đi."
+  }
+ ]
+}

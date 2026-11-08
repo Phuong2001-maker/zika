@@ -23,6 +23,31 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 08/11/2026 — Bỏ dữ liệu minh hoạ; điểm mở bài + Quán trà đã lên server
+
+- **Đã lên server** bản `084c1e3`: `cap-nhat-db-019-021.sql` (migration 019–021, chạy thử 2 lần trên bản sao DB giống server)
+  + `zika-code-20261108-1118.zip`, xoá `storage/cache/content`. Kiểm web thật: `version.json` mới, API trả JSON, ảnh sách
+  mở thẳng 403, Quán trà đủ 5 bàn, Chế độ test **tắt**. Chưa gắn link Shopee nên bé túi chưa hiện.
+- **Bỏ dữ liệu minh hoạ** (người dùng thấy trên web thật): Top chăm học có 10 tên bịa, Lịch sử thi có 3 cuộc thi bịa
+  ("Bạn" Giải Nhì 300.000đ) và form nhận thưởng nhập ngân hàng mà không gửi đi đâu.
+  Nay Top chăm học tính từ phút học thật (`visits.duration_sec`, cùng nguồn tổng giờ học), chỉ học viên đang hoạt động, từ
+  1 phút; Lịch sử thi lấy các cuộc thi đã kết thúc (không ghi số tiền vì quỹ không chụp lại theo cuộc thi). Người đạt giải
+  gửi thông tin nhận thưởng qua Góp ý. Code: `Services/TopHoc.php`, `ContestService::history`, `GET /contest/study-top`,
+  `GET /contest/history`; bỏ `PrizeClaim.svelte`. Test: `TopHocTest`, `ContestTest`; kịch bản I16–I18.
+  Lên server chỉ cần gói code mới, không có migration.
+- **Khoá quyền quản trị bằng `admin_emails` trong `config.php`:** DB ghi admin mà email ngoài danh sách thì chỉ là người học
+  (`Auth::attach`/`login`, `UserService::toApi`, đếm "còn ít nhất một quản trị"); đổi quyền sang admin cho email ngoài danh sách
+  bị chặn. Server dùng 2 email `phuongnv24012001@gmail.com`, `nvpchaytran@gmail.com`. Test `AdminEmailsTest`.
+- **Ví dụ lật thẻ Hán ngữ đủ 2.990/2.990 từ** (trước thiếu 535, 16 từ "ví dụ" chỉ là chính từ đó): câu chính bài → câu sách
+  bài trước → 496 câu tự soạn (`data/han-ngu/vi-du/`, qua `kiem_vi_du_hn.py`; 6 agent soạn theo quyển, đọc soát ngẫu nhiên 45
+  câu). Nạp local bằng `nap_vi_du_hn.py` (559 từ, giữ id). Server: `cap-nhat-vi-du-hn.sql` (tìm từ theo giáo trình + quyển +
+  bài + chữ + pinyin; đã thử trên bản sao DB đưa về trạng thái server: khớp local 3.997 câu, HSK không đổi, chạy 2 lần như
+  nhau) + zip giọng đọc câu mới. Không chạy lại `02-han-ngu.sql`: xoá bài là mất tiến độ học viên.
+- **Quét giao diện 08/11 (local):** 25 màn quản trị + 32 màn học viên × 3 khổ (375/768/1280px) không tràn, không lỗi;
+  bấm tay lật thẻ 3 chế độ, Chuyển nhanh, chuông, đọc sách, file nghe, Quán trà, Top chăm học, Đổi quyền. Sửa 2 lỗi tìm được:
+  bài 0 câu (Bài tập/Kiểm tra Hán ngữ) vẫn có nút "Bắt đầu làm bài" ở điện thoại; trang lỗi Bài tập/Lật thẻ mất thanh đầu
+  trang. Kịch bản phần R.
+
 ### 08/11/2026 — Mở bài giáo trình bằng điểm, chặn tải
 
 - **Luật:** học viên chỉ đọc được bài đã mở. Lần đầu bấm bé túi/link Shopee +3 điểm, từ hôm sau mỗi ngày bấm +1 (giữ điểm chưa

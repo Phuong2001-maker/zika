@@ -1,0 +1,667 @@
+{
+  "经济": [
+    {
+      "zh": "这个城市的经济发展得很快。",
+      "pinyin": "Zhège chéngshì de jīngjì fāzhǎn de hěn kuài.",
+      "vi": "Kinh tế của thành phố này phát triển rất nhanh."
+    }
+  ],
+  "届": [
+    {
+      "zh": "他是我们学校第一届毕业生。",
+      "pinyin": "Tā shì wǒmen xuéxiào dì yī jiè bìyèshēng.",
+      "vi": "Anh ấy thuộc khoá tốt nghiệp đầu tiên của trường chúng tôi."
+    }
+  ],
+  "总统": [
+    {
+      "zh": "他当了八年的总统。",
+      "pinyin": "Tā dāng le bā nián de zǒngtǒng.",
+      "vi": "Ông ấy đã làm tổng thống tám năm."
+    }
+  ],
+  "月球": [
+    {
+      "zh": "月球上没有水和空气。",
+      "pinyin": "Yuèqiú shang méiyǒu shuǐ hé kōngqì.",
+      "vi": "Trên mặt trăng không có nước và không khí."
+    }
+  ],
+  "人类": [
+    {
+      "zh": "人类离不开水和空气。",
+      "pinyin": "Rénlèi lí bu kāi shuǐ hé kōngqì.",
+      "vi": "Loài người không thể sống thiếu nước và không khí."
+    }
+  ],
+  "火星": [
+    {
+      "zh": "火星上到底有没有水？",
+      "pinyin": "Huǒxīng shang dàodǐ yǒu méiyǒu shuǐ?",
+      "vi": "Trên sao Hỏa rốt cuộc có nước hay không?"
+    }
+  ],
+  "乱七八糟": [
+    {
+      "zh": "他的房间总是乱七八糟的。",
+      "pinyin": "Tā de fángjiān zǒngshì luànqībāzāo de.",
+      "vi": "Phòng của cậu ấy lúc nào cũng bừa bộn lung tung."
+    }
+  ],
+  "责任": [
+    {
+      "zh": "照顾好孩子是父母的责任。",
+      "pinyin": "Zhàogù hǎo háizi shì fùmǔ de zérèn.",
+      "vi": "Chăm sóc tốt con cái là trách nhiệm của cha mẹ."
+    }
+  ],
+  "提醒": [
+    {
+      "zh": "请你明天提醒我给妈妈打电话。",
+      "pinyin": "Qǐng nǐ míngtiān tíxǐng wǒ gěi māma dǎ diànhuà.",
+      "vi": "Ngày mai bạn nhắc tôi gọi điện cho mẹ nhé."
+    }
+  ],
+  "咬牙": [
+    {
+      "zh": "他咬牙坚持到了最后。",
+      "pinyin": "Tā yǎo yá jiānchí dào le zuìhòu.",
+      "vi": "Anh ấy cắn răng kiên trì đến cùng."
+    }
+  ],
+  "犬": [
+    {
+      "zh": "城里养犬的人越来越多了。",
+      "pinyin": "Chéng li yǎng quǎn de rén yuè lái yuè duō le.",
+      "vi": "Người nuôi chó trong thành phố ngày càng nhiều."
+    }
+  ],
+  "毫不": [
+    {
+      "zh": "她对这件事毫不关心。",
+      "pinyin": "Tā duì zhè jiàn shì háo bù guānxīn.",
+      "vi": "Cô ấy chẳng quan tâm chút nào đến chuyện này."
+    }
+  ],
+  "深刻": [
+    {
+      "zh": "这本书给我留下了深刻的印象。",
+      "pinyin": "Zhè běn shū gěi wǒ liúxià le shēnkè de yìnxiàng.",
+      "vi": "Cuốn sách này để lại cho tôi ấn tượng sâu sắc."
+    }
+  ],
+  "记忆": [
+    {
+      "zh": "老人的记忆越来越不好了。",
+      "pinyin": "Lǎorén de jìyì yuè lái yuè bù hǎo le.",
+      "vi": "Trí nhớ của ông cụ ngày càng kém."
+    }
+  ],
+  "打石膏": [
+    {
+      "zh": "他摔伤了腿，医生说要打石膏。",
+      "pinyin": "Tā shuāishāng le tuǐ, yīshēng shuō yào dǎ shígāo.",
+      "vi": "Anh ấy ngã bị thương ở chân, bác sĩ nói phải bó bột."
+    }
+  ],
+  "欢腾": [
+    {
+      "zh": "听到这个好消息，全城一片欢腾。",
+      "pinyin": "Tīngdào zhège hǎo xiāoxi, quán chéng yí piàn huānténg.",
+      "vi": "Nghe tin vui này, cả thành phố hân hoan náo nức."
+    }
+  ],
+  "卫星": [
+    {
+      "zh": "中国又发射了一颗新的卫星。",
+      "pinyin": "Zhōngguó yòu fāshè le yì kē xīn de wèixīng.",
+      "vi": "Trung Quốc lại phóng thêm một vệ tinh mới."
+    }
+  ],
+  "目前": [
+    {
+      "zh": "目前我还没有找到工作。",
+      "pinyin": "Mùqián wǒ hái méiyǒu zhǎodào gōngzuò.",
+      "vi": "Hiện tại tôi vẫn chưa tìm được việc làm."
+    }
+  ],
+  "停留": [
+    {
+      "zh": "我们在上海只停留了两天。",
+      "pinyin": "Wǒmen zài Shànghǎi zhǐ tíngliú le liǎng tiān.",
+      "vi": "Chúng tôi chỉ dừng lại ở Thượng Hải hai ngày."
+    }
+  ],
+  "连续": [
+    {
+      "zh": "这几天连续下雨，衣服都干不了。",
+      "pinyin": "Zhè jǐ tiān liánxù xià yǔ, yīfu dōu gān bu liǎo.",
+      "vi": "Mấy hôm nay mưa liên tục, quần áo đều không khô được."
+    }
+  ],
+  "不断": [
+    {
+      "zh": "他的汉语水平在不断提高。",
+      "pinyin": "Tā de Hànyǔ shuǐpíng zài búduàn tígāo.",
+      "vi": "Trình độ tiếng Trung của anh ấy không ngừng nâng cao."
+    }
+  ],
+  "信号": [
+    {
+      "zh": "这里手机没有信号。",
+      "pinyin": "Zhèlǐ shǒujī méiyǒu xìnhào.",
+      "vi": "Ở đây điện thoại không có tín hiệu."
+    }
+  ],
+  "重大": [
+    {
+      "zh": "这是一个重大的决定。",
+      "pinyin": "Zhè shì yí ge zhòngdà de juédìng.",
+      "vi": "Đây là một quyết định quan trọng."
+    }
+  ],
+  "某": [
+    {
+      "zh": "他在某个地方见过这个人。",
+      "pinyin": "Tā zài mǒu ge dìfang jiànguo zhège rén.",
+      "vi": "Anh ấy đã gặp người này ở một nơi nào đó."
+    }
+  ],
+  "突破": [
+    {
+      "zh": "这项研究取得了重大突破。",
+      "pinyin": "Zhè xiàng yánjiū qǔdé le zhòngdà tūpò.",
+      "vi": "Nghiên cứu này đã đạt được bước đột phá lớn."
+    }
+  ],
+  "坚硬": [
+    {
+      "zh": "这种石头非常坚硬。",
+      "pinyin": "Zhè zhǒng shítou fēicháng jiānyìng.",
+      "vi": "Loại đá này vô cùng cứng."
+    }
+  ],
+  "混凝土": [
+    {
+      "zh": "这座大楼是用混凝土建成的。",
+      "pinyin": "Zhè zuò dàlóu shì yòng hùnníngtǔ jiànchéng de.",
+      "vi": "Toà nhà này được xây bằng bê tông."
+    }
+  ],
+  "覆盖": [
+    {
+      "zh": "大雪覆盖了整个城市。",
+      "pinyin": "Dàxuě fùgài le zhěnggè chéngshì.",
+      "vi": "Tuyết lớn phủ kín cả thành phố."
+    }
+  ],
+  "植物": [
+    {
+      "zh": "她的房间里放了很多植物。",
+      "pinyin": "Tā de fángjiān li fàng le hěn duō zhíwù.",
+      "vi": "Trong phòng cô ấy đặt rất nhiều cây xanh."
+    }
+  ],
+  "生长": [
+    {
+      "zh": "这些花在冬天也能生长。",
+      "pinyin": "Zhèxiē huā zài dōngtiān yě néng shēngzhǎng.",
+      "vi": "Những bông hoa này mùa đông cũng có thể sinh trưởng."
+    }
+  ],
+  "无法": [
+    {
+      "zh": "他病得很重，无法来上课。",
+      "pinyin": "Tā bìng de hěn zhòng, wúfǎ lái shàng kè.",
+      "vi": "Anh ấy ốm rất nặng, không cách nào đến lớp được."
+    }
+  ],
+  "实际上": [
+    {
+      "zh": "他看起来很年轻，实际上已经五十岁了。",
+      "pinyin": "Tā kàn qilai hěn niánqīng, shíjìshang yǐjīng wǔshí suì le.",
+      "vi": "Trông anh ấy rất trẻ, trên thực tế đã năm mươi tuổi rồi."
+    }
+  ],
+  "物质": [
+    {
+      "zh": "现在人们的物质生活越来越好了。",
+      "pinyin": "Xiànzài rénmen de wùzhì shēnghuó yuè lái yuè hǎo le.",
+      "vi": "Đời sống vật chất của mọi người bây giờ ngày càng tốt hơn."
+    }
+  ],
+  "饮用": [
+    {
+      "zh": "这里的水不能直接饮用。",
+      "pinyin": "Zhèlǐ de shuǐ bù néng zhíjiē yǐnyòng.",
+      "vi": "Nước ở đây không thể uống trực tiếp."
+    }
+  ],
+  "金属": [
+    {
+      "zh": "这张桌子是金属做的。",
+      "pinyin": "Zhè zhāng zhuōzi shì jīnshǔ zuò de.",
+      "vi": "Chiếc bàn này làm bằng kim loại."
+    }
+  ],
+  "惊人": [
+    {
+      "zh": "他的进步速度很惊人。",
+      "pinyin": "Tā de jìnbù sùdù hěn jīngrén.",
+      "vi": "Tốc độ tiến bộ của anh ấy thật đáng kinh ngạc."
+    }
+  ],
+  "天壶": [
+    {
+      "zh": "天壶地区的天气怎么样？",
+      "pinyin": "Tiānhú dìqū de tiānqì zěnmeyàng?",
+      "vi": "Thời tiết ở khu vực Thiên Hồ thế nào?"
+    }
+  ],
+  "耽误": [
+    {
+      "zh": "对不起，耽误你这么多时间。",
+      "pinyin": "Duìbuqǐ, dānwu nǐ zhème duō shíjiān.",
+      "vi": "Xin lỗi, đã làm mất của anh nhiều thời gian như vậy."
+    }
+  ],
+  "抱歉": [
+    {
+      "zh": "真抱歉，我来晚了。",
+      "pinyin": "Zhēn bàoqiàn, wǒ lái wǎn le.",
+      "vi": "Thật xin lỗi, tôi đến muộn."
+    }
+  ],
+  "逃": [
+    {
+      "zh": "他害怕得想逃，可是腿却动不了。",
+      "pinyin": "Tā hàipà de xiǎng táo, kěshì tuǐ què dòng bu liǎo.",
+      "vi": "Anh ấy sợ đến mức muốn bỏ chạy, nhưng chân lại không cử động được."
+    }
+  ],
+  "竞选": [
+    {
+      "zh": "他打算竞选班长。",
+      "pinyin": "Tā dǎsuàn jìngxuǎn bānzhǎng.",
+      "vi": "Cậu ấy định tranh cử chức lớp trưởng."
+    }
+  ],
+  "登台": [
+    {
+      "zh": "第一次登台演出，她紧张极了。",
+      "pinyin": "Dì yī cì dēng tái yǎnchū, tā jǐnzhāng jí le.",
+      "vi": "Lần đầu lên sân khấu biểu diễn, cô ấy hồi hộp vô cùng."
+    }
+  ],
+  "脸红": [
+    {
+      "zh": "他一说话就脸红。",
+      "pinyin": "Tā yì shuō huà jiù liǎn hóng.",
+      "vi": "Cậu ấy hễ nói chuyện là đỏ mặt."
+    }
+  ],
+  "心跳": [
+    {
+      "zh": "见到她，我心跳得很快。",
+      "pinyin": "Jiàndào tā, wǒ xīn tiào de hěn kuài.",
+      "vi": "Gặp cô ấy, tim tôi đập rất nhanh."
+    }
+  ],
+  "傍晚": [
+    {
+      "zh": "每天傍晚，他都去公园散步。",
+      "pinyin": "Měi tiān bàngwǎn, tā dōu qù gōngyuán sàn bù.",
+      "vi": "Chiều tối nào ông ấy cũng ra công viên đi dạo."
+    }
+  ],
+  "递": [
+    {
+      "zh": "请把那本书递给我。",
+      "pinyin": "Qǐng bǎ nà běn shū dì gěi wǒ.",
+      "vi": "Làm ơn đưa cho tôi quyển sách kia."
+    }
+  ],
+  "顺手": [
+    {
+      "zh": "出门的时候，请顺手把门关上。",
+      "pinyin": "Chū mén de shíhou, qǐng shùnshǒu bǎ mén guān shang.",
+      "vi": "Khi ra ngoài, nhờ tiện tay đóng cửa lại."
+    }
+  ],
+  "兴高采烈": [
+    {
+      "zh": "孩子们兴高采烈地去公园玩。",
+      "pinyin": "Háizimen xìnggāo cǎiliè de qù gōngyuán wán.",
+      "vi": "Bọn trẻ hớn hở kéo nhau đi công viên chơi."
+    }
+  ],
+  "期待": [
+    {
+      "zh": "我很期待和你再次见面。",
+      "pinyin": "Wǒ hěn qīdài hé nǐ zàicì jiàn miàn.",
+      "vi": "Tôi rất mong được gặp lại bạn."
+    }
+  ],
+  "说谎": [
+    {
+      "zh": "说谎是不好的习惯。",
+      "pinyin": "Shuō huǎng shì bù hǎo de xíguàn.",
+      "vi": "Nói dối là thói quen không tốt."
+    }
+  ],
+  "随着": [
+    {
+      "zh": "随着天气变冷，来公园的人少了。",
+      "pinyin": "Suízhe tiānqì biàn lěng, lái gōngyuán de rén shǎo le.",
+      "vi": "Cùng với việc trời trở lạnh, người đến công viên ít đi."
+    }
+  ],
+  "鼓掌": [
+    {
+      "zh": "演出结束了，大家都热烈鼓掌。",
+      "pinyin": "Yǎnchū jiéshù le, dàjiā dōu rèliè gǔ zhǎng.",
+      "vi": "Buổi biểu diễn kết thúc, mọi người đều vỗ tay nhiệt liệt."
+    }
+  ],
+  "半夜": [
+    {
+      "zh": "他昨天工作到半夜才睡。",
+      "pinyin": "Tā zuótiān gōngzuò dào bànyè cái shuì.",
+      "vi": "Hôm qua anh ấy làm việc đến nửa đêm mới ngủ."
+    }
+  ],
+  "悄悄": [
+    {
+      "zh": "她悄悄地走进了房间。",
+      "pinyin": "Tā qiāoqiāo de zǒujìn le fángjiān.",
+      "vi": "Cô ấy lặng lẽ bước vào phòng."
+    }
+  ],
+  "摇头": [
+    {
+      "zh": "他听了我的话，只是摇头。",
+      "pinyin": "Tā tīng le wǒ de huà, zhǐshì yáo tóu.",
+      "vi": "Nghe tôi nói, anh ấy chỉ lắc đầu."
+    }
+  ],
+  "神秘": [
+    {
+      "zh": "这个地方有很多神秘的故事。",
+      "pinyin": "Zhège dìfang yǒu hěn duō shénmì de gùshi.",
+      "vi": "Nơi này có rất nhiều câu chuyện thần bí."
+    }
+  ],
+  "叹息": [
+    {
+      "zh": "听到这个消息，他轻轻地叹息了一声。",
+      "pinyin": "Tīngdào zhège xiāoxi, tā qīngqīng de tànxī le yì shēng.",
+      "vi": "Nghe tin này, anh ấy khẽ thở dài một tiếng."
+    }
+  ],
+  "粉色": [
+    {
+      "zh": "她穿着一条粉色的裙子。",
+      "pinyin": "Tā chuānzhe yì tiáo fěnsè de qúnzi.",
+      "vi": "Cô ấy mặc một chiếc váy màu hồng phấn."
+    }
+  ],
+  "绸带": [
+    {
+      "zh": "她头上系着一条红色的绸带。",
+      "pinyin": "Tā tóu shang jìzhe yì tiáo hóngsè de chóudài.",
+      "vi": "Trên đầu cô ấy buộc một dải lụa màu đỏ."
+    }
+  ],
+  "死心": [
+    {
+      "zh": "他还没死心，想再试一次。",
+      "pinyin": "Tā hái méi sǐ xīn, xiǎng zài shì yí cì.",
+      "vi": "Anh ấy vẫn chưa dẹp ý định, muốn thử lại một lần nữa."
+    }
+  ],
+  "开口": [
+    {
+      "zh": "他想借钱，可是不好意思开口。",
+      "pinyin": "Tā xiǎng jiè qián, kěshì bù hǎoyìsi kāi kǒu.",
+      "vi": "Anh ấy muốn vay tiền nhưng ngại mở miệng."
+    }
+  ],
+  "跟随": [
+    {
+      "zh": "他从小就跟随父亲学画画。",
+      "pinyin": "Tā cóngxiǎo jiù gēnsuí fùqīn xué huà huà.",
+      "vi": "Từ nhỏ cậu ấy đã theo cha học vẽ."
+    }
+  ],
+  "下决心": [
+    {
+      "zh": "他下决心每天早上去跑步。",
+      "pinyin": "Tā xià juéxīn měi tiān zǎoshang qù pǎo bù.",
+      "vi": "Anh ấy hạ quyết tâm sáng nào cũng đi chạy bộ."
+    }
+  ],
+  "软": [
+    {
+      "zh": "这个面包又香又软。",
+      "pinyin": "Zhège miànbāo yòu xiāng yòu ruǎn.",
+      "vi": "Chiếc bánh mì này vừa thơm vừa mềm."
+    }
+  ],
+  "表露": [
+    {
+      "zh": "他很少表露自己的感情。",
+      "pinyin": "Tā hěn shǎo biǎolù zìjǐ de gǎnqíng.",
+      "vi": "Anh ấy hiếm khi biểu lộ tình cảm của mình."
+    }
+  ],
+  "少女": [
+    {
+      "zh": "画上的少女笑得很美。",
+      "pinyin": "Huà shang de shàonǚ xiào de hěn měi.",
+      "vi": "Cô thiếu nữ trong tranh cười rất đẹp."
+    }
+  ],
+  "特有": [
+    {
+      "zh": "这是这个地方特有的水果。",
+      "pinyin": "Zhè shì zhège dìfang tèyǒu de shuǐguǒ.",
+      "vi": "Đây là loại hoa quả chỉ nơi này mới có."
+    }
+  ],
+  "深深": [
+    {
+      "zh": "他的话深深地打动了我。",
+      "pinyin": "Tā de huà shēnshēn de dǎdòng le wǒ.",
+      "vi": "Lời anh ấy nói đã làm tôi xúc động sâu sắc."
+    }
+  ],
+  "甜蜜": [
+    {
+      "zh": "他们过着甜蜜的生活。",
+      "pinyin": "Tāmen guòzhe tiánmì de shēnghuó.",
+      "vi": "Họ sống một cuộc sống ngọt ngào."
+    }
+  ],
+  "预知": [
+    {
+      "zh": "谁也无法预知明天会发生什么。",
+      "pinyin": "Shéi yě wúfǎ yùzhī míngtiān huì fāshēng shénme.",
+      "vi": "Không ai có thể biết trước ngày mai sẽ xảy ra chuyện gì."
+    }
+  ],
+  "未来": [
+    {
+      "zh": "我们的未来会越来越好。",
+      "pinyin": "Wǒmen de wèilái huì yuè lái yuè hǎo.",
+      "vi": "Tương lai của chúng ta sẽ ngày càng tốt đẹp."
+    }
+  ],
+  "责怪": [
+    {
+      "zh": "这不是你的错，没有人会责怪你。",
+      "pinyin": "Zhè bú shì nǐ de cuò, méiyǒu rén huì zéguài nǐ.",
+      "vi": "Đây không phải lỗi của bạn, sẽ không ai trách bạn đâu."
+    }
+  ],
+  "笑话": [
+    {
+      "zh": "他给我们讲了一个笑话。",
+      "pinyin": "Tā gěi wǒmen jiǎng le yí ge xiàohua.",
+      "vi": "Anh ấy kể cho chúng tôi nghe một câu chuyện cười."
+    }
+  ],
+  "吓一跳": [
+    {
+      "zh": "要是他知道了，一定会吓一跳。",
+      "pinyin": "Yàoshi tā zhīdào le, yídìng huì xià yí tiào.",
+      "vi": "Nếu anh ấy biết, chắc chắn sẽ giật nảy mình."
+    }
+  ],
+  "吃惊": [
+    {
+      "zh": "听到这个消息，大家都很吃惊。",
+      "pinyin": "Tīngdào zhège xiāoxi, dàjiā dōu hěn chī jīng.",
+      "vi": "Nghe tin này, mọi người đều rất giật mình."
+    }
+  ],
+  "接受": [
+    {
+      "zh": "他很高兴地接受了我的礼物。",
+      "pinyin": "Tā hěn gāoxìng de jiēshòu le wǒ de lǐwù.",
+      "vi": "Anh ấy vui vẻ nhận món quà của tôi."
+    }
+  ],
+  "良好": [
+    {
+      "zh": "他从小就养成了良好的习惯。",
+      "pinyin": "Tā cóngxiǎo jiù yǎngchéng le liánghǎo de xíguàn.",
+      "vi": "Từ nhỏ cậu ấy đã có thói quen tốt."
+    }
+  ],
+  "示弱": [
+    {
+      "zh": "比赛中他从不示弱。",
+      "pinyin": "Bǐsài zhōng tā cóng bú shìruò.",
+      "vi": "Trong thi đấu anh ấy chưa bao giờ chịu thua."
+    }
+  ],
+  "分歧": [
+    {
+      "zh": "我们在这个问题上有一些分歧。",
+      "pinyin": "Wǒmen zài zhège wèntí shang yǒu yìxiē fēnqí.",
+      "vi": "Chúng tôi có một số bất đồng về vấn đề này."
+    }
+  ],
+  "违心": [
+    {
+      "zh": "我不想说违心的话。",
+      "pinyin": "Wǒ bù xiǎng shuō wéixīn de huà.",
+      "vi": "Tôi không muốn nói những lời trái với lương tâm."
+    }
+  ],
+  "正确": [
+    {
+      "zh": "你的回答完全正确。",
+      "pinyin": "Nǐ de huídá wánquán zhèngquè.",
+      "vi": "Câu trả lời của bạn hoàn toàn chính xác."
+    }
+  ],
+  "观点": [
+    {
+      "zh": "我同意你的观点。",
+      "pinyin": "Wǒ tóngyì nǐ de guāndiǎn.",
+      "vi": "Tôi đồng ý với quan điểm của bạn."
+    }
+  ],
+  "良心": [
+    {
+      "zh": "做人要有良心。",
+      "pinyin": "Zuò rén yào yǒu liángxīn.",
+      "vi": "Làm người phải có lương tâm."
+    }
+  ],
+  "谴责": [
+    {
+      "zh": "这种行为受到了大家的谴责。",
+      "pinyin": "Zhè zhǒng xíngwéi shòudào le dàjiā de qiǎnzé.",
+      "vi": "Hành vi này đã bị mọi người khiển trách."
+    }
+  ],
+  "敢于": [
+    {
+      "zh": "我们要敢于说出自己的想法。",
+      "pinyin": "Wǒmen yào gǎnyú shuōchū zìjǐ de xiǎngfǎ.",
+      "vi": "Chúng ta phải dám nói ra suy nghĩ của mình."
+    }
+  ],
+  "真理": [
+    {
+      "zh": "我们要坚持真理。",
+      "pinyin": "Wǒmen yào jiānchí zhēnlǐ.",
+      "vi": "Chúng ta phải giữ vững chân lý."
+    }
+  ],
+  "修正": [
+    {
+      "zh": "发现错误就要马上修正。",
+      "pinyin": "Fāxiàn cuòwù jiù yào mǎshàng xiūzhèng.",
+      "vi": "Phát hiện sai sót thì phải sửa ngay cho đúng."
+    }
+  ],
+  "众人": [
+    {
+      "zh": "他当着众人的面向我道歉。",
+      "pinyin": "Tā dāngzhe zhòngrén de miàn xiàng wǒ dào qiàn.",
+      "vi": "Anh ấy xin lỗi tôi trước mặt mọi người."
+    }
+  ],
+  "坦白": [
+    {
+      "zh": "他说话很坦白，从不说谎。",
+      "pinyin": "Tā shuō huà hěn tǎnbái, cóng bù shuō huǎng.",
+      "vi": "Anh ấy nói năng rất thẳng thắn, chưa bao giờ nói dối."
+    }
+  ],
+  "欣赏": [
+    {
+      "zh": "我很欣赏他的勇气。",
+      "pinyin": "Wǒ hěn xīnshǎng tā de yǒngqì.",
+      "vi": "Tôi rất đánh giá cao lòng dũng cảm của anh ấy."
+    }
+  ],
+  "事实": [
+    {
+      "zh": "你说的不是事实。",
+      "pinyin": "Nǐ shuō de bú shì shìshí.",
+      "vi": "Điều bạn nói không phải là sự thật."
+    }
+  ],
+  "证明": [
+    {
+      "zh": "事实证明，他的办法是对的。",
+      "pinyin": "Shìshí zhèngmíng, tā de bànfǎ shì duì de.",
+      "vi": "Thực tế đã chứng minh cách của anh ấy là đúng."
+    }
+  ],
+  "想象": [
+    {
+      "zh": "这里的变化比我想象的还大。",
+      "pinyin": "Zhèlǐ de biànhuà bǐ wǒ xiǎngxiàng de hái dà.",
+      "vi": "Sự thay đổi ở đây còn lớn hơn tôi tưởng tượng."
+    }
+  ],
+  "成为": [
+    {
+      "zh": "她的理想是成为一名医生。",
+      "pinyin": "Tā de lǐxiǎng shì chéngwéi yì míng yīshēng.",
+      "vi": "Ước mơ của cô ấy là trở thành bác sĩ."
+    }
+  ],
+  "优秀": [
+    {
+      "zh": "他是我们班最优秀的学生。",
+      "pinyin": "Tā shì wǒmen bān zuì yōuxiù de xuésheng.",
+      "vi": "Cậu ấy là học sinh xuất sắc nhất lớp chúng tôi."
+    }
+  ]
+}

@@ -1,0 +1,628 @@
+{
+  "你好": [
+    {
+      "zh": "老师，你好！",
+      "pinyin": "Lǎoshī, nǐ hǎo!",
+      "vi": "Em chào thầy ạ!",
+      "cho_phep": "Bài 1 chỉ có 11 chữ, không có ai để chào; thêm 老师"
+    }
+  ],
+  "一": [
+    {
+      "zh": "你一口，我一口。",
+      "pinyin": "Nǐ yì kǒu, wǒ yì kǒu.",
+      "vi": "Bạn một miếng, tôi một miếng.",
+      "cho_phep": "Bài 1 chưa có đại từ 我"
+    }
+  ],
+  "五": [
+    {
+      "zh": "我家五口人。",
+      "pinyin": "Wǒ jiā wǔ kǒu rén.",
+      "vi": "Nhà tôi có năm người.",
+      "cho_phep": "Số đếm cần danh từ đi kèm; thêm 我 家 人"
+    }
+  ],
+  "八": [
+    {
+      "zh": "我八岁。",
+      "pinyin": "Wǒ bā suì.",
+      "vi": "Tôi tám tuổi.",
+      "cho_phep": "Số đếm cần danh từ đi kèm; thêm 我 岁"
+    }
+  ],
+  "大": [
+    {
+      "zh": "白马好大！",
+      "pinyin": "Bái mǎ hǎo dà!",
+      "vi": "Con ngựa trắng to quá!"
+    }
+  ],
+  "不": [
+    {
+      "zh": "白马不大。",
+      "pinyin": "Bái mǎ bú dà.",
+      "vi": "Con ngựa trắng không to."
+    }
+  ],
+  "口": [
+    {
+      "zh": "你家几口人？",
+      "pinyin": "Nǐ jiā jǐ kǒu rén?",
+      "vi": "Nhà bạn có mấy người?",
+      "cho_phep": "Nghĩa nhân khẩu cần 家 人; thêm 家 几 人"
+    }
+  ],
+  "白": [
+    {
+      "zh": "马白不白？",
+      "pinyin": "Mǎ bái bu bái?",
+      "vi": "Con ngựa có trắng không?"
+    }
+  ],
+  "女": [
+    {
+      "zh": "我是女的。",
+      "pinyin": "Wǒ shì nǚ de.",
+      "vi": "Tôi là nữ.",
+      "cho_phep": "Bài 1 chưa có 是 的; thêm 我 是 的"
+    }
+  ],
+  "马": [
+    {
+      "zh": "马不白。",
+      "pinyin": "Mǎ bù bái.",
+      "vi": "Con ngựa không trắng."
+    }
+  ],
+  "爸爸": [
+    {
+      "zh": "爸爸忙吗？",
+      "pinyin": "Bàba máng ma?",
+      "vi": "Bố có bận không?"
+    }
+  ],
+  "妈妈": [
+    {
+      "zh": "妈妈很忙。",
+      "pinyin": "Māma hěn máng.",
+      "vi": "Mẹ rất bận."
+    }
+  ],
+  "他": [
+    {
+      "zh": "他不太忙。",
+      "pinyin": "Tā bú tài máng.",
+      "vi": "Anh ấy không bận lắm."
+    }
+  ],
+  "她": [
+    {
+      "zh": "她妈妈很忙。",
+      "pinyin": "Tā māma hěn máng.",
+      "vi": "Mẹ cô ấy rất bận."
+    }
+  ],
+  "男": [
+    {
+      "zh": "他是男的。",
+      "pinyin": "Tā shì nán de.",
+      "vi": "Người đó là nam.",
+      "cho_phep": "Bài 2 chưa có 是 的; thêm 是 的"
+    }
+  ],
+  "哥哥": [
+    {
+      "zh": "你哥哥忙吗？",
+      "pinyin": "Nǐ gēge máng ma?",
+      "vi": "Anh trai bạn có bận không?"
+    }
+  ],
+  "弟弟": [
+    {
+      "zh": "她弟弟很忙。",
+      "pinyin": "Tā dìdi hěn máng.",
+      "vi": "Em trai cô ấy rất bận."
+    }
+  ],
+  "妹妹": [
+    {
+      "zh": "你妹妹好吗？",
+      "pinyin": "Nǐ mèimei hǎo ma?",
+      "vi": "Em gái bạn có khỏe không?"
+    }
+  ],
+  "阿拉伯语": [
+    {
+      "zh": "阿拉伯语很难。",
+      "pinyin": "Ālābóyǔ hěn nán.",
+      "vi": "Tiếng Ả Rập rất khó."
+    }
+  ],
+  "德语": [
+    {
+      "zh": "你学德语吗？",
+      "pinyin": "Nǐ xué Déyǔ ma?",
+      "vi": "Bạn học tiếng Đức à?"
+    }
+  ],
+  "俄语": [
+    {
+      "zh": "俄语难吗？",
+      "pinyin": "Éyǔ nán ma?",
+      "vi": "Tiếng Nga có khó không?"
+    }
+  ],
+  "法语": [
+    {
+      "zh": "她学法语。",
+      "pinyin": "Tā xué Fǎyǔ.",
+      "vi": "Cô ấy học tiếng Pháp."
+    }
+  ],
+  "韩国语": [
+    {
+      "zh": "韩国语不太难。",
+      "pinyin": "Hánguóyǔ bú tài nán.",
+      "vi": "Tiếng Hàn Quốc không khó lắm."
+    }
+  ],
+  "日语": [
+    {
+      "zh": "他哥哥学日语。",
+      "pinyin": "Tā gēge xué Rìyǔ.",
+      "vi": "Anh trai anh ấy học tiếng Nhật."
+    }
+  ],
+  "西班牙语": [
+    {
+      "zh": "她妹妹学西班牙语。",
+      "pinyin": "Tā mèimei xué Xībānyáyǔ.",
+      "vi": "Em gái cô ấy học tiếng Tây Ban Nha."
+    }
+  ],
+  "对": [
+    {
+      "zh": "对，他学汉语。",
+      "pinyin": "Duì, tā xué Hànyǔ.",
+      "vi": "Đúng vậy, anh ấy học tiếng Hán."
+    }
+  ],
+  "六": [
+    {
+      "zh": "他去北京六天。",
+      "pinyin": "Tā qù Běijīng liù tiān.",
+      "vi": "Anh ấy đi Bắc Kinh sáu ngày."
+    }
+  ],
+  "七": [
+    {
+      "zh": "妹妹七岁。",
+      "pinyin": "Mèimei qī suì.",
+      "vi": "Em gái bảy tuổi.",
+      "cho_phep": "Số đếm cần danh từ đi kèm; thêm 岁"
+    }
+  ],
+  "九": [
+    {
+      "zh": "明天九号。",
+      "pinyin": "Míngtiān jiǔ hào.",
+      "vi": "Ngày mai là mùng chín.",
+      "cho_phep": "Số đếm cần danh từ đi kèm; thêm 号"
+    }
+  ],
+  "昨天": [
+    {
+      "zh": "昨天我很忙。",
+      "pinyin": "Zuótiān wǒ hěn máng.",
+      "vi": "Hôm qua tôi rất bận."
+    }
+  ],
+  "星期一": [
+    {
+      "zh": "今天星期一。",
+      "pinyin": "Jīntiān Xīngqīyī.",
+      "vi": "Hôm nay là thứ hai."
+    }
+  ],
+  "星期三": [
+    {
+      "zh": "我星期三去银行。",
+      "pinyin": "Wǒ Xīngqīsān qù yínháng.",
+      "vi": "Thứ tư tôi đi ngân hàng."
+    }
+  ],
+  "星期四": [
+    {
+      "zh": "星期四你去哪儿？",
+      "pinyin": "Xīngqīsì nǐ qù nǎr?",
+      "vi": "Thứ năm bạn đi đâu?"
+    }
+  ],
+  "星期五": [
+    {
+      "zh": "星期五我去邮局。",
+      "pinyin": "Xīngqīwǔ wǒ qù yóujú.",
+      "vi": "Thứ sáu tôi đi bưu điện."
+    }
+  ],
+  "星期六": [
+    {
+      "zh": "星期六我去天安门。",
+      "pinyin": "Xīngqīliù wǒ qù Tiān'ān Mén.",
+      "vi": "Thứ bảy tôi đi Thiên An Môn."
+    }
+  ],
+  "星期天": [
+    {
+      "zh": "明天星期天。",
+      "pinyin": "Míngtiān Xīngqītiān.",
+      "vi": "Ngày mai là chủ nhật."
+    }
+  ],
+  "那儿": [
+    {
+      "zh": "我不去那儿。",
+      "pinyin": "Wǒ bú qù nàr.",
+      "vi": "Tôi không đi đến đó."
+    }
+  ],
+  "再见": [
+    {
+      "zh": "妈妈，再见！",
+      "pinyin": "Māma, zàijiàn!",
+      "vi": "Mẹ ơi, tạm biệt!"
+    }
+  ],
+  "对不起": [
+    {
+      "zh": "对不起，我不去。",
+      "pinyin": "Duìbuqǐ, wǒ bú qù.",
+      "vi": "Xin lỗi, tôi không đi."
+    }
+  ],
+  "没关系": [
+    {
+      "zh": "没关系，明天见！",
+      "pinyin": "Méi guānxi, míngtiān jiàn!",
+      "vi": "Không sao, mai gặp nhé!"
+    }
+  ],
+  "谢谢": [
+    {
+      "zh": "王老师，谢谢您！",
+      "pinyin": "Wáng lǎoshī, xièxie nín!",
+      "vi": "Thầy Vương, cảm ơn thầy!"
+    }
+  ],
+  "不客气": [
+    {
+      "zh": "不客气，请喝茶！",
+      "pinyin": "Bú kèqi, qǐng hē chá!",
+      "vi": "Không có gì, mời uống trà!"
+    }
+  ],
+  "十": [
+    {
+      "zh": "今天是十日。",
+      "pinyin": "Jīntiān shì shí rì.",
+      "vi": "Hôm nay là ngày mùng mười."
+    }
+  ],
+  "日": [
+    {
+      "zh": "明天是一日。",
+      "pinyin": "Míngtiān shì yī rì.",
+      "vi": "Ngày mai là ngày mùng một."
+    }
+  ],
+  "阿拉伯文": [
+    {
+      "zh": "这是阿拉伯文杂志。",
+      "pinyin": "Zhè shì Ālābówén zázhì.",
+      "vi": "Đây là tạp chí tiếng Ả Rập."
+    }
+  ],
+  "德文": [
+    {
+      "zh": "我朋友学德文。",
+      "pinyin": "Wǒ péngyou xué Déwén.",
+      "vi": "Bạn tôi học tiếng Đức."
+    }
+  ],
+  "俄文": [
+    {
+      "zh": "这是俄文书吗？",
+      "pinyin": "Zhè shì Éwén shū ma?",
+      "vi": "Đây là sách tiếng Nga à?"
+    }
+  ],
+  "法文": [
+    {
+      "zh": "他是法文老师。",
+      "pinyin": "Tā shì Fǎwén lǎoshī.",
+      "vi": "Anh ấy là giáo viên tiếng Pháp."
+    }
+  ],
+  "韩文": [
+    {
+      "zh": "这本书是韩文的。",
+      "pinyin": "Zhè běn shū shì Hánwén de.",
+      "vi": "Cuốn sách này viết bằng tiếng Hàn."
+    }
+  ],
+  "日文": [
+    {
+      "zh": "你学日文吗？",
+      "pinyin": "Nǐ xué Rìwén ma?",
+      "vi": "Bạn học tiếng Nhật à?"
+    }
+  ],
+  "西班牙文": [
+    {
+      "zh": "西班牙文不太难。",
+      "pinyin": "Xībānyáwén bú tài nán.",
+      "vi": "Tiếng Tây Ban Nha không khó lắm."
+    }
+  ],
+  "麦克": [
+    {
+      "zh": "麦克是美国人。",
+      "pinyin": "Màikè shì Měiguó rén.",
+      "vi": "Mike là người Mỹ."
+    }
+  ],
+  "德国": [
+    {
+      "zh": "他是德国人。",
+      "pinyin": "Tā shì Déguó rén.",
+      "vi": "Anh ấy là người Đức."
+    }
+  ],
+  "俄国": [
+    {
+      "zh": "俄国很大。",
+      "pinyin": "Éguó hěn dà.",
+      "vi": "Nước Nga rất rộng lớn."
+    }
+  ],
+  "法国": [
+    {
+      "zh": "我朋友去法国。",
+      "pinyin": "Wǒ péngyou qù Fǎguó.",
+      "vi": "Bạn tôi đi Pháp."
+    }
+  ],
+  "韩国": [
+    {
+      "zh": "你是韩国人吗？",
+      "pinyin": "Nǐ shì Hánguó rén ma?",
+      "vi": "Bạn là người Hàn Quốc à?"
+    }
+  ],
+  "日本国": [
+    {
+      "zh": "日本国也叫日本。",
+      "pinyin": "Rìběnguó yě jiào Rìběn.",
+      "vi": "Nước Nhật Bản cũng gọi tắt là Nhật Bản."
+    }
+  ],
+  "英国": [
+    {
+      "zh": "她去英国学英文。",
+      "pinyin": "Tā qù Yīngguó xué Yīngwén.",
+      "vi": "Cô ấy sang Anh học tiếng Anh."
+    }
+  ],
+  "一些": [
+    {
+      "zh": "我要一些米饭。",
+      "pinyin": "Wǒ yào yìxiē mǐfàn.",
+      "vi": "Tôi muốn một ít cơm."
+    }
+  ],
+  "那些": [
+    {
+      "zh": "那些人是谁？",
+      "pinyin": "Nàxiē rén shì shéi?",
+      "vi": "Những người kia là ai?"
+    }
+  ],
+  "玛丽": [
+    {
+      "zh": "玛丽要一碗米饭。",
+      "pinyin": "Mǎlì yào yì wǎn mǐfàn.",
+      "vi": "Mary muốn một bát cơm."
+    }
+  ],
+  "公斤": [
+    {
+      "zh": "苹果一公斤多少钱？",
+      "pinyin": "Píngguǒ yì gōngjīn duōshao qián?",
+      "vi": "Táo bao nhiêu tiền một cân?"
+    }
+  ],
+  "元": [
+    {
+      "zh": "一共十元。",
+      "pinyin": "Yígòng shí yuán.",
+      "vi": "Tổng cộng mười đồng."
+    }
+  ],
+  "角": [
+    {
+      "zh": "一个苹果八角。",
+      "pinyin": "Yí ge píngguǒ bā jiǎo.",
+      "vi": "Một quả táo tám hào."
+    }
+  ],
+  "分": [
+    {
+      "zh": "找您五分钱。",
+      "pinyin": "Zhǎo nín wǔ fēn qián.",
+      "vi": "Trả lại ông năm xu."
+    }
+  ],
+  "一点儿": [
+    {
+      "zh": "便宜一点儿吧！",
+      "pinyin": "Piányi yìdiǎnr ba!",
+      "vi": "Rẻ một chút đi!"
+    }
+  ],
+  "上午": [
+    {
+      "zh": "上午我去银行。",
+      "pinyin": "Shàngwǔ wǒ qù yínháng.",
+      "vi": "Buổi sáng tôi đi ngân hàng."
+    }
+  ],
+  "营业员": [
+    {
+      "zh": "她是银行营业员。",
+      "pinyin": "Tā shì yínháng yíngyèyuán.",
+      "vi": "Cô ấy là nhân viên giao dịch ngân hàng."
+    }
+  ],
+  "千": [
+    {
+      "zh": "我换两千美元。",
+      "pinyin": "Wǒ huàn liǎng qiān měiyuán.",
+      "vi": "Tôi đổi hai nghìn đô la Mỹ."
+    }
+  ],
+  "万": [
+    {
+      "zh": "我换一万日元。",
+      "pinyin": "Wǒ huàn yí wàn rìyuán.",
+      "vi": "Tôi đổi mười nghìn yên Nhật."
+    }
+  ],
+  "港币": [
+    {
+      "zh": "这是港币，不是人民币。",
+      "pinyin": "Zhè shì gǎngbì, bú shì rénmínbì.",
+      "vi": "Đây là đô la Hồng Kông, không phải nhân dân tệ."
+    }
+  ],
+  "日元": [
+    {
+      "zh": "这是日元吗？",
+      "pinyin": "Zhè shì rìyuán ma?",
+      "vi": "Đây là tiền yên Nhật à?"
+    }
+  ],
+  "韩元": [
+    {
+      "zh": "我要换韩元。",
+      "pinyin": "Wǒ yào huàn hányuán.",
+      "vi": "Tôi muốn đổi tiền won Hàn Quốc."
+    }
+  ],
+  "欧元": [
+    {
+      "zh": "一欧元换多少人民币？",
+      "pinyin": "Yì ōuyuán huàn duōshao rénmínbì?",
+      "vi": "Một euro đổi được bao nhiêu nhân dân tệ?"
+    }
+  ],
+  "零": [
+    {
+      "zh": "我住二零八房间。",
+      "pinyin": "Wǒ zhù èr líng bā fángjiān.",
+      "vi": "Tôi ở phòng 208."
+    }
+  ],
+  "李昌浩": [
+    {
+      "zh": "李昌浩是韩国人。",
+      "pinyin": "Lǐ Chānghào shì Hánguó rén.",
+      "vi": "Lee Changho là người Hàn Quốc."
+    }
+  ],
+  "秘书": [
+    {
+      "zh": "这位是我的秘书。",
+      "pinyin": "Zhè wèi shì wǒ de mìshū.",
+      "vi": "Vị này là thư ký của tôi."
+    }
+  ],
+  "你们": [
+    {
+      "zh": "你们是留学生吗？",
+      "pinyin": "Nǐmen shì liúxuéshēng ma?",
+      "vi": "Các bạn là lưu học sinh à?"
+    }
+  ],
+  "没什么": [
+    {
+      "zh": "没什么，别客气。",
+      "pinyin": "Méi shénme, bié kèqi.",
+      "vi": "Không có gì, đừng khách sáo."
+    }
+  ],
+  "爱德华": [
+    {
+      "zh": "爱德华是我的朋友。",
+      "pinyin": "Àidéhuá shì wǒ de péngyou.",
+      "vi": "Edward là bạn của tôi."
+    }
+  ],
+  "中药": [
+    {
+      "zh": "我爸爸吃中药。",
+      "pinyin": "Wǒ bàba chī zhōngyào.",
+      "vi": "Bố tôi uống thuốc bắc."
+    }
+  ],
+  "西药": [
+    {
+      "zh": "你吃西药还是中药？",
+      "pinyin": "Nǐ chī xīyào háishi zhōngyào?",
+      "vi": "Bạn uống thuốc tây hay thuốc bắc?"
+    }
+  ],
+  "马马虎虎": [
+    {
+      "zh": "我的汉语马马虎虎。",
+      "pinyin": "Wǒ de Hànyǔ mǎmǎhūhū.",
+      "vi": "Tiếng Hán của tôi tạm được.",
+      "pinyin_sach": "sách in mǎmǎhūhū (khẩu ngữ), máy chỉ biết hǔ"
+    }
+  ],
+  "有一点儿": [
+    {
+      "zh": "这件衣服有一点儿贵。",
+      "pinyin": "Zhè jiàn yīfu yǒu yìdiǎnr guì.",
+      "vi": "Chiếc áo này hơi đắt."
+    }
+  ],
+  "自行车": [
+    {
+      "zh": "这是我的新自行车。",
+      "pinyin": "Zhè shì wǒ de xīn zìxíngchē.",
+      "vi": "Đây là chiếc xe đạp mới của tôi."
+    }
+  ],
+  "汽车": [
+    {
+      "zh": "他有一辆汽车。",
+      "pinyin": "Tā yǒu yí liàng qìchē.",
+      "vi": "Anh ấy có một chiếc ô tô."
+    }
+  ],
+  "摩托车": [
+    {
+      "zh": "我的摩托车是黑色的。",
+      "pinyin": "Wǒ de mótuōchē shì hēisè de.",
+      "vi": "Xe máy của tôi màu đen."
+    }
+  ],
+  "出租车": [
+    {
+      "zh": "我们坐出租车去吧。",
+      "pinyin": "Wǒmen zuò chūzūchē qù ba.",
+      "vi": "Chúng ta đi taxi nhé."
+    }
+  ]
+}

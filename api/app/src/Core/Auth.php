@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Zika\Core;
 
+use Zika\Services\UserService;
+
 /**
  * Phiên đăng nhập bằng cookie zk_sid (02 §6.1).
  * Cookie chứa 32 byte ngẫu nhiên; DB chỉ lưu sha256 của nó.
@@ -54,7 +56,7 @@ final class Auth
         foreach (['s_id', 'user_id', 'remember', 'device_type', 'os', 'browser', 'last_used_at', 'expires_at', 'revoked_at'] as $k) {
             unset($user[$k]);
         }
-        $r->user = $user;
+        $r->user = UserService::withEffectiveRole($user);
         $r->session = $session;
         Log::$userId = (int) $user['id'];
 
@@ -94,7 +96,7 @@ final class Auth
             'expires_at' => Clock::sql(Clock::addSeconds($remember ? self::REMEMBER_SEC : self::SHORT_SEC, $now)),
         ]);
         Cookie::queue(self::COOKIE, $token, $remember ? $now->getTimestamp() + self::REMEMBER_SEC : 0);
-        $r->user = $user;
+        $r->user = UserService::withEffectiveRole($user);
         $r->session = ['id' => $sessionId, 'remember' => $remember ? 1 : 0, 'device_type' => $ua['device'], 'os' => $ua['os'], 'browser' => $ua['browser']];
         return Csrf::ensure($r, true);
     }

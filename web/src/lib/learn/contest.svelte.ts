@@ -49,9 +49,39 @@ export interface Ranking {
   participants: number;
 }
 
+/** Một dòng Top chăm học: phút học trong tháng, ngày có học, số phần bài học xong lần đầu trong tháng. */
+export interface StudyRow {
+  rank: number;
+  name: string;
+  minutes: number;
+  days: number;
+  done: number;
+  isMe: boolean;
+}
+
+export interface StudyTop {
+  month: string;
+  rows: StudyRow[];
+  /** null khi tháng này mình chưa học đủ một phút. */
+  me: StudyRow | null;
+  count: number;
+}
+
+/** Cuộc thi đã kết thúc. Không có số tiền: quỹ không chụp lại theo từng cuộc thi. */
+export interface PastContest {
+  id: number;
+  title: string;
+  endedOn: string;
+  participants: number;
+  top: RankRow[];
+  me: RankRow | null;
+}
+
 class ContestStore {
   current = $state<Contest | null>(null);
   ranking = $state<Ranking | null>(null);
+  studyTop = $state<StudyTop | null>(null);
+  history = $state<PastContest[] | null>(null);
   prizes = $state<Prize[]>([]);
   registrants = $state<Registrants | null>(null);
 
@@ -77,6 +107,22 @@ class ContestStore {
       this.ranking = await api.get<Ranking>('/contest/ranking', { quiet: true });
     } catch {
       // Giữ bảng đang hiện nếu có; chưa có thì phần giao diện báo chưa có kết quả.
+    }
+  }
+
+  async refreshStudyTop(): Promise<void> {
+    try {
+      this.studyTop = await api.get<StudyTop>('/contest/study-top', { quiet: true });
+    } catch {
+      // Giữ bảng đang hiện.
+    }
+  }
+
+  async refreshHistory(): Promise<void> {
+    try {
+      this.history = await api.get<PastContest[]>('/contest/history', { quiet: true });
+    } catch {
+      if (this.history === null) this.history = [];
     }
   }
 

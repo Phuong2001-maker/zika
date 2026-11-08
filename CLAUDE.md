@@ -37,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; API 194/194; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; API 200/200; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -61,7 +61,8 @@ api/app/src/             Controllers/, Services/, Core/
 api/app/config.php       bí mật (DB, Google, SMTP) — gitignore, KHÔNG commit
 ```
 
-Ba vai trò: `learner`, `editor`, `admin`.
+Ba vai trò: `learner`, `editor`, `admin`. Quyền admin cần cả `users.role = 'admin'` **và** email nằm trong `admin_emails` của
+`config.php` (rỗng = không giới hạn); vai trò dùng để phân quyền lấy qua `UserService::withEffectiveRole`, đừng đọc thẳng cột `role`.
 
 Giáo trình là cha của bài: truy vấn bài/từ cho người học phải lọc `curriculum_id` (`Services/Curricula.php`). Học viên chưa phân quyền (`users.curriculum_id` NULL, cả tài khoản cũ lẫn mới) học giáo trình bật `curricula.is_default`, hiện là
 Hán ngữ 6 tập; lấy bằng `Curricula::defaultId()`, đừng coi id 1 là mặc định. Giáo trình số 1 (`Curricula::HSK_ID`, "Giáo trình HSK 3.0")
@@ -162,8 +163,11 @@ chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả h
 
 ## Việc còn treo
 
-- **Mở bài giáo trình bằng điểm + chặn tải (08/11/2026), chưa lên server:** xong ở local, xem NHAT-KY 08/11 và phần O
-  của KICH-BAN-TEST. Lên server cần code mới, chạy migration 019, 020, 021 (Quán trà và các bàn), rồi ở quản trị gắn lại link Shopee (DB server đã xoá link).
+- **Ví dụ lật thẻ Hán ngữ đủ mọi từ (08/11/2026), chưa lên server:** 496 câu tự soạn ở `data/han-ngu/vi-du/` (luật và cách chạy ở
+  [data/han-ngu/README.md](data/han-ngu/README.md)). Lên server: import `data/han-ngu/ra/cap-nhat-vi-du-hn.sql` (chỉ thay ví dụ, giữ
+  bài và tiến độ), giải nén zip giọng câu mới, xoá `storage/cache/content`. Đừng chạy lại `02-han-ngu.sql` để cập nhật ví dụ.
+- **Mở bài giáo trình bằng điểm + chặn tải (08/11/2026), đã lên server 08/11** (migration 019–021, code `084c1e3`), xem NHAT-KY 08/11 và phần O
+  của KICH-BAN-TEST. Còn: ở quản trị gắn lại link Shopee (DB server đã xoá link) thì bé túi mới hiện.
   **Không bán sách**: phần gói học/chuyển khoản đã làm rồi bỏ (rủi ro pháp lý), đừng thêm lại khi chưa có giấy phép bản quyền.
   **Chế độ test điểm đang bật ở local**
   (mỗi lần bấm bé túi +1) — trên server phải để tắt. Chưa có link Shopee thì nút "Nhận điểm hôm nay" cộng thẳng. Bé túi vẫn hiện mỗi lần
@@ -192,7 +196,7 @@ chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả h
   Giáo trình và tab Đề thi đã có API thật; đề thi thử cuối cấp vẫn dùng chung mọi giáo trình.
   Link Shopee đã có API thật (Icon 1 link, Quỹ tháng nhiều link, công tắc ở `/admin/support`), tiền quỹ do admin nhập tay ở cùng màn đó;
   cuộc thi tạo ở `/admin/contests`, chọn đề từ tab `/admin/exams` (chỉ cần tên, câu nạp sau), đề Nháp chỉ làm được trong giờ thi, hết giờ tự nộp, xếp hạng theo câu đúng rồi thời gian, mỗi người 1 lượt.
-  đăng ký trước giờ thi mới được làm, cơ cấu giải chỉnh ở cùng màn. Trang soạn đề là bản tạm. **Server thật còn cần migration 007 đến 018 và xoá `storage/cache/content`** rồi gắn link Icon thì bé mới hiện. Top chăm học vẫn minh hoạ. Checklist: phần I, J, K, L của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+  đăng ký trước giờ thi mới được làm, cơ cấu giải chỉnh ở cùng màn. Trang soạn đề là bản tạm. **Server thật còn cần migration 007 đến 018 và xoá `storage/cache/content`** rồi gắn link Icon thì bé mới hiện. Top chăm học và Lịch sử thi lấy số thật từ 08/11; không viết lại dữ liệu minh hoạ vào giao diện người học. Checklist: phần I, J, K, L của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 - **ĐANG DỞ — giọng đọc mới toàn bộ + sửa UI/UX (03/11/2026), chỉ còn đưa lên server:** mọi file đọc
   mẫu chuyển sang giọng Microsoft (edge-tts), câu thoại giọng riêng từng nhân vật, `TTS_VERSION = 6`;

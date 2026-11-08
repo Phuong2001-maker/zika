@@ -1,0 +1,128 @@
+{
+  "总是": [
+    {
+      "zh": "他总是在图书馆看书。",
+      "pinyin": "Tā zǒngshì zài túshūguǎn kàn shū.",
+      "vi": "Anh ấy lúc nào cũng đọc sách ở thư viện."
+    }
+  ],
+  "帮忙": [
+    {
+      "zh": "他很忙，我们去帮忙吧。",
+      "pinyin": "Tā hěn máng, wǒmen qù bāngmáng ba.",
+      "vi": "Anh ấy rất bận, chúng ta đi giúp một tay nhé."
+    }
+  ],
+  "胖": [
+    {
+      "zh": "我哥哥有点儿胖。",
+      "pinyin": "Wǒ gēge yǒudiǎnr pàng.",
+      "vi": "Anh trai tôi hơi béo."
+    }
+  ],
+  "打折": [
+    {
+      "zh": "这个商店的衣服今天打折。",
+      "pinyin": "Zhège shāngdiàn de yīfu jīntiān dǎzhé.",
+      "vi": "Quần áo ở cửa hàng này hôm nay giảm giá."
+    }
+  ],
+  "去年": [
+    {
+      "zh": "我是去年来中国的。",
+      "pinyin": "Wǒ shì qùnián lái Zhōngguó de.",
+      "vi": "Tôi đến Trung Quốc vào năm ngoái."
+    }
+  ],
+  "点钟": [
+    {
+      "zh": "我们八点钟上课。",
+      "pinyin": "Wǒmen bā diǎnzhōng shàng kè.",
+      "vi": "Chúng tôi vào học lúc tám giờ."
+    }
+  ],
+  "分钟": [
+    {
+      "zh": "还有五分钟就上课了。",
+      "pinyin": "Hái yǒu wǔ fēnzhōng jiù shàng kè le.",
+      "vi": "Còn năm phút nữa là vào học rồi."
+    }
+  ],
+  "下车": [
+    {
+      "zh": "我们在这儿下车吧。",
+      "pinyin": "Wǒmen zài zhèr xià chē ba.",
+      "vi": "Chúng ta xuống xe ở đây nhé."
+    }
+  ],
+  "山本": [
+    {
+      "zh": "山本是日本人。",
+      "pinyin": "Shānběn shì Rìběnrén.",
+      "vi": "Yamamoto là người Nhật."
+    }
+  ],
+  "南边": [
+    {
+      "zh": "我家在学校南边。",
+      "pinyin": "Wǒ jiā zài xuéxiào nánbian.",
+      "vi": "Nhà tôi ở phía nam trường học."
+    }
+  ],
+  "后边": [
+    {
+      "zh": "图书馆后边有一个公园。",
+      "pinyin": "Túshūguǎn hòubian yǒu yí ge gōngyuán.",
+      "vi": "Phía sau thư viện có một công viên."
+    }
+  ],
+  "右边": [
+    {
+      "zh": "银行在邮局右边。",
+      "pinyin": "Yínháng zài yóujú yòubian.",
+      "vi": "Ngân hàng ở bên phải bưu điện."
+    }
+  ],
+  "上边": [
+    {
+      "zh": "我的手机在书的上边。",
+      "pinyin": "Wǒ de shǒujī zài shū de shàngbian.",
+      "vi": "Điện thoại của tôi ở trên quyển sách."
+    }
+  ],
+  "下边": [
+    {
+      "zh": "你的笔在那本书下边。",
+      "pinyin": "Nǐ de bǐ zài nà běn shū xiàbian.",
+      "vi": "Bút của bạn ở dưới quyển sách kia."
+    }
+  ],
+  "右": [
+    {
+      "zh": "到前边往右拐就是银行。",
+      "pinyin": "Dào qiánbian wǎng yòu guǎi jiù shì yínháng.",
+      "vi": "Đi đến phía trước rẽ phải là ngân hàng."
+    }
+  ],
+  "请假": [
+    {
+      "zh": "我感冒了，明天要请假。",
+      "pinyin": "Wǒ gǎnmào le, míngtiān yào qǐngjià.",
+      "vi": "Tôi bị cảm rồi, ngày mai phải xin nghỉ."
+    }
+  ],
+  "那么": [
+    {
+      "zh": "我没有他那么高。",
+      "pinyin": "Wǒ méiyǒu tā nàme gāo.",
+      "vi": "Tôi không cao như anh ấy."
+    }
+  ],
+  "为什么": [
+    {
+      "zh": "你为什么没来上课？",
+      "pinyin": "Nǐ wèi shénme méi lái shàng kè?",
+      "vi": "Tại sao bạn không đến lớp?"
+    }
+  ]
+}

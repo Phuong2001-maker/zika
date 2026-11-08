@@ -291,9 +291,14 @@
             </p>
           </div>
         </div>
-        <a href={startHref} class="btn btn-son btn-lg" style="width: 100%">
-          {picked === 'all' ? texts.allStart : currentProg && currentProg.position > 0 ? texts.contStart : texts.nextStart}
-        </a>
+        {#if picked !== 'all' && current && countOf(current) === 0}
+          <!-- Bài chưa có câu (Hán ngữ cố ý để trống Bài tập, Kiểm tra): mở vào chỉ gặp trang lỗi. -->
+          <p class="muted" style="font-size: 14px; text-align: center">Phần này của bài chưa soạn xong.</p>
+        {:else}
+          <a href={startHref} class="btn btn-son btn-lg" style="width: 100%">
+            {picked === 'all' ? texts.allStart : currentProg && currentProg.position > 0 ? texts.contStart : texts.nextStart}
+          </a>
+        {/if}
       </div>
     {/if}
   </div>

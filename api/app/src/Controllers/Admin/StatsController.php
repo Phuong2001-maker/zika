@@ -311,7 +311,7 @@ final class StatsController
                     'email' => $mask ? Str::maskEmail((string) $u['email']) : (string) $u['email'],
                     'isNew' => strtotime((string) $u['created_at']) > time() - 7 * 86400,
                     'method' => (string) $u['signup_method'],
-                    'role' => (string) $u['role'],
+                    'role' => (string) UserService::withEffectiveRole($u)['role'],
                     'createdAt' => date('Y-m-d', strtotime((string) $u['created_at'])),
                     'lastSeenAt' => $u['last_seen_at'] === null ? null : date('c', strtotime((string) $u['last_seen_at'])),
                     'lastVisit' => $in === '' ? null : ['start' => $in, 'end' => $out !== '' ? $out : null, 'durationMin' => (int) round(((int) $secs) / 60)],
@@ -518,6 +518,9 @@ final class StatsController
 
         if ((int) $u['id'] === $r->userId() && $role !== 'admin') {
             throw HttpError::invalid('Không tự hạ quyền của mình được.');
+        }
+        if ($role === 'admin' && !UserService::mayBeAdmin((string) $u['email'])) {
+            throw HttpError::invalid('Email này chưa có trong danh sách quản trị (admin_emails trong config.php trên máy chủ).');
         }
         if ($u['role'] === 'admin' && $role !== 'admin'
             && UserService::activeAdminCount([(int) $u['id']]) < 1) {

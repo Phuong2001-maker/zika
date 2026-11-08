@@ -11,7 +11,7 @@ import json
 import sys
 from collections import Counter
 
-from chung_hn import BAI, chon_bai, doc_bai, file_bai, file_ra, ghi_json
+from chung_hn import BAI, THU_MUC, chon_bai, doc_bai, file_bai, file_ra, ghi_json
 from chung import cau_tao, chu_han, han_viet_chu, kho_chu, la_han, nghia_ngan, tach_am_tiet
 import importlib.util
 
@@ -22,6 +22,65 @@ _goc = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_goc)
 
 TIEN_TO = {"chu_thich": "Chú thích: ", "ngu_am": "Ngữ âm: ", "ngu_phap": ""}
+
+# Câu ví dụ lật thẻ lấy từ bài trước thì không dài quá chừng này (số chữ Hán): thẻ là để nhớ từ, không phải đọc đoạn văn.
+VI_DU_DAI_TOI_DA = 30
+
+
+def vi_du_soan(q: int) -> dict:
+    """Câu tự soạn cho từ mà cả bài này lẫn các bài trước của sách không có câu nào chứa nó (đã qua kiem_vi_du_hn.py)."""
+    vd: dict = {}
+    for f in sorted((THU_MUC / "vi-du").glob(f"q{q}*.json")):  # soạn tách nhiều file (q6-a, q6-b) cũng được
+        vd.update(json.loads(f.read_text(encoding="utf-8")))
+    return vd
+
+
+_DA_TACH: dict[tuple[int, str], list[str]] = {}
+
+
+def tach_tu(cau: str, tu_dien: set[str]) -> list[str]:
+    """Cắt câu theo từ (tham lam dài nhất), bỏ dấu câu. Không giới hạn số ô như tach_o của bộ HSK.
+    Nhớ kết quả theo (bộ từ điển, câu): mỗi từ thiếu ví dụ đều dò lại cả kho câu của bộ sách."""
+    khoa = (id(tu_dien), cau)
+    if khoa not in _DA_TACH:
+        _DA_TACH[khoa] = _tach(cau, tu_dien)
+    return _DA_TACH[khoa]
+
+
+def _tach(cau: str, tu_dien: set[str]) -> list[str]:
+    s = _goc.tron(cau)
+    dai = max((len(x) for x in tu_dien), default=1)
+    ra: list[str] = []
+    i = 0
+    while i < len(s):
+        for n in range(min(dai, len(s) - i), 0, -1):
+            if n == 1 or s[i:i + n] in tu_dien:
+                ra.append(s[i:i + n])
+                i += n
+                break
+    return ra
+
+
+def nhan_vd(han: str) -> str:
+    """Chữ tô đậm trong câu ví dụ. API đòi câu chứa đúng chuỗi này, mà 太…了 không bao giờ nằm nguyên trong câu
+    (API bỏ cả câu, nên trước 08/11 mọi từ dạng cấu trúc đều không có ví dụ): tô mảnh đầu, web tô mọi chỗ có mảnh đó."""
+    return next((m for m in han.split("…") if m), han) if "…" in han else han
+
+
+def co_tu(cau: str, han: str, tu_dien: set[str]) -> bool:
+    """Từ đứng riêng trong câu chứ không phải mảnh của từ khác: 大 không khớp 大学, 学生 không khớp 大学生.
+    Cấu trúc có dấu … (又…又…) thì các mảnh phải xuất hiện đúng thứ tự."""
+    if "…" in han:
+        s, vt = _goc.tron(cau), 0
+        for m in (x for x in han.split("…") if x):
+            j = s.find(m, vt)
+            if j < 0:
+                return False
+            vt = j + len(m)
+        return True
+    # Từ nhiều chữ của sách đã nằm trong tu_dien (tu_dien_chung), từ một chữ thì luôn tách được: khỏi ghép thêm han,
+    # ghép là mỗi từ một bộ từ điển mới và mất bộ nhớ tách câu.
+    return han in tach_tu(cau, tu_dien) or (len(han) > 1 and han not in tu_dien and han in tach_tu(cau, tu_dien | {han}))
 
 
 def la_cau_sai(v: dict) -> bool:
@@ -42,20 +101,51 @@ class BaiHanNgu(_goc.Bai):
         self.cau_sai = {_goc.tron(v["zh"]) for g in d["ngu_phap"] for v in g["vi_du"] if v["kieu"] == "Câu sai"}
         self.loai |= self.cau_sai
 
-    def vi_du_cho(self, han: str) -> list[dict]:
-        # Không dùng câu soạn riêng của HSK (vi-du/): câu đó tính theo từ vựng HSK, không theo tiến độ sách này.
-        # Ưu tiên câu ngắn trong chính bài; lấy tối đa 2 câu như lật thẻ HSK. Lật thẻ không có chỗ ghi nhãn nên bỏ câu sai.
+    # Kho câu sách của cả bộ theo thứ tự bài, dựng một lần ở __main__: [((quyển, bài), zh, pinyin, vi)].
+    KHO: list[tuple[tuple[int, int], str, str, str]] = []
+
+    def cau_sach(self) -> list[tuple[str, str, str]]:
+        """Câu bài khóa và ví dụ ngữ pháp của bài này, trừ câu sách đánh dấu sai."""
         nguon = [(c["zh"], c.get("pinyin", ""), c.get("vi", "")) for c in self.cau]
-        nguon += [(v["zh"], v.get("pinyin", ""), v.get("vi", "")) for g in self.d["ngu_phap"] for v in g.get("vi_du", [])
-                  if _goc.tron(v["zh"]) not in self.cau_sai]
+        return nguon + [(v["zh"], v.get("pinyin", ""), v.get("vi", "")) for g in self.d["ngu_phap"] for v in g.get("vi_du", [])
+                        if _goc.tron(v["zh"]) not in self.cau_sai]
+
+    @staticmethod
+    def dung_duoc(zh: str, py: str, vi: str, han: str, bai_khac: bool = False) -> bool:
+        # Câu ví dụ ngữ âm giữ dấu trọng âm như sách (我'吃。): đúng ở mục ngữ âm, nhưng lạ khi làm câu ví dụ của thẻ từ.
+        # Câu chỉ có đúng từ đó (马 → "马" ở mục luyện phát âm) không giúp gì cho người học.
+        # Đếm cả chữ số: "1840年" là ví dụ tốt cho 年. Câu lấy từ bài khác thì bỏ câu có ngoặc (怎么（为什么）没来？ là
+        # ghi chú ngữ pháp, đặt lên thẻ thì rối); câu chính bài giữ như trước để không đổi ví dụ đang dùng tốt.
+        return bool(vi and py and len(zh) <= 60 and "'" not in zh and not (bai_khac and "（" in zh)
+                    and len(_goc.tron(zh)) > len(_goc.tron(han)))
+
+    def vi_du_cho(self, han: str) -> list[dict]:
+        # Không dùng câu soạn riêng của HSK (data/nap-sach/vi-du/): câu đó tính theo từ vựng HSK, không theo tiến độ sách này.
+        # Thứ tự: câu ngắn trong chính bài → câu sách ở bài trước (người học đã gặp) → câu soạn thêm. Tối đa 2 câu như
+        # lật thẻ HSK. Lật thẻ không có chỗ ghi nhãn nên bỏ câu sai.
         ra: list[dict] = []
-        for zh, py, vi in sorted(nguon, key=lambda x: len(x[0])):
-            # Câu ví dụ ngữ âm giữ dấu trọng âm như sách (我'吃。): đúng ở mục ngữ âm, nhưng lạ khi làm câu ví dụ của thẻ từ.
-            if han in zh and vi and py and len(zh) <= 60 and "'" not in zh and zh not in [x["zh"] for x in ra]:
-                ra.append({"zh": zh, "pinyin": py, "vi": vi, "highlight": han})
+        for zh, py, vi in sorted(self.cau_sach(), key=lambda x: len(x[0])):
+            # Từ dạng cấu trúc (太…了) không bao giờ nằm nguyên trong câu: xét từng mảnh theo thứ tự.
+            co = co_tu(zh, han, self.tu_dien) if "…" in han else han in zh
+            if co and self.dung_duoc(zh, py, vi, han) and zh not in [x["zh"] for x in ra]:
+                ra.append({"zh": zh, "pinyin": py, "vi": vi, "highlight": nhan_vd(han)})
             if len(ra) == 2:
-                break
-        return ra
+                return ra
+        if ra:
+            return ra
+        # Bài trước: bắt buộc từ đứng riêng trong câu, vì câu bài khác không do chính từ này mà có.
+        truoc = [(zh, py, vi) for k, zh, py, vi in self.KHO
+                 if k < (self.cap, self.so) and len(chu_han(zh)) <= VI_DU_DAI_TOI_DA
+                 and self.dung_duoc(zh, py, vi, han, bai_khac=True) and co_tu(zh, han, self.tu_dien)]
+        for zh, py, vi in sorted(truoc, key=lambda x: len(x[0])):
+            if zh not in [x["zh"] for x in ra]:
+                ra.append({"zh": zh, "pinyin": py, "vi": vi, "highlight": nhan_vd(han)})
+            if len(ra) == 2:
+                return ra
+        if ra:
+            return ra
+        return [{"zh": v["zh"], "pinyin": v["pinyin"], "vi": v["vi"], "highlight": nhan_vd(han)}
+                for v in vi_du_soan(self.cap).get(han, [])][:2]
 
     def words(self) -> list[dict]:
         # Mỗi dòng 生词/专名 sách in là một thẻ, kể cả từ đã có ở bài trước (sách in lại thường với nghĩa khác)
@@ -228,17 +318,24 @@ if __name__ == "__main__":
     tu_dien = tu_dien_chung()
     ten = ten_nhan_vat()
     chon = chon_bai(sys.argv[1:])
+    # Dựng mọi bài trước (kể cả bài không chọn) để có kho câu sách cho ví dụ lấy từ bài trước.
+    cac_bai: dict[tuple[int, int], BaiHanNgu] = {}
+    for q in BAI:
+        for so in BAI[q]:
+            if file_bai(q, so).exists():
+                d = doc_bai(q, so)
+                for k in d["bai_khoa"]:
+                    for c in k["cau"]:
+                        if c.get("nguoi") in ten:
+                            c["nguoi_vi"] = ten[c["nguoi"]]
+                cac_bai[(q, so)] = BaiHanNgu(d, tu_dien, set())
+    BaiHanNgu.KHO = [(k, zh, py, vi) for k, b in sorted(cac_bai.items()) for zh, py, vi in b.cau_sach()]
     for q in sorted({x for x, _ in chon}):
         for so in BAI[q]:
             if (q, so) not in chon or not file_bai(q, so).exists():
                 continue
-            d = doc_bai(q, so)
-            for k in d["bai_khoa"]:
-                for c in k["cau"]:
-                    if c.get("nguoi") in ten:
-                        c["nguoi_vi"] = ten[c["nguoi"]]
             # Sách in lại từ của bài trước thì bài này vẫn có thẻ đó (migration 017 bỏ khoá duy nhất theo cấp).
-            p = BaiHanNgu(d, tu_dien, set()).payload()
+            p = cac_bai[(q, so)].payload()
             ghi_json(file_ra(q, so), p)
             print(f"Quyển {q} · Bài {so}: {len(p['words'])} từ, {len(p['writing'])} chữ viết, "
                   f"{len(p['dialogues'])} bài khoá, {len(p['grammar'])} ngữ pháp"

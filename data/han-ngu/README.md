@@ -18,6 +18,7 @@ Quyển n nằm ở cấp n, học viên thấy "Quyển n" nhờ cột `curricu
 `ZIKA_HANNGU_DIR="D:/zika-devtools/Project/HanNgu/New folder"` cho các bước đọc PDF (`xem_trang.py --cat`, `kiem_tra_goc`).
 
 ```bash
+python kiem_vi_du_hn.py        # ví dụ lật thẻ: nguồn câu, từ còn thiếu, kiểm câu tự soạn vi-du/q*.json
 python sinh.py all             # bai/ → ra/qN/baiNN.json
 python kiem_tra.py all         # soát bản chép
 python nap.py all              # nạp qua API quản trị
@@ -46,8 +47,14 @@ Thêm migration mới thì sửa `DEN_SO` trong `dong_goi.py` rồi đóng gói 
 
 - **Câu sách đánh dấu sai** (`kieu` là "Câu sai"): chỉ hiện ở Ngữ pháp kèm nhãn, không lấy làm ví dụ lật thẻ hay bài xếp câu.
   `la_cau_sai` trong `sinh.py` gom các cách ghi nhãn khác nhau của từng bài.
-- **Ví dụ lật thẻ** chỉ lấy câu có trong chính bài, không dùng câu soạn riêng của HSK, vì câu đó tính theo từ vựng HSK. Từ nào
-  sách không có câu chứa nó thì không có ví dụ.
+- **Ví dụ lật thẻ** (từ 08/11/2026): câu ngắn trong chính bài → không có thì câu sách ở bài trước (người học đã gặp, từ phải
+  đứng riêng: 大 không khớp 大学) → không có nữa thì câu tự soạn ở `vi-du/q{n}*.json`. Không dùng câu soạn của HSK vì câu đó
+  tính theo từ vựng HSK. Câu chỉ có đúng từ đó (马 → "马" ở mục ngữ âm) bị bỏ. Từ dạng cấu trúc (太…了) tô mảnh đầu, vì API
+  đòi câu chứa đúng chuỗi được tô. Lúc đầu 535/2.990 từ không có ví dụ; nay đủ cả: 2.456 câu chính bài, 38 câu bài trước,
+  496 câu tự soạn. Câu tự soạn qua `kiem_vi_du_hn.py` (chứa từ, ngắn theo quyển, chỉ dùng chữ đã gặp tới bài đó, pinyin khớp
+  từng chữ); ngoại lệ ghi ngay trong câu: `cho_phep` (9 câu ở Q1 bài 1–3, bài quá ít chữ), `pinyin_sach` (马马虎虎 hūhū).
+  Sửa câu soạn rồi: `kiem_vi_du_hn.py` → `sinh.py all` → `nap_vi_du_hn.py` (chỉ sửa từ đổi, giữ id; ghi
+  `ra/cap-nhat-vi-du-hn.sql` cho server) → `viec_hn.py && doc_hn.py` → `gan_hn.py` (hoặc chỉ `tai_nhanh()`) cho giọng câu mới.
 - **Từ sách không ghi từ loại** (cụm, cấu trúc như 又…又…) là `other`, không phải danh từ.
 - **Bản dịch câu**: sách không in bản dịch nên câu tiếng Việt là bản tham khảo tự dịch, web có ghi chú ngay dưới bài khóa.
   Pinyin Q3–6 cũng tự thêm vì sách không in.

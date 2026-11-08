@@ -17,6 +17,7 @@ use Zika\Core\Str;
 use Zika\Core\Validator;
 use Zika\Services\AnnouncementService;
 use Zika\Services\BackupService;
+use Zika\Services\UserService;
 
 /** Quản trị · Thông báo, Góp ý, Ủng hộ & Shopee, Cài đặt (04 §10.8–§10.11). */
 final class OpsController
@@ -567,7 +568,7 @@ final class OpsController
                 'id' => (int) $u['id'],
                 'name' => (string) $u['display_name'],
                 'email' => (string) $u['email'],
-                'role' => (string) $u['role'],
+                'role' => (string) UserService::withEffectiveRole($u)['role'],
                 'isMe' => (int) $u['id'] === $r->userId(),
             ], Db::all("SELECT id, display_name, email, role FROM users WHERE role IN ('admin','editor') ORDER BY role, display_name")),
             'invites' => array_map(static fn (array $i): array => [
@@ -648,8 +649,7 @@ final class OpsController
         if ($id === $r->userId()) {
             throw HttpError::invalid('Không tự gỡ quyền của mình được.');
         }
-        if ((int) Db::val("SELECT COUNT(*) FROM users WHERE role = 'admin'") <= 1
-            && Db::val('SELECT role FROM users WHERE id = ?', [$id]) === 'admin') {
+        if (Db::val('SELECT role FROM users WHERE id = ?', [$id]) === 'admin' && UserService::activeAdminCount([$id]) < 1) {
             throw HttpError::invalid('Phải còn ít nhất một quản trị viên.');
         }
 

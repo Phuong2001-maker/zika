@@ -1,0 +1,252 @@
+{
+ "差一点儿": [
+  {"zh": "今天我起晚了，差一点儿迟到。", "pinyin": "Jīntiān wǒ qǐ wǎn le, chà yìdiǎnr chídào.", "vi": "Hôm nay tôi dậy muộn, suýt nữa thì đến trễ."}
+ ],
+ "摔跤": [
+  {"zh": "下雪了，路很滑，小心别摔跤。", "pinyin": "Xià xuě le, lù hěn huá, xiǎoxīn bié shuāijiāo.", "vi": "Tuyết rơi rồi, đường rất trơn, cẩn thận kẻo ngã."}
+ ],
+ "另外": [
+  {"zh": "这件衣服太小了，我想看看另外一件。", "pinyin": "Zhè jiàn yīfu tài xiǎo le, wǒ xiǎng kànkan lìngwài yí jiàn.", "vi": "Chiếc áo này chật quá, tôi muốn xem chiếc khác."},
+  {"zh": "我买了一本书，另外还买了两支笔。", "pinyin": "Wǒ mǎile yì běn shū, lìngwài hái mǎile liǎng zhī bǐ.", "vi": "Tôi mua một quyển sách, ngoài ra còn mua hai cây bút."}
+ ],
+ "服务员": [
+  {"zh": "服务员，请给我们一杯茶。", "pinyin": "Fúwùyuán, qǐng gěi wǒmen yì bēi chá.", "vi": "Phục vụ ơi, cho chúng tôi một cốc trà."}
+ ],
+ "样子": [
+  {"zh": "他笑的样子很像他爸爸。", "pinyin": "Tā xiào de yàngzi hěn xiàng tā bàba.", "vi": "Dáng cười của cậu ấy rất giống bố."}
+ ],
+ "小伙儿": [
+  {"zh": "那个小伙儿又高又帅。", "pinyin": "Nàge xiǎohuǒr yòu gāo yòu shuài.", "vi": "Chàng trai kia vừa cao vừa đẹp trai."}
+ ],
+ "灯笼": [
+  {"zh": "春节的时候，家家门口都挂着灯笼。", "pinyin": "Chūnjié de shíhou, jiājiā ménkǒu dōu guàzhe dēnglong.", "vi": "Dịp Tết, trước cửa nhà nào cũng treo đèn lồng."}
+ ],
+ "摆": [
+  {"zh": "他把书摆在桌子上。", "pinyin": "Tā bǎ shū bǎi zài zhuōzi shang.", "vi": "Anh ấy bày sách lên bàn."}
+ ],
+ "新娘": [
+  {"zh": "今天的新娘真漂亮。", "pinyin": "Jīntiān de xīnniáng zhēn piàoliang.", "vi": "Cô dâu hôm nay đẹp quá."}
+ ],
+ "棉袄": [
+  {"zh": "天冷了，妈妈给我买了一件棉袄。", "pinyin": "Tiān lěng le, māma gěi wǒ mǎile yí jiàn mián'ǎo.", "vi": "Trời lạnh rồi, mẹ mua cho tôi một chiếc áo bông."}
+ ],
+ "新郎": [
+  {"zh": "新郎今天穿得非常帅。", "pinyin": "Xīnláng jīntiān chuān de fēicháng shuài.", "vi": "Hôm nay chú rể ăn mặc rất bảnh."}
+ ],
+ "帅": [
+  {"zh": "你哥哥长得真帅！", "pinyin": "Nǐ gēge zhǎng de zhēn shuài!", "vi": "Anh trai bạn đẹp trai thật!"}
+ ],
+ "系": [
+  {"zh": "他今天系了一条红领带。", "pinyin": "Tā jīntiān jìle yì tiáo hóng lǐngdài.", "vi": "Hôm nay anh ấy thắt một chiếc cà vạt đỏ."}
+ ],
+ "领带": [
+  {"zh": "这条领带是我送给他的。", "pinyin": "Zhè tiáo lǐngdài shì wǒ sòng gěi tā de.", "vi": "Chiếc cà vạt này là tôi tặng anh ấy."}
+ ],
+ "热情": [
+  {"zh": "这里的人对客人非常热情。", "pinyin": "Zhèlǐ de rén duì kèrén fēicháng rèqíng.", "vi": "Người ở đây rất niềm nở với khách."}
+ ],
+ "客人": [
+  {"zh": "今天晚上家里要来几位客人。", "pinyin": "Jīntiān wǎnshang jiā li yào lái jǐ wèi kèrén.", "vi": "Tối nay nhà sẽ có mấy vị khách đến chơi."}
+ ],
+ "气氛": [
+  {"zh": "晚会的气氛非常热闹。", "pinyin": "Wǎnhuì de qìfēn fēicháng rènao.", "vi": "Không khí buổi dạ hội rất náo nhiệt."}
+ ],
+ "倒": [
+  {"zh": "请给我倒一杯水。", "pinyin": "Qǐng gěi wǒ dào yì bēi shuǐ.", "vi": "Làm ơn rót cho tôi một cốc nước."}
+ ],
+ "枣": [
+  {"zh": "这些枣又大又甜。", "pinyin": "Zhèxiē zǎo yòu dà yòu tián.", "vi": "Những quả táo này vừa to vừa ngọt."}
+ ],
+ "尝": [
+  {"zh": "你尝一下我做的菜吧。", "pinyin": "Nǐ cháng yíxià wǒ zuò de cài ba.", "vi": "Bạn nếm thử món tôi nấu đi."}
+ ],
+ "住宅": [
+  {"zh": "这里新建了很多住宅。", "pinyin": "Zhèlǐ xīn jiànle hěn duō zhùzhái.", "vi": "Ở đây mới xây rất nhiều nhà ở."}
+ ],
+ "小区": [
+  {"zh": "我们小区里有一个大花园。", "pinyin": "Wǒmen xiǎoqū li yǒu yí ge dà huāyuán.", "vi": "Trong khu dân cư của chúng tôi có một khu vườn lớn."}
+ ],
+ "欢乐": [
+  {"zh": "晚会上到处都是欢乐的笑声。", "pinyin": "Wǎnhuì shang dàochù dōu shì huānlè de xiàoshēng.", "vi": "Ở buổi dạ hội đâu đâu cũng là tiếng cười vui vẻ."}
+ ],
+ "节日": [
+  {"zh": "春节是中国最重要的节日。", "pinyin": "Chūnjié shì Zhōngguó zuì zhòngyào de jiérì.", "vi": "Tết là ngày lễ quan trọng nhất của Trung Quốc."}
+ ],
+ "春节": [
+  {"zh": "今年春节你回家吗？", "pinyin": "Jīnnián Chūnjié nǐ huí jiā ma?", "vi": "Tết năm nay bạn có về nhà không?"}
+ ],
+ "份": [
+  {"zh": "这是我送给你的一份礼物。", "pinyin": "Zhè shì wǒ sòng gěi nǐ de yí fèn lǐwù.", "vi": "Đây là món quà tôi tặng bạn."}
+ ],
+ "行业": [
+  {"zh": "你以后想在哪个行业工作？", "pinyin": "Nǐ yǐhòu xiǎng zài nǎge hángyè gōngzuò?", "vi": "Sau này bạn muốn làm việc trong ngành nghề nào?"}
+ ],
+ "沙发": [
+  {"zh": "爸爸坐在沙发上看电视。", "pinyin": "Bàba zuò zài shāfā shang kàn diànshì.", "vi": "Bố ngồi trên ghế sofa xem ti vi."}
+ ],
+ "冰箱": [
+  {"zh": "冰箱里还有很多水果。", "pinyin": "Bīngxiāng li hái yǒu hěn duō shuǐguǒ.", "vi": "Trong tủ lạnh vẫn còn nhiều hoa quả."}
+ ],
+ "洗衣机": [
+  {"zh": "我们家的洗衣机坏了。", "pinyin": "Wǒmen jiā de xǐyījī huài le.", "vi": "Máy giặt nhà chúng tôi hỏng rồi."}
+ ],
+ "空调": [
+  {"zh": "天气太热了，快开空调吧。", "pinyin": "Tiānqì tài rè le, kuài kāi kōngtiáo ba.", "vi": "Trời nóng quá, mau bật điều hoà lên đi."}
+ ],
+ "空姐": [
+  {"zh": "我姐姐是一名空姐。", "pinyin": "Wǒ jiějie shì yì míng kōngjiě.", "vi": "Chị gái tôi là một tiếp viên hàng không."}
+ ],
+ "湿": [
+  {"zh": "下雨了，我的衣服都湿了。", "pinyin": "Xià yǔ le, wǒ de yīfu dōu shī le.", "vi": "Trời mưa, quần áo của tôi ướt hết rồi."}
+ ],
+ "首都": [
+  {"zh": "北京是中国的首都。", "pinyin": "Běijīng shì Zhōngguó de shǒudū.", "vi": "Bắc Kinh là thủ đô của Trung Quốc."}
+ ],
+ "剧场": [
+  {"zh": "晚上我们去剧场看京剧。", "pinyin": "Wǎnshang wǒmen qù jùchǎng kàn jīngjù.", "vi": "Buổi tối chúng tôi đến nhà hát xem Kinh kịch."}
+ ],
+ "司机": [
+  {"zh": "他是一名出租车司机。", "pinyin": "Tā shì yì míng chūzūchē sījī.", "vi": "Anh ấy là một tài xế taxi."}
+ ],
+ "机场": [
+  {"zh": "我明天早上去机场接朋友。", "pinyin": "Wǒ míngtiān zǎoshang qù jīchǎng jiē péngyou.", "vi": "Sáng mai tôi ra sân bay đón bạn."}
+ ],
+ "运气": [
+  {"zh": "今天我的运气真好！", "pinyin": "Jīntiān wǒ de yùnqi zhēn hǎo!", "vi": "Hôm nay tôi may mắn thật!"}
+ ],
+ "傻": [
+  {"zh": "我真傻，又把钥匙忘在家里了。", "pinyin": "Wǒ zhēn shǎ, yòu bǎ yàoshi wàng zài jiā li le.", "vi": "Tôi ngốc thật, lại để quên chìa khoá ở nhà rồi."}
+ ],
+ "受骗": [
+  {"zh": "买东西的时候要小心，别受骗。", "pinyin": "Mǎi dōngxi de shíhou yào xiǎoxīn, bié shòupiàn.", "vi": "Khi mua đồ phải cẩn thận, đừng để bị lừa."}
+ ],
+ "受": [
+  {"zh": "他小时候受了很多苦。", "pinyin": "Tā xiǎoshíhou shòule hěn duō kǔ.", "vi": "Hồi nhỏ anh ấy đã chịu rất nhiều khổ cực."}
+ ],
+ "骗": [
+  {"zh": "你别骗我，我都知道了。", "pinyin": "Nǐ bié piàn wǒ, wǒ dōu zhīdào le.", "vi": "Bạn đừng lừa tôi, tôi biết hết rồi."}
+ ],
+ "罚": [
+  {"zh": "他开车太快，被罚了两百块钱。", "pinyin": "Tā kāi chē tài kuài, bèi fále liǎng bǎi kuài qián.", "vi": "Anh ấy lái xe quá nhanh, bị phạt hai trăm tệ."}
+ ],
+ "戒烟": [
+  {"zh": "为了身体，爸爸决定戒烟。", "pinyin": "Wèile shēntǐ, bàba juédìng jièyān.", "vi": "Vì sức khoẻ, bố quyết định cai thuốc lá."}
+ ],
+ "大山": [
+  {"zh": "大山最近遇到了很多倒霉事儿。", "pinyin": "Dàshān zuìjìn yùdàole hěn duō dǎoméi shìr.", "vi": "Gần đây Đại Sơn gặp rất nhiều chuyện xui xẻo."}
+ ],
+ "古代": [
+  {"zh": "这是一个中国古代的故事。", "pinyin": "Zhè shì yí ge Zhōngguó gǔdài de gùshi.", "vi": "Đây là một câu chuyện thời cổ đại của Trung Quốc."}
+ ],
+ "神话": [
+  {"zh": "我很喜欢中国的神话故事。", "pinyin": "Wǒ hěn xǐhuan Zhōngguó de shénhuà gùshi.", "vi": "Tôi rất thích truyện thần thoại Trung Quốc."}
+ ],
+ "仙女": [
+  {"zh": "她长得像仙女一样漂亮。", "pinyin": "Tā zhǎng de xiàng xiānnǚ yíyàng piàoliang.", "vi": "Cô ấy đẹp như tiên nữ."}
+ ],
+ "羡慕": [
+  {"zh": "我很羡慕你有这么好的工作。", "pinyin": "Wǒ hěn xiànmù nǐ yǒu zhème hǎo de gōngzuò.", "vi": "Tôi rất ngưỡng mộ bạn có công việc tốt như vậy."}
+ ],
+ "人间": [
+  {"zh": "仙女觉得人间比天上好。", "pinyin": "Xiānnǚ juéde rénjiān bǐ tiānshàng hǎo.", "vi": "Nàng tiên thấy trần gian tốt hơn trên trời."}
+ ],
+ "偷偷儿": [
+  {"zh": "弟弟偷偷儿吃了一块糖。", "pinyin": "Dìdi tōutōur chīle yí kuài táng.", "vi": "Em trai lén ăn một viên kẹo."}
+ ],
+ "内容": [
+  {"zh": "这本书的内容很有意思。", "pinyin": "Zhè běn shū de nèiróng hěn yǒu yìsi.", "vi": "Nội dung cuốn sách này rất thú vị."}
+ ],
+ "喘气": [
+  {"zh": "他跑得太快，累得直喘气。", "pinyin": "Tā pǎo de tài kuài, lèi de zhí chuǎnqì.", "vi": "Anh ấy chạy nhanh quá, mệt đến thở hổn hển."}
+ ],
+ "出汗": [
+  {"zh": "天太热了，我一动就出汗。", "pinyin": "Tiān tài rè le, wǒ yí dòng jiù chūhàn.", "vi": "Trời nóng quá, tôi cứ động một chút là đổ mồ hôi."}
+ ],
+ "搬家": [
+  {"zh": "我们下个月要搬家了。", "pinyin": "Wǒmen xià ge yuè yào bānjiā le.", "vi": "Tháng sau chúng tôi sẽ chuyển nhà."}
+ ],
+ "点菜": [
+  {"zh": "你来点菜吧，我什么都吃。", "pinyin": "Nǐ lái diǎn cài ba, wǒ shénme dōu chī.", "vi": "Bạn gọi món đi, tôi món gì cũng ăn."}
+ ],
+ "十字路口儿": [
+  {"zh": "到了十字路口儿往左拐。", "pinyin": "Dàole shízì lùkǒur wǎng zuǒ guǎi.", "vi": "Đến ngã tư thì rẽ trái."}
+ ],
+ "腿脚": [
+  {"zh": "奶奶老了，腿脚不太方便。", "pinyin": "Nǎinai lǎo le, tuǐjiǎo bú tài fāngbiàn.", "vi": "Bà già rồi, chân cẳng đi lại không tiện lắm."}
+ ],
+ "来往": [
+  {"zh": "这条路来往的人很多。", "pinyin": "Zhè tiáo lù láiwǎng de rén hěn duō.", "vi": "Người qua lại trên con đường này rất đông."}
+ ],
+ "敢": [
+  {"zh": "这么晚了，我不敢一个人回家。", "pinyin": "Zhème wǎn le, wǒ bù gǎn yí ge rén huí jiā.", "vi": "Muộn thế này rồi, tôi không dám về nhà một mình."}
+ ],
+ "立即": [
+  {"zh": "他接到电话，立即去了医院。", "pinyin": "Tā jiēdào diànhuà, lìjí qùle yīyuàn.", "vi": "Nhận được điện thoại, anh ấy lập tức đến bệnh viện."}
+ ],
+ "扶": [
+  {"zh": "他扶着老人过马路。", "pinyin": "Tā fúzhe lǎorén guò mǎlù.", "vi": "Anh ấy dìu cụ già qua đường."}
+ ],
+ "老人": [
+  {"zh": "那位老人每天都去公园散步。", "pinyin": "Nà wèi lǎorén měi tiān dōu qù gōngyuán sànbù.", "vi": "Cụ già ấy ngày nào cũng ra công viên đi dạo."}
+ ],
+ "情景": [
+  {"zh": "我还记得第一次来中国的情景。", "pinyin": "Wǒ hái jìde dì yī cì lái Zhōngguó de qíngjǐng.", "vi": "Tôi vẫn nhớ cảnh lần đầu tiên đến Trung Quốc."}
+ ],
+ "滚": [
+  {"zh": "一个球滚到了路中间。", "pinyin": "Yí ge qiú gǔndàole lù zhōngjiān.", "vi": "Một quả bóng lăn ra giữa đường."}
+ ],
+ "抱": [
+  {"zh": "妈妈抱着孩子在门口等我。", "pinyin": "Māma bàozhe háizi zài ménkǒu děng wǒ.", "vi": "Mẹ bế con đứng ở cửa đợi tôi."}
+ ],
+ "叔叔": [
+  {"zh": "叔叔，请问去机场怎么走？", "pinyin": "Shūshu, qǐngwèn qù jīchǎng zěnme zǒu?", "vi": "Chú ơi, cho cháu hỏi đi sân bay thế nào ạ?"}
+ ],
+ "鞋带儿": [
+  {"zh": "你的鞋带儿开了。", "pinyin": "Nǐ de xiédàir kāi le.", "vi": "Dây giày của bạn bị tuột rồi."}
+ ],
+ "鞋": [
+  {"zh": "这双鞋太小了，我想换一双。", "pinyin": "Zhè shuāng xié tài xiǎo le, wǒ xiǎng huàn yì shuāng.", "vi": "Đôi giày này chật quá, tôi muốn đổi đôi khác."}
+ ],
+ "脚": [
+  {"zh": "走了一天路，我的脚很疼。", "pinyin": "Zǒule yì tiān lù, wǒ de jiǎo hěn téng.", "vi": "Đi bộ cả ngày, chân tôi đau quá."}
+ ],
+ "伸": [
+  {"zh": "她笑着向我伸出了手。", "pinyin": "Tā xiàozhe xiàng wǒ shēnchūle shǒu.", "vi": "Cô ấy mỉm cười chìa tay về phía tôi."}
+ ],
+ "面前": [
+  {"zh": "老师站在我面前。", "pinyin": "Lǎoshī zhàn zài wǒ miànqián.", "vi": "Thầy giáo đứng trước mặt tôi."}
+ ],
+ "弯": [
+  {"zh": "他弯下腰，帮孩子系好鞋带儿。", "pinyin": "Tā wānxià yāo, bāng háizi jìhǎo xiédàir.", "vi": "Anh ấy cúi người xuống, buộc lại dây giày cho đứa bé."}
+ ],
+ "腰": [
+  {"zh": "坐了一天，我的腰有点儿疼。", "pinyin": "Zuòle yì tiān, wǒ de yāo yǒudiǎnr téng.", "vi": "Ngồi cả ngày, lưng tôi hơi đau."}
+ ],
+ "照顾": [
+  {"zh": "我生病的时候，妈妈一直照顾我。", "pinyin": "Wǒ shēngbìng de shíhou, māma yìzhí zhàogù wǒ.", "vi": "Lúc tôi bị ốm, mẹ luôn chăm sóc tôi."}
+ ],
+ "兰笛": [
+  {"zh": "兰笛觉得中国的警察很不错。", "pinyin": "Lándí juéde Zhōngguó de jǐngchá hěn búcuò.", "vi": "Randi thấy cảnh sát Trung Quốc rất tốt."}
+ ],
+ "谢大力": [
+  {"zh": "谢大力很喜欢中国画和书法。", "pinyin": "Xiè Dàlì hěn xǐhuan Zhōngguóhuà hé shūfǎ.", "vi": "Tạ Đại Lực rất thích tranh Trung Quốc và thư pháp."}
+ ],
+ "长久": [
+  {"zh": "这不是长久的办法。", "pinyin": "Zhè bú shì chángjiǔ de bànfǎ.", "vi": "Đây không phải cách lâu dài."}
+ ],
+ "友谊": [
+  {"zh": "为我们的友谊干杯！", "pinyin": "Wèi wǒmen de yǒuyì gānbēi!", "vi": "Vì tình bạn của chúng ta, cạn chén!"}
+ ],
+ "爱情": [
+  {"zh": "这是一个关于爱情的故事。", "pinyin": "Zhè shì yí ge guānyú àiqíng de gùshi.", "vi": "Đây là một câu chuyện về tình yêu."}
+ ],
+ "活": [
+  {"zh": "她奶奶活到了一百岁。", "pinyin": "Tā nǎinai huódàole yìbǎi suì.", "vi": "Bà nội cô ấy sống đến một trăm tuổi."}
+ ],
+ "顺": [
+  {"zh": "最近工作很顺，我很高兴。", "pinyin": "Zuìjìn gōngzuò hěn shùn, wǒ hěn gāoxìng.", "vi": "Dạo này công việc rất thuận lợi, tôi rất vui."}
+ ],
+ "下次": [
+  {"zh": "今天太晚了，我们下次再来吧。", "pinyin": "Jīntiān tài wǎn le, wǒmen xià cì zài lái ba.", "vi": "Hôm nay muộn quá rồi, lần sau chúng ta lại đến nhé."}
+ ]
+}

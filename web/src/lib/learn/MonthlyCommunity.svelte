@@ -5,13 +5,15 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import ContestCountdown from './ContestCountdown.svelte';
   import ContestHistory from './ContestHistory.svelte';
-  import { contestStore, type RankRow } from './contest.svelte';
+  import { contestStore, type RankRow, type StudyRow } from './contest.svelte';
+  import { feedback } from '$lib/stores/feedback.svelte';
+  import { session } from '$lib/stores/session.svelte';
   import { supportLinks } from './support-links.svelte';
   import { clock } from '$lib/utils/format';
   import { ApiError } from '$lib/api/client';
   import { toast } from '$lib/stores/toast.svelte';
 
-  // Tiền quỹ, link Shopee và giờ thi lấy theo cấu hình ở khu quản trị. Bảng xếp hạng vẫn là dữ liệu duyệt giao diện.
+  // Tiền quỹ, link Shopee và giờ thi lấy theo cấu hình ở khu quản trị; Top chăm học tính từ phút học thật trong tháng.
   const currency = (value: number): string =>
     new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(value);
   const month = $derived(supportLinks.monthlyFund.month);
@@ -67,6 +69,13 @@
     dialog = 'ranking';
     void contestStore.refreshRanking();
     void contestStore.refreshRegistrants();
+    void contestStore.refreshStudyTop();
+  }
+  const studyTop = $derived(contestStore.studyTop);
+  // Chưa có cách nhận thưởng riêng: người đạt giải gửi tài khoản ngân hàng qua Góp ý, quản trị đọc ở /admin/feedback.
+  function claimPrize(): void {
+    dialog = null;
+    feedback.open();
   }
   onMount(() => {
     void supportLinks.refresh();
@@ -100,19 +109,6 @@
     void supportLinks.refresh();
     void contestStore.refresh();
   }
-
-  const students = [
-    { name: 'Nguyễn Thảo Linh', initials: 'TL', days: 26, lessons: 48, minutes: 1240 },
-    { name: 'Trần Minh Anh', initials: 'MA', days: 24, lessons: 45, minutes: 1125 },
-    { name: 'Lê Hoàng Nam', initials: 'HN', days: 23, lessons: 42, minutes: 980 },
-    { name: 'Phạm Ngọc Mai', initials: 'NM', days: 21, lessons: 39, minutes: 875 },
-    { name: 'Đỗ Hải Yến', initials: 'HY', days: 20, lessons: 36, minutes: 810 },
-    { name: 'Vũ Đức Anh', initials: 'ĐA', days: 18, lessons: 32, minutes: 740 },
-    { name: 'Bùi Thu Hà', initials: 'TH', days: 17, lessons: 30, minutes: 685 },
-    { name: 'Nguyễn Tuấn Tú', initials: 'TT', days: 16, lessons: 28, minutes: 620 },
-    { name: 'Trần Khánh Vy', initials: 'KV', days: 15, lessons: 26, minutes: 580 },
-    { name: 'Lê Minh Châu', initials: 'MC', days: 14, lessons: 24, minutes: 540 },
-  ];
 </script>
 
 {#snippet bag()}
@@ -350,7 +346,7 @@
       {@render prizeList()}
       <div class="mc-detail-lines">
         <h3 class="mc-rules-title">Thông tin cần biết</h3>
-        <p><Icon name="flag" size={18} /><span><b>Nhận thưởng qua ngân hàng</b><small>Người đạt giải cung cấp ngân hàng, số tài khoản và tên chủ tài khoản sau khi công bố kết quả. Không cần nhập khi đăng ký thi.</small></span></p>
+        <p><Icon name="flag" size={18} /><span><b>Nhận thưởng qua ngân hàng</b><small>Sau khi công bố kết quả, người đạt giải gửi tên ngân hàng, số tài khoản và tên chủ tài khoản qua Góp ý (Chuyển nhanh → Góp ý). Không cần nhập khi đăng ký thi.</small></span></p>
         {#if contest}<p><Icon name="clock" size={18} /><span><b>Hết giờ tự nộp bài</b><small>Bài thi kết thúc lúc {contest.endsLabel}. Các câu đã làm sẽ được nộp tự động.</small></span></p>{/if}
         <p>
           <Icon name="quiz" size={18} /><span
@@ -417,18 +413,32 @@
           onclick={() => showRanking('registrants')}>📋 Đăng ký{registrants?.count ? ` (${registrants.count})` : ''}</button
         >
       </div>
-      {#if ranking === 'study'}<p class="mc-muted-note">
-          Top 10 theo thời gian học trong tháng. Cùng thời gian thì ưu tiên số bài hoàn thành. Dữ liệu minh họa.
-        </p>
-        <ol class="mc-full-list">
-          {#each students as student, i (i)}<li>
-              <span class="mc-place" class:mc-medal-place={i < 3} role="img" aria-label={`Hạng ${i + 1}`}>{MEDALS[i] ?? i + 1}</span><span
-                class="mc-avatar"
-                style="background: var(--lv{(i % 3) + 1})">{student.initials}</span
-              ><span class="mc-person"><b>{student.name}</b><small>{student.days} ngày học · {student.lessons} bài hoàn thành</small></span
-              ><span class="mc-minutes"><b>{student.minutes.toLocaleString('vi-VN')}</b><small>phút học</small></span>
-            </li>{/each}
-        </ol>{:else if ranking === 'registrants'}
+      {#if ranking === 'study'}
+        {#snippet studyRow(row: StudyRow)}
+          <li class:mc-me={row.isMe}>
+            <span class="mc-place" class:mc-medal-place={row.rank <= 3} role="img" aria-label={`Hạng ${row.rank}`}
+              >{MEDALS[row.rank - 1] ?? row.rank}</span
+            ><span class="mc-avatar" style="background: var(--lv{((row.rank - 1) % 3) + 1})">{initials(row.name)}</span><span class="mc-person"
+              ><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>{row.days} ngày học · {row.done} phần bài học xong</small></span
+            ><span class="mc-minutes"><b>{row.minutes.toLocaleString('vi-VN')}</b><small>phút học</small></span>
+          </li>
+        {/snippet}
+        {#if studyTop && studyTop.rows.length > 0}
+          <ol class="mc-full-list">
+            {#each studyTop.rows as row (row.rank)}{@render studyRow(row)}{/each}
+          </ol>
+          {#if studyTop.me && studyTop.me.rank > studyTop.rows.length}
+            <ol class="mc-full-list mc-my-rank">{@render studyRow(studyTop.me)}</ol>
+          {/if}
+        {:else if studyTop}
+          <div class="mc-contest-empty">
+            <span aria-hidden="true">🌱</span>
+            <h3>Tháng này chưa có ai lên bảng</h3>
+            <p class="muted">Học từ một phút trở lên là có tên ở đây.</p>
+          </div>
+        {/if}
+        {#if studyTop?.rows.length && !studyTop.me && !session.isStaff}<p class="mc-muted-note">Bạn chưa có phút học nào trong tháng này.</p>{/if}
+      {:else if ranking === 'registrants'}
         {#if registrants?.contest && registrants.rows.length > 0}
           <div class="mc-rank-head">
             <b>{registrants.contest.title}</b>
@@ -460,13 +470,8 @@
             {contestRanking.contest.status === 'open' ? 'Đang diễn ra' : 'Đã kết thúc'} · {contestRanking.participants} người
           </span>
         </div>
-        <p class="mc-muted-note">
-          Xếp theo số câu đúng, bằng nhau thì ai làm nhanh hơn xếp trên.{contestRanking.contest.status === 'open'
-            ? ' Bảng cập nhật khi có người nộp bài.'
-            : ''}
-        </p>
         {#if myPrize && myPrize.amount !== null && myPrize.amount > 0}
-          <div class="mc-claim-banner"><span aria-hidden="true">🎉</span><div><b>Bạn đạt {myPrize.label}!</b><small>Phần thưởng {prizeMoney(myPrize)} · Xem trạng thái trong lịch sử</small></div><button type="button" class="btn btn-son btn-sm" onclick={openHistory}>Lịch sử thi &amp; thưởng</button></div>
+          <div class="mc-claim-banner"><span aria-hidden="true">🎉</span><div><b>Bạn đạt {myPrize.label}!</b><small>Phần thưởng {prizeMoney(myPrize)} · Gửi tên ngân hàng, số tài khoản và tên chủ tài khoản qua Góp ý để nhận thưởng.</small></div>{#if feedback.available}<button type="button" class="btn btn-son btn-sm" onclick={claimPrize}>Gửi thông tin nhận thưởng</button>{/if}</div>
         {/if}
         {#snippet rankRow(row: RankRow)}
           <li class:mc-me={row.isMe}>

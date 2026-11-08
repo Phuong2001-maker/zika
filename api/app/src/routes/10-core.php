@@ -48,6 +48,8 @@ return [
     ['GET',    '/contest/current', [ContestC::class, 'current'], 'L'],
     ['GET',    '/contest/ranking', [ContestC::class, 'ranking'], 'L'],
     ['GET',    '/contest/registrants', [ContestC::class, 'registrants'], 'L'],
+    ['GET',    '/contest/history', [ContestC::class, 'history'], 'L'],
+    ['GET',    '/contest/study-top', [ContestC::class, 'studyTop'], 'L'],
     ['POST',   '/contest/register', [ContestC::class, 'register'], 'L'],
     ['DELETE', '/contest/register', [ContestC::class, 'unregister'], 'L'],
 

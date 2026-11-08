@@ -117,6 +117,8 @@ final class ContestTest extends DbTestCase
     public function testRoute(): void
     {
         self::assertSame('L', Router::match('GET', '/contest/current')['auth']);
+        self::assertSame('L', Router::match('GET', '/contest/history')['auth']);
+        self::assertSame('L', Router::match('GET', '/contest/study-top')['auth']);
         self::assertSame('A', Router::match('GET', '/admin/contests')['auth']);
         self::assertSame('A', Router::match('POST', '/admin/contests')['auth']);
         self::assertSame('A', Router::match('DELETE', '/admin/contests/3')['auth']);
@@ -821,5 +823,32 @@ final class ContestTest extends DbTestCase
             self::assertNotSame([0, 1, 2, 3], $map, 'Không được để nguyên thứ tự gốc');
             self::assertCount(4, array_unique($map));
         }
+    }
+
+    public function testLichSuChiCuocThiDaKetThucMoiNhatTruocKemHangCuaMinh(): void
+    {
+        $mock = $this->de(2);
+        $cu = $this->cuocThi($mock, '2026-10-30 08:00:00', '2026-10-30 09:00:00');
+        $moi = $this->cuocThi($mock, '2026-11-20 08:00:00', '2026-11-20 09:00:00');
+        $this->cuocThi($mock, '2026-11-20 09:30:00', '2026-11-20 18:00:00');   // đang thi: chưa vào lịch sử
+        $toi = $this->makeUser(['display_name' => 'Tôi']);
+        $vang = $this->makeUser(['display_name' => 'Vắng']);
+        foreach (['A', 'B', 'C', 'D'] as $i => $ten) {
+            $this->luotDaNop($moi, $mock, $this->makeUser(['display_name' => $ten]), 2, 100 + $i, '2026-11-20 08:30:00');
+        }
+        $this->luotDaNop($moi, $mock, $toi, 1, 50, '2026-11-20 08:40:00');
+        Db::exec('INSERT INTO contest_registrations (contest_id, user_id, created_at) VALUES (?, ?, ?)', [$moi, $vang, '2026-11-20 07:00:00']);
+
+        $r = new Request('GET', '/contest/history');
+        $r->user = ['id' => $toi, 'role' => 'learner'];
+        $lich = (new ContestController())->history($r);
+
+        self::assertSame([$moi, $cu], array_column($lich, 'id'));
+        self::assertSame('20/11/2026', $lich[0]['endedOn']);
+        self::assertSame(6, $lich[0]['participants']);
+        self::assertSame(['A', 'B', 'C'], array_column($lich[0]['top'], 'name'));
+        self::assertSame(5, $lich[0]['me']['rank']);
+        self::assertNull($lich[1]['me']);
+        self::assertSame([], $lich[1]['top']);
     }
 }

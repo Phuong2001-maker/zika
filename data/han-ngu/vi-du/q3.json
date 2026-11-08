@@ -1,0 +1,329 @@
+{
+  "病人": [
+    {
+      "zh": "医院里有很多病人。",
+      "pinyin": "Yīyuàn li yǒu hěn duō bìngrén.",
+      "vi": "Trong bệnh viện có rất nhiều bệnh nhân."
+    }
+  ],
+  "小便": [
+    {
+      "zh": "医生让我去验小便。",
+      "pinyin": "Yīshēng ràng wǒ qù yàn xiǎobiàn.",
+      "vi": "Bác sĩ bảo tôi đi xét nghiệm nước tiểu."
+    }
+  ],
+  "开药": [
+    {
+      "zh": "医生正在给病人开药。",
+      "pinyin": "Yīshēng zhèngzài gěi bìngrén kāi yào.",
+      "vi": "Bác sĩ đang kê thuốc cho bệnh nhân."
+    }
+  ],
+  "打针": [
+    {
+      "zh": "我不想打针，我想吃药。",
+      "pinyin": "Wǒ bù xiǎng dǎzhēn, wǒ xiǎng chī yào.",
+      "vi": "Tôi không muốn tiêm, tôi muốn uống thuốc."
+    }
+  ],
+  "平方米": [
+    {
+      "zh": "我的房间有二十平方米。",
+      "pinyin": "Wǒ de fángjiān yǒu èrshí píngfāngmǐ.",
+      "vi": "Phòng của tôi rộng hai mươi mét vuông."
+    }
+  ],
+  "妻子": [
+    {
+      "zh": "他的妻子是医生。",
+      "pinyin": "Tā de qīzi shì yīshēng.",
+      "vi": "Vợ của anh ấy là bác sĩ."
+    }
+  ],
+  "考试": [
+    {
+      "zh": "这次考试他考得很好。",
+      "pinyin": "Zhè cì kǎoshì tā kǎo de hěn hǎo.",
+      "vi": "Kỳ thi lần này anh ấy làm bài rất tốt."
+    }
+  ],
+  "散步": [
+    {
+      "zh": "我每天晚上去公园散步。",
+      "pinyin": "Wǒ měi tiān wǎnshang qù gōngyuán sànbù.",
+      "vi": "Tối nào tôi cũng đi dạo ở công viên."
+    }
+  ],
+  "坏处": [
+    {
+      "zh": "喝酒对身体有坏处。",
+      "pinyin": "Hē jiǔ duì shēntǐ yǒu huàichù.",
+      "vi": "Uống rượu có hại cho sức khỏe."
+    }
+  ],
+  "春天": [
+    {
+      "zh": "春天来了，天气暖和了。",
+      "pinyin": "Chūntiān lái le, tiānqì nuǎnhuo le.",
+      "vi": "Mùa xuân đến rồi, trời ấm lên rồi."
+    }
+  ],
+  "秋天": [
+    {
+      "zh": "北京的秋天很漂亮。",
+      "pinyin": "Běijīng de qiūtiān hěn piàoliang.",
+      "vi": "Mùa thu ở Bắc Kinh rất đẹp."
+    }
+  ],
+  "刮风": [
+    {
+      "zh": "今天刮风，天气很冷。",
+      "pinyin": "Jīntiān guā fēng, tiānqì hěn lěng.",
+      "vi": "Hôm nay gió thổi, trời rất lạnh."
+    }
+  ],
+  "画册": [
+    {
+      "zh": "这本画册很漂亮。",
+      "pinyin": "Zhè běn huàcè hěn piàoliang.",
+      "vi": "Cuốn tập tranh này rất đẹp."
+    }
+  ],
+  "爱": [
+    {
+      "zh": "我爸爸很爱喝茶。",
+      "pinyin": "Wǒ bàba hěn ài hē chá.",
+      "vi": "Bố tôi rất thích uống trà."
+    },
+    {
+      "zh": "妈妈很爱我。",
+      "pinyin": "Māma hěn ài wǒ.",
+      "vi": "Mẹ rất yêu tôi."
+    }
+  ],
+  "水": [
+    {
+      "zh": "我想喝一杯水。",
+      "pinyin": "Wǒ xiǎng hē yì bēi shuǐ.",
+      "vi": "Tôi muốn uống một cốc nước."
+    }
+  ],
+  "有名": [
+    {
+      "zh": "这个饭店很有名。",
+      "pinyin": "Zhège fàndiàn hěn yǒumíng.",
+      "vi": "Nhà hàng này rất nổi tiếng."
+    }
+  ],
+  "区": [
+    {
+      "zh": "这个区有很多学校。",
+      "pinyin": "Zhège qū yǒu hěn duō xuéxiào.",
+      "vi": "Khu này có rất nhiều trường học."
+    }
+  ],
+  "旅游": [
+    {
+      "zh": "我想去中国旅游。",
+      "pinyin": "Wǒ xiǎng qù Zhōngguó lǚyóu.",
+      "vi": "Tôi muốn đi du lịch Trung Quốc."
+    }
+  ],
+  "尤其": [
+    {
+      "zh": "我喜欢吃水果，尤其是苹果。",
+      "pinyin": "Wǒ xǐhuan chī shuǐguǒ, yóuqí shì píngguǒ.",
+      "vi": "Tôi thích ăn hoa quả, nhất là táo."
+    }
+  ],
+  "凉快": [
+    {
+      "zh": "今天下雨了，很凉快。",
+      "pinyin": "Jīntiān xià yǔ le, hěn liángkuai.",
+      "vi": "Hôm nay trời mưa, rất mát mẻ."
+    }
+  ],
+  "避暑": [
+    {
+      "zh": "夏天我们去山里避暑。",
+      "pinyin": "Xiàtiān wǒmen qù shān li bìshǔ.",
+      "vi": "Mùa hè chúng tôi lên núi nghỉ mát."
+    }
+  ],
+  "靠": [
+    {
+      "zh": "他们家靠经营饭店生活。",
+      "pinyin": "Tāmen jiā kào jīngyíng fàndiàn shēnghuó.",
+      "vi": "Nhà họ sống nhờ vào việc kinh doanh nhà hàng."
+    }
+  ],
+  "经营": [
+    {
+      "zh": "他在北京经营一个饭店。",
+      "pinyin": "Tā zài Běijīng jīngyíng yí ge fàndiàn.",
+      "vi": "Anh ấy kinh doanh một nhà hàng ở Bắc Kinh."
+    }
+  ],
+  "发财": [
+    {
+      "zh": "听说他发财了。",
+      "pinyin": "Tīngshuō tā fācái le.",
+      "vi": "Nghe nói anh ấy phát tài rồi."
+    }
+  ],
+  "着急": [
+    {
+      "zh": "别着急，还早呢。",
+      "pinyin": "Bié zháojí, hái zǎo ne.",
+      "vi": "Đừng sốt ruột, vẫn còn sớm mà."
+    }
+  ],
+  "坏事": [
+    {
+      "zh": "他没做过坏事。",
+      "pinyin": "Tā méi zuòguo huàishì.",
+      "vi": "Anh ấy chưa từng làm việc xấu."
+    }
+  ],
+  "父亲": [
+    {
+      "zh": "我父亲是老师。",
+      "pinyin": "Wǒ fùqin shì lǎoshī.",
+      "vi": "Bố tôi là giáo viên."
+    }
+  ],
+  "离婚": [
+    {
+      "zh": "他们去年离婚了。",
+      "pinyin": "Tāmen qùnián líhūn le.",
+      "vi": "Họ đã li hôn vào năm ngoái."
+    }
+  ],
+  "未婚妻": [
+    {
+      "zh": "这是我的未婚妻。",
+      "pinyin": "Zhè shì wǒ de wèihūnqī.",
+      "vi": "Đây là vợ chưa cưới của tôi."
+    }
+  ],
+  "那样": [
+    {
+      "zh": "他不是那样的人。",
+      "pinyin": "Tā bú shì nàyàng de rén.",
+      "vi": "Anh ấy không phải là người như thế."
+    }
+  ],
+  "开会": [
+    {
+      "zh": "老师们正在开会。",
+      "pinyin": "Lǎoshīmen zhèngzài kāihuì.",
+      "vi": "Các thầy cô đang họp."
+    }
+  ],
+  "办事": [
+    {
+      "zh": "我下午要去银行办事。",
+      "pinyin": "Wǒ xiàwǔ yào qù yínháng bànshì.",
+      "vi": "Chiều nay tôi phải ra ngân hàng giải quyết chút việc."
+    }
+  ],
+  "注意": [
+    {
+      "zh": "开车的时候要注意安全。",
+      "pinyin": "Kāi chē de shíhou yào zhùyì ānquán.",
+      "vi": "Khi lái xe phải chú ý an toàn."
+    }
+  ],
+  "出土": [
+    {
+      "zh": "这些文物是去年出土的。",
+      "pinyin": "Zhèxiē wénwù shì qùnián chūtǔ de.",
+      "vi": "Những hiện vật này được khai quật vào năm ngoái."
+    }
+  ],
+  "文物": [
+    {
+      "zh": "博物馆里有很多文物。",
+      "pinyin": "Bówùguǎn li yǒu hěn duō wénwù.",
+      "vi": "Trong viện bảo tàng có rất nhiều hiện vật."
+    }
+  ],
+  "大约": [
+    {
+      "zh": "从这儿到机场大约要一个小时。",
+      "pinyin": "Cóng zhèr dào jīchǎng dàyuē yào yí ge xiǎoshí.",
+      "vi": "Từ đây đến sân bay mất khoảng một tiếng."
+    }
+  ],
+  "要求": [
+    {
+      "zh": "老师要求我们每天写汉字。",
+      "pinyin": "Lǎoshī yāoqiú wǒmen měi tiān xiě Hànzì.",
+      "vi": "Thầy giáo yêu cầu chúng tôi ngày nào cũng viết chữ Hán."
+    }
+  ],
+  "住院": [
+    {
+      "zh": "他住院三天了。",
+      "pinyin": "Tā zhùyuàn sān tiān le.",
+      "vi": "Anh ấy nằm viện ba ngày rồi."
+    }
+  ],
+  "利用": [
+    {
+      "zh": "他利用休息时间学习汉语。",
+      "pinyin": "Tā lìyòng xiūxi shíjiān xuéxí Hànyǔ.",
+      "vi": "Anh ấy tận dụng thời gian nghỉ ngơi để học tiếng Trung."
+    }
+  ],
+  "假期": [
+    {
+      "zh": "这个假期你想去哪儿？",
+      "pinyin": "Zhège jiàqī nǐ xiǎng qù nǎr?",
+      "vi": "Kỳ nghỉ này bạn muốn đi đâu?"
+    }
+  ],
+  "旅行社": [
+    {
+      "zh": "我想找一个旅行社。",
+      "pinyin": "Wǒ xiǎng zhǎo yí ge lǚxíngshè.",
+      "vi": "Tôi muốn tìm một công ty du lịch."
+    }
+  ],
+  "组织": [
+    {
+      "zh": "学校组织我们去参观博物馆。",
+      "pinyin": "Xuéxiào zǔzhī wǒmen qù cānguān bówùguǎn.",
+      "vi": "Nhà trường tổ chức cho chúng tôi đi tham quan viện bảo tàng."
+    }
+  ],
+  "需要": [
+    {
+      "zh": "我需要你的帮助。",
+      "pinyin": "Wǒ xūyào nǐ de bāngzhù.",
+      "vi": "Tôi cần sự giúp đỡ của bạn."
+    }
+  ],
+  "经常": [
+    {
+      "zh": "他经常去图书馆看书。",
+      "pinyin": "Tā jīngcháng qù túshūguǎn kàn shū.",
+      "vi": "Anh ấy thường xuyên đến thư viện đọc sách."
+    }
+  ],
+  "收集": [
+    {
+      "zh": "他收集了很多中国画。",
+      "pinyin": "Tā shōují le hěn duō Zhōngguó huà.",
+      "vi": "Anh ấy đã sưu tầm rất nhiều tranh Trung Quốc."
+    }
+  ],
+  "生病": [
+    {
+      "zh": "他生病了，今天没来上课。",
+      "pinyin": "Tā shēngbìng le, jīntiān méi lái shàng kè.",
+      "vi": "Anh ấy bị ốm, hôm nay không đến lớp."
+    }
+  ]
+}

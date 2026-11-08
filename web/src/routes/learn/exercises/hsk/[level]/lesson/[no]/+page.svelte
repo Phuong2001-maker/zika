@@ -37,6 +37,7 @@
   let order = $state<number[]>([]);
   let attemptId = $state<number | null>(null);
   let failed = $state(false);
+  let chuaCoCau = $state(false);
 
   let i = $state(0);
   let answer = $state<Answer>(null);
@@ -54,6 +55,7 @@
   /** `moiHan` = “Làm lại”: bỏ lượt dở, mở lượt mới. */
   async function load(moiHan = false): Promise<void> {
     failed = false;
+    chuaCoCau = false;
     try {
       const l = await lessonByNo(levelId, lessonNo);
       if (!l) {
@@ -64,6 +66,10 @@
       lesson = data.lesson;
       next = data.next;
       questions = data.questions;
+      if (questions.length === 0) {
+        chuaCoCau = true;
+        return;
+      }
 
       const st = untrack(() => page.state);
       const fromStart = moiHan || st.fromStart === true;
@@ -226,18 +232,24 @@
   </section>
 {/snippet}
 
-{#if failed}
-  <main class="page">
-    <EmptyState title="Không mở được bài tập này.">
-      {#snippet action()}<a href="/learn/exercises/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
-    </EmptyState>
-  </main>
-{:else if media.isMobile}
+{#snippet baoLoi()}
+  <EmptyState
+    title={chuaCoCau ? 'Bài này chưa có câu bài tập nào.' : 'Không mở được bài tập này.'}
+    desc={chuaCoCau ? 'Phần Bài tập của bài này đang soạn, bạn học phần khác trước nhé.' : undefined}
+  >
+    {#snippet action()}<a href="/learn/exercises/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
+  </EmptyState>
+{/snippet}
+
+<!-- Lỗi cũng nằm trong khung có thanh đầu trang, để người học còn menu đi phần khác. -->
+{#if media.isMobile}
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
     <MTopbar current="bt" back="/learn/exercises/hsk/{levelId}" backLabel="Về danh sách bài" title={lesson?.title ?? 'Bài tập'} sub="{cap.ten(levelId)} · Bài {lessonNo}" />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">
-      {#if lesson === null}
+      {#if failed || chuaCoCau}
+        {@render baoLoi()}
+      {:else if lesson === null}
         <Skeleton h="360px" r={20} />
       {:else}
         {@render khung(true)}
@@ -253,7 +265,9 @@
     </nav>
   </Topbar>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
-    {#if lesson === null}
+    {#if failed || chuaCoCau}
+      {@render baoLoi()}
+    {:else if lesson === null}
       <Skeleton h="420px" r={22} />
     {:else}
       <DauBai href="/learn/exercises/hsk/{levelId}" kicker="{cap.ten(levelId)} · Bài {lessonNo} · {total} câu" title={lesson.title} />

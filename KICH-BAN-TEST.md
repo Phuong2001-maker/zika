@@ -142,7 +142,7 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 
 ## I. Quỹ thưởng, top chăm học và bé túi Shopee — giao diện chưa có backend (06/11/2026)
 
-Danh sách top là dữ liệu minh hoạ; tiền quỹ do admin nhập (phần J). Kiểm ở 320 / 375 / 768 / 1280px, sáng và tối.
+Top chăm học và Lịch sử thi lấy số thật từ 08/11 (trước đó là tên minh hoạ viết cứng); tiền quỹ do admin nhập (phần J). Kiểm ở 320 / 375 / 768 / 1280px, sáng và tối.
 "Máy" là đã chạy trên trình duyệt máy dev ngày 06/11 bằng khổ giả lập; cột "ĐT thật" còn trống, chưa thử trên thiết bị thật.
 
 | # | Làm gì | Mong đợi | Máy | ĐT thật |
@@ -163,6 +163,9 @@ Danh sách top là dữ liệu minh hoạ; tiền quỹ do admin nhập (phần 
 | I15 | Nhìn bé đứng khoảng 10 giây | Tự đổi động tác (vẫy tay, nhảy, nhún nhảy, ngó, nháy mắt, xoay), chữ lời nhắn đứng yên | Đạt | |
 | I12 | Bật "giảm chuyển động" ở hệ điều hành | Bé đứng yên, nói một lần rồi im; không có nhún, chớp | Chưa thử | |
 | I13 | Giao diện tối: thanh đầu trang và 3 hộp thoại | Chữ đọc rõ, không chói | Đạt | |
+| I16 | Học viên học vài phút rồi mở Top chăm học | Có tên mình, số phút, ngày học, phần bài học xong trong tháng; quản trị/biên tập không lên bảng; chưa ai học thì báo "Tháng này chưa có ai lên bảng" | Đạt (local) | |
+| I17 | Mở Lịch sử thi & thưởng | Chỉ cuộc thi đã kết thúc, mới nhất trước; hạng của mình và 3 người dẫn đầu; không có số tiền; chưa có cuộc thi nào thì báo trống | Đạt (local) | |
+| I18 | Người đạt giải bấm "Gửi thông tin nhận thưởng" | Mở hộp Góp ý để gửi ngân hàng, số tài khoản, tên chủ tài khoản; không còn form nhận thưởng giả | Đạt (local) | |
 
 Cần đối chiếu với điều khoản tiếp thị: lời nhắn của bé nói "Chạm là góp quỹ thưởng rồi", nhưng chưa có căn cứ là chỉ bấm đã sinh hoa hồng.
 
@@ -355,6 +358,22 @@ Chưa bấm thử trên trình duyệt: nút Lưu ở form giáo trình (API đ�
 | Q4 | ⋯ → Trả lời / Xoá tin / Báo cáo | Trả lời có khung trích; xoá thành "Tin đã bị xoá" ở mọi máy; báo cáo chọn lý do | Đạt ở test API; **xoá và báo cáo trên trình duyệt chưa bấm** |
 | Q5 | Gửi 2 tin trong 2 giây; 21 tin trong 5 phút | Báo "gửi nhanh quá" / "nghỉ chút" | Đạt ở test API |
 | Q6 | Quản trị cấm chat 1 giờ; tắt "Đang mở cửa" | Học viên thấy "Bạn đang bị tạm cấm…" / "Quán trà đang tạm đóng cửa", không gửi được, vẫn đọc được | Đạt ở test API |
+
+## R. Khoá quyền quản trị, quét giao diện (08/11/2026)
+
+"Máy" là đã chạy ở local ngày 08/11: quét tự động 25 màn quản trị + 32 màn học viên × 3 khổ (375 / 768 / 1280px) — không màn
+nào tràn ngang, không lỗi tải, không lỗi JS; bấm tay ở 375px và 800px.
+
+| # | Làm gì | Mong đợi | Máy | Web thật |
+|---|---|---|---|---|
+| R1 | Server có `admin_emails` trong `config.php`; đăng nhập bằng email trong danh sách | Vào được Quản trị như cũ | Đạt (test API) | |
+| R2 | Sửa DB cho một tài khoản ngoài danh sách thành `role = admin` rồi đăng nhập tài khoản đó | Chỉ là người học, mở `/admin` bị đưa về màn học | Đạt (test API) | |
+| R3 | Quản trị → Người dùng → ⋯ → Đổi quyền → Quản trị viên cho email ngoài danh sách | Báo "Email này chưa có trong danh sách quản trị…", quyền không đổi | Đạt (test API) | |
+| R4 | Học viên Hán ngữ mở Bài tập hoặc Kiểm tra (Hán ngữ cố ý để trống), chọn một bài | Bài ghi "Sắp có"; tấm dưới đáy (điện thoại) ghi "Phần này của bài chưa soạn xong", không có nút Bắt đầu | Đạt | |
+| R5 | Gõ thẳng đường dẫn bài tập của bài 0 câu, hoặc bài Lật thẻ không tồn tại | Báo lỗi ngay trong khung có thanh đầu trang (vẫn có menu đi phần khác) | Đạt | |
+| R7 | Hán ngữ Quyển 1 Bài 1, lật thẻ 五, 马, 你好 | Có "Câu ví dụ" là câu thật (我家五口人。, 白马不大。…), không còn ví dụ chỉ là chính từ đó; bấm loa nghe được giọng | Đạt (local) | |
+| R8 | Hán ngữ Quyển 1 Bài 8, thẻ 太…了 | Có câu ví dụ, chữ 太 được tô | Đạt (local) | |
+| R6 | Lật thẻ 3 chế độ, Chuyển nhanh, chuông, tài khoản, đọc sách (mục lục, file nghe), Quán trà, Top chăm học, Quỹ tháng | Mở/đóng được, không che chữ, không tràn | Đạt | |
 
 ## E. Kiểm tra tự động (chạy ở máy dev)
 

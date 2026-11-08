@@ -350,20 +350,23 @@
   </section>
 {/snippet}
 
-{#if failed}
-  <main class="page">
-    <EmptyState title="Không mở được bài này." desc="Bài có thể đang ẩn hoặc đã bị xoá.">
-      {#snippet action()}<a href="/learn/flashcards/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
-    </EmptyState>
-  </main>
-{:else if media.isMobile}
+{#snippet baoLoi()}
+  <EmptyState title="Không mở được bài này." desc="Bài có thể đang ẩn hoặc đã bị xoá.">
+    {#snippet action()}<a href="/learn/flashcards/hsk/{levelId}" class="btn btn-sm">Về danh sách bài</a>{/snippet}
+  </EmptyState>
+{/snippet}
+
+<!-- Lỗi cũng nằm trong khung có thanh đầu trang, để người học còn menu đi phần khác. -->
+{#if media.isMobile}
   <!-- ============ Điện thoại ============ -->
   <div class="mscreen">
-    <MTopbar current="lt" back="/learn/flashcards/hsk/{levelId}" backLabel="Về danh sách bài" title={data?.lesson.title ?? '…'} sub="{cap.ten(levelId)} · Bài {lessonNo}" />
+    <MTopbar current="lt" back="/learn/flashcards/hsk/{levelId}" backLabel="Về danh sách bài" title={data?.lesson.title ?? (failed ? 'Lật thẻ' : '…')} sub="{cap.ten(levelId)} · Bài {lessonNo}" />
 
     <!-- overflow-x: clip — thẻ mới trượt vào lệch 40px, không được tạo thanh cuộn ngang. -->
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px; overflow-x: clip">
-      {#if data === null}
+      {#if failed}
+        {@render baoLoi()}
+      {:else if data === null}
         <Skeleton h="420px" r={22} />
       {:else}
         <!-- Điện thoại: hàng chế độ đứng ngoài khung để 4 nút có đủ bề ngang, không cắt chữ. -->
@@ -382,7 +385,9 @@
   </Topbar>
 
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
-    {#if data === null}
+    {#if failed}
+      {@render baoLoi()}
+    {:else if data === null}
       <Skeleton h="520px" r={22} />
     {:else}
       <DauBai href="/learn/flashcards/hsk/{levelId}" kicker="{cap.ten(levelId)} · Bài {lessonNo} · {cards.length} từ" title={data.lesson.title} />

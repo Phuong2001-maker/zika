@@ -7,6 +7,7 @@ use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Core\Validator;
 use Zika\Services\ContestService;
+use Zika\Services\TopHoc;
 
 /** Cuộc thi phía người học. */
 final class ContestController
@@ -21,6 +22,18 @@ final class ContestController
     public function ranking(Request $r): array
     {
         return ContestService::ranking($r->userId());
+    }
+
+    /** GET /contest/history — cuộc thi đã kết thúc. */
+    public function history(Request $r): array
+    {
+        return ContestService::history($r->userId());
+    }
+
+    /** GET /contest/study-top — Top chăm học tháng này. */
+    public function studyTop(Request $r): array
+    {
+        return TopHoc::thang($r->userId());
     }
 
     /** GET /contest/registrants */

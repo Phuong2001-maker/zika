@@ -126,7 +126,37 @@ final class ContestService
         if ($c === null) {
             return ['contest' => null, 'rows' => [], 'me' => null, 'participants' => 0];
         }
+        return self::bangCua($c, $userId, $limit);
+    }
 
+    /**
+     * Các cuộc thi đã kết thúc, mới nhất trước: ai đứng đầu và mình đứng thứ mấy.
+     * Không trả số tiền: quỹ không được chụp lại theo từng cuộc thi, lấy quỹ hiện tại thì nói sai số đã trao.
+     * @return list<array<string,mixed>>
+     */
+    public static function history(int $userId, int $limit = 12): array
+    {
+        $out = [];
+        foreach (Db::all(
+            'SELECT * FROM contests WHERE ends_at <= ? ORDER BY ends_at DESC, id DESC LIMIT ' . max(1, $limit),
+            [Clock::sql()],
+        ) as $c) {
+            $bang = self::bangCua($c, $userId, 3);
+            $out[] = [
+                'id' => (int) $c['id'],
+                'title' => (string) $c['title'],
+                'endedOn' => Clock::parse((string) $c['ends_at'])->format('d/m/Y'),
+                'participants' => $bang['participants'],
+                'top' => array_values(array_filter($bang['rows'], static fn (array $row): bool => $row['participated'])),
+                'me' => $bang['me'],
+            ];
+        }
+        return $out;
+    }
+
+    /** @param array<string,mixed> $c */
+    private static function bangCua(array $c, int $userId, int $limit): array
+    {
         // Người đóng tab trước khi hết giờ chưa được chấm: chấm luôn cho bảng đủ người, không chờ cron.
         $overdue = Db::col(
             'SELECT id FROM test_attempts WHERE contest_id = ? AND submitted_at IS NULL AND deadline_at < ? LIMIT 200',

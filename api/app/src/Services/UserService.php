@@ -26,15 +26,56 @@ final class UserService
     public static function activeAdminCount(array $except = []): int
     {
         $sql = "SELECT COUNT(*) FROM users WHERE role = 'admin' AND status = 'active'";
+        $args = array_values($except);
         if ($except !== []) {
             $sql .= ' AND id NOT IN (' . Db::in($except) . ')';
         }
-        return (int) Db::val($sql, array_values($except));
+        // Có danh sách quản trị thì admin ngoài danh sách không tính: họ không vào được khu quản trị.
+        $ds = self::adminEmails();
+        if ($ds !== []) {
+            $sql .= ' AND LOWER(email) IN (' . Db::in($ds) . ')';
+            array_push($args, ...$ds);
+        }
+        return (int) Db::val($sql, $args);
+    }
+
+    /**
+     * Email được làm quản trị, đặt ở config.php (`admin_emails`) — ngoài git, ngoài DB. Có danh sách thì tài khoản ghi
+     * role = admin trong DB mà email không có ở đây vẫn chỉ là người học: ai sửa được DB (lộ phpMyAdmin, lỗi SQL) cũng
+     * không tự nâng mình lên quản trị được. Danh sách rỗng = không giới hạn (máy dev, server chưa điền).
+     * @return list<string>
+     */
+    public static function adminEmails(): array
+    {
+        $ds = Config::get('admin_emails', []);
+        if (!is_array($ds)) {
+            return [];
+        }
+        return array_values(array_unique(array_filter(array_map(static fn ($e): string => Str::lower(trim((string) $e)), $ds))));
+    }
+
+    public static function mayBeAdmin(string $email): bool
+    {
+        $ds = self::adminEmails();
+        return $ds === [] || in_array(Str::lower(trim($email)), $ds, true);
+    }
+
+    /**
+     * Dòng users với vai trò dùng để phân quyền: admin ngoài danh sách bị hạ về người học.
+     * @param array<string,mixed> $u @return array<string,mixed>
+     */
+    public static function withEffectiveRole(array $u): array
+    {
+        if (($u['role'] ?? null) === 'admin' && !self::mayBeAdmin((string) ($u['email'] ?? ''))) {
+            $u['role'] = 'learner';
+        }
+        return $u;
     }
 
     /** @param array<string,mixed> $u dòng bảng users @return array<string,mixed> */
     public static function toApi(array $u): array
     {
+        $u = self::withEffectiveRole($u);
         $display = (string) $u['display_name'];
         return [
             'id' => (int) $u['id'],

@@ -10,6 +10,7 @@ use Zika\Core\Request;
 use Zika\Core\Upload;
 use Zika\Core\Validator;
 use Zika\Services\Curricula;
+use Zika\Services\UserService;
 
 /** Quản trị · tiện ích dùng chung: số trên menu, danh sách nhân sự, tra từ điển, tải ảnh/âm thanh (04 §10.1). */
 final class MiscController
@@ -31,8 +32,8 @@ final class MiscController
         return array_map(static fn (array $u): array => [
             'id' => (int) $u['id'],
             'name' => (string) $u['display_name'],
-            'role' => (string) $u['role'],
-        ], Db::all("SELECT id, display_name, role FROM users WHERE role IN ('editor','admin') ORDER BY role, display_name"));
+            'role' => (string) UserService::withEffectiveRole($u)['role'],
+        ], Db::all("SELECT id, display_name, email, role FROM users WHERE role IN ('editor','admin') ORDER BY role, display_name"));
     }
 
     /**
