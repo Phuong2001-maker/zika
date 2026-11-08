@@ -50,11 +50,11 @@
       {/if}
     {:else if !diemDoc.homNay}
       <p class="gt-khoa-loi-giai">
-        Bạn chưa có điểm mở bài.{diemDoc.link ? ' Bấm nhận để mở link Shopee ở tab mới, không cần mua gì.' : ''}
+        Bạn chưa có điểm mở bài. Bấm nhận để lấy điểm hôm nay.
       </p>
       <button type="button" class="btn btn-son" onclick={nhan}>Nhận {diemDoc.lanToi} điểm hôm nay</button>
     {:else}
-      <p class="gt-khoa-loi-giai">Bạn đã dùng hết điểm. Mai bấm bé túi để nhận thêm 1 điểm nhé.</p>
+      <p class="gt-khoa-loi-giai">Bạn đã dùng hết điểm. Mai quay lại bấm Nhận điểm nhé.</p>
     {/if}
   {:else if ke}
     <p class="gt-khoa-loi-giai">Bài mở lần lượt theo thứ tự. Mở Bài {ke.bai}{ke.ma !== st.sach?.ma ? ` của ${ke.tenSach}` : ''} trước nhé.</p>

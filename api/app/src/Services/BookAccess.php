@@ -21,8 +21,8 @@ use Zika\Core\Settings;
  * Trang trước bài đầu (bìa trong, lời nói đầu, mục lục) đọc tự do, nhưng chỉ ở quyển đang học tới — quyển sau
  * còn khoá cả trang đầu.
  *
- * Điểm: lần bấm bé túi/link Shopee đầu tiên được 3, từ hôm sau mỗi ngày bấm được 1. Điểm chưa dùng giữ lại;
- * ngày không bấm thì không bù. Một điểm mở một bài.
+ * Điểm: lần nhận đầu tiên được 3, từ hôm sau mỗi ngày bấm nút nhận được 1. Điểm chưa dùng giữ lại;
+ * ngày không nhận thì không bù. Một điểm mở một bài. Link Shopee là luồng ủng hộ riêng, không cộng điểm.
  */
 final class BookAccess
 {
@@ -151,7 +151,7 @@ final class BookAccess
         return Db::val("SELECT 1 FROM book_points WHERE user_id = ? AND khoa = 'first'", [$userId]) !== null;
     }
 
-    /** Chế độ test bật ở quản trị: coi như hôm nay chưa nhận, để bé túi và nút luôn mời nhận tiếp. */
+    /** Chế độ test bật ở quản trị: coi như hôm nay chưa nhận để nút luôn mời nhận tiếp. */
     public static function daNhanHomNay(int $userId): bool
     {
         if (self::cheDoThu()) {
@@ -160,14 +160,14 @@ final class BookAccess
         return Db::val('SELECT 1 FROM book_points WHERE user_id = ? AND khoa = ?', [$userId, self::khoaHomNay()]) !== null;
     }
 
-    /** Chế độ test điểm (Quản trị → Điểm mở bài): mỗi lần bấm link đều +1 điểm. */
+    /** Chế độ test điểm (Quản trị → Điểm mở bài): mỗi lần bấm nhận đều +1 điểm. */
     public static function cheDoThu(): bool
     {
         return (bool) Settings::value('points', 'test_mode', false);
     }
 
     /**
-     * Cộng điểm của ngày khi bấm link Shopee. Trả số điểm vừa cộng: 3 lần đầu, 1 lần đầu trong ngày, 0 nếu hôm nay
+     * Cộng điểm khi bấm nút nhận. Trả số điểm vừa cộng: 3 lần đầu, 1 lần đầu trong ngày, 0 nếu hôm nay
      * đã nhận. Lần đầu cũng ghi dấu của ngày hôm đó (0 điểm) để cùng ngày không được thêm 1.
      *
      * Chạy trong transaction: hai yêu cầu cùng lúc (bấm đúp, hai tab) thì yêu cầu sau chờ khoá của dòng `first`
@@ -212,7 +212,7 @@ final class BookAccess
                     : 'Bài mở lần lượt theo thứ tự: bài tiếp theo của bạn là Bài ' . $ke['bai'] . '.');
             }
             if (self::soDiem($userId) < 1) {
-                throw new HttpError(409, 'NO_POINTS', 'Bạn đã hết điểm mở bài. Mỗi ngày bấm bé túi được thêm 1 điểm.');
+                throw new HttpError(409, 'NO_POINTS', 'Bạn đã hết điểm mở bài. Mỗi ngày bấm Nhận điểm để được thêm 1 điểm.');
             }
             $luc = Clock::sql();
             Db::insert('book_unlocks', ['user_id' => $userId, 'ma' => $ma, 'bai' => $bai, 'created_at' => $luc]);

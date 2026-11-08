@@ -171,9 +171,9 @@ chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả h
 - **Mở bài giáo trình bằng điểm + chặn tải (08/11/2026), đã lên server 08/11** (migration 019–021, code `084c1e3`), xem NHAT-KY 08/11 và phần O
   của KICH-BAN-TEST. Còn: ở quản trị gắn lại link Shopee (DB server đã xoá link) thì bé túi mới hiện.
   **Không bán sách**: phần gói học/chuyển khoản đã làm rồi bỏ (rủi ro pháp lý), đừng thêm lại khi chưa có giấy phép bản quyền.
-  **Chế độ test điểm đang bật ở local**
-  (mỗi lần bấm bé túi +1) — trên server phải để tắt. Chưa có link Shopee thì nút "Nhận điểm hôm nay" cộng thẳng. Bé túi vẫn hiện mỗi lần
-  tải trang để người dùng test; chốt thì thêm `supportLinks.claimedToday` vào điều kiện ẩn của `ShopeeBuddy.svelte`.
+  **Điểm và Shopee đã tách riêng (08/11):** nút "Nhận điểm" gọi `/learn/points/daily`, lần đầu +3, các ngày sau +1;
+  bé túi và mọi `/go` chỉ mở link/ghi lượt ủng hộ, không cộng điểm. Chế độ test điểm chỉ làm mỗi lần bấm **Nhận điểm** được +1
+  và trên server phải để tắt. Bé túi vẫn hiện lại mỗi lần tải trang để người dùng có lối ghé Shopee.
 - **Server thật đã lên bản 08/11/2026 (đã kiểm):** DB xoá hết chỉ giữ tài khoản, nạp lại 2 giáo trình; code, âm thanh,
   ảnh sách đã lên. Kiểm trên web thật: 116 bài × 6 phần giống local (bỏ qua `?v=` nét chữ và `updatedByName`), 21.313
   file âm thanh/nét chữ đủ và đúng cỡ, 43 màn chạy ở máy tính/máy tính bảng/điện thoại. Lúc nạp, `01-cau-truc.sql` dừng

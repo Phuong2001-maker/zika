@@ -109,7 +109,7 @@
 {/snippet}
 
 {#snippet viDiem()}
-  <!-- Điểm mở bài: chạm bé túi mỗi ngày được điểm, mỗi điểm mở một bài. -->
+  <!-- Điểm mở bài nhận tại đây, độc lập với bé túi Shopee; mỗi điểm mở một bài. -->
   <section class="gt-vi" aria-label="Điểm mở bài">
     <span class="gt-vi-so" aria-hidden="true"><b class="num">{diemDoc.diem}</b><small>điểm</small></span>
     <span class="gt-vi-giua">
@@ -144,7 +144,7 @@
   {#if !session.isStaff && ds?.length && diemDoc.lanDau && diemDoc.daTai}
     <!-- Chỉ người chưa nhận điểm lần nào mới cần đọc luật; sau đó dòng này tự ẩn cho gọn. -->
     <ol class="gt-luat" aria-label="Cách mở bài">
-      <li><span class="num">1</span>Chạm bé túi hoặc bấm <b>Nhận điểm</b> mỗi ngày — lần đầu được 3 điểm</li>
+      <li><span class="num">1</span>Bấm <b>Nhận điểm</b> mỗi ngày — lần đầu được 3 điểm</li>
       <li><span class="num">2</span>Mỗi điểm mở một bài, mở lần lượt theo sách</li>
       <li><span class="num">3</span>Bài đã mở là đọc, nghe, xem đáp án mãi</li>
     </ol>

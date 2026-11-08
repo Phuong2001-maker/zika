@@ -21,7 +21,7 @@
     iso ? new Date(iso).toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
   const baoLoi = (e: unknown, macDinh: string) => toast.show(e instanceof ApiError ? e.message : macDinh, 'info', 5000);
 
-  /** Chế độ test điểm: mỗi lần bấm bé túi đều +1. */
+  /** Chế độ test điểm: mỗi lần bấm Nhận điểm đều +1. */
   let cheDoThu = $state(false);
   let tenSach = $state<Record<string, string>>({});
 
@@ -71,7 +71,7 @@
   async function doiCheDoThu(bat: boolean): Promise<void> {
     try {
       cheDoThu = (await api.put<{ testMode: boolean }>('/admin/book-points/test-mode', { enabled: bat })).testMode;
-      toast.ok(cheDoThu ? 'Đã bật chế độ test: mỗi lần bấm bé túi đều +1 điểm.' : 'Đã tắt chế độ test: mỗi ngày chỉ +1 điểm.');
+      toast.ok(cheDoThu ? 'Đã bật chế độ test: mỗi lần bấm Nhận điểm đều +1 điểm.' : 'Đã tắt chế độ test: mỗi ngày chỉ +1 điểm.');
     } catch (e) {
       cheDoThu = !bat;
       baoLoi(e, 'Chưa đổi được chế độ test.');
@@ -136,7 +136,7 @@
   <div>
     <h1>Điểm mở bài giáo trình</h1>
     <p class="muted" style="font-size: 14px">
-      Lần đầu bấm bé túi hoặc link Shopee được 3 điểm, từ hôm sau mỗi ngày bấm được 1 điểm; điểm chưa dùng giữ lại, ngày không bấm
+      Lần đầu bấm Nhận điểm được 3 điểm, từ hôm sau mỗi ngày bấm được 1 điểm; điểm chưa dùng giữ lại, ngày không bấm
       không bù. Mỗi điểm mở một bài, lần lượt theo thứ tự. Hệ thống tính sai thì cộng/trừ tay ở bảng dưới — mọi lần chỉnh đều ghi sổ.
     </p>
   </div>
@@ -146,7 +146,7 @@
 {#if cheDoThu}
   <!-- Bật quên là ai cũng nhận điểm vô hạn: nhắc cho tới khi tắt. -->
   <div class="bp-canh-bao" role="status">
-    <b>Đang bật chế độ test điểm</b> — mỗi lần bấm bé túi đều +1 điểm, không giới hạn mỗi ngày. Nhớ tắt trước khi chạy thật.
+    <b>Đang bật chế độ test điểm</b> — mỗi lần bấm Nhận điểm đều +1 điểm, không giới hạn mỗi ngày. Nhớ tắt trước khi chạy thật.
     <button type="button" class="btn btn-sm" onclick={() => doiCheDoThu(false)}>Tắt ngay</button>
   </div>
 {/if}

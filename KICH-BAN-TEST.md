@@ -324,13 +324,13 @@ Chưa bấm thử trên trình duyệt: nút Lưu ở form giáo trình (API đ�
 | O1 | Học viên mới mở Giáo trình | Thẻ "0 điểm mở bài", nút "Nhận 3 điểm hôm nay"; Quyển 1 mở, Quyển 2–6 xám, ghi "Mở hết Giáo trình Hán ngữ n" | Đạt (máy tính, điện thoại) |
 | O2 | Mở Quyển 1 | Trang đầu sách đọc được; mỗi bài là một thẻ khoá ("Bài 1 chưa mở", số trang, số file nghe), các trang của bài không hiện | Đạt |
 | O3 | Gõ thẳng `/api/learn/books/hn1/30?t=…` (trang Bài 1) và `/nghe/1` khi chưa mở bài | 403 | Đạt |
-| O4 | Bấm bé túi (hoặc link Quỹ tháng) 2 lần trong ngày đầu, tải lại trang | +3 điểm, không phải 4; giai đoạn test: bé hiện lại sau khi tải trang, lời nhắn "Hôm nay bạn đã nhận điểm rồi!" | Đạt (giả lập `/go`); **bấm bé túi thật chưa thử** |
+| O4 | Bấm bé túi hoặc link Quỹ tháng | Mở Shopee, ghi lượt ủng hộ; số điểm mở bài không đổi; lời bé không nhắc tặng điểm | Có test API; cần kiểm tay lời bé |
 | O5 | Mở Bài 1 bằng 1 điểm | Hỏi lại "Dùng 1 trong 3 điểm…"; mở xong hiện trang, nút Nghe bài này phát được (206); còn 2 điểm | Đạt |
 | O6 | Bấm mở Bài 3 khi Bài 2 chưa mở | Thẻ ghi "Mở Bài 2 trước nhé", nút "Đến Bài 2" | Đạt |
-| O7 | Hôm sau bấm bé túi; bỏ một ngày rồi bấm | Mỗi ngày bấm +1; ngày bỏ qua không được bù | Đạt ở test API (đổi đồng hồ) |
+| O7 | Bấm Nhận điểm ngày đầu, hôm sau bấm lại; bỏ một ngày rồi bấm | Lần đầu +3, các ngày sau +1; ngày bỏ qua không được bù; không mở Shopee | Đạt ở test API (đổi đồng hồ) |
 | O8 | Đường dẫn ảnh không có `?t=`, mã của tài khoản khác, mã sửa 1 ký tự, mã quá 6 giờ | 403 | Đạt (test API + trình duyệt) |
 | O9 | Chuột phải, kéo ảnh, Ctrl+S, Ctrl+P trên trang sách | Không ra menu lưu, không kéo được, không lưu/in | Đạt (máy tính); **giữ ngón tay trên iPhone/Android thật chưa thử** |
-| O17 | Bật Chế độ test điểm, học viên bấm bé túi 3 lần | +3 điểm; tắt chế độ là về mỗi ngày +1 | Đạt (test API + giả lập `/go`) |
+| O17 | Bật Chế độ test điểm, học viên bấm Nhận điểm 3 lần | Lần đầu +3 rồi +1 mỗi lần; tắt chế độ là về mỗi ngày chỉ nhận một lần | Đạt test API |
 | O19 | Quản trị → Điểm mở bài: bảng học viên, bấm +1 rồi −1 trên một dòng, mở Chi tiết | Bảng có giáo trình, điểm, bài đã mở, lần nhận gần nhất; điểm đổi ngay; sổ điểm ghi "Quản trị chỉnh tay · Chỉnh nhanh từ bảng học viên" | Đạt |
 | O14 | Quản trị → Điểm mở bài: tìm email, cộng 2 điểm kèm lý do, trừ quá số đang có | Sổ điểm hiện từng dòng; trừ quá thì báo lỗi | Đạt ở test API; tìm và xem sổ đạt trên trình duyệt |
 | O15 | Quản trị/biên tập mở mọi quyển | Đọc tự do, không bị trừ điểm | Đạt |

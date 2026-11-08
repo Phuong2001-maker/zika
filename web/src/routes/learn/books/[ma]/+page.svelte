@@ -39,7 +39,7 @@
     return (st.mucLuc[i + 1]?.trang ?? st.soTrang + 1) - b.trang;
   }
 
-  // Vừa nhận điểm ở tab khác (bé túi, link Shopee mở app) thì quay lại là thấy số điểm mới; mã ký đường dẫn ảnh
+  // Vừa nhận điểm ở màn khác thì quay lại là thấy số điểm mới; mã ký đường dẫn ảnh
   // sống 6 giờ, đi quá nửa thì lấy mã mới trước khi hết hạn giữa lúc đọc.
   onMount(() => {
     void diemDoc.refresh();

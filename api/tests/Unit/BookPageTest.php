@@ -321,7 +321,7 @@ final class BookPageTest extends DbTestCase
         self::assertSame(['first', 'daily', 'unlock', 'unlock', 'unlock'], Db::col('SELECT kind FROM book_points WHERE user_id = ? ORDER BY id', [$uid]));
     }
 
-    public function testBamLinkShopeeMoiCongDiem(): void
+    public function testNhanDiemRiengKhongPhuThuocLinkShopee(): void
     {
         Settings::set('support', ['enabled' => true]);
         $link = Db::insert('affiliate_links', ['name' => 'Túi', 'url' => 'https://s.shopee.vn/abc', 'place_icon' => 1, 'place_fund' => 0]);
@@ -330,21 +330,18 @@ final class BookPageTest extends DbTestCase
         $go = new Request('GET', "/go/$link", query: ['place' => 'icon']);
         $go->params = ['id' => (string) $link];
         $go->user = ['id' => $uid, 'role' => 'learner'];
-        self::assertFalse($s->links($this->req($uid))['claimedToday']);
         self::assertSame(302, $s->go($go)->status);
-        self::assertSame(3, BookAccess::soDiem($uid));
-        self::assertTrue($s->links($this->req($uid))['claimedToday']);
-        // Có link thì không lách được bằng gọi API nhận điểm.
-        self::assertSame('403 FORBIDDEN', $this->loi(fn () => (new BookPointsController())->daily($this->req($uid))));
-        $p = (new BookPointsController())->points($this->req($uid));
-        self::assertSame([3, true, false, "/go/$link?place=icon"], [$p['diem'], $p['homNay'], $p['lanDau'], $p['link']]);
+        self::assertSame(0, BookAccess::soDiem($uid), 'Bấm Shopee chỉ ghi ủng hộ, không cộng điểm mở bài');
+        $p = (new BookPointsController())->daily($this->req($uid));
+        self::assertSame([3, true, false], [$p['diem'], $p['homNay'], $p['lanDau']]);
+        self::assertSame(1, (int) Db::val("SELECT COUNT(*) FROM affiliate_events WHERE kind = 'click' AND user_id = ?", [$uid]));
     }
 
-    public function testChuaGanLinkThiNutNhanDiemCongThang(): void
+    public function testNutNhanDiemCongThangKhiKhongCoLinkShopee(): void
     {
         $uid = $this->nguoi();
         $p = (new BookPointsController())->daily($this->req($uid));
-        self::assertSame([3, true, null], [$p['diem'], $p['homNay'], $p['link']]);
+        self::assertSame([3, true, false], [$p['diem'], $p['homNay'], $p['lanDau']]);
     }
 
     public function testQuanTriXemDanhSachDiemHocVien(): void

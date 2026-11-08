@@ -24,7 +24,7 @@ final class Settings
             ['label' => 'Khuyến khích 2', 'percent' => 5],
         ]],
         'donate'  => ['enabled' => true, 'qr_path' => null, 'bank' => '', 'owner' => '', 'account' => '', 'memo' => 'UNG HO ZIKA'],
-        // Chế độ test điểm mở bài: mỗi lần bấm link đều +1, không giới hạn mỗi ngày một lần. Chỉ để thử; phải tắt khi chạy thật.
+        // Chế độ test điểm mở bài: mỗi lần bấm Nhận điểm đều +1, không giới hạn mỗi ngày một lần. Chỉ để thử; phải tắt khi chạy thật.
         'points'  => ['test_mode' => false],
         // Quán trà (phòng trò chuyện chung): quản trị đóng tạm khi cần dọn dẹp.
         'chat'    => ['enabled' => true],

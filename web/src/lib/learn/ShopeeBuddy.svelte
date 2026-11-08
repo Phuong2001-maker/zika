@@ -5,7 +5,6 @@
   import { media } from '$lib/stores/media.svelte';
   import { buddyShownOn } from './shopee-buddy';
   import { supportLinks } from './support-links.svelte';
-  import { diemDoc } from './diem-doc.svelte';
 
   // Chữ trôi theo hình làm người đọc hoa mắt, nhưng giấu chữ thì không ai biết bấm để làm gì.
   // Nên bé đứng nói là chính, mỗi lần chỉ đi một quãng ngắn, và chữ chỉ hiện khi đã đứng yên.
@@ -28,8 +27,7 @@
   const link = $derived(supportLinks.icon);
   // Giữ component sống khi sang màn làm bài rồi quay lại, để bé đã ẩn thì vẫn ẩn.
   // Bé tồn tại để dẫn sang Shopee: admin tắt công tắc hoặc chưa gắn link Icon thì không hiện.
-  // Giai đoạn test (người dùng yêu cầu 08/11): tải lại trang là bé hiện, kể cả hôm nay đã nhận điểm. Khi chốt thì thêm
-  // `supportLinks.claimedToday` vào đây để bé nghỉ đến 0h hôm sau. Điểm vẫn chỉ cộng một lần mỗi ngày ở server.
+  // Tải lại trang là bé hiện để người dùng luôn có lối mở link ủng hộ; bé không liên quan đến điểm mở bài.
   const blocked = $derived(covered || !link || !buddyShownOn(page.url.pathname));
   let ready = $state(false);
   let reducedMotion = $state(false);
@@ -131,22 +129,9 @@
     if (leaving) return;
     if (link) window.open(link.url, '_blank', 'noopener');
     leaving = true;
-    const diem = diemDoc.lanToi;
-    const daNhan = supportLinks.claimedToday;
     exitTimer = setTimeout(() => {
       hidden = true;
-      toast.show(
-        daNhan
-          ? 'Cảm ơn bạn đã góp quỹ thưởng! Điểm mở bài hôm nay bạn nhận rồi, mai chạm tiếp nhé.'
-          : `Cảm ơn bạn đã góp quỹ thưởng! Bạn được cộng ${diem} điểm mở bài giáo trình.`,
-        'info',
-        6000,
-      );
-      // Server cộng điểm khi tab mới đi qua /go; đọc lại sau một nhịp để kệ sách, màn đọc thấy số mới.
-      setTimeout(() => {
-        void supportLinks.refresh();
-        void diemDoc.refresh();
-      }, 1500);
+      toast.show('Cảm ơn bạn đã ghé Shopee và góp vào quỹ thưởng nhé!', 'info', 5000);
     }, 500);
   }
 
@@ -159,11 +144,9 @@
 
   onMount(() => {
     void supportLinks.refresh();
-    void diemDoc.refresh();
-    // Admin bật/tắt ở tab khác, hay vừa bấm link ở tab khác: quay lại tab học là thấy đúng, khỏi tải lại trang.
+    // Admin bật/tắt ở tab khác: quay lại tab học là thấy đúng, khỏi tải lại trang.
     const refreshOnFocus = (): void => {
       void supportLinks.refresh();
-      void diemDoc.refresh();
     };
     window.addEventListener('focus', refreshOnFocus);
 
@@ -300,14 +283,8 @@
   >
     <div class="sb-speech" class:sb-speaking={speaking} class:sb-from-right={onRightSide}>
       <button type="button" class="sb-message" onclick={visitAndHide}>
-        <!-- Hai ý cùng lúc: ý gốc (chạm là góp quỹ thưởng, không cần mua) và ý mới (được điểm mở bài giáo trình). -->
         <b>Chạm tớ, tớ ẩn nhé!</b>
         <span>Chạm là góp quỹ thưởng rồi, không cần mua gì nhé 🧡</span>
-        {#if supportLinks.claimedToday}
-          <span class="sb-diem">Điểm mở bài hôm nay bạn nhận rồi, mai chạm được thêm 1 điểm.</span>
-        {:else}
-          <span class="sb-diem">🎁 Tặng thêm <b>+{diemDoc.lanToi} điểm</b> mở bài giáo trình</span>
-        {/if}
         <small>Liên kết tiếp thị</small>
       </button>
     </div>
@@ -478,19 +455,6 @@
   .sb-message span {
     font-size: 13px;
     line-height: 1.4;
-  }
-  /* Dòng điểm mở bài tách khỏi lời chính bằng nền nhạt: đọc lướt vẫn thấy hai ý riêng. */
-  .sb-message .sb-diem {
-    margin-top: 3px;
-    padding: 5px 8px;
-    border-radius: 9px;
-    background: var(--son-soft);
-    color: var(--son-text);
-    font-size: 12.5px;
-  }
-  .sb-message .sb-diem b {
-    font-size: inherit;
-    color: inherit;
   }
   .sb-message small {
     margin-top: 1px;

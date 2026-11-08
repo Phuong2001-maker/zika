@@ -26,7 +26,7 @@ final class BookPointsController
         ];
     }
 
-    /** PUT /admin/book-points/test-mode {enabled} — bật/tắt chế độ test điểm (mỗi lần bấm bé túi đều +1). */
+    /** PUT /admin/book-points/test-mode {enabled} — bật/tắt chế độ test điểm (mỗi lần bấm nhận đều +1). */
     public function testMode(Request $r): array
     {
         $v = new Validator($r->body);

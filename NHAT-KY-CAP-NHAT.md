@@ -23,6 +23,14 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 08/11/2026 — Tách nhận điểm khỏi bé túi Shopee
+
+- Nút **Nhận điểm** gọi thẳng API điểm: lần đầu +3, các ngày sau +1; bấm không mở tab hay ứng dụng Shopee.
+- Bé túi và các link trong Quỹ tháng chỉ chuyển sang Shopee, ghi lượt bấm ủng hộ và không thay đổi điểm mở bài.
+- Bỏ trạng thái/lời nhắn tặng điểm khỏi bé túi; sửa lời hướng dẫn ở kệ sách, bài khoá và trang quản trị điểm.
+- Test API khóa hai luồng: bấm `/go` giữ nguyên 0 điểm, sau đó bấm Nhận điểm mới thành 3. Đã chạy đủ: web 0 lỗi/0 cảnh báo,
+  lint sạch, 109/109; API 200/200. README mục "Điểm mở bài" sửa theo luật mới. **Chưa đưa lên server.**
+
 ### 08/11/2026 — Bỏ dữ liệu minh hoạ; điểm mở bài + Quán trà đã lên server
 
 - **Đã lên server** bản `084c1e3`: `cap-nhat-db-019-021.sql` (migration 019–021, chạy thử 2 lần trên bản sao DB giống server)
@@ -54,7 +62,7 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ### 08/11/2026 — Mở bài giáo trình bằng điểm, chặn tải
 
-- **Luật:** học viên chỉ đọc được bài đã mở. Lần đầu bấm bé túi/link Shopee +3 điểm, từ hôm sau mỗi ngày bấm +1 (giữ điểm chưa
+- **Luật lúc triển khai:** học viên chỉ đọc được bài đã mở. Lần đầu bấm bé túi/link Shopee +3 điểm, từ hôm sau mỗi ngày bấm +1 (giữ điểm chưa
   dùng, không bù ngày không bấm). 1 điểm mở 1 bài, lần lượt; quyển sau khoá đến khi mở hết quyển trước.
   Bé túi: giai đoạn test vẫn hiện mỗi lần tải trang (người dùng yêu cầu); khi chốt thì nghỉ đến 0h hôm sau.
 - **Chặn tải:** server trả 403 cho ảnh trang, đáp án, file nghe của bài chưa mở; mọi đường dẫn file phải kèm mã ký của chính
@@ -69,7 +77,8 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
   **bỏ hẳn** theo người dùng vì rủi ro pháp lý khi thu tiền bản scan sách — xoá code, bảng `book_packages/orders/owned`,
   cài đặt `payment`, trang `/learn/books/goi`;
   thanh đầu trang thống nhất ở mọi màn (máy tính `Topbar`, điện thoại `MTopbar`), bỏ logo; ô điểm ở mọi màn; lời bé túi giữ
-  ý "góp quỹ thưởng" cùng dòng điểm; **Chế độ test điểm** (mỗi lần bấm bé túi +1) — đang **bật** ở máy local cho người dùng thử.
+  ý "góp quỹ thưởng" cùng dòng điểm; **Chế độ test điểm** (mỗi lần bấm bé túi +1) — từng bật ở máy local cho người dùng thử.
+  Luật này đã được thay bằng mục "Tách nhận điểm khỏi bé túi Shopee" ở trên.
 - **Góp ý cho người học:** Chuyển nhanh → "Góp ý · báo lỗi màn này" (`FeedbackModal`, `POST /feedback`, `GET /feedback/mine`),
   tự kèm phần/cấp/bài/trang sách, server tra đúng bài để quản trị "Mở để sửa"; học viên đọc trả lời ngay trong hộp. Phần P.
 - **Quán trà:** phòng trò chuyện chia bàn theo chủ đề (`/learn/chat`, `/learn/chat/<bàn>`, migration 020 + 021, `Services/QuanTra.php`,

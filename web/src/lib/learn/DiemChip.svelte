@@ -12,7 +12,7 @@
 
   const chuaNhan = $derived(!diemDoc.homNay);
   const giaiThich = $derived(
-    `Bạn có ${diemDoc.diem} điểm mở bài giáo trình. Mỗi ngày chạm bé túi được ${chuaNhan ? diemDoc.lanToi : 1} điểm, ` +
+    `Bạn có ${diemDoc.diem} điểm mở bài giáo trình. Mỗi ngày bấm Nhận điểm được ${chuaNhan ? diemDoc.lanToi : 1} điểm, ` +
       `mỗi điểm mở một bài.${chuaNhan ? ' Hôm nay bạn chưa nhận.' : ''} Bấm để vào Giáo trình.`,
   );
 </script>

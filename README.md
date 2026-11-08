@@ -102,22 +102,21 @@ Cần `pymupdf`, `Pillow`, `imageio-ffmpeg`. Cả 9 quyển ~740MB.
 Học viên **không đọc được bài chưa mở**: trang sách, trang đáp án và file nghe của bài đó server trả 403, kể cả khi gõ
 thẳng đường dẫn hay dùng công cụ tải. Biên tập và quản trị đọc tự do.
 
-- **Điểm:** lần đầu bấm bé túi (hoặc một link Shopee ở Quỹ tháng) được **3 điểm**, từ hôm sau mỗi ngày bấm được **1 điểm**
+- **Điểm:** lần đầu bấm nút **Nhận điểm** được **3 điểm**, từ hôm sau mỗi ngày bấm được **1 điểm**
   (ngày tính 0h–24h giờ Việt Nam). Bấm nhiều lần trong ngày vẫn chỉ 1; điểm chưa dùng giữ lại, ngày không bấm thì không bù.
-  Điểm chỉ cộng ở lối `/go/{id}` phía server. Quản trị chưa gắn link Shopee nào thì nút "Nhận điểm hôm nay" cộng thẳng
-  (`POST /learn/points/daily`); có link thì lối đó trả 403.
+  Điểm chỉ cộng ở `POST /learn/points/daily`, không phụ thuộc link Shopee: bé túi và link Quỹ tháng (`/go/{id}`) chỉ dẫn
+  sang Shopee và ghi lượt ủng hộ, không cộng điểm (tách ngày 08/11/2026).
 - **Xem điểm ở đâu:** mọi màn học đều có ô điểm đứng đầu cụm nút ở thanh đầu trang — máy tính: "2 điểm mở bài · Nhận +1
   hôm nay" (`Topbar`), điện thoại: ô số (`MTopbar`); hôm nay chưa nhận thì có nhãn vàng "+1". Bấm là về kệ Giáo trình; đầu kệ
   có ví điểm (số điểm, đã mở bao nhiêu bài, nút Nhận điểm); thẻ khoá trong màn đọc có nút dùng điểm và nhận điểm.
 - **Mở bài:** 1 điểm mở 1 bài, **lần lượt theo thứ tự** trong bộ sách (Quyển 1 bài 1 → … → Quyển 2 bài 16…). Bài đã mở là
   mở mãi. Trang trước bài đầu (bìa trong, lời nói đầu, mục lục) đọc tự do, nhưng chỉ ở quyển đã học tới — quyển sau còn khoá
   cả trang đầu, kệ sách hiện xám kèm "Mở hết <quyển trước>".
-- **Bé túi:** đang trong giai đoạn test nên tải lại trang là bé hiện, kể cả hôm nay đã nhận điểm (bấm thêm chỉ báo "đã nhận
-  rồi", không cộng). Khi chốt thì cho bé nghỉ đến 0h hôm sau: `/support/links` đã trả `claimedToday`, chỉ cần thêm vào điều
-  kiện ẩn trong `ShopeeBuddy.svelte`.
+- **Bé túi:** không liên quan đến điểm. Tải lại trang là bé hiện để người dùng luôn có lối ghé Shopee; bấm vào bé thì mở
+  link ở tab mới và bé ẩn đến lần tải trang sau.
 - **Không bán sách:** đã làm phần bán gói (trọn bộ, chuyển khoản, quản trị duyệt) rồi bỏ ngày 08/11/2026 — bán bản scan sách
   có bản quyền rủi ro pháp lý cao. Học viên chỉ mở bài bằng điểm.
-- **Chế độ test điểm** (Quản trị → Điểm mở bài): bật thì mỗi lần bấm bé túi đều +1 điểm, không chờ sang
+- **Chế độ test điểm** (Quản trị → Điểm mở bài): bật thì mỗi lần bấm Nhận điểm đều +1 điểm, không chờ sang
   ngày, để thử nhanh. Đang bật thì đầu màn quản trị có dải vàng nhắc. **Phải tắt trước khi chạy thật.**
 - **Mã ký đường dẫn:** mọi đường dẫn ảnh trang và file nghe phải kèm `?t=<hết hạn>.<chữ ký>` do API cấp, gắn với tài khoản
   và quyển, sống 6 giờ (ký bằng `app_key`). Link dán sang tài khoản khác, sửa một ký tự, hay để quá 6 giờ đều 403. Màn đọc
