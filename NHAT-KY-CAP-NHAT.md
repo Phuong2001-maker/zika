@@ -23,6 +23,14 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 08/11/2026 — Bé túi bấm xong nghỉ đến 0h hôm sau
+
+- Bấm bé túi (hoặc một link Quỹ tháng) thì trong ngày bé không hiện lại, kể cả tải lại trang hay đổi máy: server đọc lượt bấm
+  hôm nay của tài khoản trong `affiliate_events` và trả `clickedToday` ở `/support/links`. 0h hôm sau bé hiện lại.
+- Không có migration; không thêm nút tắt, không đổi lời bé, không có chế độ thử cho bé (người dùng chốt). Phía quản trị
+  người dùng tự sửa sau.
+- Test `SupportLinksTest::testBamLinkThiBeTuiNghiDenNgayHomSau`. **Chưa đưa lên server.**
+
 ### 08/11/2026 — Tách nhận điểm khỏi bé túi Shopee
 
 - Nút **Nhận điểm** gọi thẳng API điểm: lần đầu +3, các ngày sau +1; bấm không mở tab hay ứng dụng Shopee.

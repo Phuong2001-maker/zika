@@ -156,7 +156,7 @@ Top chăm học và Lịch sử thi lấy số thật từ 08/11 (trước đó 
 | I7 | Bấm túi, rồi bấm số tiền ở thanh đầu trang | Cả hai đều mở cùng hộp quỹ, không còn hộp Shopee riêng | Đạt | |
 | I8 | Mở bất kỳ hộp thoại nào | Bé túi tạm ẩn, đóng hộp thì hiện lại | Đạt | |
 | I9 | Bật link Icon, F5 rồi vào màn chọn bài hoặc đang làm bài (lật thẻ, bài tập, kiểm tra, ôn tập, đọc giáo trình) trên điện thoại/máy tính | Bé túi được phép hiện trên mọi màn `/learn/`, kể cả có thể che nút theo yêu cầu 06/11; dialog/nhập liệu vẫn tạm ẩn | Test route đạt; chưa kiểm lại UI | |
-| I10 | Bấm bé hoặc lời nhắn, rồi đổi sang màn học khác | Mở link ở tab mới, bé ẩn và vẫn ẩn khi đổi màn; F5 thì hiện lại (chính sách đang để test) | Đạt | |
+| I10 | Bấm bé hoặc lời nhắn, rồi đổi sang màn học khác | Mở link ở tab mới, bé ẩn và vẫn ẩn khi đổi màn; F5, đổi máy cùng tài khoản vẫn ẩn đến 0h hôm sau (đổi 08/11) | Có test API; chưa kiểm lại UI | |
 | I11 | Xem bé đi trên màn chọn cấp | Chữ chỉ hiện khi bé đứng yên; lúc đi có dấu 👆; rê chuột vào thì dừng và hiện chữ | Đạt | |
 | I16 | Điện thoại: bấm quỹ, cuộc thi, cúp | Hộp nằm sát dưới thanh đầu trang, không bị đẩy xuống đáy; hộp dài cuộn được, thấy đủ nút cuối ở màn 320×568 | Đạt | |
 | I14 | Nhìn bé đi trên nền trơn | Không có lớp mờ hay vệt bóng đi theo; bé nhún, nghiêng theo đà, chân tay cử động | Đạt | |
@@ -324,7 +324,7 @@ Chưa bấm thử trên trình duyệt: nút Lưu ở form giáo trình (API đ�
 | O1 | Học viên mới mở Giáo trình | Thẻ "0 điểm mở bài", nút "Nhận 3 điểm hôm nay"; Quyển 1 mở, Quyển 2–6 xám, ghi "Mở hết Giáo trình Hán ngữ n" | Đạt (máy tính, điện thoại) |
 | O2 | Mở Quyển 1 | Trang đầu sách đọc được; mỗi bài là một thẻ khoá ("Bài 1 chưa mở", số trang, số file nghe), các trang của bài không hiện | Đạt |
 | O3 | Gõ thẳng `/api/learn/books/hn1/30?t=…` (trang Bài 1) và `/nghe/1` khi chưa mở bài | 403 | Đạt |
-| O4 | Bấm bé túi hoặc link Quỹ tháng | Mở Shopee, ghi lượt ủng hộ; số điểm mở bài không đổi; lời bé không nhắc tặng điểm | Có test API; cần kiểm tay lời bé |
+| O4 | Bấm bé túi hoặc link Quỹ tháng | Mở Shopee, ghi lượt ủng hộ; số điểm mở bài không đổi; lời bé không nhắc tặng điểm; bé nghỉ đến 0h hôm sau | Có test API; cần kiểm tay lời bé |
 | O5 | Mở Bài 1 bằng 1 điểm | Hỏi lại "Dùng 1 trong 3 điểm…"; mở xong hiện trang, nút Nghe bài này phát được (206); còn 2 điểm | Đạt |
 | O6 | Bấm mở Bài 3 khi Bài 2 chưa mở | Thẻ ghi "Mở Bài 2 trước nhé", nút "Đến Bài 2" | Đạt |
 | O7 | Bấm Nhận điểm ngày đầu, hôm sau bấm lại; bỏ một ngày rồi bấm | Lần đầu +3, các ngày sau +1; ngày bỏ qua không được bù; không mở Shopee | Đạt ở test API (đổi đồng hồ) |

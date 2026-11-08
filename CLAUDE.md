@@ -37,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; API 200/200; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; API 201/201; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -173,7 +173,7 @@ chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả h
   **Không bán sách**: phần gói học/chuyển khoản đã làm rồi bỏ (rủi ro pháp lý), đừng thêm lại khi chưa có giấy phép bản quyền.
   **Điểm và Shopee đã tách riêng (08/11):** nút "Nhận điểm" gọi `/learn/points/daily`, lần đầu +3, các ngày sau +1;
   bé túi và mọi `/go` chỉ mở link/ghi lượt ủng hộ, không cộng điểm. Chế độ test điểm chỉ làm mỗi lần bấm **Nhận điểm** được +1
-  và trên server phải để tắt. Bé túi vẫn hiện lại mỗi lần tải trang để người dùng có lối ghé Shopee.
+  và trên server phải để tắt. Bấm bé túi hoặc link Quỹ tháng thì bé nghỉ đến 0h hôm sau, nhớ theo tài khoản ở server (`clickedToday`); chưa lên server.
 - **Server thật đã lên bản 08/11/2026 (đã kiểm):** DB xoá hết chỉ giữ tài khoản, nạp lại 2 giáo trình; code, âm thanh,
   ảnh sách đã lên. Kiểm trên web thật: 116 bài × 6 phần giống local (bỏ qua `?v=` nét chữ và `updatedByName`), 21.313
   file âm thanh/nét chữ đủ và đúng cỡ, 43 màn chạy ở máy tính/máy tính bảng/điện thoại. Lúc nạp, `01-cau-truc.sql` dừng
@@ -194,7 +194,7 @@ chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả h
 - **Giao diện giáo trình admin + quỹ thưởng/top chăm học/bé túi Shopee (05–06/11/2026):** đọc
   [BAN-GIAO-GIAO-DIEN.md](BAN-GIAO-GIAO-DIEN.md) trước khi tiếp tục. Chỉ frontend/dữ liệu mẫu;
   mỗi học viên một giáo trình do admin gán, không thêm màn chọn giáo trình cho học viên.
-  Bé túi hiện trên mọi màn `/learn/`, kể cả đang làm bài (người dùng chấp nhận che nút, 06/11); hiện lại ngay sau F5 để test, chính sách một ngày chưa áp dụng.
+  Bé túi hiện trên mọi màn `/learn/`, kể cả đang làm bài (người dùng chấp nhận che nút, 06/11); bấm xong thì nghỉ đến 0h hôm sau (08/11).
   Giáo trình và tab Đề thi đã có API thật; đề thi thử cuối cấp vẫn dùng chung mọi giáo trình.
   Link Shopee đã có API thật (Icon 1 link, Quỹ tháng nhiều link, công tắc ở `/admin/support`), tiền quỹ do admin nhập tay ở cùng màn đó;
   cuộc thi tạo ở `/admin/contests`, chọn đề từ tab `/admin/exams` (chỉ cần tên, câu nạp sau), đề Nháp chỉ làm được trong giờ thi, hết giờ tự nộp, xếp hạng theo câu đúng rồi thời gian, mỗi người 1 lượt.

@@ -27,8 +27,9 @@
   const link = $derived(supportLinks.icon);
   // Giữ component sống khi sang màn làm bài rồi quay lại, để bé đã ẩn thì vẫn ẩn.
   // Bé tồn tại để dẫn sang Shopee: admin tắt công tắc hoặc chưa gắn link Icon thì không hiện.
-  // Tải lại trang là bé hiện để người dùng luôn có lối mở link ủng hộ; bé không liên quan đến điểm mở bài.
-  const blocked = $derived(covered || !link || !buddyShownOn(page.url.pathname));
+  // Hôm nay đã bấm một link Shopee thì bé nghỉ đến 0h hôm sau (server nhớ theo tài khoản): một lần bấm là đủ gắn mã
+  // tiếp thị, hiện thêm chỉ làm phiền người học. Bé không liên quan đến điểm mở bài.
+  const blocked = $derived(covered || !link || supportLinks.clickedToday || !buddyShownOn(page.url.pathname));
   let ready = $state(false);
   let reducedMotion = $state(false);
   let x = $state(16);
@@ -144,7 +145,7 @@
 
   onMount(() => {
     void supportLinks.refresh();
-    // Admin bật/tắt ở tab khác: quay lại tab học là thấy đúng, khỏi tải lại trang.
+    // Admin bật/tắt ở tab khác, hay vừa bấm link Quỹ tháng ở tab khác: quay lại tab học là thấy đúng, khỏi tải lại trang.
     const refreshOnFocus = (): void => {
       void supportLinks.refresh();
     };
@@ -157,7 +158,7 @@
     };
     preference.addEventListener('change', changePreference);
 
-    // Trong giai đoạn test, tải lại trang là hiện bé để thử tiếp (xem `blocked`).
+    // Hiện hay nghỉ do `blocked` quyết (gồm cả "hôm nay đã bấm"), không cần nhớ gì thêm ở trình duyệt.
     hidden = false;
     viewportWidth = window.innerWidth;
     stops = buildStops();

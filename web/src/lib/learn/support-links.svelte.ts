@@ -18,6 +18,8 @@ interface SupportData {
   icon: SupportLink | null;
   fund: SupportLink[];
   monthlyFund: MonthlyFund;
+  /** Hôm nay tài khoản đã bấm một link Shopee: bé túi nghỉ đến 0h hôm sau. */
+  clickedToday: boolean;
 }
 
 /** Link Shopee và tiền quỹ phía người học. Bé túi và thanh đầu trang dùng chung, không gọi API hai lần. */
@@ -25,6 +27,7 @@ class SupportLinks {
   icon = $state<SupportLink | null>(null);
   fund = $state<SupportLink[]>([]);
   monthlyFund = $state<MonthlyFund>({ amount: null, month: '', updatedOn: null });
+  clickedToday = $state(false);
   private loading: Promise<void> | null = null;
 
   refresh(): Promise<void> {
@@ -40,6 +43,7 @@ class SupportLinks {
       this.icon = data.icon;
       this.fund = data.fund;
       this.monthlyFund = data.monthlyFund;
+      this.clickedToday = data.clickedToday;
     } catch {
       // Đây là phần phụ: lỗi mạng thì giữ nguyên trạng thái, không làm phiền người đang học.
     }

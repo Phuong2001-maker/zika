@@ -112,8 +112,9 @@ thẳng đường dẫn hay dùng công cụ tải. Biên tập và quản trị
 - **Mở bài:** 1 điểm mở 1 bài, **lần lượt theo thứ tự** trong bộ sách (Quyển 1 bài 1 → … → Quyển 2 bài 16…). Bài đã mở là
   mở mãi. Trang trước bài đầu (bìa trong, lời nói đầu, mục lục) đọc tự do, nhưng chỉ ở quyển đã học tới — quyển sau còn khoá
   cả trang đầu, kệ sách hiện xám kèm "Mở hết <quyển trước>".
-- **Bé túi:** không liên quan đến điểm. Tải lại trang là bé hiện để người dùng luôn có lối ghé Shopee; bấm vào bé thì mở
-  link ở tab mới và bé ẩn đến lần tải trang sau.
+- **Bé túi:** không liên quan đến điểm. Bấm vào bé thì mở link ở tab mới, bé ẩn **đến 0h hôm sau** (giờ Việt Nam). Server
+  nhớ theo tài khoản (`/support/links` trả `clickedToday`, đọc từ lượt bấm trong `affiliate_events`), nên đổi máy hay tải lại
+  trang cũng không hiện lại trong ngày. Bấm link Quỹ tháng cũng tính là đã bấm. Link Quỹ tháng thì bấm được mọi lúc.
 - **Không bán sách:** đã làm phần bán gói (trọn bộ, chuyển khoản, quản trị duyệt) rồi bỏ ngày 08/11/2026 — bán bản scan sách
   có bản quyền rủi ro pháp lý cao. Học viên chỉ mở bài bằng điểm.
 - **Chế độ test điểm** (Quản trị → Điểm mở bài): bật thì mỗi lần bấm Nhận điểm đều +1 điểm, không chờ sang

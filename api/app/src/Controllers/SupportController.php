@@ -32,7 +32,25 @@ final class SupportController
                 $fund[] = ['id' => $id, 'name' => (string) $l['name'], 'url' => "/go/$id?place=fund"];
             }
         }
-        return ['icon' => $icon, 'fund' => $fund, 'monthlyFund' => self::monthlyFund()];
+        return [
+            'icon' => $icon,
+            'fund' => $fund,
+            'monthlyFund' => self::monthlyFund(),
+            'clickedToday' => $r->user !== null && self::daBamHomNay($r->userId()),
+        ];
+    }
+
+    /**
+     * Hôm nay (theo giờ Việt Nam) tài khoản đã bấm link Shopee nào chưa, ở bé túi hay ở Quỹ tháng đều tính: bấm một lần
+     * là máy đã mang mã tiếp thị, bé hiện lại trong ngày chỉ làm phiền người học. Ghi theo tài khoản ở server để đổi máy
+     * hay đổi trình duyệt cũng không hiện lại.
+     */
+    public static function daBamHomNay(int $userId): bool
+    {
+        return Db::val(
+            "SELECT 1 FROM affiliate_events WHERE kind = 'click' AND user_id = ? AND created_at >= ? LIMIT 1",
+            [$userId, Clock::today() . ' 00:00:00'],
+        ) !== null;
     }
 
     /**

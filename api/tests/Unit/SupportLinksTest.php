@@ -304,4 +304,46 @@ final class SupportLinksTest extends DbTestCase
         self::assertSame(3, $out['links'][0]['clicks']);
         self::assertSame(30.0, $out['links'][0]['ctr']);
     }
+
+    public function testBamLinkThiBeTuiNghiDenNgayHomSau(): void
+    {
+        $this->bat();
+        $icon = $this->link(['place_icon' => 1, 'place_fund' => 0]);
+        $quy = $this->link();
+        $a = $this->makeUser();
+        $b = $this->makeUser();
+        $hoi = function (int $uid, string $method = 'GET', string $path = '/support/links', array $query = [], ?int $id = null) {
+            $r = new Request($method, $path, $query);
+            $r->user = ['id' => $uid, 'role' => 'learner'];
+            if ($id !== null) {
+                $r->params = ['id' => (string) $id];
+                return (new SupportController())->go($r);
+            }
+            return (new SupportController())->links($r);
+        };
+
+        self::assertFalse($hoi($a)['clickedToday']);
+        // Lượt hiển thị không tính là đã bấm.
+        $v = new Request('POST', '/support/view', [], ['place' => 'icon']);
+        $v->user = ['id' => $a, 'role' => 'learner'];
+        (new SupportController())->view($v);
+        self::assertFalse($hoi($a)['clickedToday']);
+
+        $hoi($a, 'GET', "/go/$icon", ['place' => 'icon'], $icon);
+        self::assertTrue($hoi($a)['clickedToday']);
+        self::assertFalse($hoi($b)['clickedToday'], 'Người khác chưa bấm thì bé vẫn hiện');
+
+        // Bấm link Quỹ tháng cũng tính: máy đã mang mã tiếp thị.
+        $hoi($b, 'GET', "/go/$quy", ['place' => 'fund'], $quy);
+        self::assertTrue($hoi($b)['clickedToday']);
+
+        // 23:59 vẫn là hôm nay; 0h hôm sau bé hiện lại.
+        Clock::freeze(new DateTimeImmutable('2026-11-06 23:59:59'));
+        self::assertTrue($hoi($a)['clickedToday']);
+        Clock::freeze(new DateTimeImmutable('2026-11-07 00:00:00'));
+        self::assertFalse($hoi($a)['clickedToday']);
+
+        // Chưa đăng nhập thì không có gì để nhớ.
+        self::assertFalse((new SupportController())->links(new Request('GET', '/support/links'))['clickedToday']);
+    }
 }
