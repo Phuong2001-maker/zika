@@ -34,7 +34,11 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
   1 phút; Lịch sử thi lấy các cuộc thi đã kết thúc (không ghi số tiền vì quỹ không chụp lại theo cuộc thi). Người đạt giải
   gửi thông tin nhận thưởng qua Góp ý. Code: `Services/TopHoc.php`, `ContestService::history`, `GET /contest/study-top`,
   `GET /contest/history`; bỏ `PrizeClaim.svelte`. Test: `TopHocTest`, `ContestTest`; kịch bản I16–I18.
-  Lên server chỉ cần gói code mới, không có migration.
+  Lên server chỉ cần gói code mới, không có migration. **Đã lên server cùng ngày** (code `ad9032a`, `admin_emails` trong
+  `config.php`, `cap-nhat-vi-du-hn.sql` + zip giọng); kiểm trên web thật: Q1 B1/B8, Q3 B8, Q6 B25 đủ ví dụ và giọng.
+- **Kiểm web thật bằng tài khoản quản trị (08/11):** 24 màn quản trị + 29 màn học × 3 khổ không tràn, không lỗi; bấm thử lật
+  thẻ 3 chế độ, Chuyển nhanh, Top chăm học, Quỹ tháng, Lịch sử thi, đọc sách, Quán trà, sổ điểm, quản trị Quán trà. Sửa và đưa
+  lên cùng ngày: tab "Đăng ký" của bảng xếp hạng bị khung hộp cắt ở điện thoại (3 tab nay chia đều, `.mc-tabs`).
 - **Khoá quyền quản trị bằng `admin_emails` trong `config.php`:** DB ghi admin mà email ngoài danh sách thì chỉ là người học
   (`Auth::attach`/`login`, `UserService::toApi`, đếm "còn ít nhất một quản trị"); đổi quyền sang admin cho email ngoài danh sách
   bị chặn. Server dùng 2 email `phuongnv24012001@gmail.com`, `nvpchaytran@gmail.com`. Test `AdminEmailsTest`.

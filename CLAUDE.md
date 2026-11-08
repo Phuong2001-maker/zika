@@ -163,9 +163,11 @@ chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả h
 
 ## Việc còn treo
 
-- **Ví dụ lật thẻ Hán ngữ đủ mọi từ (08/11/2026), chưa lên server:** 496 câu tự soạn ở `data/han-ngu/vi-du/` (luật và cách chạy ở
-  [data/han-ngu/README.md](data/han-ngu/README.md)). Lên server: import `data/han-ngu/ra/cap-nhat-vi-du-hn.sql` (chỉ thay ví dụ, giữ
-  bài và tiến độ), giải nén zip giọng câu mới, xoá `storage/cache/content`. Đừng chạy lại `02-han-ngu.sql` để cập nhật ví dụ.
+- **Đã lên server 08/11/2026 (đã kiểm trên web thật):** code `ad9032a` (Top chăm học/Lịch sử thi số thật, sửa 2 lỗi giao diện),
+  khoá quản trị theo `admin_emails` trong `config.php` server (2 email: phuongnv24012001, nvpchaytran), ví dụ lật thẻ Hán ngữ đủ
+  2.990 từ + 586 file giọng. 496 câu tự soạn ở `data/han-ngu/vi-du/` (luật và cách chạy ở
+  [data/han-ngu/README.md](data/han-ngu/README.md)). Sửa ví dụ lần sau: `nap_vi_du_hn.py` ghi SQL chỉ thay ví dụ, giữ bài và
+  tiến độ; đừng chạy lại `02-han-ngu.sql` để cập nhật ví dụ.
 - **Mở bài giáo trình bằng điểm + chặn tải (08/11/2026), đã lên server 08/11** (migration 019–021, code `084c1e3`), xem NHAT-KY 08/11 và phần O
   của KICH-BAN-TEST. Còn: ở quản trị gắn lại link Shopee (DB server đã xoá link) thì bé túi mới hiện.
   **Không bán sách**: phần gói học/chuyển khoản đã làm rồi bỏ (rủi ro pháp lý), đừng thêm lại khi chưa có giấy phép bản quyền.

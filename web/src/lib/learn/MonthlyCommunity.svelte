@@ -393,7 +393,7 @@
     }}
   >
     <div class="mc-modal-content">
-      <div class="tabs">
+      <div class="tabs mc-tabs">
         <button
           type="button"
           class="tab"
@@ -550,6 +550,12 @@
 <ContestHistory bind:open={historyOpen} />
 
 <style>
+  /* Ba tab bảng xếp hạng chia đều bề ngang hộp: .tabs co theo chữ rồi cuộn ngang, ở 375px tab "Đăng ký" bị khung hộp cắt. */
+  .mc-tabs { width: 100%; }
+  .mc-tabs .tab { flex: 1 1 0; min-width: 0; justify-content: center; padding: 0 8px; }
+  @media (max-width: 480px) {
+    .mc-tabs .tab { gap: 4px; padding: 4px; font-size: 13px; white-space: normal; text-align: center; }
+  }
   .mc-history-hint { margin-top: 14px; font-size: 12.5px; text-align: center; color: var(--muted); line-height: 1.6; }
   .mc-history-link { display: block; margin: 8px auto 0; padding: 10px; min-height: 44px; font: inherit; font-size: 12.5px; color: var(--muted); background: transparent; border: 0; cursor: pointer; }
   .mc-history-link:hover { color: var(--son-text); }
