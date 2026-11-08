@@ -14,7 +14,8 @@ Quyển n nằm ở cấp n, học viên thấy "Quyển n" nhờ cột `curricu
 
 ## Thứ tự chạy
 
-Đặt `PYTHONUTF8=1`. Cần MariaDB, API và web local đang chạy.
+Đặt `PYTHONUTF8=1`. Cần MariaDB, API và web local đang chạy. Sách đã chuyển vào `HanNgu/New folder/`: đặt
+`ZIKA_HANNGU_DIR="D:/zika-devtools/Project/HanNgu/New folder"` cho các bước đọc PDF (`xem_trang.py --cat`, `kiem_tra_goc`).
 
 ```bash
 python sinh.py all             # bai/ → ra/qN/baiNN.json
@@ -35,8 +36,10 @@ php thu_server.php ../../../dong-goi-han-ngu ../../../dong-goi-server   # thử 
 ## Đưa lên server
 
 `dong_goi.py` tạo gói kèm `HUONG-DAN.txt` từng bước. Thứ tự không đổi được: code mới (web + PHP) trước, rồi `01-cau-truc.sql`
-(migration 006–015, đã chạy thì tự bỏ qua), `02-han-ngu.sql`, giải nén `uploads-han-ngu.zip`, xoá file trong `storage/cache/content`.
-Code và cấu trúc DB phải lên cùng đợt: code mới đọc `curricula.level_label` khi trả `/me`, thiếu migration 015 là không đăng nhập được.
+(migration 006–018, đã chạy thì tự bỏ qua), `02-han-ngu.sql`, giải nén `uploads-han-ngu.zip`, xoá file trong `storage/cache/content`.
+Code và cấu trúc DB phải lên cùng đợt: code mới đọc `curricula.level_label` khi trả `/me`, thiếu migration 015 là không đăng nhập được, thiếu 016 là học viên không vào được màn học.
+`02-han-ngu.sql` tự đặt Hán ngữ làm giáo trình mặc định (`is_default`), vì migration 016 chạy lúc server chưa có Hán ngữ:
+mọi học viên chưa phân quyền chuyển sang Hán ngữ, ai học HSK thì admin gán "Giáo trình HSK 3.0".
 Thêm migration mới thì sửa `DEN_SO` trong `dong_goi.py` rồi đóng gói và chạy lại `thu_server.php`.
 
 ## Các quyết định cần nhớ
@@ -48,7 +51,8 @@ Thêm migration mới thì sửa `DEN_SO` trong `dong_goi.py` rồi đóng gói 
 - **Từ sách không ghi từ loại** (cụm, cấu trúc như 又…又…) là `other`, không phải danh từ.
 - **Bản dịch câu**: sách không in bản dịch nên câu tiếng Việt là bản tham khảo tự dịch, web có ghi chú ngay dưới bài khóa.
   Pinyin Q3–6 cũng tự thêm vì sách không in.
-- **Băng**: chấm theo chữ nghe được chứ không theo tên file. Băng Q1, Q5, Q6 là bản 修订本, chữ khác sách phiên bản 3, nên đoạn nào
+- **Băng (không dùng từ 08/11/2026)**: mọi bài khóa ghép giọng tự tạo (`DUNG_BANG = False` trong `gan_hn.py`). Khi bật lại thì băng
+  chấm theo chữ nghe được chứ không theo tên file. Băng Q1, Q5, Q6 là bản 修订本, chữ khác sách phiên bản 3, nên đoạn nào
   lệch thì dùng giọng mẫu. File `B14 - Bài khóa` của Q4 thật ra là Luyện tập B13.
 - **Bài khóa dài** vượt giới hạn 2 MB của form tải lên (tới 8 phút), nên `gan_hn.py` ghi thẳng vào uploads như `Upload::store`.
 - **File SQL** nối bản ghi qua biến phiên, không ghi id cứng; chữ Hán nối qua cột `hanzi` và không ghi đè chữ HSK đang có.

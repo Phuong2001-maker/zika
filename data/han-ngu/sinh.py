@@ -12,7 +12,7 @@ import sys
 from collections import Counter
 
 from chung_hn import BAI, chon_bai, doc_bai, file_bai, file_ra, ghi_json
-from chung import cau_tao, chu_han, han_viet_chu, kho_chu, nghia_ngan, tach_am_tiet
+from chung import cau_tao, chu_han, han_viet_chu, kho_chu, la_han, nghia_ngan, tach_am_tiet
 import importlib.util
 
 from chung_hn import NAP_SACH
@@ -50,36 +50,119 @@ class BaiHanNgu(_goc.Bai):
                   if _goc.tron(v["zh"]) not in self.cau_sai]
         ra: list[dict] = []
         for zh, py, vi in sorted(nguon, key=lambda x: len(x[0])):
-            if han in zh and vi and py and len(zh) <= 60 and zh not in [x["zh"] for x in ra]:
+            # Câu ví dụ ngữ âm giữ dấu trọng âm như sách (我'吃。): đúng ở mục ngữ âm, nhưng lạ khi làm câu ví dụ của thẻ từ.
+            if han in zh and vi and py and len(zh) <= 60 and "'" not in zh and zh not in [x["zh"] for x in ra]:
                 ra.append({"zh": zh, "pinyin": py, "vi": vi, "highlight": han})
             if len(ra) == 2:
                 break
         return ra
 
     def words(self) -> list[dict]:
-        ra = super().words()
-        # Sách in một chữ hai lần với hai cách đọc (好 hào/hǎo): web chỉ giữ một thẻ, nên ghi rõ cách đọc thứ hai
-        # vào nghĩa thay vì để nghĩa đó đứng dưới pinyin của cách đọc đầu.
-        goc: dict[str, list[dict]] = {}
+        # Mỗi dòng 生词/专名 sách in là một thẻ, kể cả từ đã có ở bài trước (sách in lại thường với nghĩa khác)
+        # và cùng chữ hai cách đọc trong một bài (好 hào/hǎo). Chỉ gộp khi sách in lặp đúng chữ và cách đọc.
+        ra: list[dict] = []
         for w in self.d["tu_moi"] + self.d["ten_rieng"]:
-            goc.setdefault(w["hanzi"], []).append(w)
-        khong_loai = {w["hanzi"] for w in self.d["tu_moi"] if not (w.get("loai") or "").strip()}
-        for x in ra:
-            ban = goc.get(x["hanzi"], [])
-            if len({w["pinyin"] for w in ban}) > 1:
-                x["meaning"] = "; ".join(f"({w['pinyin']}) {w['nghia']}" for w in ban)[:255]
+            h, py = w["hanzi"], w["pinyin"]
+            en = (w.get("nghia_en") or "").strip()
+            cu = next((x for x in ra if x["hanzi"] == h and x["pinyin"] == py), None)
+            if cu is not None:
+                if w["nghia"] not in cu["meaning"]:
+                    cu["meaning"] = f"{cu['meaning']}; {w['nghia']}"[:255]
+                if en and en not in (cu.get("meaningEn") or ""):
+                    cu["meaningEn"] = f"{cu['meaningEn']}; {en}"[:255] if cu.get("meaningEn") else en[:255]
+                continue
             # Sách không ghi từ loại cho cụm và cấu trúc (没关系, 又…又…); để trống thì bộ HSK coi là danh từ, sai.
-            if x["hanzi"] in khong_loai:
-                x["pos"] = "other"
+            co_loai = (w.get("loai") or "").strip()
+            x = {"hanzi": h, "pinyin": py, "meaning": w["nghia"][:255],
+                 "hanViet": _goc.han_viet_tu(h, py),
+                 "pos": _goc.ma_loai(w.get("loai", "danh từ riêng")) if (co_loai or w in self.d["ten_rieng"]) else "other",
+                 "examples": self.vi_du_cho(h)}
+            if en:
+                x["meaningEn"] = en[:255]
+            ra.append(x)
+        return ra
+
+    def dialogues(self) -> list[dict]:
+        ra = super().dialogues()
+        # Tên bài khoá như sách in (我学习汉语); bộ HSK chỉ đặt "Bài khoá n". Không ghép ten_vi: tên tiếng Việt
+        # của bài khoá là người chép tự dịch, sách không in.
+        co_cau = [k for k in self.d["bai_khoa"][:10] if any(chu_han(c.get("zh", "")) for c in k["cau"])]
+        for x, k in zip(ra, co_cau):
+            ten = (k.get("ten_zh") or "").strip()
+            if ten:
+                x["title"] = ten[:120]
+        return ra
+
+    def gop_ngu_phap(self) -> list[dict]:
+        """Như bộ HSK (gộp mục liền nhau cùng tên) nhưng mang theo phần tiếng Anh của từng mục."""
+        ra: list[dict] = []
+        for g in self.d["ngu_phap"]:
+            if ra and ra[-1]["ten"] == g["ten"]:
+                cu = ra[-1]
+                noi = lambda a, b, sep: sep.join(x for x in (a, b) if x and x.strip())  # noqa: E731
+                cu["giai_thich"] = noi(cu["giai_thich"], g.get("giai_thich", ""), "\n\n")
+                cu["giai_thich_en"] = noi(cu.get("giai_thich_en", ""), g.get("giai_thich_en", ""), "\n\n")
+                cu["luu_y"] = noi(cu.get("luu_y", ""), g.get("luu_y", ""), "\n")
+                cu["luu_y_en"] = noi(cu.get("luu_y_en", ""), g.get("luu_y_en", ""), "\n")
+                cu["ten_en"] = cu.get("ten_en") or g.get("ten_en", "")
+                for k in ("cong_thuc", "cong_thuc_en"):
+                    cu[k] = cu.get(k, []) + [x for x in g.get(k, []) if x not in cu.get(k, [])]
+                cu["vi_du"] = cu.get("vi_du", []) + g.get("vi_du", [])
+            else:
+                ra.append({**g, "cong_thuc": list(g.get("cong_thuc", [])), "cong_thuc_en": list(g.get("cong_thuc_en", [])),
+                           "vi_du": list(g.get("vi_du", []))})
         return ra
 
     def grammar(self) -> list[dict]:
-        ra = super().grammar()
-        for g in ra:
-            p = g.get("practice")
-            # Máy chấm giữ lại — và … khi so ô chữ với câu đúng, còn tách ô thì bỏ: câu kiểu này làm API bỏ cả điểm ngữ pháp.
-            if p and any(c in p["answer"] for c in "—…"):
-                g["practice"] = None
+        # Viết lại thay vì dùng bộ HSK: bộ đó tách mục quá 6 ví dụ thành "(tiếp)" và cắt tên/công thức dài,
+        # còn sách là chuẩn — API nay giữ tới 40 ví dụ và tên 255, công thức 500 ký tự.
+        ra = []
+        for g in self.gop_ngu_phap():
+            ct = [x for x in g.get("cong_thuc", []) if x.strip()]
+            then_chot = "".join(c for c in g["ten"] if la_han(c))
+            ex = []
+            for v in g.get("vi_du", []):
+                nhan = next((t for t in (then_chot, *chu_han(then_chot)) if t and t in v["zh"]), None)
+                e = {"kind": v.get("kieu", ""), "formula": "", "zh": v["zh"], "highlight": nhan,
+                     "pinyin": v.get("pinyin", ""), "vi": v.get("vi", "")}
+                if (v.get("en") or "").strip():
+                    e["en"] = v["en"].strip()
+                if (v.get("kieu_en") or "").strip():
+                    e["kindEn"] = v["kieu_en"].strip()
+                ex.append(e)
+            practice = None
+            for v in g.get("vi_du", []):
+                o = _goc.tach_o(v["zh"], self.tu_dien)
+                # Máy chấm giữ — và … khi so ô chữ với câu đúng, còn tách ô thì bỏ: câu kiểu này làm API bỏ cả điểm.
+                if (o and len(v["zh"]) <= 120 and len(o) >= 3 and v.get("vi") and _goc.tron(v["zh"]) not in self.loai
+                        and not any(c in v["zh"] for c in "—…")):
+                    practice = {"answer": v["zh"], "vi": v["vi"], "tiles": o}
+                    break
+            ten = _goc.viet_thuong(g["ten"])
+            # Dòng phụ gồm cả mô tả sách in lẫn mọi công thức: bộ HSK chỉ lấy một trong hai nên mục có mô tả
+            # (拼音 Initial-final combinations) mất hết bảng phiên âm. mo_ta trùng tên tiếng Anh thì đã hiện ở titleEn.
+            mo_ta = (g.get("mo_ta") or "").strip()
+            if mo_ta == (g.get("ten_en") or "").strip():
+                mo_ta = ""
+            item = {
+                "title": ten[:255],
+                "subtitle": " · ".join(x for x in [mo_ta, *ct] if x)[:2000],
+                "explain": (g.get("giai_thich") or "").strip()[:4000] or ten[:4000],
+                "note": (g.get("luu_y") or None),
+                # Công thức chép "中文 — Tiếng Việt" như sách in: ô công thức chỉ dựng từ phần chữ Hán, phần tiếng Việt
+                # đã hiện nguyên văn ở dòng phụ; tách cả chuỗi theo " + " thì ô lẫn chữ Việt.
+                "blocks": self.khoi(ct[0].split(" — ")[0]) if ct else [],
+                "examples": ex[:40],
+                "practice": practice,
+            }
+            phu_en = g.get("mo_ta_en") or " · ".join(x for x in g.get("cong_thuc_en", []) if x.strip())
+            for khoa, gt in (("titleEn", g.get("ten_en")), ("subtitleEn", phu_en),
+                             ("explainEn", g.get("giai_thich_en")), ("noteEn", g.get("luu_y_en"))):
+                if (gt or "").strip():
+                    item[khoa] = gt.strip()
+            if len(ex) > 40:
+                self.bao_cao.append(f"Ngữ pháp: «{ten[:30]}» có {len(ex)} ví dụ, web chỉ giữ 40")
+            ra.append(item)
         return ra
 
     def writing(self) -> list[dict]:
@@ -146,20 +229,17 @@ if __name__ == "__main__":
     ten = ten_nhan_vat()
     chon = chon_bai(sys.argv[1:])
     for q in sorted({x for x, _ in chon}):
-        # Từ trùng trong cùng cấp: bài trước giữ, bài sau bỏ (bảng words duy nhất theo giáo trình + cấp + chữ Hán).
-        da_co: set[str] = set()
         for so in BAI[q]:
-            if not file_bai(q, so).exists():
+            if (q, so) not in chon or not file_bai(q, so).exists():
                 continue
             d = doc_bai(q, so)
             for k in d["bai_khoa"]:
                 for c in k["cau"]:
                     if c.get("nguoi") in ten:
                         c["nguoi_vi"] = ten[c["nguoi"]]
-            if (q, so) in chon:
-                p = BaiHanNgu(d, tu_dien, set(da_co)).payload()
-                ghi_json(file_ra(q, so), p)
-                print(f"Quyển {q} · Bài {so}: {len(p['words'])} từ, {len(p['writing'])} chữ viết, "
-                      f"{len(p['dialogues'])} bài khoá, {len(p['grammar'])} ngữ pháp"
-                      + (f" — {len(p['bao_cao'])} ghi chú" if p["bao_cao"] else ""))
-            da_co |= {w["hanzi"] for w in d["tu_moi"] + d["ten_rieng"] if w.get("hanzi")}
+            # Sách in lại từ của bài trước thì bài này vẫn có thẻ đó (migration 017 bỏ khoá duy nhất theo cấp).
+            p = BaiHanNgu(d, tu_dien, set()).payload()
+            ghi_json(file_ra(q, so), p)
+            print(f"Quyển {q} · Bài {so}: {len(p['words'])} từ, {len(p['writing'])} chữ viết, "
+                  f"{len(p['dialogues'])} bài khoá, {len(p['grammar'])} ngữ pháp"
+                  + (f" — {len(p['bao_cao'])} ghi chú" if p["bao_cao"] else ""))

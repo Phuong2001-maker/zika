@@ -10,7 +10,7 @@
   import { num } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
   import { adminApi } from '$lib/admin/api';
-  import { activeKey, lastLesson, menuGroups, type AdminBadges, type MenuItem } from '$lib/admin/menu';
+  import { activeKey, lastCurriculum, lastLesson, menuGroups, type AdminBadges, type MenuItem } from '$lib/admin/menu';
 
   // Khung khu quản trị (08 §1): menu trái ≥ 900px, thanh + mtabs < 900px.
   let { children }: { children: Snippet } = $props();
@@ -37,8 +37,37 @@
     }
   }
 
+  /**
+   * Trình duyệt chưa mở bài nào thì 5 mục soạn theo bài trỏ cả về danh sách bài, menu sáng nhầm ở "Bài học".
+   * Lấy bài đầu của giáo trình đang soạn để bấm mục nào cũng vào đúng trang soạn phần đó.
+   */
+  async function baiDauTien(): Promise<number | null> {
+    try {
+      const ds = await adminApi.curricula();
+      const gt = ds.find((c) => c.id === lastCurriculum()) ?? ds.find((c) => c.isDefault) ?? ds[0];
+      const cap = gt ? gt.levels.findIndex((n) => n > 0) + 1 : 0;
+      if (!gt || cap === 0) return null;
+      return (await adminApi.lessons(cap, gt.id)).lessons[0]?.id ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  // Mở bài khác (kể cả chọn bài ngay trên đầu trang soạn) thì menu trỏ theo luôn, không đợi tải lại trang.
+  $effect(() => {
+    const m = page.url.pathname.match(/^\/admin\/lessons\/(\d+)\//);
+    const tuVung = page.url.pathname.startsWith('/admin/words') ? Number(page.url.searchParams.get('lesson')) : 0;
+    if (m) lesson = Number(m[1]);
+    else if (tuVung > 0) lesson = tuVung;
+  });
+
   onMount(() => {
-    lesson = lastLesson();
+    lesson ??= lastLesson();
+    if (lesson === null) {
+      void baiDauTien().then((id) => {
+        lesson ??= id;
+      });
+    }
     void loadBadges();
     const t = setInterval(loadBadges, 60_000);
     return () => clearInterval(t);

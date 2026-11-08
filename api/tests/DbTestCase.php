@@ -43,6 +43,7 @@ abstract class DbTestCase extends TestCase
         }
         $pdo->exec("DELETE FROM announcements WHERE is_auto_welcome = 0");
         $pdo->exec('DELETE FROM curricula WHERE id <> 1');
+        $pdo->exec('UPDATE curricula SET is_default = (id = 1)');
         $pdo->exec('UPDATE levels SET is_visible = 0');
         $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
         Settings::clearCache();

@@ -207,9 +207,9 @@ final class StatsController
     {
         $levels = Db::all('SELECT id, is_visible FROM levels ORDER BY id');
 
-        // Thanh tiến độ nhập từ so với mục tiêu của cấp nên chỉ tính giáo trình mặc định, cộng dồn mọi bộ thì vượt 100%.
+        // Thanh tiến độ nhập từ so với mục tiêu từ vựng HSK của cấp nên chỉ tính giáo trình HSK, cộng dồn mọi bộ thì vượt 100%.
         $entered = [];
-        foreach (Db::all('SELECT level_id, COUNT(*) AS n FROM words WHERE curriculum_id = ? GROUP BY level_id', [Curricula::DEFAULT_ID]) as $x) {
+        foreach (Db::all('SELECT level_id, COUNT(*) AS n FROM words WHERE curriculum_id = ? GROUP BY level_id', [Curricula::HSK_ID]) as $x) {
             $entered[(int) $x['level_id']] = (int) $x['n'];
         }
 
@@ -364,7 +364,7 @@ final class StatsController
                JOIN levels v ON v.id = l.level_id
               WHERE l.curriculum_id = ? AND l.status = 'published' AND v.is_visible = 1
               GROUP BY l.level_id ORDER BY l.level_id",
-            [(int) $u['id'], $u['curriculum_id'] === null ? Curricula::DEFAULT_ID : (int) $u['curriculum_id']],
+            [(int) $u['id'], $u['curriculum_id'] === null ? Curricula::defaultId() : (int) $u['curriculum_id']],
         );
 
         $devices = Db::all(

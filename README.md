@@ -56,40 +56,52 @@ Nhận `.xlsx`, `.csv` và nội dung dán. File được đọc ngay trong trì
 thư viện Excel. Trước khi ghi, hộp thoại hiện bảng xem trước và liệt kê dòng nào sai, sai chỗ nào;
 các dòng còn lại vẫn nhập được. Chọn **Thêm vào cuối** hoặc **Xoá hết rồi nhập mới**.
 
-## Giáo trình (3 quyển HSK 1–3)
+## Giáo trình (đọc sách, nghe file ghi âm, xem đáp án)
 
-Ba quyển giáo trình của Đại học Hà Nội **có bản quyền nên chỉ tài khoản quản trị đọc được**
-(học viên và biên tập không thấy mục này, vào thẳng URL cũng bị đưa về trang nhà). Quản trị bấm
-**Giáo trình** ở bảng Chuyển nhanh → kệ 3 quyển → cuộn lên/xuống để đọc các trang nối tiếp như PDF.
-Thanh số trang cho phép đi thẳng tới trang cần đọc. Chỗ đọc dở nhớ riêng từng quyển bằng `localStorage`.
-Ảnh tải dần khi cuộn; giữ chỗ theo kích thước trang để nội dung không nhảy khi ảnh tải xong.
+Bấm **Giáo trình** ở bảng Chuyển nhanh → kệ sách. **Học viên chỉ thấy bộ sách của giáo trình mình học**: giáo trình gọi
+cấp là "Quyển" (Hán ngữ 6 tập) thấy 6 quyển Hán ngữ, giáo trình gọi "HSK" thấy 3 quyển HSK 1–3 (Đại học Hà Nội).
+Biên tập và quản trị thấy cả hai bộ. Mở quyển bộ khác bằng URL thì ra "Không có quyển giáo trình này" (API trả 404).
 
-Nội dung là **ảnh từng trang**, không phải chữ — vì HSK 2 và HSK 3 là bản scan, không tách chữ
-ra được. Sinh ảnh bằng:
+| Bộ | Quyển | File nghe | Đáp án |
+|---|---|---|---|
+| Hán ngữ 6 tập | Hán ngữ 1–6 (1.558 trang) | cả 6 quyển (181 file, ~9 giờ) | Hán ngữ 3–6 (bản YUEXIN) |
+| HSK 3.0 | HSK 1–3 (469 trang) | HSK 1, HSK 2 (143 file) | không có |
+
+Màn đọc: cuộn dọc như PDF, thanh số trang đi thẳng tới trang, **Mục lục** (bài nào có file nghe, có đáp án đều đánh dấu),
+đầu mỗi bài có dải tên bài với nút **Nghe bài này** và **Đáp án**. Thanh phát dính đáy màn hình: phát/tạm dừng, lùi/tới 5 giây,
+tốc độ 0,5–1,25×, lặp một file, sang file trước/sau, hết file tự nghe phần sau của cùng bài; điều khiển được cả ở màn hình khoá
+điện thoại. Nút **Sách / Đáp án** đổi sang ảnh trang đáp án, đúng bài đang đọc. Quyển nào không có file nghe hay đáp án thì
+các nút đó tự ẩn. Chỗ đọc dở (sách và đáp án riêng) và tốc độ nghe nhớ bằng `localStorage`.
+
+Dữ liệu dựng bằng một script, đọc PDF sách, file nghe và file Word đáp án ở `D:\zika-devtools\Project\` (`HanNgu\`, `hsk1\`,
+`hsk2\`, 3 PDF HSK):
 
 ```bash
-cd data/giao-trinh && python tach-giao-trinh.py "<thư mục uploads>"
+cd data/giao-trinh && python dung-sach.py                 # cả 9 quyển, vào api/dev-uploads
+cd data/giao-trinh && python dung-sach.py --chi hn3,hn4   # chỉ vài quyển
 ```
 
-Máy dev thì thư mục uploads là `api/dev-uploads`, hosting là `public_html/uploads`. Script cần
-`pymupdf` và đường dẫn 3 file PDF khai trong chính file đó. Kết quả: 469 trang WebP rộng 1200px
-+ 3 ảnh bìa, tổng ~44MB.
+Mỗi quyển ra `uploads/giao-trinh/<mã>/`: `bia.webp` + `001.webp…` (rộng 1200px), `nghe/01.mp3…`, `dap-an/001.webp…`
+và `sach.json` (tên, chiều cao từng trang, mục lục, danh sách file nghe kèm thời lượng, đáp án, `phien`). API chỉ đọc
+`sach.json` — thêm quyển là chạy script, không sửa code. Đáp án Word phải đổi sang PDF trước bằng Word
+(`data/giao-trinh/ra/dap-an/hn3.pdf`…, xem đầu script). File MP3 bitrate thay đổi mà thiếu header Xing (bộ Hán ngữ 6) được
+ffmpeg đóng gói lại, không nén lại; thiếu bước này trình duyệt đoán sai thời lượng 15% và không tua quá mốc đoán sai.
+Cần `pymupdf`, `Pillow`, `imageio-ffmpeg`. Cả 9 quyển ~740MB.
 
-> **Ảnh không nằm trong git.** Đẩy code lên hosting là chưa đủ — phải tải thư mục `giao-trinh/`
-> lên `public_html/uploads/` (giải nén thành `uploads/giao-trinh/hsk1/001.webp`…), nếu không màn
-> đọc sẽ báo "Chưa có ảnh trang sách".
+> **Không nằm trong git.** Đẩy code lên hosting là chưa đủ — phải chép cả thư mục `giao-trinh/` vào `uploads/` của server (zip ở `../dong-goi-giao-trinh/giao-trinh-*.zip`, giải nén tại `/home/buwsofujhosting`)
+> (`uploads/giao-trinh/hn1/sach.json`…). Thiếu `sach.json` thì kệ sách trống.
 
-> **Ảnh không phát thẳng.** `.htaccess` gốc trả 403 cho mọi đường `uploads/giao-trinh/`; trình
-> duyệt lấy ảnh qua `GET /api/admin/books/{hsk1..3}/{số trang | bia}`, endpoint này đòi quyền
-> quản trị và trả `Cache-Control: private`. Service worker không cache ảnh sách. Sau khi deploy,
-> mở thử `https://<tên miền>/uploads/giao-trinh/hsk1/001.webp` — phải ra 403, không được ra ảnh.
-
-Kế hoạch nạp nội dung 3 quyển này vào 6 phần học ghi ở
-[data/giao-trinh/TIEN-DO.md](data/giao-trinh/TIEN-DO.md).
+> **Không phát thẳng.** `.htaccess` gốc trả 403 cho mọi đường `uploads/giao-trinh/`; trình duyệt lấy qua
+> `GET /api/learn/books/{mã}/{trang|bia}`, `/dap-an/{trang}`, `/nghe/{số}` (đòi đăng nhập, `Cache-Control: private`,
+> file nghe trả từng đoạn 206 để tua được). Đường dẫn gắn `?v=<phien>` nên dựng lại sách thì trình duyệt tự bỏ bản cũ.
+> Service worker không cache gì dưới `/api/learn/books`. Sau khi deploy, mở thử
+> `https://<tên miền>/uploads/giao-trinh/hn1/001.webp` — phải ra 403, không được ra ảnh.
 
 ## Nhiều bộ giáo trình
 
-Mỗi học viên học một giáo trình do quản trị gán ở **Giáo trình → Phân quyền học**; chưa gán thì học giáo trình mặc định.
+Mỗi học viên học một giáo trình do quản trị gán ở **Giáo trình → Phân quyền học**; chưa gán thì học giáo trình mặc định,
+hiện là **Hán ngữ 6 tập**, cho cả tài khoản cũ lẫn mới đăng ký. Ai học HSK thì gán **Giáo trình HSK 3.0** (giáo trình số 1).
+Đổi mặc định bằng công tắc **Giáo trình mặc định** trong form giáo trình; luôn đúng một giáo trình bật.
 Mọi giáo trình dùng chung 6 cấp, form giáo trình có mục **Học viên thấy cấp là** để chọn cách gọi: `HSK 1, HSK 2…` hoặc
 `Quyển 1, Quyển 2…`. Màn học lấy chữ này qua `web/src/lib/stores/cap.svelte.ts`, nên đừng viết cứng "HSK n" ở màn học.
 "Thi thử HSK n" là ngoại lệ vì đó là đề HSK dùng chung mọi giáo trình. Đường dẫn vẫn là `/hsk/n` ở mọi giáo trình.

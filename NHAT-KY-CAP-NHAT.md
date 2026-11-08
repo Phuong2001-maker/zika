@@ -23,6 +23,112 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 08/11/2026 — Đã đưa lên server thật và kiểm
+
+- Thứ tự đã làm: xoá DB (giữ tài khoản) → `01-cau-truc.sql` (dừng ở 013: bảng words trên server có `uq_words_lesson_hanzi`
+  + `ix_words_level_hanzi` thay cho `uq_words_level_hanzi`; sửa tay: bỏ 2 chỉ mục đó, thêm khoá thường
+  `uq_words_curriculum_hanzi`, thêm `users.curriculum_id`, ghi 013 vào `schema_migrations`, chạy lại 01) → `02-han-ngu.sql`
+  → `03-hsk-giong-moi.sql` → giải nén `uploads-han-ngu.zip`, `uploads-hsk-giong-moi.zip`, 3 zip ảnh sách, `zika-code-20261108.zip`
+  tại `/home/buwsofujhosting`. Câu so cấu trúc: `../dong-goi-han-ngu/kiem-cau-truc.sql` (trống = khớp local).
+- Kiểm web thật (đăng nhập quản trị): 116 bài × 6 phần + danh sách bài giống local; 21.313 file âm thanh/nét chữ có đủ, đúng
+  cỡ; 43 màn không lỗi; bấm tay Lật thẻ (3 chế độ), Luyện viết, Hội thoại, Ngữ pháp, Bài tập/Kiểm tra HSK, Giáo trình
+  (nghe, tua 206, đáp án) ở máy tính, máy tính bảng, điện thoại. Đối chiếu lại với bản chép sách: Hán ngữ khớp hoàn toàn,
+  HSK 40/40 bài khớp.
+
+### 08/11/2026 — Chuẩn bị đưa cả 2 giáo trình lên server
+
+- DB server: người dùng chạy lệnh xoá, chỉ giữ tài khoản (email, mật khẩu, tên, vai trò), thêm lại thư chào mừng tự động.
+- So bài HSK trên server (gói 02/11) với local: giống từng bảng, chỉ khác đường dẫn âm thanh hội thoại (đợt giọng 03/11
+  chưa lên). SQL giọng 03/11 cũ tìm bài theo cấp + số bài không lọc giáo trình → sẽ ghi đè Hán ngữ Q1–3. Thay bằng
+  `../dong-goi-hsk/` (`03-hsk-giong-moi.sql` lọc `curriculum_id = 1`, `uploads-hsk-giong-moi.zip` 8.586 file).
+- Thử cả chuỗi xoá → 01 → 02 Hán ngữ → 03 HSK trên DB giống server: HSK 3.0 và Hán ngữ 6 tập giống local từng bảng,
+  mặc định là Hán ngữ, cấp 1–6 đều hiện.
+- 3 zip ảnh giáo trình đóng lại cùng tiền tố `domains/tiengtrunghanu.io.vn/uploads/` như gói Hán ngữ.
+
+### 08/11/2026 — Giáo trình: thêm 6 quyển Hán ngữ, file nghe và đáp án
+
+Người dùng: kệ Giáo trình của học viên Hán ngữ phải là sách Hán ngữ, có file ghi âm để bật nghe khi đọc, có đáp án, quyển
+nào không có thì ẩn; chỉ làm giao diện cho dễ dùng.
+
+- **Dữ liệu** — `data/giao-trinh/dung-sach.py` (thay `tach-giao-trinh.py`) dựng 9 quyển vào `uploads/giao-trinh/<mã>/`:
+  ảnh trang, `nghe/NN.mp3`, `dap-an/NNN.webp`, `sach.json`. Hán ngữ 1–6: 1.558 trang, 181 file nghe (~9 giờ); HSK 1–2:
+  143 file; đáp án Hán ngữ 3–6 (116 trang) từ 4 file Word YUEXIN, đổi PDF bằng Word (`ra/dap-an/`). Hán ngữ 1–2 và HSK
+  không có đáp án; HSK 3 không có file nghe. Tổng ~740MB.
+- **MP3 Hán ngữ 6** bitrate thay đổi, thiếu header Xing: trình duyệt đoán 510 giây cho file 595 giây và không tua quá mốc
+  đó. Script cho ffmpeg (gói `imageio-ffmpeg`) đóng gói lại, chép nguyên âm thanh. Đã kiểm: trình duyệt đọc 595,4 giây.
+- **API** `Controllers/BookController.php` (bỏ `Admin/BookController.php`): `GET /learn/books` (kệ, lọc theo giáo trình),
+  `/learn/books/{mã}` (mục lục, nghe, đáp án), trang, `/dap-an/{trang}`, `/nghe/{số}` (Range 206). `Response::fileRange`.
+- **Web** — kệ nhóm theo bộ, thẻ "Đọc tiếp", nhãn file nghe/đáp án; màn đọc có Mục lục, dải tên bài với nút Nghe bài này/
+  Đáp án, thanh phát dính đáy (`lib/learn/giao-trinh/`), chuyển Sách ↔ Đáp án. 8 icon thêm tay cuối `lib/icons.ts`.
+- **Service worker** nay không cache `/api/learn/books` (trước đó đổi sang `/api/learn/` thì ảnh sách lọt vào kho bài học
+  300 mục và file nghe 206 sẽ câm).
+- Test: API 173/173 (BookPageTest 9 test), web 106/106. Kịch bản GT6–GT19.
+- **Server**: cần code mới + chép `uploads/giao-trinh/` (cả 9 thư mục, có `sach.json`). Gói ở `release/`.
+
+### 08/11/2026 — Hán ngữ 6 tập đúng như sách in, thêm tiếng Anh
+
+Người dùng: sách là chuẩn, web phải đúng từng chữ và pinyin, đủ mọi thứ sách in ở 4 phần, và thêm mọi phần tiếng Anh
+sách in. Soát lại cả 1.296 trang của 76 bài theo ảnh (16 agent, hướng dẫn chung trong lần làm), sửa bản chép `bai/*.json`
+(bản trước khi sửa: `data/han-ngu/ra/bai-truoc-soat-20261108/`):
+- Lỗi chép thật: chữ Hán sai/thiếu (Q6 B17 试一次 chép thành 试一试, Q6 B24 thiếu chữ 地, Q3 B2 写汉字 历 → 厉), mục thiếu
+  (Q2 B20 thiếu 二日…十日, Q1 B1 thiếu 5 chữ, Q3 B7 thiếu 10 câu so sánh), chú thích trong ngoặc sách in bị bỏ.
+- Ngữ pháp: bỏ tên mục, công thức, giải thích, ví dụ người chép tự đặt; chép lại nguyên văn sách.
+- Pinyin tự thêm (Q3–Q6 và ví dụ): theo bảng 生词 của sách — thanh nhẹ, viết hoa tên riêng, 不 trong bổ ngữ khả năng
+  "bu", bổ ngữ xu hướng sau động từ qilai/xialai/huiqu như 生词 Q4 B14 in, đa âm tự theo nghĩa (很长时间 cháng, 待 dāi,
+  一场雪 cháng, 东西 dōngxi, 地方 dìfang). Lệch bảng 生词: 528 → còn vài chỗ báo nhầm (一个人 ≠ 个人).
+- Tiếng Anh: 2.986/2.990 thẻ từ có nghĩa tiếng Anh, 630 tên mục, 611 đoạn giải thích, 65 ví dụ, công thức và lưu ý.
+- 65 lỗi in của sách (鸡/蛋 đảo nghĩa, 西边 "phía đông", 南京 "Giang Tây"…): người dùng muốn **sửa trên web**. Bản chép
+  vẫn ghi lại chữ sách in ở `loi_sach` (`sach_in` → `sua_thanh`, `da_sua: true`), còn nội dung đã thay bằng bản sửa.
+- Rà lại toàn bộ chữ Việt và Anh (6 agent, chỉ đọc chữ): 375 chỗ sửa — nghĩa từ sai (旁边 "gần đây" → "bên cạnh",
+  顿时 "chốc lát" → "lập tức", 监考 "giám khảo" → "coi thi"), nghĩa Anh lệch nghĩa Việt (相会 chép nhầm nghĩa 相亲),
+  bản dịch câu sai nghĩa (不是…而是 "không chỉ… mà là"), xưng hô, tên người (罗兰 thống nhất Roland), chính tả.
+  Sửa vào phần sách in thì thêm mục `loi_sach`; bản tự dịch sửa thẳng.
+- Người dùng chỉ muốn tiếng Anh ở **Lật thẻ**: trang Ngữ pháp bỏ phần tiếng Anh (dữ liệu vẫn trong DB, ô sửa ở trang soạn giữ).
+- **Phần nghe**: mọi bài khoá dùng giọng tự tạo (`gan_hn.py` `DUNG_BANG = False`), cùng giọng nhân vật, tốc độ, độ to
+  với câu thoại và với HSK 3.0; không dùng băng (băng Q1, Q5, Q6 là bản 修订本 đọc khác sách). Giọng đọc bỏ ký hiệu sách in
+  trước khi gửi máy (`doc_edge.bo_ngoac`): `*` câu sai trước bị đọc thành 星号, `'` trọng âm; chú thích trong ngoặc vốn đã bỏ.
+- Bỏ dòng "Bản dịch tiếng Việt là bản tham khảo của Zìkǎ — sách không in." ở tình huống bài khoá (189 bài khoá, cả 60 bài HSK):
+  bộ nạp thôi chèn, migration 018 dọn dữ liệu đã nạp (server chạy cùng `01-cau-truc.sql`).
+- Tốc độ: 305 câu Hán ngữ đọc nhanh hơn 5,8 âm tiết/giây sinh lại chậm thêm 15% (`doc_cham_lai.py` với danh sách Hán ngữ),
+  như chuẩn HSK 3.0. Quét qua web: 13.116 âm thanh + 1.381 nét chữ, 0 lỗi.
+- Thanh đường dẫn 5 màn học theo bài: "Phần / Quyển n", không lặp số bài và tên bài đã có ở khối tiêu đề.
+- **Giáo trình (`/learn/books`) mở cho mọi tài khoản** theo yêu cầu người dùng: hiện ở Chuyển nhanh, bỏ chặn đường dẫn,
+  ảnh trang qua `/api/learn/books/...` (đòi đăng nhập; `/admin/books` cũ giữ lại). Thư mục ảnh vẫn bị `.htaccess` chặn.
+  Thử bằng học viên mẫu: menu có Giáo trình, ảnh 3 quyển tải được; khách chưa đăng nhập 401/403.
+- Gói server `../dong-goi-han-ngu/` (migration 006–018, 14.497 file, 337 MB) thử trên DB giống server: **ĐẠT**. Chạy thử
+  toàn bộ web qua trình duyệt: 22 trang học viên + 17 trang quản trị đạt, không lỗi console.
+
+Web và API (migration 017): sách in lại một từ ở bài sau / một chữ hai cách đọc trong bài (30 từ trước bị bỏ, 好 hào/hǎo
+bị gộp) nay đều có thẻ — trùng chỉ xét trong một bài theo chữ Hán + pinyin; cột tiếng Anh cho từ và ngữ pháp; ngữ pháp
+giữ tới 40 ví dụ (không còn tách "(tiếp)"), tên 255 và công thức 2.000 ký tự, không bỏ ô công thức chỉ có chữ Hán;
+Luyện viết hiện cách đọc 写汉字 của từng bài (`lesson_chars.pinyin`, 行 háng); tên bài khoá theo sách. Màn học hiện
+tiếng Anh ở Lật thẻ (dưới nghĩa Việt) và Ngữ pháp (tên, công thức, khối "English", ví dụ, lưu ý); màn soạn có ô tiếng Anh.
+Bộ sinh `data/han-ngu/sinh.py` viết lại phần từ, hội thoại, ngữ pháp cho khớp.
+
+Kiểm tra: so web với bản chép từng trường (thẻ, chữ viết, câu thoại, ví dụ, cả tiếng Anh) — **khớp hoàn toàn** 76 bài.
+Trình duyệt: thẻ 英文 hiện "English" in nghiêng; Q5 B6 ngữ pháp hiện tên, câu tiếng Anh và khối English. Web 0 lỗi/0 cảnh
+báo, lint sạch, 103/103; API 168/168. Giọng đọc: 747 file mới cho câu đã sửa.
+
+
+Migration 016: giáo trình số 1 đổi tên "Giáo trình HSK chuẩn" → "Giáo trình HSK 3.0"; thêm cột `curricula.is_default` và bật cho
+"Hán ngữ 6 tập". Mọi học viên chưa phân quyền, cả tài khoản cũ lẫn mới đăng ký, học Hán ngữ; ai học HSK thì admin gán HSK 3.0 ở
+Phân quyền học (tiến độ HSK cũ còn nguyên). `Curricula::DEFAULT_ID` đổi thành `HSK_ID` (giáo trình gốc của công cụ nạp và chữ mẫu cấp),
+giáo trình của học viên chưa gán lấy bằng `Curricula::defaultId()`. Form giáo trình có công tắc **Giáo trình mặc định**, bật bộ khác thì
+bộ cũ tự tắt; không tắt hay xoá được bộ đang mặc định. Đổi mặc định thì bỏ lượt ôn dở của học viên chưa phân quyền, như khi gán tay.
+Gói server: `01-cau-truc.sql` tới migration 016, `02-han-ngu.sql` tự chuyển cờ sang Hán ngữ; **phải đóng gói lại**.
+Lúc làm có chạy nhầm `install.php --help` (lệnh này không có `--help`) ở DB dev: 3 tài khoản mẫu bị đặt lại mật khẩu `Zika@2026`,
+nội dung và tiến độ không đổi. Bản đầu của migration 016 (cột `for_signup`, chỉ áp cho tài khoản mới) đã chạy ở DB dev và `zika_test`
+rồi được gỡ để chạy bản này. Kiểm tra: web 0 lỗi/0 cảnh báo, lint sạch, 103/103; API 164/164 (1107 assertions); `thu_server.php` ĐẠT với gói mới. Trình duyệt: `/admin/curricula` đúng tên,
+nhãn Mặc định và công tắc. Chưa đăng ký thử tài khoản thật, chưa bấm Phân quyền học trên trình duyệt.
+
+Cùng ngày sửa trang soạn **Ngữ pháp**: tab ghi "Ngữ pháp 8" nhưng trang báo "0 điểm ngữ pháp" và "Không tải được phần ngữ pháp",
+vì `structuredClone` không sao chép được proxy `$state` (bẫy số 8). Đổi sang `$state.snapshot` ở Ngữ pháp, Bài tập, Kiểm tra và
+Đề thi thử. Đã bấm trên trình duyệt: Q2 Bài 16 hiện đủ 8 điểm ngữ pháp; HSK 1 Bài 1 hiện đủ 8 câu bài tập, 5 câu kiểm tra.
+
+Menu trái nhóm **Phần học · soạn theo bài**: trình duyệt chưa mở bài nào thì 5 mục đều trỏ về `/admin/lessons` nên sáng nhầm ở
+"Bài học HSK"; bài gần nhất cũng chỉ đọc lúc tải trang, mở bài khác vẫn trỏ bài cũ tới khi F5. Nay menu bám theo bài trên URL, chưa có
+bài thì lấy bài đầu của giáo trình đang soạn. Đã bấm thử cả 5 mục khi xoá bài đã nhớ, và chuyển bài không tải lại trang.
+
 ### 07/11/2026 — Học viên Hán ngữ thấy "Quyển n" thay cho "HSK n"
 
 Thêm cột `curricula.level_label` (migration 015, chọn ở form giáo trình), API trả `user.levelLabel`, màn học đọc qua

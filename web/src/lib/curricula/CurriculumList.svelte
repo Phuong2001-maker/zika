@@ -18,7 +18,7 @@
   let failed = $state(false);
   let saving = $state(false);
   let error = $state('');
-  let edit = $state<{ id: number | null; name: string; description: string; color: string; levelLabel: string } | null>(null);
+  let edit = $state<{ id: number | null; name: string; description: string; color: string; levelLabel: string; isDefault: boolean; wasDefault: boolean } | null>(null);
 
   async function load(): Promise<void> {
     failed = false;
@@ -31,12 +31,12 @@
   onMount(load);
 
   function openNew(): void {
-    edit = { id: null, name: '', description: '', color: COLORS[0], levelLabel: 'HSK' };
+    edit = { id: null, name: '', description: '', color: COLORS[0], levelLabel: 'HSK', isDefault: false, wasDefault: false };
     error = '';
   }
 
   function openEdit(c: AdminCurriculum): void {
-    edit = { id: c.id, name: c.name, description: c.description, color: c.color, levelLabel: c.levelLabel };
+    edit = { id: c.id, name: c.name, description: c.description, color: c.color, levelLabel: c.levelLabel, isDefault: c.isDefault, wasDefault: c.isDefault };
     error = '';
   }
 
@@ -49,7 +49,7 @@
     saving = true;
     error = '';
     try {
-      await adminApi.saveCurriculum(edit.id, { name: edit.name.trim(), description: edit.description.trim(), color: edit.color, levelLabel: edit.levelLabel });
+      await adminApi.saveCurriculum(edit.id, { name: edit.name.trim(), description: edit.description.trim(), color: edit.color, levelLabel: edit.levelLabel, isDefault: edit.isDefault });
       edit = null;
       toast.ok('Đã lưu giáo trình.');
       await load();
@@ -96,7 +96,7 @@
           <span class="ct-icon" style:background={c.color}><Icon name="book" size={21} /></span>
           <div class="ct-name">
             <b>{c.name}</b>
-            {#if c.isDefault}<span class="tag">Mặc định</span>{/if}
+            {#if c.isDefault}<span class="tag" title="Học viên chưa được phân quyền, cả tài khoản cũ lẫn mới đăng ký, học giáo trình này">Mặc định</span>{/if}
             {#if c.description}<p class="muted">{c.description}</p>{/if}
           </div>
         </div>
@@ -136,6 +136,16 @@
       <div class="ct-field">
         <label class="lbl" for="ct-cap">Học viên thấy cấp là</label>
         <Select id="ct-cap" bind:value={edit.levelLabel} options={[{ v: 'HSK', label: 'HSK 1, HSK 2…' }, { v: 'Quyển', label: 'Quyển 1, Quyển 2…' }]} />
+      </div>
+      <div class="ct-field">
+        <label class="sw"><input type="checkbox" bind:checked={edit.isDefault} disabled={edit.wasDefault} /><span></span> Giáo trình mặc định</label>
+        <p class="hint" style="margin-top: 0">
+          {#if edit.wasDefault}
+            Đang là mặc định. Muốn đổi thì bật ở giáo trình khác.
+          {:else}
+            Học viên chưa được phân quyền, cả tài khoản cũ lẫn mới đăng ký, sẽ học giáo trình này. Giáo trình mặc định hiện tại tự tắt.
+          {/if}
+        </p>
       </div>
       <div class="ct-field">
         <span class="lbl">Màu nhận diện</span>

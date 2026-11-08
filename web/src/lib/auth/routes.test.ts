@@ -41,12 +41,12 @@ describe('vào trang nào sau khi đăng nhập', () => {
   });
 
   it('chỉ quản trị đọc được giáo trình', () => {
+    // Giáo trình mở cho mọi vai trò (08/11/2026).
     expect(canView('admin', '/learn/books')).toBe(true);
-    expect(canView('admin', '/learn/books/hsk1')).toBe(true);
-    expect(canView('editor', '/learn/books/hsk1')).toBe(false);
-    expect(canView('learner', '/learn/books')).toBe(false);
-    expect(canView('learner', '/learn/booksx')).toBe(true);
-    expect(landingPath('learner', '/learn/books/hsk2')).toBe('/learn/flashcards');
+    expect(canView('editor', '/learn/books/hsk1')).toBe(true);
+    expect(canView('learner', '/learn/books')).toBe(true);
+    expect(canView('learner', '/learn/books/hsk2')).toBe(true);
+    expect(landingPath('learner', '/learn/books/hsk2')).toBe('/learn/books/hsk2');
   });
 
   it('không có “next” thì về trang nhà của vai trò', () => {

@@ -21,6 +21,11 @@
     subtitle: string;
     explain: string;
     note: string;
+    /** Phần tiếng Anh sách in; giáo trình không có thì để trống. */
+    titleEn: string;
+    subtitleEn: string;
+    explainEn: string;
+    noteEn: string;
     blocks: GrammarBlock[];
     examples: GrammarExample[];
     practice: { answer: string; vi: string; tiles: string[] };
@@ -49,6 +54,10 @@
       subtitle: '',
       explain: '',
       note: '',
+      titleEn: '',
+      subtitleEn: '',
+      explainEn: '',
+      noteEn: '',
       blocks: [{ label: 'Chủ ngữ', hz: '', color: COLORS[0] }],
       examples: [{ kind: 'Khẳng định', formula: '', zh: '', highlight: null, pinyin: '', vi: '' }],
       practice: { answer: '', vi: '', tiles: [] },
@@ -81,9 +90,13 @@
           subtitle: p.subtitle,
           explain: p.explain,
           note: p.note ?? '',
-          blocks: p.blocks.length ? structuredClone(p.blocks) : [{ label: '', hz: '', color: COLORS[0] }],
-          examples: p.examples.length ? structuredClone(p.examples) : [{ kind: '', formula: '', zh: '', highlight: null, pinyin: '', vi: '' }],
-          practice: p.practice ? structuredClone(p.practice) : { answer: '', vi: '', tiles: [] },
+          titleEn: p.titleEn ?? '',
+          subtitleEn: p.subtitleEn ?? '',
+          explainEn: p.explainEn ?? '',
+          noteEn: p.noteEn ?? '',
+          blocks: p.blocks.length ? $state.snapshot(p.blocks) : [{ label: '', hz: '', color: COLORS[0] }],
+          examples: p.examples.length ? $state.snapshot(p.examples) : [{ kind: '', formula: '', zh: '', highlight: null, pinyin: '', vi: '' }],
+          practice: p.practice ? $state.snapshot(p.practice) : { answer: '', vi: '', tiles: [] },
         }
       : blank();
   }
@@ -128,7 +141,12 @@
         subtitle: draft.subtitle.trim(),
         explain: draft.explain.trim(),
         note: draft.note.trim() || null,
-        blocks: draft.blocks.filter((b) => b.label.trim() !== ''),
+        titleEn: draft.titleEn.trim(),
+        subtitleEn: draft.subtitleEn.trim(),
+        explainEn: draft.explainEn.trim(),
+        noteEn: draft.noteEn.trim(),
+        // Khối chỉ có chữ Hán (请问 trong "请问 + ，……？") vẫn là phần công thức sách in.
+        blocks: draft.blocks.filter((b) => b.label.trim() !== '' || b.hz.trim() !== ''),
         examples: draft.examples.filter((e) => e.zh.trim() !== ''),
         practice: draft.practice.answer.trim() === '' ? {} : draft.practice,
       };
@@ -217,9 +235,25 @@
           </div>
         </div>
 
+        <div class="grid2">
+          <div class="field">
+            <label class="lbl" for="g-title-en">Tên tiếng Anh</label>
+            <input id="g-title-en" class="inp" lang="en" bind:value={draft.titleEn} oninput={touch} placeholder="Bỏ trống nếu sách không in" />
+          </div>
+          <div class="field">
+            <label class="lbl" for="g-sub-en">Công thức tiếng Anh</label>
+            <input id="g-sub-en" class="inp" lang="en" bind:value={draft.subtitleEn} oninput={touch} />
+          </div>
+        </div>
+
         <div class="field">
           <label class="lbl" for="g-ex">Giải thích</label>
           <textarea id="g-ex" class="inp" rows="3" bind:value={draft.explain} oninput={touch}></textarea>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="g-ex-en">Giải thích tiếng Anh</label>
+          <textarea id="g-ex-en" class="inp" lang="en" rows="3" bind:value={draft.explainEn} oninput={touch}></textarea>
         </div>
 
         <!-- Khối công thức -->
@@ -275,6 +309,8 @@
         <div class="field">
           <label class="lbl" for="g-note">Lưu ý / lỗi hay gặp</label>
           <textarea id="g-note" class="inp" rows="2" bind:value={draft.note} oninput={touch}></textarea>
+          <label class="lbl" for="g-note-en" style="margin-top: 8px">Lưu ý tiếng Anh</label>
+          <textarea id="g-note-en" class="inp" lang="en" rows="2" bind:value={draft.noteEn} oninput={touch}></textarea>
         </div>
 
         <!-- Bài luyện tập -->

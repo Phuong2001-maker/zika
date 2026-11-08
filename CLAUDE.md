@@ -37,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 103/103 test; API 161/161; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 106/106 test; API 173/173; `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -51,7 +51,8 @@ web/src/lib/curricula/   màn Giáo trình + Phân quyền học (giáo trình �
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
 web/src/lib/stores/cap.svelte.ts  cách gọi cấp theo giáo trình ("HSK 1" / "Quyển 1"), màn học lấy chữ từ đây
 web/src/lib/learn/che-do/  3 chế độ luyện ở màn Lật thẻ (Ghép cặp, Trắc nghiệm, Gõ chữ)
-web/src/lib/learn/sach.ts  3 quyển giáo trình ở /learn/books — chỉ admin, ảnh qua /api/admin/books (ngoài git)
+web/src/lib/learn/sach.ts  giáo trình /learn/books: học viên thấy bộ sách của giáo trình mình (Hán ngữ 1–6 hoặc HSK 1–3)
+web/src/lib/learn/giao-trinh/  màn đọc: mục lục, thanh phát file nghe, đáp án — dữ liệu từ sach.json (data/giao-trinh/dung-sach.py)
 data/han-ngu/            nạp giáo trình Hán ngữ 6 tập: chép từ ảnh → sinh → nạp → giọng → quét → gói server
 web/src/app.css          tokens + class dùng chung TOÀN CỤC (xem bẫy số 1); cuối file là khung học `zk-*`
 api/app/src/             Controllers/, Services/, Core/
@@ -60,7 +61,9 @@ api/app/config.php       bí mật (DB, Google, SMTP) — gitignore, KHÔNG comm
 
 Ba vai trò: `learner`, `editor`, `admin`.
 
-Giáo trình là cha của bài: truy vấn bài/từ cho người học phải lọc `curriculum_id` (`Services/Curricula.php`). Giáo trình số 1 là mặc định, không xoá được.
+Giáo trình là cha của bài: truy vấn bài/từ cho người học phải lọc `curriculum_id` (`Services/Curricula.php`). Học viên chưa phân quyền (`users.curriculum_id` NULL, cả tài khoản cũ lẫn mới) học giáo trình bật `curricula.is_default`, hiện là
+Hán ngữ 6 tập; lấy bằng `Curricula::defaultId()`, đừng coi id 1 là mặc định. Giáo trình số 1 (`Curricula::HSK_ID`, "Giáo trình HSK 3.0")
+giữ dữ liệu HSK gốc, chỉ ai được gán mới học, không xoá được.
 
 ## Bẫy — đọc kỹ, đã sa vào thật
 
@@ -127,6 +130,11 @@ Sửa file lúc trang đang mở (nhất là khi nhiều tiến trình cùng ghi
 component — giao diện "không ăn" dù code đúng, tải lại trang cũng không hết. Chạm lại file (`touch`)
 hoặc khởi động lại `npm run dev`. Bản build không bị.
 
+### 8. `structuredClone` không sao chép được `$state`
+
+Phần tử lấy ra từ mảng `$state` là proxy của Svelte 5, `structuredClone(proxy)` ném `DataCloneError`. Ở trang soạn Ngữ pháp lỗi
+này rơi vào `catch` của `load()` nên trang báo "0 điểm" dù API trả đủ. Lấy bản sao bằng `$state.snapshot(x)`.
+
 ## Nếp viết
 
 - **Tiếng Việt** cho chữ hiển thị, comment và thông điệp commit. Tên biến/hàm có thể tiếng Việt khi rõ nghĩa hơn.
@@ -140,9 +148,21 @@ hoặc khởi động lại `npm run dev`. Bản build không bị.
 
 ## Việc còn treo
 
+- **Server thật đã lên bản 08/11/2026 (đã kiểm):** DB xoá hết chỉ giữ tài khoản, nạp lại 2 giáo trình; code, âm thanh,
+  ảnh sách đã lên. Kiểm trên web thật: 116 bài × 6 phần giống local (bỏ qua `?v=` nét chữ và `updatedByName`), 21.313
+  file âm thanh/nét chữ đủ và đúng cỡ, 43 màn chạy ở máy tính/máy tính bảng/điện thoại. Lúc nạp, `01-cau-truc.sql` dừng
+  ở migration 013 vì bảng words trên server có chỉ mục khác (`uq_words_lesson_hanzi`, `ix_words_level_hanzi`); đã sửa
+  tay rồi chạy tiếp — xem NHAT-KY 08/11. **Đừng dùng gói giọng 03/11 cũ** (`cap-nhat-giong-moi-20261103-0355.zip`).
+- **Giáo trình kèm file nghe + đáp án (08/11/2026):** học viên thấy bộ sách theo giáo trình học (Hán ngữ → 6 quyển Hán ngữ),
+  thanh phát file ghi âm, đáp án Q3–6. Đã lên server. Chưa thử màn hình khoá điện thoại thật (GT18). Xem NHAT-KY 08/11.
+- **Hán ngữ đúng như sách + tiếng Anh (08/11/2026):** sách là chuẩn — bản chép đã soát lại cả 76 bài theo ảnh, web khớp
+  bản chép từng chữ (migration 017). Lỗi in của sách và chỗ dịch sai đã sửa trên web, chữ sách in giữ ở `loi_sach`.
+  Tiếng Anh chỉ hiện ở Lật thẻ (ngữ pháp có dữ liệu tiếng Anh nhưng không hiện). Mọi phần nghe của Hán ngữ là giọng tự tạo,
+  kể cả nút Nghe bài khoá (`gan_hn.py` `DUNG_BANG = False`). Sách ở `HanNgu/New folder/` → đặt `ZIKA_HANNGU_DIR` khi đọc PDF
+  (thư mục "File nghe…" vẫn ở `HanNgu/`). Xem NHAT-KY 08/11.
 - **Giáo trình "Hán ngữ 6 tập" (07/11/2026):** 76 bài đã nạp ở local, quy trình ở [data/han-ngu/README.md](data/han-ngu/README.md).
   Chỉ có 4 phần, Bài tập và Kiểm tra cố ý để trống. Gói server ở `../dong-goi-han-ngu/`, **chưa đưa lên**: cần code mới trước,
-  rồi chạy `01-cau-truc.sql` (migration 006–015, đã chạy thì tự bỏ qua) và `02-han-ngu.sql`, chép zip uploads, xoá `storage/cache/content`.
+  rồi chạy `01-cau-truc.sql` (migration 006–018, đã chạy thì tự bỏ qua) và `02-han-ngu.sql`, chép zip uploads, xoá `storage/cache/content`.
   Màn học gọi cấp theo `curricula.level_label` qua `lib/stores/cap.svelte.ts` ("Quyển n"), đừng viết cứng "HSK n" ở màn học; riêng "Thi thử HSK n" giữ vì là đề HSK dùng chung. Góp ý ở màn học chưa nối (không có nút gửi, không có route POST).
 
 - **Giao diện giáo trình admin + quỹ thưởng/top chăm học/bé túi Shopee (05–06/11/2026):** đọc
@@ -152,7 +172,7 @@ hoặc khởi động lại `npm run dev`. Bản build không bị.
   Giáo trình và tab Đề thi đã có API thật; đề thi thử cuối cấp vẫn dùng chung mọi giáo trình.
   Link Shopee đã có API thật (Icon 1 link, Quỹ tháng nhiều link, công tắc ở `/admin/support`), tiền quỹ do admin nhập tay ở cùng màn đó;
   cuộc thi tạo ở `/admin/contests`, chọn đề từ tab `/admin/exams` (chỉ cần tên, câu nạp sau), đề Nháp chỉ làm được trong giờ thi, hết giờ tự nộp, xếp hạng theo câu đúng rồi thời gian, mỗi người 1 lượt.
-  đăng ký trước giờ thi mới được làm, cơ cấu giải chỉnh ở cùng màn. Trang soạn đề là bản tạm. **Server thật còn cần migration 007 đến 015 và xoá `storage/cache/content`** rồi gắn link Icon thì bé mới hiện. Top chăm học vẫn minh hoạ. Checklist: phần I, J, K, L của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+  đăng ký trước giờ thi mới được làm, cơ cấu giải chỉnh ở cùng màn. Trang soạn đề là bản tạm. **Server thật còn cần migration 007 đến 018 và xoá `storage/cache/content`** rồi gắn link Icon thì bé mới hiện. Top chăm học vẫn minh hoạ. Checklist: phần I, J, K, L của [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 - **ĐANG DỞ — giọng đọc mới toàn bộ + sửa UI/UX (03/11/2026), chỉ còn đưa lên server:** mọi file đọc
   mẫu chuyển sang giọng Microsoft (edge-tts), câu thoại giọng riêng từng nhân vật, `TTS_VERSION = 6`;
@@ -187,9 +207,9 @@ hoặc khởi động lại `npm run dev`. Bản build không bị.
     hosting. Mất 3 lớp kiểm tra, đã bù 2 (đếm `cnt_*` và trỏ nét chữ), còn `QuestionPayload::clean()`
     thì chưa — xem `data/hsk1/TIEN-DO.md` Phần B.
 
-- **Màn đọc giáo trình đã xong** (`/learn/books`): 3 quyển HSK 1–3 đọc theo ảnh từng trang.
-  Ảnh sinh bằng `data/giao-trinh/tach-giao-trinh.py`, nằm ở `<uploads>/giao-trinh/` và
-  **không có trong git** — xem mục "Giáo trình" ở [README.md](README.md) trước khi triển khai.
+- **Màn đọc giáo trình** (`/learn/books`): 9 quyển (Hán ngữ 1–6, HSK 1–3) đọc theo ảnh từng trang, kèm file nghe và
+  đáp án khi sách có. Dựng bằng `data/giao-trinh/dung-sach.py` vào `<uploads>/giao-trinh/<mã>/` (có `sach.json`),
+  **không có trong git** (~740MB) — xem mục "Giáo trình" ở [README.md](README.md) trước khi triển khai.
 
 - API còn khoảng 56 chỗ dùng `NOW()`, phần lớn vô hại (truy vấn thống kê, hoặc đặt mốc thời
   gian lúc ghi). Chỉ thành vấn đề khi hàm đó có test đóng băng đồng hồ **và** so sánh với một

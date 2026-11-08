@@ -28,11 +28,12 @@ final class CurriculumController
             $words[(int) $x['curriculum_id']] = (int) $x['n'];
         }
         $learners = [];
-        foreach (Db::all("SELECT COALESCE(curriculum_id, ?) AS c, COUNT(*) AS n FROM users WHERE role = 'learner' GROUP BY c", [Curricula::DEFAULT_ID]) as $x) {
+        foreach (Db::all("SELECT COALESCE(curriculum_id, ?) AS c, COUNT(*) AS n FROM users WHERE role = 'learner' GROUP BY c", [Curricula::defaultId()]) as $x) {
             $learners[(int) $x['c']] = (int) $x['n'];
         }
 
-        return array_map(static function (array $c) use ($byLevel, $words, $learners): array {
+        $default = Curricula::defaultId();
+        return array_map(static function (array $c) use ($byLevel, $words, $learners, $default): array {
             $id = (int) $c['id'];
             $levels = [];
             foreach ([1, 2, 3, 4, 5, 6] as $lv) {
@@ -44,7 +45,7 @@ final class CurriculumController
                 'description' => (string) $c['description'],
                 'color' => (string) $c['color'],
                 'levelLabel' => (string) $c['level_label'],
-                'isDefault' => $id === Curricula::DEFAULT_ID,
+                'isDefault' => $id === $default,
                 'levels' => $levels,
                 'lessonCount' => array_sum($levels),
                 'wordCount' => $words[$id] ?? 0,
@@ -67,6 +68,12 @@ final class CurriculumController
         if ($v->present('levelLabel')) {
             $row['level_label'] = $v->in('levelLabel', 'Cách gọi cấp', Curricula::LEVEL_LABELS);
         }
+        // Cùng lý do: công cụ nạp không gửi cờ này. Chỉ bật được, vì luôn phải có một giáo trình mặc định:
+        // muốn đổi thì bật ở giáo trình khác, bộ đang bật tự tắt.
+        $makeDefault = $v->present('isDefault') && $v->bool('isDefault');
+        if ($v->present('isDefault') && !$makeDefault && $id > 0 && $id === Curricula::defaultId()) {
+            $v->error('isDefault', 'Luôn phải có một giáo trình mặc định. Muốn đổi thì bật ở giáo trình khác.');
+        }
         if (Db::val('SELECT id FROM curricula WHERE name = ? AND id <> ?', [$row['name'], $id]) !== null) {
             $v->error('name', 'Đã có giáo trình tên này.');
         }
@@ -76,22 +83,49 @@ final class CurriculumController
             if (Db::val('SELECT id FROM curricula WHERE id = ?', [$id]) === null) {
                 throw HttpError::notFound('Không có giáo trình này.');
             }
-            Db::update('curricula', $row, ['id' => $id]);
+            Db::tx(static function () use ($row, $id, $makeDefault): void {
+                Db::update('curricula', $row, ['id' => $id]);
+                if ($makeDefault) {
+                    self::makeDefault($id);
+                }
+            });
             Audit::log($r, 'curriculum.update', 'curriculum', $id, ['name' => $row['name']]);
             return Response::json(['id' => $id]);
         }
 
-        $newId = Db::insert('curricula', $row);
+        $newId = Db::tx(static function () use ($row, $makeDefault): int {
+            $newId = Db::insert('curricula', $row);
+            if ($makeDefault) {
+                self::makeDefault($newId);
+            }
+            return $newId;
+        });
         Audit::log($r, 'curriculum.create', 'curriculum', $newId, ['name' => $row['name']]);
         return Response::json(['id' => $newId], 201);
+    }
+
+    /**
+     * Mọi học viên chưa phân quyền chuyển sang giáo trình này. Bỏ lượt ôn dở của họ như khi gán tay (assign):
+     * lượt ôn lưu theo (người, cấp) nên còn trỏ vào câu của giáo trình cũ.
+     */
+    private static function makeDefault(int $id): void
+    {
+        $old = Curricula::defaultId();
+        Db::exec('UPDATE curricula SET is_default = (id = ?)', [$id]);
+        if ($old !== $id) {
+            Db::exec("DELETE FROM review_progress WHERE user_id IN (SELECT id FROM users WHERE curriculum_id IS NULL AND role = 'learner')");
+        }
     }
 
     /** DELETE /admin/curricula/{id} — còn bài hoặc từ thì không xoá, tránh mất nội dung đã soạn. */
     public function delete(Request $r): Response
     {
         $id = $r->id();
-        if ($id === Curricula::DEFAULT_ID) {
-            throw HttpError::conflict('Đây là giáo trình mặc định của học viên chưa được gán nên không xoá được, bạn có thể đổi tên.');
+        if ($id === Curricula::defaultId()) {
+            throw HttpError::conflict('Đây là giáo trình mặc định của học viên chưa được phân quyền nên không xoá được. Muốn xoá thì đặt giáo trình khác làm mặc định trước.');
+        }
+        if ($id === Curricula::HSK_ID) {
+            throw HttpError::conflict('Đây là giáo trình HSK gốc nên không xoá được, bạn có thể đổi tên.');
         }
         $lessons = (int) Db::val('SELECT COUNT(*) FROM lessons WHERE curriculum_id = ?', [$id]);
         $words = (int) Db::val('SELECT COUNT(*) FROM words WHERE curriculum_id = ?', [$id]);
@@ -133,7 +167,7 @@ final class CurriculumController
         );
     }
 
-    /** PUT /admin/curricula/assign — mỗi học viên một giáo trình; null = về giáo trình mặc định. */
+    /** PUT /admin/curricula/assign — mỗi học viên một giáo trình; null = chưa phân quyền, học giáo trình mặc định. */
     public function assign(Request $r): array
     {
         $v = new Validator($r->body);

@@ -73,7 +73,7 @@
     errors = {};
     dirty = false;
     formKey++;
-    draft = q === null ? blank() : { id: q.id, type: q.type, payload: structuredClone(q.payload), explain: q.explain ?? '', score: q.score };
+    draft = q === null ? blank() : { id: q.id, type: q.type, payload: $state.snapshot(q.payload), explain: q.explain ?? '', score: q.score };
   }
 
   async function save(andNext = false): Promise<void> {

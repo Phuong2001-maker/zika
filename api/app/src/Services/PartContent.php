@@ -240,7 +240,7 @@ final class PartContent
     private static function charRows(string $where, array $params, bool $withLesson = false): array
     {
         $rows = Db::all(
-            "SELECT lc.id AS lesson_char_id, lc.lesson_id, lc.sort_order, l.lesson_no,
+            "SELECT lc.id AS lesson_char_id, lc.lesson_id, lc.sort_order, l.lesson_no, lc.pinyin AS lesson_pinyin,
                     c.*, w.hanzi AS word_hanzi, w.meaning_vi AS word_meaning
              FROM lesson_chars lc
              JOIN characters c ON c.id = lc.char_id
@@ -252,11 +252,13 @@ final class PartContent
         );
 
         return array_map(static function (array $c) use ($withLesson): array {
+            // Cách đọc sách in ở mục 写汉字 của bài (行 háng trong 银行) đứng trước cách đọc chung của chữ.
+            $pinyin = ($c['lesson_pinyin'] ?? '') !== '' ? (string) $c['lesson_pinyin'] : (string) $c['pinyin'];
             $item = [
                 'id' => (int) $c['id'],
                 'hanzi' => (string) $c['hanzi'],
-                'pinyin' => (string) $c['pinyin'],
-                'tone' => Pinyin::tone((string) $c['pinyin']),
+                'pinyin' => $pinyin,
+                'tone' => Pinyin::tone($pinyin),
                 'hanViet' => (string) $c['han_viet'],
                 'meaning' => (string) $c['meaning_vi'],
                 'strokes' => (int) $c['strokes'],
@@ -417,9 +419,13 @@ final class PartContent
         return array_map(static fn (array $g): array => [
             'id' => (int) $g['id'],
             'title' => (string) $g['title'],
+            'titleEn' => ($g['title_en'] ?? '') !== '' ? (string) $g['title_en'] : null,
             'subtitle' => (string) $g['subtitle'],
+            'subtitleEn' => ($g['subtitle_en'] ?? '') !== '' ? (string) $g['subtitle_en'] : null,
             'explain' => (string) $g['explain_vi'],
+            'explainEn' => ($g['explain_en'] ?? '') !== '' ? (string) $g['explain_en'] : null,
             'note' => ($g['note_vi'] ?? '') !== '' ? (string) $g['note_vi'] : null,
+            'noteEn' => ($g['note_en'] ?? '') !== '' ? (string) $g['note_en'] : null,
             'blocks' => ContentBuilder::json($g['blocks'], []),
             'examples' => ContentBuilder::json($g['examples'], []),
             'practice' => ContentBuilder::json($g['practice'], null),

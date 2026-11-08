@@ -224,6 +224,7 @@
                 <span class="hv">{card.hanViet}</span>
               {/if}
               <span class="nghia" style="font-size: {m ? 17 : 20}px">{card.meaning}</span>
+              {#if card.meaningEn}<span class="nghia-anh" lang="en" style="font-size: {m ? 14 : 15.5}px">{card.meaningEn}</span>{/if}
             </span>
           </span>
         </button>
@@ -382,8 +383,9 @@
   <!-- ============ Máy tính ============ -->
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px">
-      <a href="/learn/flashcards/hsk/{levelId}">{cap.ten(levelId)}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b>
+    <!-- Chỉ ghi phần và cấp: số bài và tên bài đã ở khối tiêu đề ngay bên dưới, ghi lại ở đây là lặp. -->
+    <nav class="crumb" aria-label="Đường dẫn" style="margin-left: 8px">
+      <a href="/learn/flashcards">Lật thẻ</a> / <a href="/learn/flashcards/hsk/{levelId}">{cap.ten(levelId)}</a>
     </nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px">
       <Switcher current="lt" />
@@ -426,6 +428,12 @@
   .nghia {
     font-weight: 600;
     max-width: 90%;
+  }
+  .nghia-anh {
+    color: var(--text-2);
+    font-style: italic;
+    max-width: 90%;
+    margin-top: -4px;
   }
   .goi {
     position: absolute;

@@ -93,6 +93,7 @@ final class VisitServiceTest extends DbTestCase
         self::assertSame('Đang thi thử HSK 2', VisitService::activityText(['part' => 'kt', 'screen' => 'do', 'level' => 2, 'mockId' => 3]));
         self::assertSame('Ở trang Tài khoản', VisitService::activityText(['part' => null, 'screen' => 'account']));
         self::assertSame('Đang đọc giáo trình HSK 3', VisitService::activityText(['part' => null, 'screen' => 'book', 'level' => 3]));
+        self::assertSame('Đang đọc giáo trình Hán ngữ 3', VisitService::activityText(['part' => null, 'screen' => 'book', 'level' => 3, 'book' => 'hn3']));
         self::assertSame('Đang đọc giáo trình', VisitService::activityText(['part' => null, 'screen' => 'book']));
     }
 }

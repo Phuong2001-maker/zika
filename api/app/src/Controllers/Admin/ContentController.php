@@ -337,6 +337,7 @@ final class ContentController
                 'pinyin' => (string) $w['pinyin'],
                 'hanViet' => (string) $w['han_viet'],
                 'meaning' => (string) $w['meaning_vi'],
+                'meaningEn' => $w['meaning_en'] !== null ? (string) $w['meaning_en'] : null,
                 'pos' => (string) $w['pos'],
                 'exampleCount' => (int) $w['example_count'],
             ], $rows),
@@ -470,12 +471,12 @@ final class ContentController
                 $skipped[] = ['hanzi' => $hanzi, 'reason' => 'Không phải chữ Hán.'];
                 continue;
             }
-            if (Db::val('SELECT id FROM words WHERE curriculum_id = ? AND level_id = ? AND hanzi = ?', [$curriculumId, $levelId, $hanzi]) !== null) {
-                $skipped[] = ['hanzi' => $hanzi, 'reason' => 'Cấp này đã có từ đó.'];
+            $pinyin = trim((string) ($raw['pinyin'] ?? ''));
+            if (self::duplicateWord($curriculumId, $levelId, $lessonId, $hanzi, $pinyin) !== null) {
+                $skipped[] = ['hanzi' => $hanzi, 'reason' => $lessonId !== null ? 'Bài này đã có từ đó.' : 'Cấp này đã có từ đó.'];
                 continue;
             }
 
-            $pinyin = trim((string) ($raw['pinyin'] ?? ''));
             $meaning = trim((string) ($raw['meaning'] ?? ''));
             $hanViet = trim((string) ($raw['hanViet'] ?? ''));
             $pos = (string) ($raw['pos'] ?? '');
@@ -502,6 +503,7 @@ final class ContentController
                 'pinyin' => mb_substr($pinyin, 0, 120),
                 'han_viet' => mb_substr($hanViet, 0, 120),
                 'meaning_vi' => mb_substr($meaning, 0, 255),
+                'meaning_en' => ($en = trim((string) ($raw['meaningEn'] ?? ''))) !== '' ? mb_substr($en, 0, 255) : null,
                 'pos' => in_array($pos, self::POS, true) ? $pos : 'n',
                 'sort_order' => ++$sort,
             ]);
@@ -536,6 +538,10 @@ final class ContentController
         $pinyin = $v->str('pinyin', 'Pinyin', false, 0, 120);
         $hanViet = $v->str('hanViet', 'Hán Việt', false, 0, 120);
         $meaning = $v->str('meaning', 'Nghĩa tiếng Việt', min: 1, max: 255);
+        // Không gửi thì giữ nguyên: màn soạn cũ hoặc công cụ khác không được xoá nghĩa tiếng Anh đã nạp từ sách.
+        $meaningEn = $v->present('meaningEn')
+            ? (($x = trim((string) $v->raw('meaningEn'))) !== '' ? mb_substr($x, 0, 255) : null)
+            : ($cur !== null ? $cur['meaning_en'] : null);
         $pos = $v->in('pos', 'Loại từ', self::POS, 'n');
         $note = $v->strOrNull('note', 'Ghi chú', 2000);
         $curriculumId = $cur !== null
@@ -558,13 +564,8 @@ final class ContentController
             }
         }
 
-        // Trong một giáo trình, mỗi cấp không được có 2 từ cùng chữ Hán.
-        $dupe = Db::val(
-            'SELECT id FROM words WHERE curriculum_id = ? AND level_id = ? AND hanzi = ?' . ($cur !== null ? ' AND id <> ?' : ''),
-            $cur !== null ? [$curriculumId, $levelId, $hanzi, (int) $cur['id']] : [$curriculumId, $levelId, $hanzi],
-        );
-        if ($dupe !== null) {
-            $v->error('hanzi', 'Cấp này đã có từ “' . $hanzi . '”.');
+        if (self::duplicateWord($curriculumId, $levelId, $lessonId, $hanzi, $pinyin, $cur !== null ? (int) $cur['id'] : null) !== null) {
+            $v->error('hanzi', ($lessonId !== null ? 'Bài này' : 'Cấp này') . ' đã có từ “' . $hanzi . '” cùng cách đọc.');
         }
 
         $examples = [];
@@ -604,6 +605,7 @@ final class ContentController
             'pinyin' => $pinyin,
             'han_viet' => $hanViet,
             'meaning_vi' => $meaning,
+            'meaning_en' => $meaningEn,
             'pos' => $pos,
             'note' => $note,
             'sort_order' => $sort,
@@ -653,6 +655,30 @@ final class ContentController
         }
     }
 
+    /**
+     * Từ trùng: cùng bài, cùng chữ Hán và cùng pinyin (so đúng từng dấu thanh — hǎo và hào là hai từ).
+     * Sách in lại một từ ở bài sau nên khác bài thì được; từ chưa gắn bài thì vẫn xét trong cả cấp như trước.
+     */
+    private static function duplicateWord(int $curriculumId, int $levelId, ?int $lessonId, string $hanzi, string $pinyin, ?int $exceptId = null): ?int
+    {
+        $sql = 'SELECT id FROM words WHERE curriculum_id = ? AND level_id = ? AND hanzi = ?'
+            . ($lessonId !== null ? ' AND lesson_id = ?' . ($pinyin !== '' ? ' AND BINARY pinyin = ?' : '') : ' AND lesson_id IS NULL')
+            . ($exceptId !== null ? ' AND id <> ?' : '') . ' LIMIT 1';
+        $args = [$curriculumId, $levelId, $hanzi];
+        if ($lessonId !== null) {
+            // Không ghi pinyin thì không phân biệt được cách đọc: cùng chữ trong bài là trùng.
+            $args[] = $lessonId;
+            if ($pinyin !== '') {
+                $args[] = $pinyin;
+            }
+        }
+        if ($exceptId !== null) {
+            $args[] = $exceptId;
+        }
+        $id = Db::val($sql, $args);
+        return $id === null ? null : (int) $id;
+    }
+
     /** @param array<string,mixed> $w @return array<string,mixed> */
     public static function wordToApi(array $w): array
     {
@@ -665,6 +691,7 @@ final class ContentController
             'pinyin' => (string) $w['pinyin'],
             'hanViet' => (string) $w['han_viet'],
             'meaning' => (string) $w['meaning_vi'],
+            'meaningEn' => $w['meaning_en'] !== null ? (string) $w['meaning_en'] : null,
             'pos' => (string) $w['pos'],
             'note' => $w['note'] !== null ? (string) $w['note'] : null,
             'sortOrder' => (int) $w['sort_order'],

@@ -17,7 +17,7 @@ const LEARN = 'zika-learn';
 const MEDIA = 'zika-media';
 const FONTS = 'zika-fonts';
 // Từng có kho 'zika-book' giữ ảnh giáo trình; bỏ khỏi danh sách để lần kích hoạt tới xoá nó đi,
-// vì sách có bản quyền và ảnh nay chỉ đọc qua /api/admin/ (không bao giờ cache).
+// vì sách có bản quyền và ảnh nay chỉ đọc qua /api/learn/books/ (không bao giờ cache, xem NEVER).
 const MINE = [PRECACHE, LEARN, MEDIA, FONTS];
 
 /** Nội dung bài học giữ tối đa 300 mục, 30 ngày (02 §3.5). */
@@ -27,7 +27,9 @@ const MEDIA_TTL = 60 * 24 * 60 * 60 * 1000;
 const FONT_TTL = 365 * 24 * 60 * 60 * 1000;
 
 /** Đường dẫn API không bao giờ được cache — dữ liệu riêng của từng người, phải luôn mới. */
-const NEVER = ['/api/me', '/api/auth/', '/api/admin/', '/api/visit/', '/api/progress/', '/api/tests/'];
+// Giáo trình (/api/learn/books) cũng không: sách có bản quyền, một quyển hàng trăm ảnh sẽ đẩy hết bài học khỏi kho
+// 300 mục, và file nghe đi theo từng đoạn (206) thì Cache Storage không cất được — cất là file câm.
+const NEVER = ['/api/me', '/api/auth/', '/api/admin/', '/api/visit/', '/api/progress/', '/api/tests/', '/api/learn/books'];
 
 // Mọi file build + file tĩnh đều nằm trong precache. Bỏ qua file cài đặt một lần.
 const ASSETS = [...build, ...files.filter((f) => f !== '/robots.txt')];

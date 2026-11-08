@@ -1,5 +1,9 @@
 # Giáo trình HSK 1–3 — đã làm gì, còn phải làm gì
 
+> **Cũ (08/11/2026):** `tach-giao-trinh.py` đã thay bằng `dung-sach.py` (9 quyển Hán ngữ + HSK, kèm file nghe, đáp án,
+> `sach.json`); kệ sách lấy danh sách từ API, service worker không cache sách. Cách làm hiện tại ở mục "Giáo trình" của
+> [README.md](../../README.md). Phần dưới giữ làm lịch sử.
+
 Ghi lúc dừng việc ngày **19/10/2026**. Mở file này ra là làm tiếp được ngay, không cần đọc lại
 lịch sử chat.
 

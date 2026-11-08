@@ -20,6 +20,9 @@ final class DialogueController
     /** Trần cho một lượt nhập từ Excel. */
     private const BULK_MAX = 100;
 
+    /** Ví dụ tối đa của một điểm ngữ pháp: đủ cho bảng dài nhất sách in (31 ngày, 12 tháng). */
+    private const MAX_EXAMPLES = 40;
+
     /* ------------------------------------------------------------------ */
     /* Hội thoại                                                           */
     /* ------------------------------------------------------------------ */
@@ -311,8 +314,8 @@ final class DialogueController
     private static function grammarSet(array $in): array
     {
         $v = new Validator($in);
-        $title = $v->str('title', 'Tên cấu trúc', min: 1, max: 120);
-        $subtitle = $v->str('subtitle', 'Mô tả ngắn', false, 0, 160);
+        $title = $v->str('title', 'Tên cấu trúc', min: 1, max: 255);
+        $subtitle = $v->str('subtitle', 'Mô tả ngắn', false, 0, 2000);
         $explain = $v->str('explain', 'Giải thích', min: 1, max: 4000);
         $note = $v->strOrNull('note', 'Lưu ý', 2000);
         $blocksIn = $v->arr('blocks', 'Khối công thức', false);
@@ -323,7 +326,8 @@ final class DialogueController
         $blocks = [];
         foreach (array_slice($blocksIn, 0, 6) as $b) {
             $label = trim((string) ($b['label'] ?? ''));
-            if ($label === '') {
+            // Khối chỉ có chữ Hán (请问 trong "请问 + ，……？") vẫn là một phần công thức sách in, không được bỏ.
+            if ($label === '' && trim((string) ($b['hz'] ?? '')) === '') {
                 continue;
             }
             $color = (string) ($b['color'] ?? '');
@@ -335,7 +339,8 @@ final class DialogueController
         }
 
         $examples = [];
-        foreach (array_slice($examplesIn, 0, 6) as $i => $e) {
+        // Sách in tới vài chục ví dụ cho một mục (bảng ngày tháng, các âm); cắt ở 6 thì phải tách ra mục sách không có.
+        foreach (array_slice($examplesIn, 0, self::MAX_EXAMPLES) as $i => $e) {
             $zh = trim((string) ($e['zh'] ?? ''));
             if ($zh === '') {
                 continue;
@@ -344,14 +349,21 @@ final class DialogueController
             if ($highlight !== '' && mb_strpos($zh, $highlight) === false) {
                 throw HttpError::validation(['examples' => 'Ví dụ ' . ($i + 1) . ' không chứa ' . $highlight . '.']);
             }
-            $examples[] = [
-                'kind' => mb_substr(trim((string) ($e['kind'] ?? '')), 0, 40),
+            $ex = [
+                'kind' => mb_substr(trim((string) ($e['kind'] ?? '')), 0, 120),
                 'formula' => mb_substr(trim((string) ($e['formula'] ?? '')), 0, 120),
                 'zh' => mb_substr($zh, 0, 255),
                 'highlight' => $highlight !== '' ? mb_substr($highlight, 0, 32) : null,
                 'pinyin' => mb_substr(trim((string) ($e['pinyin'] ?? '')), 0, 500),
                 'vi' => mb_substr(trim((string) ($e['vi'] ?? '')), 0, 500),
             ];
+            // Tiếng Anh chỉ có khi sách in: không ghi khoá rỗng để ví dụ HSK giữ nguyên dạng cũ.
+            foreach (['en' => 500, 'kindEn' => 120] as $k => $max) {
+                if (($x = trim((string) ($e[$k] ?? ''))) !== '') {
+                    $ex[$k] = mb_substr($x, 0, $max);
+                }
+            }
+            $examples[] = $ex;
         }
 
         $practice = null;
@@ -375,7 +387,7 @@ final class DialogueController
             ];
         }
 
-        return [
+        $set = [
             'title' => $title,
             'subtitle' => $subtitle,
             'explain_vi' => $explain,
@@ -384,6 +396,14 @@ final class DialogueController
             'examples' => Json::encode($examples),
             'practice' => Json::encode($practice),
         ];
+        // Phần tiếng Anh sách in: không gửi thì không đụng tới, để màn soạn chưa có ô tiếng Anh không xoá mất.
+        foreach (['titleEn' => ['title_en', 255], 'subtitleEn' => ['subtitle_en', 2000], 'explainEn' => ['explain_en', 8000], 'noteEn' => ['note_en', 4000]] as $k => [$col, $max]) {
+            if (array_key_exists($k, $in)) {
+                $x = trim((string) ($in[$k] ?? ''));
+                $set[$col] = $x !== '' ? mb_substr($x, 0, $max) : null;
+            }
+        }
+        return $set;
     }
 
     /** @return array<string,mixed> */
@@ -417,9 +437,13 @@ final class DialogueController
         return [
             'id' => (int) $g['id'],
             'title' => (string) $g['title'],
+            'titleEn' => $g['title_en'] !== null ? (string) $g['title_en'] : null,
             'subtitle' => (string) $g['subtitle'],
+            'subtitleEn' => $g['subtitle_en'] !== null ? (string) $g['subtitle_en'] : null,
             'explain' => (string) $g['explain_vi'],
+            'explainEn' => $g['explain_en'] !== null ? (string) $g['explain_en'] : null,
             'note' => $g['note_vi'] !== null ? (string) $g['note_vi'] : null,
+            'noteEn' => $g['note_en'] !== null ? (string) $g['note_en'] : null,
             'blocks' => ContentBuilder::json($g['blocks'], []),
             'examples' => ContentBuilder::json($g['examples'], []),
             'practice' => ContentBuilder::json($g['practice'], null),

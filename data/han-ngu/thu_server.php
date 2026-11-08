@@ -5,7 +5,7 @@ declare(strict_types=1);
  * Thử gói server trên một DB giống server thật nhất có thể (test_zika_server): cấu trúc tới migration 005 +
  * nội dung HSK của gói 02/11 — đúng trạng thái server trước khi có giáo trình.
  *   1. Chạy 01-cau-truc.sql hai lần → cấu trúc giống hệt local, lần 2 không lỗi.
- *   2. Chạy 02-han-ngu.sql hai lần → nội dung khớp local, HSK và chữ có sẵn không đổi.
+ *   2. Chạy 02-han-ngu.sql hai lần → nội dung khớp local, HSK và chữ có sẵn không đổi, Hán ngữ thành giáo trình mặc định.
  *
  *   php thu_server.php <thư mục gói> <thư mục dong-goi-server>
  */
@@ -57,7 +57,8 @@ function van_tay(PDO $p, string $db): array
     $c = (int) $p->query("SELECT id FROM `$db`.curricula WHERE name = " . $p->quote(TEN))->fetchColumn();
     $cau = [
         'lessons' => "SELECT level_id, lesson_no, title, status, cnt_words, cnt_lv, cnt_ht, cnt_np FROM `$db`.lessons WHERE curriculum_id = $c ORDER BY level_id, lesson_no",
-        'words' => "SELECT w.level_id, l.lesson_no, w.hanzi, w.pinyin, w.meaning_vi, w.sort_order FROM `$db`.words w JOIN `$db`.lessons l ON l.id = w.lesson_id WHERE w.curriculum_id = $c ORDER BY w.level_id, w.hanzi",
+        // Sắp theo bài + thứ tự trong bài: từ 017 một chữ được in lại ở nhiều bài, sắp theo chữ thì thứ tự các dòng trùng chữ không cố định.
+        'words' => "SELECT w.level_id, l.lesson_no, w.hanzi, w.pinyin, w.meaning_vi, w.meaning_en, w.sort_order FROM `$db`.words w JOIN `$db`.lessons l ON l.id = w.lesson_id WHERE w.curriculum_id = $c ORDER BY w.level_id, l.lesson_no, w.sort_order, w.hanzi, BINARY w.pinyin",
         'word_examples' => "SELECT w.level_id, w.hanzi, e.sort_order, e.zh, e.vi FROM `$db`.word_examples e JOIN `$db`.words w ON w.id = e.word_id WHERE w.curriculum_id = $c ORDER BY w.level_id, w.hanzi, e.sort_order, e.zh",
         'lesson_chars' => "SELECT l.level_id, l.lesson_no, ch.hanzi, x.sort_order, w.hanzi AS nguon FROM `$db`.lesson_chars x JOIN `$db`.lessons l ON l.id = x.lesson_id JOIN `$db`.characters ch ON ch.id = x.char_id LEFT JOIN `$db`.words w ON w.id = x.source_word_id WHERE l.curriculum_id = $c ORDER BY l.level_id, l.lesson_no, x.sort_order, ch.hanzi",
         'dialogues' => "SELECT l.level_id, l.lesson_no, k.sort_order, k.title, k.scene, k.audio_path FROM `$db`.dialogues k JOIN `$db`.lessons l ON l.id = k.lesson_id WHERE l.curriculum_id = $c ORDER BY l.level_id, l.lesson_no, k.sort_order",
@@ -99,6 +100,13 @@ foreach (array_unique([...array_keys($a), ...array_keys($b)]) as $t) {
 }
 echo 'Cấu trúc khớp local: ', $loi === 0 ? 'đúng' : 'SAI', ' · chạy lại lần 2 không lỗi', "\n";
 
+// Migration 016 chạy lúc server chưa có Hán ngữ: HSK đổi tên và tạm giữ cờ mặc định, 02-han-ngu.sql mới chuyển cờ.
+$macDinh = static fn (): array => $pdo->query('SELECT name FROM ' . DB . '.curricula WHERE is_default = 1')->fetchAll(PDO::FETCH_COLUMN);
+$hskTen = static fn (): string => (string) $pdo->query('SELECT name FROM ' . DB . '.curricula WHERE id = 1')->fetchColumn();
+$ok = $hskTen() === 'Giáo trình HSK 3.0' && $macDinh() === ['Giáo trình HSK 3.0'];
+echo 'Sau 01-cau-truc.sql: giáo trình 1 tên "', $hskTen(), '", mặc định ', json_encode($macDinh(), JSON_UNESCAPED_UNICODE), ': ', $ok ? 'đúng' : 'SAI', "\n";
+$loi += $ok ? 0 : 1;
+
 $hsk = static fn (): string => sha1(json_encode($pdo->query('SELECT l.id, l.title, l.cnt_words, (SELECT COUNT(*) FROM ' . DB . '.words w WHERE w.lesson_id = l.id) n FROM ' . DB . '.lessons l WHERE l.curriculum_id = 1 ORDER BY l.id')->fetchAll()));
 $chu = static fn (string $them = ''): string => sha1(json_encode($pdo->query('SELECT id, hanzi, pinyin, han_viet, meaning_vi, structure, analysis FROM ' . DB . ".characters $them ORDER BY id")->fetchAll(), JSON_UNESCAPED_UNICODE));
 $h0 = $hsk();
@@ -117,7 +125,8 @@ foreach ($lc as $k => $v) {
     echo sprintf("%-16s %-50s %s\n", $k, $v, $ok ? 'khớp cả 2 lần' : "LỆCH {$l1[$k]} / {$l2[$k]}");
 }
 foreach ([['HSK không đổi', $hsk() === $h0], ['Chữ có sẵn không đổi', $chu("WHERE id <= $maxChu") === $c0],
-          ['Tài khoản còn', (int) $pdo->query('SELECT COUNT(*) FROM ' . DB . ".users WHERE email = 'hv@thu.local'")->fetchColumn() === 1]] as [$ten, $ok]) {
+          ['Tài khoản còn', (int) $pdo->query('SELECT COUNT(*) FROM ' . DB . ".users WHERE email = 'hv@thu.local'")->fetchColumn() === 1],
+          ['Mặc định chỉ là ' . TEN, $macDinh() === [TEN]]] as [$ten, $ok]) {
     echo "$ten: ", $ok ? 'đúng' : 'SAI', "\n";
     $loi += $ok ? 0 : 1;
 }

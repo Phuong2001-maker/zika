@@ -160,9 +160,12 @@ final class WritingController
                 $fetched++;
             }
 
+            // Cách đọc của bài (行 háng trong mục 写汉字 bài 银行) lưu theo bài: bảng characters dùng chung mọi giáo trình,
+            // ghi đè ở đó là đổi cách đọc của bài HSK khác.
+            $py = trim((string) ($row['pinyin'] ?? ''));
             Db::exec(
-                'INSERT IGNORE INTO lesson_chars (lesson_id, char_id, sort_order, is_visible) VALUES (?, ?, ?, ?)',
-                [$lessonId, $charId, ++$sort, ($row['visible'] ?? true) ? 1 : 0],
+                'INSERT IGNORE INTO lesson_chars (lesson_id, char_id, pinyin, sort_order, is_visible) VALUES (?, ?, ?, ?, ?)',
+                [$lessonId, $charId, $py !== '' ? mb_substr($py, 0, 30) : null, ++$sort, ($row['visible'] ?? true) ? 1 : 0],
             );
             $added++;
         }
@@ -382,7 +385,7 @@ final class WritingController
     private static function chars(int $lessonId): array
     {
         $rows = Db::all(
-            'SELECT lc.id AS lesson_char_id, lc.is_visible, lc.sort_order, c.*,
+            'SELECT lc.id AS lesson_char_id, lc.is_visible, lc.sort_order, lc.pinyin AS lesson_pinyin, c.*,
                     w.hanzi AS word_hanzi, w.meaning_vi AS word_meaning
              FROM lesson_chars lc
              JOIN characters c ON c.id = lc.char_id
@@ -396,7 +399,8 @@ final class WritingController
             'sourceWord' => $c['word_hanzi'] !== null
                 ? ['hanzi' => (string) $c['word_hanzi'], 'meaning' => (string) $c['word_meaning']]
                 : null,
-        ] + self::charApi($c), $rows);
+            // Màn soạn hiện đúng cách đọc người học thấy ở bài này.
+        ] + self::charApi(($c['lesson_pinyin'] ?? '') !== '' ? ['pinyin' => (string) $c['lesson_pinyin']] + $c : $c), $rows);
     }
 
     /** @param array<string,mixed> $c @return array<string,mixed> */

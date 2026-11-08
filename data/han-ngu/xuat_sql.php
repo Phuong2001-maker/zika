@@ -68,7 +68,7 @@ $viet = static function (string $s) use ($f): void {
 };
 
 $viet('-- Zìkǎ · Giáo trình "' . TEN . '": ' . count($bai) . ' bài. Xuất lúc ' . date('d/m/Y H:i') . '.');
-$viet('-- Chạy SAU các migration tới 015 (cần bảng curricula và cột level_label). Chạy lại được, không đụng giáo trình khác.');
+$viet('-- Chạy SAU các migration tới 018 (cần cột curricula.is_default và các cột tiếng Anh, lesson_chars.pinyin). Chạy lại được, không đụng giáo trình khác.');
 $viet('-- Sau khi chạy: chép thư mục uploads đi kèm và xoá storage/cache/content.');
 $viet('SET NAMES utf8mb4;');
 $viet('SET time_zone = \'+07:00\';');
@@ -76,6 +76,12 @@ $viet('START TRANSACTION;');
 $viet(chen($pdo, 'curricula', ['name' => TEN, 'description' => $gt['description'], 'color' => $gt['color'], 'level_label' => $gt['level_label']])
     . ' ON DUPLICATE KEY UPDATE description = VALUES(description), color = VALUES(color), level_label = VALUES(level_label);');
 $viet('SET @c = (SELECT id FROM curricula WHERE name = ' . $pdo->quote(TEN) . ');');
+if ((int) $gt['is_default'] === 1) {
+    // Server chạy migration 016 lúc chưa có Hán ngữ nên cờ còn ở giáo trình HSK; chuyển sang đây để mọi học viên
+    // chưa phân quyền học Hán ngữ. Lượt ôn dở của họ trỏ vào câu HSK nên bỏ, như khi admin đổi mặc định ở form.
+    $viet('UPDATE curricula SET is_default = (id = @c);');
+    $viet("DELETE FROM review_progress WHERE user_id IN (SELECT id FROM users WHERE curriculum_id IS NULL AND role = 'learner');");
+}
 $viet('-- Xoá bản nạp trước của giáo trình này (khoá ngoại xoá theo câu thoại, ngữ pháp, chữ viết của bài).');
 $viet('DELETE FROM words WHERE curriculum_id = @c;');
 $viet('DELETE FROM lessons WHERE curriculum_id = @c;');
@@ -129,11 +135,14 @@ foreach ($bai as $l) {
     foreach ($pdo->query("SELECT lc.*, c.hanzi, w.hanzi AS tu_nguon FROM lesson_chars lc JOIN characters c ON c.id = lc.char_id
                            LEFT JOIN words w ON w.id = lc.source_word_id WHERE lc.lesson_id = $lid ORDER BY lc.sort_order, lc.id")->fetchAll() as $x) {
         $nguon = $x['tu_nguon'] === null ? 'NULL'
-            : '(SELECT id FROM words WHERE curriculum_id = @c AND level_id = ' . (int) $l['level_id'] . ' AND hanzi = ' . $pdo->quote((string) $x['tu_nguon']) . ')';
+            // Một từ được in lại ở nhiều bài (migration 017): ưu tiên từ của chính bài, LIMIT 1 để không lỗi "nhiều dòng".
+            : '(SELECT id FROM words WHERE curriculum_id = @c AND level_id = ' . (int) $l['level_id'] . ' AND hanzi = ' . $pdo->quote((string) $x['tu_nguon'])
+              . ' ORDER BY (lesson_id = @l) DESC, id LIMIT 1)';
         $viet(chen($pdo, 'lesson_chars', [
             'lesson_id' => ['raw' => '@l'],
             'char_id' => ['raw' => '(SELECT id FROM characters WHERE hanzi = ' . $pdo->quote((string) $x['hanzi']) . ')'],
             'source_word_id' => ['raw' => $nguon],
+            'pinyin' => $x['pinyin'],
             'sort_order' => $x['sort_order'],
             'is_visible' => $x['is_visible'],
         ]) . ';');

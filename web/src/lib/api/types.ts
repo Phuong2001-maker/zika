@@ -95,6 +95,8 @@ export interface Activity {
   lessonId?: number;
   lessonNo?: number;
   mockId?: number;
+  /** Mã quyển giáo trình đang đọc (hn3, hsk1) — để quản trị thấy "Hán ngữ 3" chứ không phải "HSK 3". */
+  book?: string;
 }
 
 /* ---------------- Nội dung học ---------------- */
@@ -173,6 +175,8 @@ export interface Word {
   pinyin: string;
   hanViet: string;
   meaning: string;
+  /** Cột tiếng Anh của bảng 生词 khi sách in (giáo trình Hán ngữ); HSK không có. */
+  meaningEn?: string | null;
   pos: string;
   audioUrl: string | null;
   examples: Example[];

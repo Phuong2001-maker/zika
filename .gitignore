@@ -43,3 +43,6 @@ data/han-ngu/bai/
 data/han-ngu/ra/
 data/han-ngu/nghe/
 data/nap-sach/ra/
+
+# Đáp án Hán ngữ đổi từ Word sang PDF (nguồn có bản quyền, sinh lại bằng Word)
+data/giao-trinh/ra/

@@ -2,7 +2,8 @@
 
   python gan_hn.py        # sau nghe_doi_chieu.py, viec_hn.py, doc_hn.py
 
-Nút "Nghe" của bài khóa theo ra/nghe_gan.json: file ghi âm đọc khớp sách thì dùng (cắt đúng đoạn nếu là
+Nút "Nghe" của bài khóa: ghép các câu thoại bằng giọng tự tạo (DUNG_BANG = False, từ 08/11/2026). Bật DUNG_BANG thì
+theo ra/nghe_gan.json: file ghi âm đọc khớp sách thì dùng (cắt đúng đoạn nếu là
 file chung của cả bài), không thì ghép các câu thoại bằng giọng mẫu. Mọi bản đều cân về cùng độ to.
 """
 from __future__ import annotations
@@ -23,6 +24,10 @@ from viec_doc import duong
 
 NGHI = 0.6
 SR_BANG = 44100
+# Người dùng 08/11/2026: mọi phần nghe của Hán ngữ dùng giọng tự tạo cùng một chuẩn (giọng nhân vật, tốc độ, độ to
+# như các câu bấm riêng và như HSK 3.0), không dùng băng thật — băng Q1, Q5, Q6 là bản 修订本 đọc khác sách, và giọng
+# băng khác hẳn giọng câu thoại. Bật lại True thì bài khóa lại dùng băng theo ra/nghe_gan.json.
+DUNG_BANG = False
 PHP = "D:/zika-devtools/php/php.exe"
 UPLOADS = REPO / "api" / "dev-uploads"  # config.php → paths.uploads_dir ở máy dev
 KQ = NAP_SACH / "ra" / "doc_edge_kq.json"
@@ -106,7 +111,7 @@ if __name__ == "__main__":
                     l["audioPath"] = p
                     thieu_cau += p is None
                 ten = f"q{q}-bai{b:02d}-khoa{kh['no']}"
-                chon = gan.get(ten, {"cach": "tao"})
+                chon = gan.get(ten, {"cach": "tao"}) if DUNG_BANG else {"cach": "tao"}
                 out = tam / f"{ten}.mp3"
                 if chon["cach"] in ("file", "cat"):
                     goc = SACH_DIR / THU_MUC_NGHE[q] / f"{chon['ten']}.mp3"

@@ -85,7 +85,9 @@ def doc_so(text: str) -> str:
 
 def bo_ngoac(text: str) -> str:
     """（日） sau 号 là cách viết khác in trong sách, không đọc; câu dẫn cả câu trong ngoặc thì đọc phần trong."""
-    t = text.strip()
+    # Ký hiệu sách in, không phải chữ để đọc: * đánh dấu câu sai ("我从来/*向来…" bị đọc thành 星号),
+    # ' / ′ đánh trọng âm ở mục ngữ âm (我'吃). Bỏ trước để luật "A/B" bên dưới còn khớp.
+    t = re.sub(r"[*＊'′]", "", text).strip()
     # Sách in hai cách nói "A/B" (星期日/星期天, 在/正在): đọc cả hai, nghỉ ngắn ở giữa.
     # Riêng "日/号" sau số ngày là hai cách viết của cùng một chữ: chỉ đọc 日.
     t = t.replace("日/号", "日")

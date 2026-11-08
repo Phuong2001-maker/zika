@@ -39,6 +39,7 @@
   let pinyin = $state('');
   let hanViet = $state('');
   let meaning = $state('');
+  let meaningEn = $state('');
   let pos = $state('n');
   let examples = $state<WordExample[]>([]);
   let errors = $state<Record<string, string>>({});
@@ -168,6 +169,7 @@
     pinyin = '';
     hanViet = '';
     meaning = '';
+    meaningEn = '';
     pos = 'n';
     examples = [];
     errors = {};
@@ -183,6 +185,7 @@
       pinyin = w.pinyin;
       hanViet = w.hanViet;
       meaning = w.meaning;
+      meaningEn = w.meaningEn ?? '';
       pos = w.pos;
       examples = (w.examples ?? []).map((e) => ({ ...e }));
       errors = {};
@@ -208,6 +211,7 @@
       pinyin: pinyin.trim(),
       hanViet: hanViet.trim(),
       meaning: meaning.trim(),
+      meaningEn: meaningEn.trim(),
       pos,
       examples: examples.filter((e) => e.zh.trim() !== ''),
     };
@@ -345,6 +349,11 @@
       <label class="lbl" for="w-vi">Nghĩa tiếng Việt *</label>
       <input id="w-vi" class="inp" bind:value={meaning} placeholder="trứng gà" />
       {#if errors.meaning}<p class="err">{errors.meaning}</p>{/if}
+    </div>
+
+    <div class="field">
+      <label class="lbl" for="w-en">Nghĩa tiếng Anh</label>
+      <input id="w-en" class="inp" lang="en" bind:value={meaningEn} placeholder="egg (theo cột English của sách, bỏ trống nếu sách không in)" />
     </div>
 
     <!-- Câu ví dụ -->

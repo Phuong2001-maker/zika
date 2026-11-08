@@ -1,4 +1,4 @@
-// 51 icon SVG (viewBox 24) từ design/icons.json — sinh tự động, đừng sửa tay.
+// 51 icon SVG (viewBox 24) từ design/icons.json — sinh tự động, đừng sửa tay. 8 icon cuối thêm tay cho màn Giáo trình.
 export const FILLED = new Set<string>(["dots","grip","apps"]);
 
 export const ICONS: Record<string, string> = {
@@ -53,6 +53,15 @@ export const ICONS: Record<string, string> = {
   "megaphone": "<path d=\"M4 10v4h3l8 4.5v-13L7 10z\"/><path d=\"M18.5 9.5a3.5 3.5 0 0 1 0 5\"/>",
   "flag": "<path d=\"M6 21V4\"/><path d=\"M6 4h11l-2.5 4L17 12H6\"/>",
   "tablet": "<rect x=\"5\" y=\"3\" width=\"14\" height=\"18\" rx=\"2\"/><path d=\"M11 17.5h2\"/>",
+  // Thêm tay cho màn Giáo trình (08/11/2026): design/icons.json không có. Giữ cùng nét 1.8 trên khung 24.
+  "pause": "<rect x=\"6.5\" y=\"5\" width=\"3.6\" height=\"14\" rx=\"1\"/><rect x=\"13.9\" y=\"5\" width=\"3.6\" height=\"14\" rx=\"1\"/>",
+  "headphones": "<path d=\"M4 15v-3a8 8 0 0 1 16 0v3\"/><rect x=\"3\" y=\"14\" width=\"4.5\" height=\"6.5\" rx=\"1.6\"/><rect x=\"16.5\" y=\"14\" width=\"4.5\" height=\"6.5\" rx=\"1.6\"/>",
+  "list": "<path d=\"M9 6h11M9 12h11M9 18h11\"/><circle cx=\"4.5\" cy=\"6\" r=\"1\"/><circle cx=\"4.5\" cy=\"12\" r=\"1\"/><circle cx=\"4.5\" cy=\"18\" r=\"1\"/>",
+  "answer": "<path d=\"M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z\"/><path d=\"M14 3v5h5\"/><path d=\"M9 14l2 2 4-4\"/>",
+  "back5": "<path d=\"M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 9\"/><path d=\"M4.5 4v5h5\"/>",
+  "fwd5": "<path d=\"M19.5 12a7.5 7.5 0 1 1-2.2-5.3L19.5 9\"/><path d=\"M19.5 4v5h-5\"/>",
+  "skip-prev": "<path d=\"M18 6l-9 6 9 6z\"/><path d=\"M6 6v12\"/>",
+  "skip-next": "<path d=\"M6 6l9 6-9 6z\"/><path d=\"M18 6v12\"/>",
 };
 
 export type IconName = keyof typeof ICONS;

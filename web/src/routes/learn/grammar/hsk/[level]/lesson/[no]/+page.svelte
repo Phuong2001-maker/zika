@@ -20,6 +20,7 @@
 
   // Cấu trúc ngữ pháp (07 §11).
   interface Block { label: string; hz: string; color: string }
+  // API có trả phần tiếng Anh sách in (titleEn, explainEn…) nhưng người dùng chỉ muốn tiếng Anh ở Lật thẻ (08/11/2026).
   interface Example { kind: string; formula: string; zh: string; highlight: string | null; pinyin: string; vi: string }
   interface Practice { answer: string; vi: string; tiles: string[] }
   interface Point {
@@ -138,7 +139,8 @@
       </div>
     {/if}
 
-    <p style="font-size: 15px; line-height: 1.65">{p.explain}</p>
+    <!-- pre-line: giải thích sách in nhiều đoạn, gộp bằng dòng trống; không giữ thì các đoạn dính vào nhau. -->
+    <p style="font-size: 15px; line-height: 1.65; white-space: pre-line">{p.explain}</p>
 
     <!-- Ví dụ: mỗi câu một ô nền nhạt như câu ví dụ ở Lật thẻ. -->
     {#if p.examples.length > 0}
@@ -173,7 +175,7 @@
     {#if p.note}
       <div class="fb" style="background: var(--bo-soft); border-color: #FDE68A">
         <Icon name="flag" size={18} />
-        <span style="flex: 1; font-size: 14px">{p.note}</span>
+        <span style="flex: 1; font-size: 14px; white-space: pre-line">{p.note}</span>
       </div>
     {/if}
   </div>
@@ -303,8 +305,9 @@
   <!-- ============ Máy tính ============ -->
   <header class="topbar">
     <a href="/learn/flashcards" class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</a>
-    <nav class="crumb" style="margin-left: 8px">
-      <a href="/learn/grammar/hsk/{levelId}">Ngữ pháp · {cap.ten(levelId)}</a> / <b>Bài {lessonNo}{data ? ` · ${data.lesson.title}` : ''}</b>
+    <!-- Chỉ ghi phần và cấp: số bài và tên bài đã ở khối tiêu đề ngay bên dưới, ghi lại ở đây là lặp. -->
+    <nav class="crumb" aria-label="Đường dẫn" style="margin-left: 8px">
+      <a href="/learn/grammar">Ngữ pháp</a> / <a href="/learn/grammar/hsk/{levelId}">{cap.ten(levelId)}</a>
     </nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 12px"><Switcher current="np" /><Avatar size={44} /></div>
   </header>

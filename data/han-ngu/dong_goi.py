@@ -22,14 +22,14 @@ UPLOADS = REPO / "api" / "dev-uploads"
 MIGRATION = REPO / "api" / "app" / "migrations"
 DOCROOT = "domains/tiengtrunghanu.io.vn"
 # 004, 005 đã lên server từ gói 02/11; 006 vào gói 04/11 nhưng không chắc đã chạy, cũng an toàn vì có kiểm tra.
-TU_SO, DEN_SO = 6, 15
+TU_SO, DEN_SO = 6, 18
 
 
 def cau_truc() -> str:
     """Mỗi migration chỉ chạy nếu schema_migrations chưa ghi: lệnh ALTER không chạy lại được, mà người dùng chỉ có
     phpMyAdmin nên không có install.php --migrate để tự xét. Dùng PREPARE chứ không dùng thủ tục tạm vì thủ tục
     cần quyền CREATE ROUTINE (user DB local đã không có, hosting chưa chắc có) và lệnh DELIMITER."""
-    phan = ["-- Zìkǎ · cấu trúc DB tới migration 015. Migration đã chạy thì tự bỏ qua, chạy lại file này không sao.",
+    phan = ["-- Zìkǎ · cấu trúc DB tới migration 018. Migration đã chạy thì tự bỏ qua, chạy lại file này không sao.",
             "SET NAMES utf8mb4;"]
     for f in sorted(MIGRATION.glob("*.sql")):
         so = int(f.name[:3])
@@ -62,14 +62,19 @@ và không nhận từ dạng "又…又…". Chưa có gói code thì đừng c
 4. 1Panel → /home/buwsofujhosting → upload uploads-han-ngu.zip ({zip_mb} MB) → giải nén vào CHÍNH thư mục đó, cho phép
    gộp thư mục và ghi đè file trùng. Đừng xoá gì trong uploads.
 5. Xoá các FILE trong /home/buwsofujhosting/zika-app/storage/cache/content, giữ thư mục. Không thì API trả dữ liệu cũ.
-6. Vào web bằng tài khoản quản trị → Giáo trình: thấy "Hán ngữ 6 tập". Gán giáo trình cho một học viên thử rồi kiểm:
-   - Học viên được gán thấy "Quyển 1…6"; học viên HSK vẫn thấy "HSK 1…6".
+6. Vào web bằng tài khoản quản trị → Giáo trình: thấy "Giáo trình HSK 3.0" (tên mới của giáo trình HSK) và "Hán ngữ 6 tập"
+   có nhãn "Mặc định". Từ giờ MỌI học viên chưa được phân quyền (tài khoản cũ lẫn mới đăng ký) học Hán ngữ;
+   ai cần học HSK thì gán "Giáo trình HSK 3.0" ở Giáo trình → Phân quyền học. Tiến độ HSK cũ vẫn còn, gán lại là học tiếp.
+   Gán "Giáo trình HSK 3.0" cho một học viên thử rồi kiểm:
+   - Học viên chưa phân quyền thấy "Quyển 1…6"; học viên được gán HSK 3.0 thấy "HSK 1…6".
    - Quyển 1 bài 1: Lật thẻ nghe được, Luyện viết có nét, Hội thoại bấm câu nào đọc câu đó, Ngữ pháp có ví dụ.
    - Quyển 6 bài 22: nút "Nghe" cả bài khóa phát đủ 8 phút.
-   - Học viên đang học HSK: vẫn thấy đúng bài HSK và tiến độ cũ.
+   - Học viên được gán HSK 3.0: thấy đúng bài HSK và tiến độ cũ.
 
-Không có trong gói: tài khoản, tiến độ, ảnh trang sách. File SQL không đụng giáo trình HSK. Ảnh hưởng chung duy nhất:
-cấp 4–6 được bật hiển thị vì Hán ngữ dùng cấp 1–6 làm 6 quyển; học viên HSK sẽ thấy các cấp này ở trạng thái chưa có bài.
+Không có trong gói: tài khoản, tiến độ, ảnh trang sách. File SQL không đụng bài và từ của giáo trình HSK. Ảnh hưởng chung:
+- Hán ngữ thành giáo trình mặc định: học viên chưa phân quyền chuyển sang Hán ngữ, lượt ôn tập dở của họ bị bỏ
+  (tiến độ từng bài HSK vẫn giữ).
+- Cấp 4–6 được bật hiển thị vì Hán ngữ dùng cấp 1–6 làm 6 quyển; học viên HSK sẽ thấy các cấp này ở trạng thái chưa có bài.
 """
 
 

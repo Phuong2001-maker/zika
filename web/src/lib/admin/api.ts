@@ -12,6 +12,7 @@ export interface AdminCurriculum {
   description: string;
   color: string;
   levelLabel: string;
+  /** Học viên chưa được phân quyền (cả tài khoản cũ lẫn mới) học giáo trình này; luôn đúng một giáo trình bật. */
   isDefault: boolean;
   /** Số bài của cấp 1–6. */
   levels: number[];
@@ -75,6 +76,8 @@ export interface AdminWord {
   pinyin: string;
   hanViet: string;
   meaning: string;
+  /** Cột tiếng Anh của bảng 生词 (giáo trình theo sách có in). */
+  meaningEn?: string | null;
   pos: string;
   note?: string | null;
   exampleCount?: number;
@@ -193,6 +196,9 @@ export interface GrammarExample {
   highlight: string | null;
   pinyin: string;
   vi: string;
+  /** Bản dịch / tên mục con tiếng Anh nếu sách in. */
+  en?: string;
+  kindEn?: string;
 }
 
 export interface GrammarPractice {
@@ -204,9 +210,13 @@ export interface GrammarPractice {
 export interface AdminGrammarPoint {
   id: number;
   title: string;
+  titleEn?: string | null;
   subtitle: string;
+  subtitleEn?: string | null;
   explain: string;
+  explainEn?: string | null;
   note: string | null;
+  noteEn?: string | null;
   blocks: GrammarBlock[];
   examples: GrammarExample[];
   practice: GrammarPractice | null;
@@ -219,7 +229,7 @@ export const adminApi = {
   badges: () => api.get<{ users: number; lessons: number; words: number; unreadFeedback: number }>('/admin/badges'),
 
   curricula: () => api.get<AdminCurriculum[]>('/admin/curricula'),
-  saveCurriculum: (id: number | null, body: { name: string; description: string; color: string; levelLabel: string }) =>
+  saveCurriculum: (id: number | null, body: { name: string; description: string; color: string; levelLabel: string; isDefault: boolean }) =>
     id === null ? api.post<{ id: number }>('/admin/curricula', body) : api.put<{ id: number }>(`/admin/curricula/${id}`, body),
   deleteCurriculum: (id: number) => api.del(`/admin/curricula/${id}`),
   curriculumLearners: (q: Record<string, string | number>) => api.getFull<CurriculumLearner[]>('/admin/curricula/learners', { query: q }),

@@ -84,13 +84,11 @@
               ><span class="swi-ic" style="background: {p.accent}"><Icon name={p.icon} size={24} /></span>{p.name}</a
             >
           {/each}
-          <!-- Giáo trình có bản quyền nên chỉ quản trị thấy; khi có, nó khép lại lưới 5 + 1 kín 2 hàng.
+          <!-- Giáo trình hiện cho mọi tài khoản (người dùng mở cho học viên 08/11/2026).
              Màu giấy kraft để không lẫn với 6 màu của các phần học. -->
-          {#if session.isAdmin}
-            <a href="/learn/books" class="swi" onclick={() => (open = false)}
-              ><span class="swi-ic" style="background: #EFE0C8"><Icon name="book" size={24} /></span>Giáo trình</a
-            >
-          {/if}
+          <a href="/learn/books" class="swi" onclick={() => (open = false)}
+            ><span class="swi-ic" style="background: #EFE0C8"><Icon name="book" size={24} /></span>Giáo trình</a
+          >
         </nav>
         {#if showFeedback && feedback.available}
           <span class="rule"></span>

@@ -79,11 +79,25 @@ Kết quả ghi vào cột cuối: ✅ đạt · ❌ lỗi (ghi kèm mô tả) �
 | D3 | Cài đặt → "Nghe thử" | Giọng người theo giọng đã chọn | | | |
 | D4 | Tắt mạng sau khi đã nghe một lượt (MT) | Âm thanh đã nghe vẫn phát từ bộ nhớ đệm trình duyệt | | | |
 
-## Đọc giáo trình (`/learn/books`) — chỉ tài khoản quản trị
+## Đọc giáo trình (`/learn/books`) — mọi tài khoản đã đăng nhập (từ 08/11/2026)
 
 | # | Bước | Mong đợi | ĐT | MTB | MT |
 |---|---|---|---|---|---|
-| GT0 | Học viên, biên tập: mở Chuyển nhanh; gõ thẳng `/learn/books`; mở `/uploads/giao-trinh/hsk1/001.webp` và `/api/admin/books/hsk1/1` | Không có mục Giáo trình; URL sách đưa về trang nhà; ảnh trả 403 cả hai đường | | | |
+| GT6 | `hocvien@zika.local` (chưa phân quyền → Hán ngữ) mở Giáo trình | Chỉ 6 quyển Hán ngữ 1–6, không có HSK; gõ `/learn/books/hsk1` → "Không có quyển giáo trình này" | Đạt 08/11 (API: 6 quyển hn1–hn6, hsk1 → 404) | | |
+| GT7 | Gán học viên vào **Giáo trình HSK 3.0** rồi mở lại Giáo trình | Chỉ 3 quyển HSK 1–3; `/learn/books/hn1` → không có quyển | | | |
+| GT8 | Quản trị mở Giáo trình | Hai nhóm "Hán ngữ 6 tập" (6 quyển) và "Giáo trình HSK 3.0" (3 quyển); thẻ có nhãn "N file nghe" ở Hán ngữ 1–6, HSK 1–2; nhãn "Đáp án" chỉ ở Hán ngữ 3–6; HSK 3 không có cả hai | Đạt 08/11 | | |
+| GT9 | Đọc dở một quyển rồi về kệ | Thẻ "Đọc tiếp" đầu kệ đúng quyển, đúng trang; thẻ quyển có thanh tiến độ "Đang đọc trang N/…" | Đạt 08/11 | | |
+| GT10 | Mở Hán ngữ 3, bấm **Mục lục** | Ngăn mục lục (máy tính: trượt từ phải; điện thoại: từ đáy) có "Đầu sách" + 12 bài, mỗi bài có số file nghe, dấu đáp án, số trang; bài đang đọc tô đỏ; bấm bài → tới đúng trang đầu bài | Đạt 08/11 (MT) | | |
+| GT11 | Cuộn tới trang đầu một bài | Trên trang có dải "Bài n · tên bài" với nút **Nghe bài này · n file** và **Đáp án** (Đáp án chỉ ở Q3–6); thanh công cụ có số file nghe của bài đang đọc trên nút Nghe | Đạt 08/11 | | |
+| GT12 | Bấm **Nghe bài này** | Thanh phát hiện dính đáy, phát file đầu (Từ mới); hết file tự sang Bài khoá 1, 2…, hết bài thì dừng; vẫn nghe khi cuộn sách | Đạt 08/11 (phát được, MT và ĐT) | | |
+| GT13 | Trên thanh phát: lùi/tới 5 giây, kéo thanh thời gian, đổi tốc độ 0,5–1,25×, lặp, file trước/sau, đóng | Mỗi nút đúng việc; tốc độ nhớ cho lần sau; kéo được tới cuối file kể cả file dài 10 phút của Hán ngữ 6 | | | |
+| GT14 | Thời lượng file Hán ngữ 6 (vd. Bài 14 ghi âm cả bài) | Thanh phát ghi 9:55, không phải 8:30 | Đạt 08/11 (trình duyệt đọc 595,4 giây) | | |
+| GT15 | Bấm nút **Nghe** trên thanh công cụ | Ngăn "File nghe": file gom theo bài, bài đang đọc nền xanh + nhãn "Đang đọc", file đang phát có ba vạch nhảy; bấm "Trang n" → về trang đầu bài | Đạt 08/11 | | |
+| GT16 | Hán ngữ 3, đang ở bài 1: bấm **Sách / Đáp án** → Đáp án | Đổi sang ảnh trang đáp án, mở đúng "Đáp án bài 1" (trang 5/32), tiêu đề tab có "Đáp án ·"; bấm **Mở bài trong sách** → về trang sách đang đọc của bài 1 | Đạt 08/11 | | |
+| GT17 | Điện thoại: thanh công cụ có 3 nút tròn (mục lục, nghe, đáp án) + ô trang; thanh phát 3 hàng | Không tràn ngang ở 375px; nút đáp án sáng khi đang xem đáp án, đầu trang ghi "Đáp án" | Đạt 08/11 (375px) | | |
+| GT18 | Màn hình khoá điện thoại khi đang nghe | Hiện tên "Bài n · phần", nút phát/dừng, trước/sau hoạt động | | | |
+| GT19 | Khách: `/api/learn/books/hn1/nghe/1`, `/api/learn/books/hn3/dap-an/5`, `/uploads/giao-trinh/hn1/nghe/01.mp3` | 401, 401, 403 | Đạt 08/11 (401 API; thư mục 403) | | |
+| GT0 | Học viên: mở Chuyển nhanh → Giáo trình; gõ thẳng `/learn/books/hsk1`. Khách chưa đăng nhập: mở `/uploads/giao-trinh/hsk1/001.webp` và `/api/learn/books/hsk1/1` | Học viên thấy mục Giáo trình, đọc được sách của giáo trình mình (xem GT6–GT7); khách: thư mục ảnh 403, API 401 | Đạt 08/11 (học viên mẫu: menu có Giáo trình, ảnh 200 cả 3 quyển; khách 403/401) | | |
 | GT1 | Mở từng quyển HSK 1–3, cuộn/vuốt dọc | Các trang nối tiếp, đọc qua ranh giới trang mà không cần bấm lật | | | |
 | GT2 | Nhập số trang rồi bấm Đi tới / Enter | Cuộn đến đúng trang; ảnh tải xong không đẩy lệch vị trí | | | |
 | GT3 | Cuộn đến giữa sách, về kệ rồi mở lại | Nhớ đúng trang đang đọc của từng quyển | | | |
@@ -280,6 +294,22 @@ Chưa bấm thử trên trình duyệt: nút Lưu ở form giáo trình (API đ�
 | N12 | Người nghe thử giọng: danh sách máy nghe khác chữ (`ra/doc_edge_kq.json`, trạng thái `nghi`) | Giọng đọc đúng | **Chờ người nghe** |
 | N13 | Học viên Hán ngữ đi qua 6 phần và trang Tài khoản | Ghi "Quyển n", "Chọn quyển", "ôn cả quyển"; chữ mẫu lấy từ bài đầu của quyển; riêng "Thi thử HSK n" giữ vì là đề HSK dùng chung | Đạt |
 | N14 | Học viên HSK đi qua các màn đó | Vẫn "HSK n", "Chọn cấp HSK", chữ mẫu cũ | Đạt ở Bàn học và Luyện viết; **các màn còn lại chưa bấm** |
+| N16 | Sau migration 016 mở `/admin/curricula` | Giáo trình số 1 tên "Giáo trình HSK 3.0", không còn nhãn Mặc định; Hán ngữ có nhãn Mặc định, công tắc trong form bật và khoá; form HSK có công tắc tắt | Đạt (DB dev, 08/11) |
+| N17 | Học viên cũ chưa phân quyền, và tài khoản mới đăng ký bằng email / Google | Vào Hán ngữ, thấy "Quyển 1…6" | Đạt ở test API; **chưa đăng ký thử trên trình duyệt** |
+| N18 | Gán "Giáo trình HSK 3.0" cho một học viên ở Phân quyền học | Thấy "HSK 1…6", bài và tiến độ HSK cũ còn nguyên | Đạt ở test API; **chưa bấm trên trình duyệt** |
+| N20 | So web với bản chép (`so_web2.py` trong lần làm 08/11): thẻ, chữ viết, câu thoại, ví dụ, tên mục, giải thích, công thức, cả tiếng Anh | Khớp hoàn toàn 76 bài | Đạt |
+| N21 | Lật thẻ bài có từ sách in lại (Q1 B10 找) và chữ hai cách đọc (Q6 B14 好 hào/hǎo) | Có đủ thẻ; mặt sau có dòng tiếng Anh in nghiêng | Đạt ở API + so web; thẻ tiếng Anh xem trên trình duyệt (英文 → English) |
+| N22 | Ngữ pháp Q2 B20 年、月、日; Q1 B1 拼音 | Một mục đủ 31 ngày / đủ bảng phiên âm, không có mục "(tiếp)"; tên, giải thích tiếng Anh hiện dưới tiếng Việt | Đạt ở so web; Q5 B6 xem trên trình duyệt |
+| N23 | Luyện viết Q1 B3 行 | Hiện háng như mục 写汉字 sách in; bài HSK có 行 vẫn xíng | Đạt ở test API |
+| N24 | Lật thẻ Hán ngữ: học theo bài (lật thẻ), ôn cả quyển | Mặt sau thẻ có một dòng tiếng Anh in nghiêng dưới nghĩa Việt; ôn cả quyển thì ở mặt trước | Đạt (API 2.988/2.990 thẻ có tiếng Anh; DOM thẻ 英文) · người dùng đã test 08/11: đạt |
+| N25 | Ngữ pháp Hán ngữ bất kỳ (Q5 B6) | Không còn chữ tiếng Anh nào; giải thích nhiều đoạn xuống dòng như sách | Đạt (DOM) · người dùng đã test 08/11: đạt |
+| N26 | Hội thoại: bấm "Nghe" cả bài khoá (Q1 B6, Q6 B22) và bấm từng câu | Giọng tự tạo, mỗi nhân vật một giọng, nghe cả bài cùng giọng và tốc độ với câu bấm riêng; không còn băng thật | Đạt (129/129 bài khoá ghép giọng, quét 13.116 file 0 lỗi) · người dùng đã test 08/11: đạt |
+| N27 | Tình huống bài khoá, cả Hán ngữ lẫn HSK 3.0 | Không còn dòng "Bản dịch tiếng Việt là bản tham khảo của Zìkǎ — sách không in." | Đạt (DB 0 dòng; DOM Q2 B20, Q6 B22, HSK 1 B1) · người dùng đã test 08/11: đạt |
+| N28 | Lỗi in đã sửa: Q1 B7 鸡/蛋, Q2 B23 西边, Q5 B4 南京 | 鸡 = gà, 蛋 = trứng; 西边 = phía tây; 南京 = Giang Tô | Đạt (so web) · người dùng đã test 08/11: đạt |
+| N29 | Nghe câu có ký hiệu sách: Q6 B15 «我从来/*向来没去过美国。», Q1 B6 câu trọng âm «我'吃。» | Đọc "我从来，向来…" và "我吃", không đọc "星号" hay dấu | Đạt (máy nghe kiểm) · người dùng đã test 08/11: đạt |
+| N30 | Thanh đường dẫn trên cùng ở 5 màn học theo bài | "Lật thẻ / Quyển 2" (bấm được), không lặp số bài và tên bài của khối bên dưới | Đạt (DOM Q2 B16) · người dùng đã test 08/11: đạt |
+| N31 | Tốc độ đọc câu Hán ngữ so với HSK 3.0 | Câu không nhanh hơn 5,8 âm tiết/giây (305 câu đã sinh chậm lại 15%) | Đạt (máy đo) · người dùng đã test 08/11: đạt |
+| N19 | Bật "Giáo trình mặc định" ở giáo trình khác rồi lưu; thử xoá giáo trình mặc định | Bộ cũ tự tắt, học viên chưa phân quyền đổi theo, người đã gán giữ nguyên; không xoá được bộ mặc định | Đạt ở test API |
 | N15 | Quản trị: thẻ giáo trình, tab cấp và đầu trang soạn bài của Hán ngữ; Xem thử `?preview=1&curriculum=` | Ghi "Quyển n" theo giáo trình đang xem; rời Xem thử thì về nhãn của tài khoản | Đạt |
 
 ## E. Kiểm tra tự động (chạy ở máy dev)

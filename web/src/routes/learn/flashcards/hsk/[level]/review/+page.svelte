@@ -121,6 +121,7 @@
             <span class="face face-front">
               <span class="nhan-mat">Nghĩa tiếng Việt</span>
               <span style="font-size: {m ? 28 : 38}px; font-weight: 800; line-height: 1.15">{card.meaning}</span>
+              {#if card.meaningEn}<span lang="en" style="font-size: {m ? 15 : 17}px; font-style: italic; color: var(--text-2)">{card.meaningEn}</span>{/if}
               <span class="goi"><Icon name="repeat" size={13} /> {m ? 'Chạm để lật' : 'Bấm để lật'}</span>
             </span>
             <span class="face face-back">

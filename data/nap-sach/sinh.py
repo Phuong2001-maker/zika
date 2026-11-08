@@ -218,9 +218,8 @@ class Bai:
                 nhan = next((t for t in tu_dai if t in c["zh"]), None)
                 lines.append({"speakerKey": key[c["_ten"][:30]], "zh": c["zh"], "pinyin": c.get("pinyin", ""),
                               "vi": c.get("vi", ""), "highlight": nhan})
+            # Không ghi chú "bản dịch là bản tham khảo, sách không in" vào tình huống: người dùng không muốn hiện (08/11/2026).
             canh = "\n".join(x for x in (k.get("boi_canh_zh", ""), k.get("boi_canh_vi", "")) if x).strip()
-            if any(c.get("vi_tu_dich") for c in cau):
-                canh = (canh + "\n" if canh else "") + "Bản dịch tiếng Việt là bản tham khảo của Zìkǎ — sách không in."
             ra.append({"no": i, "title": f"Bài khoá {i}", "scene": canh, "speakers": speakers, "lines": lines})
         return ra
 

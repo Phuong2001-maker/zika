@@ -65,6 +65,91 @@ final class CurriculumTest extends DbTestCase
         $this->assertSame('Quyển', \Zika\Services\UserService::toApi(\Zika\Services\UserService::find($this->nguoiHoc($quyen)))['levelLabel']);
     }
 
+    private function dangKy(string $email, array $them = []): array
+    {
+        return \Zika\Services\UserService::create($them + [
+            'email' => $email, 'display_name' => 'Mới', 'full_name' => 'Người Mới', 'signup_method' => 'email',
+        ]);
+    }
+
+    public function testGiaoTrinhSoMotDoiTenThanhHsk30(): void
+    {
+        $this->assertSame('Giáo trình HSK 3.0', Db::val('SELECT name FROM curricula WHERE id = 1'));
+    }
+
+    /** Giáo trình bật cờ mặc định, tắt cờ ở giáo trình HSK như sau khi nạp Hán ngữ. */
+    private function macDinh(string $ten, string $cap = 'HSK'): int
+    {
+        $id = Db::insert('curricula', ['name' => $ten, 'level_label' => $cap]);
+        Db::exec('UPDATE curricula SET is_default = (id = ?)', [$id]);
+        return $id;
+    }
+
+    public function testChuaPhanQuyenThiHocGiaoTrinhMacDinhCaTaiKhoanCuLanMoi(): void
+    {
+        $this->assertSame(Curricula::HSK_ID, Curricula::defaultId(), 'Chưa có Hán ngữ thì mặc định vẫn là HSK');
+        $cu = $this->nguoiHoc();
+        $hsk = $this->nguoiHoc(Curricula::HSK_ID);
+
+        $hanNgu = $this->macDinh('Hán ngữ 6 tập', 'Quyển');
+        $moi = $this->dangKy('moi@zika.test');
+
+        $this->assertSame($hanNgu, Curricula::ofUser($cu), 'Tài khoản cũ chưa phân quyền chuyển sang Hán ngữ');
+        $this->assertSame($hanNgu, Curricula::ofUser((int) $moi['id']), 'Tài khoản mới đăng ký học Hán ngữ');
+        $this->assertSame('Quyển', \Zika\Services\UserService::toApi($moi)['levelLabel']);
+        $this->assertSame(Curricula::HSK_ID, Curricula::ofUser($hsk), 'Được gán HSK thì học HSK');
+        $this->assertSame('HSK', \Zika\Services\UserService::toApi(\Zika\Services\UserService::find($hsk))['levelLabel']);
+
+        $bai = $this->bai($hanNgu, 1);
+        Curricula::assertLesson($bai, Curricula::ofUser($cu));
+        $this->expectException(HttpError::class);
+        Curricula::assertLesson($bai, Curricula::ofUser($hsk));
+    }
+
+    public function testDoiGiaoTrinhMacDinhOFormQuanTri(): void
+    {
+        $a = $this->macDinh('Bộ A');
+        $b = Db::insert('curricula', ['name' => 'Bộ B']);
+        $admin = $this->makeUser(['role' => 'admin']);
+        $chuaGan = $this->nguoiHoc();
+        $daGan = $this->nguoiHoc($a);
+        foreach ([$chuaGan, $daGan] as $u) {
+            Db::insert('review_progress', ['user_id' => $u, 'level_id' => 1, 'part' => 'lt', 'position' => 3, 'updated_at' => \Zika\Core\Clock::sql()]);
+        }
+        $luu = function (int $id, array $body) use ($admin): void {
+            $r = $this->req('PUT', "/admin/curricula/$id", $admin, 'admin', [], $body);
+            $r->params = ['id' => (string) $id];
+            (new CurriculumController())->save($r);
+        };
+
+        $luu($b, ['name' => 'Bộ B', 'isDefault' => true]);
+        $this->assertSame($b, Curricula::defaultId());
+        $this->assertSame(1, (int) Db::val('SELECT COUNT(*) FROM curricula WHERE is_default = 1'), 'Chỉ một giáo trình mặc định');
+        $this->assertSame($b, Curricula::ofUser($chuaGan));
+        $this->assertSame($a, Curricula::ofUser($daGan));
+        $this->assertNull(Db::val('SELECT position FROM review_progress WHERE user_id = ?', [$chuaGan]), 'Lượt ôn dở trỏ vào giáo trình cũ');
+        $this->assertSame(3, (int) Db::val('SELECT position FROM review_progress WHERE user_id = ?', [$daGan]));
+
+        $luu($b, ['name' => 'Bộ B mới']);
+        $this->assertSame($b, Curricula::defaultId(), 'Không gửi cờ thì giữ nguyên');
+
+        $ds = (new CurriculumController())->index($this->req('GET', '/admin/curricula', $admin, 'admin'));
+        $this->assertSame([$a => false, $b => true], array_intersect_key(array_column($ds, 'isDefault', 'id'), [$a => 1, $b => 1]));
+        $this->assertSame(1, array_column($ds, 'learnerCount', 'id')[$b], 'Học viên chưa gán tính vào giáo trình mặc định');
+
+        try {
+            $luu($b, ['name' => 'Bộ B mới', 'isDefault' => false]);
+            $this->fail('Tắt mặc định mà không chọn bộ khác');
+        } catch (HttpError $e) {
+            $this->assertSame($b, Curricula::defaultId());
+        }
+
+        $r = $this->req('DELETE', "/admin/curricula/$b", $admin, 'admin');
+        $r->params = ['id' => (string) $b];
+        $this->expectException(HttpError::class);
+        (new CurriculumController())->delete($r);
+    }
+
     public function testSuaGiaoTrinhKhongGuiCachGoiThiGiuNguyen(): void
     {
         $id = Db::insert('curricula', ['name' => 'Theo quyển', 'level_label' => 'Quyển']);
@@ -89,23 +174,23 @@ final class CurriculumTest extends DbTestCase
         Db::update('lessons', ['sample_text' => 'bài đầu'], ['id' => $this->bai($c, 1)]);
 
         $capCua = static fn (int $id): array => array_values(array_filter(ContentBuilder::levels(false, $id), static fn (array $l) => $l['id'] === 1))[0];
-        $this->assertSame('mẫu HSK', $capCua(Curricula::DEFAULT_ID)['sampleText']);
+        $this->assertSame('mẫu HSK', $capCua(Curricula::HSK_ID)['sampleText']);
         $this->assertSame('bài đầu', $capCua($c)['sampleText']);
     }
 
     public function testDuLieuCuThuocGiaoTrinhMacDinh(): void
     {
         $id = Db::insert('lessons', ['level_id' => 1, 'lesson_no' => 1, 'title' => 'Bài cũ']);
-        self::assertSame(Curricula::DEFAULT_ID, (int) Db::val('SELECT curriculum_id FROM lessons WHERE id = ?', [$id]));
+        self::assertSame(Curricula::HSK_ID, (int) Db::val('SELECT curriculum_id FROM lessons WHERE id = ?', [$id]));
 
         $w = Db::insert('words', ['level_id' => 1, 'hanzi' => '好', 'pinyin' => 'hǎo', 'meaning_vi' => 'tốt']);
-        self::assertSame(Curricula::DEFAULT_ID, (int) Db::val('SELECT curriculum_id FROM words WHERE id = ?', [$w]));
+        self::assertSame(Curricula::HSK_ID, (int) Db::val('SELECT curriculum_id FROM words WHERE id = ?', [$w]));
     }
 
     public function testHaiGiaoTrinhCungCoBaiMotVaCungMotTu(): void
     {
         $c = $this->giaoTrinh();
-        $this->bai(Curricula::DEFAULT_ID, 1);
+        $this->bai(Curricula::HSK_ID, 1);
         $this->bai($c, 1);
         Db::insert('words', ['level_id' => 1, 'hanzi' => '好', 'pinyin' => 'hǎo', 'meaning_vi' => 'tốt']);
         Db::insert('words', ['curriculum_id' => $c, 'level_id' => 1, 'hanzi' => '好', 'pinyin' => 'hǎo', 'meaning_vi' => 'tốt']);
@@ -117,7 +202,7 @@ final class CurriculumTest extends DbTestCase
     public function testNguoiHocChiThayBaiCuaGiaoTrinhMinh(): void
     {
         $c = $this->giaoTrinh();
-        $baiCu = $this->bai(Curricula::DEFAULT_ID, 1);
+        $baiCu = $this->bai(Curricula::HSK_ID, 1);
         $baiMoi = $this->bai($c, 1);
 
         $cu = $this->req('GET', '/learn/levels/1/lessons', $this->nguoiHoc());
@@ -135,7 +220,7 @@ final class CurriculumTest extends DbTestCase
     public function testBaiCuaGiaoTrinhKhacTraVe404(): void
     {
         $c = $this->giaoTrinh();
-        $bai = $this->bai(Curricula::DEFAULT_ID, 1);
+        $bai = $this->bai(Curricula::HSK_ID, 1);
         $r = $this->req('GET', "/learn/lessons/$bai/flashcards", $this->nguoiHoc($c));
         $r->params = ['id' => (string) $bai, 'part' => 'flashcards'];
 
@@ -146,8 +231,8 @@ final class CurriculumTest extends DbTestCase
     public function testBanCacheCuaGiaoTrinhNayKhongLotSangGiaoTrinhKia(): void
     {
         $c = $this->giaoTrinh();
-        $this->bai(Curricula::DEFAULT_ID, 1);
-        $this->bai(Curricula::DEFAULT_ID, 2);
+        $this->bai(Curricula::HSK_ID, 1);
+        $this->bai(Curricula::HSK_ID, 2);
         $this->bai($c, 1);
 
         foreach ([[null, 2], [$c, 1], [null, 2]] as [$gt, $soBai]) {
@@ -165,7 +250,7 @@ final class CurriculumTest extends DbTestCase
     public function testBaiKeTiepKhongNhayTheoSangGiaoTrinhKhac(): void
     {
         $c = $this->giaoTrinh();
-        $this->bai(Curricula::DEFAULT_ID, 2);
+        $this->bai(Curricula::HSK_ID, 2);
         $motBai = $this->bai($c, 1);
         $l = Db::one('SELECT * FROM lessons WHERE id = ?', [$motBai]);
         self::assertNull(ContentBuilder::nextLesson($l, false));
@@ -174,7 +259,7 @@ final class CurriculumTest extends DbTestCase
     public function testTienDoChiTinhBaiCuaGiaoTrinhDangHoc(): void
     {
         $c = $this->giaoTrinh();
-        $baiCu = $this->bai(Curricula::DEFAULT_ID, 1);
+        $baiCu = $this->bai(Curricula::HSK_ID, 1);
         $this->bai($c, 1);
         $u = $this->nguoiHoc();
 
@@ -195,7 +280,7 @@ final class CurriculumTest extends DbTestCase
     public function testNguoiHocKhongGhiDuocTienDoBaiGiaoTrinhKhac(): void
     {
         $c = $this->giaoTrinh();
-        $bai = $this->bai(Curricula::DEFAULT_ID, 1);
+        $bai = $this->bai(Curricula::HSK_ID, 1);
 
         $this->expectException(HttpError::class);
         ProgressService::save($this->nguoiHoc($c), $bai, 'lt', 1, 3, null);
@@ -212,8 +297,8 @@ final class CurriculumTest extends DbTestCase
     public function testTaoBaiDanhSoRiengTheoGiaoTrinh(): void
     {
         $c = $this->giaoTrinh();
-        $this->bai(Curricula::DEFAULT_ID, 1);
-        $this->bai(Curricula::DEFAULT_ID, 2);
+        $this->bai(Curricula::HSK_ID, 1);
+        $this->bai(Curricula::HSK_ID, 2);
 
         $r = $this->req('POST', '/admin/levels/1/lessons', $this->makeUser(['role' => 'admin']), 'admin', [], ['title' => 'Bài đầu', 'curriculumId' => $c]);
         $r->params = ['id' => '1'];
@@ -252,7 +337,7 @@ final class CurriculumTest extends DbTestCase
     {
         $c = $this->giaoTrinh();
         $this->bai($c, 1);
-        foreach ([Curricula::DEFAULT_ID, $c] as $id) {
+        foreach ([Curricula::HSK_ID, $c] as $id) {
             $r = $this->req('DELETE', "/admin/curricula/$id", $this->makeUser(['role' => 'admin']), 'admin');
             $r->params = ['id' => (string) $id];
             try {
@@ -272,7 +357,7 @@ final class CurriculumTest extends DbTestCase
         $r->params = ['id' => (string) $c];
         (new CurriculumController())->delete($r);
 
-        self::assertSame(Curricula::DEFAULT_ID, Curricula::ofUser($u));
+        self::assertSame(Curricula::HSK_ID, Curricula::ofUser($u));
     }
 
     public function testGanGiaoTrinhXoaLuotTongHopCu(): void
@@ -312,6 +397,6 @@ final class CurriculumTest extends DbTestCase
 
         // Người học gửi tham số curriculum cũng không đổi được giáo trình.
         $hoc = $this->req('GET', '/learn/levels', $this->nguoiHoc(), 'learner', ['preview' => '1', 'curriculum' => (string) $c]);
-        self::assertSame(Curricula::DEFAULT_ID, Curricula::forRequest($hoc));
+        self::assertSame(Curricula::HSK_ID, Curricula::forRequest($hoc));
     }
 }

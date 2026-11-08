@@ -15,6 +15,10 @@ final class Response
     ) {
     }
 
+    /** Gửi một đoạn của file thay vì cả file (trả lời Range); null = cả file. */
+    public ?int $fileOffset = null;
+    public int $fileLength = 0;
+
     /** @param array<string,mixed>|null $meta */
     public static function json(mixed $data, int $status = 200, ?array $meta = null): self
     {
@@ -83,6 +87,40 @@ final class Response
         ], $path);
     }
 
+    /**
+     * File phát/tua được: trả lời header Range bằng 206 + đúng đoạn được hỏi. Range lạ (nhiều đoạn, sai cú pháp) thì
+     * trả cả file với 200 — đúng chuẩn HTTP, trình duyệt vẫn phát được.
+     * @param array<string,string> $headers
+     */
+    public static function fileRange(string $path, string $contentType, string $range, array $headers = []): self
+    {
+        $size = (int) filesize($path);
+        $res = new self(200, '', $headers + [
+            'Content-Type'   => $contentType,
+            'Accept-Ranges'  => 'bytes',
+            'Content-Length' => (string) $size,
+        ], $path);
+        if (!preg_match('/^bytes=(\d*)-(\d*)$/', trim($range), $m) || $m[1] === '' && $m[2] === '') {
+            return $res;
+        }
+        if ($m[1] === '') {
+            $start = max(0, $size - (int) $m[2]);
+            $end = $size - 1;
+        } else {
+            $start = (int) $m[1];
+            $end = $m[2] === '' ? $size - 1 : min((int) $m[2], $size - 1);
+        }
+        if ($start > $end || $start >= $size) {
+            return new self(416, '', ['Content-Range' => "bytes */$size"]);
+        }
+        $res->status = 206;
+        $res->headers['Content-Range'] = "bytes $start-$end/$size";
+        $res->headers['Content-Length'] = (string) ($end - $start + 1);
+        $res->fileOffset = $start;
+        $res->fileLength = $end - $start + 1;
+        return $res;
+    }
+
     public function withHeader(string $name, string $value): self
     {
         $this->headers[$name] = $value;
@@ -96,6 +134,15 @@ final class Response
             header("$k: $v");
         }
         Cookie::flush();
+        if ($this->filePath !== null && $this->fileOffset !== null) {
+            $fh = fopen($this->filePath, 'rb');
+            fseek($fh, $this->fileOffset);
+            for ($con = $this->fileLength; $con > 0 && !feof($fh); $con -= 65536) {
+                echo fread($fh, min(65536, $con));
+            }
+            fclose($fh);
+            return;
+        }
         if ($this->filePath !== null) {
             readfile($this->filePath);
             return;

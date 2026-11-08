@@ -128,7 +128,7 @@ final class ContentBuilder
             'name' => (string) $v['name'],
             'visible' => (bool) $v['is_visible'],
             // levels.sample_text là chữ mẫu của HSK; giáo trình khác lấy từ bài đầu của chính nó.
-            'sampleText' => $curriculumId === Curricula::DEFAULT_ID ? (string) $v['sample_text'] : (string) $v['mau_bai_dau'],
+            'sampleText' => $curriculumId === Curricula::HSK_ID ? (string) $v['sample_text'] : (string) $v['mau_bai_dau'],
             'targetWords' => (int) $v['target_words'],
             'lessonCount' => (int) $v['lesson_count'],
             'wordCount' => (int) $v['word_count'],
@@ -287,6 +287,7 @@ final class ContentBuilder
                 'pinyin' => (string) $w['pinyin'],
                 'hanViet' => (string) $w['han_viet'],
                 'meaning' => (string) $w['meaning_vi'],
+                'meaningEn' => ($w['meaning_en'] ?? '') !== '' ? (string) $w['meaning_en'] : null,
                 'pos' => (string) $w['pos'],
                 'audioUrl' => $w['audio_path'] ?: null,
                 'examples' => array_map(static fn (array $e) => [
