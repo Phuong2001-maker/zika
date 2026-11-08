@@ -2,32 +2,32 @@
 Options -Indexes
 DirectoryIndex index.html
 
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
+# KHÔNG bọc phần này trong <IfModule mod_rewrite.c>: 09/11/2026 LiteSpeed trên hosting bỗng coi khối đó là không có
+# module, bỏ qua mọi RewriteRule (Header vẫn chạy) → /api và /learn trả 404, ảnh sách mở thẳng được. Bỏ khối bọc là chạy lại.
+RewriteEngine On
+RewriteBase /
 
-  # HTTPS
-  RewriteCond %{HTTPS} !=on
-  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
-  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # Chặn file ẩn (.git, .env…)
-  RewriteRule (^|/)\.(?!well-known/) - [F]
+# Chặn file ẩn (.git, .env…)
+RewriteRule (^|/)\.(?!well-known/) - [F]
 
-  # Giáo trình có bản quyền: không phát thẳng ảnh, chỉ đọc qua api/admin/books (đòi quyền quản trị).
-  # Đặt ở .htaccess gốc vì uploads/.htaccess không bật RewriteEngine nên luật ở đây vẫn áp xuống.
-  RewriteRule ^uploads/giao-trinh/ - [F]
+# Giáo trình có bản quyền: không phát thẳng ảnh, chỉ đọc qua api/admin/books (đòi quyền quản trị).
+# Đặt ở .htaccess gốc vì uploads/.htaccess không bật RewriteEngine nên luật ở đây vẫn áp xuống.
+RewriteRule ^uploads/giao-trinh/ - [F]
 
-  # API và link ủng hộ → PHP
-  RewriteRule ^api/index\.php$ - [L]
-  RewriteRule ^api/ api/index.php [L,QSA]
-  RewriteRule ^go/[0-9]+/?$ api/index.php [L,QSA]
+# API và link ủng hộ → PHP
+RewriteRule ^api/index\.php$ - [L]
+RewriteRule ^api/ api/index.php [L,QSA]
+RewriteRule ^go/[0-9]+/?$ api/index.php [L,QSA]
 
-  # SPA: mọi đường dẫn không phải file thật → index.html
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ index.html [L]
-</IfModule>
+# SPA: mọi đường dẫn không phải file thật → index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
 
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"

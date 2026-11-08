@@ -188,7 +188,7 @@ Kết quả `release/zika-release-<ngày giờ>.zip` gồm hai thư mục:
 
 Thư mục `uploads/` phải cho PHP ghi được (755 hoặc 775), `app/storage/` cũng vậy.
 
-### 1b. Bốn cái bẫy khi giải nén bằng File Manager — đã sa vào thật 23/10/2026
+### 1b. Năm cái bẫy khi giải nén bằng File Manager — đã sa vào thật 23/10/2026
 
 Nếu đẩy lên bằng File Manager của panel (1Panel, cPanel…) thay vì SSH thì đọc kỹ bốn mục này.
 Cả bốn đều đã làm sập web thật một lần.
@@ -210,6 +210,11 @@ Cả bốn đều đã làm sập web thật một lần.
    nên **mọi** đường dẫn không tồn tại đều trả `index.html` kèm mã **200**. Phải xem
    `content-type`. Thêm nữa service worker cache cả những đường dẫn 404 cũ, nên sau khi đẩy file
    lên trình duyệt vẫn trả bản cũ — kiểm bằng `?v=<ngẫu nhiên>` và bảo người dùng Ctrl+Shift+R.
+
+5. **Không bọc luật chuyển hướng trong `<IfModule mod_rewrite.c>`** (sa vào 09/11/2026). LiteSpeed của hosting bỗng bỏ qua
+   cả khối đó trong khi `Header` cùng file vẫn chạy: trang chủ mở được nhưng `/api/...`, `/learn/...` trả 404 trang LiteSpeed,
+   và `uploads/giao-trinh/` mở thẳng được. Lưu lại file không ăn; bỏ khối bọc là chạy ngay. `deploy/htaccess-root` đã bỏ.
+   Kiểm sau mỗi lần deploy: `/api/me` phải trả JSON, `/uploads/giao-trinh/hn1/sach.json` phải 403.
 
 Sau khi deploy xong, nếu có đổi nội dung bằng SQL thẳng thì **xoá sạch `<APP_DIR>/storage/cache/content/`**,
 không thì API vẫn trả số đếm cũ.

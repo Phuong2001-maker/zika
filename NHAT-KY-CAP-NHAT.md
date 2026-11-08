@@ -23,6 +23,15 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 09/11/2026 01:03 — Sự cố web thật: RewriteRule ngừng chạy, đã sửa
+
+- Khoảng 00:56 (sau khi dọn zip thừa trên 1Panel, không liên quan) web thật: trang chủ mở được nhưng `/api/...`, `/learn/...`
+  trả 404 trang LiteSpeed, ảnh sách `uploads/giao-trinh/` mở thẳng được (200). `api/index.php` gọi thẳng vẫn chạy, `config.php`
+  còn; `Header` trong `.htaccess` vẫn có tác dụng — chỉ khối `<IfModule mod_rewrite.c>` bị bỏ qua. Lưu lại file không ăn.
+- **Sửa:** bỏ khối `<IfModule mod_rewrite.c>` bọc quanh luật chuyển hướng trong `.htaccess` trên server (luật giữ nguyên).
+  01:03 kiểm lại: `/api/me` JSON 200, `/learn/books` 200, ảnh sách thẳng 403, màn đọc Hán ngữ 1 tải ảnh trang.
+- `deploy/htaccess-root` trong repo sửa giống hệt bản server, để lần đóng gói sau không mang khối bọc trở lại. README thêm bẫy 5.
+
 ### 09/11/2026 00:50 — Đã lên server: Nhận điểm riêng, bé túi nghỉ theo ngày, bỏ Chế độ test, mở cả quyển
 
 - **Đã lên server** code `main` `9f033b5` bằng `dong-goi-code/zika-code-20261109-0045.zip` (cùng cấu trúc, cùng 403 file như
