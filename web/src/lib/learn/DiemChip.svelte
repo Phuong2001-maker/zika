@@ -4,7 +4,7 @@
   import { diemDoc } from './diem-doc.svelte';
 
   // Số điểm mở bài trên thanh đầu trang ở mọi màn học: người học luôn biết mình còn bao nhiêu điểm và hôm nay đã nhận
-  // chưa; bấm là về kệ Giáo trình (ở đó có nút Nhận điểm, Mua gói). Đứng đầu cụm nút bên phải ở cả Topbar (máy tính)
+  // chưa; bấm là về kệ Giáo trình (ở đó có nút Nhận điểm). Đứng đầu cụm nút bên phải ở cả Topbar (máy tính)
   // lẫn MTopbar (điện thoại, bản `gon`). Biên tập/quản trị đọc sách tự do nên không có điểm để hiện.
   let { gon = false }: { gon?: boolean } = $props();
 

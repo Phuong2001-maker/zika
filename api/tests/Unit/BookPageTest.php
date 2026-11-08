@@ -20,7 +20,7 @@ use Zika\Tests\DbTestCase;
 
 /**
  * Giáo trình: ảnh trang, file nghe tua được, đáp án — đọc từ sach.json do dung-sach.py dựng — và luật chặn:
- * học viên chỉ nhận được file của bài đã mở bằng điểm hoặc quyển đã mua, kèm mã ký của chính tài khoản.
+ * học viên chỉ nhận được file của bài đã mở bằng điểm, kèm mã ký của chính tài khoản.
  */
 final class BookPageTest extends DbTestCase
 {
@@ -132,7 +132,6 @@ final class BookPageTest extends DbTestCase
         self::assertSame('L', Router::match('POST', '/learn/books/hn1/mo/5')['auth']);
         self::assertSame('L', Router::match('GET', '/learn/books/hn1/quyen')['auth']);
         self::assertSame('A', Router::match('POST', '/admin/book-points/adjust')['auth']);
-        self::assertSame('A', Router::match('GET', '/admin/books/hsk1/7')['auth']);
     }
 
     public function testRouteKhongNhanDuongDanLa(): void
@@ -346,6 +345,23 @@ final class BookPageTest extends DbTestCase
         $uid = $this->nguoi();
         $p = (new BookPointsController())->daily($this->req($uid));
         self::assertSame([3, true, null], [$p['diem'], $p['homNay'], $p['link']]);
+    }
+
+    public function testQuanTriXemDanhSachDiemHocVien(): void
+    {
+        $a = $this->nguoi();
+        $b = $this->nguoi();
+        $this->nguoi('editor');
+        BookAccess::nhanDiemNgay($a);
+        $this->moBai($a, 'hsk1', 1);
+        $res = (new \Zika\Controllers\Admin\BookPointsController())->users($this->req($this->nguoi('admin')));
+        $j = json_decode($res->body, true);
+        // Chỉ học viên, xếp theo điểm giảm dần; người chưa nhận lần nào có 0 điểm, chưa có lần nhận.
+        self::assertSame([2, [$a, $b], [3, 0], [1, 0]], [
+            $j['meta']['total'], array_column($j['data'], 'id'), array_column($j['data'], 'diem'), array_column($j['data'], 'baiMo'),
+        ]);
+        self::assertNotNull($j['data'][0]['lastClaim']);
+        self::assertNull($j['data'][1]['lastClaim']);
     }
 
     public function testQuanTriCongTruTayKhongAmDiem(): void

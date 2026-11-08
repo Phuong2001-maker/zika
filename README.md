@@ -125,8 +125,9 @@ thẳng đường dẫn hay dùng công cụ tải. Biên tập và quản trị
 - **Chặn lưu ở trình duyệt:** màn đọc tắt chuột phải, giữ ngón tay (menu "Lưu hình ảnh" của iOS), kéo ảnh ra ngoài, Ctrl+S,
   Ctrl+P và không in trang sách. Lớp này chỉ chặn người dùng bình thường — ai chụp màn hình vẫn chụp được; chặn thật là ở server.
 
-Quản trị → **Điểm mở bài**: công tắc Chế độ test, tra học viên theo email (số điểm, số bài đã mở, sổ cộng/trừ), cộng/trừ tay
-kèm lý do.
+Quản trị → **Điểm mở bài**: bảng mọi học viên (giáo trình, số điểm, số bài đã mở, lần nhận điểm gần nhất; tìm theo tên/email,
+xếp theo nhiều điểm nhất hoặc nhận gần đây), nút −1/+1 ngay trên dòng, **Chi tiết** để cộng/trừ số tuỳ ý kèm lý do và xem
+sổ điểm; công tắc Chế độ test. Mọi lần chỉnh tay đều ghi sổ (`book_points.kind = admin`) để tra lại khi hệ thống tính sai.
 
 ## Quán trà (phòng trò chuyện chung) và Góp ý
 

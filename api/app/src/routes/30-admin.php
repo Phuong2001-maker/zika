@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Zika\Controllers\BookController as Book;
 use Zika\Controllers\Admin\BookPointsController as BookPoints;
 use Zika\Controllers\Admin\ChatController as ChatAdmin;
 use Zika\Controllers\Admin\ContentController as Content;
@@ -147,6 +146,7 @@ return [
     // Điểm mở bài giáo trình (migration 019)
     ['GET',    '/admin/book-points', [BookPoints::class, 'settings'], 'A'],
     ['PUT',    '/admin/book-points/test-mode', [BookPoints::class, 'testMode'], 'A'],
+    ['GET',    '/admin/book-points/users', [BookPoints::class, 'users'], 'A'],
     ['GET',    '/admin/book-points/user', [BookPoints::class, 'user'], 'A'],
     ['POST',   '/admin/book-points/adjust', [BookPoints::class, 'adjust'], 'A'],
 
@@ -167,8 +167,4 @@ return [
     ['GET',    '/admin/backups', [Ops::class, 'backups'], 'A'],
     ['POST',   '/admin/backups', [Ops::class, 'createBackup'], 'A'],
     ['GET',    '/admin/backups/{file:zika-[0-9]{8}-[0-9]{4}\.sql\.gz}', [Ops::class, 'downloadBackup'], 'A'],
-
-    // Lối cũ của quản trị, giữ cho trình duyệt còn cache đường dẫn này; web nay gọi /learn/books (20-learn.php).
-    // Cuộn một lượt là hàng trăm ảnh nên không tính vào giới hạn 300 request/phút.
-    ['GET',    '/admin/books/{ma:(?:hsk|hn)[1-6]}/{trang:bia|[0-9]{1,3}}', [Book::class, 'page'], 'A', ['rate' => false]],
 ];

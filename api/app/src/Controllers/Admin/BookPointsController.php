@@ -8,9 +8,11 @@ use Zika\Core\Clock;
 use Zika\Core\Db;
 use Zika\Core\HttpError;
 use Zika\Core\Request;
+use Zika\Core\Response;
 use Zika\Core\Settings;
 use Zika\Core\Validator;
 use Zika\Services\BookAccess;
+use Zika\Services\Curricula;
 
 /** Quản trị điểm mở bài giáo trình: chế độ test, tra sổ điểm từng học viên, cộng/trừ tay. Chỉ admin. */
 final class BookPointsController
@@ -33,6 +35,44 @@ final class BookPointsController
         Settings::set('points', ['test_mode' => $on]);
         Audit::log($r, 'book_points.test_mode', 'site_settings', null, ['enabled' => $on]);
         return ['testMode' => $on];
+    }
+
+    /**
+     * GET /admin/book-points/users?q=&sort=diem|moi&page= — mọi học viên kèm số điểm, giáo trình, bài đã mở, lần nhận điểm
+     * gần nhất: quản trị nhìn một bảng là thấy ai đang có bao nhiêu điểm, sai thì cộng/trừ tay ngay (người dùng yêu cầu 08/11).
+     */
+    public function users(Request $r): Response
+    {
+        $q = trim((string) $r->q('q', ''));
+        $per = 50;
+        $page = $r->qInt('page', 1, 1);
+        $where = "u.role = 'learner'";
+        $args = [];
+        if ($q !== '') {
+            $where .= ' AND (u.email LIKE ? OR u.display_name LIKE ? OR u.full_name LIKE ?)';
+            array_push($args, "%$q%", "%$q%", "%$q%");
+        }
+        $tong = (int) Db::val("SELECT COUNT(*) FROM users u WHERE $where", $args);
+        $thuTu = (string) $r->q('sort', 'diem') === 'moi' ? 'lan_cuoi IS NULL, lan_cuoi DESC, u.id DESC' : 'diem DESC, u.id DESC';
+        $rows = Db::all(
+            "SELECT u.id, u.email, u.display_name, c.name giao_trinh,
+                    COALESCE(p.diem, 0) diem, p.lan_cuoi,
+                    (SELECT COUNT(*) FROM book_unlocks b WHERE b.user_id = u.id) bai_mo
+               FROM users u
+               LEFT JOIN curricula c ON c.id = COALESCE(u.curriculum_id, ?)
+               LEFT JOIN (SELECT user_id, SUM(delta) diem,
+                                 MAX(CASE WHEN kind IN ('first', 'daily') THEN created_at END) lan_cuoi
+                            FROM book_points GROUP BY user_id) p ON p.user_id = u.id
+              WHERE $where
+              ORDER BY $thuTu
+              LIMIT $per OFFSET " . (($page - 1) * $per),
+            [Curricula::defaultId(), ...$args],
+        );
+        return Response::json(array_map(static fn ($u) => [
+            'id' => (int) $u['id'], 'email' => (string) $u['email'], 'name' => (string) $u['display_name'],
+            'curriculum' => (string) ($u['giao_trinh'] ?? ''), 'diem' => (int) $u['diem'], 'baiMo' => (int) $u['bai_mo'],
+            'lastClaim' => Clock::iso($u['lan_cuoi']),
+        ], $rows), 200, ['total' => $tong, 'page' => $page, 'per' => $per]);
     }
 
     /** GET /admin/book-points/user?q=email — tìm học viên, xem số điểm, bài đã mở và sổ điểm. */

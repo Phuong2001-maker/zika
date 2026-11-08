@@ -76,7 +76,7 @@ final class BookController
         return $this->quyen($r, $s);
     }
 
-    /** GET /learn/books/{ma}/{trang} (và /admin/books/… cũ) — trang là số (1, 2…) hoặc "bia". */
+    /** GET /learn/books/{ma}/{trang} — trang là số (1, 2…) hoặc "bia". */
     public function page(Request $r): Response
     {
         $ma = $r->param('ma');
@@ -180,7 +180,7 @@ final class BookController
     }
 
     /** Bộ sách của giáo trình người học: giáo trình gọi cấp "Quyển" là Hán ngữ, còn lại là HSK. */
-    public static function boCua(Request $r): string
+    private static function boCua(Request $r): string
     {
         return Curricula::levelLabel(Curricula::ofUser($r->userId())) === 'Quyển' ? 'hanngu' : 'hsk';
     }
