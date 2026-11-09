@@ -23,6 +23,18 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 09/11/2026 — Cây ẩn/hiện nội dung, hoàn thiện quyền hiển thị theo vai trò
+
+- Hoàn thiện Cài đặt → Quyền truy cập & hiển thị: trạng thái riêng theo vai trò, kế thừa cha/con, chống ghi đè cấu hình cũ, kiểm quyền API và đường dẫn; giữ lượt kiểm tra đang làm.
+- Thêm Giáo trình → Ẩn/hiện nội dung, quản lý giáo trình → cấp/quyển → bài. Một trạng thái bài dùng cho cả 6 phần. Chuyển công tắc cấp ở Từ vựng/Cài đặt và công tắc bài ở các tab soạn về cây chung.
+- Migration 025–026 đã chạy local. Bài ẩn bị loại khỏi danh sách, Học tiếp, ôn tập tổng hợp; chặn trước cache backend. Service worker chuyển nội dung học sang hỏi mạng trước, ngoại tuyến vẫn giữ khả năng đọc bản đã lưu còn hạn.
+- Chi tiết vận hành, phạm vi màn đọc sách và cách tiếp tục phát triển: `HUONG-DAN-QUYEN-HIEN-THI.md`. Kịch bản thủ công bổ sung trong `KICH-BAN-TEST.md`.
+- Chưa đưa thay đổi này lên hosting. Không thay dữ liệu thật bằng người học/lịch sử thưởng minh họa.
+- Kiểm tra local: toàn bộ API **224/224 test, 1.683 assertions**; web **120/120**, Svelte 0 lỗi/0 cảnh báo, lint sạch, build thành công. Kiểm HTTP thực: admin đọc cây 200, tắt cấp thì 6 API bài trả 404, staff xem trước 200, khôi phục cấp thì bài trả 200. Đã trả công tắc về trạng thái ban đầu sau kiểm tra.
+- Chưa kiểm trực quan trên trình duyệt: phiên browser của công cụ không có trình duyệt kết nối. Các bước điện thoại/máy tính trong kịch bản vẫn cần duyệt bằng mắt.
+- Kiểm lại trước commit theo yêu cầu: `npm run check` 0 lỗi/0 cảnh báo, lint sạch, web 120/120; toàn bộ PHPUnit 224/224 (1.683 assertions); `python data/nap-sach/test_doc_edge.py` 12/12. Giữ `AGENTS.md` của người dùng ngoài commit.
+- Mục này lúc đầu nằm sau "Lần quét gần nhất" ở cuối file; đã chuyển lên đây vì `quet.py` thay mục quét tới hết file và sẽ xoá mất.
+
 ### 09/11/2026 — Quyền truy cập & hiển thị cha–con theo vai trò
 
 - Admin → Cài đặt thêm tab quản lý cha–con cho Học viên/Biên tập/Admin. Tắt cha giữ nguyên lựa chọn con; bảng phân biệt Hiển thị và Truy cập.
@@ -786,13 +798,3 @@ Sinh tự động bởi `data/nap-sach/quet.py`, đừng sửa tay mục này.
 | Lỗi | Số chỗ | Ví dụ |
 |---|---|---|
 | Không có lỗi | 0 | |
-# 09/11/2026 — quản lý hiển thị theo vai trò và cây nội dung
-
-- Hoàn thiện Cài đặt → Quyền truy cập & hiển thị: trạng thái riêng theo vai trò, kế thừa cha/con, chống ghi đè cấu hình cũ, kiểm quyền API và đường dẫn; giữ lượt kiểm tra đang làm.
-- Thêm Giáo trình → Ẩn/hiện nội dung, quản lý giáo trình → cấp/quyển → bài. Một trạng thái bài dùng cho cả 6 phần. Chuyển công tắc cấp ở Từ vựng/Cài đặt và công tắc bài ở các tab soạn về cây chung.
-- Migration 025–026 đã chạy local. Bài ẩn bị loại khỏi danh sách, Học tiếp, ôn tập tổng hợp; chặn trước cache backend. Service worker chuyển nội dung học sang hỏi mạng trước, ngoại tuyến vẫn giữ khả năng đọc bản đã lưu còn hạn.
-- Chi tiết vận hành, phạm vi màn đọc sách và cách tiếp tục phát triển: `HUONG-DAN-QUYEN-HIEN-THI.md`. Kịch bản thủ công bổ sung trong `KICH-BAN-TEST.md`.
-- Chưa đưa thay đổi này lên hosting. Không thay dữ liệu thật bằng người học/lịch sử thưởng minh họa.
-- Kiểm tra local: toàn bộ API **224/224 test, 1.683 assertions**; web **120/120**, Svelte 0 lỗi/0 cảnh báo, lint sạch, build thành công. Kiểm HTTP thực: admin đọc cây 200, tắt cấp thì 6 API bài trả 404, staff xem trước 200, khôi phục cấp thì bài trả 200. Đã trả công tắc về trạng thái ban đầu sau kiểm tra.
-- Chưa kiểm trực quan trên trình duyệt: phiên browser của công cụ không có trình duyệt kết nối. Các bước điện thoại/máy tính trong kịch bản vẫn cần duyệt bằng mắt.
-- Kiểm lại trước commit theo yêu cầu: `npm run check` 0 lỗi/0 cảnh báo, lint sạch, web 120/120; toàn bộ PHPUnit 224/224 (1.683 assertions); `python data/nap-sach/test_doc_edge.py` 12/12. Giữ `AGENTS.md` của người dùng ngoài commit.

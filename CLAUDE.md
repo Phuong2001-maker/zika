@@ -37,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; API 201/201; `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 120/120 test; API 224/224 (chạy khoảng 16 phút vì mỗi test xoá sạch bảng); `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
