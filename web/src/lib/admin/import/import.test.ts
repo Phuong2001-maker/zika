@@ -175,6 +175,27 @@ describe('nhập câu hỏi', () => {
     expect(kt.items).toHaveLength(1);
   });
 
+  it('đề khung HSK 3.0: cột Phần, để trống thì xếp theo dạng câu, sai phần thì báo dòng', () => {
+    const h = ['Phần', ...header];
+    const r = questionsImport('hsk30').parse([
+      sheet('Đề thi', [
+        h,
+        ['', 'Nghe và chọn', '男：你好！女：你好！问：他们在做什么？', '', '打招呼', '吃饭', '', '', 'A', '', '', '', ''],
+        ['Viết', 'Chọn từ điền câu', '我___中国人。', '', '是', '在', '', '', 'A', '', '', '', ''],
+        ['', 'Sắp xếp câu', '我是学生', '', '', '', '', '', '', '我|是|学生', '', '', ''],
+        ['Nghe', 'Sắp xếp câu', '我是学生', '', '', '', '', '', '', '我|是|学生', '', '', ''],
+        ['Nói', 'Chọn từ điền câu', '我___中国人。', '', '是', '在', '', '', 'A', '', '', '', ''],
+        ['Đọc', 'Chọn nghĩa', '鸡蛋', '', 'trứng', 'sữa', '', '', 'A', '', '', '', ''],
+      ]),
+    ]);
+    expect(r.items.map((x) => [x.type, x.section])).toEqual([
+      ['listen', 'listening'],
+      ['blank', 'writing'],
+      ['order', 'writing'],
+    ]);
+    expect(r.issues.map((x) => x.row)).toEqual([5, 6, 7]);
+  });
+
   it('“Chọn từ điền câu” của màn Kiểm tra vẫn là dạng blank của API', () => {
     const r = questionsImport('kt').parse([
       sheet('Kiểm tra', [header, ['Chọn từ điền câu', '我喝___。', '', '牛奶', '鸡蛋', '', '', 'B', '', '', '', '']]),

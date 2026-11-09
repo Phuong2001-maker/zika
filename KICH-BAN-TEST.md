@@ -491,3 +491,10 @@ Kết quả theo lần kiểm 10/11 ở local (Chromium chạy ngầm, micro gi�
 | H13 | Duyệt từng câu 6 đề thật (1 đề mỗi cấp) | Mọi câu có đề bài và phương án, hình tải được, không lỗi JS | Đạt (394/394 câu) |
 | H14 | Điện thoại (390px): danh sách, làm bài, ghi âm | Bố cục không vỡ; bé túi có thể che nút (đã chấp nhận 06/11) | Đạt (danh sách, làm bài); ghi âm cần thử trên điện thoại thật |
 | H15 | iPhone Safari ghi âm | Ghi mp4, nghe lại được | Chưa thử (cần máy thật) |
+| H16 | Nghe câu hội thoại HSK 2–6 ("男：… 女：…") ở cả giọng nữ và giọng nam (Cài đặt) | Không đọc nhãn 男/女; lời nam giọng nam, lời nữ giọng nữ; câu hỏi "问…" giọng đã chọn | Máy kiểm 464 file; chưa nghe tay |
+| H17 | `kiem_de.py` 18 đề | 0 lỗi; HSK 4/6 đáp án đúng dài nhất ≤ 30% | Đạt (23% / 24%) |
+| H18 | Quản trị → Đề thi → Soạn câu | Màn giống Đề HSK 3.0: 4 phần, thêm câu theo phần, câu nói, chọn tranh, ô hình; không có công tắc Công khai; "Đổi tên" chỉ có tên | Chưa thử |
+| H19 | Nhập Excel ở Đề thi / Đề HSK 3.0 (tải file mẫu rồi nhập) | Cột Phần; để trống tự xếp; ghi "Nói" hoặc dạng Chọn nghĩa thì báo dòng lỗi | Chưa thử (có test tự động, chưa chạy) |
+| H20 | Mở đường dẫn cũ `/admin/mock-tests/{id}` của một đề thi | Tự chuyển sang `/admin/exams/{id}` | Chưa thử |
+| H21 | Cuộc thi dùng đề ở tab Đề thi; học viên đã đăng ký bấm Vào thi ngay khi tới giờ | Màn thi HSK 3.0 `/learn/cuoc-thi/{id}`: tên cuộc thi, đồng hồ theo số phút cuộc thi, ghi âm câu nói; nộp xong không có Làm lại, ghi "đáp án hiện sau khi cuộc thi kết thúc" | Chưa thử |
+| H22 | Tắt Thi thử HSK 3.0 cho Học viên rồi làm H21 | Cuộc thi vẫn vào được (theo quyền cuộc thi) | Chưa thử |

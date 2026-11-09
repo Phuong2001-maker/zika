@@ -62,6 +62,18 @@ class DocEdge(unittest.TestCase):
     def test_chia_nguoi_doi_gioi(self):
         self.assertEqual(d.chia_nguoi("A：你好！B：你好！", "nu"), [("你好！", "nu"), ("你好！", "nam")])
 
+    def test_hoi_thoai_nam_nu(self):
+        # Nhãn không đọc, giới cố định theo nhãn; câu hỏi 问 đọc bằng giọng của file
+        t = "男：你去哪儿？女：我想问：图书馆在哪儿？问：女的要去哪儿？"
+        self.assertEqual(d.chia_nguoi(t, "nu"), [("你去哪儿？", "nam"), ("我想问：图书馆在哪儿？", "nu"),
+                                                 ("问：女的要去哪儿？", "nu")])
+        self.assertEqual(d.chia_nguoi(t, "nam")[2], ("问：女的要去哪儿？", "nam"))
+        self.assertEqual(d.bo_nhan(t), "你去哪儿？我想问：图书馆在哪儿？问：女的要去哪儿？")
+        self.assertNotEqual(d.chu_ky({"text": t, "voice": "nu", "kind": "cau"}),
+                            d.chu_ky({"text": "你去哪儿？", "voice": "nu", "kind": "cau"}))
+        # Lời kể chỉ có câu hỏi 问: một giọng như cũ
+        self.assertEqual(d.chia_nguoi("他每天跑步。问：他每天做什么？", "nam"), [("他每天跑步。问：他每天做什么？", "nam")])
+
     def test_dem_am_tiet(self):
         self.assertEqual(d.so_am_tiet({"text": "那儿", "pinyin": "nàr"}), 1.0)
         self.assertEqual(d.so_am_tiet({"text": "那里", "pinyin": "nàli"}), 1.5)

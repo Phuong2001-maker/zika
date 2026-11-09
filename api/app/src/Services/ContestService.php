@@ -255,9 +255,9 @@ final class ContestService
             return null;
         }
         $m = Db::one(
-            'SELECT m.level_id, (SELECT COUNT(*) FROM questions q WHERE q.mock_test_id = m.id) AS qn FROM mock_tests m WHERE m.id = ?',
+            'SELECT m.level_id, m.kind, m.for_contest, (SELECT COUNT(*) FROM questions q WHERE q.mock_test_id = m.id) AS qn FROM mock_tests m WHERE m.id = ?',
             [(int) $c['mock_test_id']],
-        ) ?? ['level_id' => 0, 'qn' => 0];
+        ) ?? ['level_id' => 0, 'qn' => 0, 'kind' => 'mock', 'for_contest' => 0];
 
         $now = Clock::now()->getTimestamp();
         $status = self::status($c);
@@ -274,6 +274,8 @@ final class ContestService
             'durationMin' => (int) $c['duration_min'],
             'questionCount' => (int) $m['qn'],
             'levelId' => (int) $m['level_id'],
+            // Đề khung HSK 3.0 (đề tab Đề thi) làm ở màn thi HSK 3.0: có phần, câu nói ghi âm; đề thi thử cũ ở màn Kiểm tra.
+            'hsk30' => TestService::khungHsk30($m),
             'mockTestId' => $status === 'open' && ($registered || $attempt !== 'none') ? (int) $c['mock_test_id'] : null,
             'myAttempt' => $attempt,
             'registered' => $registered,

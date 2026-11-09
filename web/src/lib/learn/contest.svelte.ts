@@ -12,6 +12,8 @@ export interface Contest {
   durationMin: number;
   questionCount: number;
   levelId: number;
+  /** Đề khung HSK 3.0 (đề tab Đề thi): làm ở màn thi HSK 3.0 /learn/cuoc-thi/{id}, có phần và câu nói ghi âm. */
+  hsk30: boolean;
   /** Chỉ có khi đã mở thi. */
   mockTestId: number | null;
   myAttempt: 'none' | 'doing' | 'submitted';

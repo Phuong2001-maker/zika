@@ -28,11 +28,42 @@ export interface QuestionRow {
   payload: Payload;
   explain: string;
   score: number;
+  /** Chỉ đề khung HSK 3.0: listening · reading · writing. */
+  section?: string;
 }
 
 /** Dạng câu dùng được ở mỗi phần — giống QuestionGrader::BT_TYPES / KT_TYPES ở API. */
 const BT_TYPES = ['meaning', 'blank', 'audio', 'pinyin', 'order', 'trans', 'tf', 'match'];
 const KT_TYPES = ['blank', 'listen', 'meaning', 'pick', 'order', 'trans', 'tf', 'match', 'tone', 'toZh'];
+
+/** Đề khung HSK 3.0 (Thi thử HSK 3.0, đề cuộc thi): dạng câu theo phần, giống màn soạn (SoanDeHsk.svelte).
+ *  Câu chọn tranh và câu nói cần chọn hình, đặt giờ nói nên soạn trên web, không nhập từ Excel. */
+const DANG_HSK30: Record<string, string[]> = {
+  listening: ['listen'],
+  reading: ['blank', 'pick', 'tf', 'match'],
+  writing: ['order', 'toZh', 'blank'],
+};
+const TEN_PHAN: Record<string, string> = { listening: 'Nghe', reading: 'Đọc', writing: 'Viết' };
+const SECTION_NAMES: Record<string, string[]> = {
+  listening: ['nghe', 'listening', 'phần nghe'],
+  reading: ['đọc', 'doc', 'reading', 'phần đọc'],
+  writing: ['viết', 'viet', 'writing', 'phần viết'],
+};
+
+/** '' khi ô trống, null khi không hiểu. */
+function sectionCode(s: string): string | null {
+  const n = norm(s);
+  if (n === '') return '';
+  for (const [code, names] of Object.entries(SECTION_NAMES)) {
+    if (names.some((x) => norm(x) === n)) return code;
+  }
+  return null;
+}
+
+/** Ô Phần để trống: câu nghe vào phần Nghe, sắp xếp và chọn câu tiếng Trung vào phần Viết, còn lại phần Đọc. */
+function sectionOf(type: string): string {
+  return type === 'listen' ? 'listening' : type === 'order' || type === 'toZh' ? 'writing' : 'reading';
+}
 
 /** Tên gọi chấp nhận cho mỗi dạng (gõ mã hay gõ tiếng Việt đều được). */
 const TYPE_NAMES: Record<string, string[]> = {
@@ -103,6 +134,14 @@ const COLUMNS: SheetSpec['columns'] = [
   { key: 'score', header: 'Điểm', alias: ['điểm số'], hint: 'Để trống thì tính 1 điểm' },
 ];
 
+const SECTION_COLUMN: SheetSpec['columns'][number] = {
+  key: 'section',
+  header: 'Phần',
+  alias: ['phần thi', 'section'],
+  hint: 'Nghe · Đọc · Viết. Để trống thì tự xếp theo dạng câu',
+};
+const COLUMNS_HSK30: SheetSpec['columns'] = [SECTION_COLUMN, ...COLUMNS];
+
 const SAMPLE_BT: string[][] = [
   ['Chọn nghĩa', '鸡蛋', 'Từ này nghĩa là gì?', 'trứng gà', 'sữa bò', 'bánh mì', 'cơm', 'A', '', '', '', '1'],
   ['Điền chỗ trống', '我每天喝一杯___。', 'Mỗi ngày tôi uống một cốc ___.', '牛奶', '鸡蛋', '米饭', '面包', 'A', '', '', '', '1'],
@@ -118,6 +157,14 @@ const SAMPLE_KT: string[][] = [
   ['Chọn câu đúng', 'Câu nào viết đúng?', '', '我喜欢吃鸡蛋。', '我鸡蛋吃喜欢。', '吃我鸡蛋喜欢。', '喜欢我吃鸡蛋。', 'A', '', '', '', '1'],
   ['Thanh điệu', '妈', 'Chữ này mang thanh mấy?', 'Thanh 1', 'Thanh 2', 'Thanh 3', 'Thanh 4', 'A', '', '', '', '1'],
   ['Chọn câu tiếng Trung', 'Tôi thích ăn trứng gà.', '', '我喜欢吃鸡蛋。', '我喜欢喝牛奶。', '我喜欢吃米饭。', '我喜欢吃面包。', 'A', '', '', '', '1'],
+];
+
+const SAMPLE_HSK30: string[][] = [
+  ['Nghe', 'Nghe và chọn', '男：你明天几点来？女：上午九点。问：女的几点来？', '', '八点', '九点', '十点', '十一点', 'B', '', '', 'Người nữ nói 上午九点.', '1'],
+  ['Đọc', 'Chọn từ điền câu', '我每天喝一杯___。', 'Mỗi ngày tôi uống một cốc ___.', '牛奶', '鸡蛋', '米饭', '面包', 'A', '', '', '', '1'],
+  ['Đọc', 'Đúng / Sai', '小明每天早上七点起床，然后去跑步。', '小明每天早上跑步。', '', '', '', '', 'Đúng', '', '', '', '1'],
+  ['Viết', 'Sắp xếp câu', '我喜欢吃鸡蛋', 'Tôi thích ăn trứng gà.', '', '', '', '', '', '我|喜欢|吃|鸡蛋', '', '', '1'],
+  ['Viết', 'Chọn câu tiếng Trung', 'Tôi thích ăn trứng gà.', '', '我喜欢吃鸡蛋。', '我喜欢喝牛奶。', '我喜欢吃米饭。', '我喜欢吃面包。', 'A', '', '', '', '1'],
 ];
 
 /* ===================================================================== */
@@ -209,20 +256,24 @@ function buildPayload(type: string, f: Fields): Payload | string {
 
 /* ===================================================================== */
 
-export function questionsImport(part: 'bt' | 'kt'): ImportSpec<QuestionRow> {
-  const allowed = part === 'bt' ? BT_TYPES : KT_TYPES;
-  const label = part === 'bt' ? 'bài tập' : 'kiểm tra';
+export function questionsImport(part: 'bt' | 'kt' | 'hsk30'): ImportSpec<QuestionRow> {
+  const hsk30 = part === 'hsk30';
+  const allowed = part === 'bt' ? BT_TYPES : hsk30 ? [...new Set(Object.values(DANG_HSK30).flat())] : KT_TYPES;
+  const label = part === 'bt' ? 'bài tập' : hsk30 ? 'đề thi' : 'kiểm tra';
+  const columns = hsk30 ? COLUMNS_HSK30 : COLUMNS;
 
   const sheet: SheetSpec = {
-    name: part === 'bt' ? 'Bài tập' : 'Kiểm tra',
-    about: `Mỗi dòng một câu. Cột nào không dùng cho dạng đó thì để trống.`,
-    columns: COLUMNS,
-    sample: part === 'bt' ? SAMPLE_BT : SAMPLE_KT,
+    name: part === 'bt' ? 'Bài tập' : hsk30 ? 'Đề thi' : 'Kiểm tra',
+    about: hsk30
+      ? 'Mỗi dòng một câu, ghi phần Nghe / Đọc / Viết. Cột nào không dùng cho dạng đó thì để trống. Câu chọn tranh và câu nói soạn trên web.'
+      : `Mỗi dòng một câu. Cột nào không dùng cho dạng đó thì để trống.`,
+    columns,
+    sample: part === 'bt' ? SAMPLE_BT : hsk30 ? SAMPLE_HSK30 : SAMPLE_KT,
   };
 
   return {
     title: `Nhập câu ${label} từ Excel`,
-    fileName: `zika-mau-${part === 'bt' ? 'bai-tap' : 'kiem-tra'}.xlsx`,
+    fileName: `zika-mau-${part === 'bt' ? 'bai-tap' : hsk30 ? 'de-thi' : 'kiem-tra'}.xlsx`,
     intro: `Mỗi dòng một câu ${label}. Tải file mẫu để xem cách điền từng dạng câu.`,
     sheets: [sheet],
 
@@ -234,7 +285,7 @@ export function questionsImport(part: 'bt' | 'kt'): ImportSpec<QuestionRow> {
         return { items: [], issues: issues.list, preview: { cols: [], rows: [] } };
       }
 
-      const { at, index } = headerMap(found.rows, COLUMNS);
+      const { at, index } = headerMap(found.rows, columns);
       if (at < 0 || index.type === undefined || index.main === undefined) {
         issues.add(-1, 'Không thấy cột “Dạng câu” và “Nội dung”. Hãy tải file mẫu và giữ nguyên dòng tiêu đề.');
         return { items: [], issues: issues.list, preview: previewOf(found, at) };
@@ -253,8 +304,22 @@ export function questionsImport(part: 'bt' | 'kt'): ImportSpec<QuestionRow> {
           return;
         }
         if (!allowed.includes(type)) {
-          issues.add(line, `Phần ${label} không dùng dạng “${rawType}”.`);
+          issues.add(line, hsk30 ? `Dạng “${rawType}” không nhập từ Excel được, soạn trên web.` : `Phần ${label} không dùng dạng “${rawType}”.`);
           return;
+        }
+        let section: string | undefined;
+        if (hsk30) {
+          const raw = cellOf(row, index, 'section');
+          const code = sectionCode(raw);
+          if (code === null) {
+            issues.add(line, `Không hiểu phần “${raw}”, ghi Nghe, Đọc hoặc Viết.`);
+            return;
+          }
+          section = code || sectionOf(type);
+          if (!DANG_HSK30[section].includes(type)) {
+            issues.add(line, `Phần ${TEN_PHAN[section]} không dùng dạng “${rawType}”.`);
+            return;
+          }
         }
 
         const payload = buildPayload(type, {
@@ -277,6 +342,7 @@ export function questionsImport(part: 'bt' | 'kt'): ImportSpec<QuestionRow> {
           payload,
           explain: cellOf(row, index, 'explain'),
           score: score > 0 ? score : 1,
+          ...(section ? { section } : {}),
         });
       });
 

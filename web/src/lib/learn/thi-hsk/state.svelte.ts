@@ -22,7 +22,9 @@ export interface CauHoi {
 export interface LuotLam {
   attemptId: number;
   mode: CheDo;
-  mock: { id: number; title: string; levelId: number; kind: string } | null;
+  mock: { id: number; title: string; levelId: number; kind: string; forContest?: boolean } | null;
+  /** Lượt gắn với cuộc thi đang mở: tên cuộc thi. */
+  contestTitle?: string | null;
   serverNow: string;
   deadlineAt: string;
   durationSec: number;
@@ -67,6 +69,9 @@ export interface KetQua {
   sections: { section: Phan; graded: boolean; total: number; done: number; percent: number }[];
   results: DongKetQua[];
   speaking: DongKetQua[];
+  contestTitle?: string | null;
+  /** Cuộc thi còn mở: server giấu đáp án và bài mẫu, kẻo người nộp sớm truyền cho người chưa thi. */
+  answersHidden?: boolean;
 }
 
 export class ThiHsk {

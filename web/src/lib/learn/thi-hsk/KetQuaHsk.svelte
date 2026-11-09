@@ -7,14 +7,21 @@
 
   // Kết quả đề HSK 3.0: tỉ lệ đúng chung rồi từng phần như phiếu điểm đề thật; phần nói không chấm, chỉ đếm câu đã nói
   // và cho nghe lại bản ghi cạnh bài mẫu. Câu sai kèm đáp án và giải thích.
-  let { kq, mobile = false, onlamlai, ve }: { kq: KetQua; mobile?: boolean; onlamlai: () => void; ve: string } = $props();
+  // Cuộc thi: không có nút Làm lại (onlamlai = null, mỗi người một lượt); cuộc thi còn mở thì server giấu đáp án.
+  let {
+    kq,
+    mobile = false,
+    onlamlai,
+    ve,
+    tenVe = 'Về danh sách đề',
+  }: { kq: KetQua; mobile?: boolean; onlamlai: (() => void) | null; ve: string; tenVe?: string } = $props();
 
   const icon = (p: string): string => PHAN.find((x) => x.code === p)?.icon ?? 'quiz';
   const coCham = $derived(kq.maxScore > 0);
 </script>
 
 <div class="zk-khung-dau">
-  <h2 class="zk-khung-ten">{kq.mode === 'practice' ? 'Kết quả luyện tập' : 'Kết quả thi thử'}</h2>
+  <h2 class="zk-khung-ten">{kq.contestTitle ? 'Kết quả cuộc thi' : kq.mode === 'practice' ? 'Kết quả luyện tập' : 'Kết quả thi thử'}</h2>
   <span class="zk-so">Làm trong {clock(kq.usedSec * 1000)}{kq.autoSubmitted ? ' · hết giờ tự nộp' : ''}</span>
 </div>
 
@@ -75,13 +82,15 @@
       </div>
     {/each}
   </div>
+{:else if kq.answersHidden}
+  <p class="muted" style="text-align: center; font-size: 14px">Đáp án, giải thích và phần nghe lại bài nói hiện sau khi cuộc thi kết thúc.</p>
 {:else if coCham}
   <p class="muted" style="text-align: center; font-size: 14px">Không sai câu nào. Giỏi quá!</p>
 {/if}
 
 <div class="zk-chan" class:kq-chan-m={mobile}>
-  <button type="button" class="btn" class:btn-lg={mobile} onclick={onlamlai}><Icon name="repeat" size={16} /> Làm lại</button>
-  <a href={ve} class="btn btn-son" class:btn-lg={mobile}>Về danh sách đề</a>
+  {#if onlamlai}<button type="button" class="btn" class:btn-lg={mobile} onclick={onlamlai}><Icon name="repeat" size={16} /> Làm lại</button>{/if}
+  <a href={ve} class="btn btn-son" class:btn-lg={mobile}>{tenVe}</a>
 </div>
 
 <style>

@@ -414,7 +414,7 @@ final class QuestionController
 
         $created = 0;
         $skipped = [];
-        $hsk30 = $m['kind'] === 'hsk30';
+        $hsk30 = TestService::khungHsk30($m);
         $allowed = $hsk30 ? QuestionGrader::HSK30_TYPES : QuestionGrader::KT_TYPES;
         Db::tx(static function () use ($items, $mockId, $mode, $hsk30, $allowed, &$created, &$skipped): void {
             if ($mode === 'replace') {
@@ -460,7 +460,7 @@ final class QuestionController
     public function createMockQuestion(Request $r): Response
     {
         $m = self::mock($r->id(), $r);
-        $hsk30 = $m['kind'] === 'hsk30';
+        $hsk30 = TestService::khungHsk30($m);
         [$type, $payload, $explain, $score] = $this->read($r, 'kt', $hsk30);
 
         $v = new Validator($r->body);
@@ -574,10 +574,11 @@ final class QuestionController
         return [$type, QuestionPayload::clean($type, $payloadIn), $explain, QuestionGrader::isGraded($type) ? $score : 0.0];
     }
 
-    /** Đề này là đề Thi thử HSK 3.0. */
+    /** Đề này soạn theo khung HSK 3.0: đề Thi thử HSK 3.0 hoặc đề cuộc thi (TestService::khungHsk30). */
     private static function isHsk30(int $mockId): bool
     {
-        return Db::val('SELECT kind FROM mock_tests WHERE id = ?', [$mockId]) === 'hsk30';
+        $m = Db::one('SELECT kind, for_contest FROM mock_tests WHERE id = ?', [$mockId]);
+        return $m !== null && TestService::khungHsk30($m);
     }
 
     /**

@@ -23,6 +23,34 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 10/11/2026 (sau) — Hội thoại hai giọng, cân độ dài phương án HSK 4 + 6, màn soạn đề thi theo khung HSK 3.0
+
+- **Hội thoại đề HSK 3.0 đọc hai giọng**: câu nghe "男：… 女：… 问：…" không đọc nhãn nữa; lời người nam giọng nam, lời người
+  nữ giọng nữ, câu hỏi "问" đọc bằng giọng người học chọn. Sửa ở `doc_edge.py` (`chia_nguoi`, `bo_nhan`, chữ ký "nam-nu"),
+  web không đổi gì vì tên file vẫn theo chữ của câu. Sinh lại 464 file (232 câu × 2 giọng), tải đủ 464 lên web local:
+  462 đạt, 2 máy đánh dấu (câu "今天真热啊！…" hai giọng: máy nghe ra đúng cả câu, chỉ lệch cách so trợ từ 啊).
+  8 file trước đây bị đánh dấu vì máy nghe nhãn 女 thành 你 nay đạt. Tổng pipeline: 11.173 đạt, 270 cần người nghe, 0 lỗi.
+  File cùng tên nên **server thật chép đè** `uploads/tts` như mọi lần; trình duyệt nào đã tải bản cũ thì phải xoá cache
+  (đề HSK 3.0 chưa lên server nên chưa ai tải).
+- **Cân độ dài phương án**: `kiem_de.py` thêm luật đáp án đúng không được hay là phương án dài nhất (≤ 1/số phương án + 5%).
+  Ngoài HSK 4 còn phát hiện HSK 6 lệch hơn (47–59%). Đã sửa 48 câu HSK 4 và 75 câu HSK 6, chỉ đổi phương án (và giải thích
+  khi nhắc chữ phương án), không đổi đáp án, đoạn nghe hay giọng đọc: HSK 4 về 23%, HSK 6 về 24%; 18 đề 0 lỗi; đã nạp lại
+  đề #22–#27 (vẫn Nháp). HSK 6 · Đề 2 câu 44 (chọn câu có lỗi): câu sai cũ "由于……的缘故" thật ra đúng ngữ pháp, đã thay
+  bằng lỗi "原因是因为".
+- **Màn soạn đề thi** (Quản trị → Đề thi → Soạn câu, `/admin/exams/{id}`) dùng chung màn soạn với Đề HSK 3.0
+  (`lib/admin/SoanDeHsk.svelte`): câu chia phần Nghe/Đọc/Viết/Nói, có câu nói, câu chọn tranh, ô chọn hình. Đề cuộc thi
+  không có công tắc Công khai (luôn Nháp, mở trong giờ thi) và không đặt thời gian (theo số phút của cuộc thi). Cả hai màn
+  có **Nhập Excel** với cột **Phần** (để trống thì tự xếp theo dạng câu; câu chọn tranh và câu nói soạn trên web).
+  Đường dẫn cũ `/admin/mock-tests/{id}` của đề thi tự chuyển sang màn mới; đề thi thử cuối cấp cũ giữ màn cũ.
+- **Server**: `TestService::khungHsk30()` (đề hsk30 hoặc `for_contest = 1`) mở phần viết/nói, dạng câu HSK 3.0 và thứ tự
+  phần cho đề cuộc thi; `/contest/current` thêm `hsk30`.
+- **Người học**: cuộc thi có đề kiểu này mở ở màn thi HSK 3.0 `/learn/cuoc-thi/{id}` (quyền `community.contests.enter`,
+  không cần quyền Thi thử HSK 3.0): tên cuộc thi, đồng hồ theo cuộc thi, câu nói ghi âm; nộp xong không có Làm lại, đáp án và
+  bài mẫu ẩn tới khi cuộc thi kết thúc.
+- Test đã viết **nhưng chưa chạy** (theo yêu cầu, chờ lệnh test): `Hsk30Test::testDeCuocThiSoanTheoKhungHsk30`,
+  `import.test.ts` (nhập Excel đề khung HSK 3.0), `test_doc_edge.py::test_hoi_thoai_nam_nu`. Chưa chạy check/lint/test,
+  chưa thử trên trình duyệt. Kịch bản: H16–H22 trong [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
+
 ### 10/11/2026 — Thi thử HSK 3.0: phần thi mới, ghi âm phần nói, kho hình, 18 đề tự soạn
 
 - **Phần mới "Thi thử HSK 3.0"** (Chuyển nhanh → Thi thử HSK 3.0, `/learn/hsk30`): kho đề dùng chung mọi giáo trình, không theo cây
@@ -42,7 +70,8 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 - **Giọng đọc**: `viec_doc.py` gom thêm câu nghe và bài nói mẫu của đề HSK 3.0; tạo giọng nam + nữ bằng pipeline có sẵn, tải lên
   web local: 555 câu × 2 giọng = 1.110 file, kiểm qua web đủ 1.110/1.110. Pipeline: 0 file lỗi, 1.102 đạt, **8 file máy đánh dấu cần người nghe**
   (HSK 2 · Đề 1–3, HSK 3 · Đề 1: câu hội thoại có nhãn 男：/女：, máy nhận dạng nghe nhãn "女" thành 你/雨, "男" thành 难/南;
-  phần câu đúng). Vẫn đã tải lên; nên nghe thử. Đây cũng là lý do nên làm đọc hội thoại hai giọng thay cho đọc nhãn. Câu nghe hội thoại giữ nhãn 男：/女： (giọng máy đọc lên) vì nhiều câu hỏi cần biết ai nói.
+  phần câu đúng). Vẫn đã tải lên; nên nghe thử. Đây cũng là lý do nên làm đọc hội thoại hai giọng thay cho đọc nhãn — **đã làm ở mục trên**
+  (bỏ nhãn, nam/nữ đọc đúng giọng).
 - Migration **027**; code: `TestService` (mode, check, sections), `QuestionPayload` (speak, pic, imageUrl), `Hsk30Controller` ×2,
   `lib/learn/thi-hsk/`, `routes/learn/hsk30`, `routes/admin/hsk30`. Hướng dẫn: [HUONG-DAN-THI-THU-HSK30.md](HUONG-DAN-THI-THU-HSK30.md).
 - Kiểm: Hsk30Test 9/9, thi-hsk.test 6/6; duyệt trình duyệt (Chromium chạy ngầm, micro giả lập) luyện tập, ghi âm, bài mẫu, kết quả,

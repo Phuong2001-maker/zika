@@ -4,7 +4,7 @@
 
 Luật giống QuestionPayload.php ở server (độ dài, số phương án, ô chữ ghép đúng câu…) cộng thêm luật của bộ đề:
 đúng số câu từng phần theo cấp, đúng dạng câu từng phần, mã hình có trong kho, có giải thích, ba đề cùng cấp
-không trùng câu. In lỗi theo "file · câu n", thoát mã 1 nếu còn lỗi.
+không trùng câu, đáp án đúng không hay là phương án dài nhất. In lỗi theo "file · câu n", thoát mã 1 nếu còn lỗi.
 """
 from __future__ import annotations
 
@@ -213,7 +213,28 @@ def kiem_file(f: Path, hinh: set[str]) -> tuple[list[str], int, list[tuple[str, 
             loi.append(f"{f.name}: phần {sec} cần {n} câu, đang có {dem[sec]}")
     if thu_tu != sorted(thu_tu):
         loi.append(f"{f.name}: câu phải xếp Nghe → Đọc → Viết → Nói")
+    dai, mong, n = do_dai_dap_an(qs)
+    if n and dai / n > mong + 0.05:
+        loi.append(f"{f.name}: đáp án đúng là phương án dài nhất ở {dai}/{n} câu ({dai / n:.0%}), chỉ nên"
+                   f" ≤ {mong + 0.05:.0%} — người thi đoán theo độ dài được")
     return loi, cap, khoa
+
+
+def do_dai_dap_an(qs: list[dict]) -> tuple[int, float, int]:
+    """Số câu chọn mà đáp án đúng dài hẳn nhất, tỉ lệ nếu ngẫu nhiên (1/số phương án), số câu xét.
+    Bỏ chọn tranh: phương án là mã hình, không ai nhìn thấy độ dài."""
+    dai, mong, n = 0, 0.0, 0
+    for q in qs:
+        p = q.get("payload") or {}
+        o, a = p.get("options"), p.get("answer")
+        if q.get("type") not in CHOICE or q.get("type") == "pic" or not isinstance(o, list) or len(o) < 2                 or not isinstance(a, int) or not 0 <= a < len(o):
+            continue
+        do = [len(norm_zh(str(x))) for x in o]
+        n += 1
+        mong += 1 / len(o)
+        if do[a] == max(do) and do.count(do[a]) == 1:
+            dai += 1
+    return dai, (mong / n if n else 0.0), n
 
 
 def main(paths: list[str]) -> int:

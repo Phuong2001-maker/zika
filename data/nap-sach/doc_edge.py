@@ -97,7 +97,31 @@ def bo_ngoac(text: str) -> str:
     return re.sub(r"[（(][^）)]*[）)]", "", t).strip()
 
 
+# Hội thoại đề HSK 3.0 "男：… 女：… 问：…": như đề thật, người nghe nhận ra ai nói qua giọng chứ không qua chữ;
+# đọc nhãn lên vừa thừa vừa sai (máy đọc 女 nǚ nghe thành 你). 男 luôn giọng nam, 女 luôn giọng nữ; 问 là câu hỏi
+# của người dẫn, vẫn đọc "问" như đề thật, bằng giọng của file (giọng người học chọn trong Cài đặt).
+# Nhãn chỉ tính khi đứng đầu câu (sau dấu câu), để "我想问：" trong lời kể không bị cắt.
+NHAN_NGUOI = re.compile(r"(?:^|(?<=[。！？!?…”」\s]))(男|女|问)\s*[：:]\s*")
+NHAN_NAM_NU = re.compile(r"(?:^|(?<=[。！？!?…”」\s]))[男女]\s*[：:]\s*")
+
+
+def co_nhan_nam_nu(text: str) -> bool:
+    return bool(NHAN_NAM_NU.search(text))
+
+
+def bo_nhan(text: str) -> str:
+    """Chữ thật sự đọc lên (để so với máy nghe và đếm âm tiết): bỏ nhãn 男：/女：, giữ 问."""
+    return NHAN_NAM_NU.sub("", text)
+
+
 def chia_nguoi(text: str, giong: str) -> list[tuple[str, str]]:
+    if co_nhan_nam_nu(text):
+        phan = NHAN_NGUOI.split(text)
+        ra = [(phan[0], giong)] if phan[0].strip() else []
+        for nhan, doan in zip(phan[1::2], phan[2::2]):
+            if doan.strip():
+                ra.append(("问：" + doan, giong) if nhan == "问" else (doan, "nam" if nhan == "男" else "nu"))
+        return ra
     phan = re.split(r"\b([AB])\s*[:：]\s*", text)
     if len(phan) < 3:
         return [(text, giong)]
@@ -420,9 +444,10 @@ def am_so_sanh(s: str) -> list[str]:
 def so_am_tiet(v: dict) -> float:
     """Số âm tiết để đo tốc độ: 儿 nhi hoá không thành âm tiết riêng (那儿 = nàr), âm tiết thanh nhẹ
     (那里 nà li, 东西 dōngxi) vốn ngắn nên tính nửa — không thì từ có thanh nhẹ bị báo đọc quá nhanh."""
-    chu = chu_han(v["text"])
-    n = len(am_khong_dau(v["text"])) - sum(1 for i, c in enumerate(chu) if c == "儿" and i > 0)
-    sach = am_sach(v["text"], v.get("pinyin"))
+    t = bo_nhan(v["text"])
+    chu = chu_han(t)
+    n = len(am_khong_dau(t)) - sum(1 for i, c in enumerate(chu) if c == "儿" and i > 0)
+    sach = am_sach(t, v.get("pinyin"))
     if sach:
         n -= 0.5 * sum(1 for c, a in zip(chu, sach) if a.endswith("5") and c != "儿")
     return max(1.0, n)
@@ -507,7 +532,7 @@ async def kiem(v: dict) -> dict:
     # Nghe lại
     am16 = giai_16k(am)
     dem = np.zeros(4800, np.float32)
-    mong = am_so_sanh(v["text"])
+    mong = am_so_sanh(bo_nhan(v["text"]))
     cho_phep = 0 if len(mong) <= 10 else 1 if len(mong) <= 40 else int(len(mong) * 0.15)
 
     def nghe_thu(vao: np.ndarray, cat_dan: bool) -> tuple[str, list[int], bool]:
@@ -549,8 +574,10 @@ async def kiem(v: dict) -> dict:
 # ------------------------------------------------------------------ chạy
 
 def chu_ky(v: dict) -> str:
-    return hashlib.sha1(json.dumps([REV, v["text"], v.get("pinyin"), v["voice"], v["kind"]],
-                                   ensure_ascii=False).encode()).hexdigest()[:12]
+    goc = [REV, v["text"], v.get("pinyin"), v["voice"], v["kind"]]
+    if co_nhan_nam_nu(v["text"]):
+        goc.append("nam-nu")  # 10/11: hội thoại 男/女 đọc hai giọng, bỏ nhãn; chỉ những file này phải sinh lại
+    return hashlib.sha1(json.dumps(goc, ensure_ascii=False).encode()).hexdigest()[:12]
 
 
 def sha(p: Path) -> str:

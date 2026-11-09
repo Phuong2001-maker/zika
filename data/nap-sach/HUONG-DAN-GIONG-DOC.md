@@ -80,6 +80,10 @@ nữ 5,39, nam 5,74 — không nhanh hơn băng thật. `quet.py` báo câu nhan
 - **Biến điệu** 3-3, 一, 不 và thanh nhẹ để giọng đọc tự xử lý như người thật.
 - **Số**: số điện thoại (≥ 7 chữ số) đọc từng số, 1 = yāo; ngày, giờ, giá giọng đọc tự đọc đúng.
 - **Chữ cái**: "A：… B：…" bỏ nhãn, B đọc giọng khác giới; "HSK" đọc 汉语水平考试.
+- **Hội thoại đề HSK 3.0** "男：… 女：… 问：…" (10/11): bỏ nhãn, lời 男 luôn giọng nam, lời 女 luôn giọng nữ; câu hỏi
+  "问：…" vẫn đọc chữ 问 như đề thật, bằng giọng của file (giọng người học chọn). Nhãn chỉ tính khi đứng đầu câu, nên
+  "我想问：" trong lời kể không bị cắt. Máy kiểm so với chữ đã bỏ nhãn (`bo_nhan`). File có nhãn mang thêm dấu "nam-nu"
+  trong chữ ký (`chu_ky`), nên chạy `doc_edge.py` bình thường là tự sinh lại đúng những file đó.
 - **Ngoặc**: phần trong ngoặc sau câu (`（日）`, lời giải thích `（妈妈还在看电视。）`) không đọc; câu dẫn
   cả câu trong ngoặc thì đọc phần trong.
 - **Hai cách nói "A/B"** (星期日/星期天, 在/正在): đọc cả hai, nghỉ ngắn ở giữa; riêng "日/号" chỉ đọc 日.

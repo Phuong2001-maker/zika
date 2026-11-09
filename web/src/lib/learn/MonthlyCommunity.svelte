@@ -26,7 +26,9 @@
   // Đã nộp bài thì không còn đường vào thi: mỗi người một lượt.
   const examHref = $derived(
     (session.can('community.contests.enter') || contest?.myAttempt === 'doing') && contest?.status === 'open' && contest.mockTestId && contest.questionCount > 0 && contest.myAttempt !== 'submitted'
-      ? `/learn/tests/hsk/${contest.levelId}/mock/${contest.mockTestId}`
+      ? contest.hsk30
+        ? `/learn/cuoc-thi/${contest.mockTestId}`
+        : `/learn/tests/hsk/${contest.levelId}/mock/${contest.mockTestId}`
       : null,
   );
   const examLabel = $derived(contest?.myAttempt === 'doing' ? 'Tiếp tục làm bài' : 'Vào thi ngay');

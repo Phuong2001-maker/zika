@@ -8,7 +8,7 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import Modal from '$lib/components/Modal.svelte';
 
-  // Quản trị · Đề thi: chỉ cần tên để chọn khi tạo bài thi, câu hỏi nạp sau ở nút Soạn câu.
+  // Quản trị · Đề thi: chỉ cần tên để chọn khi tạo bài thi, câu hỏi nạp sau ở nút Soạn câu (màn soạn khung HSK 3.0).
   interface Exam { id: number; title: string; status: 'draft' | 'published'; questionCount: number; contestCount: number }
 
   let list = $state<Exam[] | null>(null);
@@ -80,7 +80,7 @@
 
 <div class="head">
   <h1>Đề thi</h1>
-  <p class="muted" style="font-size: 14px">Nhập tên đề để chọn khi tạo bài thi ở mục Cuộc thi. Câu hỏi có thể nạp sau.</p>
+  <p class="muted" style="font-size: 14px">Nhập tên đề để chọn khi tạo bài thi ở mục Cuộc thi. Câu hỏi soạn sau, chia phần Nghe / Đọc / Viết / Nói như đề HSK 3.0.</p>
 </div>
 
 <form
@@ -118,7 +118,7 @@
             </td>
             <td>{x.contestCount > 0 ? `${x.contestCount} bài thi` : '—'}</td>
             <td style="white-space: nowrap; text-align: right">
-              <a class="btn btn-sm" href="/admin/mock-tests/{x.id}"><Icon name="edit" size={15} /> Soạn câu</a>
+              <a class="btn btn-sm" href="/admin/exams/{x.id}"><Icon name="edit" size={15} /> Soạn câu</a>
               <button
                 type="button"
                 class="btn btn-bare btn-sm"

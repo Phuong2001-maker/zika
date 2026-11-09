@@ -117,6 +117,16 @@ final class TestService
         return self::payload(self::create($userId, $lessonId, $mockTestId, $cfg, $questions, null, $mode), $cfg);
     }
 
+    /**
+     * Đề soạn theo khung HSK 3.0 (chia phần Nghe/Đọc/Viết/Nói, có câu nói, câu chọn tranh): đề Thi thử HSK 3.0 và
+     * đề của cuộc thi (tab Đề thi, 10/11) — dùng chung màn soạn và màn làm bài. Đề thi thử cuối cấp cũ thì không.
+     * @param array<string,mixed> $m dòng mock_tests
+     */
+    public static function khungHsk30(array $m): bool
+    {
+        return ($m['kind'] ?? '') === 'hsk30' || (int) ($m['for_contest'] ?? 0) === 1;
+    }
+
     /** Chế độ luyện tập chỉ có ở đề HSK 3.0; bài kiểm tra, thi thử cuối cấp và cuộc thi luôn là thi thật. */
     private static function modeFor(?int $lessonId, ?int $mockTestId, string $mode): string
     {
@@ -302,12 +312,12 @@ final class TestService
 
         $started = strtotime((string) $a['started_at']);
         $soft = $started + (int) $cfg['durationSec'];
-        $mock = $a['mock_test_id'] === null ? null : Db::one('SELECT id, title, level_id, kind FROM mock_tests WHERE id = ?', [(int) $a['mock_test_id']]);
+        $mock = $a['mock_test_id'] === null ? null : Db::one('SELECT id, title, level_id, kind, for_contest FROM mock_tests WHERE id = ?', [(int) $a['mock_test_id']]);
 
         return [
             'attemptId' => (int) $a['id'],
             'mode' => (string) ($a['mode'] ?? 'exam'),
-            'mock' => $mock === null ? null : ['id' => (int) $mock['id'], 'title' => (string) $mock['title'], 'levelId' => (int) $mock['level_id'], 'kind' => (string) $mock['kind']],
+            'mock' => $mock === null ? null : ['id' => (int) $mock['id'], 'title' => (string) $mock['title'], 'levelId' => (int) $mock['level_id'], 'kind' => (string) $mock['kind'], 'forContest' => (int) $mock['for_contest'] === 1],
             'serverNow' => Clock::now()->format('c'),
             'deadlineAt' => date('c', strtotime((string) $a['deadline_at'])),
             'softDeadlineAt' => date('c', $soft),
@@ -809,9 +819,9 @@ final class TestService
             'autoSubmit' => true,
             'showAnswersAfter' => true,
         ], Db::all(
-            // Đề HSK 3.0 luôn theo thứ tự phần Nghe → Đọc → Viết → Nói, dù admin thêm câu theo thứ tự nào.
+            // Đề khung HSK 3.0 luôn theo thứ tự phần Nghe → Đọc → Viết → Nói, dù admin thêm câu theo thứ tự nào.
             'SELECT * FROM questions WHERE mock_test_id = ? ORDER BY '
-            . ($m['kind'] === 'hsk30' ? "FIELD(section, 'listening', 'reading', 'writing', 'speaking'), " : '')
+            . (self::khungHsk30($m) ? "FIELD(section, 'listening', 'reading', 'writing', 'speaking'), " : '')
             . 'sort_order, id',
             [$mockTestId],
         )];

@@ -32,6 +32,12 @@ nội dung là của Zìkǎ**, không chép câu hỏi, âm thanh, hình của t
 - Câu nói có 5 kiểu: nghe và nhắc lại, đọc to, trả lời câu hỏi, nói theo chủ đề, nhìn tranh nói; thời gian chuẩn bị,
   thời gian nói, bài nói mẫu + nghĩa.
 - Đề mới luôn là **Nháp**; học viên chỉ thấy đề **Công khai**. Đề không có điểm đạt — chấm theo tỉ lệ đúng.
+- **Nhập Excel** (nút ở đầu màn soạn): tải file mẫu, mỗi dòng một câu, cột **Phần** ghi Nghe / Đọc / Viết (để trống thì
+  câu nghe vào Nghe, sắp xếp và chọn câu tiếng Trung vào Viết, còn lại vào Đọc). Câu chọn tranh và câu nói soạn trên web.
+- **Đề cuộc thi dùng chung màn soạn này** (10/11): Quản trị → Đề thi → Soạn câu mở `/admin/exams/{id}`, soạn y như đề
+  HSK 3.0. Khác: không có công tắc Công khai (đề cuộc thi luôn Nháp, chỉ mở cho người đã đăng ký trong giờ thi), không đặt
+  thời gian (theo số phút của cuộc thi). Học viên làm cuộc thi ở màn thi HSK 3.0 (`/learn/cuoc-thi/{id}`, luôn thi thật,
+  mỗi người một lượt, đáp án ẩn tới khi cuộc thi kết thúc).
 
 ## Kỹ thuật
 
@@ -51,6 +57,11 @@ nội dung là của Zìkǎ**, không chép câu hỏi, âm thanh, hình của t
   trong git.
 - **Giọng đọc**: `data/nap-sach/viec_doc.py` gom thêm `audioText` và `sample` của mọi đề hsk30; chạy
   `sinh-giong-doc.ps1` như các phần khác. Chưa có file giọng thì web đọc bằng giọng trình duyệt.
+  Hội thoại "男：… 女：… 问：…" đọc hai giọng trong cùng một file (bỏ nhãn, nam giọng nam, nữ giọng nữ, câu hỏi giọng
+  người học chọn) — xem "Hội thoại đề HSK 3.0" trong `data/nap-sach/HUONG-DAN-GIONG-DOC.md`.
+- **Khung HSK 3.0** = `TestService::khungHsk30()`: đề `kind = 'hsk30'` hoặc đề cuộc thi (`for_contest = 1`). Đề khung này
+  nhận phần viết/nói, dạng câu nói/chọn tranh, xếp câu theo phần; soạn ở `lib/admin/SoanDeHsk.svelte`, làm ở
+  `ThiHskRunner` (`cuocThi` cho cuộc thi). Chế độ luyện tập chỉ có ở đề `hsk30`.
 
 ## Đưa lên server thật (chưa làm)
 
@@ -66,4 +77,6 @@ nội dung là của Zìkǎ**, không chép câu hỏi, âm thanh, hình của t
   luyện tập xem đáp án và tách lượt, chấm không tính câu nói và kết quả theo phần, quyền riêng và lượt đang làm, đề nháp.
 - `web/src/lib/learn/thi-hsk/thi-hsk.test.ts`: quyền đường dẫn, câu nói đã làm, định dạng ghi âm, lỗi ghi âm, gom phần,
   kho hình.
+- 10/11 (chưa chạy): `Hsk30Test::testDeCuocThiSoanTheoKhungHsk30` (đề cuộc thi nhận phần viết/nói, cuộc thi luôn thi thật,
+  thứ tự phần), `import.test.ts` (nhập Excel có cột Phần), `test_doc_edge.py` (tách hội thoại 男/女).
 - Kịch bản thủ công: mục "Thi thử HSK 3.0" trong `KICH-BAN-TEST.md`.

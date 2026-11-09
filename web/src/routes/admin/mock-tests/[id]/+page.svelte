@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import { goto } from '$app/navigation';
   import { api, ApiError } from '$lib/api/client';
   import { toast } from '$lib/stores/toast.svelte';
   import Icon from '$lib/components/Icon.svelte';
@@ -10,8 +11,9 @@
   import { adminApi, type AdminQuestion, type Draft } from '$lib/admin/api';
   import { questionsImport, type ImportMode, type ImportOutcome, type QuestionRow } from '$lib/admin/import';
 
-  // Soạn đề thi (bản tạm): danh sách câu, thêm tay hoặc nạp Excel. Dạng câu dùng chung với bài kiểm tra.
-  interface Mock { id: number; levelId: number; title: string; status: 'draft' | 'published'; durationSec: number; forContest: boolean }
+  // Soạn đề thi thử cuối cấp cũ: danh sách câu, thêm tay hoặc nạp Excel. Dạng câu dùng chung với bài kiểm tra.
+  // Đề cuộc thi và đề HSK 3.0 soạn ở màn khung HSK 3.0 (SoanDeHsk), đường dẫn cũ tới đây thì chuyển sang đó.
+  interface Mock { id: number; levelId: number; title: string; status: 'draft' | 'published'; durationSec: number; forContest: boolean; kind?: string }
 
   const TYPES: [string, string][] = [
     ['blank', 'Chọn từ điền câu'],
@@ -54,6 +56,10 @@
     failed = false;
     try {
       const res = await api.get<{ mock: Mock; questions: AdminQuestion[] }>(`/admin/mock-tests/${mockId}/questions`);
+      if (res.mock.forContest || res.mock.kind === 'hsk30') {
+        void goto(res.mock.forContest ? `/admin/exams/${mockId}` : `/admin/hsk30/${mockId}`, { replaceState: true });
+        return;
+      }
       mock = res.mock;
       questions = res.questions;
       dirty = false;
@@ -133,11 +139,7 @@
 {:else}
   <div class="head">
     <div style="min-width: 0">
-      {#if mock.forContest}
-        <a class="muted back" href="/admin/exams"><Icon name="chev" size={15} style="transform: rotate(180deg)" /> Đề thi</a>
-      {:else}
-        <a class="muted back" href="/admin/mock-tests?level={mock.levelId}"><Icon name="chev" size={15} style="transform: rotate(180deg)" /> Đề thi thử HSK {mock.levelId}</a>
-      {/if}
+      <a class="muted back" href="/admin/mock-tests?level={mock.levelId}"><Icon name="chev" size={15} style="transform: rotate(180deg)" /> Đề thi thử HSK {mock.levelId}</a>
       <h1>{mock.title}</h1>
       <p class="muted" style="font-size: 14px">{questions.length} câu</p>
     </div>

@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import { media } from '$lib/stores/media.svelte';
+  import { session } from '$lib/stores/session.svelte';
+  import { homePath } from '$lib/auth/routes';
   import Icon from '$lib/components/Icon.svelte';
   import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
@@ -17,7 +19,8 @@
 
   // Màn làm đề Thi thử HSK 3.0. Giống màn Kiểm tra (TestRunner) về khung và thanh riêng lúc đang thi, thêm: câu chia
   // theo phần Nghe/Đọc/Viết/Nói, câu nói ghi âm, và chế độ luyện tập bấm Kiểm tra từng câu.
-  let { mockId, mode }: { mockId: number; mode: CheDo } = $props();
+  // cuocThi: đề cuộc thi (tab Đề thi) — không có danh sách đề để về, không làm lại, tên là tên cuộc thi.
+  let { mockId, mode, cuocThi = false }: { mockId: number; mode: CheDo; cuocThi?: boolean } = $props();
 
   // svelte-ignore state_referenced_locally
   const st = new ThiHsk(mockId, mode);
@@ -25,11 +28,18 @@
   onDestroy(() => st.huy());
 
   const capDe = $derived(st.at?.mock?.levelId ?? null);
-  const veDanhSach = $derived(capDe ? `/learn/hsk30?cap=${capDe}` : '/learn/hsk30');
-  const tenDe = $derived(st.at?.mock?.title ?? 'Thi thử HSK 3.0');
-  const tenCheDo = $derived(mode === 'practice' ? 'Luyện tập' : 'Thi thật');
+  const veDanhSach = $derived(
+    cuocThi ? homePath(session.user?.role, session.features) : capDe ? `/learn/hsk30?cap=${capDe}` : '/learn/hsk30',
+  );
+  const tenVe = $derived(cuocThi ? 'Về bàn học' : 'Về danh sách đề');
+  const tenDe = $derived(
+    cuocThi ? (st.at?.contestTitle ?? st.ketQua?.contestTitle ?? 'Cuộc thi') : (st.at?.mock?.title ?? 'Thi thử HSK 3.0'),
+  );
+  const tenCheDo = $derived(cuocThi ? 'Cuộc thi' : mode === 'practice' ? 'Luyện tập' : 'Thi thật');
   const kicker = $derived(
-    st.at ? `HSK ${capDe} · ${tenCheDo} · ${st.total} câu${st.coGio ? ` · ${Math.round(st.at.durationSec / 60)} phút` : ''}` : 'Thi thử HSK 3.0',
+    !st.at
+      ? cuocThi ? 'Cuộc thi' : 'Thi thử HSK 3.0'
+      : `${cuocThi ? 'Cuộc thi' : `HSK ${capDe} · ${tenCheDo}`} · ${st.total} câu${st.coGio ? ` · ${Math.round(st.at.durationSec / 60)} phút` : ''}`,
   );
   const dangThi = $derived(st.coGio && st.ketQua === null);
   const kt = $derived(st.q ? (st.kiemTra[st.q.id] ?? null) : null);
@@ -157,7 +167,7 @@
 {#snippet khung(m: boolean)}
   <section class="block zk-khung" class:zk-khung-m={m}>
     {#if st.ketQua}
-      <KetQuaHsk kq={st.ketQua} mobile={m} onlamlai={() => void st.tai()} ve={veDanhSach} />
+      <KetQuaHsk kq={st.ketQua} mobile={m} onlamlai={cuocThi ? null : () => void st.tai()} ve={veDanhSach} {tenVe} />
     {:else}
       {@render lamBai(m)}
     {/if}
@@ -167,14 +177,14 @@
 {#snippet body(m: boolean)}
   {#if st.loi}
     <EmptyState title="Không mở được đề thi." desc={st.loi}>
-      {#snippet action()}<a href={veDanhSach} class="btn btn-sm">Về danh sách đề</a>{/snippet}
+      {#snippet action()}<a href={veDanhSach} class="btn btn-sm">{tenVe}</a>{/snippet}
     </EmptyState>
   {:else if st.dangTai || (!st.ketQua && !st.at)}
     <Skeleton h={m ? '420px' : '520px'} r={22} />
   {:else if m}
     {@render khung(true)}
   {:else}
-    <DauBai href={veDanhSach} hideBack={dangThi} label="Chọn đề" {kicker} title={tenDe} right={dongHoDau} />
+    <DauBai href={veDanhSach} hideBack={dangThi} label={cuocThi ? 'Bàn học' : 'Chọn đề'} {kicker} title={tenDe} right={dongHoDau} />
     {@render khung(false)}
   {/if}
 {/snippet}
@@ -183,7 +193,7 @@
 {#if media.isMobile}
   <div class="mscreen">
     <header class="mtop">
-      {#if !dangThi}<a href={veDanhSach} class="btn btn-bare" aria-label="Về danh sách đề"><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>{/if}
+      {#if !dangThi}<a href={veDanhSach} class="btn btn-bare" aria-label={tenVe}><Icon name="chev" size={20} style="transform: rotate(180deg)" /></a>{/if}
       <b style="flex: 1; min-width: 0; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{tenDe}</b>
       <span class="tag">{tenCheDo}</span>
     </header>
@@ -191,7 +201,7 @@
   </div>
 {:else}
   <header class="topbar">
-    <nav class="crumb">{#if !dangThi}<a href={veDanhSach}>Thi thử HSK 3.0</a> / {/if}<b>{tenDe}</b></nav>
+    <nav class="crumb">{#if !dangThi}<a href={veDanhSach}>{cuocThi ? 'Bàn học' : 'Thi thử HSK 3.0'}</a> / {/if}<b>{tenDe}</b></nav>
     <div style="margin-left: auto; display: flex; align-items: center; gap: 10px">
       <span class="tag">{dangThi ? 'Đang thi' : tenCheDo}</span>
       {#if !dangThi}<Avatar size={44} />{/if}

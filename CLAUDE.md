@@ -54,6 +54,7 @@ web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hư�
 web/src/lib/stores/cap.svelte.ts  cách gọi cấp theo giáo trình ("HSK 1" / "Quyển 1"), màn học lấy chữ từ đây
 web/src/lib/learn/che-do/  3 chế độ luyện ở màn Lật thẻ (Ghép cặp, Trắc nghiệm, Gõ chữ)
 web/src/lib/learn/thi-hsk/  Thi thử HSK 3.0: kho đề chung mọi giáo trình, luyện tập/thi thật, câu nói ghi âm ở máy (HUONG-DAN-THI-THU-HSK30.md)
+web/src/lib/admin/SoanDeHsk.svelte  màn soạn đề khung HSK 3.0, dùng chung cho Đề HSK 3.0 và đề cuộc thi (tab Đề thi); cuộc thi làm ở /learn/cuoc-thi
 data/hsk30/               đề HSK 3.0 tự soạn: đặc tả, kiem_de.py, nap_de.py, hinh/ve.py (kho hình SVG web/static/hinh-hsk)
 web/src/routes/learn/chat/  Quán trà — trò chuyện chia bàn theo chủ đề (hỏi tin mới 4 giây/lần), quản trị ở /admin/chat
 web/src/lib/learn/sach.ts  giáo trình /learn/books: học viên thấy bộ sách của giáo trình mình (Hán ngữ 1–6 hoặc HSK 1–3)

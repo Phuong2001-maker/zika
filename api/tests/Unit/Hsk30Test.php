@@ -235,4 +235,34 @@ final class Hsk30Test extends DbTestCase
         self::assertSame(1, (int) Db::val('SELECT COUNT(*) FROM questions WHERE mock_test_id = ? AND section = ?', [$de, 'speaking']));
         self::assertSame([], TestService::sectionStats([]));
     }
+
+    /** Đề cuộc thi (tab Đề thi, 10/11) soạn theo khung HSK 3.0: nhận phần viết/nói, câu nói không điểm, làm theo thứ tự phần. */
+    public function testDeCuocThiSoanTheoKhungHsk30(): void
+    {
+        $tao = $this->req('POST', '/admin/exams', ['title' => 'Đề thi tháng 11']);
+        $de = (int) $this->json((new \Zika\Controllers\Admin\ContestController())->createExam($tao))['id'];
+        self::assertTrue(TestService::khungHsk30(Db::one('SELECT * FROM mock_tests WHERE id = ?', [$de])));
+        self::assertFalse(TestService::khungHsk30(['kind' => 'mock', 'for_contest' => 0]));
+
+        $noi = $this->themCau($de, 'speak', ['task' => 'repeat', 'audioText' => '我喜欢喝茶。', 'prepSec' => 0, 'answerSec' => 15, 'sample' => '我喜欢喝茶。', 'sampleVi' => 'Tôi thích uống trà.'], 'speaking');
+        $viet = $this->themCau($de, 'order', ['vi' => 'Tôi là học sinh.', 'answer' => '我是学生。', 'tiles' => ['我', '是', '学生']], 'writing');
+        $nghe = $this->themCau($de, 'pic', ['audioText' => '我喝茶。', 'options' => ['cha', 'ca-phe', 'sua'], 'answer' => 0], 'listening');
+        self::assertSame('speaking', $noi['section']);
+        self::assertSame(0.0, (float) $noi['score']);
+        self::assertSame('writing', $viet['section']);
+        self::assertSame('listening', $nghe['section']);
+
+        // Cuộc thi đang mở: người học đã đăng ký vào làm ở màn thi HSK 3.0, câu theo thứ tự Nghe → Viết → Nói.
+        $uid = $this->makeUser();
+        $cid = Db::insert('contests', [
+            'title' => 'Thi tháng 11', 'mock_test_id' => $de, 'duration_min' => 30,
+            'starts_at' => Clock::sql(Clock::now()->modify('-5 minutes')), 'ends_at' => Clock::sql(Clock::now()->modify('+25 minutes')),
+        ]);
+        Db::insert('contest_registrations', ['contest_id' => $cid, 'user_id' => $uid, 'created_at' => Clock::sql(Clock::now()->modify('-1 day'))]);
+        self::assertTrue(\Zika\Services\ContestService::current($uid)['hsk30']);
+        $a = TestService::start($uid, null, $de, 'practice');
+        self::assertSame('exam', $a['mode'], 'Cuộc thi luôn là thi thật, không có luyện tập');
+        self::assertTrue($a['mock']['forContest']);
+        self::assertSame(['listening', 'writing', 'speaking'], array_column($a['questions'], 'section'));
+    }
 }

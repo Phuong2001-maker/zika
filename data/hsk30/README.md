@@ -90,7 +90,10 @@ Chỉ dùng mã có trong danh sách; câu chọn tranh phải phân biệt đư
 
 ## Chất lượng (người soát kiểm theo đây)
 
-1. Đáp án đúng **duy nhất**, các phương án sai hợp lý nhưng chắc chắn sai.
+1. Đáp án đúng **duy nhất**, các phương án sai hợp lý nhưng chắc chắn sai. Đáp án đúng **không được hay là phương án dài
+   nhất**: `kiem_de.py` báo lỗi khi tỉ lệ câu có đáp án dài hẳn nhất vượt 1/số phương án + 5% (4 phương án: quá 30%).
+   Cân bằng cách kéo dài phương án nhiễu bằng chi tiết lấy từ đoạn nghe/đọc nhưng sai ý, hoặc rút gọn đáp án mà giữ nghĩa
+   (10/11: HSK 4 từ 31–44% về 23%, HSK 6 từ 47–59% về 24%).
 2. Tiếng Trung tự nhiên, đúng ngữ pháp, dấu câu Trung (，。？！).
 3. Từ vựng đúng cấp HSK 3.0 (cấp 1 rất cơ bản; không dùng từ của cấp cao hơn trong câu hỏi).
 4. Ba đề cùng cấp không trùng câu; mỗi đề phủ nhiều chủ đề (gia đình, ăn uống, mua sắm, thời gian, thời tiết,
