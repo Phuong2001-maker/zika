@@ -14,12 +14,10 @@
     placeIcon: boolean; placeFund: boolean;
     active: boolean; views: number; clicks: number; ctr: number;
   }
-  interface Donate { enabled: boolean; bank: string; owner: string; account: string; memo: string; qr_path: string | null }
   interface Data {
     enabled: boolean;
     kpi: { views: number; clicks: number; ctr: number; active: number; total: number };
     links: Link[];
-    donate: Donate;
     fund: Fund;
   }
   interface Fund { amount: number | null; month: string; updatedOn: string | null }
@@ -132,32 +130,12 @@
       toast.show('Không xoá được.');
     }
   }
-
-  async function saveDonate(): Promise<void> {
-    if (!d) return;
-    try {
-      await api.put('/admin/support/donate', {
-        enabled: d.donate.enabled,
-        bank: d.donate.bank,
-        owner: d.donate.owner,
-        account: d.donate.account,
-        memo: d.donate.memo,
-        qrPath: d.donate.qr_path,
-      });
-      toast.ok('Đã lưu thông tin ủng hộ.');
-    } catch {
-      toast.show('Không lưu được.');
-    }
-  }
 </script>
 
 <svelte:head><title>Ủng hộ &amp; Shopee · Quản trị · Zìkǎ</title></svelte:head>
 
 <div class="head">
-  <div>
-    <h1>Ủng hộ &amp; Shopee</h1>
-    <p class="muted" style="font-size: 14px">Link hiển thị cho người học, luôn kèm nhãn “Liên kết tiếp thị”.</p>
-  </div>
+  <h1>Ủng hộ &amp; Shopee</h1>
   <button type="button" class="btn btn-son btn-sm" onclick={openNew}><Icon name="plus" size={15} /> Thêm link</button>
 </div>
 
@@ -185,7 +163,6 @@
   <!-- Tiền quỹ tháng -->
   <section class="block" style="padding: 16px 20px; display: flex; flex-direction: column; gap: 8px">
     <h2 class="h2">Quỹ tháng</h2>
-    <p class="muted" style="font-size: 13.5px">Số tiền người học thấy ở thanh đầu trang và hộp quỹ. Bạn tự nhập, web không tự cộng.</p>
     <div class="fund-row">
       <div class="field fund-field">
         <label class="lbl" for="f-amount">Số tiền (đ)</label>
@@ -193,13 +170,9 @@
       </div>
       <button type="button" class="btn btn-son btn-sm" disabled={savingFund} onclick={saveFund}>Lưu số tiền</button>
     </div>
-    <p class="hint" style="margin-top: 0">
-      {#if d.fund.amount === null}
-        Chưa nhập: người học đang thấy “Đang cập nhật”.
-      {:else}
-        Đang hiện cho tháng {d.fund.month}, cập nhật ngày {d.fund.updatedOn}. Sang tháng mới, bấm Lưu lại để đổi sang tháng đó. Để trống rồi lưu là xoá.
-      {/if}
-    </p>
+    {#if d.fund.amount === null}
+      <p class="hint" style="margin-top: 0">Chưa nhập: người học đang thấy “Đang cập nhật”.</p>
+    {/if}
   </section>
 
   <section class="kpi">
@@ -247,23 +220,6 @@
     {#if d.links.length === 0}
       <p class="muted" style="padding: 16px; font-size: 14px">Chưa có link nào.</p>
     {/if}
-  </section>
-
-  <!-- Ủng hộ trực tiếp -->
-  <section class="block" style="padding: 18px 20px; display: flex; flex-direction: column; gap: 12px">
-    <h2 class="h2">Ủng hộ trực tiếp</h2>
-    <p class="muted" style="font-size: 13.5px">Hiện khi người học bấm “ủng hộ trực tiếp”. Không qua trung gian.</p>
-
-    <label class="sw"><input type="checkbox" bind:checked={d.donate.enabled} /><span></span> Đang hiện</label>
-
-    <div class="grid2">
-      <div class="field"><label class="lbl" for="s-bank">Ngân hàng / ví điện tử</label><input id="s-bank" class="inp" bind:value={d.donate.bank} /></div>
-      <div class="field"><label class="lbl" for="s-owner">Chủ tài khoản</label><input id="s-owner" class="inp" bind:value={d.donate.owner} /></div>
-      <div class="field"><label class="lbl" for="s-acc">Số tài khoản</label><input id="s-acc" class="inp num" bind:value={d.donate.account} /></div>
-      <div class="field"><label class="lbl" for="s-memo">Nội dung chuyển khoản gợi ý</label><input id="s-memo" class="inp" bind:value={d.donate.memo} /></div>
-    </div>
-
-    <button type="button" class="btn btn-son btn-sm" style="align-self: flex-start" onclick={saveDonate}>Lưu thông tin</button>
   </section>
 {/if}
 
@@ -325,10 +281,5 @@
   }
   .fund-field {
     flex: 0 1 260px;
-  }
-  .grid2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
-    gap: 12px;
   }
 </style>

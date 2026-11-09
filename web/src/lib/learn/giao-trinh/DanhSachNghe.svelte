@@ -57,7 +57,7 @@
   .gt-ng-on { background: var(--troi); }
   .gt-ng-dau { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; padding: 0 4px 6px; }
   .gt-ng-bai { font-size: 12px; font-weight: 700; letter-spacing: .02em; color: var(--text-2); text-transform: uppercase; }
-  .gt-ng-ten { font-family: var(--font-hz), var(--font-ui); font-size: 15px; font-weight: 600; }
+  .gt-ng-ten { font-family: var(--font-mix); font-size: 15px; font-weight: 600; }
   .gt-ng-trang { margin-left: auto; min-height: 28px; font-size: 12.5px; }
   .gt-ng-ds { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
   .gt-ng-file {

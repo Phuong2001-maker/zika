@@ -36,7 +36,7 @@ describe('giáo trình', () => {
   // Cùng luật với BookAccess ở server; server mới là nơi chặn thật, đây chỉ để vẽ thẻ khoá đúng chỗ.
   describe('bài nào đọc được', () => {
     const sach = { bai, dapAn: { soTrang: 6, cao: [], bai: [{ so: 16, trang: 2 }, { so: 17, trang: 4 }] } };
-    const quyen = (q: Partial<QuyenDoc>): QuyenDoc => ({ tuDo: false, khoa: false, mo: [], ke: null, diem: 0, ve: '', veGiay: 0, ...q });
+    const quyen = (q: Partial<QuyenDoc>): QuyenDoc => ({ tuDo: false, khoa: false, mo: [], an: [], ke: null, diem: 0, ve: '', veGiay: 0, ...q });
 
     it('trang đầu sách đọc được khi đã học tới quyển, quyển còn khoá thì không', () => {
       expect(trangDaMo(sach, quyen({}), 5)).toBe(true);
@@ -54,6 +54,16 @@ describe('giáo trình', () => {
     it('quản trị, biên tập đọc mọi bài', () => {
       expect(baiDaMo(sach, quyen({}), 17)).toBe(false);
       expect(baiDaMo(sach, quyen({ tuDo: true, khoa: true }), 17)).toBe(true);
+    });
+
+    // Cây Ẩn/hiện nội dung: bài ẩn khoá với mọi người, kể cả bài đã mở bằng điểm và quản trị.
+    it('bài đang ẩn không đọc được, các bài khác và trang đầu sách vẫn theo luật cũ', () => {
+      expect(baiDaMo(sach, quyen({ mo: [16, 17], an: [16] }), 16)).toBe(false);
+      expect(baiDaMo(sach, quyen({ tuDo: true, an: [16] }), 16)).toBe(false);
+      expect(trangDaMo(sach, quyen({ mo: [16], an: [16] }), 20)).toBe(false);
+      expect(trangDaMo(sach, quyen({ mo: [16], an: [16] }), 3, true)).toBe(false);
+      expect(baiDaMo(sach, quyen({ mo: [16, 17], an: [16] }), 17)).toBe(true);
+      expect(trangDaMo(sach, quyen({ an: [16] }), 5)).toBe(true);
     });
   });
 });

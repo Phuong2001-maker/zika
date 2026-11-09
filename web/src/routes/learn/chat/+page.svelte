@@ -100,7 +100,7 @@
   .qb-tieu { display: flex; align-items: center; gap: 10px; line-height: 1.2; }
   .qb-cha {
     display: grid; place-items: center; padding: 4px 8px; border-radius: 10px; background: #DDEFD9; color: #2F5D2A;
-    font-family: var(--font-hz), var(--font-ui); font-size: .62em; font-weight: 700;
+    font-family: var(--font-mix); font-size: .62em; font-weight: 700;
   }
   .qb-mo-ta { margin-top: 4px; font-size: 14px; }
   .qb-dong { padding: 10px 14px; border-radius: 12px; background: var(--bo-soft); color: var(--warn-text); font-size: 14px; }
@@ -114,7 +114,7 @@
   .qb-dong-ban { opacity: .7; }
   .qb-icon {
     flex: none; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; background: #DDEFD9;
-    color: #2F5D2A; font: 700 22px var(--font-hz), var(--font-ui);
+    color: #2F5D2A; font: 700 22px var(--font-mix);
   }
   .qb-giua { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
   .qb-ten { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }

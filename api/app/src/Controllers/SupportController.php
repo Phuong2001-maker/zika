@@ -33,15 +33,11 @@ final class SupportController
                 $fund[] = ['id' => $id, 'name' => (string) $l['name'], 'url' => "/go/$id?place=fund"];
             }
         }
-        $donate = Settings::get('donate');
         return [
             'icon' => FeatureAccess::allows($r->role(), 'support.buddy') ? $icon : null,
             'fund' => FeatureAccess::allows($r->role(), 'support.links') ? $fund : [],
             'monthlyFund' => FeatureAccess::allows($r->role(), 'fund') ? self::monthlyFund() : ['amount' => null, 'month' => '', 'updatedOn' => null],
             'clickedToday' => $r->user !== null && self::daBamHomNay($r->userId()),
-            'donate' => FeatureAccess::allows($r->role(), 'support.donate') && $donate['enabled'] && $donate['account'] !== '' ? [
-                'bank' => $donate['bank'], 'owner' => $donate['owner'], 'account' => $donate['account'], 'memo' => $donate['memo'], 'qrUrl' => $donate['qr_path'],
-            ] : null,
         ];
     }
 

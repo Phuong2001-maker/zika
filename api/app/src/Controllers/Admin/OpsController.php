@@ -412,7 +412,6 @@ final class OpsController
                     'ctr' => ((int) $s['v']) > 0 ? round(((int) $s['c']) / ((int) $s['v']) * 100, 1) : 0.0,
                 ];
             }, $links),
-            'donate' => Settings::get('donate'),
             'fund' => SupportController::monthlyFund(),
         ];
     }
@@ -525,25 +524,6 @@ final class OpsController
             Db::exec('UPDATE affiliate_links SET sort_order = ? WHERE id = ?', [$i + 1, $id]);
         }
         return Response::noContent();
-    }
-
-    /** PUT /admin/support/donate */
-    public function donate(Request $r): array
-    {
-        $v = new Validator($r->body);
-        $data = [
-            'enabled' => $v->bool('enabled'),
-            'bank' => $v->str('bank', 'Ngân hàng', false, 0, 80),
-            'owner' => $v->str('owner', 'Chủ tài khoản', false, 0, 120),
-            'account' => $v->str('account', 'Số tài khoản', false, 0, 40),
-            'memo' => $v->str('memo', 'Nội dung chuyển khoản', false, 0, 140),
-            'qr_path' => $v->strOrNull('qrPath', 'Mã QR', 255),
-        ];
-        $v->done();
-
-        Settings::set('donate', $data);
-        Audit::log($r, 'support.donate', 'settings');
-        return $data;
     }
 
     /* ------------------------------------------------------------------ */

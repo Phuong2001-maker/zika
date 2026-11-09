@@ -19,6 +19,9 @@ use Zika\Services\BookAccess;
  * Học viên chỉ thấy bộ sách của giáo trình mình học (Hán ngữ cho giáo trình gọi cấp "Quyển", HSK cho "HSK"),
  * biên tập và quản trị thấy cả hai bộ và đọc tự do. Học viên chỉ nhận được file của bài đã mở bằng điểm (BookAccess),
  * và mọi đường dẫn file phải kèm mã ký `?t=` của chính tài khoản đó.
+ *
+ * Cây Giáo trình → Ẩn/hiện nội dung áp cả vào đây (BookAccess::an): bài ẩn không có tên, file nghe, ảnh trang với bất
+ * kỳ ai, kể cả biên tập/quản trị; quyển thuộc cấp hoặc giáo trình đang ẩn thì biến khỏi kệ sách.
  */
 final class BookController
 {
@@ -30,6 +33,10 @@ final class BookController
         foreach ($this->sachCho($r) as $s) {
             $t = $ttBo[$s['bo']] ??= $this->trangThai($r, $s['bo']);
             $ma = (string) $s['ma'];
+            if (BookAccess::quyenAn($t, $ma)) {
+                continue;
+            }
+            $an = array_flip(BookAccess::baiAn($t, $s));
             $ra[] = [
                 'ma'       => $ma,
                 'bo'       => $s['bo'],
@@ -39,12 +46,12 @@ final class BookController
                 'phu'      => $s['phu'],
                 'phien'    => (string) ($s['phien'] ?? ''),
                 'soTrang'  => $s['soTrang'],
-                'soBai'    => count($s['bai']),
-                'soNghe'   => count($s['nghe']),
-                'phutNghe' => (int) round(array_sum(array_column($s['nghe'], 'giay')) / 60),
+                'soBai'    => count($s['bai']) - count($an),
+                'soNghe'   => count($nghe = self::ngheHien($s, $an)),
+                'phutNghe' => (int) round(array_sum(array_column($nghe, 'giay')) / 60),
                 'coDapAn'  => $s['dapAn'] !== null,
                 'khoa'     => !isset($t['toi'][$ma]),
-                'baiMo'    => $t['tuDo'] ? count($s['bai']) : count($t['mo'][$ma] ?? []),
+                'baiMo'    => $t['tuDo'] ? count($s['bai']) - count($an) : count(array_diff_key($t['mo'][$ma] ?? [], $an)),
             ];
         }
         return $ra;
@@ -53,24 +60,49 @@ final class BookController
     /** GET /learn/books/{ma} — mô tả đủ của một quyển kèm quyền đọc, để màn đọc dựng mục lục, file nghe, đáp án. */
     public function show(Request $r): array
     {
-        $s = $this->sach($r, $r->param('ma'));
+        [$s, $tt] = $this->doc($r, $r->param('ma'));
+        $s['quyen'] = $this->quyen($r, $s, $tt);
+        // Bài ẩn vẫn giữ số và trang bắt đầu (màn đọc cần để biết trang nào thuộc bài nào) nhưng không lộ tên, file nghe.
+        $an = array_flip($s['quyen']['an']);
+        foreach ($s['bai'] as &$b) {
+            if (isset($an[(int) $b['so']])) {
+                $b['ten'] = '';
+                $b['tenVi'] = '';
+            }
+        }
+        unset($b);
+        $s['nghe'] = self::ngheHien($s, $an);
         $s['tenBo'] = BookAccess::BO[$s['bo']];
-        $s['quyen'] = $this->quyen($r, $s);
         return $s;
+    }
+
+    /**
+     * File nghe của các bài không ẩn.
+     * @param array<string,mixed> $s @param array<int,int> $an số bài ẩn → bất kỳ
+     * @return list<array<string,mixed>>
+     */
+    private static function ngheHien(array $s, array $an): array
+    {
+        return array_values(array_filter($s['nghe'], static fn (array $n): bool => !isset($an[(int) $n['bai']])));
     }
 
     /** GET /learn/books/{ma}/quyen — làm mới quyền đọc và mã ký (sau khi mở bài, nhận điểm, hay mã sắp hết hạn). */
     public function access(Request $r): array
     {
-        return $this->quyen($r, $this->sach($r, $r->param('ma')));
+        [$s, $tt] = $this->doc($r, $r->param('ma'));
+        return $this->quyen($r, $s, $tt);
     }
 
     /** POST /learn/books/{ma}/mo/{bai} — dùng 1 điểm mở bài tiếp theo. */
     public function unlock(Request $r): array
     {
-        $s = $this->sach($r, $r->param('ma'));
+        [$s, $tt] = $this->doc($r, $r->param('ma'));
+        $bai = (int) $r->param('bai');
+        if (in_array($bai, BookAccess::baiAn($tt, $s), true)) {
+            throw self::an();
+        }
         if (!$r->isStaff()) {
-            BookAccess::moBai($r->userId(), (string) $s['bo'], (string) $s['ma'], (int) $r->param('bai'));
+            BookAccess::moBai($r->userId(), (string) $s['bo'], (string) $s['ma'], $bai);
         }
         return $this->quyen($r, $s);
     }
@@ -79,14 +111,15 @@ final class BookController
     public function page(Request $r): Response
     {
         $ma = $r->param('ma');
-        $s = $this->sach($r, $ma);
+        [$s, $tt] = $this->doc($r, $ma);
         $trang = $r->param('trang');
         // Bìa hiện ở kệ sách cho cả quyển còn khoá, không có gì để giấu.
         if ($trang === 'bia') {
             return $this->anh($this->file($ma, 'bia.webp'));
         }
         $this->kiemVe($r, $ma);
-        if (!BookAccess::moTrang($this->trangThai($r, $s['bo']), $s, (int) $trang)) {
+        $this->chanBaiAn($tt, $s, BookAccess::baiCuaTrang($s['bai'], (int) $trang));
+        if (!BookAccess::moTrang($tt, $s, (int) $trang)) {
             throw self::khoa();
         }
         return $this->anh($this->file($ma, sprintf('%03d.webp', (int) $trang)));
@@ -96,12 +129,13 @@ final class BookController
     public function answer(Request $r): Response
     {
         $ma = $r->param('ma');
-        $s = $this->sach($r, $ma);
+        [$s, $tt] = $this->doc($r, $ma);
         if ($s['dapAn'] === null) {
             throw HttpError::notFound();
         }
         $this->kiemVe($r, $ma);
-        if (!BookAccess::moDapAn($this->trangThai($r, $s['bo']), $s, (int) $r->param('trang'))) {
+        $this->chanBaiAn($tt, $s, BookAccess::baiCuaTrang($s['dapAn']['bai'], (int) $r->param('trang')));
+        if (!BookAccess::moDapAn($tt, $s, (int) $r->param('trang'))) {
             throw self::khoa();
         }
         return $this->anh($this->file($ma, sprintf('dap-an/%03d.webp', (int) $r->param('trang'))));
@@ -114,9 +148,14 @@ final class BookController
     public function audio(Request $r): Response
     {
         $ma = $r->param('ma');
-        $s = $this->sach($r, $ma);
+        [$s, $tt] = $this->doc($r, $ma);
         $this->kiemVe($r, $ma);
-        if (!BookAccess::moNghe($this->trangThai($r, $s['bo']), $s, (int) $r->param('so'))) {
+        foreach ($s['nghe'] as $n) {
+            if ((int) $n['so'] === (int) $r->param('so')) {
+                $this->chanBaiAn($tt, $s, (int) $n['bai']);
+            }
+        }
+        if (!BookAccess::moNghe($tt, $s, (int) $r->param('so'))) {
             throw self::khoa();
         }
         $file = $this->file($ma, sprintf('nghe/%02d.mp3', (int) $r->param('so')));
@@ -130,10 +169,10 @@ final class BookController
      * @param array<string,mixed> $s
      * @return array<string,mixed>
      */
-    private function quyen(Request $r, array $s): array
+    private function quyen(Request $r, array $s, ?array $tt = null): array
     {
         $ma = (string) $s['ma'];
-        $tt = $this->trangThai($r, (string) $s['bo']);
+        $tt ??= $this->trangThai($r, (string) $s['bo']);
         $ke = $tt['ke'];
         if ($ke !== null) {
             foreach (BookAccess::sachCuaBo((string) $s['bo']) as $q) {
@@ -143,10 +182,12 @@ final class BookController
             }
         }
         $uid = $r->userId();
+        $an = BookAccess::baiAn($tt, $s);
         return [
             'tuDo'  => $tt['tuDo'],
             'khoa'  => !isset($tt['toi'][$ma]),
-            'mo'    => $tt['tuDo'] ? array_map('intval', array_column($s['bai'], 'so')) : array_keys($tt['mo'][$ma] ?? []),
+            'mo'    => array_values(array_diff($tt['tuDo'] ? array_map('intval', array_column($s['bai'], 'so')) : array_keys($tt['mo'][$ma] ?? []), $an)),
+            'an'    => $an,
             'ke'    => $ke,
             'diem'  => $tt['tuDo'] ? 0 : BookAccess::soDiem($uid),
             've'    => BookAccess::ve($uid, $ma),
@@ -170,6 +211,34 @@ final class BookController
     private static function khoa(): HttpError
     {
         return new HttpError(403, 'LOCKED', 'Bài này chưa mở. Dùng điểm mở bài để xem.');
+    }
+
+    /** Bài ẩn trong cây Ẩn/hiện nội dung: 404 như 6 phần học, khác 403 của bài chưa mở bằng điểm. */
+    private static function an(): HttpError
+    {
+        return HttpError::notFound('Bài này đang ẩn.');
+    }
+
+    /** @param array<string,mixed> $tt @param array<string,mixed> $s */
+    private function chanBaiAn(array $tt, array $s, ?int $bai): void
+    {
+        if ($bai !== null && in_array($bai, BookAccess::baiAn($tt, $s), true)) {
+            throw self::an();
+        }
+    }
+
+    /**
+     * Quyển `ma` kèm trạng thái đọc. Quyển ẩn (ẩn giáo trình hoặc ẩn cấp ở cây nội dung) báo 404 như quyển không có.
+     * @return array{0: array<string,mixed>, 1: array<string,mixed>}
+     */
+    private function doc(Request $r, string $ma): array
+    {
+        $s = $this->sach($r, $ma);
+        $tt = $this->trangThai($r, (string) $s['bo']);
+        if (BookAccess::quyenAn($tt, $ma)) {
+            throw HttpError::notFound();
+        }
+        return [$s, $tt];
     }
 
     /** @return list<array<string,mixed>> các quyển người này được thấy, Hán ngữ trước rồi HSK, mỗi bộ theo cấp. */

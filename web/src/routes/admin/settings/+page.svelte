@@ -141,9 +141,6 @@
   <section class="block card">
     <h2 class="h2">Nội dung học</h2>
     <div class="field">
-      <a class="btn btn-sm" href="/admin/curricula?tab=visibility">Quản lý ẩn/hiện theo giáo trình và bài học</a>
-    </div>
-    <div class="field">
       <span class="lbl">Giọng đọc mặc định</span>
       <div class="seg">
         <button type="button" class:on={s.content.default_voice === 'xiaoxiao'} onclick={() => (s!.content.default_voice = 'xiaoxiao')}>Xiaoxiao · nữ</button>

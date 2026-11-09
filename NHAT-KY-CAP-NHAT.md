@@ -23,6 +23,21 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 09/11/2026 — Màn đọc sách theo cây Ẩn/hiện nội dung, gọn khu quản trị, bỏ Ủng hộ trực tiếp, thống nhất font
+
+- **Lỗi người dùng báo:** ẩn bài trong Giáo trình → Ẩn/hiện nội dung mà vẫn vào được. Đã thử: 6 phần học chặn đúng (404 với cả học viên lẫn admin). Lỗ hở nằm ở **màn đọc sách** `/learn/books`, trước đây chỉ xét bài đã mở bằng điểm. Ngoài ra hai giáo trình đều có "Bài 1 · Xin chào": ẩn bài của HSK 3.0 thì bài cùng tên của Hán ngữ (giáo trình mặc định của admin chưa gán) vẫn hiện, đó là đúng.
+- Sửa: `BookAccess::an()` lấy bài/quyển ẩn theo cây (bài sách số `so` của quyển cấp `cap` = bài `lesson_no = so`, `level_id = cap` của giáo trình). Bài ẩn: không tên, không file nghe, ảnh trang/đáp án/file nghe và mở bằng điểm trả 404, kể cả bài đã mở từ trước và kể cả quản trị; bài mở tiếp bằng điểm bỏ qua bài ẩn. Ẩn cấp hoặc giáo trình: quyển biến khỏi kệ, mọi đường dẫn kể cả bìa 404. Bật lại là đọc được ngay, bài đã mở bằng điểm vẫn giữ. Màn đọc hiện thẻ "Bài n đang tạm ẩn", mục lục bỏ bài ẩn.
+
+- Các tab con của "Phần học · soạn theo bài" (Từ vựng · Lật thẻ và 5 tab soạn bài) bỏ nút "Quản lý ẩn/hiện" và "Xem như người học". Ẩn/hiện chỉ còn ở Giáo trình → Ẩn/hiện nội dung. Chế độ `?preview=1` phía server vẫn giữ, chỉ bỏ nút.
+- Ủng hộ & Shopee: bỏ các dòng giải thích dưới tiêu đề và ở Quỹ tháng; bỏ hẳn **Ủng hộ trực tiếp**: khối admin, nút và hộp ở Quỹ tháng phía người học, `PUT /admin/support/donate`, trường `donate` của `/support/links`, mục `support.donate` trong bảng quyền. Dòng `donate` cũ trong `site_settings` để nguyên, không còn ai đọc.
+- Cài đặt → Quyền truy cập & hiển thị: bỏ dòng mô tả, khung giải thích Hiển thị/Truy cập và nút sang cây ẩn/hiện. Cài đặt chung bỏ nút "Quản lý ẩn/hiện theo giáo trình và bài học".
+- Font: toàn web vốn dùng Be Vietnam Pro, lệch ở hai chỗ. Ô nhập/ô chọn không có class `.inp` hiện font hệ thống, nay mọi `input`/`select`/`textarea` kế thừa font. Các dòng trộn chữ Việt và chữ Hán (mục lục sách, tên bài trong màn đọc, Quán trà) viết `var(--font-hz), var(--font-ui)` nên chữ Việt lẫn hai font, nay dùng `--font-mix`.
+- Bảng Quyền truy cập & hiển thị theo thang chữ chung của admin: tiêu đề 28px, chữ bảng 14px, đầu cột và chữ phụ 12px (trước có cả 10, 13 và 26px). Nút đầu trang về cỡ `btn-sm` như tab Cài đặt chung; đầu cột đầu tiên ghi "Chức năng" thay vì lặp lại tên nhóm đã có ở dòng cha.
+- Test tự động thêm: `BookPageTest` (bài ẩn chặn cả màn đọc, bỏ qua khi tính bài mở tiếp, ẩn cấp/giáo trình làm quyển biến mất, cây của giáo trình khác không ảnh hưởng), `SupportLinksTest` (Ủng hộ trực tiếp đã bỏ hẳn), `FeatureAccessTest` (danh mục không còn `support.donate`), `sach.test.ts` (bài ẩn khoá ở giao diện).
+- Kiểm thật ở local qua API: ẩn Hán ngữ Quyển 1 Bài 1 → kệ còn 14 bài, ảnh trang bài 1 trả 404 với học viên và admin, bài 2 vẫn 200; ẩn Quyển 2 → hn2 biến khỏi kệ, bìa 404; bật lại đủ như cũ. `PUT /admin/support/donate` 404.
+- Kiểm trên trình duyệt (Chromium chạy ngầm, máy tính 1366px; tiện ích Chrome không kết nối được): màn soạn bài, Từ vựng, Ủng hộ & Shopee, Cài đặt, Quyền truy cập đúng như yêu cầu; bảng quyền chỉ còn cỡ 28/14/13 (nút)/12px; ô nhập không class `.inp` dùng Be Vietnam Pro; màn đọc hiện thẻ "Bài 1 đang tạm ẩn", mục lục "14 bài"; hộp Quỹ tháng không còn Ủng hộ trực tiếp. Chưa thử điện thoại.
+- Kiểm trước commit: `npm run check` 0 lỗi/0 cảnh báo, lint sạch, web 121/121; toàn bộ PHPUnit 230/230 (1.715 assertions, 16 phút 40 giây); `test_doc_edge.py` 12/12. Chưa đưa lên hosting.
+
 ### 09/11/2026 — Cây ẩn/hiện nội dung, hoàn thiện quyền hiển thị theo vai trò
 
 - Hoàn thiện Cài đặt → Quyền truy cập & hiển thị: trạng thái riêng theo vai trò, kế thừa cha/con, chống ghi đè cấu hình cũ, kiểm quyền API và đường dẫn; giữ lượt kiểm tra đang làm.

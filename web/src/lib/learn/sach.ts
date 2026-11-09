@@ -42,6 +42,8 @@ export interface QuyenDoc {
   khoa: boolean;
   /** Bài đã mở. */
   mo: number[];
+  /** Bài đang ẩn ở cây Ẩn/hiện nội dung: không đọc được kể cả khi đã mở bằng điểm, server cũng không gửi tên bài. */
+  an: number[];
   /** Bài mở tiếp được bằng điểm, có thể ở quyển khác; null = đã mở hết bộ sách. */
   ke: { ma: string; bai: number; tenSach: string } | null;
   diem: number;
@@ -101,6 +103,7 @@ export const moBaiSach = (ma: string, bai: number) => api.post<QuyenDoc>(`/learn
 type MucTrang = { so: number; trang: number };
 
 export function baiDaMo(sach: { bai: MucTrang[] }, q: QuyenDoc, bai: number | null): boolean {
+  if (bai !== null && q.an.includes(bai)) return false;
   if (q.tuDo) return true;
   if (bai === null || !sach.bai.some((b) => b.so === bai)) return !q.khoa;
   return q.mo.includes(bai);

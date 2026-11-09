@@ -251,7 +251,7 @@
   .qt-dau .muted { margin-top: 4px; font-size: 14px; }
   .qt-icon {
     display: grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: 12px; background: #DDEFD9; color: #2F5D2A;
-    font-family: var(--font-hz), var(--font-ui); font-size: .8em; font-weight: 700;
+    font-family: var(--font-mix); font-size: .8em; font-weight: 700;
   }
   .qt-ve { display: inline-flex; align-items: center; gap: 4px; margin-bottom: 4px; font-size: 13px; font-weight: 600; color: var(--son-text); text-decoration: none; }
   .qt-ban-ds { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -4px; padding: 2px 4px; }

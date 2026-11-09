@@ -58,22 +58,86 @@ final class BookAccess
     }
 
     /**
+     * Giáo trình dùng để xét Ẩn/hiện nội dung cho một bộ sách. Học viên chỉ thấy bộ của giáo trình mình nên lấy
+     * giáo trình của chính họ; biên tập/quản trị đọc cả hai bộ nên bộ khác lấy giáo trình gốc của bộ đó.
+     */
+    public static function giaoTrinhCuaBo(int $userId, string $bo): int
+    {
+        if (self::boCuaNguoi($userId) === $bo) {
+            return Curricula::ofUser($userId);
+        }
+        if ($bo === 'hsk') {
+            return Curricula::HSK_ID;
+        }
+        return (int) (Db::val("SELECT id FROM curricula WHERE level_label = 'Quyển' ORDER BY is_default DESC, id LIMIT 1") ?? 0);
+    }
+
+    /**
+     * Bài sách đang ẩn theo cây Giáo trình → Ẩn/hiện nội dung (migration 026). Bài số `so` của quyển cấp `cap` chính là
+     * bài lesson_no = so, level_id = cap của giáo trình: cùng cách đánh số với sách (dữ liệu nạp từ chính sách đó).
+     * Ẩn giáo trình hay ẩn cấp thì cả quyển ẩn. Bài sách chưa có trong dữ liệu thì không chặn: cây chỉ ẩn được bài nó có.
+     *
+     * @return array<string, true|array<int,true>> mã quyển → true (cả quyển ẩn) hoặc các số bài đang ẩn
+     */
+    public static function an(string $bo, int $curriculumId): array
+    {
+        // Chưa có giáo trình nào cho bộ này (máy mới chưa nạp Hán ngữ): cây không có gì để ẩn.
+        if ($curriculumId <= 0) {
+            return [];
+        }
+        $baiAn = [];
+        foreach (Db::all("SELECT level_id, lesson_no FROM lessons WHERE curriculum_id = ? AND status <> 'published'", [$curriculumId]) as $l) {
+            $baiAn[(int) $l['level_id']][(int) $l['lesson_no']] = true;
+        }
+        $ra = [];
+        foreach (self::sachCuaBo($bo) as $s) {
+            $ma = (string) $s['ma'];
+            $cap = (int) $s['cap'];
+            if (!ContentVisibility::levelVisible($curriculumId, $cap)) {
+                $ra[$ma] = true;
+                continue;
+            }
+            foreach ($s['bai'] as $b) {
+                if (isset($baiAn[$cap][(int) $b['so']])) {
+                    $ra[$ma][(int) $b['so']] = true;
+                }
+            }
+        }
+        return $ra;
+    }
+
+    /** @param array<string,mixed> $tt trangThai() — cả quyển `ma` đang ẩn: không hiện trên kệ, mọi đường dẫn báo 404. */
+    public static function quyenAn(array $tt, string $ma): bool
+    {
+        return ($tt['an'][$ma] ?? null) === true;
+    }
+
+    /** @param array<string,mixed> $tt trangThai() — các số bài đang ẩn của quyển `ma` (quyển ẩn cả thì là mọi bài). */
+    public static function baiAn(array $tt, array $s): array
+    {
+        $an = $tt['an'][(string) $s['ma']] ?? [];
+        return $an === true ? array_map('intval', array_column($s['bai'], 'so')) : array_keys($an);
+    }
+
+    /**
      * Trạng thái mở của một bộ sách cho một người.
      *
-     * @return array{tuDo:bool, mo:array<string,array<int,true>>, ke:?array{ma:string,bai:int}, toi:array<string,true>}
+     * @return array{tuDo:bool, mo:array<string,array<int,true>>, ke:?array{ma:string,bai:int}, toi:array<string,true>, an:array<string,true|array<int,true>>}
      *   tuDo: biên tập/quản trị đọc mọi trang · mo: bài đã mở theo mã sách · ke: bài tiếp theo được mở bằng điểm
-     *   (null = hết bài) · toi: quyển đã học tới (đọc được trang đầu sách)
+     *   (null = hết bài) · toi: quyển đã học tới (đọc được trang đầu sách) · an: bài/quyển đang ẩn, xem an().
+     *   Bài ẩn chặn cả biên tập/quản trị, giống 6 phần học: muốn xem thì bật lại ở cây.
      */
     public static function trangThai(int $userId, string $bo, bool $tuDo = false): array
     {
         $ds = self::sachCuaBo($bo);
+        $an = self::an($bo, self::giaoTrinhCuaBo($userId, $bo));
         $mo = [];
         $toi = [];
         if ($tuDo) {
             foreach ($ds as $s) {
                 $toi[$s['ma']] = true;
             }
-            return ['tuDo' => true, 'mo' => [], 'ke' => null, 'toi' => $toi];
+            return ['tuDo' => true, 'mo' => [], 'ke' => null, 'toi' => $toi, 'an' => $an];
         }
         $ma = array_column($ds, 'ma');
         if ($ma !== []) {
@@ -81,10 +145,15 @@ final class BookAccess
                 $mo[(string) $u['ma']][(int) $u['bai']] = true;
             }
         }
+        // Bài ẩn bị bỏ qua khi tìm bài mở tiếp: không thì học viên kẹt trước một bài không ai mở được.
         $ke = null;
         foreach ($ds as $s) {
+            $anQuyen = $an[$s['ma']] ?? [];
+            if ($anQuyen === true) {
+                continue;
+            }
             foreach ($s['bai'] as $b) {
-                if (!isset($mo[$s['ma']][(int) $b['so']])) {
+                if (!isset($mo[$s['ma']][(int) $b['so']]) && !isset($anQuyen[(int) $b['so']])) {
                     $ke = ['ma' => (string) $s['ma'], 'bai' => (int) $b['so']];
                     break 2;
                 }
@@ -95,7 +164,7 @@ final class BookAccess
                 $toi[$s['ma']] = true;
             }
         }
-        return ['tuDo' => false, 'mo' => $mo, 'ke' => $ke, 'toi' => $toi];
+        return ['tuDo' => false, 'mo' => $mo, 'ke' => $ke, 'toi' => $toi, 'an' => $an];
     }
 
     /** Số bài (theo sách) chứa trang `trang`: bài cuối cùng bắt đầu trước hoặc đúng trang đó; trang đầu sách → null. */
@@ -114,6 +183,10 @@ final class BookAccess
     public static function moBaiSo(array $tt, array $s, ?int $bai): bool
     {
         $ma = (string) $s['ma'];
+        $an = $tt['an'][$ma] ?? [];
+        if ($an === true || ($bai !== null && isset($an[$bai]))) {
+            return false;
+        }
         if ($tt['tuDo']) {
             return true;
         }

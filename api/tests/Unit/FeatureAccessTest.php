@@ -61,6 +61,17 @@ final class FeatureAccessTest extends DbTestCase
         self::assertSame(0, (int) Db::val('SELECT COUNT(*) FROM feature_access'));
     }
 
+    public function testDanhMucKhongConUngHoTrucTiep(): void
+    {
+        $keys = array_column(FeatureAccess::catalog(), 'key');
+        self::assertNotContains('support.donate', $keys);
+        self::assertContains('support.buddy', $keys);
+        self::assertContains('support.links', $keys);
+        // Dòng cũ còn trong DB không làm hỏng ma trận: chỉ mục trong danh mục mới được trả về.
+        $this->set('support.donate', false);
+        self::assertArrayNotHasKey('support.donate', FeatureAccess::matrix()['learner']);
+    }
+
     public function testMacDinhVaChanApiKhiNhapLinkTrucTiep(): void
     {
         self::assertFalse(FeatureAccess::allows('learner', 'learn.tests'));

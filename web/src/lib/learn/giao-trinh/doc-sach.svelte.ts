@@ -85,6 +85,14 @@ export class DocSach {
     return !!this.sach && !!this.quyen && trangDaMo(this.sach, this.quyen, n, this.dapAn);
   }
 
+  /** Bài `so` đang ẩn ở cây Ẩn/hiện nội dung: không hiện ở mục lục, trang của bài thành thẻ "đang ẩn". */
+  baiAn(so: number): boolean {
+    return !!this.quyen?.an.includes(so);
+  }
+
+  /** Mục lục hiện cho người đọc. `mucLuc` vẫn giữ cả bài ẩn vì cần nó để biết trang nào thuộc bài nào. */
+  readonly mucLucHien = $derived(this.mucLuc.filter((b) => !this.baiAn(b.so)));
+
   /** Bài `so` của quyển này là bài mở tiếp được bằng điểm. */
   laBaiKe(so: number): boolean {
     return this.quyen?.ke?.ma === this.sach?.ma && this.quyen?.ke?.bai === so;

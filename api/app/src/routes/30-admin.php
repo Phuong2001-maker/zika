@@ -157,7 +157,6 @@ return [
     ['PUT',    '/admin/support/links/{id}', [Ops::class, 'saveLink'], 'A'],
     ['PATCH',  '/admin/support/links/{id}', [Ops::class, 'toggleLink'], 'A'],
     ['DELETE', '/admin/support/links/{id}', [Ops::class, 'deleteLink'], 'A'],
-    ['PUT',    '/admin/support/donate', [Ops::class, 'donate'], 'A'],
 
     // Điểm mở bài giáo trình (migration 019)
     ['GET',    '/admin/book-points', [BookPoints::class, 'settings'], 'A'],

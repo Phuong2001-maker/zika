@@ -15,7 +15,6 @@ export interface MonthlyFund {
 }
 
 interface SupportData {
-  donate?: { bank: string; owner: string; account: string; memo: string; qrUrl: string | null } | null;
   icon: SupportLink | null;
   fund: SupportLink[];
   monthlyFund: MonthlyFund;
@@ -25,7 +24,6 @@ interface SupportData {
 
 /** Link Shopee và tiền quỹ phía người học. Bé túi và thanh đầu trang dùng chung, không gọi API hai lần. */
 class SupportLinks {
-  donate = $state<SupportData['donate']>(null);
   icon = $state<SupportLink | null>(null);
   fund = $state<SupportLink[]>([]);
   monthlyFund = $state<MonthlyFund>({ amount: null, month: '', updatedOn: null });
@@ -42,7 +40,6 @@ class SupportLinks {
   private async load(): Promise<void> {
     try {
       const data = await api.get<SupportData>('/support/links', { quiet: true });
-      this.donate = data.donate ?? null;
       this.icon = data.icon;
       this.fund = data.fund;
       this.monthlyFund = data.monthlyFund;

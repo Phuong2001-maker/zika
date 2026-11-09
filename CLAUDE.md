@@ -37,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 120/120 test; API 224/224 (chạy khoảng 16 phút vì mỗi test xoá sạch bảng); `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 121/121 test; API 230/230 (chạy khoảng 17 phút vì mỗi test xoá sạch bảng); `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -146,7 +146,8 @@ này rơi vào `catch` của `load()` nên trang báo "0 điểm" dù API trả 
 chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả hai, đừng chỉ dựa vào giao diện ẩn nút. Điểm chỉ cộng ở
 `POST /learn/points/daily` (lần đầu +3, mỗi ngày +1, không có chế độ test); quản trị mở cả quyển không trừ điểm qua
 `BookAccess::moCaQuyen` (chỉ quyển thuộc giáo trình của học viên); test nhớ `site_settings` giữ nguyên giữa các test
-nên phải đặt lại `support` trong `setUp`.
+nên phải đặt lại `support` trong `setUp`. Cây Ẩn/hiện nội dung cũng áp vào sách (`BookAccess::an`, 09/11): lối mới trả
+file sách phải đi qua `BookController::doc()` và `chanBaiAn()`, bài ẩn chặn cả quản trị.
 
 ## Nếp viết
 
@@ -158,6 +159,7 @@ nên phải đặt lại `support` trong `setUp`.
   Điện thoại **luôn** là `lib/components/MTopbar.svelte` (dòng 1 giống hệt mọi màn; nút lùi + tên màn ở dòng 2 qua
   `back`/`title`/`sub` hoặc nội dung con). Hai thanh cùng thứ tự: điểm mở bài, Quỹ tháng, Top chăm học, chuông,
   Chuyển nhanh, tài khoản. Không đặt logo "字 Zìkǎ" ở thanh đầu trang nào (người dùng bỏ 08/11).
+- Font: chữ Việt dùng `--font-ui` (Be Vietnam Pro), chữ Hán `--font-hz`; dòng trộn cả hai dùng `--font-mix`, đừng viết `var(--font-hz), var(--font-ui)` (chữ Việt sẽ lẫn hai font). Không thêm font khác.
 - Dấu ấn chữ Hán dùng lại, đừng tự chế kiểu khác: `ChuDien.svelte` (chữ trong ô chữ điền), `.dau-xong` (triện "完" bài đã xong),
   `.lv-nen` + `.lv-hoa` với `SO_HAN` trong `lib/learn/hoa-tiet.ts` (hoạ tiết số Hán của cấp).
 - Mỗi màn phức tạp tách trạng thái ra `state.svelte.ts` (class runes), bố cục máy tính và điện thoại **dùng chung** trạng thái đó — kéo cửa sổ qua 768px không mất chữ đang gõ.

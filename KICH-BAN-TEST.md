@@ -256,7 +256,7 @@ Kiểm tra tự động: `api/tests/Unit/ContestTest.php`.
 | L2 | Thêm giáo trình mới | Khối mới, mọi cấp "Chưa có"; có nút xoá, giáo trình mặc định không có | Đạt |
 | L3 | Soạn bài ở giáo trình mới, Thêm bài | Bài là Bài 1 của giáo trình đó, không đụng Bài 1 của bộ cũ; đường dẫn giữ giáo trình | Đạt |
 | L4 | Thêm từ đã có ở bộ khác | Không báo trùng; thêm lần hai trong cùng bộ thì báo trùng | Đạt; có test API |
-| L5 | Xem như người học ở bài Nháp | Mở đúng bài của giáo trình đó, không ghi tiến độ | Mở bài đạt; phần không ghi tiến độ chưa thử trên màn |
+| L5 | Xem như người học ở bài Nháp | Mở đúng bài của giáo trình đó, không ghi tiến độ | Bỏ 09/11: nút đã gỡ khỏi các tab soạn bài |
 | L6 | Gán học viên vào bộ mới | Bàn học và mọi phần chỉ còn bài của bộ đó; cấp chưa có bài hiện Đang soạn; mở bài bộ khác báo 404 | Đạt |
 | L7 | Gán lại bộ cũ | Tiến độ bộ cũ còn nguyên | Có test API |
 | L8 | Xoá giáo trình còn bài, xoá giáo trình mặc định | Báo lỗi, không xoá | Đạt |
@@ -449,3 +449,22 @@ local (đăng → số đỏ → đọc → "Đánh dấu đã xem tất cả").
 6. Đang làm kiểm tra rồi admin ẩn bài/cấp/giáo trình: tiếp tục, lưu và nộp lượt đó được. Người chưa có lượt không bắt đầu được. Không lấy lượt của tài khoản khác để vượt quyền.
 7. Xem trước của staff vẫn thấy nội dung ẩn; học viên thêm `?preview=1` vẫn bị chặn. Học tiếp và số bài học chỉ lấy bài đang hiện.
 8. Kiểm trên điện thoại: cây mở từng cấp, nhãn công tắc không chen vào tên bài, chạm được từng công tắc; khi cha tắt, con bị vô hiệu hóa nhưng vẫn giữ lựa chọn riêng.
+
+# Kiểm tra bổ sung: màn đọc sách theo cây ẩn/hiện, gọn khu quản trị, font (09/11/2026)
+
+Kết quả ghi theo lần kiểm 09/11 ở local (Chromium chạy ngầm, máy tính 1366px). Điện thoại chưa thử.
+
+| # | Bước | Mong đợi | Kết quả |
+|---|---|---|---|
+| S1 | Ẩn Hán ngữ Quyển 1 Bài 1 ở Giáo trình → Ẩn/hiện nội dung, học viên Hán ngữ mở Giáo trình → Quyển 1 | Kệ sách ghi 14 bài; trang của Bài 1 thành thẻ "Bài 1 đang tạm ẩn", không có nút mở bằng điểm; mục lục "14 bài", không có dòng Bài 1; Bài 2 đọc bình thường | Đạt |
+| S2 | Cùng lúc đó gõ thẳng đường dẫn ảnh trang / file nghe của Bài 1 (cả học viên đã mở bài lẫn admin) | 404, không gửi ảnh hay âm thanh | Đạt (API) |
+| S3 | Bài kế tiếp để mở bằng điểm đang là bài bị ẩn | Nút "Mở được" nhảy sang bài hiện kế tiếp, không kẹt | Đạt (test tự động) |
+| S4 | Ẩn cả Quyển 2 (cấp) hoặc cả giáo trình | Quyển biến khỏi kệ sách; mở đường dẫn cũ báo không có sách, kể cả bìa | Đạt (API) |
+| S5 | Bật lại bài/quyển | Đọc được ngay, bài đã mở bằng điểm và số điểm còn nguyên | Đạt |
+| S6 | Ẩn bài 1 cấp 1 của Giáo trình HSK 3.0, vào khu học bằng admin chưa gán giáo trình | Vẫn thấy "Bài 1 · Xin chào" — đó là bài của Hán ngữ 6 tập (giáo trình mặc định), không phải lỗi | Đạt |
+| S7 | Admin mở 6 tab "Phần học · soạn theo bài" | Không còn nút "Quản lý ẩn/hiện", "Xem như người học" | Đạt |
+| S8 | Admin → Ủng hộ & Shopee | Không còn dòng giải thích dưới tiêu đề, ở Quỹ tháng, không còn khối Ủng hộ trực tiếp; chỉ còn "Chưa nhập…" khi chưa có số tiền | Đạt |
+| S9 | Học viên mở hộp Quỹ tháng | Không còn nút Ủng hộ trực tiếp; nhãn "Liên kết tiếp thị" của link Shopee vẫn còn | Đạt |
+| S10 | Admin → Cài đặt → Quyền truy cập & hiển thị | Không còn dòng mô tả, khung giải thích, nút sang cây; không còn hàng "Ủng hộ trực tiếp"; tiêu đề 28px, chữ bảng 14px, chữ phụ 12px, nút cỡ nhỏ như tab Cài đặt chung | Đạt |
+| S11 | Font: ô nhập không class `.inp`, tên bài trong mục lục sách, Quán trà | Chữ Việt cùng một font Be Vietnam Pro, chữ Hán Noto Sans SC | Đạt (máy tính) |
+| S12 | Lặp S1, S7, S10 trên điện thoại | Như trên, bố cục không vỡ | Chưa thử |

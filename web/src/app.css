@@ -72,6 +72,10 @@
   --font-hz-serif:"Noto Serif SC", "Songti SC", "SimSun", serif;
   --font-hz-kai:  "Ma Shan Zheng", "KaiTi", "STKaiti", serif;
   --font-brush:   "Ma Shan Zheng", "Noto Serif SC", "KaiTi", serif;
+  /* Dòng trộn chữ Việt và chữ Hán (tên bài, tên quyển…). Đừng ghép --font-hz đứng trước --font-ui:
+     --font-hz kết thúc bằng sans-serif nên chữ Việt rơi vào phần Latin của Noto Sans SC, dấu tiếng Việt
+     lại lấy từ font hệ thống, một chữ hai font. Be Vietnam Pro đứng trước, chữ Hán nó không có thì tự sang --font-hz. */
+  --font-mix:     "Be Vietnam Pro", var(--font-hz);
 
   /* Cỡ chữ Hán theo cài đặt fontSize (s/m/l) — đặt lại bằng JS: html[data-hz-size] */
   --hz-scale: 1;
@@ -125,7 +129,9 @@ h1, h2, .h2, .bignum, .logo, .disp { font-family: var(--font-display); }
 h1 { font-weight: 700; letter-spacing: -.02em; }
 a { color: var(--son-text); text-decoration: none; }
 a:hover { color: var(--son-hover); }
-button { font: inherit; color: inherit; }
+/* Trình duyệt không cho ô nhập kế thừa font, ô nào thiếu class .inp sẽ hiện font hệ thống. */
+button, input, select, textarea { font: inherit; }
+button { color: inherit; }
 img { max-width: 100%; display: block; }
 [hidden] { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

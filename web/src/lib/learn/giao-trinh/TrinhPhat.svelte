@@ -81,7 +81,7 @@
   .gt-may-ten > span:last-child { display: flex; flex-direction: column; }
   .gt-may-ten b, .gt-may-ten .muted { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .gt-may-ten b { font-size: 14px; }
-  .gt-may-ten .muted { font-size: 12.5px; font-family: var(--font-hz), var(--font-ui); }
+  .gt-may-ten .muted { font-size: 12.5px; font-family: var(--font-mix); }
   .gt-may-dia { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: var(--son-soft); color: var(--son-text); }
   .gt-may-nut { grid-area: nut; display: flex; align-items: center; justify-content: center; gap: 4px; }
   .gt-may-m .gt-may-nut { gap: 10px; padding-top: 2px; }

@@ -20,7 +20,7 @@
   const month = $derived(supportLinks.monthlyFund.month || new Date().toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' }));
   const updatedOn = $derived(supportLinks.monthlyFund.updatedOn);
   const money = $derived(supportLinks.monthlyFund.amount === null ? 'Đang cập nhật' : currency(supportLinks.monthlyFund.amount));
-  const showFund = $derived(session.can('header.fund') && (session.can('fund') || session.can('community.contests') || session.can('support.links') || session.can('support.donate')));
+  const showFund = $derived(session.can('header.fund') && (session.can('fund') || session.can('community.contests') || session.can('support.links')));
   const showRankingButton = $derived(session.can('header.ranking') && (session.can('community.study') || session.can('community.contests.ranking') || session.can('community.contests.registrants')));
   const contest = $derived(contestStore.current);
   // Đã nộp bài thì không còn đường vào thi: mỗi người một lượt.
@@ -87,7 +87,7 @@
     void supportLinks.refresh();
     void contestStore.refresh();
   });
-  let dialog = $state<'overview' | 'contest' | 'ranking' | 'shop' | 'donate' | null>(null);
+  let dialog = $state<'overview' | 'contest' | 'ranking' | 'shop' | null>(null);
 
   // Tìm sản phẩm: bỏ dấu để gõ "khan giay" vẫn ra "Khăn giấy".
   let search = $state('');
@@ -301,7 +301,6 @@
         {/if}
       </div>
       {@render prizeCompact()}
-      {#if session.can('support.donate') && supportLinks.donate}<button class="btn" onclick={() => dialog = 'donate'}>Ủng hộ trực tiếp</button>{/if}
       <FeatureGate name="community.contests.info">{@render regNote()}</FeatureGate>
       {#if canRegister}
         <button type="button" class="btn btn-son btn-lg mc-cta" disabled={registering} onclick={() => setRegistered(true)}
@@ -563,13 +562,6 @@
   </Modal>
 {/if}
 
-{#if dialog === 'donate' && session.can('support.donate') && supportLinks.donate}
-  <Modal title="Ủng hộ trực tiếp" onclose={() => dialog = null} width={460}>
-    <p class="muted">Bạn có thể ủng hộ tự nguyện qua thông tin bên dưới.</p>
-    {#if supportLinks.donate.qrUrl}<img src={supportLinks.donate.qrUrl} alt="Mã QR ủng hộ" style="display: block; width: min(260px, 100%); margin: 16px auto" />{/if}
-    <dl style="display: grid; grid-template-columns: auto 1fr; gap: 14px; margin-top: 20px; font-size: 14px"><dt>Ngân hàng</dt><dd>{supportLinks.donate.bank}</dd><dt>Chủ tài khoản</dt><dd>{supportLinks.donate.owner}</dd><dt>Số tài khoản</dt><dd style="user-select: all">{supportLinks.donate.account}</dd><dt>Nội dung</dt><dd style="user-select: all">{supportLinks.donate.memo}</dd></dl>
-  </Modal>
-{/if}
 <FeatureGate name="community.contests.history"><ContestHistory bind:open={historyOpen} /></FeatureGate>
 
 <style>

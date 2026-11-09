@@ -17,7 +17,7 @@
       </button>
     </li>
   {/if}
-  {#each st.mucLuc as b (b.so)}
+  {#each st.mucLucHien as b (b.so)}
     {@const soNghe = st.ngheTheoBai[b.so]?.length ?? 0}
     {@const dangDoc = st.baiHienTai?.so === b.so}
     {@const khoa = !st.baiMo(b.so)}
@@ -55,7 +55,7 @@
   }
   .gt-ml-dong.on .gt-ml-so { background: var(--son); color: var(--on-accent); }
   .gt-ml-ten { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-  .gt-ml-ten b { font-size: 15px; font-weight: 600; font-family: var(--font-hz), var(--font-ui); }
+  .gt-ml-ten b { font-size: 15px; font-weight: 600; font-family: var(--font-mix); }
   .gt-ml-ten .muted { font-size: 12.5px; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .gt-ml-phai { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2); white-space: nowrap; }
   .gt-ml-co { display: inline-flex; align-items: center; gap: 2px; color: var(--blue-text); }

@@ -21,6 +21,14 @@
   }
 </script>
 
+{#if st.baiAn(bai.so)}
+  <!-- Bài đang ẩn ở cây Ẩn/hiện nội dung: không mở được bằng điểm, server không gửi tên bài. -->
+  <div class="gt-khoa" role="group" aria-label="Bài {bai.so} đang ẩn">
+    <span class="gt-khoa-o" aria-hidden="true"><Icon name="lock" size={24} /></span>
+    <p class="gt-khoa-tieu">Bài {bai.so} đang tạm ẩn</p>
+    <p class="gt-khoa-loi-giai">Bài này đang được cập nhật, bạn quay lại sau nhé.</p>
+  </div>
+{:else}
 <div class="gt-khoa" role="group" aria-label="{st.dapAn ? 'Đáp án bài' : 'Bài'} {bai.so} chưa mở">
   <span class="gt-khoa-o" aria-hidden="true"><Icon name="lock" size={24} /></span>
   <p class="gt-khoa-tieu">{st.dapAn ? 'Đáp án bài' : 'Bài'} {bai.so} chưa mở</p>
@@ -70,6 +78,7 @@
 
   {#if st.loiMo && laKe}<p class="gt-khoa-sai" role="alert">{st.loiMo}</p>{/if}
 </div>
+{/if}
 
 <style>
   .gt-khoa {
@@ -83,7 +92,7 @@
   }
   .gt-khoa-tieu { font-size: 18px; font-weight: 700; }
   .gt-khoa-ten { display: flex; flex-direction: column; gap: 2px; line-height: 1.35; }
-  .gt-khoa-ten b { font-family: var(--font-hz), var(--font-ui); font-size: 17px; font-weight: 600; }
+  .gt-khoa-ten b { font-family: var(--font-mix); font-size: 17px; font-weight: 600; }
   .gt-khoa-ten span { font-size: 13px; color: var(--text-2); }
   .gt-khoa-phu { font-size: 13px; }
   .gt-khoa-loi-giai { max-width: 420px; font-size: 14px; line-height: 1.5; }

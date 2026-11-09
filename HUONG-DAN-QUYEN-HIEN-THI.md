@@ -24,7 +24,7 @@ Vào **Admin → Cài đặt → Quyền truy cập & hiển thị**. Mỗi hàn
 | Giáo trình | File nghe, Đáp án, Điểm và nhận điểm mở bài |
 | Cộng đồng | Quán trà, Góp ý, Top chăm học, Thông báo, Cuộc thi |
 | Cuộc thi | Thông tin, đăng ký/hủy, vào thi, bảng xếp hạng, danh sách đăng ký, lịch sử, thông tin giải thưởng/nhận thưởng |
-| Ủng hộ | Bé túi Shopee, link trong Quỹ tháng, ủng hộ trực tiếp |
+| Ủng hộ | Bé túi Shopee, link trong Quỹ tháng (Ủng hộ trực tiếp đã bỏ 09/11) |
 | Thông tin quỹ thưởng | Công tắc riêng cho nội dung quỹ |
 | Bàn học | Học tiếp, chuỗi ngày, thống kê từ, gợi ý ôn tập |
 | Tài khoản | Thống kê, avatar, tên, cài đặt học, phiên đăng nhập, xóa tài khoản |
@@ -67,13 +67,21 @@ Test tự động: `FeatureAccessTest.php`, `auth/features.test.ts`. Test Shopee
 
 Vào **Admin → Giáo trình → Ẩn/hiện nội dung**. Chọn giáo trình, mở cấp/quyển rồi gạt bài muốn hiện hoặc ẩn. Mỗi lần gạt lưu ngay; nếu lỗi thì giữ nguyên trạng thái trước đó. Công tắc giáo trình và cấp không ghi đè lựa chọn của con.
 
-- Một bài có **một trạng thái chung cho cả 6 phần**. Không còn công tắc riêng ở từng tab soạn bài. Nút **Quản lý ẩn/hiện** ở màn soạn dẫn tới đúng giáo trình/cấp trong cây.
+- Một bài có **một trạng thái chung cho cả 6 phần**. Không còn công tắc riêng ở từng tab soạn bài. Các tab soạn bài không có nút dẫn sang cây này hay nút Xem như người học (bỏ 09/11 theo yêu cầu); vào thẳng Giáo trình → Ẩn/hiện nội dung.
 - Tắt giáo trình chặn toàn bộ cấp và bài của chính giáo trình đó. Tắt cấp chỉ ảnh hưởng cấp của giáo trình đang chọn; giáo trình khác có cùng số cấp vẫn giữ nguyên.
 - Tắt bài loại bài khỏi danh sách, Học tiếp, tổng hợp/ôn tập và cả 6 API nội dung. URL cũ trả 404. Dữ liệu soạn bài, phân giáo trình và tiến độ đã học vẫn được giữ.
 - Bật lại cha chỉ mở các con có trạng thái riêng đang bật. Học viên không tự chuyển sang giáo trình khác khi bộ mình bị ẩn.
 - Cấp bị ẩn không xuất hiện thành thẻ “Sắp có” trên 6 trang chọn cấp. Cấp đang bật nhưng chưa có bài vẫn giữ trạng thái đang soạn.
 - Admin/biên tập vẫn xem trước bằng `?preview=1`; học viên không dùng tham số này để vượt quyền. Lượt kiểm tra đã bắt đầu được tiếp tục/nộp; lượt mới bị chặn.
-- Công tắc theo vai trò ở **Cài đặt** và cây nội dung cùng có hiệu lực: phải được phép vào phần học, đúng giáo trình và cả cây nội dung đang hiện mới học được. Cây này quản lý 6 phần soạn theo bài; màn đọc ảnh sách vẫn theo quyền Giáo trình và bài đã mở bằng điểm.
+- Công tắc theo vai trò ở **Cài đặt** và cây nội dung cùng có hiệu lực: phải được phép vào phần học, đúng giáo trình và cả cây nội dung đang hiện mới học được. Cây này quản lý 6 phần soạn theo bài **và cả màn đọc sách** (từ 09/11, xem mục dưới).
+
+### Màn đọc sách (`/learn/books`)
+
+- Bài sách số `n` của quyển cấp `c` ứng với bài `lesson_no = n`, `level_id = c` của giáo trình (dữ liệu nạp từ chính sách nên cùng cách đánh số). Học viên xét theo giáo trình của mình; biên tập/quản trị đọc cả hai bộ nên bộ HSK xét theo Giáo trình HSK 3.0, bộ Hán ngữ theo giáo trình gọi cấp "Quyển".
+- Bài ẩn: mục lục bỏ bài đó, trang của bài thành thẻ "Bài n đang tạm ẩn"; server không gửi tên bài, file nghe; ảnh trang, trang đáp án, file nghe và nút mở bằng điểm trả 404 — kể cả bài đã mở bằng điểm từ trước và kể cả quản trị, giống 6 phần học. Bài mở tiếp bằng điểm bỏ qua bài ẩn để học viên không kẹt.
+- Ẩn cấp/quyển hoặc ẩn giáo trình: quyển biến khỏi kệ sách, mọi đường dẫn kể cả bìa trả 404.
+- Bật lại là đọc được ngay; bài đã mở bằng điểm và số điểm không mất. Bài sách chưa có trong dữ liệu thì không bị chặn (cây chỉ ẩn được bài nó có).
+- Code: `BookAccess::an()`, `trangThai()` trả thêm `an`, `BookController::doc()`/`chanBaiAn()`. API quyền đọc trả thêm `quyen.an` (số bài ẩn).
 
 ### Lưu trữ và bảo trì
 
@@ -86,4 +94,6 @@ Vào **Admin → Giáo trình → Ẩn/hiện nội dung**. Chọn giáo trình,
 - Bộ nhớ danh sách bài hỏi lại server mặc định khi điều hướng, tránh danh sách cũ còn giữ bài vừa ẩn.
 - `/me` và `/me/features` chỉ trả thêm ID/tên bài của lượt chưa nộp thuộc chính tài khoản. `TestRunner` dùng thông tin này khi tải lại lượt thi, không cần mở cây bài đã ẩn để tìm ID. Server vẫn kiểm chủ lượt và hạn làm bài.
 
-Test tự động bổ sung: `ContentVisibilityTest.php` (cây cha/con, giáo trình độc lập, 6 phần, ôn tập, cache và lượt thi), `authorized-content.test.ts` (server từ chối, ngoại tuyến, hết hạn, kho đầy).
+Test tự động bổ sung: `ContentVisibilityTest.php` (cây cha/con, giáo trình độc lập, 6 phần, ôn tập, cache và lượt thi), `authorized-content.test.ts` (server từ chối, ngoại tuyến, hết hạn, kho đầy), `BookPageTest.php` các test `testBaiAn…`, `testAnCap…`, `testCayCuaGiaoTrinhKhac…` (màn đọc sách), `sach.test.ts` (bài ẩn khoá ở giao diện).
+
+Nhầm thường gặp: hai giáo trình đều có "Bài 1 · Xin chào". Tài khoản chưa được gán giáo trình (kể cả admin) học giáo trình mặc định Hán ngữ 6 tập, nên ẩn bài của Giáo trình HSK 3.0 rồi vào khu học vẫn thấy "Bài 1 · Xin chào" của Hán ngữ — đó là bài khác, không phải lỗi.

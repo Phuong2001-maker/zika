@@ -497,7 +497,6 @@
             <h2 class="h2">HSK {level.id}</h2>
             <p class="muted num" style="font-size: 13.5px">{num(level.enteredWords)} từ · {level.lessonCount} bài</p>
           </div>
-          <a class="btn btn-sm" href="/admin/curricula?tab=visibility&curriculum={curriculumId}&level={level.id}">Quản lý ẩn/hiện</a>
         </section>
       {/if}
 

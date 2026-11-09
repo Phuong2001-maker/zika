@@ -23,7 +23,6 @@ final class Settings
             ['label' => 'Khuyến khích 1', 'percent' => 5],
             ['label' => 'Khuyến khích 2', 'percent' => 5],
         ]],
-        'donate'  => ['enabled' => true, 'qr_path' => null, 'bank' => '', 'owner' => '', 'account' => '', 'memo' => 'UNG HO ZIKA'],
         // Quán trà (phòng trò chuyện chung): quản trị đóng tạm khi cần dọn dẹp.
         'chat'    => ['enabled' => true],
     ];

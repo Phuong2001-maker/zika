@@ -352,7 +352,7 @@
 </div>
 
 {#if sach && st.ngan === 'muc-luc'}
-  <NganKeo title={st.dapAn ? 'Mục lục đáp án' : 'Mục lục'} sub="{sach.ten} · {st.mucLuc.length} bài" mobile={media.isMobile} onclose={() => (st.ngan = '')}>
+  <NganKeo title={st.dapAn ? 'Mục lục đáp án' : 'Mục lục'} sub="{sach.ten} · {st.mucLucHien.length} bài" mobile={media.isMobile} onclose={() => (st.ngan = '')}>
     <MucLuc {st} ondi={di} />
   </NganKeo>
 {/if}
@@ -385,7 +385,7 @@
   .gt-nut-ml:hover { color: var(--text); border-color: var(--line-3); }
   .gt-ml-nhan { display: flex; align-items: baseline; gap: 6px; min-width: 0; font-size: 13px; }
   .gt-ml-nhan b { color: var(--text); white-space: nowrap; }
-  .gt-ml-nhan span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-hz), var(--font-ui); }
+  .gt-ml-nhan span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mix); }
   .gt-cong {
     position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
     width: 42px; height: 42px; padding: 0; border: 1px solid var(--line); border-radius: 999px;
@@ -463,7 +463,7 @@
   }
   .gt-dai-da .gt-dai-so { background: var(--ngoc); }
   .gt-dai-ten { flex: 1 1 220px; display: flex; flex-direction: column; min-width: 0; line-height: 1.35; }
-  .gt-dai-ten b { font-family: var(--font-hz), var(--font-ui); font-size: 17px; font-weight: 600; }
+  .gt-dai-ten b { font-family: var(--font-mix); font-size: 17px; font-weight: 600; }
   .gt-dai-ten span { font-size: 13px; color: var(--text-2); }
   .gt-dai-nut { display: flex; flex-wrap: wrap; gap: 8px; }
   .gt-nghe-bai { background: var(--son-soft); border-color: var(--son-line); color: var(--son-text); }

@@ -78,6 +78,23 @@ final class SupportLinksTest extends DbTestCase
         self::assertSame('A', Router::match('PUT', '/admin/support/fund')['auth']);
     }
 
+    public function testUngHoTrucTiepDaBoHan(): void
+    {
+        // Người dùng bỏ 09/11: không còn API lưu, không còn trường donate ở phía người học lẫn trang quản trị.
+        try {
+            Router::match('PUT', '/admin/support/donate');
+            self::fail('Route ủng hộ trực tiếp vẫn còn.');
+        } catch (HttpError $e) {
+            self::assertContains($e->status, [404, 405]);
+        }
+        $this->bat();
+        self::assertArrayNotHasKey('donate', (new SupportController())->links($this->nguoiHoc('GET', '/support/links')));
+        $r = new Request('GET', '/admin/support');
+        $r->user = ['id' => $this->makeUser(['role' => 'admin']), 'role' => 'admin'];
+        self::assertArrayNotHasKey('donate', (new OpsController())->support($r));
+        self::assertArrayNotHasKey('donate', Settings::DEFAULTS);
+    }
+
     public function testCongTacTatThiKhongCoLinkNao(): void
     {
         $this->link(['place_icon' => 1]);

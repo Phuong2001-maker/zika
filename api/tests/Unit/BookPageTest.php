@@ -29,6 +29,8 @@ final class BookPageTest extends DbTestCase
         parent::setUp();
         // site_settings giữ nguyên giữa các test (DbTestCase::KEEP): đặt lại khối test này có sửa.
         Settings::set('support', Settings::DEFAULTS['support']);
+        // DbTestCase ẩn mọi cấp; màn đọc sách nay theo cây Ẩn/hiện nội dung nên phải bật lại, như dữ liệu thật.
+        Db::exec('UPDATE levels SET is_visible = 1');
         $goc = Config::uploadsDir('giao-trinh');
         foreach (glob("$goc/*/sach.json") ?: [] as $f) {
             unlink($f);
@@ -391,6 +393,97 @@ final class BookPageTest extends DbTestCase
         $q->user = ['id' => $admin, 'role' => 'admin'];
         self::assertSame([['hsk1', 2, 0], ['hsk2', 1, 1]],
             array_map(static fn ($b) => [$b['ma'], $b['tong'], $b['daMo']], $qt->user($q)['books']));
+    }
+
+    // ------------------------------------------------------------------ cây Ẩn/hiện nội dung
+
+    /** Bài trong dữ liệu ứng với bài sách: cùng giáo trình, level_id = cấp của quyển, lesson_no = số bài sách. */
+    private function baiDuLieu(int $cap, int $so, string $status, int $curriculum = 1): void
+    {
+        Db::insert('lessons', ['curriculum_id' => $curriculum, 'level_id' => $cap, 'lesson_no' => $so, 'title' => "Bài $so", 'status' => $status]);
+    }
+
+    public function testBaiAnTrongCayChanCaManDocSach(): void
+    {
+        // hsk1: bài 1 đang hiện, bài 2 ẩn. hsk2 bài 1 chưa có trong dữ liệu: không bị chặn.
+        $this->baiDuLieu(1, 1, 'published');
+        $this->baiDuLieu(1, 2, 'draft');
+        $uid = $this->nguoi();
+        $c = new BookController();
+
+        $ke = array_column($c->index($this->req($uid)), null, 'ma');
+        self::assertSame([1, 1], [$ke['hsk1']['soBai'], $ke['hsk1']['soNghe']], 'Kệ sách chỉ đếm bài và file nghe đang hiện');
+
+        $s = $c->show($this->req($uid, ['ma' => 'hsk1']));
+        self::assertSame([2], $s['quyen']['an']);
+        self::assertSame(['', ''], [$s['bai'][1]['ten'], $s['bai'][1]['tenVi']], 'Không lộ tên bài ẩn');
+        self::assertSame('你好', $s['bai'][0]['ten']);
+        self::assertSame([1], array_column($s['nghe'], 'bai'), 'Không gửi file nghe của bài ẩn');
+
+        // Đã mở bằng điểm từ trước vẫn không đọc được: ảnh trang, file nghe, mở bài đều 404.
+        $this->moBai($uid, 'hsk1', 1);
+        $this->moBai($uid, 'hsk1', 2);
+        self::assertSame('', $this->trang($uid, 'hsk1', '4'));
+        self::assertSame('404 NOT_FOUND', $this->trang($uid, 'hsk1', '7'));
+        self::assertSame('404 NOT_FOUND', $this->loi(fn () => $c->audio($this->req($uid, ['ma' => 'hsk1', 'so' => '2']))));
+        self::assertSame([1], $c->access($this->req($uid, ['ma' => 'hsk1']))['mo']);
+        self::assertSame('404 NOT_FOUND', $this->loi(fn () => $c->unlock($this->req($uid, ['ma' => 'hsk1', 'bai' => '2']))));
+
+        // Quản trị cũng bị chặn như ở 6 phần học; bài khác vẫn đọc tự do.
+        $admin = $this->nguoi('admin');
+        self::assertSame('404 NOT_FOUND', $this->trang($admin, 'hsk1', '7'));
+        self::assertSame('', $this->trang($admin, 'hsk1', '4'));
+
+        // Bật lại bài thì đọc được ngay, bài đã mở bằng điểm vẫn còn.
+        Db::exec("UPDATE lessons SET status = 'published' WHERE level_id = 1 AND lesson_no = 2");
+        self::assertSame('', $this->trang($uid, 'hsk1', '7'));
+        self::assertSame([1, 2], $c->access($this->req($uid, ['ma' => 'hsk1']))['mo']);
+    }
+
+    public function testBaiAnBiBoQuaKhiTinhBaiMoTiep(): void
+    {
+        $this->baiDuLieu(1, 2, 'draft');
+        $uid = $this->nguoi();
+        $this->moBai($uid, 'hsk1', 1);
+        // Bài 2 ẩn: bài mở tiếp nhảy sang hsk2 bài 1, không kẹt trước bài không ai mở được.
+        self::assertSame(['ma' => 'hsk2', 'bai' => 1], BookAccess::trangThai($uid, 'hsk')['ke']);
+        BookAccess::nhanDiemNgay($uid);
+        self::assertSame('', $this->loi(fn () => (new BookController())->unlock($this->req($uid, ['ma' => 'hsk2', 'bai' => '1']))));
+        self::assertSame('', $this->trang($uid, 'hsk2', '4'));
+    }
+
+    public function testAnCapHoacGiaoTrinhThiQuyenBienMatKhoiKe(): void
+    {
+        $uid = $this->nguoi();
+        $admin = $this->nguoi('admin');
+        $c = new BookController();
+        // Ẩn cấp 2 của giáo trình HSK: hsk2 biến khỏi kệ, mọi đường dẫn kể cả bìa báo 404, với cả quản trị.
+        Db::insert('curriculum_levels', ['curriculum_id' => 1, 'level_id' => 2, 'is_visible' => 0]);
+        self::assertSame(['hsk1'], array_column($c->index($this->req($uid)), 'ma'));
+        self::assertNotContains('hsk2', array_column($c->index($this->req($admin)), 'ma'));
+        foreach (['show', 'access'] as $ham) {
+            self::assertSame('404 NOT_FOUND', $this->loi(fn () => $c->$ham($this->req($uid, ['ma' => 'hsk2']))), $ham);
+        }
+        self::assertSame('404 NOT_FOUND', $this->trang($uid, 'hsk2', 'bia', false));
+        self::assertSame('404 NOT_FOUND', $this->trang($admin, 'hsk2', '4'));
+
+        // Ẩn cả giáo trình: học viên không còn quyển nào. Bật lại thì cấp 2 vẫn giữ lựa chọn ẩn riêng của nó.
+        Db::exec('UPDATE curricula SET is_visible = 0 WHERE id = 1');
+        self::assertSame([], $c->index($this->req($uid)));
+        Db::exec('UPDATE curricula SET is_visible = 1 WHERE id = 1');
+        self::assertSame(['hsk1'], array_column($c->index($this->req($uid)), 'ma'));
+    }
+
+    public function testCayCuaGiaoTrinhKhacKhongAnhHuongSach(): void
+    {
+        // Ẩn bài 1 cấp 3 của giáo trình HSK không đụng tới hn3 của học viên Hán ngữ (cùng số cấp, cùng số bài).
+        $hn = $this->hanNgu();
+        $this->baiDuLieu(3, 1, 'draft');
+        $this->baiDuLieu(3, 1, 'published', $hn);
+        $uid = $this->nguoi('learner', $hn);
+        $this->moBai($uid, 'hn3', 1);
+        self::assertSame('', $this->trang($uid, 'hn3', '4'));
+        self::assertSame([], (new BookController())->access($this->req($uid, ['ma' => 'hn3']))['an']);
     }
 
     // ------------------------------------------------------------------ file nghe

@@ -18,7 +18,7 @@ final class FeatureAccess
             'learn' => ['Các phần học', 'access', ['flashcards' => 'Lật thẻ', 'exercises' => 'Bài tập', 'tests' => 'Kiểm tra / thi thử', 'writing' => 'Luyện viết', 'dialogues' => 'Đọc hội thoại', 'grammar' => 'Ngữ pháp']],
             'books' => ['Giáo trình', 'access', ['audio' => 'File nghe', 'answers' => 'Đáp án', 'points' => 'Điểm và nhận điểm mở bài']],
             'community' => ['Cộng đồng', 'access', ['chat' => 'Quán trà', 'feedback' => 'Góp ý · báo lỗi', 'study' => 'Top chăm học', 'notifications' => 'Thông báo', 'contests' => 'Cuộc thi']],
-            'support' => ['Ủng hộ', 'access', ['buddy' => 'Bé túi Shopee', 'links' => 'Link Shopee trong Quỹ tháng', 'donate' => 'Ủng hộ trực tiếp']],
+            'support' => ['Ủng hộ', 'access', ['buddy' => 'Bé túi Shopee', 'links' => 'Link Shopee trong Quỹ tháng']],
             'fund' => ['Thông tin quỹ thưởng', 'display', []],
             'home' => ['Các khối trên Bàn học', 'display', ['continue' => 'Học tiếp', 'streak' => 'Chuỗi ngày học', 'words' => 'Thống kê từ đã học', 'review' => 'Gợi ý ôn tập']],
             'account' => ['Tài khoản', 'display', ['stats' => 'Thống kê học tập', 'avatar' => 'Đổi / xóa avatar', 'name' => 'Chỉnh tên', 'preferences' => 'Cài đặt học', 'sessions' => 'Quản lý phiên đăng nhập', 'delete' => 'Xóa tài khoản']],

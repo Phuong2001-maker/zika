@@ -259,5 +259,4 @@ export interface CompleteResult {
 export interface SupportBlock {
   enabled: boolean;
   links?: { id: number; name: string; imageUrl: string | null; goUrl: string }[];
-  donate?: { bank: string; owner: string; account: string; memo: string; qrUrl: string | null } | null;
 }
