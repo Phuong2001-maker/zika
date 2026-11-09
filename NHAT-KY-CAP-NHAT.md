@@ -40,8 +40,9 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
   phương án, đáp án hay là phương án dài nhất (HSK 5 đã cân lại). Nạp qua API (`nap_de.py`, server kiểm từng câu), **để Nháp** chờ
   người soát rồi Công khai.
 - **Giọng đọc**: `viec_doc.py` gom thêm câu nghe và bài nói mẫu của đề HSK 3.0; tạo giọng nam + nữ bằng pipeline có sẵn, tải lên
-  web local: 555 câu × 2 giọng = 1.110 file, kiểm qua web đủ 1.110/1.110 (pipeline: 0 file lỗi; 276 file cần người nghe là của các
-  phần cũ, không tăng). Câu nghe hội thoại giữ nhãn 男：/女： (giọng máy đọc lên) vì nhiều câu hỏi cần biết ai nói.
+  web local: 555 câu × 2 giọng = 1.110 file, kiểm qua web đủ 1.110/1.110. Pipeline: 0 file lỗi, 1.102 đạt, **8 file máy đánh dấu cần người nghe**
+  (HSK 2 · Đề 1–3, HSK 3 · Đề 1: câu hội thoại có nhãn 男：/女：, máy nhận dạng nghe nhãn "女" thành 你/雨, "男" thành 难/南;
+  phần câu đúng). Vẫn đã tải lên; nên nghe thử. Đây cũng là lý do nên làm đọc hội thoại hai giọng thay cho đọc nhãn. Câu nghe hội thoại giữ nhãn 男：/女： (giọng máy đọc lên) vì nhiều câu hỏi cần biết ai nói.
 - Migration **027**; code: `TestService` (mode, check, sections), `QuestionPayload` (speak, pic, imageUrl), `Hsk30Controller` ×2,
   `lib/learn/thi-hsk/`, `routes/learn/hsk30`, `routes/admin/hsk30`. Hướng dẫn: [HUONG-DAN-THI-THU-HSK30.md](HUONG-DAN-THI-THU-HSK30.md).
 - Kiểm: Hsk30Test 9/9, thi-hsk.test 6/6; duyệt trình duyệt (Chromium chạy ngầm, micro giả lập) luyện tập, ghi âm, bài mẫu, kết quả,
