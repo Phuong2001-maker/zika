@@ -1,5 +1,6 @@
 <script lang="ts">
   import Icon from '$lib/components/Icon.svelte';
+  import { session } from '$lib/stores/session.svelte';
   import { diemDoc } from '$lib/learn/diem-doc.svelte';
   import type { DocSach, MucBai } from './doc-sach.svelte';
 
@@ -35,7 +36,9 @@
     <p class="gt-khoa-loi-giai">Mở bài trong sách là xem được đáp án của bài đó.</p>
     <button type="button" class="btn btn-son" onclick={() => st.veSach(bai.so)}><Icon name="book" size={16} />Về Bài {bai.so} trong sách</button>
   {:else if laKe}
-    {#if diem >= 1}
+    {#if !session.can('books.points')}
+      <p class="gt-khoa-loi-giai">Liên hệ quản trị viên để được mở bài.</p>
+    {:else if diem >= 1}
       {#if hoi}
         <p class="gt-khoa-loi-giai">Dùng 1 trong <b class="num">{diem}</b> điểm để mở Bài {bai.so}? Mở rồi là đọc mãi.</p>
         <div class="gt-khoa-nut">

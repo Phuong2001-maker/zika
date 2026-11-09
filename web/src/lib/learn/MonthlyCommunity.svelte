@@ -12,17 +12,20 @@
   import { clock } from '$lib/utils/format';
   import { ApiError } from '$lib/api/client';
   import { toast } from '$lib/stores/toast.svelte';
+  import FeatureGate from '$lib/components/FeatureGate.svelte';
 
   // Tiền quỹ, link Shopee và giờ thi lấy theo cấu hình ở khu quản trị; Top chăm học tính từ phút học thật trong tháng.
   const currency = (value: number): string =>
     new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(value);
-  const month = $derived(supportLinks.monthlyFund.month);
+  const month = $derived(supportLinks.monthlyFund.month || new Date().toLocaleDateString('vi-VN', { month: '2-digit', year: 'numeric' }));
   const updatedOn = $derived(supportLinks.monthlyFund.updatedOn);
   const money = $derived(supportLinks.monthlyFund.amount === null ? 'Đang cập nhật' : currency(supportLinks.monthlyFund.amount));
+  const showFund = $derived(session.can('header.fund') && (session.can('fund') || session.can('community.contests') || session.can('support.links') || session.can('support.donate')));
+  const showRankingButton = $derived(session.can('header.ranking') && (session.can('community.study') || session.can('community.contests.ranking') || session.can('community.contests.registrants')));
   const contest = $derived(contestStore.current);
   // Đã nộp bài thì không còn đường vào thi: mỗi người một lượt.
   const examHref = $derived(
-    contest?.status === 'open' && contest.mockTestId && contest.questionCount > 0 && contest.myAttempt !== 'submitted'
+    (session.can('community.contests.enter') || contest?.myAttempt === 'doing') && contest?.status === 'open' && contest.mockTestId && contest.questionCount > 0 && contest.myAttempt !== 'submitted'
       ? `/learn/tests/hsk/${contest.levelId}/mock/${contest.mockTestId}`
       : null,
   );
@@ -38,7 +41,7 @@
     dialog = null;
     historyOpen = true;
   }
-  const canRegister = $derived(contest?.status === 'upcoming' && !contest.registered);
+  const canRegister = $derived(session.can('community.contests.register') && contest?.status === 'upcoming' && !contest.registered);
   let registering = $state(false);
   let registrationMessage = $state('');
 
@@ -65,6 +68,9 @@
       .join('');
 
   function showRanking(tab: 'study' | 'registrants' | 'contest'): void {
+    const available = (['study', 'contest', 'registrants'] as const).filter((t) => session.can(t === 'study' ? 'community.study' : `community.contests.${t === 'contest' ? 'ranking' : t}`));
+    if (!available.length) return;
+    if (!available.includes(tab)) tab = available[0];
     ranking = tab;
     dialog = 'ranking';
     void contestStore.refreshRanking();
@@ -81,7 +87,7 @@
     void supportLinks.refresh();
     void contestStore.refresh();
   });
-  let dialog = $state<'overview' | 'contest' | 'ranking' | 'shop' | null>(null);
+  let dialog = $state<'overview' | 'contest' | 'ranking' | 'shop' | 'donate' | null>(null);
 
   // Tìm sản phẩm: bỏ dấu để gõ "khan giay" vẫn ra "Khăn giấy".
   let search = $state('');
@@ -100,6 +106,11 @@
     supportLinks.logView('fund');
   }
   let ranking = $state<'study' | 'registrants' | 'contest'>('study');
+  $effect(() => {
+    if (dialog !== 'ranking') return;
+    const keys = { study: 'community.study', contest: 'community.contests.ranking', registrants: 'community.contests.registrants' };
+    if (!session.can(keys[ranking])) dialog = null;
+  });
   const MEDALS = ['🥇', '🥈', '🥉'];
   // Quỹ chưa nhập thì chưa có số tiền, hiện phần trăm chứ đừng ghi 0 đồng.
   const prizeMoney = (p: { percent: number; amount: number | null }): string => (p.amount === null ? `${p.percent}% quỹ` : currency(p.amount));
@@ -134,10 +145,10 @@
         </div>
       </div>
       <div class="mc-reg-meta">
-        <button type="button" onclick={() => showRanking('registrants')}>
+        <FeatureGate name="community.contests.registrants"><button type="button" onclick={() => showRanking('registrants')}>
           <Icon name="users" size={14} /> {contest.registrantCount} người đăng ký
-        </button>
-        {#if contest.registered}<button type="button" class="mc-cancel-registration" disabled={registering} onclick={() => setRegistered(false)}><Icon name="x" size={15} /> {registering ? 'Đang xử lý…' : 'Huỷ đăng ký'}</button>{/if}
+        </button></FeatureGate>
+        {#if contest.registered && session.can('community.contests.register')}<button type="button" class="mc-cancel-registration" disabled={registering} onclick={() => setRegistered(false)}><Icon name="x" size={15} /> {registering ? 'Đang xử lý…' : 'Huỷ đăng ký'}</button>{/if}
       </div>
     {:else}
     <p class="mc-reg-note">
@@ -148,9 +159,9 @@
       {:else if contest.myAttempt === 'doing'}
         <Icon name="clock" size={15} /> Bạn đang làm dở bài thi này
       {:else if contest.registered || contest.myAttempt === 'submitted'}
-        <Icon name="check" size={15} /> Bạn đã đăng ký · {contest.registrantCount} người tham gia
+        <Icon name="check" size={15} /> Bạn đã đăng ký {#if session.can('community.contests.registrants')}· {contest.registrantCount} người tham gia{/if}
       {:else}
-        {contest.registrantCount} người đã đăng ký · Hạn đăng ký: trước giờ bắt đầu
+        {#if session.can('community.contests.registrants')}{contest.registrantCount} người đã đăng ký · {/if}Hạn đăng ký: trước giờ bắt đầu
       {/if}
     </p>
     {/if}
@@ -159,7 +170,7 @@
 {/snippet}
 
 {#snippet prizeList()}
-  {#if contestStore.prizes.length > 0}
+  {#if session.can('community.contests.rewards') && contestStore.prizes.length > 0}
     <div class="mc-prizes">
       <div class="mc-prizes-head">
         <b>Cơ cấu giải thưởng</b>
@@ -180,17 +191,17 @@
 
 <!-- Hộp quỹ cần thấy cả Shopee lẫn giải trong một màn: ba giải đầu xếp ngang, giải còn lại gom một dòng. Bản đủ nằm ở Thể lệ. -->
 {#snippet prizeCompact()}
-  {#if contestStore.prizes.length > 0}
+  {#if session.can('community.contests.rewards') && contestStore.prizes.length > 0}
     <div class="mc-prizes mc-prizes-compact">
       <div class="mc-prizes-head">
         <b>Cơ cấu giải thưởng</b>
-        <button
+        <FeatureGate name="community.contests.info"><button
           type="button"
           class="mc-rule-link"
           onclick={() => {
             dialog = 'contest';
           }}>Xem thể lệ</button
-        >
+        ></FeatureGate>
       </div>
       <ul class="mc-podium" style="--cot: {Math.min(contestStore.prizes.length, 3)}">
         {#each contestStore.prizes.slice(0, 3) as p, i (i)}
@@ -228,7 +239,8 @@
   {/if}
 {/snippet}
 
-<div class="mc-header-actions" role="group" aria-label="Quỹ thưởng, Shopee và top chăm học">
+{#if showFund || showRankingButton}<div class="mc-header-actions" role="group" aria-label="Quỹ thưởng, Shopee và top chăm học">
+  {#if showFund}<FeatureGate name="header.fund">
   <button
     type="button"
     class="mc-fund-pill"
@@ -236,21 +248,24 @@
     title="Quỹ thưởng tháng"
     onclick={openFund}
     >{@render bag()}<span class="mc-fund-text"
-      ><span>Quỹ tháng <span class="mc-desktop-month">{month}</span></span><b>{money}</b></span
+      ><span>{session.can('fund') ? 'Quỹ tháng' : 'Cuộc thi'} <span class="mc-desktop-month">{month}</span></span>{#if session.can('fund')}<b>{money}</b>{/if}</span
     ></button
   >
+  </FeatureGate>{/if}
+  {#if showRankingButton}
   <button
     type="button"
     class="mc-header-top"
     title="Top chăm học"
     aria-label="Xem top học viên chăm học"
-    onclick={() => showRanking('study')}><span aria-hidden="true">🏆</span><b>Top chăm học</b></button
+    onclick={() => showRanking('study')}><span aria-hidden="true">🏆</span><b>{session.can('community.study') ? 'Top chăm học' : 'Bảng xếp hạng'}</b></button
   >
-</div>
+  {/if}
+</div>{/if}
 
 {#if dialog === 'overview'}
   <Modal
-    title={contest?.title ?? 'Cuộc thi giải đề'}
+    title={session.can('community.contests.info') ? (contest?.title ?? 'Cuộc thi giải đề') : 'Quỹ thưởng'}
     anchor="top"
     width={570}
     onclose={() => {
@@ -258,24 +273,24 @@
     }}
   >
     <section class="mc-contest" aria-label="Cuộc thi tháng và quỹ thưởng">
-      <div class="mc-contest-top">
+      <FeatureGate name="community.contests.info"><div class="mc-contest-top">
         <span class="mc-kicker">Cuộc thi tháng {month}</span>
         {#if contest?.status === 'open'}<span class="tag tag-ok">Đang diễn ra</span>
         {:else if contest}<span class="tag tag-warn">Sắp diễn ra</span>
         {:else}<span class="tag">Chưa có lịch</span>{/if}
       </div>
-      {@render countdown()}
+      {@render countdown()}</FeatureGate>
       <!-- Quỹ đến từ hoa hồng Shopee nên hai thứ nằm chung một khối, thấy số tiền là thấy ngay chỗ góp quỹ. -->
       <div class="mc-fund-box">
-        <div class="mc-fund">
+        <FeatureGate name="fund"><div class="mc-fund">
           <div>
             <span class="mc-fund-label">Quỹ thưởng tháng {month}</span><strong class="num">{money}</strong><span class="mc-source"
               >Tổng hoa hồng Shopee{#if updatedOn}&nbsp;· Cập nhật {updatedOn}{/if}</span
             >
           </div>
           <span class="mc-fund-mark" lang="zh" aria-hidden="true">奖</span>
-        </div>
-        {#if supportLinks.fund.length > 0}
+        </div></FeatureGate>
+        {#if session.can('support.links') && supportLinks.fund.length > 0}
           <button type="button" class="mc-shopee" onclick={openShop}>
             {@render bag()}<span
               ><b>Ghé Shopee, góp một chút niềm vui</b><small
@@ -286,12 +301,13 @@
         {/if}
       </div>
       {@render prizeCompact()}
-      {@render regNote()}
+      {#if session.can('support.donate') && supportLinks.donate}<button class="btn" onclick={() => dialog = 'donate'}>Ủng hộ trực tiếp</button>{/if}
+      <FeatureGate name="community.contests.info">{@render regNote()}</FeatureGate>
       {#if canRegister}
         <button type="button" class="btn btn-son btn-lg mc-cta" disabled={registering} onclick={() => setRegistered(true)}
           >{registering ? 'Đang đăng ký…' : 'Đăng ký tham gia'}</button
         >
-      {:else if contest?.status === 'upcoming'}
+      {:else if contest?.status === 'upcoming' && session.can('community.contests.info')}
         <button type="button" class="btn btn-lg mc-cta" onclick={() => (dialog = 'contest')}>Xem thông tin cuộc thi</button>
       {:else if examHref}
         <a
@@ -301,14 +317,14 @@
             dialog = null;
           }}>{examLabel} </a
         >
-      {:else if submitted}
+      {:else if submitted && session.can('community.contests.ranking')}
         <button type="button" class="btn btn-son btn-lg mc-cta" onclick={() => showRanking('contest')}
           >Xem bảng xếp hạng </button
         >
-      {:else if !contest}
+      {:else if !contest && session.can('community.contests.history')}
         <p class="mc-history-hint">Lịch thi mới sẽ được thông báo tại đây.</p>
         <button type="button" class="btn btn-lg mc-cta" onclick={openHistory}><Icon name="clock" size={17} /> Lịch sử thi &amp; thưởng</button>
-      {:else}
+      {:else if session.can('community.contests.info')}
         <button
           type="button"
           class="btn btn-lg mc-cta"
@@ -318,12 +334,12 @@
           }}>Xem thông tin cuộc thi</button
         >
       {/if}
-      {#if contest}<button type="button" class="mc-history-link" onclick={openHistory}>Lịch sử thi &amp; thưởng</button>{/if}
+      {#if contest && session.can('community.contests.history')}<button type="button" class="mc-history-link" onclick={openHistory}>Lịch sử thi &amp; thưởng</button>{/if}
     </section>
   </Modal>
 {/if}
 
-{#if dialog === 'contest'}
+{#if dialog === 'contest' && session.can('community.contests.info')}
   <Modal
     title={contest?.title ?? `Cuộc thi giải đề tháng ${month}`}
     anchor="top"
@@ -338,15 +354,15 @@
         <p class="mc-muted-note">Lịch thi sẽ được thông báo tại đây.</p>
       {/if}
       {@render countdown(true)}
-      <div class="mc-modal-fund">
+      <FeatureGate name="fund"><div class="mc-modal-fund">
         <span class="mc-fund-trophy" aria-hidden="true">🏆</span>
         <div><span>Quỹ thưởng tháng {month}</span><strong>{money}</strong><small>Từ tổng hoa hồng Shopee</small></div>
         <span class="mc-detail-fund-mark" lang="zh" aria-hidden="true">奖</span>
-      </div>
+      </div></FeatureGate>
       {@render prizeList()}
       <div class="mc-detail-lines">
         <h3 class="mc-rules-title">Thông tin cần biết</h3>
-        <p><Icon name="flag" size={18} /><span><b>Nhận thưởng qua ngân hàng</b><small>Sau khi công bố kết quả, người đạt giải gửi tên ngân hàng, số tài khoản và tên chủ tài khoản qua Góp ý (Chuyển nhanh → Góp ý). Không cần nhập khi đăng ký thi.</small></span></p>
+        <FeatureGate name="community.contests.rewards"><p><Icon name="flag" size={18} /><span><b>Nhận thưởng qua ngân hàng</b><small>Sau khi công bố kết quả, người đạt giải gửi tên ngân hàng, số tài khoản và tên chủ tài khoản qua Góp ý. Không cần nhập khi đăng ký thi.</small></span></p></FeatureGate>
         {#if contest}<p><Icon name="clock" size={18} /><span><b>Hết giờ tự nộp bài</b><small>Bài thi kết thúc lúc {contest.endsLabel}. Các câu đã làm sẽ được nộp tự động.</small></span></p>{/if}
         <p>
           <Icon name="quiz" size={18} /><span
@@ -360,9 +376,9 @@
         </p>
       </div>
     </div>
-    {#snippet actions()}{#if contest?.status === 'upcoming'}<button type="button" class="btn" onclick={() => showRanking('registrants')}
+    {#snippet actions()}{#if contest?.status === 'upcoming' && session.can('community.contests.registrants')}<button type="button" class="btn" onclick={() => showRanking('registrants')}
           >Danh sách đăng ký</button
-        >{:else}<button type="button" class="btn" onclick={() => showRanking('contest')}>Xem bảng xếp hạng</button>{/if}{#if canRegister}<button
+        >{:else if session.can('community.contests.ranking')}<button type="button" class="btn" onclick={() => showRanking('contest')}>Xem bảng xếp hạng</button>{/if}{#if canRegister}<button
           type="button"
           class="btn btn-son"
           disabled={registering}
@@ -394,26 +410,26 @@
   >
     <div class="mc-modal-content">
       <div class="tabs mc-tabs">
-        <button
+        <FeatureGate name="community.study"><button
           type="button"
           class="tab"
           class:on={ranking === 'study'}
           onclick={() => {
             ranking = 'study';
           }}>🌱 Chăm học</button
-        ><button
+        ></FeatureGate><FeatureGate name="community.contests.ranking"><button
           type="button"
           class="tab"
           class:on={ranking === 'contest'}
           onclick={() => showRanking('contest')}>🏆 Cuộc thi</button
-        ><button
+        ></FeatureGate><FeatureGate name="community.contests.registrants"><button
           type="button"
           class="tab"
           class:on={ranking === 'registrants'}
           onclick={() => showRanking('registrants')}>📋 Đăng ký{registrants?.count ? ` (${registrants.count})` : ''}</button
-        >
+        ></FeatureGate>
       </div>
-      {#if ranking === 'study'}
+      {#if ranking === 'study' && session.can('community.study')}
         {#snippet studyRow(row: StudyRow)}
           <li class:mc-me={row.isMe}>
             <span class="mc-place" class:mc-medal-place={row.rank <= 3} role="img" aria-label={`Hạng ${row.rank}`}
@@ -438,7 +454,7 @@
           </div>
         {/if}
         {#if studyTop?.rows.length && !studyTop.me && !session.isStaff}<p class="mc-muted-note">Bạn chưa có phút học nào trong tháng này.</p>{/if}
-      {:else if ranking === 'registrants'}
+      {:else if ranking === 'registrants' && session.can('community.contests.registrants')}
         {#if registrants?.contest && registrants.rows.length > 0}
           <div class="mc-rank-head">
             <b>{registrants.contest.title}</b>
@@ -470,8 +486,8 @@
             {contestRanking.contest.status === 'open' ? 'Đang diễn ra' : 'Đã kết thúc'} · {contestRanking.participants} người
           </span>
         </div>
-        {#if myPrize && myPrize.amount !== null && myPrize.amount > 0}
-          <div class="mc-claim-banner"><span aria-hidden="true">🎉</span><div><b>Bạn đạt {myPrize.label}!</b><small>Phần thưởng {prizeMoney(myPrize)} · Gửi tên ngân hàng, số tài khoản và tên chủ tài khoản qua Góp ý để nhận thưởng.</small></div>{#if feedback.available}<button type="button" class="btn btn-son btn-sm" onclick={claimPrize}>Gửi thông tin nhận thưởng</button>{/if}</div>
+        {#if session.can('community.contests.rewards') && myPrize && myPrize.amount !== null && myPrize.amount > 0}
+          <div class="mc-claim-banner"><span aria-hidden="true">🎉</span><div><b>Bạn đạt {myPrize.label}!</b><small>Phần thưởng {prizeMoney(myPrize)} · Gửi tên ngân hàng, số tài khoản và tên chủ tài khoản qua Góp ý để nhận thưởng.</small></div>{#if feedback.available && session.can('community.feedback')}<button type="button" class="btn btn-son btn-sm" onclick={claimPrize}>Gửi thông tin nhận thưởng</button>{/if}</div>
         {/if}
         {#snippet rankRow(row: RankRow)}
           <li class:mc-me={row.isMe}>
@@ -479,7 +495,7 @@
               >{MEDALS[row.rank - 1] ?? row.rank}</span
             ><span class="mc-avatar" style="background: var(--lv{((row.rank - 1) % 3) + 1})">{initials(row.name)}</span><span class="mc-person"
               ><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>{row.participated ? `Làm trong ${clock(row.usedSec * 1000)}` : 'Không tham gia · 0 điểm'}</small
-              >{#if row.participated && contestStore.prizes[row.rank - 1]}{@const p = contestStore.prizes[row.rank - 1]}<small class="mc-row-prize"
+              >{#if session.can('community.contests.rewards') && row.participated && contestStore.prizes[row.rank - 1]}{@const p = contestStore.prizes[row.rank - 1]}<small class="mc-row-prize"
                   >{p.label} · {prizeMoney(p)}</small
                 >{/if}</span
             ><span class="mc-minutes"><b>{row.correct}/{row.total}</b><small>câu đúng</small></span>
@@ -507,7 +523,7 @@
         </div>{/if}
     </div>
   </Modal>
-{:else if dialog === 'shop'}
+{:else if dialog === 'shop' && session.can('support.links')}
   <Modal
     title="Ghé Shopee"
     anchor="top"
@@ -547,7 +563,14 @@
   </Modal>
 {/if}
 
-<ContestHistory bind:open={historyOpen} />
+{#if dialog === 'donate' && session.can('support.donate') && supportLinks.donate}
+  <Modal title="Ủng hộ trực tiếp" onclose={() => dialog = null} width={460}>
+    <p class="muted">Bạn có thể ủng hộ tự nguyện qua thông tin bên dưới.</p>
+    {#if supportLinks.donate.qrUrl}<img src={supportLinks.donate.qrUrl} alt="Mã QR ủng hộ" style="display: block; width: min(260px, 100%); margin: 16px auto" />{/if}
+    <dl style="display: grid; grid-template-columns: auto 1fr; gap: 14px; margin-top: 20px; font-size: 14px"><dt>Ngân hàng</dt><dd>{supportLinks.donate.bank}</dd><dt>Chủ tài khoản</dt><dd>{supportLinks.donate.owner}</dd><dt>Số tài khoản</dt><dd style="user-select: all">{supportLinks.donate.account}</dd><dt>Nội dung</dt><dd style="user-select: all">{supportLinks.donate.memo}</dd></dl>
+  </Modal>
+{/if}
+<FeatureGate name="community.contests.history"><ContestHistory bind:open={historyOpen} /></FeatureGate>
 
 <style>
   /* Ba tab bảng xếp hạng chia đều bề ngang hộp: .tabs co theo chữ rồi cuộn ngang, ở 375px tab "Đăng ký" bị khung hộp cắt. */

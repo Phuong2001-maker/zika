@@ -25,6 +25,7 @@ final class App
 
     public static function handle(Request $req): Response
     {
+        \Zika\Services\FeatureAccess::clearCache();
         try {
             if ($req->method === 'OPTIONS' && self::corsOrigin($req) !== null) {
                 return self::cors($req, Response::noContent()->withHeader('Access-Control-Max-Age', '600'));
@@ -48,6 +49,8 @@ final class App
             if ($isWrite && ($route['opts']['csrf'] ?? true)) {
                 Csrf::verify($req);
             }
+            \Zika\Services\FeatureAccess::enforce($req);
+            \Zika\Services\ContentVisibility::enforce($req);
 
             if ($req->user !== null && $auth !== 'P' && ($route['opts']['rate'] ?? true)) {
                 // Giới hạn chung 300 request / phút / người (02 §6.3).

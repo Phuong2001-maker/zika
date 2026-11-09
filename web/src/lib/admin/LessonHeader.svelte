@@ -30,7 +30,6 @@
 
   let lesson = $state<(AdminLesson & { levelId: number; curriculumId: number; curriculumName: string; levelLabel: string }) | null>(null);
   const nhanCap = $derived(lesson?.levelLabel ?? 'HSK');
-  let busy = $state(false);
 
   // Bộ chọn cấp + bài: soạn phần nào cũng đổi được bài ngay tại chỗ, khỏi quay về danh sách.
   let levels = $state<AdminLevel[]>([]);
@@ -120,25 +119,6 @@
     void goto(`/admin/lessons/${baiChon}/${PART_SLUG[part]}`);
   }
 
-  /** Công tắc Hiện cho người học. Bài chưa có từ vựng thì hỏi lại trước khi hiện. */
-  async function toggleStatus(on: boolean): Promise<void> {
-    if (!lesson) return;
-    if (on && lesson.counts.words === 0) {
-      const ok = confirm('Bài chưa có từ vựng, người học sẽ thấy phần Lật thẻ “Sắp có”. Vẫn hiện?');
-      if (!ok) return;
-    }
-    busy = true;
-    try {
-      await adminApi.patchLesson(lessonId, { status: on ? 'published' : 'draft' });
-      lesson = { ...lesson, status: on ? 'published' : 'draft' };
-      toast.ok('Đã lưu.');
-    } catch {
-      toast.show('Không lưu được, thử lại nhé.');
-    } finally {
-      busy = false;
-    }
-  }
-
   async function rename(): Promise<void> {
     if (!lesson) return;
     const name = prompt('Tên bài:', lesson.title);
@@ -195,6 +175,7 @@
       {/if}
     </header>
       {@render boChon()}
+    <a class="btn btn-sm" href="/admin/curricula?tab=visibility&curriculum={lesson.curriculumId}&level={lesson.levelId}" style="margin-bottom: 12px">Quản lý ẩn/hiện</a>
     <div class="mtabs" style="margin: 0 -14px 14px">
       {#each PART_COL as c (c.key)}
         <button type="button" class:on={c.part === part} onclick={() => go(c.part)}>
@@ -225,11 +206,7 @@
         </h1>
       </div>
       {@render boChon()}
-      <label class="sw">
-        <input type="checkbox" checked={lesson.status === 'published'} disabled={busy} onchange={(e) => toggleStatus(e.currentTarget.checked)} />
-        <span></span>
-        {lesson.status === 'published' ? 'Đang hiện' : 'Nháp · đang ẩn'}
-      </label>
+      <a class="btn btn-sm" href="/admin/curricula?tab=visibility&curriculum={lesson.curriculumId}&level={lesson.levelId}">Quản lý ẩn/hiện</a>
       <a href={previewHref} target="_blank" rel="noopener" class="btn btn-sm btn-paper"><Icon name="eye" size={15} /> Xem như người học</a>
       {#if onsave}
         <button type="button" class="btn btn-son btn-sm" disabled={!dirty || saving} onclick={onsave}>

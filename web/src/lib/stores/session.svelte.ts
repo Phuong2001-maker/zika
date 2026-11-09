@@ -4,6 +4,7 @@ import { clearLessonCache } from '$lib/learn/lesson';
 import type { Announcement, MeResponse, PublicConfig, User } from '$lib/api/types';
 import { notifications } from './notifications.svelte';
 import { settings } from './settings.svelte';
+import { featureAllowed, type Features, type ActiveTest } from '$lib/auth/features';
 
 class Session {
   config = $state<PublicConfig | null>(null);
@@ -11,6 +12,16 @@ class Session {
   loaded = $state(false);
   supportEnabled = $state(false);
   announcements = $state<Announcement[]>([]);
+  features = $state<Features | null>(null);
+  activeTests = $state<ActiveTest[]>([]);
+  can(key: string): boolean { return featureAllowed(this.features, this.user?.role, key); }
+  async refreshFeatures(): Promise<void> {
+    try {
+      const data = await api.get<{ features: Features; activeTests: ActiveTest[] }>('/me/features', { quiet: true });
+      this.features = data.features;
+      this.activeTests = data.activeTests;
+    } catch { /* Giữ cấu hình đã tải nếu mạng đang gián đoạn. */ }
+  }
 
   get isStaff(): boolean {
     return this.user?.role === 'editor' || this.user?.role === 'admin';
@@ -48,6 +59,8 @@ class Session {
     // Đổi tài khoản (không F5) hoặc admin gán giáo trình khác: danh sách bài đã nhớ không còn đúng.
     if (this.user?.id !== me.user.id || this.user?.curriculumId !== me.user.curriculumId) clearLessonCache();
     this.user = me.user;
+    this.features = me.features ?? null;
+    this.activeTests = me.activeTests ?? [];
     setContentScope(me.user.curriculumId);
     setCsrf(me.csrf);
     this.supportEnabled = me.support.enabled;
@@ -67,6 +80,8 @@ class Session {
 
   clear(): void {
     this.user = null;
+    this.features = null;
+    this.activeTests = [];
     clearLessonCache();
     notifications.xoa(); // đổi tài khoản trên cùng máy không được thấy thông báo của người trước
     this.announcements = [];

@@ -8,7 +8,7 @@
   // lẫn MTopbar (điện thoại, bản `gon`). Biên tập/quản trị đọc sách tự do nên không có điểm để hiện.
   let { gon = false }: { gon?: boolean } = $props();
 
-  onMount(() => void diemDoc.refresh());
+  onMount(() => { if (session.can('books.points')) void diemDoc.refresh(); });
 
   const chuaNhan = $derived(!diemDoc.homNay);
   const giaiThich = $derived(
@@ -17,7 +17,7 @@
   );
 </script>
 
-{#if !session.isStaff && diemDoc.daTai}
+{#if session.can('books.points') && !session.isStaff && diemDoc.daTai}
   <a class="dc" class:dc-gon={gon} href="/learn/books" title={gon ? undefined : giaiThich} aria-label={giaiThich}>
     <span class="dc-o num" aria-hidden="true">
       <b>{diemDoc.diem}</b>

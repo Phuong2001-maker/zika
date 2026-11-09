@@ -1,6 +1,8 @@
 # Kịch bản test — Lật thẻ, Phát âm, Luyện viết, Hội thoại
 
-Người học và lịch sử thưởng minh họa trong admin (migration 022–023): checklist lưu qua F5, CRUD, avatar, xóa dây chuyền và phân quyền ở [HUONG-DAN-DU-LIEU-MINH-HOA.md](HUONG-DAN-DU-LIEU-MINH-HOA.md). Không tự tăng phút theo ngày hoặc trộn vào dữ liệu thật.
+Quyền hiển thị/truy cập cha–con theo vai trò (migration 025): xem [HUONG-DAN-QUYEN-HIEN-THI.md](HUONG-DAN-QUYEN-HIEN-THI.md), gồm bảo toàn lựa chọn con, chặn API/đường dẫn, lượt thi đang làm và chống ghi đè cấu hình.
+
+Người học và lịch sử thưởng minh họa trong admin (migration 022–024): checklist lưu qua F5, CRUD, avatar, nhịp học tự động, đổi tháng, xóa dây chuyền và phân quyền ở [HUONG-DAN-DU-LIEU-MINH-HOA.md](HUONG-DAN-DU-LIEU-MINH-HOA.md). Nhịp tự động chỉ cập nhật dữ liệu minh họa riêng trong admin.
 
 Chạy trên web thật (local `http://localhost:5173` hoặc server), đăng nhập bằng tài khoản học viên
 (hoặc admin — admin vào được cả trang học). Mỗi mục chạy ở **3 cỡ màn hình**:
@@ -437,3 +439,13 @@ pháp; bài khoá; câu thoại) và **697 file nét chữ** — 0 lỗi, đúng
 
 Chưa thử trên web thật: đăng một thông báo thật (sẽ hiện cho mọi học viên) — luồng này đã thử đủ ở
 local (đăng → số đỏ → đọc → "Đánh dấu đã xem tất cả").
+# Kiểm tra bổ sung: cây ẩn/hiện nội dung (09/11/2026)
+
+1. Admin → Giáo trình → Ẩn/hiện nội dung. Tắt một bài: kiểm cả Lật thẻ, Bài tập, Kiểm tra, Luyện viết, Hội thoại, Ngữ pháp đều không thấy bài; URL/API cũ trả 404.
+2. Tắt cấp của một giáo trình: các bài dưới cấp đều ẩn, giáo trình khác cùng số cấp không bị ảnh hưởng. Bật lại: bài vốn ẩn vẫn ẩn, bài vốn hiện trở lại.
+3. Tắt cả giáo trình rồi bật lại: giữ nguyên lựa chọn cấp/bài; không đổi phân quyền học hoặc xoá tiến độ.
+4. Ôn tập tổng hợp không chứa từ/câu/chữ/hội thoại/ngữ pháp của bài ẩn, kể cả giá trị `review_published_only` cũ là 0.
+5. Mở bài để tạo cache rồi ẩn bài từ admin. Trở lại khi có mạng không thấy nội dung cũ; phản hồi 404 không bị service worker thay bằng cache. Khi mất mạng chỉ bản đã lưu còn hạn được đọc.
+6. Đang làm kiểm tra rồi admin ẩn bài/cấp/giáo trình: tiếp tục, lưu và nộp lượt đó được. Người chưa có lượt không bắt đầu được. Không lấy lượt của tài khoản khác để vượt quyền.
+7. Xem trước của staff vẫn thấy nội dung ẩn; học viên thêm `?preview=1` vẫn bị chặn. Học tiếp và số bài học chỉ lấy bài đang hiện.
+8. Kiểm trên điện thoại: cây mở từng cấp, nhãn công tắc không chen vào tên bài, chạm được từng công tắc; khi cha tắt, con bị vô hiệu hóa nhưng vẫn giữ lựa chọn riêng.

@@ -6,9 +6,10 @@
   import Select from '$lib/components/Select.svelte';
   import { toast } from '$lib/stores/toast.svelte';
   import LichSuMinhHoa from '$lib/admin/LichSuMinhHoa.svelte';
+  import NhipHocMinhHoa from '$lib/admin/NhipHocMinhHoa.svelte';
 
   // Dữ liệu riêng trong DB; bản xem trước không ghi vào tiến độ hay kết quả thật.
-  interface Nguoi { id: number; ten: string; avatarUrl: string | null; muc: string; phut: number; ngay: number; bai: number; hien: boolean; dangKy: boolean; thi: boolean }
+  interface Nguoi { id: number; ten: string; avatarUrl: string | null; muc: string; phut: number; ngay: number; bai: number; hien: boolean; dangKy: boolean; thi: boolean; tuDong: boolean; thang?: string }
   let ds = $state<Nguoi[]>([]);
   let busy = $state(false);
   let loading = $state(true);
@@ -35,30 +36,36 @@
     anh = file;
     anhTam = URL.createObjectURL(file);
   }
-  async function tai() {
-    loading = true;
+  async function tai(silent = false) {
+    if (!silent) loading = true;
     error = false;
     try { ds = await api.get<Nguoi[]>('/admin/demo-learners'); }
     catch { error = true; }
     finally { loading = false; }
   }
-  onMount(() => { void tai(); });
+  onMount(() => {
+    void tai();
+    const interval = setInterval(() => { if (!sua && !busy) { void tai(true); revision++; } }, 60_000);
+    return () => clearInterval(interval);
+  });
   let tim = $state('');
   let khu = $state('nguoi');
   let tab = $state('cham');
   let sua = $state<Nguoi | null>(null);
   let xoa = $state<Nguoi | null>(null);
+  let goc = $state({ phut: 0, ngay: 0, bai: 0 });
   const mucs = [{ v: 'it', label: 'Nhẹ nhàng · 5–15 phút/ngày' }, { v: 'vua', label: 'Đều đặn · 15–35 phút/ngày' }, { v: 'cham', label: 'Chăm chỉ · 30–60 phút/ngày' }];
   const loc = $derived(ds.filter((n) => n.ten.toLocaleLowerCase('vi').includes(tim.toLocaleLowerCase('vi'))));
   const xem = $derived(ds.filter((n) => n.hien && (tab === 'cham' || (tab === 'dk' ? n.dangKy : n.thi))).toSorted((a, b) => b.phut - a.phut));
   const vietTat = (ten: string) => ten.trim().split(/\s+/).slice(-2).map((s) => s[0]).join('');
   function mo(n?: Nguoi) {
     boAnhTam();
-    sua = n ? { ...n } : { id: 0, ten: '', avatarUrl: null, muc: 'vua', phut: 0, ngay: 0, bai: 0, hien: true, dangKy: false, thi: false };
+    goc = { phut: n?.phut ?? 0, ngay: n?.ngay ?? 0, bai: n?.bai ?? 0 };
+    sua = n ? { ...n } : { id: 0, ten: '', avatarUrl: null, muc: 'vua', phut: 0, ngay: 0, bai: 0, hien: true, dangKy: false, thi: false, tuDong: true };
   }
   async function luu() {
     if (!sua || !sua.ten.trim()) return;
-    const n = { ...sua, ten: sua.ten.trim() };
+    const n = { ...sua, ten: sua.ten.trim(), goc };
     busy = true;
     try {
       if (anh) {
@@ -79,7 +86,7 @@
   }
   async function anHien(n: Nguoi) {
     busy = true;
-    try { await api.put(`/admin/demo-learners/${n.id}`, { ...n, hien: !n.hien }); n.hien = !n.hien; }
+    try { await api.put(`/admin/demo-learners/${n.id}`, { ...n, hien: !n.hien, goc: { phut: n.phut, ngay: n.ngay, bai: n.bai } }); await tai(true); }
     catch { toast.show('Chưa đổi được trạng thái.', 'info'); }
     finally { busy = false; }
   }
@@ -104,11 +111,11 @@
 <div class="mh-bo-cuc">
   <section class="block mh-quan-ly">
     <div class="mh-thanh"><div><h2>Danh sách người học</h2><span class="muted">{ds.length} người · {ds.filter((n) => n.hien).length} đang hiển thị</span></div><input class="inp" placeholder="Tìm tên người học..." aria-label="Tìm người học minh họa" bind:value={tim} /></div>
-    {#if loading}<p class="mh-trong">Đang tải người học...</p>{:else if error}<p class="mh-trong">Chưa tải được dữ liệu. <button class="btn btn-sm" onclick={tai}>Thử lại</button></p>{:else}
+    {#if loading}<p class="mh-trong">Đang tải người học...</p>{:else if error}<p class="mh-trong">Chưa tải được dữ liệu. <button class="btn btn-sm" onclick={() => tai()}>Thử lại</button></p>{:else}
     {#each loc as n (n.id)}
       <div class="mh-nguoi">
         <span class="mh-avatar">{#if n.avatarUrl}<img src={n.avatarUrl} alt="" />{:else}{vietTat(n.ten)}{/if}</span>
-        <div class="mh-thong-tin"><b>{n.ten}</b><small>{mucs.find((m) => m.v === n.muc)?.label}</small><span>{n.phut} phút · {n.ngay} ngày học · {n.bai} phần hoàn thành</span></div>
+        <div class="mh-thong-tin"><b>{n.ten}</b><small>{mucs.find((m) => m.v === n.muc)?.label} · {n.tuDong ? 'Tự động bật' : 'Tự động tắt'}</small><span>{n.phut} phút · {n.ngay} ngày học · {n.bai} phần hoàn thành</span></div>
         <div class="mh-thao-tac"><button class="btn btn-sm" disabled={busy} class:mh-dang-hien={n.hien} onclick={() => anHien(n)}>{n.hien ? 'Đang hiện' : 'Đang ẩn'}</button><button class="btn btn-icon" disabled={busy} aria-label={`Sửa ${n.ten}`} onclick={() => mo(n)}><Icon name="edit" size={16} /></button><button class="btn btn-icon" disabled={busy} aria-label={`Xóa ${n.ten}`} onclick={() => xoa = n}><Icon name="trash" size={16} /></button></div>
       </div>
     {:else}<p class="mh-trong">Không tìm thấy người học phù hợp.</p>{/each}
@@ -124,7 +131,7 @@
         <div class="mh-hang"><span>{i < 3 ? ['🥇', '🥈', '🥉'][i] : i + 1}</span><span class="mh-avatar mh-nho">{#if n.avatarUrl}<img src={n.avatarUrl} alt="" />{:else}{vietTat(n.ten)}{/if}</span><div><b>{n.ten}</b><small>{tab === 'dk' ? 'Đã đăng ký tham gia' : tab === 'thi' ? 'Chờ cập nhật kết quả' : `${n.ngay} ngày học · ${n.bai} phần bài học xong`}</small></div>{#if tab === 'cham'}<strong>{n.phut}<small>phút học</small></strong>{/if}</div>
       {:else}<div class="mh-trong">{tab === 'thi' ? 'Chưa có kết quả cuộc thi.' : 'Chưa có người học hiển thị.'}</div>{/each}
     </section>
-    <section class="block mh-nhip"><span class="mh-nhan">NHỊP HOẠT ĐỘNG</span><h3>Mỗi người một nhịp học</h3><p>Chọn khoảng phút học theo từng người. Khi nối backend, hệ thống sẽ phân bổ theo ngày, có ngày nghỉ và giờ cập nhật khác nhau.</p><div class="mh-mau-ngay"><span>T2<b>25′</b></span><span>T3<b>18′</b></span><span>T4<b>—</b></span><span>T5<b>32′</b></span><span>T6<b>21′</b></span></div><small class="muted">Ví dụ lịch học · Chưa chạy tăng phút tự động.</small></section>
+    <NhipHocMinhHoa {revision} nguoi={ds.map((n) => ({ id: n.id, ten: n.ten }))} />
   </aside>
 </div>
 </div>
@@ -140,6 +147,7 @@
       </div>
       <label>Tên hiển thị<input class="inp" bind:value={sua.ten} required maxlength="80" placeholder="Ví dụ: Nguyễn Thảo Linh" /></label>
       <label>Nhịp học<Select options={mucs} bind:value={sua.muc} ariaLabel="Nhịp học" /></label>
+      <div class="mh-lua-chon"><label><input type="checkbox" bind:checked={sua.tuDong} /> Tự động tăng phút theo nhịp học</label><small class="muted">Có ngày nghỉ và hai lượt học mỗi ngày. Tắt để giữ số liệu; thời gian tắt không được cộng bù.</small></div>
       <div class="mh-so"><label>Phút học hiện tại<input class="inp" type="number" min="0" max="50000" required bind:value={sua.phut} /></label><label>Số ngày học<input class="inp" type="number" min="0" max="31" required bind:value={sua.ngay} /></label><label>Phần hoàn thành<input class="inp" type="number" min="0" max="1000" required bind:value={sua.bai} /></label></div>
       <div class="mh-lua-chon"><b>Hiển thị ở đâu?</b><label><input type="checkbox" bind:checked={sua.hien} /> Hiển thị người học</label><label><input type="checkbox" bind:checked={sua.dangKy} /> Danh sách đăng ký cuộc thi</label><label><input type="checkbox" bind:checked={sua.thi} /> Bảng cuộc thi</label><small class="muted">Người học minh họa không tham gia xét thưởng thật.</small></div>
     </form>
@@ -165,7 +173,6 @@
   .mh-thong-tin { flex: 1; min-width: 150px; display: flex; flex-direction: column; gap: 6px; } .mh-thong-tin small, .mh-thong-tin span { font-size: 12px; color: var(--muted); } .mh-thao-tac { display: flex; gap: 6px; align-items: center; } .mh-dang-hien { color: #167344; background: #effbf4; }
   .mh-xem-dau { margin: 4px 0 14px; flex-wrap: wrap; } .mh-bang { padding: 20px; } .mh-bang h3 { font-size: 17px; margin: 0 0 18px; } .mh-tabs { display: flex; background: var(--ground); border-radius: 10px; padding: 4px; gap: 3px; margin-bottom: 12px; } .mh-tabs button { flex: 1; border: 0; background: transparent; border-radius: 7px; padding: 9px 4px; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer; } .mh-tabs .mh-chon { background: white; color: var(--text); box-shadow: 0 1px 3px #0000000d; }
   .mh-hang { display: flex; gap: 9px; align-items: center; padding: 14px 4px; border-bottom: 1px solid var(--line); font-size: 12px; } .mh-hang:last-child { border: 0; } .mh-hang > div { flex: 1; } .mh-hang small { display: block; color: var(--muted); font-size: 11px; margin-top: 5px; } .mh-hang strong { text-align: right; } .mh-nho { width: 32px; height: 32px; font-size: 11px; } .mh-trong { text-align: center; color: var(--muted); padding: 30px 12px; font-size: 13px; }
-  .mh-nhip { margin-top: 20px; padding: 20px; } .mh-nhip h3 { font-size: 17px; margin: 8px 0; } .mh-nhip p { font-size: 13px; color: var(--muted); line-height: 1.8; } .mh-mau-ngay { display: flex; gap: 8px; margin: 16px 0; } .mh-mau-ngay span { flex: 1; text-align: center; border-radius: 10px; padding: 9px 4px; background: #effbf4; font-size: 11px; color: var(--muted); } .mh-mau-ngay b { display: block; margin-top: 6px; color: #167344; font-size: 16px; }
   .mh-form { display: flex; flex-direction: column; gap: 18px; } .mh-form label { display: flex; flex-direction: column; gap: 8px; font-size: 13px; } .mh-so { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; } .mh-lua-chon { border: 1px solid var(--line); padding: 16px; border-radius: 12px; display: flex; flex-direction: column; gap: 14px; } .mh-lua-chon label { flex-direction: row; align-items: center; } .mh-lua-chon input { accent-color: var(--son); }
   @media (max-width: 1100px) { .mh-bo-cuc { grid-template-columns: 1fr; } } @media (max-width: 600px) { .mh-dau { align-items: flex-start; flex-direction: column; } .mh-dau h1 { font-size: 24px; } .mh-thanh .inp { max-width: none; } .mh-so { grid-template-columns: 1fr; } .mh-quan-ly, .mh-bang { padding: 16px; } }
 </style>

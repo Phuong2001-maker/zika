@@ -6,6 +6,7 @@
   import { heartbeat } from '$lib/stores/heartbeat';
   import { toast } from '$lib/stores/toast.svelte';
   import { settings } from '$lib/stores/settings.svelte';
+  import { session } from '$lib/stores/session.svelte';
   import Icon from '$lib/components/Icon.svelte';
   import Avatar from '$lib/components/Avatar.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
@@ -107,7 +108,9 @@
         heartbeat.setActivity({ part: 'kt', screen: 'review', level: levelId, mockId: mockTestId });
         body = { mockTestId };
       } else {
-        const l = await lessonByNo(levelId, lessonNo ?? 0);
+        // Lượt đang thi được nhận diện từ phiên của chính người này, không phải mở lại cây bài đã ẩn.
+        const active = session.activeTests.find((a) => a.mockId === null && a.levelId === levelId && a.lessonNo === lessonNo && a.lessonId);
+        const l = active?.lessonId ? { id: active.lessonId, no: active.lessonNo ?? 0, title: active.lessonTitle ?? heading } : await lessonByNo(levelId, lessonNo ?? 0);
         if (!l) {
           failed = true;
           return;

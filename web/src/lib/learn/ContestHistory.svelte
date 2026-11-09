@@ -4,6 +4,7 @@
   import { contestStore, type Prize } from './contest.svelte';
   import { feedback } from '$lib/stores/feedback.svelte';
   import { clock } from '$lib/utils/format';
+  import { session } from '$lib/stores/session.svelte';
 
   let { open = $bindable(false) }: { open?: boolean } = $props();
   // Cuộc thi đã kết thúc lấy từ /contest/history. Không ghi số tiền: quỹ không chụp lại theo từng cuộc thi,
@@ -30,7 +31,7 @@
   }
 </script>
 
-{#if open}
+{#if open && session.can('community.contests.history')}
   <Modal title={item ? item.title : 'Lịch sử thi & thưởng'} width={640} mobileFullscreen onclose={back}>
     <div class="ch-content">
       {#if item}
@@ -49,11 +50,11 @@
             <p>Bạn đã đăng ký nhưng không vào làm bài.</p>
           {:else}
             {@const giai = prizeOf(item.me.rank)}
-            {#if giai}<b class="ch-win">{giai.label}</b>{/if}
+            {#if giai && session.can('community.contests.rewards')}<b class="ch-win">{giai.label}</b>{/if}
             <p>Đúng {item.me.correct}/{item.me.total} câu · làm trong {clock(item.me.usedSec * 1000)}.</p>
-            {#if giai}
+            {#if giai && session.can('community.contests.rewards')}
               <p>Chưa nhận thưởng thì gửi tên ngân hàng, số tài khoản và tên chủ tài khoản qua Góp ý.</p>
-              {#if feedback.available}
+              {#if feedback.available && session.can('community.feedback')}
                 <button type="button" class="btn btn-son ch-claim-button" onclick={claim}>Gửi thông tin nhận thưởng</button>
               {/if}
             {/if}
@@ -66,7 +67,7 @@
               {#each item.top as row (row.rank)}
                 <li>
                   <span class="ch-medal" aria-hidden="true">{medals[row.rank - 1] ?? row.rank}</span>
-                  <div><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>{prizeOf(row.rank)?.label ?? `Hạng ${row.rank}`}</small></div>
+                  <div><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>{session.can('community.contests.rewards') ? (prizeOf(row.rank)?.label ?? `Hạng ${row.rank}`) : `Hạng ${row.rank}`}</small></div>
                   <strong>{row.correct}/{row.total} câu</strong>
                 </li>
               {/each}

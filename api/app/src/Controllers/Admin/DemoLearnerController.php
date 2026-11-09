@@ -4,16 +4,19 @@ declare(strict_types=1);
 namespace Zika\Controllers\Admin;
 
 use Zika\Core\{Audit, Clock, Config, Db, HttpError, Request, Response, Upload, Validator};
+use Zika\Services\DemoActivity;
 
 /** Dữ liệu minh họa chỉ đọc/ghi qua API admin, không đi vào thống kê học hay xét thưởng. */
 final class DemoLearnerController
 {
     public function learners(Request $r): array
     {
+        DemoActivity::tick();
         return array_map(static fn ($n) => [
             'id' => (int) $n['id'], 'ten' => $n['name'], 'avatarUrl' => $n['avatar_path'], 'muc' => $n['activity_level'],
             'phut' => (int) $n['minutes'], 'ngay' => (int) $n['study_days'], 'bai' => (int) $n['completed_parts'],
             'hien' => (bool) $n['is_visible'], 'dangKy' => (bool) $n['is_registered'], 'thi' => (bool) $n['show_contest'],
+            'tuDong' => (bool) $n['auto_enabled'], 'thang' => $n['stats_month'],
         ], Db::all('SELECT * FROM demo_learners ORDER BY id DESC'));
     }
 
@@ -39,16 +42,33 @@ final class DemoLearnerController
             'is_visible' => (int) $v->bool('hien', true),
             'is_registered' => (int) $v->bool('dangKy'),
             'show_contest' => (int) $v->bool('thi'),
+            'auto_enabled' => (int) $v->bool('tuDong'),
         ];
         $avatar = $v->strOrNull('avatarUrl', 'Ảnh đại diện', 500);
         if ($avatar !== null && !$this->validAvatar($avatar)) {
             $v->error('avatarUrl', 'Hãy chọn ảnh đại diện đã tải lên cho người học minh họa.');
         }
         $v->done();
+        $original = null;
+        if ($v->present('goc')) {
+            $goc = $v->arr('goc', 'Số liệu ban đầu');
+            $v->done();
+            $base = new Validator($goc);
+            $original = ['minutes' => $base->int('phut', 'Phút ban đầu', 0, 50000),
+                'study_days' => $base->int('ngay', 'Ngày ban đầu', 0, 31),
+                'completed_parts' => $base->int('bai', 'Phần ban đầu', 0, 1000)];
+            $base->done();
+        }
         $old = $r->id() > 0 ? Db::val('SELECT avatar_path FROM demo_learners WHERE id = ?', [$r->id()]) : null;
-        $result = $this->save($r, 'demo_learners', $row + ['avatar_path' => $avatar]);
+        $id = DemoActivity::save($r->id(), $row + ['avatar_path' => $avatar], $original);
+        Audit::log($r, 'demo.save', 'demo_learners', $id);
         if ($old !== null && $old !== $avatar) $this->cleanAvatar((string) $old);
-        return $result;
+        return ['id' => $id];
+    }
+
+    public function activity(Request $r): array
+    {
+        return DemoActivity::history($r->id());
     }
 
     /** Ảnh minh họa có thư mục riêng, không dùng chung tệp avatar của tài khoản thật. */

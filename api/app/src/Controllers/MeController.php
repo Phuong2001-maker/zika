@@ -32,8 +32,25 @@ final class MeController
             'settings' => UserService::settings((int) $user['id']),
             'csrf' => Csrf::ensure($r),
             'support' => ['enabled' => (bool) Settings::value('support', 'enabled', false)],
-            'announcements' => AnnouncementService::activeFor($user),
+            'announcements' => \Zika\Services\FeatureAccess::allows($r->role(), 'community.notifications') ? AnnouncementService::activeFor($user) : [],
+            'features' => \Zika\Services\FeatureAccess::effective($r->role()),
+            'activeTests' => $this->activeTests($r),
         ];
+    }
+
+    public function features(Request $r): array
+    {
+        return ['features' => \Zika\Services\FeatureAccess::effective($r->role()), 'activeTests' => $this->activeTests($r)];
+    }
+
+    private function activeTests(Request $r): array
+    {
+        return array_map(static fn ($a) => ['mockId' => $a['mock_test_id'] === null ? null : (int) $a['mock_test_id'],
+            'levelId' => (int) $a['level_id'], 'lessonNo' => $a['no'] === null ? null : (int) $a['no'],
+            'lessonId' => $a['lesson_id'] === null ? null : (int) $a['lesson_id'], 'lessonTitle' => $a['title']],
+            Db::all('SELECT a.mock_test_id, a.lesson_id, COALESCE(l.level_id, m.level_id) level_id, l.lesson_no AS no, l.title FROM test_attempts a
+                LEFT JOIN lessons l ON l.id = a.lesson_id LEFT JOIN mock_tests m ON m.id = a.mock_test_id
+                WHERE a.user_id = ? AND a.submitted_at IS NULL', [$r->userId()]));
     }
 
     /** PATCH /me */
@@ -195,9 +212,9 @@ final class MeController
         VisitService::ping($r, is_array($activity) ? $activity : null);
         return [
             'serverTime' => Clock::now()->format('Y-m-d\TH:i:s.vP'),
-            'announcements' => AnnouncementService::activeFor($r->requireUser()),
+            'announcements' => \Zika\Services\FeatureAccess::allows($r->role(), 'community.notifications') ? AnnouncementService::activeFor($r->requireUser()) : [],
             // Số trên chuông cập nhật theo nhịp ping, admin vừa đăng là học viên thấy trong ~1 phút.
-            'unreadNotifications' => AnnouncementService::inbox($r->requireUser(), 0)['unread'],
+            'unreadNotifications' => \Zika\Services\FeatureAccess::allows($r->role(), 'community.notifications') ? AnnouncementService::inbox($r->requireUser(), 0)['unread'] : 0,
         ];
     }
 

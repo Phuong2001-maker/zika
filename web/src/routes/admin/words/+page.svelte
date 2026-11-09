@@ -248,16 +248,6 @@
     }
   }
 
-  async function toggleVisible(on: boolean): Promise<void> {
-    if (!level) return;
-    try {
-      await adminApi.patchLevel(level.id, { visible: on });
-      levels = (levels ?? []).map((l) => (l.id === level.id ? { ...l, visible: on } : l));
-      toast.ok('Đã lưu.');
-    } catch {
-      toast.show('Không lưu được.');
-    }
-  }
 </script>
 
 <svelte:head><title>Từ vựng HSK · Quản trị · Zìkǎ</title></svelte:head>
@@ -507,11 +497,7 @@
             <h2 class="h2">HSK {level.id}</h2>
             <p class="muted num" style="font-size: 13.5px">{num(level.enteredWords)} từ · {level.lessonCount} bài</p>
           </div>
-          <label class="sw">
-            <input type="checkbox" checked={level.visible} onchange={(e) => toggleVisible(e.currentTarget.checked)} />
-            <span></span>
-            Hiện cho người học
-          </label>
+          <a class="btn btn-sm" href="/admin/curricula?tab=visibility&curriculum={curriculumId}&level={level.id}">Quản lý ẩn/hiện</a>
         </section>
       {/if}
 

@@ -95,6 +95,7 @@ final class CurriculumController
 
         $newId = Db::tx(static function () use ($row, $makeDefault): int {
             $newId = Db::insert('curricula', $row);
+            Db::exec('INSERT INTO curriculum_levels (curriculum_id, level_id, is_visible) SELECT ?, id, is_visible FROM levels', [$newId]);
             if ($makeDefault) {
                 self::makeDefault($newId);
             }

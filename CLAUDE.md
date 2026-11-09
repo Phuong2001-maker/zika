@@ -42,6 +42,8 @@ Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 109/109 test; AP
 
 ## Bản đồ nhanh
 
+Quyền hiển thị/truy cập khu học (09/11): đọc [HUONG-DAN-QUYEN-HIEN-THI.md](HUONG-DAN-QUYEN-HIEN-THI.md). Admin → Cài đặt → Quyền truy cập & hiển thị, migration 025. `Services/FeatureAccess.php` là danh mục/kiểm quyền backend; frontend dùng `session.can(...)` và `auth/features.ts`. Không thêm lại điều kiện ẩn cứng Bài tập/Kiểm tra/Quán trà theo `isAdmin`. Nội dung quản lý ở Giáo trình → Ẩn/hiện nội dung, migration 026, `Services/ContentVisibility.php`: giáo trình → cấp/quyển → bài, một trạng thái bài áp dụng cả 6 phần; không thêm lại công tắc riêng ở các tab soạn. Tắt cha giữ nguyên lựa chọn riêng của con; quyền này không thay thế quyền quản trị hay phân giáo trình cho từng người.
+
 ```
 web/src/routes/          màn hình (SvelteKit)
 web/src/lib/components/  component dùng chung (Select, Modal, Icon, Switcher…)

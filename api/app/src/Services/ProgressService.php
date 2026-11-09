@@ -41,7 +41,7 @@ final class ProgressService
         $totals = [];
         foreach (Db::all(
             "SELECT l.level_id, COUNT(*) AS n FROM lessons l JOIN levels v ON v.id = l.level_id
-             WHERE l.curriculum_id = ? AND v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0 GROUP BY l.level_id",
+             WHERE l.curriculum_id = ? AND " . ContentVisibility::lessonSql() . " AND l.$cnt > 0 GROUP BY l.level_id",
             [$curriculum],
         ) as $row) {
             $totals[(int) $row['level_id']] = (int) $row['n'];
@@ -50,7 +50,7 @@ final class ProgressService
         foreach (Db::all(
             "SELECT l.level_id, COUNT(*) AS n FROM lesson_progress p
              JOIN lessons l ON l.id = p.lesson_id JOIN levels v ON v.id = l.level_id
-             WHERE p.user_id = ? AND p.part = ? AND p.status = 'done' AND l.curriculum_id = ? AND v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0
+             WHERE p.user_id = ? AND p.part = ? AND p.status = 'done' AND l.curriculum_id = ? AND " . ContentVisibility::lessonSql() . " AND l.$cnt > 0
              GROUP BY l.level_id",
             [$userId, $part, $curriculum],
         ) as $row) {
@@ -67,7 +67,7 @@ final class ProgressService
             $cont = Db::one(
                 "SELECT l.*, p.position AS p_position, p.total AS p_total, p.updated_at AS p_updated_at FROM lesson_progress p
                  JOIN lessons l ON l.id = p.lesson_id JOIN levels v ON v.id = l.level_id
-                 WHERE p.user_id = ? AND p.part = ? AND p.position > 0 AND l.curriculum_id = ? AND v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0
+                 WHERE p.user_id = ? AND p.part = ? AND p.position > 0 AND l.curriculum_id = ? AND " . ContentVisibility::lessonSql() . " AND l.$cnt > 0
                  ORDER BY p.updated_at DESC LIMIT 1",
                 [$userId, $part, $curriculum],
             );
@@ -77,7 +77,7 @@ final class ProgressService
             $cont = Db::one(
                 "SELECT l.*, 0 AS p_position, l.$cnt AS p_total, NULL AS p_updated_at FROM lessons l JOIN levels v ON v.id = l.level_id
                  LEFT JOIN lesson_progress p ON p.lesson_id = l.id AND p.user_id = ? AND p.part = ?
-                 WHERE l.curriculum_id = ? AND v.is_visible = 1 AND l.status = 'published' AND l.$cnt > 0 AND (p.status IS NULL OR p.status <> 'done')
+                 WHERE l.curriculum_id = ? AND " . ContentVisibility::lessonSql() . " AND l.$cnt > 0 AND (p.status IS NULL OR p.status <> 'done')
                  $order LIMIT 1",
                 [$userId, $part, $curriculum],
             );
@@ -182,7 +182,7 @@ final class ProgressService
         $cnt = self::cntCol($part);
         $curriculum = Curricula::ofUser($userId);
         $rows = Db::all(
-            'SELECT p.* FROM lesson_progress p JOIN lessons l ON l.id = p.lesson_id WHERE p.user_id = ? AND p.part = ? AND l.level_id = ? AND l.curriculum_id = ? ORDER BY l.lesson_no',
+            'SELECT p.* FROM lesson_progress p JOIN lessons l ON l.id = p.lesson_id WHERE p.user_id = ? AND p.part = ? AND l.level_id = ? AND l.curriculum_id = ? AND ' . ContentVisibility::lessonSql() . ' ORDER BY l.lesson_no',
             [$userId, $part, $levelId, $curriculum],
         );
         $out = [];
@@ -247,7 +247,8 @@ final class ProgressService
     {
         $l = self::publishedLesson($lessonId);
         // Biên tập và quản trị được làm thử bài của mọi giáo trình.
-        if (Db::val('SELECT role FROM users WHERE id = ?', [$userId]) === 'learner') {
+        $user = UserService::withEffectiveRole(UserService::find($userId) ?? []);
+        if (($user['role'] ?? 'learner') === 'learner') {
             Curricula::assertLesson($lessonId, Curricula::ofUser($userId));
         }
         return $l;
@@ -257,7 +258,7 @@ final class ProgressService
     public static function publishedLesson(int $lessonId): array
     {
         $l = Db::one(
-            "SELECT l.* FROM lessons l JOIN levels v ON v.id = l.level_id WHERE l.id = ? AND l.status = 'published' AND v.is_visible = 1",
+            "SELECT l.* FROM lessons l JOIN levels v ON v.id = l.level_id WHERE l.id = ? AND " . ContentVisibility::lessonSql() . "",
             [$lessonId],
         );
         return $l ?? throw HttpError::notFound('Bài này chưa có hoặc đã bị ẩn.');
@@ -395,16 +396,15 @@ final class ProgressService
     }
 
     /** @return array<string,mixed> dòng levels đang hiện */
-    public static function visibleLevel(int $levelId): array
+    public static function visibleLevel(int $levelId, int $curriculumId = Curricula::HSK_ID): array
     {
-        $lv = Db::one('SELECT * FROM levels WHERE id = ? AND is_visible = 1', [$levelId]);
-        return $lv ?? throw HttpError::notFound();
+        return ContentBuilder::level($levelId, false, $curriculumId);
     }
 
     /** @param array<string,mixed>|null $state */
     public static function saveReview(int $userId, int $levelId, string $part, int $position, int $total, ?array $state): void
     {
-        self::visibleLevel($levelId);
+        self::visibleLevel($levelId, Curricula::ofUser($userId));
         $now = Clock::sql();
         Db::exec(
             'INSERT INTO review_progress (user_id, level_id, part, position, total, state, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -420,7 +420,7 @@ final class ProgressService
     /** @return array{timesDone:int} */
     public static function completeReview(int $userId, int $levelId, string $part): array
     {
-        self::visibleLevel($levelId);
+        self::visibleLevel($levelId, Curricula::ofUser($userId));
         $now = Clock::sql();
         Db::exec(
             'INSERT INTO review_progress (user_id, level_id, part, position, total, times_done, state, updated_at) VALUES (?, ?, ?, 0, 0, 1, NULL, ?)

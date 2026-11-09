@@ -7,6 +7,9 @@
   import NotificationBell from './NotificationBell.svelte';
   import MonthlyCommunity from '$lib/learn/MonthlyCommunity.svelte';
   import DiemChip from '$lib/learn/DiemChip.svelte';
+  import FeatureGate from './FeatureGate.svelte';
+  import { session } from '$lib/stores/session.svelte';
+  import { homePath } from '$lib/auth/routes';
 
   // Thanh trên người học, bố cục điện thoại — một thanh dùng chung cho mọi màn (người dùng yêu cầu 08/11, trước đó
   // 21 màn 21 kiểu: màn có Quỹ tháng, màn không; màn có Chuyển nhanh, màn không).
@@ -45,11 +48,11 @@
 
 <header class="mtop mtb" bind:clientHeight={cao}>
   <div class="mtb-dong1">
-    <DiemChip gon />
+    <FeatureGate name="header.points"><DiemChip gon /></FeatureGate>
     <MonthlyCommunity />
     <!-- Thứ tự người dùng chốt 08/11: chuông rồi mới tới Chuyển nhanh, cuối cùng là tài khoản. -->
-    <NotificationBell size={32} />
-    <Switcher {current} />
+    <FeatureGate name="header.notifications"><FeatureGate name="community.notifications"><NotificationBell size={32} /></FeatureGate></FeatureGate>
+    {#if session.can('header.switcher')}<Switcher {current} />{:else}<a class="btn btn-sm" href={homePath(session.user?.role, session.features)}>Bàn học</a>{/if}
     <Avatar size={32} current={accountCurrent} bell={false} />
   </div>
   {#if coDong2}

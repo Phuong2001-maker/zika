@@ -23,13 +23,30 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 09/11/2026 — Quyền truy cập & hiển thị cha–con theo vai trò
+
+- Admin → Cài đặt thêm tab quản lý cha–con cho Học viên/Biên tập/Admin. Tắt cha giữ nguyên lựa chọn con; bảng phân biệt Hiển thị và Truy cập.
+- Migration 025: cấu hình quyền và phiên bản, audit, lưu transaction, chống ghi đè cấu hình cũ. `/me` và `/me/features` trả quyền hiệu lực, giao diện làm mới mỗi phút.
+- Áp dụng thanh đầu, Chuyển nhanh, các phần học/chế độ luyện, sách/nghe/đáp án/điểm, quỹ/thưởng/bảng xếp hạng/cuộc thi/lịch sử, Shopee/ủng hộ, Bàn học và mục tùy chọn tài khoản.
+- Bỏ ẩn cứng Quán trà/Bài tập/Kiểm tra theo vai trò; mặc định giữ menu cũ. API chặn phần học bị tắt, bảo toàn lượt thi đang làm và lối đăng xuất/quản trị.
+- Hướng dẫn và checklist tại [HUONG-DAN-QUYEN-HIEN-THI.md](HUONG-DAN-QUYEN-HIEN-THI.md). Đã áp dụng migration ở local, chưa triển khai hosting.
+
+### 09/11/2026 — Nhịp học tự động của người học minh họa
+
+- Migration 024: lưu cấu hình tự động, mốc đồng bộ, lịch riêng mỗi ngày và tổng theo tháng. Dùng Clock, transaction/khóa người học, chống cộng trùng khi cron và giao diện cùng cập nhật.
+- Lịch ổn định theo người/tuần: 3–4 / 4–5 / 5–6 ngày học, phút tương ứng 5–15 / 15–35 / 30–60. Hai lượt/ngày, tăng theo thời gian trôi, có ngày nghỉ; 25 phút tự động tương ứng một phần hoàn thành minh họa.
+- Tắt/bật không bù khoảng tắt; sửa nhịp không đổi lịch ngày đã tạo; chỉnh tay được giữ và tiếp tục tăng. Sang tháng mới giữ lịch sử, tổng tháng mới về 0.
+- Gắn tác vụ vào cron 5 phút và đồng bộ khi đọc admin; thay khối lịch ví dụ bằng lịch từ API, số đã cộng, công tắc và lịch sử tháng.
+- Test riêng: DemoActivityTest và DemoLearnerTest; hướng dẫn tại HUONG-DAN-DU-LIEU-MINH-HOA.md. Chỉ dữ liệu admin, chưa triển khai lên server thật.
+- Kiểm tra bản này: 13/13 test backend liên quan, 185 assertions; web 110/110, Svelte 0 lỗi/0 cảnh báo, lint sạch, build thành công. HTTP local tạo/bật/tắt tự động, đọc lịch 7 ngày và tổng tháng đạt; bản ghi thử đã xóa. Migration 024 đã áp dụng local. Chưa chạy lại toàn bộ API ở lần bổ sung nhịp này.
+
 ### 09/11/2026 — Lưu người học và lịch sử thưởng minh họa trong admin
 
 - Thêm màn admin Người học minh họa, tab lịch sử thi & thưởng, form thêm/sửa, ẩn/xóa và bản xem trước.
 - Migration 022: `demo_learners`, `demo_rewards`, khóa ngoại xóa lịch sử liên quan; API chỉ quyền A, kiểm dữ liệu và ghi nhật ký thao tác.
 - Nối giao diện với API, bỏ dữ liệu cứng, xử lý tải/lỗi/lưu. Dữ liệu tồn tại sau F5, không ghép vào dữ liệu học hay thưởng thật.
 - Hướng dẫn và checklist: [HUONG-DAN-DU-LIEU-MINH-HOA.md](HUONG-DAN-DU-LIEU-MINH-HOA.md). Test tự động: `DemoLearnerTest`.
-- Chưa tự tăng phút theo ngày; nhịp học mới lưu cấu hình. Chưa triển khai lên server thật.
+- Tại mốc này chưa tự tăng phút; phần đó đã được bổ sung ở mục Nhịp học tự động phía trên. Chưa triển khai lên server thật.
 - Bổ sung avatar: migration 023, upload riêng `demo-avatar`, chuẩn hóa 192px, chọn/đổi/xóa trong form và hiển thị ở danh sách/bảng xem trước; dọn ảnh cũ khi không còn được dùng.
 - Đã chạy migration 022–023 ở local. Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, web 110/110, build thành công; API toàn bộ 207/207 test, 1.462 assertions. HTTP local: tạo/đọc/sửa/ẩn lịch sử, xóa dây chuyền đúng; học viên và biên tập bị chặn 403. Bản ghi HTTP kiểm thử đã xóa sau khi kiểm.
 
@@ -769,3 +786,13 @@ Sinh tự động bởi `data/nap-sach/quet.py`, đừng sửa tay mục này.
 | Lỗi | Số chỗ | Ví dụ |
 |---|---|---|
 | Không có lỗi | 0 | |
+# 09/11/2026 — quản lý hiển thị theo vai trò và cây nội dung
+
+- Hoàn thiện Cài đặt → Quyền truy cập & hiển thị: trạng thái riêng theo vai trò, kế thừa cha/con, chống ghi đè cấu hình cũ, kiểm quyền API và đường dẫn; giữ lượt kiểm tra đang làm.
+- Thêm Giáo trình → Ẩn/hiện nội dung, quản lý giáo trình → cấp/quyển → bài. Một trạng thái bài dùng cho cả 6 phần. Chuyển công tắc cấp ở Từ vựng/Cài đặt và công tắc bài ở các tab soạn về cây chung.
+- Migration 025–026 đã chạy local. Bài ẩn bị loại khỏi danh sách, Học tiếp, ôn tập tổng hợp; chặn trước cache backend. Service worker chuyển nội dung học sang hỏi mạng trước, ngoại tuyến vẫn giữ khả năng đọc bản đã lưu còn hạn.
+- Chi tiết vận hành, phạm vi màn đọc sách và cách tiếp tục phát triển: `HUONG-DAN-QUYEN-HIEN-THI.md`. Kịch bản thủ công bổ sung trong `KICH-BAN-TEST.md`.
+- Chưa đưa thay đổi này lên hosting. Không thay dữ liệu thật bằng người học/lịch sử thưởng minh họa.
+- Kiểm tra local: toàn bộ API **224/224 test, 1.683 assertions**; web **120/120**, Svelte 0 lỗi/0 cảnh báo, lint sạch, build thành công. Kiểm HTTP thực: admin đọc cây 200, tắt cấp thì 6 API bài trả 404, staff xem trước 200, khôi phục cấp thì bài trả 200. Đã trả công tắc về trạng thái ban đầu sau kiểm tra.
+- Chưa kiểm trực quan trên trình duyệt: phiên browser của công cụ không có trình duyệt kết nối. Các bước điện thoại/máy tính trong kịch bản vẫn cần duyệt bằng mắt.
+- Kiểm lại trước commit theo yêu cầu: `npm run check` 0 lỗi/0 cảnh báo, lint sạch, web 120/120; toàn bộ PHPUnit 224/224 (1.683 assertions); `python data/nap-sach/test_doc_edge.py` 12/12. Giữ `AGENTS.md` của người dùng ngoài commit.

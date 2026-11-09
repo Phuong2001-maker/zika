@@ -13,6 +13,7 @@
   import { date, duration } from '$lib/utils/format';
   import Icon from '$lib/components/Icon.svelte';
   import Modal from '$lib/components/Modal.svelte';
+  import FeatureGate from '$lib/components/FeatureGate.svelte';
   import { nenAnhDaiDien } from '$lib/utils/anh';
 
   // Tài khoản (07 §8).
@@ -95,6 +96,7 @@
   });
 
   async function loadDevices(): Promise<void> {
+    if (!session.can('account.sessions')) { devices = []; return; }
     try {
       devices = await api.get<Device[]>('/me/sessions');
     } catch {
@@ -188,7 +190,7 @@
             {user.initials}
           {/if}
         </span>
-        <div class="anh-dd-nut">
+        <FeatureGate name="account.avatar"><div class="anh-dd-nut">
           <label class="btn" class:btn-sm={!m} class:dang-tai={anhBusy}>
             <Icon name="upload" size={15} /> {anhBusy ? 'Đang tải…' : user.avatarUrl ? 'Đổi ảnh' : 'Thêm ảnh'}
             <input type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" disabled={anhBusy} onchange={doiAnh} />
@@ -196,7 +198,7 @@
           {#if user.avatarUrl && !anhBusy}
             <button type="button" class="btn btn-bare-chu" class:btn-sm={!m} onclick={goAnh}>Gỡ ảnh</button>
           {/if}
-        </div>
+        </div></FeatureGate>
       </div>
       <div style="flex: 1 1 200px; min-width: 0">
         <h1 style="font-size: {m ? 22 : 26}px">{user.displayName}</h1>
@@ -215,13 +217,15 @@
     </section>
 
     <!-- Ba con số -->
-    <section class="kpi">
+    <FeatureGate name="account.stats"><section class="kpi">
       <div><span class="muted">Đã học</span><b class="bignum" style="font-size: 26px">{duration(user.stats.studySec)}</b></div>
       <div><span class="muted">Bài học xong</span><b class="bignum" style="font-size: 26px">{user.stats.lessonsDone}</b></div>
       <div><span class="muted">Đang học</span><b class="bignum" style="font-size: 26px">{user.currentLevelId ? `${cap.ten(user.currentLevelId)}` : '—'}</b></div>
     </section>
 
+    </FeatureGate>
     <!-- Thông tin cá nhân -->
+    <FeatureGate name="account.name">
     <section class="block" style="padding: {m ? 18 : 24}px; display: flex; flex-direction: column; gap: 14px">
       <h2 class="h2">Thông tin cá nhân</h2>
 
@@ -242,7 +246,9 @@
       </button>
     </section>
 
+    </FeatureGate>
     <!-- Cài đặt học: lối vào /settings (trước đây là nút trên thanh đầu). -->
+    <FeatureGate name="account.preferences">
     <section class="block" style="padding: {m ? 18 : 24}px; display: flex; flex-direction: column; gap: 10px">
       <h2 class="h2">Cài đặt học</h2>
       <p class="muted" style="font-size: 14px">
@@ -251,6 +257,7 @@
       <a href="/settings" class="btn" style="align-self: flex-start"><Icon name="sliders" size={16} /> Mở cài đặt học</a>
     </section>
 
+    </FeatureGate>
     <!-- Đăng nhập và bảo mật -->
     <section class="block" style="padding: {m ? 18 : 24}px; display: flex; flex-direction: column; gap: 14px">
       <h2 class="h2">Đăng nhập và bảo mật</h2>
@@ -263,7 +270,7 @@
         <Icon name="lock" size={16} /> {user.hasPassword ? 'Đổi mật khẩu' : 'Đặt mật khẩu'}
       </button>
 
-      <hr class="rule" />
+      <FeatureGate name="account.sessions"><hr class="rule" />
 
       <h3 style="font-size: 15px; font-weight: 700">Thiết bị đang đăng nhập</h3>
       {#if devices === null}
@@ -289,10 +296,12 @@
         </ul>
       {/if}
 
+      </FeatureGate>
       <button type="button" class="btn" style="align-self: flex-start" onclick={logout}><Icon name="logout" size={16} /> Đăng xuất</button>
     </section>
 
     <!-- Xoá tài khoản -->
+    <FeatureGate name="account.delete">
     <section class="block" style="padding: {m ? 18 : 24}px; display: flex; flex-direction: column; gap: 10px">
       <h2 class="h2">Xoá tài khoản</h2>
       <p class="muted" style="font-size: 14px">
@@ -302,6 +311,7 @@
         <Icon name="trash" size={16} /> Xoá tài khoản
       </button>
     </section>
+    </FeatureGate>
   {/if}
 {/snippet}
 

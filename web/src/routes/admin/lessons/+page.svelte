@@ -112,16 +112,6 @@
     }
   }
 
-  async function toggleReviewOnly(on: boolean): Promise<void> {
-    if (!level) return;
-    try {
-      await adminApi.patchLevel(level.id, { reviewPublishedOnly: on });
-      levels = (levels ?? []).map((l) => (l.id === level.id ? { ...l, reviewPublishedOnly: on } : l));
-      toast.ok('Đã lưu.');
-    } catch {
-      toast.show('Không lưu được, thử lại nhé.');
-    }
-  }
 </script>
 
 <svelte:head><title>Bài học HSK · Quản trị · Zìkǎ</title></svelte:head>
@@ -147,15 +137,7 @@
           Tự gộp từ {data.kpi.total} bài: Lật thẻ, Bài tập (lấy ngẫu nhiên {level.reviewBtCount} câu), Luyện viết, Hội thoại
           và bảng ngữ pháp. Không cần soạn riêng.
         </p>
-        <label class="sw">
-          <input
-            type="checkbox"
-            checked={level.reviewPublishedOnly}
-            onchange={(e) => toggleReviewOnly(e.currentTarget.checked)}
-          />
-          <span></span>
-          Chỉ gộp các bài đang hiện
-        </label>
+        <p class="hint">Chỉ gộp bài đang hiện trong cây nội dung của giáo trình.</p>
       </section>
 
       <section class="block" style="background: var(--son-soft)">

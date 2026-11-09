@@ -49,7 +49,7 @@ final class ContentController
             'name' => (string) $v['name'],
             'targetWords' => (int) $v['target_words'],
             'sampleText' => (string) $v['sample_text'],
-            'visible' => (bool) $v['is_visible'],
+            'visible' => \Zika\Services\ContentVisibility::levelVisible($c, (int) $v['id']),
             'enteredWords' => (int) $v['entered_words'],
             'lessonCount' => (int) $v['lesson_count'],
             'reviewPublishedOnly' => (bool) $v['review_published_only'],

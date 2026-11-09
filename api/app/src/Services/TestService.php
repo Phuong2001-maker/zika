@@ -37,7 +37,21 @@ final class TestService
                 return ['resultAttemptId' => $done];
             }
         }
-        // Chỉ chặn lúc vào làm: lượt đã làm vẫn phải chấm và xem lại được dù học viên đã đổi giáo trình.
+        // Không cắt ngang lượt đang thi khi admin vừa ẩn nội dung hoặc đổi quyền.
+        $resume = Db::one('SELECT * FROM test_attempts WHERE user_id = ? AND ' . self::scopeSql($lessonId) . ' AND submitted_at IS NULL ORDER BY id DESC LIMIT 1', [$userId, $lessonId ?? $mockTestId]);
+        if ($resume !== null) {
+            if (self::isOverdue($resume)) {
+                self::grade((int) $resume['id'], true);
+                return ['resultAttemptId' => (int) $resume['id']];
+            }
+            [$resumeCfg] = self::source($lessonId, $mockTestId, true);
+            if ($resume['contest_id'] !== null) {
+                $duration = Db::val('SELECT duration_min FROM contests WHERE id = ?', [(int) $resume['contest_id']]);
+                if ($duration !== null) $resumeCfg['durationSec'] = (int) $duration * 60;
+            }
+            return self::payload($resume, $resumeCfg);
+        }
+        // Chỉ chặn lúc bắt đầu lượt mới.
         if ($lessonId !== null) {
             ProgressService::visibleLesson($lessonId, $userId);
         }
@@ -565,9 +579,11 @@ final class TestService
     /** Tóm tắt cho màn Chọn bài (04 §7). @return array<string,mixed> */
     public static function summary(int $userId, ?int $lessonId, ?int $mockTestId): array
     {
-        [$cfg] = self::source($lessonId, $mockTestId);
         $scope = self::scopeSql($lessonId);
         $key = $lessonId ?? $mockTestId;
+        $hasOpen = Db::val("SELECT id FROM test_attempts WHERE user_id = ? AND $scope AND submitted_at IS NULL LIMIT 1", [$userId, $key]) !== null;
+        if ($lessonId !== null && !$hasOpen) ProgressService::visibleLesson($lessonId, $userId);
+        [$cfg] = self::source($lessonId, $mockTestId, $hasOpen);
 
         $best = Db::one(
             "SELECT MAX(score) AS best, MAX(max_score) AS max_score, MAX(passed) AS passed, COUNT(*) AS used

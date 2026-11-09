@@ -18,10 +18,12 @@ require dirname(__DIR__) . '/bootstrap.php';
 use Zika\Core\Cron;
 use Zika\Core\Mailer;
 use Zika\Services\AnnouncementService;
+use Zika\Services\DemoActivity;
 use Zika\Services\StatsService;
 use Zika\Services\VisitService;
 
 $steps = [
+    'demoActivity' => static fn () => DemoActivity::tick(),
     'closeVisits' => static fn () => VisitService::closeStale(),
     'onlineSample' => static fn () => StatsService::sampleOnline(),
     'announcements' => static fn () => AnnouncementService::tick(),

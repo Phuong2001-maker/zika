@@ -64,8 +64,9 @@
         <div class="lv-grid m"><Skeleton h="120px" r={16} /><Skeleton h="120px" r={16} /></div>
       {:else}
         <section aria-label={cap.cacCap} class="lv-grid m">
-          {#each levels ?? [] as l (l.id)}
+          {#each (levels ?? []).filter((l) => l.visible) as l (l.id)}
             <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} slug={info.slug} past={texts.past} mobile />
+          {:else}<EmptyState title="Chưa có nội dung được mở." />
           {/each}
         </section>
       {/if}
@@ -89,8 +90,9 @@
         {#if loading}
           {#each Array.from({ length: 6 }) as _, k (k)}<Skeleton h="190px" r={16} />{/each}
         {:else}
-          {#each levels ?? [] as l (l.id)}
+          {#each (levels ?? []).filter((l) => l.visible) as l (l.id)}
             <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} slug={info.slug} past={texts.past} />
+          {:else}<EmptyState title="Chưa có nội dung được mở." />
           {/each}
         {/if}
       </section>

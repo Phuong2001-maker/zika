@@ -63,7 +63,7 @@ final class PartContent
     /** GET /learn/levels/{id}/review/bt — kho câu của cả cấp (04 §4.9). @return array<string,mixed> */
     public static function reviewBt(int $levelId, bool $preview, int $curriculumId): array
     {
-        $lv = ContentBuilder::level($levelId, $preview);
+        $lv = ContentBuilder::level($levelId, $preview, $curriculumId);
         $ids = ContentBuilder::reviewLessonIds($lv, $preview, $curriculumId);
         $in = Db::in($ids);
         return [
@@ -134,7 +134,7 @@ final class PartContent
     /** GET /learn/levels/{id}/review/kt — danh sách đề thi thử (04 §4.9). @return array<string,mixed> */
     public static function reviewKt(int $levelId, bool $preview, int $curriculumId): array
     {
-        $lv = ContentBuilder::level($levelId, $preview);
+        $lv = ContentBuilder::level($levelId, $preview, $curriculumId);
         $rows = Db::all(
             'SELECT m.*, COUNT(q.id) AS qn FROM mock_tests m
              LEFT JOIN questions q ON q.mock_test_id = m.id
@@ -193,7 +193,7 @@ final class PartContent
     /** GET /learn/levels/{id}/review/lv — mọi chữ của cấp, không trùng (04 §4.9). @return array<string,mixed> */
     public static function reviewLv(int $levelId, bool $preview, int $curriculumId): array
     {
-        $lv = ContentBuilder::level($levelId, $preview);
+        $lv = ContentBuilder::level($levelId, $preview, $curriculumId);
         $ids = ContentBuilder::reviewLessonIds($lv, $preview, $curriculumId);
         $in = Db::in($ids);
 
@@ -304,7 +304,7 @@ final class PartContent
     /** GET /learn/levels/{id}/review/ht (04 §4.9). @return array<string,mixed> */
     public static function reviewHt(int $levelId, bool $preview, int $curriculumId): array
     {
-        $lv = ContentBuilder::level($levelId, $preview);
+        $lv = ContentBuilder::level($levelId, $preview, $curriculumId);
         $out = [];
         foreach (ContentBuilder::reviewLessonIds($lv, $preview, $curriculumId) as $lessonId) {
             $l = Db::one('SELECT lesson_no, title FROM lessons WHERE id = ?', [$lessonId]);
@@ -385,7 +385,7 @@ final class PartContent
     /** GET /learn/levels/{id}/review/np — bảng tra theo bài (04 §4.9). @return array<string,mixed> */
     public static function reviewNp(int $levelId, bool $preview, int $curriculumId): array
     {
-        $lv = ContentBuilder::level($levelId, $preview);
+        $lv = ContentBuilder::level($levelId, $preview, $curriculumId);
         $groups = [];
         foreach (ContentBuilder::reviewLessonIds($lv, $preview, $curriculumId) as $lessonId) {
             $points = self::grammarRows($lessonId);

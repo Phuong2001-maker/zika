@@ -13,10 +13,10 @@
   let open = $state(false);
   let root: HTMLDivElement | undefined = $state();
   let nut: HTMLButtonElement | undefined = $state();
-  const visibleParts = $derived(PARTS.filter((p) => session.isAdmin || (p.code !== 'bt' && p.code !== 'kt')));
+  const visibleParts = $derived(PARTS.filter((p) => session.can(`learn.${p.slug}`)));
   const cur = $derived(visibleParts.find((p) => p.code === current));
   const others = $derived(visibleParts.filter((p) => p.code !== current));
-  const showFeedback = $derived(session.config?.showFeedbackButton ?? true);
+  const showFeedback = $derived(session.can('community.feedback') && (session.config?.showFeedbackButton ?? true));
 
   onMount(() => {
     const onDoc = (e: MouseEvent) => {
@@ -86,11 +86,12 @@
           {/each}
           <!-- Giáo trình hiện cho mọi tài khoản (người dùng mở cho học viên 08/11/2026).
              Màu giấy kraft để không lẫn với 6 màu của các phần học. -->
-          <a href="/learn/books" class="swi" onclick={() => (open = false)}
+          {#if session.can('books')}<a href="/learn/books" class="swi" onclick={() => (open = false)}
             ><span class="swi-ic" style="background: #EFE0C8"><Icon name="book" size={24} /></span>Giáo trình</a
           >
-          {#if session.isAdmin}
-            <!-- Quán trà chỉ dành cho quản trị viên; API cũng chặn các vai trò còn lại. -->
+          {/if}
+          {#if session.can('community.chat')}
+            <!-- Cấu hình theo vai trò ở Cài đặt; không ẩn cứng theo isAdmin nữa. -->
             <a href="/learn/chat" class="swi" onclick={() => (open = false)}
               ><span class="swi-ic" style="background: #DDEFD9"><Icon name="cup" size={24} /></span>Quán trà</a
             >

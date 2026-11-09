@@ -29,6 +29,7 @@ return [
     ['POST',   '/install', [Inst::class, 'run'], 'P', ['csrf' => false]],
 
     ['GET',    '/me', [Me::class, 'show'], 'L'],
+    ['GET',    '/me/features', [Me::class, 'features'], 'L'],
     ['PATCH',  '/me', [Me::class, 'update'], 'L'],
     ['DELETE', '/me', [Me::class, 'destroy'], 'L'],
     ['POST',   '/me/avatar', [Me::class, 'avatar'], 'L'],

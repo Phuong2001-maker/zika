@@ -2,11 +2,12 @@
 /// <reference lib="webworker" />
 
 import { build, files, version } from '$service-worker';
+import { authorizedContent } from './lib/utils/authorized-content';
 
 // Service worker của Zìkǎ (02 §3.5).
 // Viết tay thay vì dùng Workbox: chỉ cần 4 chiến lược, không đáng thêm một phụ thuộc build.
 //  - precache  : mã nguồn build (/_app/immutable/**) + file tĩnh trong static/
-//  - SWR       : nội dung bài học (/api/learn/**) → mở lại bài đã học khi mất mạng
+//  - NetworkFirst: nội dung bài học; chỉ dùng bản đã lưu khi mất mạng
 //  - CacheFirst: file nét chữ, ảnh, âm thanh trong /uploads/** và font Google
 //  - NetworkOnly: mọi thứ còn lại (đăng nhập, tiến độ, kiểm tra, quản trị, ?preview=1)
 
@@ -86,24 +87,12 @@ async function trim(cacheName: string, max: number): Promise<void> {
   for (const req of keys.slice(0, keys.length - max)) await cache.delete(req);
 }
 
-/** Dùng bản cache ngay, đồng thời tải bản mới về cho lần sau. */
-async function staleWhileRevalidate(req: Request, cacheName: string, ttl: number, max?: number): Promise<Response> {
+/** Hỏi lại quyền trước khi trả bài; không dùng cache để bỏ qua bài vừa bị ẩn. */
+async function networkContent(req: Request, cacheName: string, ttl: number, max: number): Promise<Response> {
   const cache = await caches.open(cacheName);
-  const hit = await cache.match(req);
-  const net = fetch(req)
-    .then(async (res) => {
-      if (res.ok) {
-        await cache.put(req, stamp(res.clone()));
-        if (max) await trim(cacheName, max);
-      }
-      return res;
-    })
-    .catch(() => null);
-  if (hit && fresh(hit, ttl)) {
-    void net;
-    return hit;
-  }
-  return (await net) ?? hit ?? Response.error();
+  const response = await authorizedContent(req, cache, ttl);
+  try { await trim(cacheName, max); } catch { /* Kho đầy không được thay phản hồi quyền của server. */ }
+  return response;
 }
 
 /** Có trong cache thì dùng luôn, không có mới tải. */
@@ -160,7 +149,7 @@ sw.addEventListener('fetch', (event) => {
     // Bài Nháp admin xem trước và các API riêng tư: luôn hỏi server.
     if (url.searchParams.has('preview') || NEVER.some((p) => url.pathname.startsWith(p))) return;
     if (url.pathname.startsWith('/api/learn/')) {
-      event.respondWith(staleWhileRevalidate(req, LEARN, LEARN_TTL, LEARN_MAX));
+      event.respondWith(networkContent(req, LEARN, LEARN_TTL, LEARN_MAX));
     }
     return;
   }

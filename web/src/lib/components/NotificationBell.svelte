@@ -5,6 +5,7 @@
   import type { InboxItem } from '$lib/api/types';
   import { neo } from '$lib/utils/neo';
   import Icon from './Icon.svelte';
+  import { session } from '$lib/stores/session.svelte';
 
   // Chuông thông báo cạnh ảnh đại diện: thông báo admin đăng ở /admin/news hiện ở đây.
   // Bảng luôn thả xuống ngay dưới chuông; điện thoại thì trải gần hết bề ngang (xem utils/neo.ts).
@@ -37,6 +38,7 @@
 
 <svelte:window onclick={ngoai} onkeydown={(e) => e.key === 'Escape' && (mo = false)} />
 
+{#if session.can('header.notifications') && session.can('community.notifications')}
 <div class="nb" bind:this={goc}>
   <button
     type="button"
@@ -106,6 +108,7 @@
     </div>
   {/if}
 </div>
+{/if}
 
 <style>
   .nb {

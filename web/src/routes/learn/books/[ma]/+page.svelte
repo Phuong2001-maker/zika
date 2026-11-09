@@ -1,6 +1,7 @@
 <script lang="ts">
   import MTopbar from '$lib/components/MTopbar.svelte';
   import Topbar from '$lib/components/Topbar.svelte';
+  import { session } from '$lib/stores/session.svelte';
   import { SvelteSet } from 'svelte/reactivity';
   import { onDestroy, onMount, untrack } from 'svelte';
   import { page } from '$app/state';
@@ -20,6 +21,10 @@
 
   // Đọc một quyển giáo trình: trang sách cuộn dọc, kèm mục lục, file nghe và đáp án (nút nào sách không có thì ẩn).
   const st = new DocSach();
+  $effect(() => {
+    if (!session.can('books.audio')) { st.may.tamDung(); if (st.ngan === 'nghe') st.ngan = ''; }
+    if (!session.can('books.answers') && st.dapAn) st.veSach(st.baiHienTai?.so);
+  });
   const ma = $derived(page.params.ma ?? '');
   const sach = $derived(st.sach);
   const cacTrang = $derived(Array.from({ length: st.soTrang }, (_, i) => i + 1));
@@ -188,7 +193,7 @@
 <svelte:head><title>{sach ? `${st.dapAn ? 'Đáp án · ' : ''}${sach.ten}` : 'Giáo trình'} · Zìkǎ</title></svelte:head>
 
 {#snippet nutPhan(mobile: boolean)}
-  {#if sach?.dapAn}
+  {#if sach?.dapAn && session.can('books.answers')}
     {#if mobile}
       <button type="button" class="gt-cong" class:on={st.dapAn} aria-pressed={st.dapAn} aria-label={st.dapAn ? 'Về trang sách' : 'Xem đáp án'}
         onclick={() => (st.dapAn ? st.veSach(st.baiHienTai?.so) : st.moDapAn(st.baiHienTai?.so))}>
@@ -279,7 +284,7 @@
         </form>
 
         <div class="gt-phai">
-          {#if sach.nghe.length}
+          {#if sach.nghe.length && session.can('books.audio')}
             <button type="button" class="gt-cong" class:gt-cong-chu={!media.isMobile} class:on={st.may.dang !== null} aria-haspopup="dialog"
               aria-label="File nghe{ngheBaiNay.length ? `, bài này có ${ngheBaiNay.length} file` : ''}" onclick={() => (st.ngan = 'nghe')}>
               <Icon name="headphones" size={19} />
@@ -315,12 +320,12 @@
                     {#if st.dapAn}
                       <button type="button" class="btn btn-sm" onclick={() => st.veSach(bai.so)}><Icon name="book" size={16} />Mở bài trong sách</button>
                     {:else}
-                      {#if soNghe}
+                      {#if soNghe && session.can('books.audio')}
                         <button type="button" class="btn btn-sm gt-nghe-bai" onclick={() => st.ngheBai(bai)}>
                           <Icon name="headphones" size={16} />Nghe bài này<span class="gt-phu num">{soNghe} file</span>
                         </button>
                       {/if}
-                      {#if bai.so in st.dapAnTheoBai}
+                      {#if bai.so in st.dapAnTheoBai && session.can('books.answers')}
                         <button type="button" class="btn btn-sm" onclick={() => st.moDapAn(bai.so)}><Icon name="answer" size={16} />Đáp án</button>
                       {/if}
                     {/if}
@@ -351,12 +356,12 @@
     <MucLuc {st} ondi={di} />
   </NganKeo>
 {/if}
-{#if sach && st.ngan === 'nghe'}
+{#if sach && st.ngan === 'nghe' && session.can('books.audio')}
   <NganKeo title="File nghe" sub="{sach.nghe.length} file · {dinhDangPhut(tongPhut)} · ghi âm đi kèm sách" mobile={media.isMobile} onclose={() => (st.ngan = '')}>
     <DanhSachNghe {st} ondi={diTrangSach} />
   </NganKeo>
 {/if}
-{#if sach}<TrinhPhat {st} mobile={media.isMobile} ondi={diTrangSach} />{/if}
+{#if sach && session.can('books.audio')}<TrinhPhat {st} mobile={media.isMobile} ondi={diTrangSach} />{/if}
 
 <style>
   .book-main { max-width: 900px; display: flex; flex-direction: column; gap: 12px; }

@@ -38,7 +38,7 @@ final class ExerciseController
             if ($levelId === null) {
                 throw HttpError::validation(['levelId' => 'Thiếu cấp.']);
             }
-            $lv = ProgressService::visibleLevel($levelId);
+            $lv = ProgressService::visibleLevel($levelId, Curricula::ofUser($userId));
             $ids = $this->reviewQuestionIds($lv, $userId);
             if ($ids === []) {
                 throw HttpError::invalid('Cấp này chưa có câu bài tập nào.');

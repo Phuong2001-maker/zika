@@ -9,6 +9,7 @@ use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Core\Settings;
 use Zika\Core\Validator;
+use Zika\Services\FeatureAccess;
 
 /** Link Shopee phía người học: bé túi (một link) và hộp Quỹ tháng (nhiều link). */
 final class SupportController
@@ -32,11 +33,15 @@ final class SupportController
                 $fund[] = ['id' => $id, 'name' => (string) $l['name'], 'url' => "/go/$id?place=fund"];
             }
         }
+        $donate = Settings::get('donate');
         return [
-            'icon' => $icon,
-            'fund' => $fund,
-            'monthlyFund' => self::monthlyFund(),
+            'icon' => FeatureAccess::allows($r->role(), 'support.buddy') ? $icon : null,
+            'fund' => FeatureAccess::allows($r->role(), 'support.links') ? $fund : [],
+            'monthlyFund' => FeatureAccess::allows($r->role(), 'fund') ? self::monthlyFund() : ['amount' => null, 'month' => '', 'updatedOn' => null],
             'clickedToday' => $r->user !== null && self::daBamHomNay($r->userId()),
+            'donate' => FeatureAccess::allows($r->role(), 'support.donate') && $donate['enabled'] && $donate['account'] !== '' ? [
+                'bank' => $donate['bank'], 'owner' => $donate['owner'], 'account' => $donate['account'], 'memo' => $donate['memo'], 'qrUrl' => $donate['qr_path'],
+            ] : null,
         ];
     }
 
@@ -74,6 +79,8 @@ final class SupportController
         $place = (string) $v->in('place', 'Vị trí', self::PLACES);
         $v->done();
 
+        FeatureAccess::require($r, $place === 'icon' ? 'support.buddy' : 'support.links');
+
         foreach (self::visibleLinks() as $l) {
             if ((int) $l["place_$place"] === 1) {
                 self::logEvent((int) $l['id'], 'view', $place, $r->userId());
@@ -89,6 +96,7 @@ final class SupportController
     public function go(Request $r): Response
     {
         $id = $r->id();
+        if ($r->user !== null && !FeatureAccess::allows($r->role(), $r->q('place') === 'icon' ? 'support.buddy' : 'support.links')) return Response::redirect('/account');
         $link = null;
         foreach (self::visibleLinks() as $l) {
             if ((int) $l['id'] === $id) {
@@ -99,10 +107,11 @@ final class SupportController
         if ($link === null) {
             return Response::redirect('/learn/flashcards');
         }
+        $place = in_array($r->q('place'), self::PLACES, true) ? (string) $r->q('place') : 'fund';
+        if (!(bool) $link["place_$place"]) return Response::redirect('/account');
 
         // Route công khai không có giới hạn tần suất: chỉ tính lượt của người đã đăng nhập để khỏi bị bơm số.
         if ($r->method === 'GET' && $r->user !== null) {
-            $place = in_array($r->q('place'), self::PLACES, true) ? (string) $r->q('place') : 'fund';
             self::logEvent($id, 'click', $place, $r->userId());
         }
         return Response::redirect((string) $link['url']);

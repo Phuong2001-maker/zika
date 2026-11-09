@@ -44,7 +44,7 @@
   const greeting = $derived(session.user?.displayName || 'bạn');
   // Giáo trình của học viên chưa có bài ở cấp nào thì cấp đó cũng là "sắp có", không cho bấm vào trang rỗng.
   const moLevels = $derived((levels ?? []).filter((l) => l.visible && l.lessonCount > 0));
-  const sapCo = $derived((levels ?? []).filter((l) => !l.visible || l.lessonCount === 0));
+  const sapCo = $derived((levels ?? []).filter((l) => l.visible && l.lessonCount === 0));
 
   // Nhãn 7 ngày gần nhất, ngày cuối là hôm nay (khớp thứ tự mảng `today.week` của API).
   const THU = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
@@ -61,9 +61,9 @@
 
 <!-- Khối “Hôm nay”: việc nên làm ngay (học tiếp bài đang dở) + chuỗi ngày học để có lý do quay lại. -->
 {#snippet homNay(m: boolean)}
-  {#if home}
-    <section class="hn" class:hn-m={m} aria-label="Hôm nay">
-      {#if home.continue}
+  {#if home && session.can('home') && (session.can('home.continue') || session.can('home.streak') || session.can('home.words'))}
+    <section class="hn" class:hn-m={m} class:hn-don={!session.can('home.continue') || (!session.can('home.streak') && !session.can('home.words'))} aria-label="Hôm nay">
+      {#if home.continue && session.can('home.continue')}
         {@const c = home.continue}
         <a href="/learn/flashcards/hsk/{c.levelId}/lesson/{c.lessonNo}" class="hn-tiep" style="--mau: var(--hsk{c.levelId}, var(--son))">
           <span class="hn-chu-nen" lang="zh" aria-hidden="true">{chuNen}</span>
@@ -76,12 +76,12 @@
           </span>
           <span class="btn btn-son hn-nut">{c.position > 0 ? 'Học tiếp' : 'Bắt đầu học'} </span>
         </a>
-      {:else if moLevels.length === 0}
+      {:else if moLevels.length === 0 && session.can('home.continue')}
         <div class="hn-tiep hn-het">
           <span class="hn-ten">Giáo trình của bạn đang được soạn</span>
           <span class="muted" style="font-size: 14px">Có bài mới là bạn học được ngay tại đây.</span>
         </div>
-      {:else}
+      {:else if session.can('home.continue')}
         <div class="hn-tiep hn-het">
           <span class="stamp" style="font-size: 26px">完成</span>
           <span class="hn-ten">Bạn đã lật hết các bài đang có</span>
@@ -89,10 +89,10 @@
         </div>
       {/if}
 
-      {#if home.today}
+      {#if home.today && (session.can('home.streak') || session.can('home.words'))}
         {@const t = home.today}
         <div class="hn-chuoi">
-          <div class="hn-so">
+          {#if session.can('home.streak')}<div class="hn-so">
             <span class="hn-so-lon num" class:hn-so-0={t.streak === 0}>{t.streak}</span>
             <span style="min-width: 0">
               <b style="display: block">ngày học liên tiếp</b>
@@ -110,8 +110,8 @@
                 <span class="hn-thu">{nhanTuan[k]}</span>
               </li>
             {/each}
-          </ol>
-          <p class="hn-tu">Đã lật xong <b class="num">{t.words}</b> từ</p>
+          </ol>{/if}
+          {#if session.can('home.words')}<p class="hn-tu">Đã lật xong <b class="num">{t.words}</b> từ</p>{/if}
         </div>
       {/if}
     </section>
@@ -130,7 +130,7 @@
 {/snippet}
 
 {#snippet suggestCard()}
-  {#if home && home.reviewSuggest}
+  {#if home && home.reviewSuggest && session.can('home.review')}
     {@const s = home.reviewSuggest}
     <section class="suggest">
       <span class="ib" style="width: 46px; height: 46px; background: var(--surface); border-radius: 12px"><Icon name="cards" size={22} /></span>
@@ -203,6 +203,7 @@
 {/if}
 
 <style>
+  .hn.hn-don { grid-template-columns: minmax(0, 1fr); }
   .lv-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));

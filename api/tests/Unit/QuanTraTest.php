@@ -60,9 +60,9 @@ final class QuanTraTest extends DbTestCase
 
     public function testRoute(): void
     {
-        self::assertSame('A', Router::match('GET', '/chat')['auth']);
+        self::assertSame('L', Router::match('GET', '/chat')['auth']);
         self::assertSame('hoi-bai', Router::match('GET', '/chat/ban/hoi-bai')['params']['ban']);
-        self::assertSame('A', Router::match('DELETE', '/chat/tin/5')['auth']);
+        self::assertSame('L', Router::match('DELETE', '/chat/tin/5')['auth']);
         self::assertSame('A', Router::match('POST', '/admin/chat/mute')['auth']);
     }
 

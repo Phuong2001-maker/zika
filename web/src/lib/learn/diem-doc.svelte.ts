@@ -2,6 +2,7 @@
 // điểm chưa dùng giữ lại, ngày không nhận thì không bù. Link Shopee không tham gia vào việc cộng điểm.
 
 import { api } from '$lib/api/client';
+import { session } from '$lib/stores/session.svelte';
 
 interface DiemTuServer {
   diem: number;
@@ -24,6 +25,7 @@ class DiemDoc {
   }
 
   refresh(): Promise<void> {
+    if (!session.can('books.points')) return Promise.resolve();
     this.#dangTai ??= api
       .get<DiemTuServer>('/learn/points', { quiet: true })
       .then((d) => this.#nap(d))

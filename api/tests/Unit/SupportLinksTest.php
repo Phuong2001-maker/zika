@@ -83,7 +83,7 @@ final class SupportLinksTest extends DbTestCase
         $this->link(['place_icon' => 1]);
         $this->bat(false);
 
-        $out = (new SupportController())->links(new Request('GET', '/support/links'));
+        $out = (new SupportController())->links($this->nguoiHoc('GET', '/support/links'));
 
         self::assertNull($out['icon']);
         self::assertSame([], $out['fund']);
@@ -96,7 +96,7 @@ final class SupportLinksTest extends DbTestCase
         $this->link(['name' => 'Chưa gắn', 'place_fund' => 0]);
         $this->bat();
 
-        $out = (new SupportController())->links(new Request('GET', '/support/links'));
+        $out = (new SupportController())->links($this->nguoiHoc('GET', '/support/links'));
 
         self::assertSame(['id' => $b, 'name' => 'Cả hai', 'url' => "/go/$b?place=icon"], $out['icon']);
         self::assertSame([$b, $a], array_column($out['fund'], 'id'));
@@ -109,7 +109,7 @@ final class SupportLinksTest extends DbTestCase
         $bat = $this->link(['name' => 'Đang bật']);
         $this->bat();
 
-        $out = (new SupportController())->links(new Request('GET', '/support/links'));
+        $out = (new SupportController())->links($this->nguoiHoc('GET', '/support/links'));
 
         self::assertSame([$bat], array_column($out['fund'], 'id'));
     }
@@ -233,7 +233,7 @@ final class SupportLinksTest extends DbTestCase
         // Sang tháng mới mà chưa nhập lại thì vẫn ghi đúng tháng của số tiền đó.
         Clock::freeze(new DateTimeImmutable('2026-12-02 08:00:00'));
         Settings::clearCache();
-        $hoc = (new SupportController())->links(new Request('GET', '/support/links'));
+        $hoc = (new SupportController())->links($this->nguoiHoc('GET', '/support/links'));
         self::assertSame(['amount' => 1250000, 'month' => '11/2026', 'updatedOn' => '06/11/2026'], $hoc['monthlyFund']);
 
         self::assertSame('12/2026', $this->nhapTienQuy(2000000)['month']);
@@ -241,7 +241,7 @@ final class SupportLinksTest extends DbTestCase
 
     public function testChuaNhapHoacXoaTienQuyThiKhongCoSo(): void
     {
-        $chua = (new SupportController())->links(new Request('GET', '/support/links'))['monthlyFund'];
+        $chua = (new SupportController())->links($this->nguoiHoc('GET', '/support/links'))['monthlyFund'];
         self::assertSame(['amount' => null, 'month' => '11/2026', 'updatedOn' => null], $chua);
 
         $this->nhapTienQuy(500000);
@@ -253,7 +253,7 @@ final class SupportLinksTest extends DbTestCase
         $this->nhapTienQuy(500000);
         $this->bat(false);
 
-        $out = (new SupportController())->links(new Request('GET', '/support/links'));
+        $out = (new SupportController())->links($this->nguoiHoc('GET', '/support/links'));
 
         self::assertSame(500000, $out['monthlyFund']['amount']);
     }

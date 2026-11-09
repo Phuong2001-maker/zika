@@ -6,7 +6,7 @@ import type { LevelLessons, LessonItem, Part, ProgressRow, LevelProgress } from 
 /** Bộ nhớ tạm trong phiên: map (cấp → danh sách bài) để không gọi lại mỗi lần đổi bài. */
 const cache = new Map<string, LevelLessons>();
 
-export async function levelLessons(levelId: number, fresh = false): Promise<LevelLessons> {
+export async function levelLessons(levelId: number, fresh = true): Promise<LevelLessons> {
   const key = `${previewKey()}:${levelId}`;
   if (!fresh) {
     const hit = cache.get(key);

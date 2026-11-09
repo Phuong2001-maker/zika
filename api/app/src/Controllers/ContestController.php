@@ -15,7 +15,9 @@ final class ContestController
     /** GET /contest/current */
     public function current(Request $r): array
     {
-        return ['contest' => ContestService::current($r->userId()), 'prizes' => ContestService::prizes()];
+        $c = ContestService::current($r->userId());
+        if ($c !== null && !\Zika\Services\FeatureAccess::allows($r->role(), 'community.contests.registrants')) $c['registrantCount'] = 0;
+        return ['contest' => $c, 'prizes' => \Zika\Services\FeatureAccess::allows($r->role(), 'community.contests.rewards') ? ContestService::prizes() : []];
     }
 
     /** GET /contest/ranking */

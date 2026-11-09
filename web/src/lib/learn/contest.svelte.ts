@@ -1,4 +1,5 @@
 import { api } from '$lib/api/client';
+import { session } from '$lib/stores/session.svelte';
 
 export interface Contest {
   id: number;
@@ -86,6 +87,7 @@ class ContestStore {
   registrants = $state<Registrants | null>(null);
 
   async refreshRegistrants(): Promise<void> {
+    if (!session.can('community.contests.registrants')) { this.registrants = null; return; }
     try {
       this.registrants = await api.get<Registrants>('/contest/registrants', { quiet: true });
     } catch {
@@ -103,6 +105,7 @@ class ContestStore {
   }
 
   async refreshRanking(): Promise<void> {
+    if (!session.can('community.contests.ranking')) { this.ranking = null; return; }
     try {
       this.ranking = await api.get<Ranking>('/contest/ranking', { quiet: true });
     } catch {
@@ -111,6 +114,7 @@ class ContestStore {
   }
 
   async refreshStudyTop(): Promise<void> {
+    if (!session.can('community.study')) { this.studyTop = null; return; }
     try {
       this.studyTop = await api.get<StudyTop>('/contest/study-top', { quiet: true });
     } catch {
@@ -119,6 +123,7 @@ class ContestStore {
   }
 
   async refreshHistory(): Promise<void> {
+    if (!session.can('community.contests.history')) { this.history = []; return; }
     try {
       this.history = await api.get<PastContest[]>('/contest/history', { quiet: true });
     } catch {
@@ -127,6 +132,7 @@ class ContestStore {
   }
 
   async refresh(): Promise<void> {
+    if (!session.can('community.contests')) { this.current = null; this.prizes = []; return; }
     try {
       const data = await api.get<{ contest: Contest | null; prizes: Prize[] }>('/contest/current', { quiet: true });
       this.current = data.contest;

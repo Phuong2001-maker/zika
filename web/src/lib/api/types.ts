@@ -81,6 +81,8 @@ export interface Inbox {
 }
 
 export interface MeResponse {
+  features?: Record<string, boolean>;
+  activeTests?: import('$lib/auth/features').ActiveTest[];
   user: User;
   settings: UserSettings;
   csrf: string;

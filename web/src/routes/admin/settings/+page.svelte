@@ -6,6 +6,8 @@
   import Icon from '$lib/components/Icon.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
+  import FeatureAccess from '$lib/admin/FeatureAccess.svelte';
+  let tab = $state('general');
 
   // Quản trị · Cài đặt (08 §16).
   interface Settings {
@@ -73,7 +75,6 @@
         content: s.content,
         privacy: s.privacy,
         backup: s.backup,
-        levels: s.levels.map((l) => ({ id: l.id, visible: l.visible })),
       });
       toast.ok('Đã lưu cài đặt.');
     } catch (e) {
@@ -98,6 +99,9 @@
 </script>
 
 <svelte:head><title>Cài đặt · Quản trị · Zìkǎ</title></svelte:head>
+<div class="tabs" style="margin-bottom: 20px"><button class="tab" class:on={tab === 'general'} onclick={() => tab = 'general'}>Cài đặt chung</button><button class="tab" class:on={tab === 'features'} onclick={() => tab = 'features'}>Quyền truy cập & hiển thị</button></div>
+<div hidden={tab !== 'features'}><FeatureAccess /></div>
+<div hidden={tab !== 'general'}>
 
 <div class="head">
   <div>
@@ -137,15 +141,7 @@
   <section class="block card">
     <h2 class="h2">Nội dung học</h2>
     <div class="field">
-      <span class="lbl">Cấp HSK đang mở cho người học</span>
-      <div style="display: flex; gap: 8px; flex-wrap: wrap">
-        {#each s.levels as l (l.id)}
-          <label class="pick">
-            <input type="checkbox" bind:checked={l.visible} />
-            <span>{l.name} · {l.visible ? 'mở' : 'ẩn'}</span>
-          </label>
-        {/each}
-      </div>
+      <a class="btn btn-sm" href="/admin/curricula?tab=visibility">Quản lý ẩn/hiện theo giáo trình và bài học</a>
     </div>
     <div class="field">
       <span class="lbl">Giọng đọc mặc định</span>
@@ -240,6 +236,7 @@
   </section>
 {/if}
 
+</div>
 <style>
   .head {
     display: flex;

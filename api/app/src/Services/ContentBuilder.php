@@ -72,10 +72,10 @@ final class ContentBuilder
     /* ------------------------------------------------------------------ */
 
     /** @return array<string,mixed> dòng levels; cấp ẩn → 404 với người học */
-    public static function level(int $levelId, bool $preview): array
+    public static function level(int $levelId, bool $preview, int $curriculumId = Curricula::HSK_ID): array
     {
         $lv = Db::one('SELECT * FROM levels WHERE id = ?', [$levelId]);
-        if ($lv === null || (!$preview && !(int) $lv['is_visible'])) {
+        if ($lv === null || (!$preview && !ContentVisibility::levelVisible($curriculumId, $levelId))) {
             throw HttpError::notFound();
         }
         return $lv;
@@ -85,7 +85,7 @@ final class ContentBuilder
     public static function lesson(int $lessonId, bool $preview): array
     {
         $l = Db::one('SELECT l.*, v.is_visible AS level_visible, v.name AS level_name FROM lessons l JOIN levels v ON v.id = l.level_id WHERE l.id = ?', [$lessonId]);
-        if ($l === null || (!$preview && ($l['status'] !== 'published' || !(int) $l['level_visible']))) {
+        if ($l === null || (!$preview && ($l['status'] !== 'published' || !ContentVisibility::levelVisible((int) $l['curriculum_id'], (int) $l['level_id'])))) {
             throw HttpError::notFound('Bài này chưa có hoặc đã bị ẩn.');
         }
         return $l;
@@ -104,7 +104,7 @@ final class ContentBuilder
     /** Điều kiện “bài đang hiện” (xem trước thì mọi bài). */
     private static function statusSql(bool $preview, string $alias = 'l'): string
     {
-        return $preview ? '1 = 1' : "$alias.status = 'published'";
+        return $preview ? '1 = 1' : ContentVisibility::lessonSql($alias);
     }
 
     /* ------------------------------------------------------------------ */
@@ -126,7 +126,7 @@ final class ContentBuilder
         return array_map(static fn (array $v) => [
             'id' => (int) $v['id'],
             'name' => (string) $v['name'],
-            'visible' => (bool) $v['is_visible'],
+            'visible' => ContentVisibility::levelVisible($curriculumId, (int) $v['id']),
             // levels.sample_text là chữ mẫu của HSK; giáo trình khác lấy từ bài đầu của chính nó.
             'sampleText' => $curriculumId === Curricula::HSK_ID ? (string) $v['sample_text'] : (string) $v['mau_bai_dau'],
             'targetWords' => (int) $v['target_words'],
@@ -138,7 +138,7 @@ final class ContentBuilder
     /** GET /learn/levels/{id}/lessons (04 §4.2). @return array<string,mixed> */
     public static function levelLessons(int $levelId, bool $preview, int $curriculumId): array
     {
-        $lv = self::level($levelId, $preview);
+        $lv = self::level($levelId, $preview, $curriculumId);
         $lessons = Db::all(
             // Đếm bài khoá bằng truy vấn con: JOIN thẳng vào dialogues sẽ nhân dòng bài lên theo
             // số bài khoá, và danh sách bài hiện ra mấy lần cùng một bài.
@@ -183,7 +183,7 @@ final class ContentBuilder
             $out[] = $item;
         }
 
-        // Tổng hợp gộp bài đang hiện (hoặc mọi bài nếu admin tắt “Chỉ gộp các bài đang hiện”).
+        // Tổng hợp của người học luôn loại bài ẩn, cùng quy tắc với học từng bài.
         $rIds = self::reviewLessonIds($lv, $preview, $curriculumId);
         $in = Db::in($rIds);
         $mock = Db::all(
@@ -221,10 +221,10 @@ final class ContentBuilder
      */
     public static function reviewLessonIds(array $lv, bool $preview, int $curriculumId): array
     {
-        // Xem trước: mọi bài. Người học: bài đang hiện, trừ khi admin tắt “Chỉ gộp các bài đang hiện”.
-        $publishedOnly = !$preview && (int) $lv['review_published_only'] === 1;
+        // Tuỳ chọn tổng hợp cũ không được phép mở lại bài đã ẩn trong cây nội dung.
+        $publishedOnly = !$preview;
         return array_map('intval', Db::col(
-            'SELECT id FROM lessons WHERE level_id = ? AND curriculum_id = ?' . ($publishedOnly ? " AND status = 'published'" : '') . ' ORDER BY lesson_no',
+            'SELECT l.id FROM lessons l WHERE l.level_id = ? AND l.curriculum_id = ?' . ($publishedOnly ? ' AND ' . ContentVisibility::lessonSql() : '') . ' ORDER BY lesson_no',
             [(int) $lv['id'], $curriculumId],
         ));
     }
@@ -321,7 +321,7 @@ final class ContentBuilder
     /** GET /learn/levels/{id}/review/lt. @return array<string,mixed> */
     public static function reviewLt(int $levelId, bool $preview, int $curriculumId): array
     {
-        $lv = self::level($levelId, $preview);
+        $lv = self::level($levelId, $preview, $curriculumId);
         return [
             'level' => ['id' => (int) $lv['id'], 'name' => (string) $lv['name']],
             'words' => self::words(self::reviewLessonIds($lv, $preview, $curriculumId), true),

@@ -81,16 +81,16 @@
       <img class="gt-bia" src={urlBia(q)} alt="" loading="lazy" draggable="false" />
       {#if q.khoa}
         <span class="gt-khoa-bia"><Icon name="lock" size={16} />{truoc[q.ma] ? `Mở hết ${truoc[q.ma]}` : 'Chưa mở'}</span>
-      {:else if q.soNghe}<span class="gt-co-nghe" title="Có file nghe"><Icon name="headphones" size={15} /></span>{/if}
+      {:else if q.soNghe && session.can('books.audio')}<span class="gt-co-nghe" title="Có file nghe"><Icon name="headphones" size={15} /></span>{/if}
     </span>
     <b class="gt-ten" style="font-size: {mobile ? 14 : 16}px">{q.ten}</b>
     <span class="muted" style="font-size: 13px">{q.phu}</span>
     <span class="gt-chips">
       <span class="gt-chip"><Icon name="book" size={14} />{q.soBai} bài</span>
-      {#if q.soNghe}
+      {#if q.soNghe && session.can('books.audio')}
         <span class="gt-chip gt-chip-nghe" title="{q.soNghe} file nghe · {dinhDangPhut(q.phutNghe)}"><Icon name="headphones" size={14} />{q.soNghe} file nghe</span>
       {/if}
-      {#if q.coDapAn}<span class="gt-chip gt-chip-da"><Icon name="answer" size={14} />Đáp án</span>{/if}
+      {#if q.coDapAn && session.can('books.answers')}<span class="gt-chip gt-chip-da"><Icon name="answer" size={14} />Đáp án</span>{/if}
     </span>
     {#if !session.isStaff}
       <span class="gt-mo num">
@@ -139,9 +139,9 @@
         <p class="muted gt-mo-ta">Bạn thấy mọi bộ sách; học viên chỉ thấy bộ sách của giáo trình mình đang học.</p>
       {/if}
     </div>
-    {#if !session.isStaff && ds?.length}{@render viDiem()}{/if}
+    {#if !session.isStaff && ds?.length && session.can('books.points')}{@render viDiem()}{/if}
   </header>
-  {#if !session.isStaff && ds?.length && diemDoc.lanDau && diemDoc.daTai}
+  {#if !session.isStaff && ds?.length && diemDoc.lanDau && diemDoc.daTai && session.can('books.points')}
     <!-- Chỉ người chưa nhận điểm lần nào mới cần đọc luật; sau đó dòng này tự ẩn cho gọn. -->
     <ol class="gt-luat" aria-label="Cách mở bài">
       <li><span class="num">1</span>Bấm <b>Nhận điểm</b> mỗi ngày — lần đầu được 3 điểm</li>

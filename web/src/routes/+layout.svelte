@@ -46,7 +46,7 @@
     if (p === '/') return false;
     if (!u) return isPublicRoute(p);
     if (isGuestOnly(p)) return false;
-    if (!canView(u.role, p)) return false;
+    if (!canView(u.role, p, session.features, session.activeTests)) return false;
     return true;
   });
 
@@ -56,14 +56,20 @@
     const p = page.url.pathname;
     const u = session.user;
     if (p === '/') {
-      void goto(u ? homePath(u.role) : '/login', { replaceState: true });
+      void goto(u ? homePath(u.role, session.features) : '/login', { replaceState: true });
     } else if (!u && !isPublicRoute(p)) {
       void goto(loginUrl(p + page.url.search), { replaceState: true });
     } else if (u && isGuestOnly(p)) {
       void goto(landingPath(u.role, page.url.searchParams.get('next')), { replaceState: true });
-    } else if (u && !canView(u.role, p)) {
-      void goto(homePath(u.role), { replaceState: true });
+    } else if (u && !canView(u.role, p, session.features, session.activeTests)) {
+      void goto(homePath(u.role, session.features), { replaceState: true });
     }
+  });
+
+  $effect(() => {
+    if (!session.user) return;
+    const timer = setInterval(() => { void session.refreshFeatures(); }, 60_000);
+    return () => clearInterval(timer);
   });
 
   // Theo dõi phiên chỉ chạy khi đã đăng nhập (02 §3.4).
@@ -92,9 +98,9 @@
 
 {#if allowed}
   {@render children()}
-  {#if page.url.pathname.startsWith('/learn/')}<ShopeeBuddy />{/if}
+  {#if page.url.pathname.startsWith('/learn/') && session.can('support.buddy')}<ShopeeBuddy />{/if}
   <!-- Hộp Góp ý cho mọi màn người học đã đăng nhập (mở từ bảng Chuyển nhanh); khu quản trị không cần. -->
-  {#if session.user && !isAdminRoute(page.url.pathname)}<FeedbackModal />{/if}
+  {#if session.user && !isAdminRoute(page.url.pathname) && session.can('community.feedback')}<FeedbackModal />{/if}
 {:else}
   <div class="boot center" aria-busy="true" aria-label="Đang tải">
     <span class="seal" lang="zh" style="width: 48px; height: 48px; font-size: 26px">字</span>

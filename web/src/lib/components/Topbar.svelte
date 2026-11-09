@@ -6,6 +6,9 @@
   import NotificationBell from './NotificationBell.svelte';
   import MonthlyCommunity from '$lib/learn/MonthlyCommunity.svelte';
   import DiemChip from '$lib/learn/DiemChip.svelte';
+  import FeatureGate from './FeatureGate.svelte';
+  import { session } from '$lib/stores/session.svelte';
+  import { homePath } from '$lib/auth/routes';
 
   // Thanh trên người học, bố cục máy tính (05 §7.1) — một thanh dùng chung cho mọi màn: đường dẫn (nếu có),
   // điểm mở bài, quỹ tháng, top chăm học, chuông, chuyển nhanh, tài khoản. Trước đây mỗi màn tự viết thanh riêng nên
@@ -27,11 +30,11 @@
 <header class="topbar">
   {#if children}{@render children()}{/if}
   <div class="tb-phai">
-    <DiemChip />
+    <FeatureGate name="header.points"><DiemChip /></FeatureGate>
     <MonthlyCommunity />
     <!-- Thứ tự người dùng chốt 08/11: chuông rồi mới tới Chuyển nhanh, cuối cùng là tài khoản. -->
-    <NotificationBell size={44} />
-    <Switcher {current} />
+    <FeatureGate name="header.notifications"><FeatureGate name="community.notifications"><NotificationBell size={44} /></FeatureGate></FeatureGate>
+    {#if session.can('header.switcher')}<Switcher {current} />{:else}<a class="btn btn-sm" href={homePath(session.user?.role, session.features)}>Bàn học</a>{/if}
     <Avatar size={44} current={accountCurrent} bell={false} />
   </div>
 </header>

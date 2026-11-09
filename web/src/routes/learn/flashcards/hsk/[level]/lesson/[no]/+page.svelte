@@ -1,5 +1,6 @@
 <script lang="ts">
   import MTopbar from '$lib/components/MTopbar.svelte';
+  import { session } from '$lib/stores/session.svelte';
   import Topbar from '$lib/components/Topbar.svelte';
   import { cap } from '$lib/stores/cap.svelte';
   import { untrack } from 'svelte';
@@ -46,6 +47,9 @@
   // Chế độ học: Lật thẻ là màn cũ, 3 chế độ còn lại luyện cùng bộ từ. Mỗi chế độ giữ lượt đang
   // làm khi đổi qua lại; đối tượng nằm ở trang nên đổi bố cục điện thoại/máy tính không mất.
   let che = $state<CheDo>('the');
+  const modeKey: Record<CheDo, string> = { the: 'cards', ghep: 'match', tn: 'quiz', go: 'type' };
+  const modes = $derived(CHE_DO.filter((c) => session.can(`learn.flashcards.${modeKey[c.ma]}`)));
+  $effect(() => { if (modes.length && !modes.some((m) => m.ma === che)) chonCheDo(modes[0].ma); });
   let ghep = $state.raw<GhepCap | null>(null);
   let tn = $state.raw<TracNghiem | null>(null);
   let go = $state.raw<GoChu | null>(null);
@@ -297,7 +301,7 @@
 <!-- Hàng chọn chế độ: nút có viền như trang mẫu, nút đang chọn tô màu son của Zìkǎ. -->
 {#snippet chonCheDoRow(m: boolean)}
   <div class="zk-tabs" class:zk-tabs-deu={m} role="tablist" aria-label="Chế độ học">
-    {#each CHE_DO as c (c.ma)}
+    {#each modes as c (c.ma)}
       <button type="button" role="tab" class="zk-tab" aria-selected={che === c.ma} onclick={() => chonCheDo(c.ma)}>{c.ten}</button>
     {/each}
   </div>
@@ -338,7 +342,8 @@
         {@render chonCheDoRow(false)}
       </div>
     {/if}
-    {#if che !== 'the'}
+    {#if modes.length === 0}<p class="muted">Các chế độ học hiện chưa được mở.</p>
+    {:else if che !== 'the'}
       {@render luyen(m)}
     {:else if finished}
       {@render done(m)}
