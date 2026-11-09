@@ -1,20 +1,22 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { Part } from '$lib/api/types';
-  import { PARTS } from '$lib/parts';
+  import type { ManHoc } from '$lib/api/types';
+  import { PARTS, HSK30 } from '$lib/parts';
   import { session } from '$lib/stores/session.svelte';
   import { feedback } from '$lib/stores/feedback.svelte';
   import { neo } from '$lib/utils/neo';
   import Icon from './Icon.svelte';
 
   // Nút “Chuyển nhanh” 9 chấm có ở MỌI màn người học (05 §7.2). Bảng luôn đóng sẵn, bấm nút mới mở.
-  let { current = 'lt' }: { current?: Part } = $props();
+  let { current = 'lt' }: { current?: ManHoc } = $props();
 
   let open = $state(false);
   let root: HTMLDivElement | undefined = $state();
   let nut: HTMLButtonElement | undefined = $state();
   const visibleParts = $derived(PARTS.filter((p) => session.can(`learn.${p.slug}`)));
-  const cur = $derived(visibleParts.find((p) => p.code === current));
+  // Thi thử HSK 3.0 không gắn giáo trình nào nên đứng riêng, cạnh 6 phần học; tắt bật ở Cài đặt → Quyền truy cập.
+  const coHsk30 = $derived(session.can('learn.hsk30'));
+  const cur = $derived(current === 'hsk30' ? (coHsk30 ? HSK30 : undefined) : visibleParts.find((p) => p.code === current));
   const others = $derived(visibleParts.filter((p) => p.code !== current));
   const showFeedback = $derived(session.can('community.feedback') && (session.config?.showFeedbackButton ?? true));
 
@@ -84,6 +86,11 @@
               ><span class="swi-ic" style="background: {p.accent}"><Icon name={p.icon} size={24} /></span>{p.name}</a
             >
           {/each}
+          {#if coHsk30 && current !== 'hsk30'}
+            <a href="/learn/{HSK30.slug}" class="swi" onclick={() => (open = false)}
+              ><span class="swi-ic" style="background: {HSK30.accent}"><Icon name={HSK30.icon} size={24} /></span>{HSK30.name}</a
+            >
+          {/if}
           <!-- Giáo trình hiện cho mọi tài khoản (người dùng mở cho học viên 08/11/2026).
              Màu giấy kraft để không lẫn với 6 màu của các phần học. -->
           {#if session.can('books')}<a href="/learn/books" class="swi" onclick={() => (open = false)}

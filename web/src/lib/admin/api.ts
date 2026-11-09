@@ -101,7 +101,7 @@ export interface AdminQuestion {
   score: number;
   sortOrder: number;
   promptText: string;
-  section?: 'listening' | 'reading';
+  section?: 'listening' | 'reading' | 'writing' | 'speaking';
 }
 
 /** Một câu hỏi đang được soạn trong trình soạn (chưa chắc đã lưu). */
@@ -111,6 +111,8 @@ export interface Draft {
   payload: Payload;
   explain: string;
   score: number;
+  /** Phần đề (chỉ đề HSK 3.0 cho chọn). */
+  section?: 'listening' | 'reading' | 'writing' | 'speaking';
 }
 
 export interface TestConfig {

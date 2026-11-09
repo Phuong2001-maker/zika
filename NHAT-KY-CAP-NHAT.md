@@ -23,6 +23,31 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 10/11/2026 — Thi thử HSK 3.0: phần thi mới, ghi âm phần nói, kho hình, 18 đề tự soạn
+
+- **Phần mới "Thi thử HSK 3.0"** (Chuyển nhanh → Thi thử HSK 3.0, `/learn/hsk30`): kho đề dùng chung mọi giáo trình, không theo cây
+  Ẩn/hiện nội dung, quyền riêng `learn.hsk30` (mặc định bật). Hai chế độ: **Luyện tập** (không tính giờ, Kiểm tra từng câu, xem
+  bài mẫu câu nói) và **Thi thật** (tính giờ, nghe tối đa 2 lần, hết giờ tự nộp). Kết quả theo từng phần Nghe/Đọc/Viết; phần Nói
+  không chấm, nghe lại bản ghi cạnh bài mẫu. Ý tưởng tham khảo trang luyện thi HSK, giao diện và nội dung là của Zìkǎ.
+- **Ghi âm phần nói** ngay trong trình duyệt (chuẩn bị, vạch âm lượng, nghe lại, ghi lại); bản ghi chỉ lưu trên máy người học
+  (IndexedDB, tự xoá sau 7 ngày) theo lựa chọn của người dùng — server 8 GB không chứa file âm thanh. Cần https.
+- **Quản trị → Đề HSK 3.0** (`/admin/hsk30`, quyền E): tạo đề (gợi ý số câu/thời gian theo cấp), công khai, soạn câu theo 4 phần.
+  Dạng câu mới: **Nói** (5 kiểu: nhắc lại, đọc to, trả lời, theo chủ đề, nhìn tranh) và **Chọn tranh**; mọi câu gắn được hình.
+- **Kho 75 hình SVG** tự vẽ (`data/hsk30/hinh/ve.py` → `web/static/hinh-hsk/`), một phong cách theo bảng màu web, mỗi hình 1–2 KB.
+- **18 đề tự soạn** (3 đề × HSK 1–6, 1.182 câu) trong `data/hsk30/de/`, soạn song song theo đặc tả `data/hsk30/README.md`, kiểm bằng
+  `kiem_de.py` (0 lỗi), **soát chéo** bởi người soát khác người soạn: sửa 7 + 30 + 23 + 1 + 57 + 27 câu (HSK 1→6) — chủ yếu câu sắp
+  xếp ghép được hai cách (máy chỉ chấm một), phương án nhiễu cũng đúng, từ vượt cấp, trùng tình huống, giải thích nhắc vị trí
+  phương án, đáp án hay là phương án dài nhất (HSK 5 đã cân lại). Nạp qua API (`nap_de.py`, server kiểm từng câu), **để Nháp** chờ
+  người soát rồi Công khai.
+- **Giọng đọc**: `viec_doc.py` gom thêm câu nghe và bài nói mẫu của đề HSK 3.0; tạo giọng nam + nữ bằng pipeline có sẵn, tải lên
+  web local. Câu nghe hội thoại giữ nhãn 男：/女： (giọng máy đọc lên) vì nhiều câu hỏi cần biết ai nói.
+- Migration **027**; code: `TestService` (mode, check, sections), `QuestionPayload` (speak, pic, imageUrl), `Hsk30Controller` ×2,
+  `lib/learn/thi-hsk/`, `routes/learn/hsk30`, `routes/admin/hsk30`. Hướng dẫn: [HUONG-DAN-THI-THU-HSK30.md](HUONG-DAN-THI-THU-HSK30.md).
+- Kiểm: Hsk30Test 9/9, thi-hsk.test 6/6; duyệt trình duyệt (Chromium chạy ngầm, micro giả lập) luyện tập, ghi âm, bài mẫu, kết quả,
+  thi thật, điện thoại, admin; duyệt từng câu 6 đề thật (394 câu) không lỗi hiển thị/JS/hình. Đề thử giao diện và lượt làm thử đã xoá.
+  Sửa sau khi thử: chữ "Chưa ghi âm câu này", khoảng trống nhóm số câu, nhãn "Đọc chọn tranh".
+- Chưa đưa lên hosting (cần migration 027, nạp đề, chép giọng mới, xoá `storage/cache/content`).
+
 ### 09/11/2026 — Màn đọc sách theo cây Ẩn/hiện nội dung, gọn khu quản trị, bỏ Ủng hộ trực tiếp, thống nhất font
 
 - **Lỗi người dùng báo:** ẩn bài trong Giáo trình → Ẩn/hiện nội dung mà vẫn vào được. Đã thử: 6 phần học chặn đúng (404 với cả học viên lẫn admin). Lỗ hở nằm ở **màn đọc sách** `/learn/books`, trước đây chỉ xét bài đã mở bằng điểm. Ngoài ra hai giáo trình đều có "Bài 1 · Xin chào": ẩn bài của HSK 3.0 thì bài cùng tên của Hán ngữ (giáo trình mặc định của admin chưa gán) vẫn hiện, đó là đúng.

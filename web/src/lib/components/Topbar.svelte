@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import type { Part } from '$lib/api/types';
+  import type { ManHoc } from '$lib/api/types';
   import Switcher from './Switcher.svelte';
   import Avatar from './Avatar.svelte';
   import NotificationBell from './NotificationBell.svelte';
@@ -20,7 +20,7 @@
     accountCurrent = false,
     children,
   }: {
-    current?: Part;
+    current?: ManHoc;
     accountCurrent?: boolean;
     /** Đường dẫn ở đầu thanh, ví dụ `<nav class="crumb">Lật thẻ / Quyển 1</nav>`. */
     children?: Snippet;

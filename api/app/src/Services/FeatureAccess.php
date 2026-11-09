@@ -15,7 +15,7 @@ final class FeatureAccess
     {
         $groups = [
             'header' => ['Thanh đầu trang', 'display', ['points' => 'Điểm mở bài', 'fund' => 'Quỹ tháng', 'ranking' => 'Top chăm học / bảng xếp hạng', 'notifications' => 'Chuông thông báo', 'switcher' => 'Chuyển nhanh']],
-            'learn' => ['Các phần học', 'access', ['flashcards' => 'Lật thẻ', 'exercises' => 'Bài tập', 'tests' => 'Kiểm tra / thi thử', 'writing' => 'Luyện viết', 'dialogues' => 'Đọc hội thoại', 'grammar' => 'Ngữ pháp']],
+            'learn' => ['Các phần học', 'access', ['flashcards' => 'Lật thẻ', 'exercises' => 'Bài tập', 'tests' => 'Kiểm tra / thi thử', 'writing' => 'Luyện viết', 'dialogues' => 'Đọc hội thoại', 'grammar' => 'Ngữ pháp', 'hsk30' => 'Thi thử HSK 3.0']],
             'books' => ['Giáo trình', 'access', ['audio' => 'File nghe', 'answers' => 'Đáp án', 'points' => 'Điểm và nhận điểm mở bài']],
             'community' => ['Cộng đồng', 'access', ['chat' => 'Quán trà', 'feedback' => 'Góp ý · báo lỗi', 'study' => 'Top chăm học', 'notifications' => 'Thông báo', 'contests' => 'Cuộc thi']],
             'support' => ['Ủng hộ', 'access', ['buddy' => 'Bé túi Shopee', 'links' => 'Link Shopee trong Quỹ tháng']],
@@ -82,7 +82,7 @@ final class FeatureAccess
     /** Lượt kiểm tra đang làm vẫn đọc, lưu và nộp được dù admin vừa tắt quyền. */
     public static function ongoing(Request $r): bool
     {
-        if (preg_match('~^/tests/attempts/(\d+)(?:/submit)?$~', $r->path, $m)) {
+        if (preg_match('~^/tests/attempts/(\d+)(?:/submit|/check)?$~', $r->path, $m)) {
             return Db::val('SELECT id FROM test_attempts WHERE id = ? AND user_id = ? AND submitted_at IS NULL', [(int) $m[1], $r->userId()]) !== null;
         }
         $mock = filter_var($r->input('mockTestId'), FILTER_VALIDATE_INT) ?: null;
@@ -116,6 +116,7 @@ final class FeatureAccess
             if (!is_string($part)) throw HttpError::validation(['part' => 'Phần học không hợp lệ.']);
             $key = 'learn.' . ($parts[$part] ?? 'flashcards');
         }
+        elseif ($p === '/learn/hsk30') $key = 'learn.hsk30';
         elseif (str_starts_with($p, '/learn/books')) $key = str_contains($p, '/nghe/') ? 'books.audio' : (str_contains($p, '/dap-an/') ? 'books.answers' : (str_contains($p, '/mo/') ? 'books.points' : 'books'));
         elseif (str_starts_with($p, '/learn/points')) $key = 'books.points';
         elseif (str_starts_with($p, '/exercises/')) $key = 'learn.exercises';
@@ -125,7 +126,8 @@ final class FeatureAccess
             if (preg_match('~^/tests/mock/(\d+)/summary$~', $p, $m)) $mock = (int) $m[1];
             if (str_starts_with($p, '/tests/attempts/')) $mock = Db::val('SELECT mock_test_id FROM test_attempts WHERE id = ? AND user_id = ?', [$r->id(), $r->userId()]);
             $isContest = $mock && Db::val('SELECT id FROM contests WHERE mock_test_id = ? LIMIT 1', [$mock]) !== null;
-            $key = $isContest ? 'community.contests.enter' : 'learn.tests';
+            $isHsk30 = $mock && Db::val('SELECT kind FROM mock_tests WHERE id = ?', [$mock]) === 'hsk30';
+            $key = $isContest ? 'community.contests.enter' : ($isHsk30 ? 'learn.hsk30' : 'learn.tests');
         }
         elseif ($p === '/chat' || str_starts_with($p, '/chat/')) $key = 'community.chat';
         elseif ($p === '/feedback' || str_starts_with($p, '/feedback/')) $key = 'community.feedback';

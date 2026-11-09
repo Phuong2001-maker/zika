@@ -154,6 +154,14 @@ def tu_web(ds: dict, thoai: list) -> None:
                 thoai.append({"cap": cap, "bai": b["no"], "lessonId": b["id"], "khoa": k["no"], "coAudio": bool(k["audioUrl"]),
                               "giong": {sp["name"]: giong[sp["id"]] for sp in k["speakers"]},
                               "cau": [{"zh": l["zh"], "pinyin": l["pinyin"], "voice": giong[l["speakerId"]]} for l in k["lines"]]})
+    # Thi thử HSK 3.0 (migration 027): câu phát cho người học nghe và bài nói mẫu của mọi đề, kể cả đề Nháp,
+    # để công khai đề là có giọng ngay. Đề không thuộc giáo trình nào nên không nằm trong vòng lặp bài ở trên.
+    for de in s.goi("GET", "/admin/hsk30"):
+        for q in s.goi("GET", f"/admin/mock-tests/{de['id']}/questions")["questions"]:
+            p = q.get("payload") or {}
+            for k in ("audioText", "sample"):
+                if p.get(k):
+                    them(ds, p[k], None)
 
 
 def gop(viec: list[dict]) -> None:

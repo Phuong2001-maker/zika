@@ -5,12 +5,15 @@ use Zika\Controllers\BookController as Book;
 use Zika\Controllers\BookPointsController as Points;
 use Zika\Controllers\ChatController as Chat;
 use Zika\Controllers\FeedbackController as Feedback;
+use Zika\Controllers\Hsk30Controller as Hsk30;
 use Zika\Controllers\LearnController as Learn;
 use Zika\Controllers\ProgressController as Prog;
 
 // Nội dung học (04 §4) và tiến độ (04 §5).
 return [
     ['GET',  '/learn/levels', [Learn::class, 'levels'], 'L'],
+    // Thi thử HSK 3.0: kho đề chung, không theo giáo trình (migration 027).
+    ['GET',  '/learn/hsk30', [Hsk30::class, 'index'], 'L'],
     ['GET',  '/learn/levels/{id}/lessons', [Learn::class, 'levelLessons'], 'L'],
     ['GET',  '/learn/lessons/{id}/{part:flashcards|exercises|test|writing|dialogue|grammar}', [Learn::class, 'lesson'], 'L'],
     ['GET',  '/learn/levels/{id}/review/{part:lt|bt|kt|lv|ht|np}', [Learn::class, 'review'], 'L'],

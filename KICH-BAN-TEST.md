@@ -468,3 +468,26 @@ Kết quả ghi theo lần kiểm 09/11 ở local (Chromium chạy ngầm, máy 
 | S10 | Admin → Cài đặt → Quyền truy cập & hiển thị | Không còn dòng mô tả, khung giải thích, nút sang cây; không còn hàng "Ủng hộ trực tiếp"; tiêu đề 28px, chữ bảng 14px, chữ phụ 12px, nút cỡ nhỏ như tab Cài đặt chung | Đạt |
 | S11 | Font: ô nhập không class `.inp`, tên bài trong mục lục sách, Quán trà | Chữ Việt cùng một font Be Vietnam Pro, chữ Hán Noto Sans SC | Đạt (máy tính) |
 | S12 | Lặp S1, S7, S10 trên điện thoại | Như trên, bố cục không vỡ | Chưa thử |
+
+# Thi thử HSK 3.0 (10/11/2026)
+
+Kết quả theo lần kiểm 10/11 ở local (Chromium chạy ngầm, micro giả lập; máy tính 1366px và điện thoại 390px). Chi tiết ở
+[HUONG-DAN-THI-THU-HSK30.md](HUONG-DAN-THI-THU-HSK30.md).
+
+| # | Bước | Mong đợi | Kết quả |
+|---|---|---|---|
+| H1 | Học viên mở Chuyển nhanh | Có "Thi thử HSK 3.0"; ở màn đó thì thẻ "Đang dùng" là Thi thử HSK 3.0 | Đạt |
+| H2 | Học viên Hán ngữ và học viên HSK cùng mở `/learn/hsk30` | Thấy cùng danh sách đề công khai; đề Nháp không hiện | Đạt (test tự động) |
+| H3 | Luyện tập: chọn đáp án, bấm Kiểm tra | Hiện Đúng rồi/Chưa đúng, đáp án, giải thích; câu chọn tranh tô xanh đúng tranh | Đạt |
+| H4 | Câu nói: Bắt đầu → đếm chuẩn bị → ghi → Dừng → nghe lại → Xem bài mẫu → tự đánh giá | Có vạch âm lượng, phát lại được, bài mẫu + Nghe mẫu | Đạt |
+| H5 | Từ chối micro / mở bằng http | Báo rõ lý do, có nút Thử lại | Đạt (test tự động) — cần thử tay trên máy thật |
+| H6 | Tải lại trang giữa bài sau khi đã ghi âm | Bản ghi còn, nghe lại được | Cần thử tay |
+| H7 | Thi thật: đồng hồ, nghe tối đa 2 lần, hết giờ tự nộp, không xem đáp án giữa chừng | Đúng như mô tả; đang thi không có lối sang màn khác | Đạt (đồng hồ, thanh trên); hết giờ cần thử tay |
+| H8 | Nộp bài | Tỉ lệ đúng chung, thanh từng phần Nghe/Đọc/Viết, phần Nói đếm câu đã nói, nghe lại bản ghi + mẫu, câu sai kèm giải thích | Đạt |
+| H9 | Luyện tập và thi thật cùng một đề | Hai lượt riêng, vào lại đúng lượt dở | Đạt (test tự động) |
+| H10 | Tắt Cài đặt → Quyền → Thi thử HSK 3.0 cho Học viên | Mục biến khỏi Chuyển nhanh, đường dẫn/API bị chặn; lượt đang làm vẫn nộp được | Đạt (test tự động) |
+| H11 | Ẩn cấp/giáo trình ở cây Ẩn/hiện nội dung | Không ảnh hưởng đề HSK 3.0 | Đạt (test tự động) |
+| H12 | Admin tạo đề, soạn câu từng phần, chọn hình, câu nhìn tranh nói, công khai/nháp, xoá | Đúng; câu nói luôn ở phần Nói, không mang điểm | Đạt |
+| H13 | Duyệt từng câu 6 đề thật (1 đề mỗi cấp) | Mọi câu có đề bài và phương án, hình tải được, không lỗi JS | Đạt (394/394 câu) |
+| H14 | Điện thoại (390px): danh sách, làm bài, ghi âm | Bố cục không vỡ; bé túi có thể che nút (đã chấp nhận 06/11) | Đạt (danh sách, làm bài); ghi âm cần thử trên điện thoại thật |
+| H15 | iPhone Safari ghi âm | Ghi mp4, nghe lại được | Chưa thử (cần máy thật) |

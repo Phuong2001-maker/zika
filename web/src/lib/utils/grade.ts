@@ -26,9 +26,17 @@ export interface Payload {
   sample?: string;
   keywords?: string[];
   answer?: number | boolean | string;
+  /** Câu nói (Thi thử HSK 3.0). */
+  task?: string;
+  prompt?: string;
+  prepSec?: number;
+  answerSec?: number;
+  sampleVi?: string;
+  /** Hình minh hoạ của câu (kho hình /hinh-hsk/…svg). */
+  imageUrl?: string | null;
 }
 
-export const CHOICE_TYPES = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'pick', 'toZh'];
+export const CHOICE_TYPES = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'pick', 'toZh', 'pic'];
 
 export type Answer = number | boolean | string | number[] | { pairs: Record<number, number> } | null;
 
@@ -62,6 +70,7 @@ export function answered(type: string, payload: Payload, a: Answer): boolean {
   if (type === 'order') return Array.isArray(a) && a.length === (payload.tiles ?? []).length;
   if (type === 'trans') return typeof a === 'string' && a.trim() !== '';
   if (type === 'tf') return typeof a === 'boolean';
+  if (type === 'speak') return typeof a === 'string' && a in SPEAK_ANSWERS;
   if (type === 'match') {
     const pairs = (a as { pairs: Record<number, number> }).pairs ?? {};
     return Object.keys(pairs).length === (payload.left ?? payload.pairs ?? []).length;
@@ -130,6 +139,16 @@ export const TYPE_LABEL: Record<string, string> = {
   trans: 'Dịch sang tiếng Việt',
   tf: 'Đọc và chọn Đúng / Sai',
   match: 'Nối từ với nghĩa',
+  speak: 'Nói',
+  pic: 'Chọn tranh đúng',
+};
+
+/** Câu nói (Thi thử HSK 3.0): ghi âm ở máy người học, không chấm tự động. Khớp QuestionGrader::SPEAK_ANSWERS. */
+export const SPEAK_ANSWERS: Record<string, string> = {
+  ghi: 'Đã ghi âm',
+  tot: 'Tự đánh giá: Tốt',
+  tam: 'Tự đánh giá: Tạm được',
+  chua: 'Tự đánh giá: Chưa được',
 };
 
 /** Màu nền cho các cặp đã nối (06 §2.12). */

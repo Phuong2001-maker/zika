@@ -2,6 +2,9 @@
   import Icon from '$lib/components/Icon.svelte';
   import type { Draft } from '$lib/admin/api';
   import type { Payload } from '$lib/utils/grade';
+  import { NHIEM_VU_NOI } from '$lib/learn/thi-hsk/cau-truc';
+  import { HINH_THEO_MA, urlHinh, maTuUrl } from '$lib/learn/thi-hsk/hinh';
+  import HinhPicker from './HinhPicker.svelte';
 
   // Biểu mẫu soạn một câu hỏi, dùng chung cho Bài tập (8 dạng) và Kiểm tra (10 dạng) — 06 §2.
   // Component chỉ giữ dữ liệu; việc lưu do trang gọi nó đảm nhiệm.
@@ -11,13 +14,43 @@
     types,
     errors = {},
     onchange,
+    hinh = false,
   }: {
     draft: Draft;
     /** Danh sách dạng câu cho phép: [mã, tên hiển thị] */
     types: [string, string][];
     errors?: Record<string, string>;
     onchange?: () => void;
+    /** Cho gắn hình minh hoạ từ kho hình (chỉ đề HSK 3.0). */
+    hinh?: boolean;
   } = $props();
+
+  /** Ô đang chọn hình: 'minh-hoa' hoặc chỉ số phương án của câu chọn tranh. */
+  let chonHinh = $state<'minh-hoa' | number | null>(null);
+  const tenHinh = (ma: string): string => (HINH_THEO_MA[ma] ? `${HINH_THEO_MA[ma].zh} · ${HINH_THEO_MA[ma].vi}` : ma);
+
+  function datHinh(ma: string): void {
+    if (chonHinh === 'minh-hoa') {
+      draft.payload.imageUrl = urlHinh(ma);
+    } else if (typeof chonHinh === 'number') {
+      const opts = [...(draft.payload.options ?? [])];
+      opts[chonHinh] = ma;
+      draft.payload.options = opts;
+    }
+    chonHinh = null;
+    touch();
+  }
+  function themTranh(): void {
+    if ((draft.payload.options ?? []).length >= 4) return;
+    draft.payload.options = [...(draft.payload.options ?? []), ''];
+    touch();
+  }
+  function boTranh(i: number): void {
+    const opts = (draft.payload.options ?? []).filter((_, k) => k !== i);
+    draft.payload.options = opts;
+    if (typeof draft.payload.answer === 'number' && draft.payload.answer >= opts.length) draft.payload.answer = 0;
+    touch();
+  }
 
   const CHOICE = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'pick', 'toZh'];
   const isChoice = $derived(CHOICE.includes(draft.type));
@@ -52,7 +85,15 @@
       statement: p.statement ?? '',
       pairs: p.pairs ?? [['', ''], ['', ''], ['', ''], ['', '']],
       showMeaning: p.showMeaning ?? true,
+      task: p.task ?? 'answer',
+      prompt: p.prompt ?? '',
+      prepSec: p.prepSec ?? 10,
+      answerSec: p.answerSec ?? 30,
+      sampleVi: p.sampleVi ?? '',
+      imageUrl: p.imageUrl ?? null,
     };
+    // Câu chọn tranh: phương án là mã hình, không dùng lại chữ của dạng cũ.
+    if (t === 'pic') keep.options = ['', '', ''];
     if (t === 'tf') keep.answer = typeof p.answer === 'boolean' ? p.answer : false;
     if (t === 'order') keep.answer = typeof p.answer === 'string' ? p.answer : '';
     draft.type = t;
@@ -341,6 +382,110 @@
   </div>
 {/if}
 
+{#if draft.type === 'pic'}
+  <!-- Chọn tranh (đề HSK 3.0): phương án là hình trong kho, nghe câu (phần nghe) hoặc đọc câu (phần đọc). -->
+  <div class="field">
+    <label class="lbl" for="q-pic-audio">Câu phát cho người học nghe (phần Nghe)</label>
+    <div class="row">
+      <input id="q-pic-audio" class="inp hz" lang="zh" style="font-size: 20px" bind:value={draft.payload.audioText} oninput={touch} />
+      <button type="button" class="btn btn-sm btn-paper" onclick={() => speak(String(draft.payload.audioText ?? ''))}><Icon name="play" size={15} /> Nghe thử</button>
+    </div>
+    {#if errors.audioText}<p class="err">{errors.audioText}</p>{/if}
+  </div>
+  <div class="field">
+    <label class="lbl" for="q-pic-ask">Hoặc câu cho người học đọc (phần Đọc)</label>
+    <input id="q-pic-ask" class="inp hz" lang="zh" style="font-size: 20px" bind:value={draft.payload.ask} oninput={touch} />
+  </div>
+  <div class="field">
+    <span class="lbl">Các tranh · chọn ô tròn ở tranh đúng</span>
+    <div class="qf-tranh">
+      {#each draft.payload.options ?? [] as ma, i (i)}
+        <div class="qf-tranh-o">
+          <label class="qf-tranh-dung"><input type="radio" name="q-pic-answer" checked={draft.payload.answer === i} onchange={() => { draft.payload.answer = i; touch(); }} /> {String.fromCharCode(65 + i)}</label>
+          <button type="button" class="qf-tranh-hinh" onclick={() => (chonHinh = i)}>
+            {#if ma}<img src={urlHinh(ma)} alt={tenHinh(ma)} width="120" height="90" />{:else}<span class="muted">Chọn hình</span>{/if}
+          </button>
+          <span class="muted qf-tranh-ten">{ma ? tenHinh(ma) : ''}</span>
+          {#if (draft.payload.options ?? []).length > 2}<button type="button" class="btn btn-bare btn-sm" aria-label="Bỏ tranh {String.fromCharCode(65 + i)}" onclick={() => boTranh(i)}><Icon name="trash" size={15} /></button>{/if}
+        </div>
+      {/each}
+    </div>
+    {#if (draft.payload.options ?? []).length < 4}<button type="button" class="btn btn-sm btn-paper" style="align-self: flex-start" onclick={themTranh}><Icon name="plus" size={15} /> Thêm tranh</button>{/if}
+    {#if errors.options}<p class="err">{errors.options}</p>{/if}
+    {#if errors.answer}<p class="err">{errors.answer}</p>{/if}
+  </div>
+{/if}
+
+{#if hinh && draft.type !== 'pic'}
+  <div class="field">
+    <span class="lbl">Hình minh hoạ{draft.type === 'speak' && draft.payload.task === 'picture' ? ' (bắt buộc với câu nhìn tranh nói)' : ' (không bắt buộc)'}</span>
+    <div class="row">
+      {#if maTuUrl(draft.payload.imageUrl)}
+        <img class="qf-minh-hoa" src={draft.payload.imageUrl} alt={tenHinh(maTuUrl(draft.payload.imageUrl) ?? '')} width="120" height="90" />
+        <span class="muted" style="flex: 1">{tenHinh(maTuUrl(draft.payload.imageUrl) ?? '')}</span>
+        <button type="button" class="btn btn-sm btn-paper" onclick={() => (chonHinh = 'minh-hoa')}>Đổi hình</button>
+        <button type="button" class="btn btn-bare btn-sm" aria-label="Bỏ hình" onclick={() => { draft.payload.imageUrl = null; touch(); }}><Icon name="trash" size={15} /></button>
+      {:else}
+        <button type="button" class="btn btn-sm btn-paper" onclick={() => (chonHinh = 'minh-hoa')}><Icon name="plus" size={15} /> Chọn hình</button>
+      {/if}
+    </div>
+    {#if errors.imageUrl}<p class="err">{errors.imageUrl}</p>{/if}
+  </div>
+{/if}
+
+{#if chonHinh !== null}
+  <HinhPicker onpick={datHinh} onclose={() => (chonHinh = null)} />
+{/if}
+
+{#if draft.type === 'speak'}
+  <!-- Câu nói (Thi thử HSK 3.0): không chấm tự động, người học ghi âm ở máy mình rồi so với bài mẫu. -->
+  <div class="field">
+    <span class="lbl">Kiểu câu nói</span>
+    <div class="chips">
+      {#each NHIEM_VU_NOI as [code, label] (code)}
+        <button type="button" class="btn btn-sm {draft.payload.task === code ? 'btn-muc' : 'btn-paper'}" onclick={() => { draft.payload.task = code; touch(); }}>{label}</button>
+      {/each}
+    </div>
+  </div>
+  <div class="field">
+    <label class="lbl" for="q-sp-audio">Câu phát cho người học nghe{draft.payload.task === 'repeat' ? ' (bắt buộc, không hiện chữ)' : ' (không bắt buộc)'}</label>
+    <div class="row">
+      <input id="q-sp-audio" class="inp hz" lang="zh" style="font-size: 20px" bind:value={draft.payload.audioText} oninput={touch} />
+      <button type="button" class="btn btn-sm btn-paper" onclick={() => speak(String(draft.payload.audioText ?? ''))}><Icon name="play" size={15} /> Nghe thử</button>
+    </div>
+    {#if errors.audioText}<p class="err">{errors.audioText}</p>{/if}
+  </div>
+  <div class="field">
+    <label class="lbl" for="q-sp-prompt">
+      {draft.payload.task === 'read' ? 'Đoạn để đọc to' : draft.payload.task === 'topic' ? 'Chủ đề' : draft.payload.task === 'repeat' ? 'Chữ của câu (hiện khi xem bài mẫu)' : 'Câu hỏi bằng chữ'}
+    </label>
+    <textarea id="q-sp-prompt" class="inp hz" lang="zh" rows="2" style="font-size: 20px" bind:value={draft.payload.prompt} oninput={touch}></textarea>
+    {#if errors.prompt}<p class="err">{errors.prompt}</p>{/if}
+  </div>
+  <div class="field">
+    <label class="lbl" for="q-sp-vi">Gợi ý tiếng Việt (không bắt buộc)</label>
+    <input id="q-sp-vi" class="inp" bind:value={draft.payload.vi} oninput={touch} />
+  </div>
+  <div class="grid2">
+    <div class="field">
+      <label class="lbl" for="q-sp-prep">Thời gian chuẩn bị (giây)</label>
+      <input id="q-sp-prep" class="inp num" type="number" min="0" max="300" bind:value={draft.payload.prepSec} oninput={touch} />
+      {#if errors.prepSec}<p class="err">{errors.prepSec}</p>{/if}
+    </div>
+    <div class="field">
+      <label class="lbl" for="q-sp-ans">Thời gian nói tối đa (giây)</label>
+      <input id="q-sp-ans" class="inp num" type="number" min="5" max="300" bind:value={draft.payload.answerSec} oninput={touch} />
+      {#if errors.answerSec}<p class="err">{errors.answerSec}</p>{/if}
+    </div>
+  </div>
+  <div class="field">
+    <label class="lbl" for="q-sp-sample">Bài nói mẫu</label>
+    <textarea id="q-sp-sample" class="inp hz" lang="zh" rows="2" style="font-size: 20px" bind:value={draft.payload.sample} oninput={touch}></textarea>
+    <input class="inp" aria-label="Nghĩa bài mẫu" placeholder="Nghĩa tiếng Việt của bài mẫu" bind:value={draft.payload.sampleVi} oninput={touch} />
+    <p class="hint">Người học thấy bài mẫu khi bấm “Xem bài mẫu” ở chế độ luyện tập, hoặc sau khi nộp bài thi.</p>
+  </div>
+{/if}
+
 <!-- Giải thích + điểm -->
 <div class="field">
   <label class="lbl" for="q-explain">Giải thích · hiện sau khi người học trả lời</label>
@@ -444,6 +589,13 @@
     font-size: 13px;
     font-weight: 600;
   }
+  .qf-tranh { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .qf-tranh-o { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 12px; }
+  .qf-tranh-dung { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; align-self: flex-start; }
+  .qf-tranh-hinh { display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 3; border: 1px dashed var(--line-3); border-radius: 10px; background: #FFFDF8; cursor: pointer; padding: 4px; }
+  .qf-tranh-hinh img { width: 100%; height: auto; }
+  .qf-tranh-ten { font-size: 12px; text-align: center; min-height: 16px; }
+  .qf-minh-hoa { width: 120px; height: auto; border: 1px solid var(--line); border-radius: 10px; background: #FFFDF8; }
   .kw button {
     border: 0;
     background: none;

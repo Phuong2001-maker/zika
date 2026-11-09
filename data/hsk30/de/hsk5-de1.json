@@ -1,0 +1,1123 @@
+{
+  "level": 5,
+  "title": "HSK 5 · Đề 1",
+  "durationSec": 6000,
+  "questions": [
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：听说你们公司下个月开始允许在家办公了？男：对，每周可以在家工作两天，具体哪两天自己选。不过经理要求每天早上九点准时参加线上会议，汇报当天的工作计划，下班前还要发工作总结。女：那挺好的，至少能省下不少路上的时间，也不用每天挤地铁了。男：是啊，我家离公司太远了，每天来回要花差不多三个小时。问：男的为什么觉得在家办公好？",
+        "options": [
+          "可以少花路上的时间",
+          "不用参加线上会议",
+          "工作任务比以前少",
+          "经理不检查工作"
+        ],
+        "answer": 0
+      },
+      "explain": "Người nữ nói “能省下不少路上的时间” (tiết kiệm nhiều thời gian đi đường), người nam đồng ý vì đi về mất gần 3 tiếng. Vẫn phải họp trực tuyến lúc 9 giờ. 在家办公 = làm việc tại nhà; 汇报 = báo cáo; 来回 = đi về."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "很多人都有把事情往后推的习惯。比如，明明下周就要交报告，却总想等到最后一两天再动手，结果每次都要熬夜才能完成，质量也不理想。心理学家认为，这往往不是因为懒，而是因为害怕失败。人们担心自己做得不够好，干脆先不开始。越是追求完美的人，越容易这样。要改变这个习惯，可以把大任务分成几个小步骤，每完成一步就给自己一点奖励。问：人们把事情往后推的主要原因是什么？",
+        "options": [
+          "身体太累了",
+          "任务太简单",
+          "害怕做得不好",
+          "缺少别人的鼓励"
+        ],
+        "answer": 2
+      },
+      "explain": "Đoạn văn nói “不是因为懒，而是因为害怕失败”: không phải vì lười mà vì sợ thất bại, sợ làm chưa tốt. 往后推 = trì hoãn; 明明 = rõ ràng; 干脆 = dứt khoát, cứ thế; 奖励 = phần thưởng."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：小区最近开始实行垃圾分类了，你习惯了吗？女：刚开始觉得有点麻烦，每次扔垃圾都要想半天，现在已经习惯了。厨房里我放了两个垃圾桶，一个装剩饭剩菜，一个装其他垃圾。男：那塑料瓶和纸箱呢？女：塑料瓶、纸箱和旧报纸都属于可回收的垃圾，我一般先放在阳台上的箱子里，等多了再一起拿下楼。男：这个办法好，我也学学，省得每天跑好几趟。问：女的怎么处理塑料瓶？",
+        "options": [
+          "和剩饭剩菜放在一起",
+          "等多了再一起拿下楼",
+          "每天早上扔一次",
+          "送给楼下的邻居"
+        ],
+        "answer": 1
+      },
+      "explain": "Người nữ nói “先放在阳台上的箱子里，等多了再一起拿下楼”: để vào thùng ngoài ban công, đợi nhiều rồi mang xuống một lượt. 垃圾分类 = phân loại rác; 可回收 = tái chế được; 塑料瓶 = chai nhựa; 剩饭剩菜 = cơm canh thừa."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "近年来，直播购物越来越受欢迎。主播在镜头前详细介绍商品，观众可以一边看一边下单，有时还能抢到很低的价格。这种方式让购物变得方便又有趣，但也带来了一些问题。有些人看直播时一激动，就买了很多其实用不上的东西，过后又后悔。有位年轻人一个晚上买了五件衣服，结果大部分一次都没穿过。专家建议，购物前最好先列一个清单，只买真正需要的商品。问：专家建议人们怎么做？",
+        "options": [
+          "少看购物直播",
+          "只在白天购物",
+          "多和主播交流",
+          "购物前先列清单"
+        ],
+        "answer": 3
+      },
+      "explain": "Chuyên gia khuyên “购物前最好先列一个清单”: trước khi mua nên lập danh sách. 直播 = phát trực tiếp; 主播 = người dẫn livestream; 下单 = đặt hàng; 清单 = danh sách."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：你给孩子报了几个兴趣班？男：本来报了三个，钢琴、画画和游泳，都是他自己挑的。后来发现孩子每天放学还要去上课，回到家都快九点了，周末也没时间玩儿，整个人都很累，我就把钢琴停了。女：我也觉得学得太多，孩子反而会没兴趣。我女儿以前也是这样，后来只留下了她最喜欢的舞蹈课。男：对，现在他每周只上画画和游泳，心情好多了。问：男的为什么停了钢琴课？",
+        "options": [
+          "钢琴课太贵了",
+          "孩子每天太累",
+          "老师要求太严",
+          "孩子不喜欢音乐"
+        ],
+        "answer": 1
+      },
+      "explain": "Người nam nói con ngày nào tan học cũng phải đi học thêm, về nhà gần 9 giờ, “整个人都很累，我就把钢琴停了”. Các lớp đều do con tự chọn nên không phải vì con không thích nhạc. 兴趣班 = lớp năng khiếu; 本来 = vốn dĩ, ban đầu; 反而 = ngược lại."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "有调查显示，七成以上的年轻人睡前都会看手机，而且一看就是一个多小时。研究发现，这种习惯会影响睡眠质量。一方面，手机屏幕发出的光会让大脑以为现在还是白天，从而推迟睡意的产生；另一方面，刷短视频时大脑一直处于兴奋状态，很难马上安静下来。所以，专家建议睡前一小时最好把手机放到一边，看看书或者听听轻音乐。问：这段话主要谈什么？",
+        "options": [
+          "怎样选择手机",
+          "刷短视频有什么好处",
+          "轻音乐的作用",
+          "睡前看手机的影响"
+        ],
+        "answer": 3
+      },
+      "explain": "Cả đoạn nói việc xem điện thoại trước khi ngủ làm giảm chất lượng giấc ngủ. 睡眠质量 = chất lượng giấc ngủ; 屏幕 = màn hình; 推迟 = làm chậm lại; 兴奋 = hưng phấn."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：您好，我叫王明，是来参加面试的，请问会议室在几楼？女：在八楼，出了电梯往右走就是。不过面试时间改了，从十点推迟到十点半，因为前面还有两位在面试，时间可能会比较长。你可以先在休息区等一会儿。男：好的，谢谢。需要准备什么材料吗？女：带上简历和毕业证书的复印件就行。男：好的，我都带了，那我先上去等着。问：面试几点开始？",
+        "options": [
+          "十点半",
+          "十点",
+          "八点",
+          "十一点"
+        ],
+        "answer": 0
+      },
+      "explain": "“从十点推迟到十点半”: lùi từ 10 giờ sang 10 giờ rưỡi. “八楼” là tầng 8, không phải giờ. 面试 = phỏng vấn; 简历 = sơ yếu lý lịch; 复印件 = bản photo."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "中国人喝茶已经有几千年的历史了。不同地方的人喝茶的习惯也不一样，比如南方人更喜欢喝绿茶，北方人则比较喜欢花茶，觉得花茶的香味更浓。在广东，人们早上常常去茶楼，一边喝茶一边吃点心，一坐就是一两个小时，这叫“喝早茶”。周末的时候，茶楼里常常坐满了一家老小。对很多人来说，喝茶不仅是一种习惯，也是交流感情的好机会。问：“喝早茶”是哪个地方的习惯？",
+        "options": [
+          "北方",
+          "上海",
+          "广东",
+          "四川"
+        ],
+        "answer": 2
+      },
+      "explain": "Đoạn văn nói “在广东，人们早上常常去茶楼……这叫‘喝早茶’”. 茶楼 = quán trà; 点心 = điểm tâm; 则 = còn (dùng để đối chiếu)."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：你最近看起来精神特别好，有什么好办法吗？男：哪有什么好办法，就是每天下班后去公园跑半个小时步，周末再约几个朋友去爬爬山。女：坚持多久了？我也试过跑步，可是一个月就放弃了，实在太累了。男：快半年了。刚开始我也特别累，跑几分钟就累得不行，后来身体慢慢适应了，睡觉也比以前香多了，体重还减了五公斤。问：男的坚持运动多长时间了？",
+        "options": [
+          "半个小时",
+          "一个多月",
+          "快半年了",
+          "一年多了"
+        ],
+        "answer": 2
+      },
+      "explain": "Người nam nói “快半年了” = sắp được nửa năm. “半个小时” là thời gian chạy mỗi ngày. 坚持 = kiên trì; 适应 = thích nghi; 睡得香 = ngủ ngon."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "随着智能手机的普及，很多服务都搬到了网上，比如挂号、打车、付款等。对年轻人来说，这些都很方便，可是不少老年人却因为不会用手机而遇到了困难，有的甚至去医院都挂不上号。为了帮助他们，一些社区开设了免费的手机课堂，每周三下午上课，由志愿者一步一步地教老人怎么操作。很多老人学会以后，还主动去教身边的朋友。问：社区为老年人做了什么？",
+        "options": [
+          "开设免费手机课",
+          "送给他们新手机",
+          "陪他们去医院",
+          "组织他们去旅游"
+        ],
+        "answer": 0
+      },
+      "explain": "“一些社区开设了免费的手机课堂” = một số khu dân cư mở lớp dạy dùng điện thoại miễn phí. 普及 = phổ cập; 挂号 = đăng ký khám bệnh; 志愿者 = tình nguyện viên; 操作 = thao tác."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：你还打算在这个城市买房吗？我记得你去年就开始看房子了。女：暂时不考虑了。房价太高，就算贷款，每个月也要还一大笔钱，差不多是我工资的一半，压力太大。男：可一直租房也不是办法啊，搬来搬去多麻烦。女：我觉得租房挺好的，可以根据工作随时换地方，省下的钱还能出去旅旅游。等以后收入稳定了再说吧。问：女的现在对买房是什么态度？",
+        "options": [
+          "已经买好了",
+          "准备马上贷款",
+          "请父母帮忙买",
+          "暂时不考虑"
+        ],
+        "answer": 3
+      },
+      "explain": "Người nữ nói ngay “暂时不考虑了” = tạm thời không tính đến. 贷款 = vay tiền; 还 (huán) = trả nợ; 收入稳定 = thu nhập ổn định; 态度 = thái độ."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "蜜蜂虽然很小，但对自然环境和人类的生活都非常重要。很多植物需要靠蜜蜂传播花粉才能结出果实，我们吃的水果和蔬菜中，有相当一部分都离不开蜜蜂的帮助。如果蜜蜂大量减少，这些农作物的产量也会跟着下降。近年来，由于农药使用过多和气候变化，一些地区的蜜蜂越来越少。为此，一些国家已经开始限制某些农药的使用。问：蜜蜂减少会带来什么结果？",
+        "options": [
+          "农药用得更多",
+          "水果产量下降",
+          "花开得更早",
+          "气温不断升高"
+        ],
+        "answer": 1
+      },
+      "explain": "Nhiều loại rau quả cần ong thụ phấn, “如果蜜蜂大量减少，这些农作物的产量也会跟着下降”. Dùng nhiều thuốc trừ sâu là nguyên nhân, không phải kết quả. 蜜蜂 = ong mật; 花粉 = phấn hoa; 产量 = sản lượng; 农药 = thuốc trừ sâu."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：你报名的那个网上课程怎么样？男：内容挺实用的，老师讲得也清楚，而且可以反复看，没听懂的地方可以多听几遍。就是没人监督，我经常学着学着就去玩手机了，到现在才学了三分之一。女：你可以找个同学一起学，每天互相检查进度，谁没完成就请对方喝咖啡。男：好主意，我问问小王有没有兴趣，他也报了这门课。问：男的在网上学习遇到了什么问题？",
+        "options": [
+          "课程内容太难",
+          "老师讲得不清楚",
+          "网速太慢",
+          "很难专心学下去"
+        ],
+        "answer": 3
+      },
+      "explain": "“没人监督，我经常学着学着就去玩手机了” → khó tập trung học. Anh ấy khen nội dung thiết thực, thầy giảng rõ, nên vấn đề không nằm ở khoá học. 监督 = giám sát; 实用 = thiết thực; 互相检查进度 = kiểm tra tiến độ của nhau."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "表扬孩子是一门学问。心理学家发现，如果总是夸孩子“你真聪明”，孩子遇到难题时反而容易放弃，因为他们担心失败会证明自己不够聪明。相反，如果表扬孩子的努力，比如说“你这次准备得很认真”，孩子会更愿意接受挑战，即使失败了也愿意再试一次，因为他们相信能力是可以通过努力提高的。所以，父母表扬孩子时，应该多关注过程。问：说话人认为应该怎样表扬孩子？",
+        "options": [
+          "多夸孩子聪明",
+          "表扬孩子的努力",
+          "尽量少表扬孩子",
+          "只看考试成绩"
+        ],
+        "answer": 1
+      },
+      "explain": "“如果表扬孩子的努力，孩子会更愿意接受挑战”, “多关注过程”. 表扬/夸 = khen; 学问 = môn học, cái cần hiểu biết; 挑战 = thử thách; 过程 = quá trình."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：这个周末博物馆有一个关于丝绸之路的展览，你想去看看吗？女：好啊，我早就想去了，听说里面有很多一千多年前的东西。不过听说周末人特别多，要提前在网上预约，不然进不去。男：我昨天已经约好了，星期六上午十点的，一共两张票。女：太好了，那我们九点半在门口见吧，先去旁边的咖啡馆坐一会儿。男：没问题，我准时到。问：他们打算什么时候见面？",
+        "options": [
+          "星期六九点半",
+          "星期六十点",
+          "星期天九点半",
+          "星期天十点"
+        ],
+        "answer": 0
+      },
+      "explain": "Vé đặt lúc 10 giờ sáng thứ Bảy, nhưng người nữ hẹn “九点半在门口见” = gặp ở cổng lúc 9 rưỡi. 展览 = triển lãm; 丝绸之路 = Con đường tơ lụa; 预约 = đặt hẹn trước."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "夏天，城市的气温往往比郊区高好几度，这种现象叫做“热岛效应”。造成这种现象的原因有很多，比如高楼太多，空气不容易流动；汽车和空调排出大量热量；绿地面积太少等。为了改善这种情况，很多城市开始在楼顶种花草，并增加公园和树木。数据显示，绿化好的地区，夏天的温度能降低两三度。此外，一些城市还鼓励人们多坐公共交通。问：城市采取了什么办法改善热岛效应？",
+        "options": [
+          "减少公园数量",
+          "多使用空调",
+          "建更多高楼",
+          "在楼顶种花草"
+        ],
+        "answer": 3
+      },
+      "explain": "“很多城市开始在楼顶种花草，并增加公园和树木”. 郊区 = ngoại ô; 现象 = hiện tượng; 热岛效应 = hiệu ứng đảo nhiệt; 改善 = cải thiện."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：听说小李辞职了？他在公司干了五年，干得挺好的呀，经理也很重视他。男：是啊，工资也不低，去年还涨了一次。不过他说每天重复同样的工作，学不到新东西，觉得没什么发展空间，想趁年轻去别的行业试试。女：他打算去做什么？男：好像是去一家做新能源汽车的公司，虽然工资少一点，但是机会多。女：他真有勇气。问：小李为什么辞职？",
+        "options": [
+          "工资太低",
+          "和同事关系不好",
+          "觉得没有发展空间",
+          "身体出了问题"
+        ],
+        "answer": 2
+      },
+      "explain": "“每天重复同样的工作，觉得没什么发展空间”. Lương “也不低” nên không phải vì lương thấp. 辞职 = nghỉ việc; 重复 = lặp lại; 趁 = nhân lúc; 行业 = ngành nghề."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "有一家开了三十年的老面馆，一直只卖一种牛肉面，店面也不大。很多人建议老板多增加几个品种，吸引更多顾客，可老板却说：“把一样东西做到最好，比什么都卖却什么都一般强。”三十年来，面的味道一直没有变过。正因为这种坚持，面馆的生意一直很好，每天中午门口都排着长队，有的客人从小吃到大，现在又带着自己的孩子来。问：这家面馆成功的原因是什么？",
+        "options": [
+          "专心把一种面做好",
+          "价格比别的店便宜",
+          "面的品种非常多",
+          "店开在热闹的市中心"
+        ],
+        "answer": 0
+      },
+      "explain": "Quán chỉ bán một loại mì, ông chủ chủ trương “把一样东西做到最好”. 品种 = chủng loại; 坚持 = kiên trì; 排长队 = xếp hàng dài."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：大夫，我最近总是头疼，晚上也睡不好，白天一点精神都没有。女：你平时工作忙吗？每天对着电脑多长时间？男：差不多十个小时，还经常加班到半夜，周末也很少休息。女：检查结果没什么大问题，主要是太累了。你要注意休息，每工作一个小时就起来活动活动，少喝点咖啡，晚上十一点以前睡觉。如果下个月还是这样，再来复查一下。问：医生认为男的头疼是什么原因？",
+        "options": [
+          "咖啡喝得太少",
+          "工作太累了",
+          "得了严重的病",
+          "运动太多了"
+        ],
+        "answer": 1
+      },
+      "explain": "Bác sĩ nói “检查结果没什么大问题，主要是太累了”. 大夫 = bác sĩ; 加班 = tăng ca; 半夜 = nửa đêm; 活动 = vận động."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "现在，翻译软件越来越聪明，不仅能翻译文字，还能直接翻译语音，出国旅游时非常方便。有人因此认为，以后没必要再学外语了。但是，语言不只是交流的工具，也包含着一个民族的文化和思维方式。机器可以帮我们理解字面意思，却很难让我们真正理解对方的文化和感情。学外语的过程，也是了解另一种文化的过程，所以它仍然很有价值。问：说话人对学外语有什么看法？",
+        "options": [
+          "已经没有必要了",
+          "会用软件就够了",
+          "只需要学文字",
+          "仍然很有价值"
+        ],
+        "answer": 3
+      },
+      "explain": "Người nói kết luận “所以它仍然很有价值” = vì vậy (học ngoại ngữ) vẫn rất có giá trị. 软件 = phần mềm; 民族 = dân tộc; 思维方式 = cách tư duy; 字面意思 = nghĩa đen."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：这个暑假你有什么安排？还去上次那家公司实习吗？男：不去了。我报名参加了一个志愿者活动，去山区的小学给孩子们上英语课，一共一个月。女：真不错！那边条件怎么样？你一个人去吗？男：我们一共有八个大学生。听说那边比较艰苦，晚上经常停电，洗澡也不方便。不过我觉得这是很难得的经历。女：那你一定要注意安全。问：男的暑假要去做什么？",
+        "options": [
+          "去山区旅游",
+          "在家复习英语",
+          "去山区教英语",
+          "去公司实习"
+        ],
+        "answer": 2
+      },
+      "explain": "“去山区的小学给孩子们上英语课” = lên trường tiểu học vùng núi dạy tiếng Anh. 志愿者 = tình nguyện viên; 艰苦 = gian khổ; 停电 = mất điện; 难得 = hiếm có."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "每年春节前后，中国都会出现一次规模巨大的人口流动，人们把它叫做“春运”。在外地工作、学习的人无论离家多远，都希望回去和家人一起过年，所以这段时间车票特别难买。以前，很多人要提前好几天去火车站排队买票，有时排一整夜也买不到。近几年，随着高铁的发展和网上购票的普及，回家的路已经比以前轻松多了，很多人当天就能到家。问：近几年春运有什么变化？",
+        "options": [
+          "回家的人越来越少",
+          "回家变得更轻松了",
+          "火车票更便宜了",
+          "春节假期变长了"
+        ],
+        "answer": 1
+      },
+      "explain": "“回家的路已经比以前轻松多了” nhờ tàu cao tốc và mua vé trên mạng. 规模巨大 = quy mô rất lớn; 流动 = di chuyển; 春运 = vận tải dịp Tết; 高铁 = tàu cao tốc."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：你好，我上周在你们网站买了这件外套，才穿了一次扣子就掉了，能退吗？女：非常抱歉，给您添麻烦了。请问您还保留着购物小票吗？男：网上买的没有小票，不过有订单号。女：订单号也可以。我们可以给您换一件新的，或者全额退款，您看哪种方式好？男：那就换一件吧，这个颜色我挺喜欢的，就是质量太让人失望了。问：男的遇到了什么问题？",
+        "options": [
+          "衣服质量有问题",
+          "衣服尺寸太小",
+          "一直没收到衣服",
+          "订单号找不到了"
+        ],
+        "answer": 0
+      },
+      "explain": "“才穿了一次扣子就掉了” → áo kém chất lượng. 扣子 = cúc áo; 小票 = hoá đơn nhỏ; 订单号 = mã đơn hàng; 全额退款 = hoàn toàn bộ tiền."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "在社交网络上，我们经常看到别人分享美食、旅行和成功的消息，于是忍不住拿自己和他们比较，觉得自己的生活太普通了，心情也变得很差。其实，大部分人只会把生活中最好的一面展示出来，我们看到的并不是全部。经常这样比较，会让人越来越不自信。与其羡慕别人，不如关注自己的进步，和过去的自己比一比。问：说话人建议我们怎么做？",
+        "options": [
+          "多分享自己的生活",
+          "少用社交网络",
+          "多出去旅行",
+          "和过去的自己比"
+        ],
+        "answer": 3
+      },
+      "explain": "“与其羡慕别人，不如关注自己的进步，和过去的自己比一比”. 与其……不如…… = thay vì… chi bằng…; 忍不住 = không nhịn được; 羡慕 = ngưỡng mộ; 展示 = phô bày."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：你那家咖啡店开了快一年了吧，生意怎么样？男：一开始不太好，周围的咖啡店太多了，价格也差不多，我们没什么特色。后来我们在店里增加了一个读书角，放了几百本书，每周末还举办小型读书会，来的客人越来越多。女：这个主意不错，既能喝咖啡又能看书。男：是啊，现在一到周末经常没有空位，有的人一坐就是一下午。问：咖啡店的生意是怎么变好的？",
+        "options": [
+          "降低了价格",
+          "搬到了新地方",
+          "增加了读书活动",
+          "请了有名的咖啡师"
+        ],
+        "answer": 2
+      },
+      "explain": "“增加了一个读书角，每周末还举办小型读书会” → thêm hoạt động đọc sách. 生意 = việc làm ăn; 举办 = tổ chức; 读书会 = buổi đọc sách; 空位 = chỗ trống."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "这次调查的___显示，超过六成的大学生每天使用手机的时间在五个小时以上。",
+        "vi": "Kết quả cuộc khảo sát lần này cho thấy hơn 60% sinh viên mỗi ngày dùng điện thoại trên 5 tiếng.",
+        "showMeaning": false,
+        "options": [
+          "结果",
+          "原因",
+          "目的",
+          "条件"
+        ],
+        "answer": 0
+      },
+      "explain": "调查的结果显示 = kết quả khảo sát cho thấy. 原因 = nguyên nhân, 目的 = mục đích, 条件 = điều kiện không đi với 显示 (cho thấy) ở đây. 六成 = 60%."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "他做事一向非常___，每份文件都要检查好几遍才交给经理，所以很少出错。",
+        "vi": "Anh ấy làm việc xưa nay rất cẩn thận, văn bản nào cũng kiểm tra mấy lượt mới nộp cho giám đốc nên hiếm khi sai sót.",
+        "showMeaning": false,
+        "options": [
+          "粗心",
+          "随便",
+          "仔细",
+          "热情"
+        ],
+        "answer": 2
+      },
+      "explain": "仔细 = cẩn thận, hợp với “检查好几遍”, “很少出错”. 粗心 = cẩu thả, 随便 = tuỳ tiện: trái nghĩa; 热情 = nhiệt tình: không hợp. 一向 = xưa nay."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "随着生活水平的提高，人们越来越___健康了，下班后去健身房锻炼的年轻人明显增加。",
+        "vi": "Cùng với mức sống nâng cao, mọi người ngày càng coi trọng sức khoẻ, số người trẻ đến phòng tập sau giờ làm tăng rõ rệt.",
+        "showMeaning": false,
+        "options": [
+          "允许",
+          "表达",
+          "吸引",
+          "重视"
+        ],
+        "answer": 3
+      },
+      "explain": "重视健康 = coi trọng sức khoẻ. 允许 = cho phép, 表达 = biểu đạt, 吸引 = thu hút đều không hợp nghĩa. 明显 = rõ rệt."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "面对越来越激烈的市场竞争，企业只有不断___，推出受欢迎的新产品，才能生存下去。",
+        "vi": "Trước sự cạnh tranh thị trường ngày càng gay gắt, doanh nghiệp chỉ có không ngừng đổi mới, tung ra sản phẩm mới được ưa chuộng thì mới tồn tại được.",
+        "showMeaning": false,
+        "options": [
+          "犹豫",
+          "创新",
+          "抱怨",
+          "休息"
+        ],
+        "answer": 1
+      },
+      "explain": "创新 = đổi mới, sáng tạo; hợp với “推出新产品”. 犹豫 = do dự, 抱怨 = phàn nàn, 休息 = nghỉ ngơi đều sai nghĩa. 激烈 = gay gắt; 生存 = tồn tại."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "虽然这次比赛我们没有拿到冠军，___大家都学到了很多东西，所以谁也不觉得遗憾。",
+        "vi": "Tuy lần này chúng tôi không giành được chức vô địch, nhưng ai cũng học được nhiều điều nên không ai thấy tiếc.",
+        "showMeaning": false,
+        "options": [
+          "因此",
+          "而且",
+          "但是",
+          "只要"
+        ],
+        "answer": 2
+      },
+      "explain": "Cặp liên từ 虽然……但是…… = tuy… nhưng…. 冠军 = vô địch; 遗憾 = tiếc nuối."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "这个地区的空气污染十分严重，为此，政府采取了一系列___，比如限制私家车出行、关闭污染严重的工厂等。",
+        "vi": "Ô nhiễm không khí ở khu vực này rất nghiêm trọng, vì vậy chính phủ đã áp dụng hàng loạt biện pháp như hạn chế xe riêng, đóng cửa các nhà máy gây ô nhiễm nặng.",
+        "showMeaning": false,
+        "options": [
+          "措施",
+          "成果",
+          "印象",
+          "情景"
+        ],
+        "answer": 0
+      },
+      "explain": "采取措施 = áp dụng biện pháp (cụm cố định). 成果 = thành quả, 印象 = ấn tượng, 情景 = cảnh tượng. 一系列 = hàng loạt; 限制 = hạn chế."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "小时候父母常常带我去图书馆，___我从小就养成了爱读书的习惯，到现在每个月还会读两三本书。",
+        "vi": "Hồi nhỏ bố mẹ thường đưa tôi đến thư viện, vì thế từ bé tôi đã có thói quen thích đọc sách, đến giờ mỗi tháng vẫn đọc hai ba cuốn.",
+        "showMeaning": false,
+        "options": [
+          "不过",
+          "因此",
+          "尽管",
+          "否则"
+        ],
+        "answer": 1
+      },
+      "explain": "因此 = vì thế, nối nguyên nhân – kết quả. 不过 = nhưng, 尽管 = mặc dù, 否则 = nếu không: sai quan hệ logic. 养成习惯 = hình thành thói quen."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "许多传统手艺正在慢慢消失，会做的人大多已经上了年纪。如何保护这些手艺，是一个值得我们认真___的问题。",
+        "vi": "Nhiều nghề thủ công truyền thống đang dần biến mất, người biết làm phần lớn đã có tuổi. Làm sao bảo tồn những nghề này là vấn đề đáng để chúng ta suy nghĩ nghiêm túc.",
+        "showMeaning": false,
+        "options": [
+          "参观",
+          "欣赏",
+          "祝贺",
+          "思考"
+        ],
+        "answer": 3
+      },
+      "explain": "思考问题 = suy nghĩ về vấn đề. 参观 = tham quan, 欣赏 = thưởng thức, 祝贺 = chúc mừng không đi với 问题. 手艺 = nghề thủ công; 消失 = biến mất; 上了年纪 = có tuổi."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "最近，一些公司开始试行“每周工作四天”的制度，员工每周只上四天班，休息三天，工资不变。公司发现，员工休息得更好以后，工作效率不但没有下降，反而有所提高，请假的人也少了。有的员工说，多出来的一天可以用来陪孩子、学习新东西，周一上班时精神特别好。不过，这种制度并不适合所有行业，比如医院、商店就很难实行。根据这段话，可以知道：",
+        "options": [
+          "所有行业都适合这种制度",
+          "员工的工作效率提高了",
+          "员工的工资减少了",
+          "请假的人比以前多了"
+        ],
+        "answer": 1
+      },
+      "explain": "“工作效率不但没有下降，反而有所提高”. Lương không đổi, người xin nghỉ ít đi, chế độ này không hợp với mọi ngành. 试行 = thí điểm; 制度 = chế độ; 效率 = hiệu suất; 实行 = thực hiện."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "心理学研究表明，人们见面后的几秒钟内就会形成对对方的第一印象，而且这种印象一旦形成就很难改变。因此，在面试或第一次见客户时，穿着整洁、面带微笑、准时到达都非常重要。当然，第一印象也不一定准确，有的人一开始给人的感觉很冷淡，接触久了才发现其实很热心。所以，我们既要重视第一印象，也不要只凭第一印象判断别人。这段话主要想告诉我们：",
+        "options": [
+          "穿着打扮比工作能力更重要",
+          "人的第一印象总是准确的",
+          "了解一个人只需要几秒钟",
+          "第一印象很重要但不一定准确"
+        ],
+        "answer": 3
+      },
+      "explain": "Đoạn văn nêu ấn tượng đầu rất quan trọng, khó thay đổi, nhưng “也不一定准确”. 印象 = ấn tượng; 整洁 = gọn gàng; 面带微笑 = mỉm cười; 准确 = chính xác."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "据统计，餐馆里每年浪费的食物数量十分惊人，一家普通餐馆每天倒掉的剩菜就有几十斤，很多菜几乎没动过。为了减少浪费，很多餐馆推出了“小份菜”，分量少一些，价格也便宜一些，顾客既能多尝几样，又不容易剩下；吃不完的菜，服务员也会主动提供打包盒。不少年轻人还在网上分享自己把饭菜吃光的照片，这些做法受到了很多人的支持。这段话谈的是：",
+        "options": [
+          "怎样减少食物浪费",
+          "餐馆怎样提高价格",
+          "年轻人为什么爱拍照",
+          "打包盒的质量问题"
+        ],
+        "answer": 0
+      },
+      "explain": "Đoạn văn nói các cách nhà hàng và người trẻ giảm lãng phí thức ăn. 浪费 = lãng phí; 惊人 = đáng kinh ngạc; 分量 = khẩu phần; 打包 = gói mang về; 剩下 = thừa lại."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "有些家长发现，孩子上了中学以后就不爱读书了，一有时间就玩游戏。其实，原因往往不在孩子。孩子是看着父母长大的，如果父母自己每天下班就玩手机，却要求孩子安静地看书，孩子很难做到。有调查发现，父母爱读书的家庭，孩子每年读的书要多出好几倍。想让孩子爱上阅读，父母最好先放下手机，每天抽半个小时和孩子一起读。作者认为孩子不爱读书的原因可能是：",
+        "options": [
+          "学校作业太多",
+          "书的价格太贵",
+          "父母自己不读书",
+          "孩子年龄太大了"
+        ],
+        "answer": 2
+      },
+      "explain": "Tác giả nói “原因往往不在孩子”: cha mẹ chỉ chơi điện thoại mà lại bắt con đọc sách. 阅读 = đọc; 放下 = đặt xuống; 要求 = yêu cầu."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "很多人觉得，只有口渴的时候才需要喝水。其实，当我们感到口渴时，身体已经缺水了。特别是老年人，他们对口渴没有年轻人那么敏感，更容易缺水却不知道。另外，一次喝太多水，身体也吸收不了，比如运动以后，就不要一口气喝下一大瓶水。所以，医生建议大家不要等渴了再喝，而应该少量多次地喝水，早上起床后可以先喝一杯温水。医生建议的喝水方法是：",
+        "options": [
+          "口渴的时候再喝",
+          "运动后一口气喝很多",
+          "只在吃饭的时候喝",
+          "每次少喝，多喝几次"
+        ],
+        "answer": 3
+      },
+      "explain": "“少量多次地喝水” = mỗi lần uống ít, uống nhiều lần. Bác sĩ khuyên “不要等渴了再喝”, sau khi vận động cũng không nên uống một hơi cả chai. 口渴 = khát; 缺水 = thiếu nước; 敏感 = nhạy cảm."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "以前，很多人觉得用二手东西没面子。现在，年轻人的想法变了。网上有很多专门买卖二手东西的平台，他们在上面把不用的衣服、书和家具卖掉，也愿意买别人用过但质量不错的东西，有时只要原价的三分之一。比如刚上大学时买一张二手书桌，毕业时再卖给学弟学妹。在他们看来，这样既能省钱，又能减少浪费，是一种环保的生活方式。关于现在的年轻人，下面哪项正确？",
+        "options": [
+          "觉得二手东西没面子",
+          "愿意买质量好的二手货",
+          "只在商店买家具",
+          "不关心环保问题"
+        ],
+        "answer": 1
+      },
+      "explain": "Người trẻ “也愿意买别人用过但质量不错的东西”. “没面子” là suy nghĩ của người trước đây. 二手 = đồ cũ; 没面子 = mất mặt; 环保 = bảo vệ môi trường."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "京剧是中国的传统艺术，演员脸上画的图案叫“脸谱”。脸谱的颜色有特别的含义：红色一般代表勇敢、忠诚，三国故事中的关羽就是红脸；黑色代表公正无私；白色则常常用在坏人身上。除了这三种颜色，还有黄色、蓝色、金色等。观众一看脸谱，就能大概知道这个人物是好人还是坏人，性格怎么样。因此，了解脸谱的颜色，是看懂京剧的第一步。根据这段话，画红色脸谱的人物一般：",
+        "options": [
+          "是坏人",
+          "性格很奇怪",
+          "勇敢、忠诚",
+          "让观众发笑"
+        ],
+        "answer": 2
+      },
+      "explain": "“红色一般代表勇敢、忠诚”. Màu trắng mới dùng cho kẻ xấu. 京剧 = Kinh kịch; 脸谱 = hoá trang khuôn mặt; 含义 = hàm ý; 忠诚 = trung thành; 公正无私 = công bằng vô tư."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "电子书携带方便，一部手机就能装下几百本书，价格也比纸质书便宜，因此越来越受欢迎。但调查发现，仍有很多读者更喜欢纸质书。他们认为，纸质书拿在手里更有感觉，可以随时在书上做笔记，看久了眼睛也不容易累，而且读的时候更容易记住内容。有的人还喜欢闻书的味道，觉得那是电子书给不了的。另外，不少家长也担心孩子看电子屏幕的时间太长。喜欢纸质书的读者认为纸质书：",
+        "options": [
+          "读起来更容易记住",
+          "价格比电子书便宜",
+          "出门携带起来更方便",
+          "书里的内容更丰富"
+        ],
+        "answer": 0
+      },
+      "explain": "Người thích sách giấy cho rằng “读的时候更容易记住内容”. Rẻ và dễ mang theo là ưu điểm của sách điện tử. 携带 = mang theo; 纸质书 = sách giấy; 仍 = vẫn."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "随着网上购物越来越普遍，快递员成了城市里最忙碌的人之一。他们每天要送上百个包裹，不管刮风下雨都要按时送到，常常顾不上按时吃饭。为了让他们有地方休息，一些城市在银行、商店或者社区服务中心里设立了“爱心休息站”，快递员可以在这里喝水、给手机充电、热饭，天冷时还能进来暖和暖和。很多快递员说，这让他们感到了城市的温暖。“爱心休息站”是为了：",
+        "options": [
+          "帮快递公司存放包裹",
+          "给快递员提供休息的地方",
+          "教快递员怎么使用手机",
+          "帮附近的顾客取快递"
+        ],
+        "answer": 1
+      },
+      "explain": "“为了让他们有地方休息，一些城市……设立了‘爱心休息站’”. 快递员 = nhân viên giao hàng; 忙碌 = bận rộn; 包裹 = bưu kiện; 顾不上 = không kịp lo; 设立 = lập ra."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "几年前，共享单车在中国各大城市迅速出现。用户只要用手机扫一下车上的二维码，就可以把车骑走，到了目的地以后，把车停在路边指定的地方就行，费用一般只要一两块钱，非常方便。共享单车解决了人们从地铁站到家、到公司这一小段路的出行问题，同时也减少了汽车的使用，对保护环境很有好处。据统计，在一些大城市，每天骑共享单车的人次超过一百万。那时，企业之间的竞争十分激烈，街上的单车多得数不清。不过，问题也随之而来。有些人把车随便乱停，占用了人行道；还有人故意损坏车辆，甚至把车骑回家自己用。为了解决这些问题，很多城市划出了专门的停车区域，车停在区域外面的，用户要多付钱。有的城市还用卫星定位来管理单车，哪里车太多、哪里车太少，管理人员在电脑上一看就知道。如今，城市里的共享单车虽然没有最初那么多了，但停放得更加整齐，使用起来也更规范了。",
+        "statement": "现在城市里的共享单车比刚出现时更多。",
+        "answer": false
+      },
+      "explain": "Câu cuối nói “虽然没有最初那么多了” = không còn nhiều như lúc đầu. 共享单车 = xe đạp công cộng; 二维码 = mã QR; 损坏 = làm hỏng; 区域 = khu vực; 规范 = quy củ."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "很多学生喜欢一边听音乐一边学习，觉得这样心情更好，时间也过得更快。可是也有家长担心，孩子戴着耳机学习，效果肯定不好。那么，听音乐到底会不会影响学习效果呢？研究人员做过这样一个实验：让两组学生在半个小时内记同样的内容，一组在安静的环境中学习，另一组边听流行歌曲边学习。结果发现，在安静环境中学习的学生记住的内容明显更多。这个结果让不少学生感到意外。研究人员还请两组学生说说自己的感觉，听歌的那组大多觉得学得很轻松，可是测试成绩却不如另一组。研究人员解释说，歌词会占用大脑处理语言的能力，让人难以集中注意力，而且音乐的声音越大，影响也越明显。不过，如果听的是没有歌词的轻音乐，而且声音不大，对学习的影响就小得多，有时甚至能帮助人放松心情。所以，如果你需要背单词或者阅读文章，最好不要听带歌词的歌；如果只是做一些简单的练习，听点轻音乐倒也没什么关系。",
+        "statement": "实验中，在安静环境中学习的学生记住的内容更多。",
+        "answer": true
+      },
+      "explain": "“在安静环境中学习的学生记住的内容明显更多”. 实验 = thí nghiệm; 流行歌曲 = nhạc pop; 歌词 = lời bài hát; 集中注意力 = tập trung chú ý; 背单词 = học thuộc từ."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "有调查显示，从小经常做家务的孩子，长大以后往往更独立，也更有责任感。可是现在，很多父母舍不得让孩子做家务，觉得孩子的任务就是学习，家务活儿由大人来做就行了。有的孩子上了大学，还不会自己洗衣服，连煮面条都不会。教育专家指出，做家务并不会浪费孩子的学习时间。相反，孩子在洗碗、整理房间的过程中，能学会合理安排时间，也能体会到父母的辛苦，更懂得关心家人。有一位妈妈说，自从让儿子每天负责洗碗以后，他做作业也比以前更有计划了。在日本，很多小学生每天都要自己打扫教室；国内也有学校把做家务列入了作业，要求学生每周帮家里做几件事。专家建议，父母可以根据孩子的年龄安排合适的家务，比如三四岁的孩子可以自己收玩具，七八岁的孩子可以帮忙洗菜、扫地。孩子做得不好时，父母不要批评，而要多给鼓励，让孩子觉得自己是家里重要的一员。",
+        "statement": "专家认为做家务会占用孩子的学习时间，所以应该少做。",
+        "answer": false
+      },
+      "explain": "Chuyên gia nói “做家务并不会浪费孩子的学习时间”, ngược với câu đã cho. 家务 = việc nhà; 独立 = tự lập; 责任感 = tinh thần trách nhiệm; 舍不得 = không nỡ; 体会 = thấu hiểu."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "书法是中国传统文化中非常重要的一部分。古时候，读书人从小就要练习写毛笔字，一手好字往往会给人留下很好的印象。据说古代有一位书法家每天练完字都在门前的池子里洗笔，时间长了，池子里的水都变黑了。随着电脑和手机的普及，现在人们写字的机会越来越少，很多人甚至拿起笔就忘了字怎么写。不过，近年来，书法又重新受到了人们的欢迎。不少中小学开设了书法课，周末的书法培训班里也坐满了孩子和成年人，很多退休的老人也把练书法当成了爱好。现在，有的公园里每天早上都有老人拿着大毛笔用清水在地上写字，吸引了不少路人停下来观看。练书法需要耐心，一个字往往要写几十遍才能写好。很多人表示，练书法不仅能写出漂亮的字，还能让人静下心来，减轻工作和生活中的压力。一位练了十年书法的老人说：“写字的时候，什么烦恼都忘了，一写就是一上午。”",
+        "statement": "很多人认为练书法能帮助减轻压力。",
+        "answer": true
+      },
+      "explain": "“练书法……还能让人静下心来，减轻工作和生活中的压力”. 书法 = thư pháp; 毛笔字 = chữ viết bút lông; 培训班 = lớp đào tạo; 烦恼 = phiền muộn."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "大熊猫是中国特有的动物，主要生活在四川、陕西和甘肃的山区。它们长得胖胖的，走起路来很慢，深受世界各国人民的喜爱。虽然大熊猫的祖先是吃肉的，但现在它们吃的食物中百分之九十九都是竹子。由于竹子的营养比较少，大熊猫每天要花十几个小时吃东西，一天能吃掉十几公斤竹子。为了节省能量，它们吃饱了就睡，平时活动得很少。大熊猫的数量增长很慢，熊猫妈妈一般两年左右才生一次孩子，每次只生一两只。刚出生的熊猫宝宝只有一百克左右，还没有一个苹果重。过去，因为大片森林被破坏，大熊猫的生活环境越来越小，数量一度很少。为此，中国建立了几十个自然保护区，还和许多国家合作，共同开展研究和保护工作。经过几十年的努力，野生大熊猫的数量已经增加到一千八百多只。如今在一些保护区里，游客有时还能看到它们在树上睡觉。不过，保护大熊猫的工作仍然不能放松。",
+        "statement": "大熊猫每天只需要花很少的时间吃东西。",
+        "answer": false
+      },
+      "explain": "Đoạn văn nói “每天要花十几个小时吃东西” vì tre ít dinh dưỡng. 特有 = đặc hữu; 祖先 = tổ tiên; 竹子 = tre, trúc; 营养 = dinh dưỡng; 野生 = hoang dã."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "塑料袋给人们的生活带来了很大的方便，但它也是环境的“敌人”。一个普通的塑料袋，从买东西到扔掉，往往只用了几十分钟，可是在自然环境中却需要几百年才能完全分解。全世界每年使用的塑料袋多得数不清，其中只有很少一部分被回收利用。许多塑料垃圾最后进入了河流和大海，海里的鱼和鸟以为是食物而吃下去，常常因此死亡。有的地方甚至在海上发现了面积很大的塑料垃圾带。为了减少塑料污染，很多国家都制定了相关的规定。在中国，超市从2008年起就不再免费提供塑料袋，顾客需要的话得付钱购买。这一规定实行以后，出门购物时自带购物袋的人越来越多，很多老人还习惯推着小车去买菜。另外，一些企业也开始研究用玉米等植物材料做成的新型袋子，它们在土里几个月就能分解。不过，这种袋子的成本比较高，暂时还没有完全普及。",
+        "statement": "中国的超市从2008年开始不再免费提供塑料袋。",
+        "answer": true
+      },
+      "explain": "“超市从2008年起就不再免费提供塑料袋”. 塑料袋 = túi nilon; 分解 = phân huỷ; 制定规定 = đặt ra quy định; 材料 = vật liệu."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "如今，点外卖已经成了许多年轻人的生活习惯。打开手机，几分钟就能下单，半个小时后饭菜就送到了家门口，连楼都不用下。一项调查显示，在大城市工作的年轻人中，超过一半的人每周点外卖三次以上，有的甚至一天三顿都靠外卖。他们选择外卖的主要原因是工作太忙，没有时间买菜做饭，而且一个人做饭也不太划算。有人开玩笑说，现在年轻人家里的厨房只是用来烧开水的。但是，营养专家提醒，外卖的饭菜往往油和盐比较多，蔬菜比较少，长期吃不利于健康。外卖平台也注意到了这个问题，开始推出更多少油少盐的健康套餐。此外，外卖带来的大量一次性餐盒和塑料袋也给环境造成了压力。还有一些年轻人周末会约朋友一起做饭，把它当成一种放松的方式。专家建议，年轻人周末有空的时候不妨自己下厨，做几个简单的家常菜，既能吃得健康，也能享受做饭的乐趣。",
+        "statement": "年轻人点外卖主要是因为外卖比自己做的饭更健康。",
+        "answer": false
+      },
+      "explain": "Lý do chính là “工作太忙，没有时间买菜做饭”; chuyên gia còn nói đồ ăn giao tận nơi nhiều dầu muối, ăn lâu không tốt. 外卖 = đồ ăn giao tận nơi; 一次性餐盒 = hộp cơm dùng một lần; 不妨 = cứ thử; 下厨 = vào bếp."
+    },
+    {
+      "section": "reading",
+      "type": "match",
+      "payload": {
+        "pairs": [
+          [
+            "竞争",
+            "cạnh tranh"
+          ],
+          [
+            "效率",
+            "hiệu suất"
+          ],
+          [
+            "消费",
+            "tiêu dùng"
+          ],
+          [
+            "投资",
+            "đầu tư"
+          ],
+          [
+            "利润",
+            "lợi nhuận"
+          ]
+        ]
+      },
+      "explain": "Từ vựng kinh tế: 竞争 jìngzhēng = cạnh tranh; 效率 xiàolǜ = hiệu suất; 消费 xiāofèi = tiêu dùng; 投资 tóuzī = đầu tư; 利润 lìrùn = lợi nhuận."
+    },
+    {
+      "section": "reading",
+      "type": "match",
+      "payload": {
+        "pairs": [
+          [
+            "情绪",
+            "cảm xúc, tâm trạng"
+          ],
+          [
+            "性格",
+            "tính cách"
+          ],
+          [
+            "信心",
+            "lòng tin, sự tự tin"
+          ],
+          [
+            "压力",
+            "áp lực"
+          ],
+          [
+            "冷静",
+            "bình tĩnh"
+          ]
+        ]
+      },
+      "explain": "Từ vựng tâm lý: 情绪 qíngxù = cảm xúc; 性格 xìnggé = tính cách; 信心 xìnxīn = lòng tin; 压力 yālì = áp lực; 冷静 lěngjìng = bình tĩnh."
+    },
+    {
+      "section": "reading",
+      "type": "match",
+      "payload": {
+        "pairs": [
+          [
+            "污染",
+            "ô nhiễm"
+          ],
+          [
+            "资源",
+            "tài nguyên"
+          ],
+          [
+            "能源",
+            "năng lượng"
+          ],
+          [
+            "气候",
+            "khí hậu"
+          ],
+          [
+            "节约",
+            "tiết kiệm"
+          ]
+        ]
+      },
+      "explain": "Từ vựng môi trường: 污染 wūrǎn = ô nhiễm; 资源 zīyuán = tài nguyên; 能源 néngyuán = năng lượng; 气候 qìhòu = khí hậu; 节约 jiéyuē = tiết kiệm."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "vi": "Kết quả nghiên cứu này vừa công bố đã thu hút sự quan tâm rộng rãi của các giới trong xã hội.",
+        "answer": "这项研究的结果一公布，就引起了社会各界的广泛关注。",
+        "tiles": [
+          "这项研究的",
+          "结果",
+          "一公布",
+          "就引起了",
+          "社会各界的",
+          "广泛",
+          "关注"
+        ]
+      },
+      "explain": "一……就…… = vừa… liền…; 引起关注 = gây sự chú ý; 各界 = các giới; 广泛 = rộng rãi. Định ngữ 社会各界的 + 广泛 đứng trước 关注."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "vi": "Anh ấy không hề nản lòng mà coi lần thất bại này là một cơ hội học hỏi quý giá.",
+        "answer": "他并没有灰心，而是把这次失败当成了一次宝贵的学习机会。",
+        "tiles": [
+          "他并没有灰心",
+          "而是",
+          "把",
+          "这次失败",
+          "当成了",
+          "一次宝贵的",
+          "学习机会"
+        ]
+      },
+      "explain": "不是/没有……而是…… = không… mà là…; câu chữ 把: 把 + tân ngữ + 当成 + cái được coi là. 灰心 = nản lòng; 宝贵 = quý giá."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "vi": "Sự phát triển nhanh của kinh tế khiến quan niệm tiêu dùng của mọi người thay đổi rất nhiều.",
+        "answer": "经济的快速发展使人们的消费观念发生了很大的变化。",
+        "tiles": [
+          "经济的",
+          "快速发展",
+          "使",
+          "人们的",
+          "消费观念",
+          "发生了",
+          "很大的变化"
+        ]
+      },
+      "explain": "Câu kiêm ngữ 使: A + 使 + B + động từ (A khiến B…). 观念 = quan niệm; 发生变化 = xảy ra thay đổi."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "vi": "Bảo vệ môi trường đòi hỏi mỗi người chúng ta bắt đầu từ những việc nhỏ quanh mình.",
+        "answer": "保护环境需要我们每个人从身边的小事做起。",
+        "tiles": [
+          "保护环境",
+          "需要我们",
+          "每个人",
+          "从身边的",
+          "小事",
+          "做起"
+        ]
+      },
+      "explain": "需要 + người + làm gì = cần ai làm gì; 从……做起 = bắt đầu làm từ…; 身边 = quanh mình."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "vi": "Thầy giáo này luôn kiên nhẫn trả lời đủ loại câu hỏi mà học sinh đặt ra trong giờ học.",
+        "answer": "这位老师总是耐心地回答学生们在课上提出的各种问题。",
+        "tiles": [
+          "这位老师",
+          "总是",
+          "耐心地",
+          "回答学生们",
+          "在课上提出的",
+          "各种问题"
+        ]
+      },
+      "explain": "Trạng ngữ 总是 + 耐心地 đứng trước động từ 回答; 学生们在课上提出的 là định ngữ của 各种问题. 耐心 = kiên nhẫn; 提出 = đưa ra."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "vi": "Dù gặp khó khăn lớn đến đâu, cô ấy cũng chưa bao giờ nghĩ đến việc từ bỏ ước mơ của mình.",
+        "answer": "即使遇到再大的困难，她也从来没有想过要放弃自己的梦想。",
+        "tiles": [
+          "即使",
+          "遇到",
+          "再大的困难",
+          "她也",
+          "从来没有",
+          "想过要放弃",
+          "自己的梦想"
+        ]
+      },
+      "explain": "即使……也…… = dù… cũng…; 再大的 = dù lớn đến đâu; 从来没有 = chưa bao giờ; 放弃 = từ bỏ; 梦想 = ước mơ."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "vi": "Ngày càng nhiều người trẻ chọn tận dụng thời gian rảnh để học thêm một kỹ năng mới.",
+        "answer": "越来越多的年轻人选择利用业余时间去学习一门新技能。",
+        "tiles": [
+          "越来越多的",
+          "年轻人",
+          "选择利用",
+          "业余时间",
+          "去学习",
+          "一门新技能"
+        ]
+      },
+      "explain": "利用 + thời gian + 去学习: dùng thời gian để học. 业余时间 = thời gian rảnh ngoài giờ làm; 一门 = lượng từ của môn học, kỹ năng; 技能 = kỹ năng."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "vi": "Năm nào bảo tàng này cũng thu hút du khách từ khắp nơi trên thế giới đến tham quan.",
+        "answer": "这家博物馆每年都能吸引来自世界各地的游客前来参观。",
+        "tiles": [
+          "这家博物馆",
+          "每年都能",
+          "吸引",
+          "来自世界各地的",
+          "游客",
+          "前来",
+          "参观"
+        ]
+      },
+      "explain": "Câu kiêm ngữ: 吸引 + 游客 + 前来参观 (thu hút du khách đến tham quan); 来自世界各地的 là định ngữ của 游客. 前来 = đến (trang trọng)."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Dù công việc bận đến đâu, cuối tuần nào anh ấy cũng dành thời gian ở bên gia đình.",
+        "options": [
+          "他的工作实在太忙了，所以周末没有时间陪家人。",
+          "因为每个周末都要陪家人，所以他的工作不太忙。",
+          "不管工作多忙，他每个周末都会抽时间陪家人。",
+          "只要工作不太忙，他每个周末就会抽时间陪家人。"
+        ],
+        "answer": 2
+      },
+      "explain": "不管……都…… = dù… đều…; 抽时间 = dành thời gian; 陪 = ở bên. Phương án khác nói ngược ý (không có thời gian) hoặc thêm điều kiện (只要 = chỉ cần)."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Kế hoạch này nghe thì có vẻ hay, nhưng làm thì không hề dễ.",
+        "options": [
+          "这个计划听起来不错，但是做起来并不容易。",
+          "这个计划做起来很容易，所以听起来不错。",
+          "这个计划听起来不好，做起来也很难。",
+          "这个计划不但听起来不错，而且很容易完成。"
+        ],
+        "answer": 0
+      },
+      "explain": "听起来 = nghe có vẻ; 做起来 = làm thì; 并不 = hoàn toàn không. Các phương án khác sai ý “nghe hay nhưng không dễ làm”."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Thay vì ngồi chờ cơ hội, chi bằng chủ động đi tạo ra cơ hội.",
+        "options": [
+          "与其主动创造机会，不如坐着等机会。",
+          "只有坐着等，机会才会出现。",
+          "虽然机会很多，但是很难创造。",
+          "与其坐着等机会，不如主动去创造机会。"
+        ],
+        "answer": 3
+      },
+      "explain": "与其A，不如B = thay vì A, chi bằng B (chọn B). Câu 与其主动创造机会，不如坐着等机会 đảo ngược hai vế. 主动 = chủ động; 创造 = tạo ra."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Khảo sát cho thấy số người đọc sách giấy đang giảm dần.",
+        "options": [
+          "调查显示，看电子书的人越来越少了。",
+          "调查显示，读纸质书的人正在逐渐减少。",
+          "调查显示，读纸质书的人逐渐增加了。",
+          "调查以前，读纸质书的人比较少。"
+        ],
+        "answer": 1
+      },
+      "explain": "显示 = cho thấy; 逐渐减少 = giảm dần; 纸质书 = sách giấy. Phương án khác sai đối tượng (电子书 = sách điện tử) hoặc ngược nghĩa (增加 = tăng)."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Nhờ sự giúp đỡ của đồng nghiệp, cô ấy nhanh chóng thích nghi với môi trường làm việc mới.",
+        "options": [
+          "在同事的帮助下，她很快就适应了新的工作环境。",
+          "她帮助同事很快就适应了新的工作环境。",
+          "因为同事都不帮助她，所以她很难适应新的工作环境。",
+          "她很快就适应了新环境，所以同事们都来帮助她。"
+        ],
+        "answer": 0
+      },
+      "explain": "在……的帮助下 = nhờ sự giúp đỡ của…; 适应 = thích nghi. Câu 她帮助同事…… đảo người giúp và người được giúp; câu 她很快就适应了新环境，所以同事们都来帮助她 đảo nhân quả; câu 因为同事都不帮助她…… ngược nghĩa."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Học tập không chỉ để thi cử mà hơn thế còn để làm phong phú bản thân.",
+        "options": [
+          "学习就是为了考试，不是为了别的。",
+          "为了丰富自己，我们不用参加考试。",
+          "学习不是为了丰富自己，而是为了考试。",
+          "学习不仅是为了考试，更是为了丰富自己。"
+        ],
+        "answer": 3
+      },
+      "explain": "不仅……更…… = không chỉ… mà hơn thế còn…; 丰富 = làm phong phú. 不是A而是B (không phải A mà là B) đảo ngược ý câu gốc."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Chỉ khi bảo vệ tốt môi trường thì kinh tế mới có thể phát triển lâu dài.",
+        "options": [
+          "只要经济发展了，环境就会变好。",
+          "经济发展得越快，环境保护得越好。",
+          "只有保护好环境，经济才能长期发展。",
+          "为了发展经济，可以暂时不保护环境。"
+        ],
+        "answer": 2
+      },
+      "explain": "只有……才…… = chỉ khi… mới…; 长期 = lâu dài. 只要……就…… (chỉ cần… là…) và 越……越…… đều sai ý câu gốc."
+    },
+    {
+      "section": "speaking",
+      "type": "speak",
+      "payload": {
+        "task": "read",
+        "prompt": "现代社会的生活节奏越来越快，很多人每天忙着工作，很少有时间停下来关心自己的内心。其实，适当地放慢脚步，和家人一起吃顿饭，去公园散散步，或者安静地读一本书，都能让我们重新找到生活的乐趣。",
+        "vi": "Đọc to đoạn văn, chú ý ngắt nghỉ sau dấu phẩy và đọc đúng thanh điệu.",
+        "prepSec": 30,
+        "answerSec": 60,
+        "sample": "现代社会的生活节奏越来越快，很多人每天忙着工作，很少有时间停下来关心自己的内心。其实，适当地放慢脚步，和家人一起吃顿饭，去公园散散步，或者安静地读一本书，都能让我们重新找到生活的乐趣。",
+        "sampleVi": "Nhịp sống của xã hội hiện đại ngày càng nhanh, nhiều người ngày nào cũng bận rộn làm việc, hiếm khi có thời gian dừng lại quan tâm đến nội tâm của mình. Thật ra, biết chậm lại đúng lúc, ăn một bữa cơm cùng gia đình, đi dạo trong công viên hoặc yên tĩnh đọc một cuốn sách đều có thể giúp chúng ta tìm lại niềm vui trong cuộc sống."
+      }
+    },
+    {
+      "section": "speaking",
+      "type": "speak",
+      "payload": {
+        "task": "answer",
+        "audioText": "你认为大学生在学习之外，有必要做兼职吗？为什么？",
+        "prompt": "你认为大学生在学习之外，有必要做兼职吗？为什么？",
+        "vi": "Theo bạn, ngoài việc học, sinh viên có cần đi làm thêm không? Vì sao?",
+        "prepSec": 30,
+        "answerSec": 60,
+        "sample": "我认为大学生适当做一些兼职是有必要的。首先，兼职可以让我们提前了解社会，积累工作经验，以后找工作的时候会更有优势。其次，自己挣钱能让我们明白父母的辛苦，学会合理地花钱。不过，兼职的时间不能太长，否则会影响学习。毕竟对学生来说，学习还是最重要的。",
+        "sampleVi": "Tôi cho rằng sinh viên làm thêm ở mức vừa phải là cần thiết. Thứ nhất, làm thêm giúp chúng ta sớm hiểu xã hội, tích luỹ kinh nghiệm làm việc, sau này đi xin việc sẽ có lợi thế hơn. Thứ hai, tự kiếm tiền giúp ta hiểu sự vất vả của bố mẹ, học cách tiêu tiền hợp lý. Tuy nhiên, thời gian làm thêm không nên quá dài, nếu không sẽ ảnh hưởng việc học. Dù sao với sinh viên, học tập vẫn là quan trọng nhất."
+      }
+    },
+    {
+      "section": "speaking",
+      "type": "speak",
+      "payload": {
+        "task": "answer",
+        "audioText": "如果有机会去另一个城市生活一年，你会选择哪个城市？为什么？",
+        "prompt": "如果有机会去另一个城市生活一年，你会选择哪个城市？为什么？",
+        "vi": "Nếu có cơ hội sống ở một thành phố khác trong một năm, bạn sẽ chọn thành phố nào? Vì sao?",
+        "prepSec": 30,
+        "answerSec": 60,
+        "sample": "如果有这样的机会，我会选择去成都。第一，成都的生活节奏比较慢，人们很会享受生活，我很想体验一下那种轻松的感觉。第二，我特别喜欢吃辣的，成都的美食又多又便宜。另外，成都附近有很多有名的景点，周末可以去爬山、看大熊猫。我相信在那里生活一年，一定会留下很多难忘的回忆。",
+        "sampleVi": "Nếu có cơ hội như vậy, tôi sẽ chọn Thành Đô. Thứ nhất, nhịp sống ở Thành Đô khá chậm, người dân rất biết tận hưởng cuộc sống, tôi rất muốn trải nghiệm cảm giác thư thái ấy. Thứ hai, tôi rất thích ăn cay, món ngon ở Thành Đô vừa nhiều vừa rẻ. Ngoài ra, gần Thành Đô có nhiều danh thắng nổi tiếng, cuối tuần có thể đi leo núi, xem gấu trúc. Tôi tin sống ở đó một năm chắc chắn sẽ có nhiều kỷ niệm khó quên."
+      }
+    },
+    {
+      "section": "speaking",
+      "type": "speak",
+      "payload": {
+        "task": "topic",
+        "prompt": "有人说网络让人与人之间的距离更近了，也有人说更远了。请谈谈你的看法。",
+        "vi": "Có người nói internet khiến con người gần nhau hơn, có người lại nói xa nhau hơn. Hãy nói quan điểm của bạn.",
+        "prepSec": 60,
+        "answerSec": 120,
+        "sample": "我觉得网络既让人与人更近了，也让人更远了。一方面，有了网络，我们可以随时和远方的家人朋友视频聊天，就算在国外也不觉得孤单。另一方面，很多人吃饭时也一直看手机，家人坐在一起却很少交流，感情反而越来越淡。所以，问题不在网络本身，而在于我们怎么使用它。我的做法是，和家人朋友在一起时尽量放下手机，认真听对方说话。",
+        "sampleVi": "Tôi thấy internet vừa khiến người với người gần nhau hơn, vừa khiến họ xa nhau hơn. Một mặt, có mạng, ta có thể gọi video với người thân, bạn bè ở xa bất cứ lúc nào, dù ở nước ngoài cũng không thấy cô đơn. Mặt khác, nhiều người lúc ăn cơm vẫn nhìn điện thoại, cả nhà ngồi cạnh nhau mà ít trò chuyện, tình cảm lại nhạt dần. Vì vậy, vấn đề không nằm ở bản thân internet mà ở cách ta dùng nó. Tôi thì khi ở bên gia đình, bạn bè sẽ cố bỏ điện thoại xuống, chăm chú nghe người khác nói."
+      }
+    },
+    {
+      "section": "speaking",
+      "type": "speak",
+      "payload": {
+        "task": "topic",
+        "prompt": "请介绍一个对健康有好处的生活习惯，并说说你是怎样坚持下来的。",
+        "vi": "Hãy giới thiệu một thói quen sinh hoạt có lợi cho sức khoẻ và kể bạn đã duy trì nó như thế nào.",
+        "prepSec": 60,
+        "answerSec": 90,
+        "sample": "我想介绍的习惯是早睡早起。以前我常常熬夜玩手机，第二天上课总是没精神。后来我给自己定了一个规定：晚上十一点以前必须上床，手机放在客厅充电。刚开始很不习惯，躺在床上睡不着，但坚持了两个星期以后，身体就适应了。现在我每天六点半自然醒，白天精神很好，学习效率也提高了。",
+        "sampleVi": "Thói quen tôi muốn giới thiệu là ngủ sớm dậy sớm. Trước đây tôi hay thức khuya chơi điện thoại, hôm sau lên lớp lúc nào cũng uể oải. Sau đó tôi tự đặt ra quy định: trước 11 giờ đêm phải lên giường, điện thoại để sạc ở phòng khách. Lúc đầu rất không quen, nằm mãi không ngủ được, nhưng kiên trì hai tuần thì cơ thể đã thích nghi. Giờ ngày nào tôi cũng tự thức dậy lúc 6 rưỡi, ban ngày rất tỉnh táo, học cũng hiệu quả hơn."
+      }
+    }
+  ]
+}

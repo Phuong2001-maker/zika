@@ -1,6 +1,8 @@
 // Kiểu dữ liệu API (04-api.md). Khoá JSON luôn camelCase.
 
 export type Part = 'lt' | 'bt' | 'kt' | 'lv' | 'ht' | 'np';
+/** Màn đang đứng, để Chuyển nhanh đánh dấu "Đang dùng": 6 phần học hoặc Thi thử HSK 3.0. */
+export type ManHoc = Part | 'hsk30';
 export type Role = 'learner' | 'editor' | 'admin';
 export type SelfLevel = 'beginner' | 'hsk12' | 'hsk34' | 'hsk5';
 export type Device = 'phone' | 'tablet' | 'desktop';

@@ -1,0 +1,1065 @@
+{
+  "level": 4,
+  "title": "HSK 4 · Đề 3",
+  "durationSec": 4500,
+  "questions": [
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：小刘，打印机又不能用了，你会修吗？男：我看看吧，可能是没有纸了，上次也是这个问题。问：男的认为打印机怎么了？",
+        "options": [
+          "坏了，需要买新的",
+          "可能没有纸了",
+          "没有电了",
+          "被别人借走了"
+        ],
+        "answer": 1
+      },
+      "explain": "可能是没有纸了 = có lẽ hết giấy rồi. 打印机 = máy in; 修 = sửa."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：你的腿怎么了？女：上周打篮球的时候不小心受伤了，医生说要休息一个月。问：女的腿是怎么受伤的？",
+        "options": [
+          "爬山时走了太多路",
+          "踢足球的时候受伤了",
+          "跑步跑得太久了",
+          "打篮球的时候受伤了"
+        ],
+        "answer": 3
+      },
+      "explain": "打篮球的时候不小心受伤了 = chơi bóng rổ không cẩn thận bị thương. 受伤 = bị thương."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：图书馆周末开门吗？男：开，不过周末只开到下午五点，平时开到晚上十点。问：图书馆周末几点关门？",
+        "options": [
+          "下午五点",
+          "晚上十点",
+          "中午十二点",
+          "晚上八点"
+        ],
+        "answer": 0
+      },
+      "explain": "周末只开到下午五点 = cuối tuần chỉ mở đến 5 giờ chiều; 晚上十点 là ngày thường."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：今年冬天怎么一点儿也不冷？女：是啊，听说这些年天气变化很大，冬天越来越暖和，我们这儿已经好几年没下雪了。问：他们在说什么？",
+        "options": [
+          "明天要下雪",
+          "夏天特别热",
+          "冬天越来越暖和",
+          "买冬天的衣服"
+        ],
+        "answer": 2
+      },
+      "explain": "冬天越来越暖和 = mùa đông ngày càng ấm; 好几年没下雪了 = mấy năm rồi không có tuyết."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：你的手机怎么又没电了？男：这个手机用了四年了，电池不行了，充满电也只能用半天。问：男的手机有什么问题？",
+        "options": [
+          "声音太小",
+          "上网太慢",
+          "样子太旧了",
+          "电很快就用完了"
+        ],
+        "answer": 3
+      },
+      "explain": "充满电也只能用半天 = sạc đầy cũng chỉ dùng được nửa ngày → hết pin nhanh. 电池 = pin."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：这几个字写得真漂亮，是你写的吗？女：不是，是我爷爷写的，他练毛笔字已经练了五十多年了。问：这几个字是谁写的？",
+        "options": [
+          "女的",
+          "女的爷爷",
+          "女的老师",
+          "男的爸爸"
+        ],
+        "answer": 1
+      },
+      "explain": "是我爷爷写的 = là ông tôi viết. 练毛笔字 = luyện viết chữ bút lông."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：周末你一般做什么？男：我常常去社区当志愿者，陪老人们聊聊天，有时候还给他们唱歌。问：男的周末常常做什么？",
+        "options": [
+          "在家休息",
+          "教孩子唱歌",
+          "去社区陪老人聊天",
+          "去公园跑步"
+        ],
+        "answer": 2
+      },
+      "explain": "去社区当志愿者，陪老人们聊聊天 = làm tình nguyện viên ở khu dân cư, trò chuyện với người già. 社区 = khu dân cư."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：听说今年公司生意不错，年底每个人都有奖金。女：真的吗？那我可以给父母买一个新冰箱了。问：女的打算用奖金做什么？",
+        "options": [
+          "给父母买冰箱",
+          "自己去旅游",
+          "存到银行里",
+          "给自己买新手机"
+        ],
+        "answer": 0
+      },
+      "explain": "给父母买一个新冰箱 = mua cho bố mẹ một chiếc tủ lạnh mới. 奖金 = tiền thưởng; 年底 = cuối năm."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：咱们今天中午去吃火锅吧？男：我最近嗓子疼，不能吃辣的，咱们去吃点儿不辣的吧。问：男的为什么不想吃火锅？",
+        "options": [
+          "火锅太贵了",
+          "嗓子疼，不能吃辣的",
+          "已经吃过了",
+          "不喜欢吃肉"
+        ],
+        "answer": 1
+      },
+      "explain": "嗓子疼，不能吃辣的 = đau họng, không ăn cay được. 火锅 = lẩu."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：下午的会是在会议室开，还是在网上开？女：在网上开，经理在外地出差，回不来。问：下午的会为什么在网上开？",
+        "options": [
+          "会议室有人用",
+          "大家都在家里",
+          "网上开会更快",
+          "经理在外地出差"
+        ],
+        "answer": 3
+      },
+      "explain": "经理在外地出差，回不来 = giám đốc đang công tác ở nơi khác, không về được. 外地 = nơi khác."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：你高考以后打算学什么专业？男：我爸爸希望我学医，可是我对计算机更感兴趣。女：那你跟你爸爸好好谈谈吧，这是你自己的选择。男：嗯，我打算今天晚上就跟他说。问：男的对什么专业更感兴趣？",
+        "options": [
+          "计算机",
+          "医学",
+          "经济",
+          "法律"
+        ],
+        "answer": 0
+      },
+      "explain": "我对计算机更感兴趣 = tôi hứng thú với máy tính hơn; học y chỉ là mong muốn của bố. 专业 = chuyên ngành."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：明天是植树节，我们公司组织大家去山上种树。女：真不错！你们要种多少棵？男：每个部门种五十棵，我们部门人少，每个人得种五六棵。女：那你得穿一双舒服的鞋。问：男的明天要做什么？",
+        "options": [
+          "去商店买鞋",
+          "去公司开会",
+          "去山上种树",
+          "在家休息"
+        ],
+        "answer": 2
+      },
+      "explain": "组织大家去山上种树 = tổ chức mọi người lên núi trồng cây. 植树节 = ngày Tết trồng cây; 棵 = lượng từ của cây."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：我刚才接到一个电话，说我网上买的东西有问题，要给我退钱，让我告诉他银行卡密码。男：千万别告诉他！这肯定是骗人的。女：我也觉得不太对，所以没说。男：做得对，你最好再给网站打个电话问问。问：女的接到的电话最可能是什么电话？",
+        "options": [
+          "银行打来的",
+          "朋友打来的",
+          "送货的人打来的",
+          "骗人的电话"
+        ],
+        "answer": 3
+      },
+      "explain": "千万别告诉他！这肯定是骗人的 = đừng nói! chắc chắn là lừa đảo. Đòi mật khẩu thẻ ngân hàng là dấu hiệu lừa. 骗 = lừa."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：听说你辞职了？女：对，我想自己开一家咖啡店。男：开店压力很大，你准备好了吗？女：我已经学了半年怎么做咖啡，钱也准备得差不多了。问：女的辞职以后打算做什么？",
+        "options": [
+          "去咖啡店上班",
+          "自己开咖啡店",
+          "去学做咖啡",
+          "在家休息半年"
+        ],
+        "answer": 1
+      },
+      "explain": "我想自己开一家咖啡店 = tôi muốn tự mở quán cà phê. Học pha cà phê là việc đã làm xong rồi. 辞职 = nghỉ việc."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：你最近怎么总是睡不着？男：最近工作特别多，压力很大，晚上躺在床上还在想工作的事。女：你应该学会放松，睡前可以听听音乐。男：我试过，没什么用。女：那周末跟我们一起去爬山吧，出出汗，心情会好很多。问：男的为什么睡不着？",
+        "options": [
+          "工作压力太大",
+          "身体生病了",
+          "晚上喝了咖啡",
+          "邻居太吵了"
+        ],
+        "answer": 0
+      },
+      "explain": "工作特别多，压力很大，晚上躺在床上还在想工作的事 = việc nhiều, áp lực lớn, nằm trên giường vẫn nghĩ chuyện công việc."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：你去过西安吗？女：去过，那是一个历史很长的城市，到处都能看到很老的房子。男：我打算暑假去，你有什么建议吗？女：夏天那儿很热，最好早上和晚上出去玩儿。还有，一定要尝尝那儿的面条。问：女的建议男的做什么？",
+        "options": [
+          "中午出去玩儿",
+          "冬天再去",
+          "早晚出去玩儿，尝尝面条",
+          "多参观几个博物馆"
+        ],
+        "answer": 2
+      },
+      "explain": "最好早上和晚上出去玩儿……一定要尝尝那儿的面条 = nên đi chơi sáng sớm và buổi tối, nhớ nếm món mì. 尝 = nếm."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：你搬家搬得怎么样了？男：东西太多了，搬了一整天还没搬完。女：要不要我叫几个同事过去帮忙？男：太好了，那我请大家吃晚饭。问：女的打算怎么帮男的？",
+        "options": [
+          "叫几个同事去帮他搬",
+          "借给他一辆车",
+          "请他吃晚饭",
+          "帮他找新房子"
+        ],
+        "answer": 0
+      },
+      "explain": "要不要我叫几个同事过去帮忙 = để tôi gọi mấy đồng nghiệp sang giúp nhé. Người mời ăn tối là nam. 搬家 = chuyển nhà."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：我想找个中国人练习口语，你有什么好办法吗？女：你可以试试语言交换，你教他英语，他教你汉语。男：这个办法不错，在哪儿能找到这样的人？女：学校的留学生中心每个月都组织语言交换活动，你可以去报名。问：在哪儿可以报名参加活动？",
+        "options": [
+          "学校图书馆",
+          "英语老师那儿",
+          "网上",
+          "留学生中心"
+        ],
+        "answer": 3
+      },
+      "explain": "学校的留学生中心每个月都组织语言交换活动 = trung tâm lưu học sinh tổ chức trao đổi ngôn ngữ hằng tháng. 报名 = đăng ký."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "女：你手上戴的是什么？男：新买的手表，能记录我每天走了多少步、睡了多长时间。女：准不准啊？男：还挺准的，它每天提醒我起来活动活动，我现在比以前健康多了。问：男的觉得这个手表怎么样？",
+        "options": [
+          "不太准",
+          "很有用",
+          "太贵了",
+          "样子不好看"
+        ],
+        "answer": 1
+      },
+      "explain": "还挺准的……我现在比以前健康多了 = khá chính xác, giờ khoẻ hơn trước nhiều → rất hữu ích. 记录 = ghi lại."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "男：我想买辆车，你觉得买电动汽车好，还是买普通的汽车好？女：我觉得电动汽车不错，又环保又省钱。男：可是充电不太方便吧？女：现在小区里、停车场都有充电的地方，比以前方便多了。问：女的觉得电动汽车怎么样？",
+        "options": [
+          "充电很不方便",
+          "价格太贵了",
+          "又环保又省钱",
+          "跑得不够快"
+        ],
+        "answer": 2
+      },
+      "explain": "又环保又省钱 = vừa thân thiện môi trường vừa tiết kiệm tiền; 充电比以前方便多了 = sạc điện tiện hơn trước nhiều."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "小张刚工作的时候，常常因为一些小事迟到。经理没有批评他，而是送给他一块手表，对他说：“按时上班是对同事的尊重。”从那以后，小张再也没有迟到过。问：经理送手表是想告诉小张什么？",
+        "options": [
+          "这块手表很贵",
+          "要按时上班，不要迟到",
+          "工作要认真",
+          "要多关心同事"
+        ],
+        "answer": 1
+      },
+      "explain": "按时上班是对同事的尊重 = đi làm đúng giờ là tôn trọng đồng nghiệp → nhắc không được đến muộn. 批评 = phê bình."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "中国有句老话叫“饭后百步走，活到九十九”，意思是吃完饭以后走一走，对身体有好处。不过医生提醒，吃完饭马上运动对胃不好，最好休息半个小时以后再出去散步。问：医生建议什么时候散步？",
+        "options": [
+          "吃饭以前",
+          "吃完饭马上去",
+          "饭后休息半小时再去",
+          "睡觉以前"
+        ],
+        "answer": 2
+      },
+      "explain": "最好休息半个小时以后再出去散步 = nên nghỉ nửa tiếng rồi mới đi dạo. 马上运动对胃不好 = vận động ngay hại dạ dày."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "最近，我们城市开了好几家二十四小时的书店。这些书店不但书多，环境也很好，还有咖啡和点心。很多年轻人下班以后喜欢来这里看书，有的人还会在这里跟朋友聊天、交流读书的想法。问：关于这些书店，下面哪句话是对的？",
+        "options": [
+          "只在白天开门",
+          "只卖书，不卖别的",
+          "环境不太好",
+          "很多年轻人喜欢去"
+        ],
+        "answer": 3
+      },
+      "explain": "很多年轻人下班以后喜欢来这里看书 = nhiều người trẻ tan làm thích đến đây. Hiệu sách mở 24 giờ, có cả cà phê, bánh."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "汉字有几千年的历史。很多汉字最早就像一张画儿，比如“日”字最早就是一个圆圆的太阳，“山”字就像几座连在一起的山。知道了汉字是怎么来的，记汉字就容易多了。问：知道汉字是怎么来的有什么好处？",
+        "options": [
+          "能写得更漂亮",
+          "更容易记住汉字",
+          "能学会画画儿",
+          "能说得更流利"
+        ],
+        "answer": 1
+      },
+      "explain": "知道了汉字是怎么来的，记汉字就容易多了 = biết chữ Hán hình thành ra sao thì nhớ chữ dễ hơn nhiều."
+    },
+    {
+      "section": "listening",
+      "type": "listen",
+      "payload": {
+        "audioText": "以前，我们公司每个月都要用很多纸打印文件。去年开始，公司要求大家在电脑上看文件、写报告，开会也不再打印材料。一年下来，公司用的纸少了一大半，工作也比以前方便了。问：公司去年开始有什么变化？",
+        "options": [
+          "大家多在电脑上看文件、写报告",
+          "买了很多新电脑",
+          "开会的次数少了",
+          "每个月打印更多材料"
+        ],
+        "answer": 0
+      },
+      "explain": "要求大家在电脑上看文件、写报告，开会也不再打印材料 = xem tài liệu, viết báo cáo trên máy tính, họp không in tài liệu nữa."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "___你已经决定了，那就好好去做吧。",
+        "vi": "Bạn đã quyết định rồi thì hãy làm cho tốt.",
+        "showMeaning": false,
+        "options": [
+          "虽然",
+          "既然",
+          "尽管",
+          "无论"
+        ],
+        "answer": 1
+      },
+      "explain": "既然……就…… = đã… thì…. 虽然/尽管 = tuy (cần 但是), 无论 = bất kể (cần 都)."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "我昨天去他家找他，___他已经搬走了。",
+        "vi": "Hôm qua tôi đến nhà tìm anh ấy, hoá ra anh ấy đã chuyển đi rồi.",
+        "showMeaning": false,
+        "options": [
+          "本来",
+          "后来",
+          "原来",
+          "将来"
+        ],
+        "answer": 2
+      },
+      "explain": "原来 = hoá ra (phát hiện điều trước đó không biết). 本来 = vốn dĩ, 后来 = sau đó, 将来 = tương lai."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "这次考试的题很难，___是班里成绩最好的同学，也只考了七十分。",
+        "vi": "Đề thi lần này rất khó, ngay cả bạn học giỏi nhất lớp cũng chỉ được 70 điểm.",
+        "showMeaning": false,
+        "options": [
+          "因为",
+          "只要",
+          "不但",
+          "即使"
+        ],
+        "answer": 3
+      },
+      "explain": "即使……也…… = ngay cả/cho dù… cũng…. 只要 đi với 就, 不但 đi với 而且."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "为了不___大家休息，他每天晚上都戴着耳机听音乐。",
+        "vi": "Để không làm phiền mọi người nghỉ ngơi, tối nào anh ấy cũng đeo tai nghe nghe nhạc.",
+        "showMeaning": false,
+        "options": [
+          "打扰",
+          "打扫",
+          "打算",
+          "打听"
+        ],
+        "answer": 0
+      },
+      "explain": "打扰 = làm phiền. 打扫 = quét dọn, 打算 = dự định, 打听 = hỏi thăm."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "通过这次比赛，我真正___到了合作有多重要。",
+        "vi": "Qua cuộc thi lần này, tôi thật sự nhận ra hợp tác quan trọng đến mức nào.",
+        "showMeaning": false,
+        "options": [
+          "认为",
+          "认识",
+          "以为",
+          "觉得"
+        ],
+        "answer": 1
+      },
+      "explain": "认识到 = nhận thức được. 认为/以为/觉得 không đi với bổ ngữ 到."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "他的房间总是收拾得非常___，每样东西都放得好好的。",
+        "vi": "Phòng anh ấy lúc nào cũng dọn dẹp rất gọn gàng, đồ đạc đều để ngay ngắn.",
+        "showMeaning": false,
+        "options": [
+          "整个",
+          "完整",
+          "正常",
+          "整齐"
+        ],
+        "answer": 3
+      },
+      "explain": "收拾得很整齐 = dọn dẹp rất gọn gàng. 整个 = toàn bộ, 完整 = trọn vẹn, 正常 = bình thường."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "我本来想周末去爬山，___下雨了，只好在家看书。",
+        "vi": "Tôi vốn định cuối tuần đi leo núi, không ngờ trời mưa, đành ở nhà đọc sách.",
+        "showMeaning": false,
+        "options": [
+          "不管",
+          "除了",
+          "没想到",
+          "只要"
+        ],
+        "answer": 2
+      },
+      "explain": "没想到 = không ngờ; 只好 = đành phải. 不管/除了/只要 không hợp nghĩa."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "我们应该___别人的生活习惯，不要用自己的标准去要求别人。",
+        "vi": "Chúng ta nên tôn trọng thói quen sinh hoạt của người khác, đừng lấy tiêu chuẩn của mình để đòi hỏi người khác.",
+        "showMeaning": false,
+        "options": [
+          "重要",
+          "尊重",
+          "严重",
+          "尊敬"
+        ],
+        "answer": 1
+      },
+      "explain": "尊重 = tôn trọng (尊重别人的习惯). 尊敬 dùng cho người bề trên (尊敬老师); 重要/严重 là tính từ."
+    },
+    {
+      "section": "reading",
+      "type": "blank",
+      "payload": {
+        "sentence": "这个问题太复杂了，我们需要再___一下，明天再做决定。",
+        "vi": "Vấn đề này quá phức tạp, chúng ta cần thảo luận thêm, ngày mai hãy quyết định.",
+        "showMeaning": false,
+        "options": [
+          "讨论",
+          "讨厌",
+          "表演",
+          "参观"
+        ],
+        "answer": 0
+      },
+      "explain": "讨论一下 = thảo luận một chút. 讨厌 = ghét, 表演 = biểu diễn, 参观 = tham quan."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "李师傅在工厂工作了三十年，是厂里技术最好的工人。去年他退休了，可是厂里遇到难题的时候，还是常常请他回来帮忙。李师傅也很愿意把自己的经验教给年轻人，他说：“技术不能只留在我一个人的脑子里。”",
+        "statement": "李师傅退休以后，不愿意再回厂里帮忙。",
+        "answer": false
+      },
+      "explain": "还是常常请他回来帮忙……李师傅也很愿意 = vẫn hay mời ông về giúp, ông cũng sẵn lòng → sai. 退休 = nghỉ hưu."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "很多在办公室工作的人一坐就是一整天，中午吃完饭也在座位上休息。时间长了，脖子和腰都容易出问题。医生建议，每坐一个小时，就站起来活动五分钟，比如去倒杯水，或者到窗户边看看远处。这些小动作对身体很有帮助。",
+        "statement": "医生建议在办公室工作的人每坐一个小时就起来活动一下。",
+        "answer": true
+      },
+      "explain": "每坐一个小时，就站起来活动五分钟 = cứ ngồi một tiếng thì đứng dậy vận động 5 phút → đúng. 脖子 = cổ; 腰 = eo, lưng."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "在中国，很多人过生日的时候会吃一碗“长寿面”。“长寿”的意思是活得很长，所以这种面条一般都很长，表示希望过生日的人身体健康、活得长。吃的时候，最好不要把面条弄断。现在，很多年轻人过生日喜欢吃蛋糕，但是很多家庭还是会给老人做一碗长寿面。",
+        "statement": "长寿面的面条很长，表示希望人能活得长。",
+        "answer": true
+      },
+      "explain": "这种面条一般都很长，表示希望过生日的人……活得长 = sợi mì dài, mang ý mong người sinh nhật sống lâu → đúng."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "现在，很多人习惯在手机上看电子书。电子书又便宜又方便，一个手机里可以放几百本书。但是我还是更喜欢纸做的书，我喜欢书拿在手里的感觉，也喜欢在书上写下自己的想法。而且，长时间看手机，眼睛也会很累。",
+        "statement": "作者认为电子书比纸做的书更好。",
+        "answer": false
+      },
+      "explain": "我还是更喜欢纸做的书 = tôi vẫn thích sách giấy hơn → sai. 电子书 = sách điện tử; 感觉 = cảm giác."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "我们公司以前给每个员工发纸杯，一天下来要用掉几百个。后来，公司决定不再提供纸杯，而是送给每个人一个漂亮的杯子。开始有人觉得不方便，但是现在大家都习惯了用自己的杯子，有的人还会在杯子上写上自己的名字。",
+        "statement": "现在，公司里的人都用自己的杯子喝水。",
+        "answer": true
+      },
+      "explain": "现在大家都习惯了用自己的杯子 = giờ mọi người đều quen dùng cốc của mình → đúng. 提供 = cung cấp."
+    },
+    {
+      "section": "reading",
+      "type": "tf",
+      "payload": {
+        "passage": "我奶奶今年七十岁了，去年她报名参加了老年大学，学习弹钢琴。开始的时候，她的手指不太听话，常常弹错。但是她每天坚持练习一个小时，现在已经能弹好几首简单的歌了。奶奶常说，学习跟年龄没有关系。",
+        "statement": "奶奶学钢琴学得很快，一开始就弹得很好。",
+        "answer": false
+      },
+      "explain": "开始的时候……常常弹错 = lúc đầu thường đánh sai → sai. 弹钢琴 = chơi đàn piano; 坚持 = kiên trì."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "李先生，您好！您上周发来的合作计划我们已经仔细看过了，我们很感兴趣，但是在价格方面还有一些问题需要讨论。下周三上午您方便来我们公司面谈吗？问：写这封信主要是为了什么？",
+        "options": [
+          "拒绝合作",
+          "约时间见面讨论",
+          "告诉对方价格",
+          "感谢对方的帮助"
+        ],
+        "answer": 1
+      },
+      "explain": "下周三上午您方便来我们公司面谈吗 = sáng thứ Tư tuần sau ông có tiện đến công ty gặp trao đổi không → hẹn gặp. 拒绝 = từ chối."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "感冒的时候，很多人马上就吃药。其实，一般的感冒多喝水、多休息，一个星期左右自己就会好。如果发烧超过三天，或者越来越严重，就应该去医院看看。问：根据这段话，什么时候应该去医院？",
+        "options": [
+          "一感冒就去",
+          "感冒一个星期以后",
+          "发烧超过三天的时候",
+          "吃完药以后"
+        ],
+        "answer": 2
+      },
+      "explain": "如果发烧超过三天，或者越来越严重，就应该去医院 = sốt quá ba ngày hoặc nặng hơn thì nên đi viện."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "上周我的钱包丢了，里面有银行卡和很多重要的东西，我急得不知道怎么办。第二天，一位出租车司机打电话给我，说他在车上发现了我的钱包，还专门开车给我送了过来。问：关于钱包，可以知道什么？",
+        "options": [
+          "丢在了出租车上",
+          "被小偷偷走了",
+          "最后在家里找到了",
+          "里面的银行卡没了"
+        ],
+        "answer": 0
+      },
+      "explain": "他在车上发现了我的钱包 = tài xế thấy ví trên xe → ví rơi trên taxi. 专门 = cất công."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "我们学校的图书馆最近有了新变化：借书不用再排队找老师了，学生自己在机器上刷一下学生卡就能借。另外，在手机上也能查到哪本书还在、哪本已经被借走了。问：图书馆有什么新变化？",
+        "options": [
+          "书比以前多了很多",
+          "开门的时间更长了",
+          "借书要排队找老师",
+          "学生可以自己在机器上借书"
+        ],
+        "answer": 3
+      },
+      "explain": "学生自己在机器上刷一下学生卡就能借 = học sinh tự quẹt thẻ trên máy là mượn được. 不用再排队 = không phải xếp hàng nữa."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "在中国，请客吃饭的时候，主人常常会点很多菜。这是因为在很多中国人看来，如果客人把菜都吃光了，说明菜可能不够，主人会觉得不好意思。问：中国人请客的时候为什么常常点很多菜？",
+        "options": [
+          "客人特别能吃",
+          "菜很便宜",
+          "怕菜不够，主人觉得不好意思",
+          "饭馆要求这样"
+        ],
+        "answer": 2
+      },
+      "explain": "如果客人把菜都吃光了，说明菜可能不够，主人会觉得不好意思 = khách ăn hết nghĩa là có thể thiếu món, chủ nhà sẽ ngại. 请客 = mời khách."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "现在，越来越多的年轻人喜欢买别人用过的旧东西，比如旧书、旧自行车。他们觉得，这些东西不但价格便宜，而且还能让东西多用几年，减少浪费。问：年轻人为什么喜欢买旧东西？",
+        "options": [
+          "质量比新的好",
+          "便宜，又能减少浪费",
+          "买不到新的",
+          "样子更好看"
+        ],
+        "answer": 1
+      },
+      "explain": "不但价格便宜，而且还能……减少浪费 = vừa rẻ vừa giảm lãng phí."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "很多人都说，选工作最重要的是工资高。可是我的朋友小高却选了一份工资不高的工作——在博物馆给游客介绍中国的历史。他说，每天都能做自己喜欢的事，这比什么都重要。问：小高选工作最重视什么？",
+        "options": [
+          "做自己喜欢的事",
+          "工资高不高",
+          "离家近不近",
+          "工作轻不轻松"
+        ],
+        "answer": 0
+      },
+      "explain": "每天都能做自己喜欢的事，这比什么都重要 = được làm việc mình thích mỗi ngày quan trọng hơn mọi thứ. 却 = lại (trái với)."
+    },
+    {
+      "section": "reading",
+      "type": "pick",
+      "payload": {
+        "ask": "上课的时候，有的学生想把老师说的每一句话都记下来，结果反而没有时间想问题。其实，记笔记只需要写下重点和自己不懂的地方，下课以后再整理一下，效果会更好。问：这段话认为记笔记应该怎么做？",
+        "options": [
+          "把老师的每句话都记下来",
+          "下课以后才开始记",
+          "上课不用记笔记",
+          "只记重点和不懂的地方"
+        ],
+        "answer": 3
+      },
+      "explain": "只需要写下重点和自己不懂的地方 = chỉ cần ghi trọng điểm và chỗ chưa hiểu. 记笔记 = ghi chép; 整理 = sắp xếp lại."
+    },
+    {
+      "section": "reading",
+      "type": "match",
+      "payload": {
+        "pairs": [
+          [
+            "专业",
+            "chuyên ngành"
+          ],
+          [
+            "毕业",
+            "tốt nghiệp"
+          ],
+          [
+            "申请",
+            "nộp đơn, xin"
+          ],
+          [
+            "奖学金",
+            "học bổng"
+          ],
+          [
+            "成绩",
+            "thành tích, điểm số"
+          ]
+        ]
+      },
+      "explain": "Từ vựng học tập: 专业 chuyên ngành, 毕业 tốt nghiệp, 申请 nộp đơn, 奖学金 học bổng, 成绩 điểm số."
+    },
+    {
+      "section": "reading",
+      "type": "match",
+      "payload": {
+        "pairs": [
+          [
+            "传统节日",
+            "lễ tết truyền thống"
+          ],
+          [
+            "志愿者",
+            "tình nguyện viên"
+          ],
+          [
+            "博物馆",
+            "viện bảo tàng"
+          ],
+          [
+            "邻居",
+            "hàng xóm"
+          ],
+          [
+            "京剧",
+            "Kinh kịch"
+          ]
+        ]
+      },
+      "explain": "Từ vựng văn hoá – xã hội: 传统节日 lễ tết truyền thống, 志愿者 tình nguyện viên, 博物馆 bảo tàng, 邻居 hàng xóm, 京剧 Kinh kịch."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "answer": "这篇文章写得非常精彩。",
+        "tiles": [
+          "这篇",
+          "文章",
+          "写得",
+          "非常精彩"
+        ],
+        "vi": "Bài văn này viết rất hay."
+      },
+      "explain": "Bổ ngữ trạng thái: động từ + 得 + 非常 + tính từ. 篇 = lượng từ của bài văn; 精彩 = đặc sắc, hay."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "answer": "妈妈把我的旧衣服都送给了邻居。",
+        "tiles": [
+          "妈妈把",
+          "我的旧衣服",
+          "都送给了",
+          "邻居"
+        ],
+        "vi": "Mẹ đã đem hết quần áo cũ của tôi tặng cho hàng xóm."
+      },
+      "explain": "Câu chữ 把: chủ ngữ + 把 + tân ngữ + 都 + 送给了 + người nhận."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "answer": "我们班的同学都在为考试做准备。",
+        "tiles": [
+          "我们班的",
+          "同学",
+          "都在为考试",
+          "做准备"
+        ],
+        "vi": "Các bạn lớp tôi đều đang chuẩn bị cho kỳ thi."
+      },
+      "explain": "为 + mục đích + 做准备 = chuẩn bị cho…; 都在 = đều đang."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "answer": "他连一句汉语都不会说。",
+        "tiles": [
+          "他连",
+          "一句汉语",
+          "都不会",
+          "说"
+        ],
+        "vi": "Anh ấy đến một câu tiếng Trung cũng không biết nói."
+      },
+      "explain": "连……都…… = ngay cả… cũng…."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "answer": "他每天都坚持用汉语写日记。",
+        "tiles": [
+          "他每天",
+          "都坚持",
+          "用汉语",
+          "写日记"
+        ],
+        "vi": "Ngày nào anh ấy cũng kiên trì viết nhật ký bằng tiếng Trung."
+      },
+      "explain": "坚持 + động từ = kiên trì làm gì; 用汉语 (cách thức) đứng trước 写日记."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "answer": "这件事情让我明白了一个道理。",
+        "tiles": [
+          "这件事情",
+          "让我",
+          "明白了",
+          "一个道理"
+        ],
+        "vi": "Chuyện này khiến tôi hiểu ra một đạo lý."
+      },
+      "explain": "让 + người + 明白了 + điều gì = khiến ai hiểu ra…. 道理 = đạo lý."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "answer": "我打算利用这个假期学会游泳。",
+        "tiles": [
+          "我打算",
+          "利用",
+          "这个假期",
+          "学会游泳"
+        ],
+        "vi": "Tôi định tận dụng kỳ nghỉ này để học bơi."
+      },
+      "explain": "利用 + thời gian + làm gì = tận dụng… để…; 学会 = học được."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "answer": "他把护照忘在出租车上了。",
+        "tiles": [
+          "他把",
+          "护照",
+          "忘在",
+          "出租车上了"
+        ],
+        "vi": "Anh ấy để quên hộ chiếu trên taxi rồi."
+      },
+      "explain": "把 + tân ngữ + 忘在 + nơi chốn + 了 = để quên… ở…. 护照 = hộ chiếu."
+    },
+    {
+      "section": "writing",
+      "type": "order",
+      "payload": {
+        "answer": "比赛结束以后，大家都高兴地跳了起来。",
+        "tiles": [
+          "比赛结束以后",
+          "大家都",
+          "高兴地",
+          "跳了起来"
+        ],
+        "vi": "Sau khi trận đấu kết thúc, mọi người đều vui mừng nhảy cẫng lên."
+      },
+      "explain": "Trạng ngữ thời gian đứng đầu; 高兴地 + động từ + bổ ngữ xu hướng 起来."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Ngoài chủ nhật ra, ngày nào anh ấy cũng đi làm.",
+        "options": [
+          "除了星期天，他每天都不上班。",
+          "只有星期天，他才去上班。",
+          "除了星期天，他每天都去上班。",
+          "星期天他也去上班，一天也不休息。"
+        ],
+        "answer": 2
+      },
+      "explain": "除了……（以外），……都…… = ngoài… ra, … đều…. 每天都去上班 = ngày nào cũng đi làm."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Bất kể bạn có đồng ý hay không, tôi đều sẽ đi.",
+        "options": [
+          "不管你同不同意，我都要去。",
+          "如果你同意，我就去。",
+          "只要你不同意，我就不去。",
+          "不管你同意，我都要去。"
+        ],
+        "answer": 0
+      },
+      "explain": "不管 + dạng lựa chọn (同不同意) + 都 = bất kể… đều…. Sau 不管 phải có dạng lựa chọn, nên “不管你同意” sai."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Tôi học tiếng Trung đã được hai năm rồi.",
+        "options": [
+          "我两年以前学过汉语。",
+          "我学汉语已经学了两年了。",
+          "我学汉语学了两个月了。",
+          "我已经两年没学汉语了。"
+        ],
+        "answer": 1
+      },
+      "explain": "Động từ + 了 + thời lượng + 了 = đã… được (bao lâu) và vẫn đang tiếp tục. 两个月 = hai tháng (sai)."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Chiếc điện thoại này là tôi mua cho mẹ, không phải mua cho mình.",
+        "options": [
+          "这个手机是妈妈给我买的，不是我自己买的。",
+          "这个手机是我给自己买的，不是给妈妈买的。",
+          "这个手机我想给妈妈买，可是没买。",
+          "这个手机是我给妈妈买的，不是给自己买的。"
+        ],
+        "answer": 3
+      },
+      "explain": "是……的 nhấn mạnh đối tượng: 是我给妈妈买的 = chính tôi mua cho mẹ."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Nghe nói cuối tuần trời sẽ trở lạnh, bạn nhớ mặc thêm áo.",
+        "options": [
+          "听说周末天气会变热，你记得少穿点儿衣服。",
+          "听说周末天气会变冷，你记得多穿点儿衣服。",
+          "听说周末天气会变冷，你忘了多穿点儿衣服。",
+          "周末天气变冷了，所以你穿了很多衣服。"
+        ],
+        "answer": 1
+      },
+      "explain": "听说 = nghe nói; 变冷 = trở lạnh; 记得多穿点儿 = nhớ mặc thêm. 忘了 = quên mất (sai nghĩa)."
+    },
+    {
+      "section": "writing",
+      "type": "toZh",
+      "payload": {
+        "vi": "Anh ấy không chỉ biết nấu ăn mà còn nấu rất ngon.",
+        "options": [
+          "他不仅不会做饭，而且做得不好吃。",
+          "他会做饭，但是做得不好吃。",
+          "他做饭很好吃，但是不常做。",
+          "他不仅会做饭，而且做得很好吃。"
+        ],
+        "answer": 3
+      },
+      "explain": "不仅……而且…… = không chỉ… mà còn…; 做得很好吃 = nấu rất ngon."
+    },
+    {
+      "section": "speaking",
+      "type": "speak",
+      "payload": {
+        "task": "read",
+        "prompt": "我们小区附近新开了一家图书馆。图书馆不大，但是环境很安静，书也很多。每天晚上，很多人吃完饭就来这里看书。有的是带着孩子的父母，有的是刚下班的年轻人，还有头发白了的老人。在这里，大家都安安静静地读书。我觉得，这是城市里最美的风景。",
+        "vi": "Đọc to đoạn văn về thư viện mới trong khu phố. Chú ý thanh điệu và từ láy 安安静静.",
+        "prepSec": 30,
+        "answerSec": 60,
+        "sample": "我们小区附近新开了一家图书馆。图书馆不大，但是环境很安静，书也很多。每天晚上，很多人吃完饭就来这里看书。有的是带着孩子的父母，有的是刚下班的年轻人，还有头发白了的老人。在这里，大家都安安静静地读书。我觉得，这是城市里最美的风景。",
+        "sampleVi": "Gần khu nhà tôi mới mở một thư viện. Thư viện không lớn nhưng rất yên tĩnh, sách cũng nhiều. Tối nào cũng có nhiều người ăn cơm xong là đến đây đọc sách: có bố mẹ dẫn theo con, có người trẻ vừa tan làm, còn có những cụ già tóc bạc. Ở đây, mọi người đều lặng lẽ đọc sách. Tôi thấy đây là phong cảnh đẹp nhất của thành phố."
+      }
+    },
+    {
+      "section": "speaking",
+      "type": "speak",
+      "payload": {
+        "task": "answer",
+        "prompt": "工作或者学习压力大的时候，你一般怎么让自己放松？",
+        "audioText": "工作或者学习压力大的时候，你一般怎么让自己放松？",
+        "vi": "Khi áp lực công việc hoặc học tập lớn, bạn thường làm gì để thư giãn?",
+        "prepSec": 30,
+        "answerSec": 60,
+        "sample": "压力大的时候，我一般有几个放松的办法。首先，我会出去跑跑步或者去游泳，运动完出一身汗，心情会好很多。其次，我喜欢听一些安静的音乐，能让我慢慢放松下来。另外，我也会给好朋友打个电话，聊聊最近遇到的事情。我觉得，把心里的话说出来，压力就会小很多。",
+        "sampleVi": "Khi áp lực lớn, tôi thường có vài cách thư giãn. Trước hết, tôi ra ngoài chạy bộ hoặc đi bơi, vận động xong ra mồ hôi là tâm trạng tốt hơn nhiều. Tiếp theo, tôi thích nghe nhạc nhẹ nhàng, giúp mình dần thả lỏng. Ngoài ra, tôi cũng gọi điện cho bạn thân, kể chuyện gặp phải gần đây. Tôi thấy nói được điều trong lòng ra thì áp lực sẽ giảm đi nhiều."
+      }
+    },
+    {
+      "section": "speaking",
+      "type": "speak",
+      "payload": {
+        "task": "answer",
+        "prompt": "如果你的好朋友考试没考好，心情很差，你会怎么帮助他？",
+        "audioText": "如果你的好朋友考试没考好，心情很差，你会怎么帮助他？",
+        "vi": "Nếu bạn thân thi không tốt, tâm trạng rất tệ, bạn sẽ giúp bạn ấy thế nào?",
+        "prepSec": 45,
+        "answerSec": 75,
+        "sample": "如果我的好朋友考试没考好，我会先陪在他身边，听他说说心里的想法，不会马上给他讲大道理。等他心情好一点儿以后，我会告诉他，一次考试不能说明什么，重要的是找到没考好的原因。然后，我会约他一起复习，互相帮助。周末的时候，我还会请他去看场电影，或者去公园走走，让他放松一下。我相信，有朋友的支持，他很快就会好起来的。",
+        "sampleVi": "Nếu bạn thân thi không tốt, trước hết tôi sẽ ở bên, nghe bạn nói ra suy nghĩ, không vội giảng đạo lý. Khi bạn đỡ buồn, tôi sẽ nói một kỳ thi không nói lên điều gì, quan trọng là tìm ra nguyên nhân. Sau đó tôi rủ bạn cùng ôn bài, giúp đỡ nhau. Cuối tuần, tôi còn mời bạn đi xem phim hoặc dạo công viên cho thư giãn. Tôi tin có bạn bè ủng hộ, bạn ấy sẽ sớm vui trở lại."
+      }
+    },
+    {
+      "section": "speaking",
+      "type": "speak",
+      "payload": {
+        "task": "topic",
+        "prompt": "请谈谈你理想中的城市是什么样子的。",
+        "vi": "Hãy nói về thành phố lý tưởng của bạn. Gợi ý: môi trường, giao thông, sinh hoạt, con người.",
+        "prepSec": 60,
+        "answerSec": 90,
+        "sample": "我理想中的城市应该有这几个特点。第一，环境要好，空气干净，到处都有树和花，走几分钟就能到公园。第二，交通要方便，地铁和公共汽车很多，大家不用开车也能去任何地方。第三，生活要方便，附近有医院、学校和超市。最后，城市里的人要友好，邻居之间互相帮助。如果能生活在这样的城市，我一定会觉得很幸福。",
+        "sampleVi": "Thành phố lý tưởng của tôi có mấy đặc điểm. Thứ nhất, môi trường tốt, không khí trong lành, khắp nơi có cây và hoa, đi bộ vài phút là tới công viên. Thứ hai, giao thông thuận tiện, nhiều tàu điện ngầm và xe buýt, không lái xe cũng đi được mọi nơi. Thứ ba, sinh hoạt tiện lợi, gần nhà có bệnh viện, trường học, siêu thị. Cuối cùng, người dân thân thiện, hàng xóm giúp đỡ nhau. Được sống ở thành phố như vậy, tôi chắc chắn sẽ rất hạnh phúc."
+      }
+    },
+    {
+      "section": "speaking",
+      "type": "speak",
+      "payload": {
+        "task": "topic",
+        "prompt": "有人说“失败是成功之母”，你同意这种说法吗？请说说你自己的经历和看法。",
+        "vi": "Có người nói “thất bại là mẹ thành công”, bạn có đồng ý không? Hãy kể từ trải nghiệm của bạn.",
+        "prepSec": 60,
+        "answerSec": 90,
+        "sample": "我非常同意这种说法。上高中的时候，我第一次参加英语演讲比赛，因为太紧张，说到一半就忘了后面的内容，结果什么奖都没拿到。我当时特别难过，但是后来我认真想了想失败的原因：准备的时间不够，练习得也太少。第二年，我每天对着镜子练习，还请老师帮我修改，最后拿了第一名。所以我觉得，失败并不可怕，重要的是找到原因，继续努力。",
+        "sampleVi": "Tôi rất đồng ý. Hồi cấp ba, lần đầu tôi thi hùng biện tiếng Anh, vì quá căng thẳng nên nói được nửa thì quên phần sau, kết quả không đạt giải nào. Lúc đó tôi rất buồn, nhưng rồi tôi nghiêm túc nghĩ lại nguyên nhân: chuẩn bị không đủ thời gian, luyện tập quá ít. Năm sau, ngày nào tôi cũng tập trước gương, còn nhờ thầy sửa bài, cuối cùng giành giải nhất. Vì vậy tôi thấy thất bại không đáng sợ, quan trọng là tìm ra nguyên nhân và tiếp tục cố gắng."
+      }
+    }
+  ]
+}

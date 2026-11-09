@@ -31,6 +31,7 @@ final class TestController
         $v = new Validator($r->body);
         $lessonId = $v->int('lessonId', 'Bài', 1, null, false);
         $mockId = $v->int('mockTestId', 'Đề thi thử', 1, null, false);
+        $mode = (string) $v->in('mode', 'Chế độ làm bài', ['exam', 'practice'], 'exam');
         $v->done();
 
         if ($lessonId === null && $mockId === null) {
@@ -42,7 +43,16 @@ final class TestController
             throw HttpError::validation(['lessonId' => 'Chỉ chọn bài hoặc đề thi thử, không chọn cả hai.']);
         }
 
-        return Response::json(TestService::start($r->userId(), $lessonId, $mockId), 201);
+        return Response::json(TestService::start($r->userId(), $lessonId, $mockId, $mode), 201);
+    }
+
+    /** POST /tests/attempts/{id}/check { qid, answer } — chỉ ở chế độ luyện tập của đề HSK 3.0. */
+    public function check(Request $r): array
+    {
+        $v = new Validator($r->body);
+        $qid = (int) $v->int('qid', 'Câu hỏi', 1);
+        $v->done();
+        return TestService::check($this->attempt($r), $qid, $r->body['answer'] ?? null);
     }
 
     /** PATCH /tests/attempts/{id} — tự lưu khi đang làm. */

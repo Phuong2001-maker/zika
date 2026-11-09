@@ -9,6 +9,7 @@ use Zika\Controllers\Admin\ContentController as Content;
 use Zika\Controllers\Admin\ContestController as Contest;
 use Zika\Controllers\Admin\CurriculumController as Curriculum;
 use Zika\Controllers\Admin\DialogueController as Dialogue;
+use Zika\Controllers\Admin\Hsk30Controller as Hsk30Admin;
 use Zika\Controllers\Admin\MiscController as Misc;
 use Zika\Controllers\Admin\OpsController as Ops;
 use Zika\Controllers\Admin\StatsController as Stats;
@@ -83,6 +84,9 @@ return [
     ['POST',   '/admin/levels/{id}/mock-tests', [Question::class, 'createMock'], 'E'],
     ['PATCH',  '/admin/mock-tests/{id}', [Question::class, 'updateMock'], 'E'],
     ['DELETE', '/admin/mock-tests/{id}', [Question::class, 'deleteMock'], 'E'],
+    // Đề HSK 3.0: danh sách và tạo; sửa, xoá, soạn câu dùng chung /admin/mock-tests/{id}.
+    ['GET',    '/admin/hsk30', [Hsk30Admin::class, 'index'], 'E'],
+    ['POST',   '/admin/hsk30', [Hsk30Admin::class, 'create'], 'E'],
     ['GET',    '/admin/mock-tests/{id}/questions', [Question::class, 'mockQuestions'], 'E'],
     ['POST',   '/admin/mock-tests/{id}/questions', [Question::class, 'createMockQuestion'], 'E'],
     ['POST',   '/admin/mock-tests/{id}/questions/bulk', [Question::class, 'bulkMock'], 'E'],

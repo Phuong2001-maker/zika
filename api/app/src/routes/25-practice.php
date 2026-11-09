@@ -18,6 +18,7 @@ return [
     ['GET',   '/tests/attempts/{id}', [Test::class, 'show'], 'L'],
     ['PATCH', '/tests/attempts/{id}', [Test::class, 'save'], 'L'],
     ['POST',  '/tests/attempts/{id}/submit', [Test::class, 'submit'], 'L'],
+    ['POST',  '/tests/attempts/{id}/check', [Test::class, 'check'], 'L'],
 
     ['POST',  '/writing/result', [Writing::class, 'result'], 'L'],
     ['GET',   '/writing/weak', [Writing::class, 'weak'], 'L'],

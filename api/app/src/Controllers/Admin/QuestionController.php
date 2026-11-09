@@ -15,6 +15,7 @@ use Zika\Services\ContentWriter;
 use Zika\Services\PartContent;
 use Zika\Services\QuestionGrader;
 use Zika\Services\QuestionPayload;
+use Zika\Services\TestService;
 
 /** Quản trị · Bài tập, Kiểm tra, Thi thử (04 §10.4). Quyền E. */
 final class QuestionController
@@ -143,14 +144,20 @@ final class QuestionController
         $q = self::find($r->id());
         self::guardQuestion($q, $r);
         $part = (string) $q['part'];
-        [$type, $payload, $explain, $score] = $this->read($r, $part === 'mock' ? 'kt' : $part);
+        $hsk30 = $part === 'mock' && self::isHsk30((int) $q['mock_test_id']);
+        [$type, $payload, $explain, $score] = $this->read($r, $part === 'mock' ? 'kt' : $part, $hsk30);
 
-        Db::update('questions', [
+        $set = [
             'type' => $type,
             'payload' => Json::encode($payload),
             'explain_vi' => $explain,
             'score' => $score,
-        ], ['id' => (int) $q['id']]);
+        ];
+        // Đề HSK 3.0 đổi được phần (nghe/đọc/viết/nói) khi sửa câu; đề cũ giữ nguyên như trước.
+        if ($hsk30) {
+            $set['section'] = self::sectionFor($type, $r->input('section') ?? $q['section'], true);
+        }
+        Db::update('questions', $set, ['id' => (int) $q['id']]);
 
         self::touch($q, $r);
         Audit::log($r, 'question.update', 'question', (int) $q['id'], ['type' => $type]);
@@ -281,7 +288,7 @@ final class QuestionController
         $rows = Db::all(
             'SELECT m.*, COUNT(q.id) AS qn FROM mock_tests m
              LEFT JOIN questions q ON q.mock_test_id = m.id
-             WHERE m.level_id = ? AND m.for_contest = 0 GROUP BY m.id ORDER BY m.sort_order, m.id',
+             WHERE m.level_id = ? AND m.for_contest = 0 AND m.kind = \'mock\' GROUP BY m.id ORDER BY m.sort_order, m.id',
             [$r->id()],
         );
         return array_map(static fn (array $m): array => [
@@ -382,6 +389,7 @@ final class QuestionController
                 'status' => (string) $m['status'],
                 'durationSec' => (int) $m['duration_sec'],
                 'forContest' => (bool) $m['for_contest'],
+                'kind' => (string) $m['kind'],
             ],
             'questions' => self::rows('mock_test_id = ?', [(int) $m['id']], true),
         ];
@@ -406,7 +414,9 @@ final class QuestionController
 
         $created = 0;
         $skipped = [];
-        Db::tx(static function () use ($items, $mockId, $mode, &$created, &$skipped): void {
+        $hsk30 = $m['kind'] === 'hsk30';
+        $allowed = $hsk30 ? QuestionGrader::HSK30_TYPES : QuestionGrader::KT_TYPES;
+        Db::tx(static function () use ($items, $mockId, $mode, $hsk30, $allowed, &$created, &$skipped): void {
             if ($mode === 'replace') {
                 Db::exec('DELETE FROM questions WHERE mock_test_id = ?', [$mockId]);
             }
@@ -415,7 +425,7 @@ final class QuestionController
             foreach (array_values($items) as $i => $raw) {
                 $row = is_array($raw) ? $raw : [];
                 $type = (string) ($row['type'] ?? '');
-                if (!in_array($type, QuestionGrader::KT_TYPES, true)) {
+                if (!in_array($type, $allowed, true)) {
                     $skipped[] = ['row' => $i + 1, 'reason' => 'Dạng câu không dùng được trong đề thi.'];
                     continue;
                 }
@@ -433,8 +443,8 @@ final class QuestionController
                     'type' => $type,
                     'payload' => Json::encode($payload),
                     'explain_vi' => mb_substr(trim((string) ($row['explain'] ?? '')), 0, 2000) ?: null,
-                    'score' => $score > 0 ? min($score, 100) : 1.0,
-                    'section' => $type === 'listen' ? 'listening' : 'reading',
+                    'score' => QuestionGrader::isGraded($type) ? ($score > 0 ? min($score, 100) : 1.0) : 0.0,
+                    'section' => self::sectionFor($type, $row['section'] ?? null, $hsk30),
                     'sort_order' => ++$sort,
                 ]);
                 $created++;
@@ -450,11 +460,15 @@ final class QuestionController
     public function createMockQuestion(Request $r): Response
     {
         $m = self::mock($r->id(), $r);
-        [$type, $payload, $explain, $score] = $this->read($r, 'kt');
+        $hsk30 = $m['kind'] === 'hsk30';
+        [$type, $payload, $explain, $score] = $this->read($r, 'kt', $hsk30);
 
         $v = new Validator($r->body);
-        $section = $v->in('section', 'Phần đề', ['listening', 'reading'], 'reading');
+        $section = $v->in('section', 'Phần đề', $hsk30 ? TestService::SECTIONS : ['listening', 'reading'], 'reading');
         $v->done();
+        if ($hsk30) {
+            $section = self::sectionFor($type, $section, true);
+        }
 
         $id = Db::insert('questions', [
             'part' => 'mock',
@@ -545,9 +559,9 @@ final class QuestionController
     /* ------------------------------------------------------------------ */
 
     /** @return array{0:string,1:array<string,mixed>,2:?string,3:float} */
-    private function read(Request $r, string $part): array
+    private function read(Request $r, string $part, bool $hsk30 = false): array
     {
-        $allowed = $part === 'bt' ? QuestionGrader::BT_TYPES : QuestionGrader::KT_TYPES;
+        $allowed = $part === 'bt' ? QuestionGrader::BT_TYPES : ($hsk30 ? QuestionGrader::HSK30_TYPES : QuestionGrader::KT_TYPES);
 
         $v = new Validator($r->body);
         $type = (string) $v->in('type', 'Dạng câu', $allowed);
@@ -556,7 +570,30 @@ final class QuestionController
         $payloadIn = $v->arr('payload', 'Nội dung câu');
         $v->done();
 
-        return [$type, QuestionPayload::clean($type, $payloadIn), $explain, $score];
+        // Câu nói không chấm tự động nên không mang điểm, không làm lệch điểm tối đa của đề.
+        return [$type, QuestionPayload::clean($type, $payloadIn), $explain, QuestionGrader::isGraded($type) ? $score : 0.0];
+    }
+
+    /** Đề này là đề Thi thử HSK 3.0. */
+    private static function isHsk30(int $mockId): bool
+    {
+        return Db::val('SELECT kind FROM mock_tests WHERE id = ?', [$mockId]) === 'hsk30';
+    }
+
+    /**
+     * Phần đề của một câu. Câu nói luôn ở phần nói; đề HSK 3.0 nhận nghe/đọc/viết theo người soạn chọn, còn không
+     * thì câu nghe vào phần nghe, các câu khác vào phần đọc như đề thi thử cũ.
+     */
+    private static function sectionFor(string $type, mixed $requested, bool $hsk30): string
+    {
+        if ($type === 'speak') {
+            return 'speaking';
+        }
+        $allowed = $hsk30 ? ['listening', 'reading', 'writing'] : ['listening', 'reading'];
+        if (is_string($requested) && in_array($requested, $allowed, true)) {
+            return $requested;
+        }
+        return in_array($type, ['listen', 'audio'], true) ? 'listening' : 'reading';
     }
 
     private static function part(string $p): string

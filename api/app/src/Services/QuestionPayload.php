@@ -33,8 +33,17 @@ final class QuestionPayload
             'trans' => self::trans($in, $errors),
             'tf' => self::tf($in, $errors),
             'match' => self::match($in, $errors),
+            'speak' => self::speak($in, $errors),
+            'pic' => self::pic($in, $errors),
             default => throw HttpError::validation(['type' => 'Dạng câu không hợp lệ.']),
         };
+        // Hình minh hoạ đi kèm câu (đề HSK 3.0: nhìn tranh trả lời, nhìn tranh nói). Chỉ nhận hình trong kho của web.
+        $hinh = self::hinh($in['imageUrl'] ?? null);
+        if ($hinh !== null) {
+            $out['imageUrl'] = $hinh;
+        } elseif ($type === 'speak' && ($out['task'] ?? '') === 'picture') {
+            $errors['imageUrl'] = 'Câu nhìn tranh nói cần chọn một hình.';
+        }
 
         if ($errors !== []) {
             throw HttpError::validation($errors);
@@ -277,6 +286,90 @@ final class QuestionPayload
         }
 
         return ['pairs' => $pairs];
+    }
+
+    /** Các kiểu câu nói của đề HSK 3.0 → đề bài cần trường nào. */
+    public const SPEAK_TASKS = ['repeat', 'read', 'answer', 'topic', 'picture'];
+
+    /** Mã hình trong kho web/static/hinh-hsk/ (chữ thường, số, gạch nối). */
+    private const MA_HINH = '~^[a-z0-9][a-z0-9-]{0,39}$~';
+
+    /** Đường dẫn hình hợp lệ: kho hình của web hoặc file đã tải lên /uploads/; còn lại bỏ qua. */
+    private static function hinh(mixed $v): ?string
+    {
+        $s = trim((string) ($v ?? ''));
+        if (preg_match('~^/hinh-hsk/([a-z0-9-]+)\.svg$~', $s, $m) && preg_match(self::MA_HINH, $m[1])) {
+            return $s;
+        }
+        return self::path($s);
+    }
+
+    /**
+     * pic — chọn tranh đúng (HSK 1–2): nghe `audioText` hoặc đọc `ask` rồi chọn một trong 2–4 hình. Phương án là mã
+     * hình trong kho, chấm như trắc nghiệm theo chỉ số.
+     */
+    private static function pic(array $in, array &$errors): array
+    {
+        $audio = trim((string) ($in['audioText'] ?? ''));
+        $ask = trim((string) ($in['ask'] ?? ''));
+        if ($audio === '' && $ask === '') {
+            $errors['audioText'] = 'Nhập câu để nghe hoặc câu hỏi để đọc.';
+        }
+        if (mb_strlen($audio) > 200 || mb_strlen($ask) > 200) {
+            $errors['audioText'] = 'Dài quá 200 ký tự.';
+        }
+        [$opts, $answer] = self::options($in, $errors);
+        foreach ($opts as $o) {
+            if (!preg_match(self::MA_HINH, $o)) {
+                $errors['options'] = 'Mỗi phương án phải là một hình trong kho.';
+                break;
+            }
+        }
+        return ['audioText' => mb_substr($audio, 0, 200), 'ask' => mb_substr($ask, 0, 200), 'options' => $opts, 'answer' => $answer];
+    }
+
+    /**
+     * speak — câu nói (Thi thử HSK 3.0). Người học ghi âm ở máy mình nên không có đáp án để chấm; `sample` là bài nói
+     * mẫu, chỉ hiện sau khi nộp hoặc khi luyện tập.
+     *   repeat: nghe `audioText` rồi nhắc lại (không hiện chữ) · read: đọc to `prompt`
+     *   answer: nghe/đọc câu hỏi rồi trả lời · topic: nói theo chủ đề `prompt`
+     */
+    private static function speak(array $in, array &$errors): array
+    {
+        $task = in_array($in['task'] ?? null, self::SPEAK_TASKS, true) ? (string) $in['task'] : 'answer';
+        $prompt = trim((string) ($in['prompt'] ?? ''));
+        $audio = trim((string) ($in['audioText'] ?? ''));
+        if ($task === 'repeat' && $audio === '') {
+            $errors['audioText'] = 'Nhập câu để người học nghe rồi nhắc lại.';
+        } elseif (in_array($task, ['read', 'topic'], true) && $prompt === '') {
+            $errors['prompt'] = $task === 'read' ? 'Nhập đoạn để người học đọc to.' : 'Nhập chủ đề để người học nói.';
+        } elseif ($task !== 'picture' && $prompt === '' && $audio === '') {
+            $errors['prompt'] = 'Nhập câu hỏi (chữ hoặc nội dung đọc).';
+        }
+        foreach (['prompt' => $prompt, 'audioText' => $audio] as $k => $v) {
+            if (mb_strlen($v) > 300) {
+                $errors[$k] = 'Dài quá 300 ký tự.';
+            }
+        }
+        $prep = filter_var($in['prepSec'] ?? 10, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 300]]);
+        $answer = filter_var($in['answerSec'] ?? 30, FILTER_VALIDATE_INT, ['options' => ['min_range' => 5, 'max_range' => 300]]);
+        if ($prep === false) {
+            $errors['prepSec'] = 'Thời gian chuẩn bị từ 0 đến 300 giây.';
+        }
+        if ($answer === false) {
+            $errors['answerSec'] = 'Thời gian nói từ 5 đến 300 giây.';
+        }
+
+        return [
+            'task' => $task,
+            'prompt' => mb_substr($prompt, 0, 300),
+            'audioText' => mb_substr($audio, 0, 300),
+            'vi' => mb_substr(trim((string) ($in['vi'] ?? '')), 0, 300),
+            'prepSec' => $prep === false ? 10 : $prep,
+            'answerSec' => $answer === false ? 30 : $answer,
+            'sample' => mb_substr(trim((string) ($in['sample'] ?? '')), 0, 500),
+            'sampleVi' => mb_substr(trim((string) ($in['sampleVi'] ?? '')), 0, 500),
+        ];
     }
 
     /** Chỉ nhận đường dẫn nội bộ /uploads/… để không nhúng được URL ngoài. */

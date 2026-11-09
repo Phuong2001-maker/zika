@@ -13,7 +13,7 @@ namespace Zika\Services;
 final class QuestionGrader
 {
     /** Nhóm dạng trắc nghiệm: đáp án là một chỉ số trong options (06 §1). */
-    public const CHOICE = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'pick', 'toZh'];
+    public const CHOICE = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'pick', 'toZh', 'pic'];
 
     /** Mọi dạng câu dùng được ở Bài tập. */
     public const BT_TYPES = ['meaning', 'blank', 'audio', 'pinyin', 'order', 'trans', 'tf', 'match'];
@@ -21,9 +21,26 @@ final class QuestionGrader
     /** Mọi dạng câu dùng được ở Kiểm tra và Thi thử. */
     public const KT_TYPES = ['blank', 'listen', 'meaning', 'pick', 'order', 'trans', 'tf', 'match', 'tone', 'toZh'];
 
+    /** Đề Thi thử HSK 3.0: thêm câu nói. */
+    public const HSK30_TYPES = [...self::KT_TYPES, 'pic', 'speak'];
+
+    /**
+     * Câu không chấm tự động: câu nói chỉ ghi âm ở máy người học, server không có file để nghe.
+     * Không cộng vào điểm tối đa, không tính đúng/sai; người học tự đánh giá.
+     */
+    public const UNGRADED = ['speak'];
+
+    /** Câu trả lời của câu nói: đã ghi âm, rồi (ở chế độ luyện tập) tự đánh giá. */
+    public const SPEAK_ANSWERS = ['ghi' => 'Đã ghi âm', 'tot' => 'Tự đánh giá: Tốt', 'tam' => 'Tự đánh giá: Tạm được', 'chua' => 'Tự đánh giá: Chưa được'];
+
     public static function isChoice(string $type): bool
     {
         return in_array($type, self::CHOICE, true);
+    }
+
+    public static function isGraded(string $type): bool
+    {
+        return !in_array($type, self::UNGRADED, true);
     }
 
     /**
@@ -59,6 +76,7 @@ final class QuestionGrader
             'trans' => is_string($answer) && trim($answer) !== '',
             'tf'    => is_bool($answer),
             'match' => is_array($answer) && count($answer) === count((array) ($payload['pairs'] ?? [])),
+            'speak' => is_string($answer) && isset(self::SPEAK_ANSWERS[$answer]),
             default => false,
         };
     }
@@ -142,13 +160,17 @@ final class QuestionGrader
      */
     public static function rightAnswerText(string $type, array $payload): string
     {
+        // Phương án của câu chọn tranh là mã hình, ghi theo chữ cái như trên màn làm bài.
+        if ($type === 'pic') {
+            return 'Tranh ' . chr(65 + (int) ($payload['answer'] ?? 0));
+        }
         if (self::isChoice($type)) {
             $opts = (array) ($payload['options'] ?? []);
             return (string) ($opts[(int) ($payload['answer'] ?? 0)] ?? '');
         }
         return match ($type) {
             'order' => (string) ($payload['answer'] ?? ''),
-            'trans' => (string) ($payload['sample'] ?? ''),
+            'trans', 'speak' => (string) ($payload['sample'] ?? ''),
             'tf'    => ((bool) ($payload['answer'] ?? false)) ? 'Đúng' : 'Sai',
             'match' => implode(' · ', array_map(
                 static fn (array $p): string => ($p[0] ?? '') . ' ' . ($p[1] ?? ''),
@@ -167,6 +189,9 @@ final class QuestionGrader
         if ($answer === null) {
             return 'Chưa trả lời';
         }
+        if ($type === 'pic') {
+            return is_int($answer) && isset(((array) ($payload['options'] ?? []))[$answer]) ? 'Tranh ' . chr(65 + $answer) : 'Chưa trả lời';
+        }
         if (self::isChoice($type)) {
             $opts = (array) ($payload['options'] ?? []);
             return is_int($answer) ? (string) ($opts[$answer] ?? 'Chưa trả lời') : 'Chưa trả lời';
@@ -178,6 +203,7 @@ final class QuestionGrader
             'trans' => is_string($answer) ? trim($answer) : 'Chưa trả lời',
             'tf'    => is_bool($answer) ? ($answer ? 'Đúng' : 'Sai') : 'Chưa trả lời',
             'match' => self::matchAnswerText($payload, $answer),
+            'speak' => is_string($answer) ? (self::SPEAK_ANSWERS[$answer] ?? 'Chưa trả lời') : 'Chưa trả lời',
             default => '',
         };
     }
@@ -219,6 +245,8 @@ final class QuestionGrader
                 static fn (array $x): string => (string) ($x[0] ?? ''),
                 (array) ($payload['pairs'] ?? []),
             )),
+            'speak'   => $p('prompt') !== '' ? $p('prompt') : ($p('audioText') !== '' ? 'Nghe: ' . $p('audioText') : 'Nhìn tranh nói'),
+            'pic'     => 'Chọn tranh · ' . ($p('audioText') !== '' ? 'Nghe: ' . $p('audioText') : $p('ask')),
             default   => '',
         };
     }
@@ -230,7 +258,7 @@ final class QuestionGrader
      */
     public static function hideAnswer(array $payload): array
     {
-        unset($payload['answer'], $payload['keywords'], $payload['sample']);
+        unset($payload['answer'], $payload['keywords'], $payload['sample'], $payload['sampleVi']);
         return $payload;
     }
 }

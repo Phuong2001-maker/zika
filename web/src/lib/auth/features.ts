@@ -1,6 +1,6 @@
 import type { Role } from '$lib/api/types';
 export type Features = Record<string, boolean>;
-export interface ActiveTest { mockId: number | null; levelId: number; lessonNo: number | null; lessonId?: number | null; lessonTitle?: string | null }
+export interface ActiveTest { mockId: number | null; levelId: number; lessonNo: number | null; lessonId?: number | null; lessonTitle?: string | null; kind?: string | null }
 
 export function featureAllowed(features: Features | null | undefined, role: Role | undefined, key: string): boolean {
   if (features) return features[key] ?? false;
@@ -10,6 +10,7 @@ export function featureAllowed(features: Features | null | undefined, role: Role
 export function routeFeature(path: string): string | null {
   const p = path.split(/[?#]/)[0];
   if (p.startsWith('/learn/books')) return 'books';
+  if (p === '/learn/hsk30' || p.startsWith('/learn/hsk30/')) return 'learn.hsk30';
   if (p.startsWith('/learn/chat')) return 'community.chat';
   if (p.startsWith('/notifications')) return 'community.notifications';
   if (p === '/settings') return 'account.preferences';
@@ -19,6 +20,9 @@ export function routeFeature(path: string): string | null {
 }
 
 export function isActiveTest(path: string, active: ActiveTest[] = []): boolean {
+  // Đề HSK 3.0 đang làm dở: vẫn vào lại được dù admin vừa tắt quyền, giống bài kiểm tra.
+  const h = path.match(/^\/learn\/hsk30\/(\d+)/);
+  if (h) return active.some((a) => a.mockId === Number(h[1]));
   const m = path.match(/^\/learn\/tests\/hsk\/(\d+)\/(mock|lesson)\/(\d+)/);
   return !!m && active.some((a) => a.levelId === Number(m[1]) && (m[2] === 'mock' ? a.mockId === Number(m[3]) : a.lessonNo === Number(m[3])));
 }

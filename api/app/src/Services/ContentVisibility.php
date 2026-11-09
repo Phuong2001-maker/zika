@@ -25,8 +25,9 @@ final class ContentVisibility
         if (preg_match('~^/learn/levels/(\d+)/(?:lessons|review/)~', $r->path, $m)) ContentBuilder::level((int) $m[1], false, Curricula::forRequest($r));
         if (preg_match('~^/tests/mock/(\d+)/summary$~', $r->path, $m) || ($r->path === '/tests/start' && $r->input('mockTestId'))) {
             $id = isset($m[1]) ? (int) $m[1] : (int) $r->input('mockTestId');
-            $mock = Db::one('SELECT level_id, for_contest FROM mock_tests WHERE id = ?', [$id]);
-            if ($mock && !(int) $mock['for_contest'] && !self::levelVisible(Curricula::ofUser($r->userId()), (int) $mock['level_id'])) throw HttpError::notFound();
+            // Đề HSK 3.0 không thuộc giáo trình nào: ẩn cấp của giáo trình không được chặn nó.
+            $mock = Db::one('SELECT level_id, for_contest, kind FROM mock_tests WHERE id = ?', [$id]);
+            if ($mock && !(int) $mock['for_contest'] && $mock['kind'] === 'mock' && !self::levelVisible(Curricula::ofUser($r->userId()), (int) $mock['level_id'])) throw HttpError::notFound();
         }
     }
 }

@@ -47,8 +47,8 @@ final class MeController
     {
         return array_map(static fn ($a) => ['mockId' => $a['mock_test_id'] === null ? null : (int) $a['mock_test_id'],
             'levelId' => (int) $a['level_id'], 'lessonNo' => $a['no'] === null ? null : (int) $a['no'],
-            'lessonId' => $a['lesson_id'] === null ? null : (int) $a['lesson_id'], 'lessonTitle' => $a['title']],
-            Db::all('SELECT a.mock_test_id, a.lesson_id, COALESCE(l.level_id, m.level_id) level_id, l.lesson_no AS no, l.title FROM test_attempts a
+            'lessonId' => $a['lesson_id'] === null ? null : (int) $a['lesson_id'], 'lessonTitle' => $a['title'], 'kind' => $a['kind']],
+            Db::all('SELECT a.mock_test_id, a.lesson_id, COALESCE(l.level_id, m.level_id) level_id, l.lesson_no AS no, l.title, m.kind FROM test_attempts a
                 LEFT JOIN lessons l ON l.id = a.lesson_id LEFT JOIN mock_tests m ON m.id = a.mock_test_id
                 WHERE a.user_id = ? AND a.submitted_at IS NULL', [$r->userId()]));
     }

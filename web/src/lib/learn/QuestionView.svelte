@@ -30,7 +30,8 @@
   const options = $derived<string[]>(payload.options ?? []);
   const hzOptions = $derived(['audio', 'blank', 'pick', 'toZh'].includes(type));
   const isWordQ = $derived(['meaning', 'pinyin', 'tone'].includes(type));
-  const isAudioQ = $derived(type === 'audio' || type === 'listen');
+  const isAudioQ = $derived(type === 'audio' || type === 'listen' || (type === 'pic' && !!payload.audioText));
+  const isPic = $derived(type === 'pic');
   const isBlankQ = $derived(type === 'blank');
 
   /* ---------------- trắc nghiệm ---------------- */
@@ -102,6 +103,10 @@
 </script>
 
 <div class="q" class:m={mobile}>
+  <!-- Hình minh hoạ (đề HSK 3.0): hình vẽ trong kho web, nền sáng như tranh in kể cả ở chế độ tối. -->
+  {#if payload.imageUrl}
+    <img class="qv-hinh" src={payload.imageUrl} alt="Hình minh hoạ của câu hỏi" width="260" height="195" loading="lazy" />
+  {/if}
   <!-- Đề bài -->
   {#if isWordQ}
     <div class="word">
@@ -142,6 +147,10 @@
     {#if payload.showMeaning && payload.vi}<p class="muted ask">{payload.vi}</p>{/if}
   {/if}
 
+  {#if isPic && payload.ask}
+    <p class="ask-big hz" lang="zh">{payload.ask}</p>
+  {/if}
+
   {#if type === 'pick' && payload.ask}
     <p class="ask-big">{payload.ask}</p>
   {/if}
@@ -166,7 +175,16 @@
   {/if}
 
   <!-- Vùng trả lời -->
-  {#if isChoice(type)}
+  {#if isPic}
+    <div class="qv-tranh">
+      {#each options as o, i (i)}
+        <button type="button" class="{optClass(i)} qv-tranh-o" disabled={locked} onclick={() => pickOption(i)} aria-label="Tranh {String.fromCharCode(65 + i)}">
+          <span class="k">{String.fromCharCode(65 + i)}</span>
+          <img src="/hinh-hsk/{o}.svg" alt="" width="160" height="120" loading="lazy" />
+        </button>
+      {/each}
+    </div>
+  {:else if isChoice(type)}
     <div class="opts" class:one={hzOptions && options.some((o) => o.length > 12)}>
       {#each options as o, i (i)}
         <button type="button" class={optClass(i)} disabled={locked} onclick={() => pickOption(i)}>
@@ -257,6 +275,10 @@
 </div>
 
 <style>
+  .qv-hinh { align-self: center; width: min(260px, 100%); height: auto; border: 1px solid var(--line); border-radius: 16px; background: #FFFDF8; }
+  .qv-tranh { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(140px, 45%), 1fr)); gap: 10px; }
+  .qv-tranh-o { flex-direction: column; align-items: center; gap: 6px; min-height: 0; padding: 10px; }
+  .qv-tranh-o img { width: 100%; max-width: 180px; height: auto; border-radius: 10px; background: #FFFDF8; }
   .q {
     display: flex;
     flex-direction: column;

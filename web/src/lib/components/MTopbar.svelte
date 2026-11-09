@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
-  import type { Part } from '$lib/api/types';
+  import type { ManHoc } from '$lib/api/types';
   import Icon from './Icon.svelte';
   import Switcher from './Switcher.svelte';
   import Avatar from './Avatar.svelte';
@@ -29,7 +29,7 @@
     children,
     cao = $bindable(0),
   }: {
-    current?: Part;
+    current?: ManHoc;
     accountCurrent?: boolean;
     /** Đường dẫn nút lùi. */
     back?: string;

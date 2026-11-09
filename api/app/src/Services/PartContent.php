@@ -138,7 +138,7 @@ final class PartContent
         $rows = Db::all(
             'SELECT m.*, COUNT(q.id) AS qn FROM mock_tests m
              LEFT JOIN questions q ON q.mock_test_id = m.id
-             WHERE m.level_id = ? AND m.for_contest = 0 AND ' . ($preview ? '1 = 1' : "m.status = 'published'") . '
+             WHERE m.level_id = ? AND m.for_contest = 0 AND m.kind = \'mock\' AND ' . ($preview ? '1 = 1' : "m.status = 'published'") . '
              GROUP BY m.id ORDER BY m.sort_order, m.id',
             [$levelId],
         );

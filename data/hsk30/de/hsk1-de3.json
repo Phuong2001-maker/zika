@@ -1,0 +1,54 @@
+{
+  "level": 1,
+  "title": "HSK 1 · Đề 3",
+  "durationSec": 1920,
+  "questions": [
+    { "section": "listening", "type": "listen", "payload": { "audioText": "今天天气很好，不冷也不热。", "imageUrl": "/hinh-hsk/tuyet.svg", "options": ["Đúng", "Sai"], "answer": 1 }, "explain": "Nghe: 今天天气很好，不冷也不热。(Hôm nay trời đẹp, không lạnh cũng không nóng.) Tranh vẽ tuyết rơi (rất lạnh) nên Sai." },
+    { "section": "listening", "type": "listen", "payload": { "audioText": "他正在工作。", "imageUrl": "/hinh-hsk/lam-viec.svg", "options": ["Đúng", "Sai"], "answer": 0 }, "explain": "Nghe: 他正在工作。(Anh ấy đang làm việc.) 正在 = đang, 工作 = làm việc. Tranh vẽ người đang làm việc nên Đúng." },
+    { "section": "listening", "type": "listen", "payload": { "audioText": "现在十二点了。", "imageUrl": "/hinh-hsk/gio-8.svg", "options": ["Đúng", "Sai"], "answer": 1 }, "explain": "Nghe: 现在十二点了。(Bây giờ 12 giờ rồi.) Đồng hồ trong tranh chỉ 8 giờ (八点) nên Sai." },
+    { "section": "listening", "type": "listen", "payload": { "audioText": "我们走路去学校吧。", "imageUrl": "/hinh-hsk/xe-dap.svg", "options": ["Đúng", "Sai"], "answer": 1 }, "explain": "Nghe: 我们走路去学校吧。(Chúng ta đi bộ đến trường nhé.) 走路 = đi bộ. Tranh vẽ xe đạp nên Sai." },
+    { "section": "listening", "type": "listen", "payload": { "audioText": "我今天买了新衣服。", "imageUrl": "/hinh-hsk/ao.svg", "options": ["Đúng", "Sai"], "answer": 0 }, "explain": "Nghe: 我今天买了新衣服。(Hôm nay tôi mua quần áo mới.) 买 = mua, 新 = mới, 衣服 = quần áo. Tranh vẽ quần áo nên Đúng." },
+
+    { "section": "listening", "type": "pic", "payload": { "audioText": "这是我的椅子。", "options": ["ban", "ghe", "coc"], "answer": 1 }, "explain": "Nghe: 这是我的椅子。(Đây là ghế của tôi.) 椅子 = cái ghế; đừng nhầm với 桌子 = cái bàn → tranh cái ghế." },
+    { "section": "listening", "type": "pic", "payload": { "audioText": "我们的学校很大。", "options": ["cua-hang", "nha", "truong-hoc"], "answer": 2 }, "explain": "Nghe: 我们的学校很大。(Trường của chúng tôi rất lớn.) 学校 = trường học → tranh trường học." },
+    { "section": "listening", "type": "pic", "payload": { "audioText": "我们早上八点上课。", "options": ["gio-3", "gio-8", "gio-9-30"], "answer": 1 }, "explain": "Nghe: 我们早上八点上课。(Chúng tôi vào học lúc 8 giờ sáng.) 早上 = buổi sáng, 八点 = 8 giờ, 上课 = vào lớp, lên lớp → đồng hồ chỉ 8 giờ." },
+    { "section": "listening", "type": "pic", "payload": { "audioText": "我的孩子很喜欢看电视。", "options": ["doc-sach", "xem-tivi", "hat"], "answer": 1 }, "explain": "Nghe: 我的孩子很喜欢看电视。(Con tôi rất thích xem ti vi.) 看电视 = xem ti vi → tranh xem ti vi." },
+    { "section": "listening", "type": "pic", "payload": { "audioText": "我们坐火车去吧。", "options": ["tau-hoa", "may-bay", "taxi"], "answer": 0 }, "explain": "Nghe: 我们坐火车去吧。(Chúng ta đi tàu hoả nhé.) 火车 = tàu hoả; 飞机 = máy bay → tranh tàu hoả." },
+    { "section": "listening", "type": "pic", "payload": { "audioText": "这些钱是你的吗？", "options": ["ve", "but", "tien"], "answer": 2 }, "explain": "Nghe: 这些钱是你的吗？(Chỗ tiền này là của bạn à?) 钱 = tiền → tranh tiền." },
+    { "section": "listening", "type": "pic", "payload": { "audioText": "我们一起吃饭吧。", "options": ["an-com", "om", "viet-chu"], "answer": 0 }, "explain": "Nghe: 我们一起吃饭吧。(Chúng ta cùng ăn cơm nhé.) 一起 = cùng nhau, 吃饭 = ăn cơm → tranh ăn cơm." },
+    { "section": "listening", "type": "pic", "payload": { "audioText": "我生病了，今天不去上课。", "options": ["cuoi", "hat", "om"], "answer": 2 }, "explain": "Nghe: 我生病了，今天不去上课。(Tôi bị ốm rồi, hôm nay không đi học.) 生病 = bị ốm, 上课 = lên lớp → tranh người bị ốm." },
+
+    { "section": "listening", "type": "listen", "payload": { "audioText": "我住在三楼，我朋友住在五楼。问：他朋友住在几楼？", "options": ["三楼", "四楼", "五楼"], "answer": 2 }, "explain": "楼 = tầng. Người nói ở tầng 3 (三楼); 朋友住在五楼 = bạn ở tầng 5 → 五楼." },
+    { "section": "listening", "type": "listen", "payload": { "audioText": "这个手机太贵了，我不买了。问：他觉得这个手机怎么样？", "options": ["不贵", "太贵了", "很好看"], "answer": 1 }, "explain": "太贵了 = đắt quá; 我不买了 = tôi không mua nữa. 觉得 = cảm thấy → 太贵了. 不贵 (không đắt) ngược nghĩa; câu không nói điện thoại đẹp (好看)." },
+    { "section": "listening", "type": "listen", "payload": { "audioText": "我明年去中国学习汉语。问：他什么时候去中国？", "options": ["今年", "去年", "明年"], "answer": 2 }, "explain": "明年 = năm sau. 今年 = năm nay, 去年 = năm ngoái → 明年." },
+    { "section": "listening", "type": "listen", "payload": { "audioText": "你看见我的书了吗？在桌子下边。问：书在哪儿？", "options": ["桌子下边", "桌子上", "椅子上"], "answer": 0 }, "explain": "看见 = nhìn thấy; 在桌子下边 = ở dưới bàn. 下边 = phía dưới, 上 = trên → 桌子下边." },
+    { "section": "listening", "type": "listen", "payload": { "audioText": "明天会下雨，我们在家看电影吧。问：明天天气怎么样？", "options": ["很热", "下雨", "很冷"], "answer": 1 }, "explain": "会下雨 = sẽ mưa → 下雨. Câu không nói nóng (热) hay lạnh (冷)." },
+    { "section": "listening", "type": "listen", "payload": { "audioText": "我爸爸妈妈都是老师，我哥哥是医生。问：谁是医生？", "options": ["他爸爸", "他妈妈", "他哥哥"], "answer": 2 }, "explain": "爸爸妈妈都是老师 = bố mẹ đều là giáo viên; 哥哥是医生 = anh trai là bác sĩ → 他哥哥." },
+    { "section": "listening", "type": "listen", "payload": { "audioText": "我两点去机场，我妈妈的飞机四点到。问：他妈妈的飞机几点到？", "options": ["两点", "四点", "十点"], "answer": 1 }, "explain": "两点 là giờ người nói ra sân bay (机场); 飞机四点到 = máy bay 4 giờ đến → 四点." },
+
+    { "section": "reading", "type": "pic", "payload": { "ask": "这个商店的东西很多。", "options": ["benh-vien", "cua-hang", "san-bay"], "answer": 1 }, "explain": "商店 = cửa hàng, 东西 = đồ, đồ vật, 很多 = rất nhiều → tranh cửa hàng. 医院 = bệnh viện, 机场 = sân bay." },
+    { "section": "reading", "type": "pic", "payload": { "ask": "我晚上九点半睡觉。", "options": ["gio-6-30", "gio-3", "gio-9-30"], "answer": 2 }, "explain": "九点半 = 9 giờ rưỡi, 睡觉 = đi ngủ → đồng hồ chỉ 9 giờ rưỡi." },
+    { "section": "reading", "type": "pic", "payload": { "ask": "今天风很大。", "options": ["gio", "mua", "nang"], "answer": 0 }, "explain": "风 = gió, 风很大 = gió to → tranh trời gió." },
+    { "section": "reading", "type": "pic", "payload": { "ask": "你渴了吗？请喝水。", "options": ["mi", "trung", "nuoc"], "answer": 2 }, "explain": "渴 = khát, 请喝水 = mời uống nước → tranh nước." },
+    { "section": "reading", "type": "pic", "payload": { "ask": "晚上我给妈妈打电话。", "options": ["nau-an", "goi-dien", "xem-tivi"], "answer": 1 }, "explain": "给 + người + 打电话 = gọi điện cho ai → tranh gọi điện." },
+
+    { "section": "reading", "type": "tf", "payload": { "passage": "我今天早上没吃早饭，现在很饿。", "statement": "他吃了早饭。", "answer": false }, "explain": "没吃早饭 = không ăn sáng, nên bây giờ 很饿 (rất đói) → Sai." },
+    { "section": "reading", "type": "tf", "payload": { "passage": "我家有三个房间，我的房间最大。", "statement": "他的房间是最大的。", "answer": true }, "explain": "房间 = phòng; 我的房间最大 = phòng của tôi to nhất → Đúng." },
+    { "section": "reading", "type": "tf", "payload": { "passage": "我和姐姐都是大学生。姐姐学汉语，我学电脑。", "statement": "他在学习汉语。", "answer": false }, "explain": "Người học tiếng Trung là 姐姐 (chị gái); người nói học 电脑 (máy tính) → Sai." },
+    { "section": "reading", "type": "tf", "payload": { "passage": "昨天是我的生日，朋友们送了我很多东西，我很高兴。", "statement": "他昨天很高兴。", "answer": true }, "explain": "生日 = sinh nhật, 送 = tặng, 很高兴 = rất vui → Đúng." },
+
+    { "section": "reading", "type": "match", "payload": { "pairs": [["星期一", "thứ Hai"], ["星期三", "thứ Tư"], ["星期天", "Chủ nhật"], ["中午", "buổi trưa"], ["下午", "buổi chiều"]] }, "explain": "Chú ý: 星期一 là thứ Hai, 星期三 là thứ Tư (số tiếng Trung nhỏ hơn thứ tiếng Việt 1 đơn vị). 星期天 = Chủ nhật; 中午 = trưa, 下午 = chiều." },
+    { "section": "reading", "type": "match", "payload": { "pairs": [["大", "to, lớn"], ["小", "nhỏ, bé"], ["冷", "lạnh"], ["热", "nóng"], ["快", "nhanh"], ["慢", "chậm"]] }, "explain": "Ba cặp trái nghĩa: 大 to – 小 nhỏ, 冷 lạnh – 热 nóng, 快 nhanh – 慢 chậm." },
+
+    { "section": "reading", "type": "pick", "payload": { "ask": "你家有几口人？", "options": ["我家有五口人。", "我家在北京。", "我家很大。"], "answer": 0 }, "explain": "几口人 = mấy người → trả lời số người: 我家有五口人. 在北京 trả lời cho câu hỏi 在哪儿 (ở đâu)." },
+    { "section": "reading", "type": "pick", "payload": { "ask": "你身体怎么样？", "options": ["我是学生。", "我很好，谢谢。", "我住在北京。"], "answer": 1 }, "explain": "身体怎么样 = sức khoẻ thế nào → 我很好，谢谢 (tôi khoẻ, cảm ơn)." },
+    { "section": "reading", "type": "pick", "payload": { "ask": "小李星期一到星期五上班，星期六和星期天休息。问：小李星期几不上班？", "options": ["星期一", "星期五", "星期六"], "answer": 2 }, "explain": "星期六和星期天休息 = thứ Bảy và Chủ nhật được nghỉ → ngày không đi làm là 星期六. 星期一, 星期五 vẫn đi làm (上班)." },
+    { "section": "reading", "type": "pick", "payload": { "ask": "请问，洗手间在哪儿？", "options": ["没关系。", "在那边。", "我不想去。"], "answer": 1 }, "explain": "洗手间 = nhà vệ sinh; 在哪儿 = ở đâu → trả lời nơi chốn: 在那边 (ở bên kia)." },
+
+    { "section": "reading", "type": "blank", "payload": { "sentence": "我___一个哥哥，没有姐姐。", "vi": "Tôi có một anh trai, không có chị gái.", "showMeaning": false, "options": ["有", "是", "在"], "answer": 0 }, "explain": "有 = có; vế sau 没有 (không có) cho thấy vế trước dùng 有." },
+    { "section": "reading", "type": "blank", "payload": { "sentence": "你喝茶___喝牛奶？", "vi": "Bạn uống trà hay uống sữa?", "showMeaning": false, "options": ["和", "还是", "吗"], "answer": 1 }, "explain": "还是 = hay là, dùng trong câu hỏi lựa chọn (A 还是 B). 和 = và, không dùng để hỏi; câu hỏi lựa chọn đã có 还是 thì không thêm 吗." },
+    { "section": "reading", "type": "blank", "payload": { "sentence": "我喜欢吃米饭，___喜欢吃面条。", "vi": "Tôi thích ăn cơm, cũng thích ăn mì.", "showMeaning": false, "options": ["吗", "也", "个"], "answer": 1 }, "explain": "也 = cũng, đứng trước động từ: 也喜欢 = cũng thích." },
+    { "section": "reading", "type": "blank", "payload": { "sentence": "你是___？——我是王老师的学生。", "vi": "Bạn là ai? — Tôi là học sinh của thầy Vương.", "showMeaning": false, "options": ["几", "多少", "谁"], "answer": 2 }, "explain": "谁 = ai. Câu trả lời tự giới thiệu mình là ai, nên câu hỏi là 你是谁. 几, 多少 dùng hỏi số lượng." },
+    { "section": "reading", "type": "blank", "payload": { "sentence": "外边很冷，你多___点儿衣服。", "vi": "Bên ngoài rất lạnh, bạn mặc thêm ít quần áo nhé.", "showMeaning": false, "options": ["穿", "喝", "看"], "answer": 0 }, "explain": "穿衣服 = mặc quần áo; 多穿点儿 = mặc thêm một chút. 冷 = lạnh." }
+  ]
+}

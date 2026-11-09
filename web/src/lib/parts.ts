@@ -24,6 +24,12 @@ export const PARTS: PartInfo[] = [
 
 export const PART: Record<Part, PartInfo> = Object.fromEntries(PARTS.map((p) => [p.code, p])) as Record<Part, PartInfo>;
 
+/**
+ * Thi thử HSK 3.0 (09/11/2026): kho đề chung cho mọi giáo trình, không phải một phần học theo bài nên không nằm trong
+ * PARTS (các màn chọn cấp/bài, tiến độ không tính nó). Màu cam nhạt để không lẫn với màu son của Kiểm tra.
+ */
+export const HSK30 = { code: 'hsk30', name: 'Thi thử HSK 3.0', slug: 'hsk30', accent: '#FFD9A8', icon: 'flag' } as const;
+
 export function partBySlug(slug: string): PartInfo | undefined {
   return PARTS.find((p) => p.slug === slug);
 }

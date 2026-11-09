@@ -4,6 +4,7 @@ export const FILLED = new Set<string>(["dots","grip","apps"]);
 export const ICONS: Record<string, string> = {
   "menu": "<path d=\"M4 7h16M4 12h16M4 17h16\"/>",
   "eye": "<path d=\"M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>",
+  "stop": "<rect x=\"6\" y=\"6\" width=\"12\" height=\"12\" rx=\"2.5\"/>",
   "mic": "<rect x=\"9\" y=\"3\" width=\"6\" height=\"11\" rx=\"3\"/><path d=\"M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7\"/>",
   "play": "<path d=\"M7 5l12 7-12 7z\"/>",
   "apps": "<circle cx=\"6\" cy=\"6\" r=\"1.9\"/><circle cx=\"12\" cy=\"6\" r=\"1.9\"/><circle cx=\"18\" cy=\"6\" r=\"1.9\"/><circle cx=\"6\" cy=\"12\" r=\"1.9\"/><circle cx=\"12\" cy=\"12\" r=\"1.9\"/><circle cx=\"18\" cy=\"12\" r=\"1.9\"/><circle cx=\"6\" cy=\"18\" r=\"1.9\"/><circle cx=\"12\" cy=\"18\" r=\"1.9\"/><circle cx=\"18\" cy=\"18\" r=\"1.9\"/>",

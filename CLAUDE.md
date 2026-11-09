@@ -37,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 121/121 test; API 230/230 (chạy khoảng 17 phút vì mỗi test xoá sạch bảng); `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 127/127 test; API 239/239 (chạy khoảng 18 phút vì mỗi test xoá sạch bảng); `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -53,6 +53,8 @@ web/src/lib/curricula/   màn Giáo trình + Phân quyền học (giáo trình �
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
 web/src/lib/stores/cap.svelte.ts  cách gọi cấp theo giáo trình ("HSK 1" / "Quyển 1"), màn học lấy chữ từ đây
 web/src/lib/learn/che-do/  3 chế độ luyện ở màn Lật thẻ (Ghép cặp, Trắc nghiệm, Gõ chữ)
+web/src/lib/learn/thi-hsk/  Thi thử HSK 3.0: kho đề chung mọi giáo trình, luyện tập/thi thật, câu nói ghi âm ở máy (HUONG-DAN-THI-THU-HSK30.md)
+data/hsk30/               đề HSK 3.0 tự soạn: đặc tả, kiem_de.py, nap_de.py, hinh/ve.py (kho hình SVG web/static/hinh-hsk)
 web/src/routes/learn/chat/  Quán trà — trò chuyện chia bàn theo chủ đề (hỏi tin mới 4 giây/lần), quản trị ở /admin/chat
 web/src/lib/learn/sach.ts  giáo trình /learn/books: học viên thấy bộ sách của giáo trình mình (Hán ngữ 1–6 hoặc HSK 1–3)
 api/app/src/Services/BookAccess.php  ai đọc được trang nào: điểm mở bài, bài đã mở, mã ký ?t= (xem bẫy số 9)
@@ -155,7 +157,7 @@ file sách phải đi qua `BookController::doc()` và `chanBaiAn()`, bài ẩn c
 - Màn học mới dùng khuôn chung: `DauBai.svelte` + một `section.block.zk-khung` (xem màn Lật thẻ theo bài).
 - Thanh đầu trang máy tính của người học **luôn** là `lib/components/Topbar.svelte` (đường dẫn truyền làm nội dung con,
   điểm mở bài, Quỹ tháng, Top chăm học, chuông, Chuyển nhanh, tài khoản). Đừng tự viết `<header class="topbar">` trong màn mới:
-  trước 08/11 mỗi màn một kiểu, người dùng báo thiếu menu. Ngoại lệ duy nhất: màn đang thi (`TestRunner`).
+  trước 08/11 mỗi màn một kiểu, người dùng báo thiếu menu. Ngoại lệ duy nhất: màn đang thi (`TestRunner`, `ThiHskRunner` của Thi thử HSK 3.0).
   Điện thoại **luôn** là `lib/components/MTopbar.svelte` (dòng 1 giống hệt mọi màn; nút lùi + tên màn ở dòng 2 qua
   `back`/`title`/`sub` hoặc nội dung con). Hai thanh cùng thứ tự: điểm mở bài, Quỹ tháng, Top chăm học, chuông,
   Chuyển nhanh, tài khoản. Không đặt logo "字 Zìkǎ" ở thanh đầu trang nào (người dùng bỏ 08/11).

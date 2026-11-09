@@ -21,6 +21,12 @@ final class TestService
     /** Cho phép trễ 10 giây so với hạn cứng, bù độ lệch đồng hồ và độ trễ mạng. */
     public const GRACE_SEC = 10;
 
+    /** Lượt luyện tập không tính giờ; giữ một ngày rồi cron tự chấm để không đọng lượt dở mãi. */
+    public const PRACTICE_SEC = 86400;
+
+    /** Thứ tự các phần của đề HSK 3.0 ở màn kết quả. */
+    public const SECTIONS = ['listening', 'reading', 'writing', 'speaking'];
+
     /* ------------------------------------------------------------------ */
     /* Tạo / lấy lượt làm bài                                              */
     /* ------------------------------------------------------------------ */
@@ -28,8 +34,9 @@ final class TestService
     /**
      * @return array<string,mixed> khối dữ liệu cho màn làm bài, hoặc ['resultAttemptId' => int]
      */
-    public static function start(int $userId, ?int $lessonId, ?int $mockTestId): array
+    public static function start(int $userId, ?int $lessonId, ?int $mockTestId, string $mode = 'exam'): array
     {
+        $mode = self::modeFor($lessonId, $mockTestId, $mode);
         // Sau khi cuộc thi đóng, đề thường lui về Nháp nên source() sẽ 404. Người đã thi vẫn phải mở được kết quả của mình.
         if ($mockTestId !== null && $lessonId === null) {
             $done = self::submittedContestAttempt($userId, $mockTestId);
@@ -38,7 +45,7 @@ final class TestService
             }
         }
         // Không cắt ngang lượt đang thi khi admin vừa ẩn nội dung hoặc đổi quyền.
-        $resume = Db::one('SELECT * FROM test_attempts WHERE user_id = ? AND ' . self::scopeSql($lessonId) . ' AND submitted_at IS NULL ORDER BY id DESC LIMIT 1', [$userId, $lessonId ?? $mockTestId]);
+        $resume = Db::one('SELECT * FROM test_attempts WHERE user_id = ? AND ' . self::scopeSql($lessonId) . ' AND mode = ? AND submitted_at IS NULL ORDER BY id DESC LIMIT 1', [$userId, $lessonId ?? $mockTestId, $mode]);
         if ($resume !== null) {
             if (self::isOverdue($resume)) {
                 self::grade((int) $resume['id'], true);
@@ -65,9 +72,9 @@ final class TestService
         // 1. Còn lượt dở trong hạn → trả lại đúng lượt đó.
         $open = Db::one(
             'SELECT * FROM test_attempts
-              WHERE user_id = ? AND ' . self::scopeSql($lessonId) . ' AND submitted_at IS NULL
+              WHERE user_id = ? AND ' . self::scopeSql($lessonId) . ' AND mode = ? AND submitted_at IS NULL
               ORDER BY id DESC LIMIT 1',
-            [$userId, $lessonId ?? $mockTestId],
+            [$userId, $lessonId ?? $mockTestId, $mode],
         );
         if ($open !== null) {
             if (!self::isOverdue($open)) {
@@ -81,10 +88,10 @@ final class TestService
         // 2. Lượt gần nhất bị tự chấm mà người học chưa xem kết quả.
         $unseen = Db::one(
             'SELECT id FROM test_attempts
-              WHERE user_id = ? AND ' . self::scopeSql($lessonId) . '
+              WHERE user_id = ? AND ' . self::scopeSql($lessonId) . ' AND mode = ?
                 AND submitted_at IS NOT NULL AND auto_submitted = 1 AND result_seen_at IS NULL
               ORDER BY id DESC LIMIT 1',
-            [$userId, $lessonId ?? $mockTestId],
+            [$userId, $lessonId ?? $mockTestId, $mode],
         );
         if ($unseen !== null) {
             return ['resultAttemptId' => (int) $unseen['id']];
@@ -107,7 +114,16 @@ final class TestService
         }
 
         // 4. Tạo lượt mới.
-        return self::payload(self::create($userId, $lessonId, $mockTestId, $cfg, $questions), $cfg);
+        return self::payload(self::create($userId, $lessonId, $mockTestId, $cfg, $questions, null, $mode), $cfg);
+    }
+
+    /** Chế độ luyện tập chỉ có ở đề HSK 3.0; bài kiểm tra, thi thử cuối cấp và cuộc thi luôn là thi thật. */
+    private static function modeFor(?int $lessonId, ?int $mockTestId, string $mode): string
+    {
+        if ($mode !== 'practice' || $lessonId !== null || $mockTestId === null) {
+            return 'exam';
+        }
+        return Db::val('SELECT kind FROM mock_tests WHERE id = ?', [$mockTestId]) === 'hsk30' ? 'practice' : 'exam';
     }
 
     /**
@@ -181,7 +197,7 @@ final class TestService
      * @param array<string,mixed>|null $contest
      * @return array<string,mixed> dòng test_attempts vừa tạo
      */
-    private static function create(int $userId, ?int $lessonId, ?int $mockTestId, array $cfg, array $questions, ?array $contest = null): array
+    private static function create(int $userId, ?int $lessonId, ?int $mockTestId, array $cfg, array $questions, ?array $contest = null, string $mode = 'exam'): array
     {
         if ($cfg['shuffleQuestions']) {
             shuffle($questions);
@@ -200,12 +216,16 @@ final class TestService
         $hard = (int) $cfg['durationSec'] * ($cfg['autoSubmit'] ? 1 : 3);
         // Cuộc thi: mọi người cùng dừng lúc hết giờ thi, vào muộn thì còn ít thời gian hơn như thi thật.
         $deadline = $contest !== null ? Clock::parse((string) $contest['ends_at']) : $now->modify("+$hard seconds");
+        if ($mode === 'practice') {
+            $deadline = $now->modify('+' . self::PRACTICE_SEC . ' seconds');
+        }
 
         $id = Db::insert('test_attempts', [
             'user_id' => $userId,
             'lesson_id' => $lessonId,
             'mock_test_id' => $mockTestId,
             'contest_id' => $contest === null ? null : (int) $contest['id'],
+            'mode' => $mode,
             'question_ids' => Json::encode($ids),
             'option_maps' => Json::encode($maps),
             'answers' => Json::encode([]),
@@ -282,9 +302,12 @@ final class TestService
 
         $started = strtotime((string) $a['started_at']);
         $soft = $started + (int) $cfg['durationSec'];
+        $mock = $a['mock_test_id'] === null ? null : Db::one('SELECT id, title, level_id, kind FROM mock_tests WHERE id = ?', [(int) $a['mock_test_id']]);
 
         return [
             'attemptId' => (int) $a['id'],
+            'mode' => (string) ($a['mode'] ?? 'exam'),
+            'mock' => $mock === null ? null : ['id' => (int) $mock['id'], 'title' => (string) $mock['title'], 'levelId' => (int) $mock['level_id'], 'kind' => (string) $mock['kind']],
             'serverNow' => Clock::now()->format('c'),
             'deadlineAt' => date('c', strtotime((string) $a['deadline_at'])),
             'softDeadlineAt' => date('c', $soft),
@@ -416,12 +439,13 @@ final class TestService
             }
             $type = (string) $q['type'];
             $payload = ContentBuilder::json($q['payload'], []);
-            $pt = (float) $q['score'];
+            $graded = QuestionGrader::isGraded($type);
+            $pt = $graded ? (float) $q['score'] : 0.0;
             $max += $pt;
 
             $given = $answers[$id] ?? $answers[(string) $id] ?? null;
             $orig = self::toOriginal($type, $given, (array) ($maps[$id] ?? $maps[(string) $id] ?? []));
-            $ok = $orig !== null && QuestionGrader::check($type, $payload, $orig);
+            $ok = $graded && $orig !== null && QuestionGrader::check($type, $payload, $orig);
             if ($ok) {
                 $score += $pt;
                 $correct++;
@@ -431,6 +455,8 @@ final class TestService
                 'qid' => $id,
                 'no' => $i + 1,
                 'correct' => $ok,
+                'graded' => $graded,
+                'section' => $q['section'],
                 'type' => $type,
                 'promptText' => QuestionGrader::promptText($type, $payload),
                 'yourAnswerText' => QuestionGrader::yourAnswerText($type, $payload, $orig),
@@ -536,7 +562,9 @@ final class TestService
         // Chỉ trả câu sai, và chỉ khi admin cho xem đáp án sau khi nộp.
         // Cuộc thi còn mở thì giấu, kẻo người nộp sớm truyền đáp án cho người chưa thi.
         $show = (bool) $cfg['showAnswersAfter'] && !self::contestStillOpen($a);
-        $wrong = array_values(array_filter($all, static fn (array $x): bool => empty($x['correct'])));
+        // Câu nói không chấm nên không phải câu sai; nó hiện ở danh sách riêng kèm bài nói mẫu.
+        $wrong = array_values(array_filter($all, static fn (array $x): bool => empty($x['correct']) && ($x['graded'] ?? true)));
+        $speaking = array_values(array_filter($all, static fn (array $x): bool => !($x['graded'] ?? true)));
 
         $used = (int) ($a['used_sec'] ?? 0);
         $over = max(0, $used - (int) $cfg['durationSec']);
@@ -559,6 +587,9 @@ final class TestService
             'contestTitle' => self::contestTitle($a),
             'correctCount' => (int) ($a['correct_count'] ?? 0),
             'answersHidden' => (bool) $cfg['showAnswersAfter'] && !$show,
+            'mode' => (string) ($a['mode'] ?? 'exam'),
+            'sections' => self::sectionStats($all),
+            'speaking' => $show ? $speaking : [],
         ];
 
         if ($a['lesson_id'] !== null) {
@@ -573,6 +604,83 @@ final class TestService
             $out['attemptsLimit'] = $cfg['attemptsLimit'];
         }
 
+        return $out;
+    }
+
+    /**
+     * Kết quả theo từng phần (nghe, đọc, viết, nói) như màn kết quả đề thật. Lượt cũ chưa ghi phần thì bỏ qua.
+     * Phần nói không chấm: chỉ đếm số câu đã ghi âm.
+     * @param list<array<string,mixed>> $results
+     * @return list<array{section:string,graded:bool,total:int,done:int,percent:int}>
+     */
+    public static function sectionStats(array $results): array
+    {
+        $by = [];
+        foreach ($results as $x) {
+            $s = (string) ($x['section'] ?? '');
+            if (!in_array($s, self::SECTIONS, true)) {
+                continue;
+            }
+            $graded = (bool) ($x['graded'] ?? true);
+            $by[$s] ??= ['section' => $s, 'graded' => $graded, 'total' => 0, 'done' => 0, 'percent' => 0];
+            $by[$s]['total']++;
+            $by[$s]['done'] += $graded ? (int) !empty($x['correct']) : (int) (($x['yourAnswerText'] ?? 'Chưa trả lời') !== 'Chưa trả lời');
+        }
+        $out = [];
+        foreach (self::SECTIONS as $s) {
+            if (isset($by[$s])) {
+                $by[$s]['percent'] = (int) round($by[$s]['done'] / $by[$s]['total'] * 100);
+                $out[] = $by[$s];
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Chế độ luyện tập: chấm ngay một câu, trả đáp án đúng và giải thích. Thi thật thì từ chối, không thì người học
+     * hỏi từng câu là lộ hết đáp án trước khi nộp.
+     * @param array<string,mixed> $a dòng test_attempts
+     * @return array<string,mixed>
+     */
+    public static function check(array $a, int $qid, mixed $answer): array
+    {
+        self::assertOpen($a);
+        if (($a['mode'] ?? 'exam') !== 'practice') {
+            throw HttpError::forbidden('Chỉ xem đáp án từng câu ở chế độ luyện tập.');
+        }
+        $ids = array_map('intval', ContentBuilder::json($a['question_ids'], []));
+        $q = in_array($qid, $ids, true) ? Db::one('SELECT * FROM questions WHERE id = ?', [$qid]) : null;
+        if ($q === null) {
+            throw HttpError::notFound('Câu này không thuộc lượt làm bài.');
+        }
+        if ($answer !== null) {
+            self::patch($a, ['answers' => [$qid => $answer]]);
+        }
+
+        $type = (string) $q['type'];
+        $payload = ContentBuilder::json($q['payload'], []);
+        $maps = ContentBuilder::json($a['option_maps'], []);
+        $map = (array) ($maps[$qid] ?? $maps[(string) $qid] ?? []);
+        $graded = QuestionGrader::isGraded($type);
+        $orig = self::toOriginal($type, $answer, $map);
+        $out = [
+            'qid' => $qid,
+            'graded' => $graded,
+            'correct' => $graded && $orig !== null && QuestionGrader::check($type, $payload, $orig),
+            'rightAnswerText' => QuestionGrader::rightAnswerText($type, $payload),
+            'explain' => $q['explain_vi'],
+            'rightIndex' => null,
+        ];
+        // Vị trí đáp án đúng theo thứ tự đang hiện, để màn làm bài tô xanh đúng ô.
+        if (QuestionGrader::isChoice($type)) {
+            $right = (int) ($payload['answer'] ?? -1);
+            $pos = $map === [] ? $right : array_search($right, $map, true);
+            $out['rightIndex'] = $pos === false ? null : (int) $pos;
+        }
+        if ($type === 'speak') {
+            $out['sample'] = (string) ($payload['sample'] ?? '');
+            $out['sampleVi'] = (string) ($payload['sampleVi'] ?? '');
+        }
         return $out;
     }
 
@@ -700,7 +808,13 @@ final class TestService
             'shuffleOptions' => true,
             'autoSubmit' => true,
             'showAnswersAfter' => true,
-        ], Db::all('SELECT * FROM questions WHERE mock_test_id = ? ORDER BY sort_order, id', [$mockTestId])];
+        ], Db::all(
+            // Đề HSK 3.0 luôn theo thứ tự phần Nghe → Đọc → Viết → Nói, dù admin thêm câu theo thứ tự nào.
+            'SELECT * FROM questions WHERE mock_test_id = ? ORDER BY '
+            . ($m['kind'] === 'hsk30' ? "FIELD(section, 'listening', 'reading', 'writing', 'speaking'), " : '')
+            . 'sort_order, id',
+            [$mockTestId],
+        )];
     }
 
     /**
