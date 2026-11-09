@@ -1,5 +1,7 @@
 # Kịch bản test — Lật thẻ, Phát âm, Luyện viết, Hội thoại
 
+Người học và lịch sử thưởng minh họa trong admin (migration 022–023): checklist lưu qua F5, CRUD, avatar, xóa dây chuyền và phân quyền ở [HUONG-DAN-DU-LIEU-MINH-HOA.md](HUONG-DAN-DU-LIEU-MINH-HOA.md). Không tự tăng phút theo ngày hoặc trộn vào dữ liệu thật.
+
 Chạy trên web thật (local `http://localhost:5173` hoặc server), đăng nhập bằng tài khoản học viên
 (hoặc admin — admin vào được cả trang học). Mỗi mục chạy ở **3 cỡ màn hình**:
 

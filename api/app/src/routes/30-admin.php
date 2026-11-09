@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Zika\Controllers\Admin\BookPointsController as BookPoints;
+use Zika\Controllers\Admin\DemoLearnerController as DemoLearner;
 use Zika\Controllers\Admin\ChatController as ChatAdmin;
 use Zika\Controllers\Admin\ContentController as Content;
 use Zika\Controllers\Admin\ContestController as Contest;
@@ -15,6 +16,15 @@ use Zika\Controllers\Admin\WritingController as Writing;
 
 // Soạn nội dung (04 §10.1, §10.3–§10.6). Quyền E = biên tập + quản trị.
 return [
+    ['GET', '/admin/demo-learners', [DemoLearner::class, 'learners'], 'A'],
+    ['POST', '/admin/demo-learners', [DemoLearner::class, 'saveLearner'], 'A'],
+    ['POST', '/admin/demo-learners/avatar', [DemoLearner::class, 'avatar'], 'A'],
+    ['PUT', '/admin/demo-learners/{id}', [DemoLearner::class, 'saveLearner'], 'A'],
+    ['DELETE', '/admin/demo-learners/{id}', [DemoLearner::class, 'deleteLearner'], 'A'],
+    ['GET', '/admin/demo-rewards', [DemoLearner::class, 'rewards'], 'A'],
+    ['POST', '/admin/demo-rewards', [DemoLearner::class, 'saveReward'], 'A'],
+    ['PUT', '/admin/demo-rewards/{id}', [DemoLearner::class, 'saveReward'], 'A'],
+    ['DELETE', '/admin/demo-rewards/{id}', [DemoLearner::class, 'deleteReward'], 'A'],
     // Chung
     ['GET',  '/admin/badges', [Misc::class, 'badges'], 'E'],
     ['GET',  '/admin/staff', [Misc::class, 'staff'], 'E'],

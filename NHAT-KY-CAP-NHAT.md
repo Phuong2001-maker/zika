@@ -23,6 +23,16 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 09/11/2026 — Lưu người học và lịch sử thưởng minh họa trong admin
+
+- Thêm màn admin Người học minh họa, tab lịch sử thi & thưởng, form thêm/sửa, ẩn/xóa và bản xem trước.
+- Migration 022: `demo_learners`, `demo_rewards`, khóa ngoại xóa lịch sử liên quan; API chỉ quyền A, kiểm dữ liệu và ghi nhật ký thao tác.
+- Nối giao diện với API, bỏ dữ liệu cứng, xử lý tải/lỗi/lưu. Dữ liệu tồn tại sau F5, không ghép vào dữ liệu học hay thưởng thật.
+- Hướng dẫn và checklist: [HUONG-DAN-DU-LIEU-MINH-HOA.md](HUONG-DAN-DU-LIEU-MINH-HOA.md). Test tự động: `DemoLearnerTest`.
+- Chưa tự tăng phút theo ngày; nhịp học mới lưu cấu hình. Chưa triển khai lên server thật.
+- Bổ sung avatar: migration 023, upload riêng `demo-avatar`, chuẩn hóa 192px, chọn/đổi/xóa trong form và hiển thị ở danh sách/bảng xem trước; dọn ảnh cũ khi không còn được dùng.
+- Đã chạy migration 022–023 ở local. Kiểm tra: Svelte 0 lỗi/0 cảnh báo, lint sạch, web 110/110, build thành công; API toàn bộ 207/207 test, 1.462 assertions. HTTP local: tạo/đọc/sửa/ẩn lịch sử, xóa dây chuyền đúng; học viên và biên tập bị chặn 403. Bản ghi HTTP kiểm thử đã xóa sau khi kiểm.
+
 ### 09/11/2026 01:03 — Sự cố web thật: RewriteRule ngừng chạy, đã sửa
 
 - Khoảng 00:56 (sau khi dọn zip thừa trên 1Panel, không liên quan) web thật: trang chủ mở được nhưng `/api/...`, `/learn/...`

@@ -44,6 +44,7 @@ export function menuGroups(lessonId: number | null): MenuGroup[] {
         { key: 'overview', label: 'Tổng quan', href: '/admin', icon: 'chart', role: 'A' },
         { key: 'users', label: 'Người dùng', href: '/admin/users', icon: 'users', role: 'A', count: (b) => b.users },
         { key: 'sessions', label: 'Phiên truy cập', href: '/admin/sessions', icon: 'clock', role: 'A' },
+        { key: 'demo-learners', label: 'Người học minh họa', href: '/admin/demo-learners', icon: 'users', role: 'A' },
       ],
     },
     {
@@ -82,6 +83,7 @@ export function menuGroups(lessonId: number | null): MenuGroup[] {
 
 /** Mục đang ở, suy ra từ đường dẫn hiện tại. */
 export function activeKey(path: string): string {
+  if (path.startsWith('/admin/demo-learners')) return 'demo-learners';
   if (path.startsWith('/admin/curricula')) return 'curricula';
   if (path.startsWith('/admin/contests')) return 'contests';
   if (path.startsWith('/admin/exams')) return 'exams';

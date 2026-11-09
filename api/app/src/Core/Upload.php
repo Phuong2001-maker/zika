@@ -20,6 +20,7 @@ final class Upload
     private const IMAGE_KINDS = [
         // Ảnh đại diện hiện to nhất 72px: 192px vẫn nét trên màn 2–3x mà mỗi tệp chỉ vài KB.
         'avatar'   => ['max' => 192, 'square' => true, 'dir' => 'avatar'],
+        'demo-avatar' => ['max' => 192, 'square' => true, 'dir' => 'demo-avatar'],
         'shopee'   => ['max' => 400, 'square' => true, 'dir' => 'img'],
         'qr'       => ['max' => 800, 'square' => false, 'dir' => 'qr'],
         'logo'     => ['max' => 512, 'square' => false, 'dir' => 'img'],
