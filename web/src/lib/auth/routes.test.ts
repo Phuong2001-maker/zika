@@ -40,6 +40,14 @@ describe('vào trang nào sau khi đăng nhập', () => {
     expect(canView('admin', '/admin')).toBe(true);
   });
 
+  it('chỉ quản trị được vào Quán trà', () => {
+    expect(canView('admin', '/learn/chat')).toBe(true);
+    expect(canView('admin', '/learn/chat/hoi-bai')).toBe(true);
+    expect(canView('editor', '/learn/chat')).toBe(false);
+    expect(canView('learner', '/learn/chat')).toBe(false);
+    expect(landingPath('learner', '/learn/chat')).toBe('/learn/flashcards');
+  });
+
   it('chỉ quản trị đọc được giáo trình', () => {
     // Giáo trình mở cho mọi vai trò (08/11/2026).
     expect(canView('admin', '/learn/books')).toBe(true);

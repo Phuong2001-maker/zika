@@ -34,11 +34,11 @@ return [
     ['GET',  '/feedback/mine', [Feedback::class, 'mine'], 'L'],
 
     // Quán trà — phòng trò chuyện chia bàn theo chủ đề (migration 020, 021). Web hỏi tin mới vài giây một lần khi tab mở.
-    ['GET',    '/chat', [Chat::class, 'rooms'], 'L'],
-    ['GET',    '/chat/ban/{ban:[a-z0-9-]{1,40}}', [Chat::class, 'index'], 'L'],
-    ['POST',   '/chat/ban/{ban:[a-z0-9-]{1,40}}', [Chat::class, 'create'], 'L'],
-    ['DELETE', '/chat/tin/{id}', [Chat::class, 'delete'], 'L'],
-    ['POST',   '/chat/tin/{id}/report', [Chat::class, 'report'], 'L'],
+    ['GET',    '/chat', [Chat::class, 'rooms'], 'A'],
+    ['GET',    '/chat/ban/{ban:[a-z0-9-]{1,40}}', [Chat::class, 'index'], 'A'],
+    ['POST',   '/chat/ban/{ban:[a-z0-9-]{1,40}}', [Chat::class, 'create'], 'A'],
+    ['DELETE', '/chat/tin/{id}', [Chat::class, 'delete'], 'A'],
+    ['POST',   '/chat/tin/{id}/report', [Chat::class, 'report'], 'A'],
 
     ['GET',  '/progress/home', [Prog::class, 'home'], 'L'],
     ['GET',  '/progress/levels/{id}', [Prog::class, 'level'], 'L'],

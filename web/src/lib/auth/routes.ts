@@ -45,6 +45,7 @@ export function homePath(role: Role | null | undefined): string {
 /** Vai trò này mở được đường dẫn không: học viên không vào khu quản trị. Giáo trình (/learn/books) mở cho mọi
  *  vai trò từ 08/11/2026; ảnh trang sách vẫn chỉ tải được khi đã đăng nhập. */
 export function canView(role: Role, path: string): boolean {
+  if (matches(path, '/learn/chat')) return role === 'admin';
   return !(isAdminRoute(path) && role === 'learner');
 }
 
