@@ -30,7 +30,7 @@ export interface Prize {
 
 export interface Registrants {
   contest: { id: number; title: string } | null;
-  rows: { name: string; isMe: boolean; at: string }[];
+  rows: { name: string; isMe: boolean; at: string; isDemo?: boolean; avatarUrl?: string | null }[];
   count: number;
 }
 
@@ -43,6 +43,8 @@ export interface RankRow {
   /** false khi đã đăng ký nhưng không vào làm bài trước lúc đóng thi. */
   participated: boolean;
   isMe: boolean;
+  isDemo?: boolean;
+  avatarUrl?: string | null;
 }
 
 export interface Ranking {
@@ -60,6 +62,8 @@ export interface StudyRow {
   days: number;
   done: number;
   isMe: boolean;
+  isDemo?: boolean;
+  avatarUrl?: string | null;
 }
 
 export interface StudyTop {

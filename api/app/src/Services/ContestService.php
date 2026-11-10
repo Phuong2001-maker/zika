@@ -72,23 +72,30 @@ final class ContestService
     public static function registrants(int $userId, int $limit = 200): array
     {
         $c = self::currentRow();
-        if ($c === null) {
-            return ['contest' => null, 'rows' => [], 'count' => 0];
-        }
-        $rows = Db::all(
+        $rows = $c === null ? [] : Db::all(
             'SELECT r.user_id, r.created_at, u.display_name
                FROM contest_registrations r JOIN users u ON u.id = r.user_id
               WHERE r.contest_id = ? ORDER BY r.created_at, r.user_id',
             [(int) $c['id']],
         );
-        return [
-            'contest' => ['id' => (int) $c['id'], 'title' => (string) $c['title'], 'status' => self::status($c)],
-            'rows' => array_map(static fn (array $r): array => [
+        $out = array_map(static fn (array $r): array => [
                 'name' => (string) $r['display_name'],
                 'isMe' => (int) $r['user_id'] === $userId,
                 'at' => Clock::parse((string) $r['created_at'])->format('H:i, d/m'),
-            ], array_slice($rows, 0, $limit)),
-            'count' => count($rows),
+                'isDemo' => false,
+                'avatarUrl' => null,
+            ], $rows);
+        foreach (DemoActivity::visible('registered') as $n) {
+            $out[] = [
+                'name' => (string) $n['name'], 'isMe' => false,
+                'at' => Clock::parse((string) $n['created_at'])->format('H:i, d/m'),
+                'isDemo' => true, 'avatarUrl' => $n['avatar_path'],
+            ];
+        }
+        return [
+            'contest' => $c === null ? null : ['id' => (int) $c['id'], 'title' => (string) $c['title'], 'status' => self::status($c)],
+            'rows' => array_slice($out, 0, $limit),
+            'count' => count($out),
         ];
     }
 
@@ -124,9 +131,27 @@ final class ContestService
             [$now, $now],
         ) ?? Db::one('SELECT * FROM contests WHERE ends_at <= ? ORDER BY ends_at DESC, id DESC LIMIT 1', [$now]);
         if ($c === null) {
-            return ['contest' => null, 'rows' => [], 'me' => null, 'participants' => 0];
+            return self::withDemoRanking(['contest' => null, 'rows' => [], 'me' => null, 'participants' => 0], $limit);
         }
-        return self::bangCua($c, $userId, $limit);
+        return self::withDemoRanking(self::bangCua($c, $userId, $limit), $limit);
+    }
+
+    /** Người minh họa đứng sau kết quả thật để không làm thay đổi thứ hạng và giải thưởng thật. */
+    private static function withDemoRanking(array $ranking, int $limit): array
+    {
+        $count = (int) $ranking['participants'];
+        foreach (DemoActivity::visible('contest') as $n) {
+            $count++;
+            if (count($ranking['rows']) < $limit) {
+                $ranking['rows'][] = [
+                    'rank' => $count, 'name' => (string) $n['name'], 'correct' => 0, 'total' => 0,
+                    'usedSec' => 0, 'participated' => false, 'isMe' => false,
+                    'isDemo' => true, 'avatarUrl' => $n['avatar_path'],
+                ];
+            }
+        }
+        $ranking['participants'] = $count;
+        return $ranking;
     }
 
     /**
@@ -279,7 +304,8 @@ final class ContestService
             'mockTestId' => $status === 'open' && ($registered || $attempt !== 'none') ? (int) $c['mock_test_id'] : null,
             'myAttempt' => $attempt,
             'registered' => $registered,
-            'registrantCount' => (int) Db::val('SELECT COUNT(*) FROM contest_registrations WHERE contest_id = ?', [(int) $c['id']]),
+            'registrantCount' => (int) Db::val('SELECT COUNT(*) FROM contest_registrations WHERE contest_id = ?', [(int) $c['id']])
+                + count(DemoActivity::visible('registered')),
         ];
     }
 }

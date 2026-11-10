@@ -6,13 +6,14 @@ Mở **Quản trị → Người học minh họa** (`/admin/demo-learners`). Ch
 
 - Tab Người học: thêm tên, nhịp học, phút học, số ngày và phần hoàn thành; sửa, ẩn hoặc xóa.
 - Tab Lịch sử thi & thưởng: chọn người học đã tạo, nhập cuộc thi, tháng, ngày thi, hạng, tên giải, số tiền và trạng thái.
-- Nút hiện/ẩn chỉ điều khiển bản xem trước trong admin. Không đưa dữ liệu vào bảng xếp hạng, đăng ký, lịch sử hay xét thưởng thật.
+- Công tắc **Hiển thị người học** đưa người đó vào Top chăm học phía học viên. Công tắc **Danh sách đăng ký cuộc thi** và **Bảng cuộc thi** điều khiển riêng hai tab tương ứng; tắt công tắc cha thì người đó không xuất hiện ở bất kỳ tab nào.
+- Dữ liệu minh họa được ghép vào kết quả API dành cho học viên nhưng vẫn nằm riêng trong `demo_*`: không tạo tài khoản, lượt thi hay đăng ký thật và không tham gia xét thưởng. Ở bảng cuộc thi, kết quả thật luôn đứng trước; người minh họa không nhận nhãn giải thưởng.
 - Thay đổi đã lưu tồn tại sau khi tải lại trang. Không tự sinh người học hoặc lịch sử mẫu trong database.
 - Xóa người học sẽ xóa lịch sử thưởng minh họa liên quan; hộp thoại xác nhận ghi rõ. Xóa một lịch sử vẫn giữ người học.
 - Mỗi người có công tắc **Tự động tăng phút theo nhịp học**. Người mới mặc định bật trong form; người đã tạo trước migration 024 giữ tắt cho tới khi admin bật.
 - Nhẹ nhàng: 5–15 phút/ngày, 3–4 ngày/tuần. Đều đặn: 15–35 phút/ngày, 4–5 ngày/tuần. Chăm chỉ: 30–60 phút/ngày, 5–6 ngày/tuần. Lịch mỗi người khác nhau, chia hai lượt/ngày, có ngày nghỉ.
 - Số phút tăng theo thời gian đã trôi trong lượt học, không tăng ngay chỉ vì bấm lưu. Một ngày chỉ tính một lần khi bắt đầu có phút. Mỗi 25 phút tự động cộng thêm một phần hoàn thành (quy ước minh họa, không tạo bài học thật).
-- Tắt tự động sẽ chốt số tới thời điểm tắt; bật lại chỉ tiếp tục từ thời điểm bật, không cộng bù thời gian tắt. Ẩn người chỉ đổi bản xem trước, không tắt nhịp học.
+- Tắt tự động sẽ chốt số tới thời điểm tắt; bật lại chỉ tiếp tục từ thời điểm bật, không cộng bù thời gian tắt. Ẩn người sẽ gỡ khỏi cả ba bảng phía học viên nhưng không tắt nhịp học.
 - Admin vẫn chỉnh phút/ngày/phần bằng tay được. Giao diện gửi giá trị gốc để lưu tên/ảnh/cấu hình không ghi đè phần phút tự tăng trong lúc form đang mở.
 - Sang tháng mới, số liệu tháng hiện tại bắt đầu từ 0 và giữ tổng của tháng cũ. Khối Nhịp hoạt động cho chọn người, xem lịch dự kiến tuần, phút đã cộng và lịch sử 24 tháng gần nhất.
 - Lịch một ngày đã tạo được giữ ổn định; thay nhịp chỉ tác động ngày chưa có lịch. Chạy cron hoặc tải lại nhiều lần không cộng trùng; khi cron chạy muộn hệ thống tính phần còn thiếu từ lần đồng bộ trước.
@@ -48,12 +49,15 @@ Cấu hình gửi trường `tuDong` (boolean). Trường tùy chọn `goc: { ph
 7. Xóa một lịch sử: người học vẫn còn. Xóa người học sau xác nhận: các lịch sử liên quan biến mất.
 8. API từ chối ngày không có thật, tháng ngoài 01–12, số âm, trạng thái ngoài danh mục, người học không tồn tại; không tạo dòng lỗi.
 9. Học viên/biên tập không mở màn hoặc gọi các API này được. Không đăng nhập bị yêu cầu đăng nhập; ghi dữ liệu vẫn qua CSRF chung.
-10. Kiểm tra bảng xếp hạng và lịch sử thật không tăng thêm người, giải hay tiền do thao tác trong admin này.
-11. Lỗi mạng: hiện lỗi/tải lại, không báo lưu thành công; bấm lưu/xóa bị vô hiệu khi đang xử lý.
-12. Chọn ảnh → xem trước → lưu → F5: ảnh còn đúng trong danh sách và cả ba tab xem trước. Đổi/xóa ảnh rồi lưu giữ đúng trạng thái; hủy form không đổi avatar đã lưu. File sai định dạng/quá 5 MB bị chặn.
-13. Bật tự động và xem lịch tuần: ngày nghỉ không có phút; trước giờ dự kiến chưa tăng. Trong lượt học, làm mới sau vài phút thấy tăng dần. Tải lại nhiều lần cùng thời điểm không cộng thêm.
-14. Tắt/bật giữa một lượt học: không cộng khoảng bị tắt. Đổi tên/ảnh khi mở form lâu vẫn giữ phần phút đã tự tăng. Chỉnh tay phút xuống/thêm lên rồi tiếp tục tự động vẫn tính tiếp từ giá trị chỉnh.
-15. Qua ranh giới tháng (test dùng Clock đóng băng), tổng tháng mới về 0 và tổng tháng cũ không mất; cron chạy muộn nhiều ngày vẫn tính đủ mỗi ngày theo lịch.
+10. Đăng nhập học viên, mở Top chăm học: người bật **Hiển thị người học** xuất hiện đúng thứ tự phút học và có avatar; người đã ẩn không xuất hiện.
+11. Mở tab Đăng ký và Cuộc thi: mỗi người chỉ xuất hiện theo đúng công tắc riêng. Khi chưa có lịch thi thật, danh sách minh họa vẫn hiển thị; không gắn chữ “minh họa” trên giao diện học viên.
+12. Tạo kết quả thi thật rồi bật người minh họa ở Bảng cuộc thi: người thật giữ nguyên thứ hạng và giải thưởng; người minh họa đứng sau, không có nút hay nhãn nhận thưởng.
+13. Lỗi mạng: hiện lỗi/tải lại, không báo lưu thành công; bấm lưu/xóa bị vô hiệu khi đang xử lý.
+14. Chọn ảnh → xem trước → lưu → F5: ảnh còn đúng trong danh sách, bản xem trước và giao diện học viên. Đổi/xóa ảnh rồi lưu giữ đúng trạng thái; hủy form không đổi avatar đã lưu. File sai định dạng/quá 5 MB bị chặn.
+15. Bật tự động và xem lịch tuần: ngày nghỉ không có phút; trước giờ dự kiến chưa tăng. Trong lượt học, làm mới sau vài phút thấy tăng dần. Tải lại nhiều lần cùng thời điểm không cộng thêm.
+16. Tắt/bật giữa một lượt học: không cộng khoảng bị tắt. Đổi tên/ảnh khi mở form lâu vẫn giữ phần phút đã tự tăng. Chỉnh tay phút xuống/thêm lên rồi tiếp tục tự động vẫn tính tiếp từ giá trị chỉnh.
+17. Qua ranh giới tháng (test dùng Clock đóng băng), tổng tháng mới về 0 và tổng tháng cũ không mất; cron chạy muộn nhiều ngày vẫn tính đủ mỗi ngày theo lịch.
 
 Kiểm thử tự động backend: `api/tests/Unit/DemoLearnerTest.php` (CRUD, validation, route admin, cascade, giữ tài khoản thật).
 Nhịp tự động: `api/tests/Unit/DemoActivityTest.php` (lịch trong giới hạn, ngày nghỉ, cộng dần/chống trùng, tắt/bật, sửa tay, đổi tháng, cron muộn, xóa dây chuyền).
+Ghép sang giao diện học viên: `api/tests/Unit/TopHocTest.php` và `api/tests/Unit/ContestTest.php` (ẩn/hiện, thứ tự Top chăm học, hai công tắc Đăng ký/Cuộc thi, không phụ thuộc lịch thi thật).

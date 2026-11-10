@@ -23,6 +23,15 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 10/11/2026 — Hiển thị người học minh họa ở giao diện học viên
+
+- Nối `demo_learners` vào ba API Top chăm học, danh sách đăng ký và bảng cuộc thi. Ba công tắc admin hoạt động độc lập; tắt **Hiển thị người học** sẽ ẩn người đó khỏi toàn bộ giao diện học viên.
+- Top chăm học xếp chung theo phút, phần hoàn thành và ngày học. Danh sách đăng ký và bảng cuộc thi vẫn hiển thị dữ liệu minh họa khi chưa có lịch thi thật.
+- Kết quả thi thật luôn đứng trước người minh họa để không thay đổi thứ hạng hoặc cơ cấu giải; người minh họa không được gắn giải thưởng và không tạo `users`, `contest_registrations` hay `test_attempts`.
+- Avatar đã chọn trong admin được trả qua API và hiển thị ở cả ba tab; không có nhãn “minh họa” trên giao diện học viên.
+- Bổ sung test ở `TopHocTest` và `ContestTest`. Kết quả: Svelte 0 lỗi/0 cảnh báo, lint sạch, web 128/128, API 242/242 (1.799 assertions).
+- Không có migration mới; server đã có migration 022–024 thì chỉ cần đưa code mới lên và xóa `storage/cache/content`.
+
 ### 10/11/2026 (sau) — Hội thoại hai giọng, cân độ dài phương án HSK 4 + 6, màn soạn đề thi theo khung HSK 3.0
 
 - **Hội thoại đề HSK 3.0 đọc hai giọng**: câu nghe "男：… 女：… 问：…" không đọc nhãn nữa; lời người nam giọng nam, lời người

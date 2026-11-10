@@ -81,6 +81,17 @@ final class ContestTest extends DbTestCase
         return (new ContestController())->ranking($r);
     }
 
+    private function minhHoa(string $name, bool $registered, bool $contest, bool $visible = true): int
+    {
+        return Db::insert('demo_learners', [
+            'name' => $name, 'activity_level' => 'vua', 'minutes' => 100,
+            'study_days' => 4, 'completed_parts' => 3, 'is_visible' => (int) $visible,
+            'is_registered' => (int) $registered, 'show_contest' => (int) $contest,
+            'auto_enabled' => 0, 'stats_month' => '2026-11',
+            'created_at' => Clock::sql(), 'updated_at' => Clock::sql(),
+        ]);
+    }
+
     /** Lượt đã nộp, ghi thẳng để thử thứ tự xếp hạng mà không phải làm bài. */
     private function luotDaNop(int $contest, int $mock, int $user, int $dung, int $giay, string $nopLuc): void
     {
@@ -122,6 +133,25 @@ final class ContestTest extends DbTestCase
         self::assertSame('A', Router::match('GET', '/admin/contests')['auth']);
         self::assertSame('A', Router::match('POST', '/admin/contests')['auth']);
         self::assertSame('A', Router::match('DELETE', '/admin/contests/3')['auth']);
+    }
+
+    public function testNguoiMinhHoaHienTrongDangKyVaBangThiTheoTungCongTac(): void
+    {
+        $this->minhHoa('Có ở cả hai bảng', true, true);
+        $this->minhHoa('Chỉ ở đăng ký', true, false);
+        $this->minhHoa('Chỉ ở bảng thi', false, true);
+        $this->minhHoa('Đang ẩn', true, true, false);
+
+        $dangKy = ContestService::registrants($this->makeUser());
+        $bangThi = $this->xepHang();
+
+        self::assertNull($dangKy['contest']);
+        self::assertSame(['Có ở cả hai bảng', 'Chỉ ở đăng ký'], array_column($dangKy['rows'], 'name'));
+        self::assertSame(2, $dangKy['count']);
+        self::assertSame(['Có ở cả hai bảng', 'Chỉ ở bảng thi'], array_column($bangThi['rows'], 'name'));
+        self::assertSame([1, 2], array_column($bangThi['rows'], 'rank'));
+        self::assertSame(2, $bangThi['participants']);
+        self::assertTrue($bangThi['rows'][0]['isDemo']);
     }
 
     public function testChuaCoCuocThi(): void

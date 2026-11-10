@@ -9,6 +9,24 @@ use Zika\Core\{Clock, Db, HttpError, Json};
 /** Chỉ cập nhật các bảng demo_*. Khóa từng người để cron và lượt tải trang không cộng trùng. */
 final class DemoActivity
 {
+    /**
+     * Dữ liệu dùng để làm đầy các bảng cộng đồng. Vẫn tách khỏi users, lượt thi và phần thưởng thật.
+     * @return list<array<string,mixed>>
+     */
+    public static function visible(?string $flag = null): array
+    {
+        self::tick();
+        $where = ['is_visible = 1'];
+        if ($flag !== null) {
+            $where[] = match ($flag) {
+                'registered' => 'is_registered = 1',
+                'contest' => 'show_contest = 1',
+                default => throw new \InvalidArgumentException('Cờ người học minh họa không hợp lệ.'),
+            };
+        }
+        return Db::all('SELECT * FROM demo_learners WHERE ' . implode(' AND ', $where) . ' ORDER BY id');
+    }
+
     public static function tick(): int
     {
         $count = 0;

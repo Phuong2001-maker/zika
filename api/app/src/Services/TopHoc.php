@@ -24,9 +24,7 @@ final class TopHoc
         [$tu, $den] = [Clock::sql($dau), Clock::sql($cuoi)];
         [$ngayTu, $ngayDen] = [$dau->format('Y-m-d'), $cuoi->format('Y-m-d')];
 
-        $rows = [];
-        $me = null;
-        $dem = 0;
+        $all = [];
         foreach (Db::all(
             "SELECT u.id, u.display_name, t.giay,
                     (SELECT COUNT(*) FROM study_days d WHERE d.user_id = u.id AND d.day >= ? AND d.day < ?) AS ngay,
@@ -38,23 +36,45 @@ final class TopHoc
               WHERE u.role = 'learner' AND u.status = 'active' AND t.giay >= ?
               ORDER BY FLOOR(t.giay / 60) DESC, xong DESC, ngay DESC, u.id",
             [$ngayTu, $ngayDen, $tu, $den, $tu, $den, self::GIAY_TOI_THIEU],
-        ) as $i => $u) {
-            $dem = $i + 1;
-            $row = [
-                'rank' => $dem,
+        ) as $u) {
+            $all[] = [
                 'name' => (string) $u['display_name'],
                 'minutes' => intdiv((int) $u['giay'], 60),
                 'days' => (int) $u['ngay'],
                 'done' => (int) $u['xong'],
                 'isMe' => (int) $u['id'] === $userId,
+                'isDemo' => false,
+                'avatarUrl' => null,
+                '_order' => (int) $u['id'],
             ];
+        }
+        foreach (DemoActivity::visible() as $n) {
+            $all[] = [
+                'name' => (string) $n['name'],
+                'minutes' => (int) $n['minutes'],
+                'days' => (int) $n['study_days'],
+                'done' => (int) $n['completed_parts'],
+                'isMe' => false,
+                'isDemo' => true,
+                'avatarUrl' => $n['avatar_path'],
+                '_order' => 1_000_000_000 + (int) $n['id'],
+            ];
+        }
+        usort($all, static fn (array $a, array $b): int =>
+            $b['minutes'] <=> $a['minutes'] ?: $b['done'] <=> $a['done'] ?: $b['days'] <=> $a['days'] ?: $a['_order'] <=> $b['_order']);
+
+        $rows = [];
+        $me = null;
+        foreach ($all as $i => $raw) {
+            unset($raw['_order']);
+            $row = ['rank' => $i + 1] + $raw;
             if ($row['isMe']) {
                 $me = $row;
             }
-            if ($dem <= $limit) {
+            if ($i < $limit) {
                 $rows[] = $row;
             }
         }
-        return ['month' => $dau->format('m/Y'), 'rows' => $rows, 'me' => $me, 'count' => $dem];
+        return ['month' => $dau->format('m/Y'), 'rows' => $rows, 'me' => $me, 'count' => count($all)];
     }
 }

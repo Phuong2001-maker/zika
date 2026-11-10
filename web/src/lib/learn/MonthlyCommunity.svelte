@@ -435,7 +435,7 @@
           <li class:mc-me={row.isMe}>
             <span class="mc-place" class:mc-medal-place={row.rank <= 3} role="img" aria-label={`Hạng ${row.rank}`}
               >{MEDALS[row.rank - 1] ?? row.rank}</span
-            ><span class="mc-avatar" style="background: var(--lv{((row.rank - 1) % 3) + 1})">{initials(row.name)}</span><span class="mc-person"
+            ><span class="mc-avatar" style="background: var(--lv{((row.rank - 1) % 3) + 1})">{#if row.avatarUrl}<img src={row.avatarUrl} alt="" />{:else}{initials(row.name)}{/if}</span><span class="mc-person"
               ><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>{row.days} ngày học · {row.done} phần bài học xong</small></span
             ><span class="mc-minutes"><b>{row.minutes.toLocaleString('vi-VN')}</b><small>phút học</small></span>
           </li>
@@ -456,15 +456,15 @@
         {/if}
         {#if studyTop?.rows.length && !studyTop.me && !session.isStaff}<p class="mc-muted-note">Bạn chưa có phút học nào trong tháng này.</p>{/if}
       {:else if ranking === 'registrants' && session.can('community.contests.registrants')}
-        {#if registrants?.contest && registrants.rows.length > 0}
+        {#if registrants && registrants.rows.length > 0}
           <div class="mc-rank-head">
-            <b>{registrants.contest.title}</b>
+            <b>{registrants.contest?.title ?? 'Danh sách đăng ký'}</b>
             <span class="tag">{registrants.count} người đã đăng ký</span>
           </div>
           <ol class="mc-full-list">
             {#each registrants.rows as row, i (i)}
               <li class:mc-me={row.isMe}>
-                <span class="mc-place">{i + 1}</span><span class="mc-avatar" style="background: var(--lv{(i % 3) + 1})">{initials(row.name)}</span
+                <span class="mc-place">{i + 1}</span><span class="mc-avatar" style="background: var(--lv{(i % 3) + 1})">{#if row.avatarUrl}<img src={row.avatarUrl} alt="" />{:else}{initials(row.name)}{/if}</span
                 ><span class="mc-person"><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>Đăng ký lúc {row.at}</small></span>
               </li>
             {/each}
@@ -481,10 +481,10 @@
         {#if canRegister}
           <button type="button" class="btn btn-son" disabled={registering} onclick={() => setRegistered(true)}>Đăng ký thi</button>
         {/if}
-      {:else if contestRanking?.contest && contestRanking.rows.length > 0}<div class="mc-rank-head">
-          <b>{contestRanking.contest.title}</b>
-          <span class="tag" class:tag-ok={contestRanking.contest.status === 'open'}>
-            {contestRanking.contest.status === 'open' ? 'Đang diễn ra' : 'Đã kết thúc'} · {contestRanking.participants} người
+      {:else if contestRanking && contestRanking.rows.length > 0}<div class="mc-rank-head">
+          <b>{contestRanking.contest?.title ?? 'Bảng cuộc thi'}</b>
+          <span class="tag" class:tag-ok={contestRanking.contest?.status === 'open'}>
+            {contestRanking.contest ? (contestRanking.contest.status === 'open' ? 'Đang diễn ra' : 'Đã kết thúc') : 'Chờ cuộc thi'} · {contestRanking.participants} người
           </span>
         </div>
         {#if session.can('community.contests.rewards') && myPrize && myPrize.amount !== null && myPrize.amount > 0}
@@ -494,9 +494,9 @@
           <li class:mc-me={row.isMe}>
             <span class="mc-place" class:mc-medal-place={row.rank <= 3} role="img" aria-label={`Hạng ${row.rank}`}
               >{MEDALS[row.rank - 1] ?? row.rank}</span
-            ><span class="mc-avatar" style="background: var(--lv{((row.rank - 1) % 3) + 1})">{initials(row.name)}</span><span class="mc-person"
-              ><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>{row.participated ? `Làm trong ${clock(row.usedSec * 1000)}` : 'Không tham gia · 0 điểm'}</small
-              >{#if session.can('community.contests.rewards') && row.participated && contestStore.prizes[row.rank - 1]}{@const p = contestStore.prizes[row.rank - 1]}<small class="mc-row-prize"
+            ><span class="mc-avatar" style="background: var(--lv{((row.rank - 1) % 3) + 1})">{#if row.avatarUrl}<img src={row.avatarUrl} alt="" />{:else}{initials(row.name)}{/if}</span><span class="mc-person"
+              ><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>{row.isDemo ? 'Chờ cập nhật kết quả' : row.participated ? `Làm trong ${clock(row.usedSec * 1000)}` : 'Không tham gia · 0 điểm'}</small
+              >{#if session.can('community.contests.rewards') && !row.isDemo && row.participated && contestStore.prizes[row.rank - 1]}{@const p = contestStore.prizes[row.rank - 1]}<small class="mc-row-prize"
                   >{p.label} · {prizeMoney(p)}</small
                 >{/if}</span
             ><span class="mc-minutes"><b>{row.correct}/{row.total}</b><small>câu đúng</small></span>
@@ -1136,6 +1136,12 @@
     color: var(--text-2);
     border: 1px solid var(--line);
     flex-shrink: 0;
+    overflow: hidden;
+  }
+  .mc-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .mc-person {
     min-width: 0;

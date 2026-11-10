@@ -94,4 +94,30 @@ final class TopHocTest extends DbTestCase
         self::assertNull($cuaNguoiChuaHoc['me']);
         self::assertSame(4, $cuaNguoiChuaHoc['count']);
     }
+
+    public function testNguoiMinhHoaHienCungNguoiThatVaTuanTheoCongTac(): void
+    {
+        $that = $this->makeUser(['display_name' => 'Người học thật']);
+        $this->hoc($that, '2026-11-04 08:00:00', 600);
+        Db::insert('demo_learners', [
+            'name' => 'Người học hiển thị', 'activity_level' => 'vua', 'minutes' => 120,
+            'study_days' => 5, 'completed_parts' => 4, 'is_visible' => 1,
+            'is_registered' => 0, 'show_contest' => 0, 'auto_enabled' => 0,
+            'stats_month' => '2026-11', 'created_at' => Clock::sql(), 'updated_at' => Clock::sql(),
+        ]);
+        Db::insert('demo_learners', [
+            'name' => 'Người học đang ẩn', 'activity_level' => 'vua', 'minutes' => 500,
+            'study_days' => 9, 'completed_parts' => 8, 'is_visible' => 0,
+            'is_registered' => 0, 'show_contest' => 0, 'auto_enabled' => 0,
+            'stats_month' => '2026-11', 'created_at' => Clock::sql(), 'updated_at' => Clock::sql(),
+        ]);
+
+        $bang = TopHoc::thang($that);
+
+        self::assertSame(['Người học hiển thị', 'Người học thật'], array_column($bang['rows'], 'name'));
+        self::assertTrue($bang['rows'][0]['isDemo']);
+        self::assertFalse($bang['rows'][1]['isDemo']);
+        self::assertSame(2, $bang['count']);
+        self::assertSame(2, $bang['me']['rank']);
+    }
 }

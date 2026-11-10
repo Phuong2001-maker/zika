@@ -498,3 +498,14 @@ Kết quả theo lần kiểm 10/11 ở local (Chromium chạy ngầm, micro gi�
 | H20 | Mở đường dẫn cũ `/admin/mock-tests/{id}` của một đề thi | Tự chuyển sang `/admin/exams/{id}` | Chưa thử |
 | H21 | Cuộc thi dùng đề ở tab Đề thi; học viên đã đăng ký bấm Vào thi ngay khi tới giờ | Màn thi HSK 3.0 `/learn/cuoc-thi/{id}`: tên cuộc thi, đồng hồ theo số phút cuộc thi, ghi âm câu nói; nộp xong không có Làm lại, ghi "đáp án hiện sau khi cuộc thi kết thúc" | Chưa thử |
 | H22 | Tắt Thi thử HSK 3.0 cho Học viên rồi làm H21 | Cuộc thi vẫn vào được (theo quyền cuộc thi) | Chưa thử |
+
+# Người học minh họa trên giao diện học viên (10/11/2026)
+
+| # | Bước | Mong đợi | Kết quả |
+|---|---|---|---|
+| MH1 | Admin tạo một người, bật Hiển thị người học, nhập phút/ngày/phần rồi học viên mở Top chăm học | Có tên và avatar, xếp đúng theo phút; không có chữ “minh họa” | Đạt (test API) |
+| MH2 | Tắt Hiển thị người học rồi tải lại ba tab | Người đó biến mất khỏi Chăm học, Cuộc thi và Đăng ký | Đạt (test API) |
+| MH3 | Bật Hiển thị + Đăng ký, tắt Bảng cuộc thi | Chỉ có ở Chăm học và Đăng ký | Đạt (test API) |
+| MH4 | Bật Hiển thị + Bảng cuộc thi, tắt Đăng ký | Chỉ có ở Chăm học và Cuộc thi, kể cả khi chưa có lịch thi thật | Đạt (test API) |
+| MH5 | Có kết quả thi thật rồi thêm người minh họa vào Bảng cuộc thi | Thứ hạng/giải của người thật không đổi; người minh họa đứng sau và không có giải | Đạt (test API) |
+| MH6 | Kiểm trên điện thoại, máy tính bảng và máy tính sau khi triển khai | Avatar tròn, tên và số liệu không vỡ hàng | Chưa thử tay |
