@@ -9,7 +9,6 @@
   import Icon from '$lib/components/Icon.svelte';
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
-  import DauBai from '$lib/components/DauBai.svelte';
   import { PHAN, type SoCauPhan } from '$lib/learn/thi-hsk/cau-truc';
 
   // Thi thử HSK 3.0 · danh sách đề theo cấp. Kho đề chung, học viên học giáo trình nào cũng thấy như nhau.
@@ -93,7 +92,6 @@
       <div class="hs-ds">
         {#each capHien.exams as d (d.id)}{@render theDe(d)}{/each}
       </div>
-      <p class="muted hs-ghi-chu"><Icon name="mic" size={14} /> Phần nói ghi âm ngay trên máy bạn để tự nghe lại, không gửi lên máy chủ.</p>
     {/if}
   </section>
 {/snippet}
@@ -112,7 +110,7 @@
 
 {#if media.isMobile}
   <div class="mscreen">
-    <MTopbar current="hsk30" title="Thi thử HSK 3.0" sub="Đề luyện thi định dạng mới" />
+    <MTopbar current="hsk30" />
     <main class="mcontent" style="display: flex; flex-direction: column; gap: 12px">{@render body(true)}</main>
   </div>
 {:else}
@@ -120,7 +118,6 @@
     <nav class="crumb"><b>Thi thử HSK 3.0</b></nav>
   </Topbar>
   <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">
-    <DauBai href="/learn/flashcards" hideBack kicker="Đề luyện thi định dạng mới · dùng chung mọi giáo trình" title="Thi thử HSK 3.0" />
     {@render body(false)}
   </main>
 {/if}
@@ -138,5 +135,4 @@
   .hs-phan li { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; }
   .hs-diem { font-size: 14px; color: var(--green-text); }
   .hs-nut { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: auto; }
-  .hs-ghi-chu { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
 </style>

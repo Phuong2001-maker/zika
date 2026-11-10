@@ -68,7 +68,7 @@
 {#snippet lamBai(m: boolean)}
   {#if st.at && st.q}
     {@const q = st.q}
-    <div class="zk-khung-dau">
+    <div class="zk-khung-dau th-dau">
       {#if m && st.coGio}
         {@render dongHo(true)}
       {:else}
@@ -86,49 +86,51 @@
       <h2 class="zk-khung-ten th-loai"><span class="th-phan">{TEN_PHAN[q.section ?? 'reading'] ?? 'Đọc'}</span> {TYPE_LABEL[q.type] ?? q.type}</h2>
     {/if}
 
-    {#key q.id}
-      {#if q.type === 'speak'}
-        <GhiAm
-          attemptId={st.at.attemptId}
-          qid={q.id}
-          payload={q.payload}
-          bind:answer={() => st.answers[q.id] ?? null, (v) => st.datTraLoi(v)}
-          locked={!!kt}
-          mau={kt ? { sample: kt.sample ?? '', sampleVi: kt.sampleVi ?? '' } : null}
-          mobile={m}
-        />
-      {:else}
-        <QuestionView
-          type={q.type}
-          payload={q.payload}
-          bind:answer={() => st.answers[q.id] ?? null, (v) => st.datTraLoi(v)}
-          locked={!!kt}
-          rightIndex={kt?.rightIndex ?? null}
-          listenLeft={st.conNghe(q)}
-          onlisten={() => st.demNghe()}
-          mobile={m}
-        />
-      {/if}
-    {/key}
+    <div class="th-cau">
+      {#key q.id}
+        {#if q.type === 'speak'}
+          <GhiAm
+            attemptId={st.at.attemptId}
+            qid={q.id}
+            payload={q.payload}
+            bind:answer={() => st.answers[q.id] ?? null, (v) => st.datTraLoi(v)}
+            locked={!!kt}
+            mau={kt ? { sample: kt.sample ?? '', sampleVi: kt.sampleVi ?? '' } : null}
+            mobile={m}
+          />
+        {:else}
+          <QuestionView
+            type={q.type}
+            payload={q.payload}
+            bind:answer={() => st.answers[q.id] ?? null, (v) => st.datTraLoi(v)}
+            locked={!!kt}
+            rightIndex={kt?.rightIndex ?? null}
+            listenLeft={st.conNghe(q)}
+            onlisten={() => st.demNghe()}
+            mobile={m}
+          />
+        {/if}
+      {/key}
 
-    {#if st.luyenTap}
-      {#if !kt}
-        <button
-          type="button"
-          class="btn th-kiem"
-          disabled={st.dangKiem || !answered(q.type, q.payload, st.answers[q.id] ?? null)}
-          onclick={() => void st.kiemTraCau()}
-        >
-          <Icon name="check" size={16} /> {q.type === 'speak' ? 'Xem bài mẫu' : 'Kiểm tra'}
-        </button>
-      {:else if kt.graded}
-        <div class="th-kq" class:th-kq-dung={kt.correct} role="status">
-          <b><Icon name={kt.correct ? 'check' : 'x'} size={16} /> {kt.correct ? 'Đúng rồi' : 'Chưa đúng'}</b>
-          {#if !kt.correct && kt.rightAnswerText}<span>Đáp án: <span class="hz" lang="zh">{kt.rightAnswerText}</span></span>{/if}
-          {#if kt.explain}<span class="muted">{kt.explain}</span>{/if}
-        </div>
+      {#if st.luyenTap}
+        {#if !kt}
+          <button
+            type="button"
+            class="btn th-kiem"
+            disabled={st.dangKiem || !answered(q.type, q.payload, st.answers[q.id] ?? null)}
+            onclick={() => void st.kiemTraCau()}
+          >
+            <Icon name="check" size={16} /> {q.type === 'speak' ? 'Xem bài mẫu' : 'Kiểm tra'}
+          </button>
+        {:else if kt.graded}
+          <div class="th-kq" class:th-kq-dung={kt.correct} role="status">
+            <b><Icon name={kt.correct ? 'check' : 'x'} size={16} /> {kt.correct ? 'Đúng rồi' : 'Chưa đúng'}</b>
+            {#if !kt.correct && kt.rightAnswerText}<span>Đáp án: <span class="hz" lang="zh">{kt.rightAnswerText}</span></span>{/if}
+            {#if kt.explain}<span class="muted">{kt.explain}</span>{/if}
+          </div>
+        {/if}
       {/if}
-    {/if}
+    </div>
 
     <div class="zk-chan th-chan">
       <div class="th-dieu" class:th-dieu-m={m}>
@@ -143,21 +145,22 @@
       </div>
 
       <!-- Dãy số câu chia theo phần, như phiếu trả lời đề thật. -->
-      {#each st.nhom as g, gi (gi)}
-        <div class="th-nhom">
-          <span class="th-nhom-ten">{TEN_PHAN[g.phan]}</span>
-          <div class="th-socau" class:th-socau-m={m} role="group" aria-label="Câu phần {TEN_PHAN[g.phan]}">
-            {#each g.cau as { q: x, k } (x.id)}
-              <button type="button" class={oSo(x, k)} onclick={() => (st.cur = k)} aria-label="Câu {k + 1}" aria-current={k === st.cur ? 'true' : undefined}>
-                {k + 1}
-              </button>
-            {/each}
+      <div class="th-bang-cau">
+        {#each st.nhom as g, gi (gi)}
+          <div class="th-nhom">
+            <span class="th-nhom-ten">{TEN_PHAN[g.phan]}</span>
+            <div class="th-socau" class:th-socau-m={m} role="group" aria-label="Câu phần {TEN_PHAN[g.phan]}">
+              {#each g.cau as { q: x, k } (x.id)}
+                <button type="button" class={oSo(x, k)} onclick={() => (st.cur = k)} aria-label="Câu {k + 1}" aria-current={k === st.cur ? 'true' : undefined}>
+                  {k + 1}
+                </button>
+              {/each}
+            </div>
           </div>
-        </div>
-      {/each}
+        {/each}
+      </div>
 
       <div class="th-nop-hang" class:th-nop-hang-m={m}>
-        <span class="muted th-nop-chu">{conLai > 0 ? `Còn ${conLai} câu chưa làm` : 'Đã làm hết, có thể nộp bài'}</span>
         <button type="button" class="btn btn-son th-nop" disabled={st.dangNop} onclick={() => (st.hoiNop = true)}>Nộp bài</button>
       </div>
     </div>
@@ -165,7 +168,7 @@
 {/snippet}
 
 {#snippet khung(m: boolean)}
-  <section class="block zk-khung" class:zk-khung-m={m}>
+  <section class="block zk-khung th-khung" class:zk-khung-m={m} class:th-khung-m={m}>
     {#if st.ketQua}
       <KetQuaHsk kq={st.ketQua} mobile={m} onlamlai={cuocThi ? null : () => void st.tai()} ve={veDanhSach} {tenVe} />
     {:else}
@@ -207,7 +210,7 @@
       {#if !dangThi}<Avatar size={44} />{/if}
     </div>
   </header>
-  <main class="page zk-cot" style="display: flex; flex-direction: column; gap: 18px">{@render body(false)}</main>
+  <main class="page zk-cot-rong th-trang">{@render body(false)}</main>
 {/if}
 
 {#if st.hoiNop}
@@ -239,6 +242,11 @@
   .th-dongho-gap { border-color: var(--son-line); background: var(--son-soft); }
   .th-dongho-gap .th-dongho-so, .th-dongho-gap .th-dongho-chu { color: var(--bad-text); }
   .th-loai { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .th-trang { display: flex; flex-direction: column; gap: 18px; max-width: 920px; }
+  .th-khung { gap: 18px; padding: 0; overflow: hidden; }
+  .th-khung > :global(.zk-khung-dau), .th-khung > .th-loai { margin-inline: 28px; }
+  .th-dau { padding-top: 22px; }
+  .th-cau { display: flex; flex-direction: column; gap: 18px; min-height: 240px; padding: 8px 32px 24px; }
   .th-phan { padding: 3px 10px; border-radius: 999px; background: #FFE9CC; color: #7A4A00; font-size: 12.5px; font-weight: 800; }
   .th-so-nhom { display: inline-flex; gap: 6px; flex-wrap: wrap; }
   .th-kiem { align-self: center; min-height: 44px; padding: 0 22px; }
@@ -247,15 +255,21 @@
   .th-kq-dung { border-color: var(--line); background: var(--ngoc-soft); }
   .th-kq-dung b { color: var(--green-text); }
   /* .zk-chan là hàng ngang có wrap + space-between; đổi sang cột thì phải tắt cả hai, không các nhóm số câu bị kéo giãn. */
-  .th-chan { flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; align-items: stretch; gap: 14px; }
-  .th-dieu { display: flex; justify-content: space-between; gap: 10px; }
+  .th-chan { flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; align-items: stretch; gap: 16px; padding: 20px 28px 24px; background: var(--surface-2); }
+  .th-dieu { display: flex; justify-content: space-between; gap: 10px; order: 2; }
   .th-dieu-m .th-tiep { flex: 1 1 auto; }
   .th-nhom { display: flex; flex-direction: column; gap: 6px; flex: none; }
   .th-nhom-ten { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
-  .th-socau { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 6px; }
+  .th-bang-cau { display: flex; flex-direction: column; gap: 14px; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .th-socau { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 7px; }
   .th-socau-m .qn { height: 44px; }
-  .th-nop-hang { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-  .th-nop-chu { font-size: 13.5px; }
+  .th-nop-hang { display: flex; align-items: center; justify-content: flex-end; order: 3; }
   .th-nop { min-height: 48px; padding: 0 24px; }
   .th-nop-hang-m .th-nop { width: 100%; }
+  .th-khung-m { gap: 14px; }
+  .th-khung-m > :global(.zk-khung-dau), .th-khung-m > .th-loai { margin-inline: 14px; }
+  .th-khung-m .th-dau { padding-top: 14px; }
+  .th-khung-m .th-cau { min-height: 0; padding: 4px 14px 18px; }
+  .th-khung-m .th-chan { padding: 16px 14px 18px; }
+  .th-khung-m .th-bang-cau { padding: 12px; }
 </style>

@@ -212,9 +212,6 @@
 
   <div class="zk-o ga-may">
     {#if trang === 'cho'}
-      <p class="muted ga-chu">
-        {prepSec > 0 ? `Chuẩn bị ${prepSec} giây, ` : ''}nói tối đa {clock(answerSec * 1000)}. Bản ghi chỉ lưu trên máy bạn.
-      </p>
       <div class="ga-nut">
         <button type="button" class="btn btn-son" disabled={locked} onclick={batDau}><Icon name="mic" size={18} /> Bắt đầu</button>
         {#if prepSec > 0}<button type="button" class="btn" disabled={locked} onclick={() => void ghi()}>Ghi âm ngay</button>{/if}
