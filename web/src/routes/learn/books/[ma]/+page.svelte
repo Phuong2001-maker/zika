@@ -247,7 +247,7 @@
         <div class="gt-ca-khoa-chu">
           <span class="gt-ca-khoa-nhan"><Icon name="lock" size={15} />Quyển này chưa mở</span>
           <h1>{sach.ten}</h1>
-          <p class="muted">{sach.bai.length} bài · {sach.soTrang} trang{sach.nghe.length ? ` · ${sach.nghe.length} file nghe` : ''}</p>
+          <p class="muted">{sach.bai.length} bài · {sach.soTrang} trang{sach.nghe.length && session.can('books.audio') ? ` · ${sach.nghe.length} file nghe` : ''}</p>
           <p>
             {#if ke}Bài mở lần lượt theo thứ tự. Mở hết <b>{ke.tenSach}</b> (bài tiếp theo: Bài {ke.bai}) là đọc được quyển này.{/if}
           </p>

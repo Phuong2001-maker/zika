@@ -23,6 +23,17 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 11/11/2026 — Lịch sử thưởng minh họa ở màn học viên, vá chặn quyền khi bắt đầu thi
+
+- Lịch sử thi & thưởng của học viên nay ghép thêm giải minh họa (`demo_rewards` đang hiện của người đang hiện), gom theo cuộc thi + ngày thi + tháng thưởng, xếp chung với cuộc thi thật theo ngày. Có tên giải, tiền, trạng thái; vai trò tắt "Thông tin giải thưởng" chỉ thấy hạng. Màn admin bỏ chữ "Chỉ hiển thị trong admin".
+- Vá 3 lỗ ở `FeatureAccess::enforce` cho `POST /tests/start` (đã tái hiện trên DB thử trước khi sửa): kèm khoá `mockId` (controller không đọc) lách được quyền Kiểm tra; `mockTestId: "013"` lách được Thi thử HSK 3.0/vào thi vì hai nơi đọc số khác nhau; có lượt luyện tập HSK 3.0 dở thì vẫn mở được lượt thi mới khi quyền đã tắt. Nay đọc số giống `Validator::int`, có `lessonId` thì luôn xét Kiểm tra, làm tiếp chỉ đúng lượt cùng chế độ (`TestService::modeFor` thành public).
+- Giao diện theo quyền: tắt Gợi ý ôn tập không còn chừa cột trống ở Bàn học; tắt File nghe/Đáp án thì mục lục sách, thẻ bài khoá và bìa quyển khoá không còn ghi số file nghe/biểu tượng đáp án; nút "Thông tin cuộc thi" trong bảng xếp hạng rỗng theo quyền Thông tin cuộc thi; nhãn nút Quỹ ghi "Ghé Shopee" khi chỉ còn link Shopee; chỉ mở Thi thử HSK 3.0 thì trang nhà là `/learn/hsk30`.
+- Tắt "Thông tin cuộc thi" không còn kéo mất số người đăng ký và nút **Huỷ đăng ký** (trước đó cả khối ghi chú đăng ký nằm trong cổng Thông tin). Trang Giáo trình chỉ kể "nghe file ghi âm", "so đáp án" khi vai trò được dùng.
+- **Hosting thật thiếu PHP intl**: nạp 18 đề HSK 3.0 lên server (11/11, qua trang quản trị trong trình duyệt vì server chặn script bằng OneShield) thì HSK 1 vào đủ 3 đề × 40 câu, HSK 2–6 lỗi 500 ở đúng loại câu Sắp xếp (`order`). Nguyên nhân: `QuestionGrader::normZh/normVi` gọi thẳng `\Normalizer` (intl). Đã đổi sang `Str::nfc` (có kiểm `class_exists`), thử bằng PHP không intl chạy đúng. Lỗi này cũng làm chấm câu `order`/`trans` trên server lỗi 500. Server còn 15 đề Nháp rỗng (HSK 2–6), nạp lại sau khi bật intl hoặc đưa PHP mới lên.
+- Đã thử trên DB bản sao `test_zika_e2e` (API 8788, web 5175, không đụng DB dev): kịch bản API tắt lần lượt 31 khoá Truy cập; kịch bản Playwright tắt lần lượt cả 51 công tắc và so giao diện học viên (máy tính + điện thoại) với mong đợi theo luật cha → con. Lần đầu lệch 2 chỗ (2 gạch đầu dòng trên), sửa xong chạy lại đúng hết.
+- Test mới: `ContestTest::testLichSuGhepGiaiMinhHoaTheoNgayThiVaCongTacHien`, `FeatureAccessTest::testBatDauThiXetDungPhanControllerSeMo`, thêm một dòng `homePath` ở `features.test.ts`. Không có migration mới.
+- Để nguyên, cần quyết ý đồ: đường dẫn `/learn/tests/hsk/n/mock/id` dùng chung cho đề thi thử và cuộc thi dùng đề thường nên giao diện cho vào nếu có Kiểm tra **hoặc** Vào thi (server vẫn chặn đúng); tắt Quỹ nhưng giữ Thông tin giải thì tiền từng giải vẫn hiện (suy ra được quỹ); `?preview=1` của biên tập vẫn bị quyền theo vai trò chặn ở Bài tập/Kiểm tra.
+
 ### 10/11/2026 — Hiển thị người học minh họa ở giao diện học viên
 
 - Nối `demo_learners` vào ba API Top chăm học, danh sách đăng ký và bảng cuộc thi. Ba công tắc admin hoạt động độc lập; tắt **Hiển thị người học** sẽ ẩn người đó khỏi toàn bộ giao diện học viên.

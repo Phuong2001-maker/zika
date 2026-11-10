@@ -128,4 +128,32 @@ final class FeatureAccessTest extends DbTestCase
         Db::update('test_attempts', ['submitted_at' => Clock::sql()], ['id' => $id]);
         self::assertFalse(FeatureAccess::ongoing($r));
     }
+
+    /** Server phải xét quyền theo đúng phần controller sẽ mở, không theo khoá lạ hay cách viết số khác. */
+    public function testBatDauThiXetDungPhanControllerSeMo(): void
+    {
+        $hsk = Db::insert('mock_tests', ['level_id' => 1, 'title' => 'Đề HSK 3.0', 'kind' => 'hsk30']);
+        $chan = function (array $body, string $vi, ?int $uid = null): void {
+            try { FeatureAccess::enforce($this->req('/tests/start', body: $body, method: 'POST', uid: $uid)); self::fail($vi); }
+            catch (HttpError $e) { self::assertSame(403, $e->status, $vi); }
+        };
+
+        // Mặc định Kiểm tra tắt với học viên: kèm mockId (controller không đọc) hay mockTestId cũng không lách sang HSK 3.0.
+        $chan(['lessonId' => 5, 'mockId' => $hsk], 'lessonId + mockId phải xét theo Kiểm tra.');
+        $chan(['lessonId' => 5, 'mockTestId' => $hsk], 'Có lessonId thì luôn xét theo Kiểm tra.');
+
+        // Mở Kiểm tra, tắt HSK 3.0: viết "0" + id vẫn là đề HSK 3.0 (Validator đọc ra cùng số).
+        $this->set('learn.tests', true);
+        $this->set('learn.hsk30', false);
+        $chan(['mockTestId' => '0' . $hsk], 'mockTestId "0xx" phải xét theo HSK 3.0.');
+        $chan(['mockTestId' => (string) $hsk], 'mockTestId dạng chuỗi phải xét theo HSK 3.0.');
+
+        // Lượt luyện tập dở chỉ cho làm tiếp đúng lượt đó, không mở lượt thi mới.
+        $uid = $this->makeUser();
+        Db::insert('test_attempts', ['user_id' => $uid, 'mock_test_id' => $hsk, 'mode' => 'practice',
+            'question_ids' => '[]', 'option_maps' => '{}', 'answers' => '{}', 'flags' => '[]', 'listen_counts' => '{}',
+            'started_at' => Clock::sql(), 'deadline_at' => Clock::sql(Clock::now()->modify('+10 minutes'))]);
+        $chan(['mockTestId' => $hsk, 'mode' => 'exam'], 'Có lượt luyện tập dở không được mở lượt thi mới.', $uid);
+        FeatureAccess::enforce($this->req('/tests/start', body: ['mockTestId' => $hsk, 'mode' => 'practice'], method: 'POST', uid: $uid));
+    }
 }

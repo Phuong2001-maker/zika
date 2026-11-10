@@ -8,6 +8,7 @@ Mở **Quản trị → Người học minh họa** (`/admin/demo-learners`). Ch
 - Tab Lịch sử thi & thưởng: chọn người học đã tạo, nhập cuộc thi, tháng, ngày thi, hạng, tên giải, số tiền và trạng thái.
 - Công tắc **Hiển thị người học** đưa người đó vào Top chăm học phía học viên. Công tắc **Danh sách đăng ký cuộc thi** và **Bảng cuộc thi** điều khiển riêng hai tab tương ứng; tắt công tắc cha thì người đó không xuất hiện ở bất kỳ tab nào.
 - Dữ liệu minh họa được ghép vào kết quả API dành cho học viên nhưng vẫn nằm riêng trong `demo_*`: không tạo tài khoản, lượt thi hay đăng ký thật và không tham gia xét thưởng. Ở bảng cuộc thi, kết quả thật luôn đứng trước; người minh họa không nhận nhãn giải thưởng.
+- Lịch sử thưởng (10/11): dòng đang bật **Hiện ở Lịch sử thi & thưởng của học viên** của người đang bật **Hiển thị người học** được ghép vào `GET /contest/history`. Các giải cùng tên cuộc thi + ngày thi + tháng thưởng gộp thành một mục (id âm), xếp chung với cuộc thi thật theo ngày, cùng ngày thì cuộc thi thật trước. Học viên thấy tên giải, số tiền và trạng thái từng dòng; vai trò bị tắt **Thông tin giải thưởng / nhận thưởng** chỉ thấy tên người và hạng.
 - Thay đổi đã lưu tồn tại sau khi tải lại trang. Không tự sinh người học hoặc lịch sử mẫu trong database.
 - Xóa người học sẽ xóa lịch sử thưởng minh họa liên quan; hộp thoại xác nhận ghi rõ. Xóa một lịch sử vẫn giữ người học.
 - Mỗi người có công tắc **Tự động tăng phút theo nhịp học**. Người mới mặc định bật trong form; người đã tạo trước migration 024 giữ tắt cho tới khi admin bật.
@@ -57,7 +58,8 @@ Cấu hình gửi trường `tuDong` (boolean). Trường tùy chọn `goc: { ph
 15. Bật tự động và xem lịch tuần: ngày nghỉ không có phút; trước giờ dự kiến chưa tăng. Trong lượt học, làm mới sau vài phút thấy tăng dần. Tải lại nhiều lần cùng thời điểm không cộng thêm.
 16. Tắt/bật giữa một lượt học: không cộng khoảng bị tắt. Đổi tên/ảnh khi mở form lâu vẫn giữ phần phút đã tự tăng. Chỉnh tay phút xuống/thêm lên rồi tiếp tục tự động vẫn tính tiếp từ giá trị chỉnh.
 17. Qua ranh giới tháng (test dùng Clock đóng băng), tổng tháng mới về 0 và tổng tháng cũ không mất; cron chạy muộn nhiều ngày vẫn tính đủ mỗi ngày theo lịch.
+18. Thêm hai giải cùng cuộc thi/ngày cho hai người đang hiện, đăng nhập học viên, mở Quỹ tháng → Lịch sử thi & thưởng: có một mục "Giải thưởng tháng mm/yyyy", mở ra thấy đủ hai người theo hạng, tên giải, tiền, trạng thái. Ẩn dòng giải hoặc ẩn người: mục/dòng đó biến mất sau khi mở lại hộp.
 
 Kiểm thử tự động backend: `api/tests/Unit/DemoLearnerTest.php` (CRUD, validation, route admin, cascade, giữ tài khoản thật).
 Nhịp tự động: `api/tests/Unit/DemoActivityTest.php` (lịch trong giới hạn, ngày nghỉ, cộng dần/chống trùng, tắt/bật, sửa tay, đổi tháng, cron muộn, xóa dây chuyền).
-Ghép sang giao diện học viên: `api/tests/Unit/TopHocTest.php` và `api/tests/Unit/ContestTest.php` (ẩn/hiện, thứ tự Top chăm học, hai công tắc Đăng ký/Cuộc thi, không phụ thuộc lịch thi thật).
+Ghép sang giao diện học viên: `api/tests/Unit/TopHocTest.php` và `api/tests/Unit/ContestTest.php` (ẩn/hiện, thứ tự Top chăm học, hai công tắc Đăng ký/Cuộc thi, không phụ thuộc lịch thi thật, lịch sử thưởng `testLichSuGhepGiaiMinhHoaTheoNgayThiVaCongTacHien`).

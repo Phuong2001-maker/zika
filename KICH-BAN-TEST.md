@@ -509,3 +509,20 @@ Kết quả theo lần kiểm 10/11 ở local (Chromium chạy ngầm, micro gi�
 | MH4 | Bật Hiển thị + Bảng cuộc thi, tắt Đăng ký | Chỉ có ở Chăm học và Cuộc thi, kể cả khi chưa có lịch thi thật | Đạt (test API) |
 | MH5 | Có kết quả thi thật rồi thêm người minh họa vào Bảng cuộc thi | Thứ hạng/giải của người thật không đổi; người minh họa đứng sau và không có giải | Đạt (test API) |
 | MH6 | Kiểm trên điện thoại, máy tính bảng và máy tính sau khi triển khai | Avatar tròn, tên và số liệu không vỡ hàng | Chưa thử tay |
+| MH7 | Admin thêm 2 giải cùng cuộc thi/ngày (bật hiện) cho 2 người đang hiện; học viên mở Quỹ tháng → Lịch sử thi & thưởng | Có mục "Giải thưởng tháng mm/yyyy"; mở ra thấy 2 người theo hạng, tên giải, tiền, trạng thái; "Bạn không tham gia" | Đạt (máy local, DB thử) |
+| MH8 | Ẩn một dòng giải, rồi ẩn hẳn một người minh họa | Dòng/người đó biến khỏi lịch sử; người ẩn không còn ở cả 3 tab | Đạt (máy local, DB thử) |
+| MH9 | Tắt "Thông tin giải thưởng / nhận thưởng" cho Học viên | Lịch sử vẫn có mục và tên người, chỉ hiện "Hạng n", không có tiền | Đạt (Playwright, DB thử) |
+
+# Quyền truy cập & hiển thị — thử đủ 51 công tắc (11/11/2026)
+
+Thử trên DB bản sao `test_zika_e2e`. API: tắt từng khoá Truy cập, API của khoá đó và con phải 403 `FEATURE_DISABLED`, khoá khác không bị chặn lây. Giao diện: Playwright tắt từng công tắc cho Học viên, so thanh đầu trang (máy tính + 375px), Chuyển nhanh, đường dẫn trực tiếp, 4 chế độ lật thẻ, hộp Quỹ, bảng xếp hạng, lịch sử thưởng, Tài khoản, Giáo trình.
+
+| # | Bước | Mong đợi | Kết quả |
+|---|---|---|---|
+| Q1 | Tắt lần lượt 31 khoá Truy cập, gọi API học viên | Đúng khoá và con bị 403, khoá khác không | Đạt |
+| Q2 | Tắt lần lượt 50 công tắc (trừ Tài khoản khoá cứng), mở các màn học viên | Phần tương ứng ẩn, phần khác giữ nguyên | Đạt (sau khi sửa 2 chỗ) |
+| Q3 | Mặc định học viên tắt Kiểm tra, gửi `POST /tests/start {lessonId, mockId: <đề HSK 3.0>}` | 403 | Đạt (trước sửa: lọt qua kiểm quyền) |
+| Q4 | Bật Kiểm tra, tắt HSK 3.0, gửi `mockTestId: "0" + id` | 403 | Đạt (trước sửa: 201) |
+| Q5 | Có lượt luyện tập HSK 3.0 dở, tắt HSK 3.0, gửi `mode: exam` | 403; gửi `mode: practice` vẫn làm tiếp | Đạt (trước sửa: mở được lượt thi mới) |
+| Q6 | Tắt Thông tin cuộc thi khi đã đăng ký | Vẫn thấy số người đăng ký và nút Huỷ đăng ký | Đạt |
+| Q7 | Trên server thật, sau khi bật intl hoặc lên PHP mới: nộp bài có câu Sắp xếp | Chấm bình thường, không lỗi 500 | Chưa thử |

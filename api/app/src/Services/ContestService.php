@@ -156,10 +156,11 @@ final class ContestService
 
     /**
      * Các cuộc thi đã kết thúc, mới nhất trước: ai đứng đầu và mình đứng thứ mấy.
-     * Không trả số tiền: quỹ không được chụp lại theo từng cuộc thi, lấy quỹ hiện tại thì nói sai số đã trao.
+     * Cuộc thi thật không trả số tiền: quỹ không được chụp lại theo từng cuộc thi, lấy quỹ hiện tại thì nói sai số đã trao.
+     * Giải minh họa thì có tiền vì quản trị nhập sẵn cho từng dòng; $rewards = false khi vai trò bị tắt thông tin giải.
      * @return list<array<string,mixed>>
      */
-    public static function history(int $userId, int $limit = 12): array
+    public static function history(int $userId, int $limit = 12, bool $rewards = true): array
     {
         $out = [];
         foreach (Db::all(
@@ -174,9 +175,55 @@ final class ContestService
                 'participants' => $bang['participants'],
                 'top' => array_values(array_filter($bang['rows'], static fn (array $row): bool => $row['participated'])),
                 'me' => $bang['me'],
+                'isDemo' => false,
+                '_order' => (string) $c['ends_at'],
             ];
         }
-        return $out;
+        array_push($out, ...self::demoHistory($rewards));
+        // usort giữ thứ tự cũ khi bằng nhau, nên cuộc thi thật kết thúc đúng 0h vẫn đứng trước giải minh họa.
+        usort($out, static fn (array $a, array $b): int => $b['_order'] <=> $a['_order']);
+        return array_map(static function (array $x): array {
+            unset($x['_order']);
+            return $x;
+        }, array_slice($out, 0, $limit));
+    }
+
+    /**
+     * Giải minh họa gom theo tên cuộc thi + ngày thi + tháng thưởng thành một mục giống cuộc thi thật.
+     * id âm để không trùng id cuộc thi thật, vì màn học viên dùng id làm khoá mở chi tiết.
+     * @return list<array<string,mixed>>
+     */
+    private static function demoHistory(bool $rewards): array
+    {
+        $dmy = static fn (string $ymd): string => implode('/', array_reverse(explode('-', $ymd)));
+        $groups = [];
+        foreach (DemoActivity::rewards() as $g) {
+            $key = $g['contest_name'] . "\n" . $g['contest_date'] . "\n" . $g['reward_month'];
+            $groups[$key] ??= [
+                'id' => -(int) $g['id'],
+                'title' => (string) $g['contest_name'],
+                'endedOn' => $dmy((string) $g['contest_date']),
+                'participants' => 0,
+                'top' => [],
+                'me' => null,
+                'isDemo' => true,
+                'rewardMonth' => $dmy((string) $g['reward_month']),
+                // Giải minh họa chỉ có ngày, coi như 0h để cuộc thi thật cùng ngày đứng trước.
+                '_order' => $g['contest_date'] . ' 00:00:00',
+            ];
+            // Giữ id nhỏ nhất của nhóm: sửa hạng hay thêm giải thì khoá của mục không đổi.
+            $groups[$key]['id'] = max($groups[$key]['id'], -(int) $g['id']);
+            $groups[$key]['participants']++;
+            $groups[$key]['top'][] = [
+                'rank' => (int) $g['ranking'], 'name' => (string) $g['name'],
+                'correct' => 0, 'total' => 0, 'usedSec' => 0, 'participated' => true, 'isMe' => false,
+                'isDemo' => true, 'avatarUrl' => $g['avatar_path'],
+                'prize' => $rewards ? (string) $g['prize_name'] : null,
+                'amount' => $rewards ? (int) $g['amount'] : null,
+                'rewardStatus' => $rewards ? (string) $g['reward_status'] : null,
+            ];
+        }
+        return array_values($groups);
     }
 
     /** @param array<string,mixed> $c */

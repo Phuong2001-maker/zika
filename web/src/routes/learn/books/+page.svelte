@@ -65,6 +65,9 @@
   });
   const docTiep = $derived(ds?.find((q) => q.ma === gan && !q.khoa && (dangDoc[q.ma] ?? 1) > 1));
   const tongBai = $derived((ds ?? []).reduce((t, q) => t + q.soBai, 0));
+  // Chỉ kể những gì vai trò này đang được dùng: tắt File nghe/Đáp án thì đừng hứa "nghe", "so đáp án".
+  const viec = $derived(['đọc sách', session.can('books.audio') && 'nghe file ghi âm', session.can('books.answers') && 'so đáp án'].filter(Boolean).join(', '));
+  const viecMo = $derived(['đọc', session.can('books.audio') && 'nghe', session.can('books.answers') && 'xem đáp án'].filter(Boolean).join(', '));
   const baiDaMo = $derived((ds ?? []).reduce((t, q) => t + q.baiMo, 0));
   /** Quyển đứng trước trong cùng bộ: thẻ quyển khoá ghi "Mở hết <quyển trước>". */
   const truoc = $derived<Record<string, string>>(
@@ -134,7 +137,7 @@
     <div class="gt-dau-chu">
       <h1 style="font-size: {mobile ? 24 : 34}px">Giáo trình</h1>
       {#if nhom.length === 1}
-        <p class="muted gt-mo-ta"><b>{nhom[0].ten}</b> · {nhom[0].ds.length} quyển · {tongBai} bài — đọc sách, nghe file ghi âm, so đáp án.</p>
+        <p class="muted gt-mo-ta"><b>{nhom[0].ten}</b> · {nhom[0].ds.length} quyển · {tongBai} bài — {viec}.</p>
       {:else if nhom.length > 1}
         <p class="muted gt-mo-ta">Bạn thấy mọi bộ sách; học viên chỉ thấy bộ sách của giáo trình mình đang học.</p>
       {/if}
@@ -146,7 +149,7 @@
     <ol class="gt-luat" aria-label="Cách mở bài">
       <li><span class="num">1</span>Bấm <b>Nhận điểm</b> mỗi ngày — lần đầu được 3 điểm</li>
       <li><span class="num">2</span>Mỗi điểm mở một bài, mở lần lượt theo sách</li>
-      <li><span class="num">3</span>Bài đã mở là đọc, nghe, xem đáp án mãi</li>
+      <li><span class="num">3</span>Bài đã mở là {viecMo} mãi</li>
     </ol>
   {/if}
 

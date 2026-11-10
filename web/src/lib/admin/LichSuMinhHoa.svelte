@@ -70,13 +70,13 @@
       <article class="lsmh-item">
         <div class="lsmh-top"><span class="lsmh-medal">{n.hang <= 3 ? ['🥇', '🥈', '🥉'][n.hang - 1] : `#${n.hang}`}</span><div class="lsmh-name"><b>{n.tenNguoi}</b><small>{n.cuocThi} · Tháng {thang(n.thang)}</small></div><strong>{tien(n.tien)}</strong></div>
         <div class="lsmh-meta"><span>{n.giai}</span><span class="lsmh-status" class:lsmh-paid={n.trangThai === 'da-trao'}>{trangThais.find((t) => t.v === n.trangThai)?.label}</span></div>
-        <div class="lsmh-actions"><button class="btn btn-sm" disabled={busy} onclick={() => anHien(n)}>{n.hien ? 'Đang hiện trong xem trước' : 'Đang ẩn'}</button><button class="btn btn-sm" disabled={busy} onclick={() => mo(n)}><Icon name="edit" size={15} /> Sửa</button><button class="btn btn-icon" disabled={busy} aria-label={`Xóa lịch sử của ${n.tenNguoi}`} onclick={() => xoa = n}><Icon name="trash" size={16} /></button></div>
+        <div class="lsmh-actions"><button class="btn btn-sm" disabled={busy} onclick={() => anHien(n)}>{n.hien ? 'Đang hiện cho học viên' : 'Đang ẩn'}</button><button class="btn btn-sm" disabled={busy} onclick={() => mo(n)}><Icon name="edit" size={15} /> Sửa</button><button class="btn btn-icon" disabled={busy} aria-label={`Xóa lịch sử của ${n.tenNguoi}`} onclick={() => xoa = n}><Icon name="trash" size={16} /></button></div>
       </article>
     {:else}<p class="lsmh-empty">Chưa có lịch sử phù hợp. Thêm một giải thưởng để xem trước.</p>{/each}
     {/if}
   </section>
   <aside>
-    <div class="lsmh-preview-title"><b>Xem trước lịch sử</b><small>Chỉ hiển thị trong admin</small></div>
+    <div class="lsmh-preview-title"><b>Xem trước lịch sử</b><small>Học viên thấy ở Lịch sử thi & thưởng</small></div>
     <section class="block lsmh-panel">
       <h2>Lịch sử thi & thưởng</h2>
       {#each dsXem as n (n.id)}
@@ -95,8 +95,8 @@
       <div class="lsmh-fields"><label>Thứ hạng<input class="inp" type="number" min="1" max="1000" required bind:value={sua.hang} /></label><label>Tên giải<input class="inp" required maxlength="80" bind:value={sua.giai} /></label></div>
       <label>Tiền thưởng (đồng)<input class="inp" type="number" min="0" max="1000000000" step="1000" required bind:value={sua.tien} /></label>
       <label>Trạng thái thưởng<Select ariaLabel="Trạng thái thưởng" options={trangThais} bind:value={sua.trangThai} /></label>
-      <label class="lsmh-check"><input type="checkbox" bind:checked={sua.hien} /> Hiển thị trong bản xem trước</label>
-      <small class="muted">Dữ liệu quản lý trong admin, không tạo khoản chi hoặc thay đổi lịch sử của học viên.</small>
+      <label class="lsmh-check"><input type="checkbox" bind:checked={sua.hien} /> Hiện ở Lịch sử thi & thưởng của học viên</label>
+      <small class="muted">Chỉ hiện khi người học này cũng đang bật Hiển thị. Không tạo khoản chi, lượt thi hay giải thưởng thật.</small>
     </form>
     {#snippet actions()}<button class="btn" disabled={busy} onclick={() => sua = null}>Hủy</button><button class="btn btn-son" disabled={busy} type="submit" form="lsmh-form">{busy ? 'Đang lưu...' : 'Lưu lịch sử'}</button>{/snippet}
   </Modal>

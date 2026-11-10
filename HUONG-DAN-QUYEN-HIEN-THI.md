@@ -43,7 +43,7 @@ Các phụ thuộc khác vẫn áp dụng: bé túi cần công tắc/link ở �
 - Quyền API có hiệu lực ngay ở request kế tiếp. Giao diện tải lại quyền khi mở trang và mỗi 60 giây; người vừa lưu được cập nhật ngay. F5 để thấy ngay ở một tài khoản đang mở sẵn.
 - Tắt điểm mở bài cũng chặn nhận điểm và mở bài bằng điểm; bài đã được mở vẫn đọc được, admin vẫn có thể cấp mở từ trang quản trị.
 - Link `/go` kiểm vai trò và vị trí link (Icon/Quỹ) trước khi chuyển hướng; khách không đăng nhập vẫn có thể truy cập liên kết công khai theo hành vi cũ.
-- Chưa đưa migration/code này lên hosting. Dữ liệu người học/lịch sử thưởng minh họa vẫn chỉ nằm trong admin, không trộn vào bảng thật.
+- Migration 025–027 đã lên hosting (kiểm 10/11). Người học và lịch sử thưởng minh họa được ghép vào API học viên nhưng vẫn ở bảng `demo_*` riêng, xem [HUONG-DAN-DU-LIEU-MINH-HOA.md](HUONG-DAN-DU-LIEU-MINH-HOA.md).
 
 ## Kịch bản kiểm tra
 
@@ -61,7 +61,7 @@ Các phụ thuộc khác vẫn áp dụng: bé túi cần công tắc/link ở �
 12. Mở hai phiên admin, lưu ở phiên thứ nhất rồi lưu dữ liệu cũ ở phiên thứ hai: báo cấu hình đã đổi (409), không ghi đè.
 13. Học viên/biên tập gọi API cấu hình nhận 403; sai khóa, vai trò, kiểu dữ liệu hoặc cố tắt Tài khoản bị từ chối 422.
 
-Test tự động: `FeatureAccessTest.php`, `auth/features.test.ts`. Test Shopee/Quán trà điều chỉnh để dùng cấu hình quyền thay cho yêu cầu admin viết cứng.
+Test tự động: `FeatureAccessTest.php`, `auth/features.test.ts`. `POST /tests/start` xét quyền theo đúng trường controller đọc (`lessonId`/`mockTestId`, số đọc như `Validator::int`), có `lessonId` thì luôn là Kiểm tra; lượt dở chỉ được làm tiếp đúng chế độ (`testBatDauThiXetDungPhanControllerSeMo`). Test Shopee/Quán trà điều chỉnh để dùng cấu hình quyền thay cho yêu cầu admin viết cứng.
 
 ## Ẩn/hiện nội dung theo giáo trình → cấp/quyển → bài
 

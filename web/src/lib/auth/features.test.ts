@@ -11,6 +11,7 @@ describe('quyền hiển thị theo cấu hình server', () => {
   it('chọn lối về dùng được kể cả khi tắt toàn bộ phần học', () => {
     expect(homePath('learner', { 'learn.flashcards': false, 'learn.writing': true })).toBe('/learn/writing');
     expect(homePath('learner', { books: true })).toBe('/learn/books');
+    expect(homePath('learner', { 'learn.hsk30': true, books: true })).toBe('/learn/hsk30');
     expect(homePath('learner', {})).toBe('/account');
     expect(homePath('admin', {})).toBe('/admin');
   });

@@ -27,6 +27,20 @@ final class DemoActivity
         return Db::all('SELECT * FROM demo_learners WHERE ' . implode(' AND ', $where) . ' ORDER BY id');
     }
 
+    /**
+     * Giải thưởng minh họa cho Lịch sử thi & thưởng phía học viên. Tắt "Hiển thị người học" thì người đó biến khỏi
+     * mọi bảng học viên, nên giải của họ cũng ẩn dù dòng giải còn bật.
+     * @return list<array<string,mixed>>
+     */
+    public static function rewards(): array
+    {
+        return Db::all(
+            'SELECT r.*, l.name, l.avatar_path FROM demo_rewards r JOIN demo_learners l ON l.id = r.learner_id
+              WHERE r.is_visible = 1 AND l.is_visible = 1
+              ORDER BY r.contest_date DESC, r.contest_name, r.reward_month DESC, r.ranking, r.id',
+        );
+    }
+
     public static function tick(): int
     {
         $count = 0;

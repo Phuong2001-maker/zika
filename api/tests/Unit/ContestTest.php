@@ -92,6 +92,15 @@ final class ContestTest extends DbTestCase
         ]);
     }
 
+    private function giaiMinhHoa(int $nguoi, string $cuocThi, string $ngay, int $hang, string $giai, int $tien, bool $hien = true): int
+    {
+        return Db::insert('demo_rewards', [
+            'learner_id' => $nguoi, 'contest_name' => $cuocThi, 'reward_month' => '2026-11', 'contest_date' => $ngay,
+            'ranking' => $hang, 'prize_name' => $giai, 'amount' => $tien, 'reward_status' => 'da-trao',
+            'is_visible' => (int) $hien, 'created_at' => Clock::sql(), 'updated_at' => Clock::sql(),
+        ]);
+    }
+
     /** Lượt đã nộp, ghi thẳng để thử thứ tự xếp hạng mà không phải làm bài. */
     private function luotDaNop(int $contest, int $mock, int $user, int $dung, int $giay, string $nopLuc): void
     {
@@ -880,5 +889,46 @@ final class ContestTest extends DbTestCase
         self::assertSame(5, $lich[0]['me']['rank']);
         self::assertNull($lich[1]['me']);
         self::assertSame([], $lich[1]['top']);
+    }
+
+    public function testLichSuGhepGiaiMinhHoaTheoNgayThiVaCongTacHien(): void
+    {
+        $mock = $this->de(2);
+        $that = $this->cuocThi($mock, '2026-11-20 08:00:00', '2026-11-20 09:00:00');
+        $lan = $this->minhHoa('Lan', false, false);
+        $minh = $this->minhHoa('Minh', false, false);
+        $an = $this->minhHoa('Người đang ẩn', false, false, false);
+        $dau = $this->giaiMinhHoa($lan, 'Thử sức HSK 2', '2026-11-05', 2, 'Giải Nhì', 300000);
+        $this->giaiMinhHoa($minh, 'Thử sức HSK 2', '2026-11-05', 1, 'Giải Nhất', 500000);
+        $this->giaiMinhHoa($an, 'Thử sức HSK 2', '2026-11-05', 3, 'Giải Ba', 100000);       // người ẩn: không hiện
+        $this->giaiMinhHoa($lan, 'Thi tháng 10', '2026-10-10', 1, 'Giải Nhất', 200000, false); // giải ẩn: không hiện
+        $this->giaiMinhHoa($minh, 'Thi tháng 11', '2026-11-20', 1, 'Giải Nhất', 400000);
+
+        $r = new Request('GET', '/contest/history');
+        $r->user = ['id' => $this->makeUser(), 'role' => 'learner'];
+        $lich = (new ContestController())->history($r);
+
+        // Cùng ngày thì cuộc thi thật đứng trước; giải minh họa gom theo cuộc thi + ngày thi, id âm.
+        self::assertSame(['Thi tháng 11', 'Thi tháng 11', 'Thử sức HSK 2'], array_column($lich, 'title'));
+        self::assertSame($that, $lich[0]['id']);
+        self::assertFalse($lich[0]['isDemo']);
+        $nhom = $lich[2];
+        self::assertSame(-$dau, $nhom['id']);
+        self::assertTrue($nhom['isDemo']);
+        self::assertSame('05/11/2026', $nhom['endedOn']);
+        self::assertSame('11/2026', $nhom['rewardMonth']);
+        self::assertNull($nhom['me']);
+        self::assertSame(2, $nhom['participants']);
+        self::assertSame(['Minh', 'Lan'], array_column($nhom['top'], 'name'));
+        self::assertSame(['Giải Nhất', 'Giải Nhì'], array_column($nhom['top'], 'prize'));
+        self::assertSame([500000, 300000], array_column($nhom['top'], 'amount'));
+        self::assertSame('da-trao', $nhom['top'][0]['rewardStatus']);
+        self::assertArrayNotHasKey('_order', $nhom);
+
+        // Vai trò bị tắt thông tin giải: vẫn thấy cuộc thi và người đạt, không thấy tên giải và tiền.
+        $kin = ContestService::history($this->makeUser(), rewards: false);
+        self::assertSame(['Minh', 'Lan'], array_column($kin[2]['top'], 'name'));
+        self::assertSame([null, null], array_column($kin[2]['top'], 'amount'));
+        self::assertNull($kin[2]['top'][0]['prize']);
     }
 }

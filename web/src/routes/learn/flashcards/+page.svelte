@@ -190,7 +190,8 @@
               {/each}
             {/if}
           </section>
-          {#if !loading && home?.reviewSuggest}
+          <!-- Cùng điều kiện với suggestCard, kẻo tắt Gợi ý ôn tập vẫn chừa một cột trống bên phải. -->
+          {#if !loading && home?.reviewSuggest && session.can('home.review')}
             <aside style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
               {@render suggestCard()}
             </aside>

@@ -38,7 +38,7 @@
       {#if bai.tenVi}<span>{bai.tenVi}</span>{/if}
     </p>
   {/if}
-  <p class="muted gt-khoa-phu num">{soTrang} trang{soNghe && !st.dapAn ? ` · ${soNghe} file nghe` : ''}</p>
+  <p class="muted gt-khoa-phu num">{soTrang} trang{soNghe && !st.dapAn && session.can('books.audio') ? ` · ${soNghe} file nghe` : ''}</p>
 
   {#if st.dapAn}
     <p class="gt-khoa-loi-giai">Mở bài trong sách là xem được đáp án của bài đó.</p>

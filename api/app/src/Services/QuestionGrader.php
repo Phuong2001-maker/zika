@@ -140,14 +140,15 @@ final class QuestionGrader
     /** Chữ Hán: bỏ khoảng trắng và dấu câu Trung/Anh (06 §3). */
     public static function normZh(string $s): string
     {
-        $s = \Normalizer::isNormalized($s) ? $s : (string) \Normalizer::normalize($s);
+        // Qua Str::nfc: hosting thật thiếu intl (không có \Normalizer) thì gọi thẳng sẽ lỗi 500 khi lưu/chấm câu Sắp xếp.
+        $s = \Zika\Core\Str::nfc($s);
         return (string) preg_replace('/[\s，。！？、；：“”‘’（）《》,.!?;:\'"()\-]/u', '', $s);
     }
 
     /** Tiếng Việt: thường hoá, bỏ dấu câu, gộp khoảng trắng, GIỮ dấu thanh; bọc 2 đầu bằng khoảng trắng. */
     public static function normVi(string $s): string
     {
-        $s = \Normalizer::isNormalized($s) ? $s : (string) \Normalizer::normalize($s);
+        $s = \Zika\Core\Str::nfc($s);
         $s = mb_strtolower($s);
         $s = (string) preg_replace('/[.,!?;:"\'“”()\-…]/u', ' ', $s);
         $s = (string) preg_replace('/\s+/u', ' ', $s);

@@ -41,7 +41,7 @@ export function homePath(role: Role | null | undefined, features?: Features | nu
   if (role === 'admin') return '/admin';
   if (role === 'editor') return '/admin/lessons';
   if (features) {
-    for (const slug of ['flashcards', 'writing', 'dialogues', 'grammar', 'exercises', 'tests']) {
+    for (const slug of ['flashcards', 'writing', 'dialogues', 'grammar', 'exercises', 'tests', 'hsk30']) {
       if (featureAllowed(features, role ?? 'learner', `learn.${slug}`)) return `/learn/${slug}`;
     }
     return featureAllowed(features, role ?? 'learner', 'books') ? '/learn/books' : '/account';

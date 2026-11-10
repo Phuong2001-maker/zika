@@ -135,24 +135,26 @@
   </svg>
 {/snippet}
 
+<!-- Phần chữ theo Thông tin cuộc thi; số người đăng ký và nút Huỷ đăng ký theo quyền riêng của chúng,
+     kẻo tắt Thông tin là mất luôn đường huỷ đăng ký. -->
 {#snippet regNote()}
   {#if contest}
     {#if contest.status === 'upcoming'}
-      <div class="mc-registration" class:mc-registration-done={contest.registered}>
+      {#if session.can('community.contests.info')}<div class="mc-registration" class:mc-registration-done={contest.registered}>
         <span class="mc-reg-icon"><Icon name={contest.registered ? 'check' : 'quiz'} size={19} /></span>
         <div class="mc-reg-copy">
           <b>{contest.registered ? 'Bạn đã có tên trong cuộc thi' : 'Sẵn sàng thử sức cùng mọi người?'}</b>
           <span>{contest.registered ? `Bắt đầu ${contest.startsLabel} · Thi ${contest.durationMin} phút` : 'Đăng ký trước giờ bắt đầu để được vào thi.'}</span>
           {#if contest.registered}<small>Đến giờ, quay lại đây để vào làm bài nhé.</small>{/if}
         </div>
-      </div>
-      <div class="mc-reg-meta">
+      </div>{/if}
+      {#if session.can('community.contests.registrants') || (contest.registered && session.can('community.contests.register'))}<div class="mc-reg-meta">
         <FeatureGate name="community.contests.registrants"><button type="button" onclick={() => showRanking('registrants')}>
           <Icon name="users" size={14} /> {contest.registrantCount} người đăng ký
         </button></FeatureGate>
         {#if contest.registered && session.can('community.contests.register')}<button type="button" class="mc-cancel-registration" disabled={registering} onclick={() => setRegistered(false)}><Icon name="x" size={15} /> {registering ? 'Đang xử lý…' : 'Huỷ đăng ký'}</button>{/if}
-      </div>
-    {:else}
+      </div>{/if}
+    {:else if session.can('community.contests.info')}
     <p class="mc-reg-note">
       {#if contest.status === 'open' && contest.mockTestId && contest.questionCount === 0}
         Đề thi đang được cập nhật, bạn quay lại sau ít phút nhé.
@@ -250,7 +252,7 @@
     title="Quỹ thưởng tháng"
     onclick={openFund}
     >{@render bag()}<span class="mc-fund-text"
-      ><span>{session.can('fund') ? 'Quỹ tháng' : 'Cuộc thi'} <span class="mc-desktop-month">{month}</span></span>{#if session.can('fund')}<b>{money}</b>{/if}</span
+      ><span>{session.can('fund') ? 'Quỹ tháng' : session.can('community.contests') ? 'Cuộc thi' : 'Ghé Shopee'} <span class="mc-desktop-month">{month}</span></span>{#if session.can('fund')}<b>{money}</b>{/if}</span
     ></button
   >
   </FeatureGate>{/if}
@@ -303,7 +305,7 @@
         {/if}
       </div>
       {@render prizeCompact()}
-      <FeatureGate name="community.contests.info">{@render regNote()}</FeatureGate>
+      {@render regNote()}
       {#if canRegister}
         <button type="button" class="btn btn-son btn-lg mc-cta" disabled={registering} onclick={() => setRegistered(true)}
           >{registering ? 'Đang đăng ký…' : 'Đăng ký tham gia'}</button
@@ -514,13 +516,14 @@
           <p class="muted">
             {contestRanking?.contest ? 'Bạn nộp bài là có tên ở đây ngay.' : 'Bảng xếp hạng sẽ xuất hiện sau khi cuộc thi bắt đầu.'}
           </p>
-          <button
+          <!-- Hộp thông tin chỉ mở khi được xem Thông tin cuộc thi: không có quyền thì bấm chỉ đóng hộp, nên ẩn nút. -->
+          {#if session.can('community.contests.info')}<button
             type="button"
             class="btn btn-sm"
             onclick={() => {
               dialog = 'contest';
             }}>Thông tin cuộc thi</button
-          >
+          >{/if}
         </div>{/if}
     </div>
   </Modal>

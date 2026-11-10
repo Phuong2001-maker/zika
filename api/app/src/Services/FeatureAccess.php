@@ -79,19 +79,41 @@ final class FeatureAccess
         if (!self::allows($r->role(), $key)) throw new HttpError(403, 'FEATURE_DISABLED', 'Phần này hiện chưa được mở cho vai trò của bạn.');
     }
 
+    /**
+     * Đọc số giống hệt Validator::int ở controller (nhận cả "012"). Đọc khác controller thì gửi "012" hay một khoá lạ
+     * là quyền bị xét theo phần khác với phần controller thật sự mở.
+     */
+    private static function so(mixed $v): ?int
+    {
+        if (is_int($v)) return $v;
+        if (is_string($v) && preg_match('/^-?\d+$/', $v)) return (int) $v;
+        if (is_float($v) && floor($v) === $v) return (int) $v;
+        return null;
+    }
+
     /** Lượt kiểm tra đang làm vẫn đọc, lưu và nộp được dù admin vừa tắt quyền. */
     public static function ongoing(Request $r): bool
     {
         if (preg_match('~^/tests/attempts/(\d+)(?:/submit|/check)?$~', $r->path, $m)) {
             return Db::val('SELECT id FROM test_attempts WHERE id = ? AND user_id = ? AND submitted_at IS NULL', [(int) $m[1], $r->userId()]) !== null;
         }
-        $mock = filter_var($r->input('mockTestId'), FILTER_VALIDATE_INT) ?: null;
-        $lesson = filter_var($r->input('lessonId'), FILTER_VALIDATE_INT) ?: null;
+        $mock = self::so($r->input('mockTestId')) ?: null;
+        $lesson = self::so($r->input('lessonId')) ?: null;
         if (preg_match('~^/tests/(mock|lessons)/(\d+)/summary$~', $r->path, $m)) {
             if ($m[1] === 'mock') $mock = (int) $m[2]; else $lesson = (int) $m[2];
         }
         if ($r->path === '/tests/start' || isset($m[2])) {
-            if ($mock && !$lesson) return Db::val('SELECT id FROM test_attempts WHERE mock_test_id = ? AND user_id = ? AND submitted_at IS NULL', [$mock, $r->userId()]) !== null;
+            if ($mock && !$lesson) {
+                $sql = 'SELECT id FROM test_attempts WHERE mock_test_id = ? AND user_id = ? AND submitted_at IS NULL';
+                $args = [$mock, $r->userId()];
+                if ($r->path === '/tests/start') {
+                    // Chỉ làm tiếp đúng lượt dở: có lượt luyện tập dở không phải lý do mở lượt thi mới khi quyền đã tắt.
+                    $mode = $r->input('mode');
+                    $sql .= ' AND mode = ?';
+                    $args[] = TestService::modeFor(null, $mock, is_string($mode) ? $mode : 'exam');
+                }
+                return Db::val($sql, $args) !== null;
+            }
             if ($lesson && !$mock) return Db::val('SELECT id FROM test_attempts WHERE lesson_id = ? AND user_id = ? AND submitted_at IS NULL', [$lesson, $r->userId()]) !== null;
         }
         return false;
@@ -122,7 +144,9 @@ final class FeatureAccess
         elseif (str_starts_with($p, '/exercises/')) $key = 'learn.exercises';
         elseif (str_starts_with($p, '/writing/')) $key = 'learn.writing';
         elseif (str_starts_with($p, '/tests/')) {
-            $mock = filter_var($r->input('mockTestId') ?? $r->input('mockId'), FILTER_VALIDATE_INT) ?: null;
+            // Chỉ đọc đúng trường controller dùng. Có lessonId thì luôn là kiểm tra của bài (gửi kèm đề thì controller báo lỗi).
+            $mock = self::so($r->input('mockTestId')) ?: null;
+            if (self::so($r->input('lessonId'))) $mock = null;
             if (preg_match('~^/tests/mock/(\d+)/summary$~', $p, $m)) $mock = (int) $m[1];
             if (str_starts_with($p, '/tests/attempts/')) $mock = Db::val('SELECT mock_test_id FROM test_attempts WHERE id = ? AND user_id = ?', [$r->id(), $r->userId()]);
             $isContest = $mock && Db::val('SELECT id FROM contests WHERE mock_test_id = ? LIMIT 1', [$mock]) !== null;

@@ -26,10 +26,13 @@ final class ContestController
         return ContestService::ranking($r->userId());
     }
 
-    /** GET /contest/history — cuộc thi đã kết thúc. */
+    /** GET /contest/history — cuộc thi đã kết thúc, kèm giải minh họa quản trị nhập. */
     public function history(Request $r): array
     {
-        return ContestService::history($r->userId());
+        return ContestService::history(
+            $r->userId(),
+            rewards: \Zika\Services\FeatureAccess::allows($r->role(), 'community.contests.rewards'),
+        );
     }
 
     /** GET /contest/study-top — Top chăm học tháng này. */

@@ -128,7 +128,7 @@ final class TestService
     }
 
     /** Chế độ luyện tập chỉ có ở đề HSK 3.0; bài kiểm tra, thi thử cuối cấp và cuộc thi luôn là thi thật. */
-    private static function modeFor(?int $lessonId, ?int $mockTestId, string $mode): string
+    public static function modeFor(?int $lessonId, ?int $mockTestId, string $mode): string
     {
         if ($mode !== 'practice' || $lessonId !== null || $mockTestId === null) {
             return 'exam';

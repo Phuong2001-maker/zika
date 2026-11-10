@@ -45,6 +45,10 @@ export interface RankRow {
   isMe: boolean;
   isDemo?: boolean;
   avatarUrl?: string | null;
+  /** Chỉ có ở giải minh họa trong lịch sử; null khi vai trò bị tắt thông tin giải. */
+  prize?: string | null;
+  amount?: number | null;
+  rewardStatus?: 'cho' | 'dang-xu-ly' | 'da-trao' | null;
 }
 
 export interface Ranking {
@@ -74,7 +78,10 @@ export interface StudyTop {
   count: number;
 }
 
-/** Cuộc thi đã kết thúc. Không có số tiền: quỹ không chụp lại theo từng cuộc thi. */
+/**
+ * Cuộc thi đã kết thúc. Cuộc thi thật không có số tiền: quỹ không chụp lại theo từng cuộc thi.
+ * Mục isDemo là giải quản trị nhập ở Người học minh họa (id âm): mỗi dòng top có tên giải, tiền, trạng thái riêng.
+ */
 export interface PastContest {
   id: number;
   title: string;
@@ -82,6 +89,9 @@ export interface PastContest {
   participants: number;
   top: RankRow[];
   me: RankRow | null;
+  isDemo?: boolean;
+  /** "11/2026", chỉ có ở mục isDemo. */
+  rewardMonth?: string;
 }
 
 class ContestStore {

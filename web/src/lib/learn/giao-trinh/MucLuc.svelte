@@ -1,5 +1,6 @@
 <script lang="ts">
   import Icon from '$lib/components/Icon.svelte';
+  import { session } from '$lib/stores/session.svelte';
   import type { DocSach } from './doc-sach.svelte';
 
   // Mục lục của phần đang xem (sách hoặc đáp án). Mỗi bài cho biết luôn có file nghe, có đáp án hay không,
@@ -30,8 +31,8 @@
         </span>
         <span class="gt-ml-phai">
           {#if khoa}<span class="gt-ml-khoa" title={st.laBaiKe(b.so) ? 'Bài mở tiếp được bằng 1 điểm' : 'Chưa mở'}><Icon name="lock" size={14} />{st.laBaiKe(b.so) ? 'Mở được' : ''}</span>{/if}
-          {#if !st.dapAn && soNghe && !khoa}<span class="gt-ml-co" title="{soNghe} file nghe"><Icon name="headphones" size={14} />{soNghe}</span>{/if}
-          {#if !st.dapAn && b.so in st.dapAnTheoBai}<span class="gt-ml-co" title="Có đáp án"><Icon name="answer" size={14} /></span>{/if}
+          {#if !st.dapAn && soNghe && !khoa && session.can('books.audio')}<span class="gt-ml-co" title="{soNghe} file nghe"><Icon name="headphones" size={14} />{soNghe}</span>{/if}
+          {#if !st.dapAn && b.so in st.dapAnTheoBai && session.can('books.answers')}<span class="gt-ml-co" title="Có đáp án"><Icon name="answer" size={14} /></span>{/if}
           <span class="num">tr. {b.trang}</span>
         </span>
       </button>
