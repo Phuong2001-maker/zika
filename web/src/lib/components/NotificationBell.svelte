@@ -38,7 +38,8 @@
 
 <svelte:window onclick={ngoai} onkeydown={(e) => e.key === 'Escape' && (mo = false)} />
 
-{#if session.can('header.notifications') && session.can('community.notifications')}
+<!-- Thông báo gửi theo tài khoản: khách học thử không có hộp thư nên không hiện chuông. -->
+{#if session.user && session.can('header.notifications') && session.can('community.notifications')}
 <div class="nb" bind:this={goc}>
   <button
     type="button"

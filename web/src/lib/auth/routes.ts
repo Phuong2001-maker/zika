@@ -14,7 +14,19 @@ function matches(path: string, prefix: string): boolean {
 }
 
 export function isPublicRoute(path: string): boolean {
-  return PUBLIC_PREFIXES.some((p) => matches(path, p));
+  return PUBLIC_PREFIXES.some((p) => matches(path, p)) || isGuestTrialRoute(path);
+}
+
+/**
+ * Khách học thử trọn cấp 1 ở mọi phần trong Chuyển nhanh: 6 phần học (giáo trình mặc định, Quyển 1 / HSK 1, kể cả
+ * làm bài Kiểm tra), Thi thử HSK 3.0 (đề HSK 1) và Giáo trình (quyển đầu). Cấp sau và bài tổng hợp đi qua đăng nhập.
+ * Đề HSK 3.0 và quyển sách không biết cấp từ URL nên để server chặn (401/khoá), web đổi 401 thành trang đăng nhập.
+ */
+export function isGuestTrialRoute(path: string): boolean {
+  if (/^\/learn\/(?:hsk30|books)(?:\/[a-z0-9]+)?\/?$/.test(path)) return true;
+  const m = path.match(/^\/learn\/(flashcards|exercises|tests|writing|dialogues|grammar)(?:\/hsk\/(\d+)(?:\/lesson\/(\d+))?)?\/?$/);
+  if (!m) return false;
+  return m[2] === undefined || Number(m[2]) === 1;
 }
 
 export function isGuestOnly(path: string): boolean {

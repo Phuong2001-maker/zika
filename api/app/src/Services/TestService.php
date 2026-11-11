@@ -118,6 +118,53 @@ final class TestService
     }
 
     /**
+     * Lượt của khách học thử (Core/Khach, migration 028): chỉ Kiểm tra của bài cấp 1 thuộc giáo trình mặc định và đề
+     * Thi thử HSK 3.0 cấp 1. Không có cuộc thi, không ghi tiến độ; làm tiếp lượt dở và giới hạn lượt giống học viên.
+     * @return array<string,mixed> khối dữ liệu cho màn làm bài, hoặc ['resultAttemptId' => int]
+     */
+    public static function startKhach(string $khach, ?int $lessonId, ?int $mockTestId, string $mode = 'exam'): array
+    {
+        self::assertChoKhach($lessonId, $mockTestId);
+        $mode = self::modeFor($lessonId, $mockTestId, $mode);
+        $scope = 'guest_key = ? AND ' . self::scopeSql($lessonId);
+        $open = Db::one("SELECT * FROM test_attempts WHERE $scope AND mode = ? AND submitted_at IS NULL ORDER BY id DESC LIMIT 1", [$khach, $lessonId ?? $mockTestId, $mode]);
+        if ($open !== null) {
+            if (self::isOverdue($open)) {
+                self::grade((int) $open['id'], true);
+                return ['resultAttemptId' => (int) $open['id']];
+            }
+            [$cfg] = self::source($lessonId, $mockTestId, true);
+            return self::payload($open, $cfg);
+        }
+        [$cfg, $questions] = self::source($lessonId, $mockTestId);
+        $limit = $cfg['attemptsLimit'] ?? null;
+        if ($limit !== null && (int) Db::val("SELECT COUNT(*) FROM test_attempts WHERE $scope AND submitted_at IS NOT NULL", [$khach, $lessonId ?? $mockTestId]) >= $limit) {
+            throw new HttpError(409, 'ATTEMPTS_EXCEEDED');
+        }
+        if ($questions === []) {
+            throw HttpError::invalid('Bài này chưa có câu kiểm tra nào.');
+        }
+        return self::payload(self::create(null, $lessonId, $mockTestId, $cfg, $questions, null, $mode, $khach), $cfg);
+    }
+
+    /** Khách chỉ làm được phần học thử; ngoài phạm vi thì 401 để web chuyển sang đăng nhập. */
+    private static function assertChoKhach(?int $lessonId, ?int $mockTestId): void
+    {
+        if ($lessonId !== null) {
+            $l = Db::one('SELECT curriculum_id, level_id FROM lessons WHERE id = ?', [$lessonId]);
+            $ok = $l !== null && (int) $l['curriculum_id'] === Curricula::defaultId() && (int) $l['level_id'] === 1;
+        } else {
+            // Đề cuộc thi cần đăng ký theo tài khoản; đề thi thử cuối cấp cũ gắn giáo trình nên cũng để người đã đăng nhập.
+            $m = Db::one('SELECT level_id, kind, for_contest FROM mock_tests WHERE id = ?', [$mockTestId]);
+            $ok = $m !== null && $m['kind'] === 'hsk30' && !(int) $m['for_contest'] && (int) $m['level_id'] === 1
+                && ContestService::openContest((int) $mockTestId) === null;
+        }
+        if (!$ok) {
+            throw new HttpError(401, 'UNAUTHENTICATED', 'Đăng nhập để làm đề này.');
+        }
+    }
+
+    /**
      * Đề soạn theo khung HSK 3.0 (chia phần Nghe/Đọc/Viết/Nói, có câu nói, câu chọn tranh): đề Thi thử HSK 3.0 và
      * đề của cuộc thi (tab Đề thi, 10/11) — dùng chung màn soạn và màn làm bài. Đề thi thử cuối cấp cũ thì không.
      * @param array<string,mixed> $m dòng mock_tests
@@ -207,7 +254,7 @@ final class TestService
      * @param array<string,mixed>|null $contest
      * @return array<string,mixed> dòng test_attempts vừa tạo
      */
-    private static function create(int $userId, ?int $lessonId, ?int $mockTestId, array $cfg, array $questions, ?array $contest = null, string $mode = 'exam'): array
+    private static function create(?int $userId, ?int $lessonId, ?int $mockTestId, array $cfg, array $questions, ?array $contest = null, string $mode = 'exam', ?string $khach = null): array
     {
         if ($cfg['shuffleQuestions']) {
             shuffle($questions);
@@ -232,6 +279,7 @@ final class TestService
 
         $id = Db::insert('test_attempts', [
             'user_id' => $userId,
+            'guest_key' => $khach,
             'lesson_id' => $lessonId,
             'mock_test_id' => $mockTestId,
             'contest_id' => $contest === null ? null : (int) $contest['id'],
@@ -406,8 +454,8 @@ final class TestService
         if ($set !== []) {
             Db::update('test_attempts', $set, ['id' => (int) $a['id']]);
         }
-        // Mở đề rồi để đó không phải là học; có câu trả lời mới tính.
-        if (!empty($in['answers']) && is_array($in['answers'])) {
+        // Mở đề rồi để đó không phải là học; có câu trả lời mới tính. Lượt của khách không có ai để tính.
+        if (!empty($in['answers']) && is_array($in['answers']) && $a['user_id'] !== null) {
             ProgressService::markStudied((int) $a['user_id']);
         }
     }
@@ -495,10 +543,11 @@ final class TestService
 
         // Ghi tiến độ cho bài kiểm tra của bài học (đề thi thử không gắn vào bài nào).
         // Chấm luôn thắng: bài bị ẩn hoặc học viên đã đổi giáo trình giữa chừng thì bỏ qua ghi tiến độ, không làm hỏng việc chấm.
-        if (!$auto) {
+        // Lượt của khách học thử chỉ có kết quả, không có tiến độ hay ngày học để ghi.
+        if (!$auto && $a['user_id'] !== null) {
             ProgressService::markStudied((int) $a['user_id']);
         }
-        if ($a['lesson_id'] !== null && ProgressService::canSee((int) $a['lesson_id'], (int) $a['user_id'])) {
+        if ($a['lesson_id'] !== null && $a['user_id'] !== null && ProgressService::canSee((int) $a['lesson_id'], (int) $a['user_id'])) {
             $userId = (int) $a['user_id'];
             $lessonId = (int) $a['lesson_id'];
             ProgressService::complete($userId, $lessonId, 'kt', !$auto);
@@ -608,8 +657,8 @@ final class TestService
                 $out['next'] = ContentBuilder::nextLesson($l, false, 'cnt_kt');
             }
             $out['attemptsUsed'] = (int) Db::val(
-                "SELECT COUNT(*) FROM test_attempts WHERE user_id = ? AND lesson_id = ? AND submitted_at IS NOT NULL",
-                [(int) $a['user_id'], (int) $a['lesson_id']],
+                'SELECT COUNT(*) FROM test_attempts WHERE ' . ($a['user_id'] === null ? 'guest_key' : 'user_id') . ' = ? AND lesson_id = ? AND submitted_at IS NOT NULL',
+                [$a['user_id'] ?? $a['guest_key'], (int) $a['lesson_id']],
             );
             $out['attemptsLimit'] = $cfg['attemptsLimit'];
         }

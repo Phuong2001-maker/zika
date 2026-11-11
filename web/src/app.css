@@ -414,10 +414,6 @@ span.qn { cursor: default; }  /* lưới số câu ở bài tập chỉ để xe
 .track { position: relative; height: 10px; border-radius: 999px; background: var(--track); }
 .track > i { position: absolute; top: 0; bottom: 0; background: var(--son); border-radius: 999px; }
 
-/* Đăng nhập */
-.wall { background: #DCE8F3 url(/login-greatwall.svg) 50% 62% / cover no-repeat; }
-.sticker { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--sh-md); }
-
 /* =====================================================================
    Quản trị (luôn dùng bảng màu sáng)
    ===================================================================== */

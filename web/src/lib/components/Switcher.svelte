@@ -13,6 +13,8 @@
   let open = $state(false);
   let root: HTMLDivElement | undefined = $state();
   let nut: HTMLButtonElement | undefined = $state();
+  // Khách thấy đúng các phần học viên thấy (session.can dùng quyền học viên khi chưa đăng nhập): hiện phần đã tắt
+  // thì khách bấm vào bị server chặn, đăng nhập xong phần đó lại biến mất.
   const visibleParts = $derived(PARTS.filter((p) => session.can(`learn.${p.slug}`)));
   // Thi thử HSK 3.0 không gắn giáo trình nào nên đứng riêng, cạnh 6 phần học; tắt bật ở Cài đặt → Quyền truy cập.
   const coHsk30 = $derived(session.can('learn.hsk30'));

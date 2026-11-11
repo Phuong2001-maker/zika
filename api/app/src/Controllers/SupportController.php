@@ -22,6 +22,7 @@ final class SupportController
      */
     public function links(Request $r): array
     {
+        $role = FeatureAccess::roleOf($r);
         $icon = null;
         $fund = [];
         foreach (self::visibleLinks() as $l) {
@@ -34,9 +35,9 @@ final class SupportController
             }
         }
         return [
-            'icon' => FeatureAccess::allows($r->role(), 'support.buddy') ? $icon : null,
-            'fund' => FeatureAccess::allows($r->role(), 'support.links') ? $fund : [],
-            'monthlyFund' => FeatureAccess::allows($r->role(), 'fund') ? self::monthlyFund() : ['amount' => null, 'month' => '', 'updatedOn' => null],
+            'icon' => FeatureAccess::allows($role, 'support.buddy') ? $icon : null,
+            'fund' => FeatureAccess::allows($role, 'support.links') ? $fund : [],
+            'monthlyFund' => FeatureAccess::allows($role, 'fund') ? self::monthlyFund() : ['amount' => null, 'month' => '', 'updatedOn' => null],
             'clickedToday' => $r->user !== null && self::daBamHomNay($r->userId()),
         ];
     }

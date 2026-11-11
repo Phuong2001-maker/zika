@@ -11,6 +11,7 @@
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import { PART, PART_TEXTS } from '$lib/parts';
+  import { session } from '$lib/stores/session.svelte';
 
   // Khuôn “Chọn cấp” dùng chung cho 5 phần: Bài tập, Kiểm tra, Luyện viết, Hội thoại, Ngữ pháp (07 §5.3).
   let { part }: { part: Exclude<Part, 'lt'> } = $props();
@@ -27,7 +28,9 @@
     try {
       const [lv, hm] = await Promise.all([
         api.get<LevelInfo[]>('/learn/levels'),
-        api.get<HomeProgress>('/progress/home', { query: { part } }),
+        session.user
+          ? api.get<HomeProgress>('/progress/home', { query: { part } })
+          : Promise.resolve<HomeProgress>({ currentLevelId: 1, levels: [], continue: null, reviewSuggest: null }),
       ]);
       levels = lv;
       home = hm;
@@ -65,7 +68,7 @@
       {:else}
         <section aria-label={cap.cacCap} class="lv-grid m">
           {#each (levels ?? []).filter((l) => l.visible) as l (l.id)}
-            <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} slug={info.slug} past={texts.past} mobile />
+            <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} slug={info.slug} past={texts.past} mobile locked={!session.user && l.id > 1} />
           {:else}<EmptyState title="Chưa có nội dung được mở." />
           {/each}
         </section>
@@ -91,7 +94,7 @@
           {#each Array.from({ length: 6 }) as _, k (k)}<Skeleton h="190px" r={16} />{/each}
         {:else}
           {#each (levels ?? []).filter((l) => l.visible) as l (l.id)}
-            <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} slug={info.slug} past={texts.past} />
+            <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} slug={info.slug} past={texts.past} locked={!session.user && l.id > 1} />
           {:else}<EmptyState title="Chưa có nội dung được mở." />
           {/each}
         {/if}

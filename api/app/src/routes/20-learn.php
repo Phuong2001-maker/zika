@@ -11,22 +11,23 @@ use Zika\Controllers\ProgressController as Prog;
 
 // Nội dung học (04 §4) và tiến độ (04 §5).
 return [
-    ['GET',  '/learn/levels', [Learn::class, 'levels'], 'L'],
+    ['GET',  '/learn/levels', [Learn::class, 'levels'], 'P'],
     // Thi thử HSK 3.0: kho đề chung, không theo giáo trình (migration 027).
-    ['GET',  '/learn/hsk30', [Hsk30::class, 'index'], 'L'],
-    ['GET',  '/learn/levels/{id}/lessons', [Learn::class, 'levelLessons'], 'L'],
-    ['GET',  '/learn/lessons/{id}/{part:flashcards|exercises|test|writing|dialogue|grammar}', [Learn::class, 'lesson'], 'L'],
+    ['GET',  '/learn/hsk30', [Hsk30::class, 'index'], 'P'],
+    ['GET',  '/learn/levels/{id}/lessons', [Learn::class, 'levelLessons'], 'P'],
+    ['GET',  '/learn/lessons/{id}/{part:flashcards|exercises|test|writing|dialogue|grammar}', [Learn::class, 'lesson'], 'P'],
     ['GET',  '/learn/levels/{id}/review/{part:lt|bt|kt|lv|ht|np}', [Learn::class, 'review'], 'L'],
-    // Ảnh trang giáo trình: phải đăng nhập, kèm mã ký ?t= của chính tài khoản, và bài đó đã mở bằng điểm (BookAccess).
+    // Ảnh trang giáo trình: kèm mã ký ?t= và bài đó đã mở (BookAccess). Khách chưa đăng nhập chỉ đọc quyển đầu của bộ
+    // sách thuộc giáo trình mặc định (trangThaiKhach); mở bài bằng điểm vẫn phải đăng nhập.
     // Thư mục ảnh bị .htaccess chặn nên không có lối nào khác. Không tính giới hạn request: cuộn một lượt là hàng trăm ảnh.
-    ['GET',  '/learn/books', [Book::class, 'index'], 'L'],
-    ['GET',  '/learn/books/{ma:(?:hsk|hn)[1-6]}', [Book::class, 'show'], 'L'],
-    ['GET',  '/learn/books/{ma:(?:hsk|hn)[1-6]}/quyen', [Book::class, 'access'], 'L'],
+    ['GET',  '/learn/books', [Book::class, 'index'], 'P'],
+    ['GET',  '/learn/books/{ma:(?:hsk|hn)[1-6]}', [Book::class, 'show'], 'P'],
+    ['GET',  '/learn/books/{ma:(?:hsk|hn)[1-6]}/quyen', [Book::class, 'access'], 'P'],
     ['POST', '/learn/books/{ma:(?:hsk|hn)[1-6]}/mo/{bai:[0-9]{1,3}}', [Book::class, 'unlock'], 'L'],
-    ['GET',  '/learn/books/{ma:(?:hsk|hn)[1-6]}/{trang:bia|[0-9]{1,3}}', [Book::class, 'page'], 'L', ['rate' => false]],
-    ['GET',  '/learn/books/{ma:(?:hsk|hn)[1-6]}/dap-an/{trang:[0-9]{1,3}}', [Book::class, 'answer'], 'L', ['rate' => false]],
+    ['GET',  '/learn/books/{ma:(?:hsk|hn)[1-6]}/{trang:bia|[0-9]{1,3}}', [Book::class, 'page'], 'P', ['rate' => false]],
+    ['GET',  '/learn/books/{ma:(?:hsk|hn)[1-6]}/dap-an/{trang:[0-9]{1,3}}', [Book::class, 'answer'], 'P', ['rate' => false]],
     // Trình duyệt hỏi file nghe thành nhiều đoạn (Range) khi tua, nên cũng không tính giới hạn request.
-    ['GET',  '/learn/books/{ma:(?:hsk|hn)[1-6]}/nghe/{so:[0-9]{1,3}}', [Book::class, 'audio'], 'L', ['rate' => false]],
+    ['GET',  '/learn/books/{ma:(?:hsk|hn)[1-6]}/nghe/{so:[0-9]{1,3}}', [Book::class, 'audio'], 'P', ['rate' => false]],
 
     // Điểm mở bài (migration 019).
     ['GET',  '/learn/points', [Points::class, 'points'], 'L'],

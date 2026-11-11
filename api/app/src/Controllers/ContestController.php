@@ -15,36 +15,37 @@ final class ContestController
     /** GET /contest/current */
     public function current(Request $r): array
     {
-        $c = ContestService::current($r->userId());
-        if ($c !== null && !\Zika\Services\FeatureAccess::allows($r->role(), 'community.contests.registrants')) $c['registrantCount'] = 0;
-        return ['contest' => $c, 'prizes' => \Zika\Services\FeatureAccess::allows($r->role(), 'community.contests.rewards') ? ContestService::prizes() : []];
+        $role = \Zika\Services\FeatureAccess::roleOf($r);
+        $c = ContestService::current($r->user === null ? 0 : $r->userId());
+        if ($c !== null && !\Zika\Services\FeatureAccess::allows($role, 'community.contests.registrants')) $c['registrantCount'] = 0;
+        return ['contest' => $c, 'prizes' => \Zika\Services\FeatureAccess::allows($role, 'community.contests.rewards') ? ContestService::prizes() : []];
     }
 
     /** GET /contest/ranking */
     public function ranking(Request $r): array
     {
-        return ContestService::ranking($r->userId());
+        return ContestService::ranking($r->user === null ? 0 : $r->userId());
     }
 
     /** GET /contest/history — cuộc thi đã kết thúc, kèm giải minh họa quản trị nhập. */
     public function history(Request $r): array
     {
         return ContestService::history(
-            $r->userId(),
-            rewards: \Zika\Services\FeatureAccess::allows($r->role(), 'community.contests.rewards'),
+            $r->user === null ? 0 : $r->userId(),
+            rewards: \Zika\Services\FeatureAccess::allows(\Zika\Services\FeatureAccess::roleOf($r), 'community.contests.rewards'),
         );
     }
 
     /** GET /contest/study-top — Top chăm học tháng này. */
     public function studyTop(Request $r): array
     {
-        return TopHoc::thang($r->userId());
+        return TopHoc::thang($r->user === null ? 0 : $r->userId());
     }
 
     /** GET /contest/registrants */
     public function registrants(Request $r): array
     {
-        return ContestService::registrants($r->userId());
+        return ContestService::registrants($r->user === null ? 0 : $r->userId());
     }
 
     /** POST /contest/register */

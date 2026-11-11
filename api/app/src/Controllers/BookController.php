@@ -14,7 +14,8 @@ use Zika\Services\BookAccess;
  *
  * Mỗi quyển là một thư mục `uploads/giao-trinh/<mã>/` do `data/giao-trinh/dung-sach.py` dựng, trong đó `sach.json`
  * mô tả tên, mục lục, file nghe, đáp án. Quyển nào không có file nghe hay đáp án thì mảng rỗng / null, web tự ẩn.
- * Sách có bản quyền: .htaccess chặn thẳng thư mục này, chỉ còn lối qua đây, và mọi route đòi đăng nhập.
+ * Sách có bản quyền: .htaccess chặn thẳng thư mục này, chỉ còn lối qua đây. Khách chưa đăng nhập (11/11) chỉ đọc
+ * quyển đầu của bộ sách thuộc giáo trình mặc định (BookAccess::trangThaiKhach); mở bài bằng điểm vẫn đòi đăng nhập.
  *
  * Học viên chỉ thấy bộ sách của giáo trình mình học (Hán ngữ cho giáo trình gọi cấp "Quyển", HSK cho "HSK"),
  * biên tập và quản trị thấy cả hai bộ và đọc tự do. Học viên chỉ nhận được file của bài đã mở bằng điểm (BookAccess),
@@ -101,6 +102,9 @@ final class BookController
         if (in_array($bai, BookAccess::baiAn($tt, $s), true)) {
             throw self::an();
         }
+        if ($r->user === null) {
+            throw new HttpError(401, 'UNAUTHENTICATED', 'Đăng nhập để mở bài bằng điểm.');
+        }
         if (!$r->isStaff()) {
             BookAccess::moBai($r->userId(), (string) $s['bo'], (string) $s['ma'], $bai);
         }
@@ -181,7 +185,6 @@ final class BookController
                 }
             }
         }
-        $uid = $r->userId();
         $an = BookAccess::baiAn($tt, $s);
         return [
             'tuDo'  => $tt['tuDo'],
@@ -189,8 +192,8 @@ final class BookController
             'mo'    => array_values(array_diff($tt['tuDo'] ? array_map('intval', array_column($s['bai'], 'so')) : array_keys($tt['mo'][$ma] ?? []), $an)),
             'an'    => $an,
             'ke'    => $ke,
-            'diem'  => $tt['tuDo'] ? 0 : BookAccess::soDiem($uid),
-            've'    => BookAccess::ve($uid, $ma),
+            'diem'  => $tt['tuDo'] || $r->user === null ? 0 : BookAccess::soDiem($r->userId()),
+            've'    => BookAccess::ve(self::chuVe($r), $ma),
             'veGiay' => BookAccess::VE_GIAY,
         ];
     }
@@ -198,12 +201,19 @@ final class BookController
     /** @return array<string,mixed> */
     private function trangThai(Request $r, string $bo): array
     {
-        return BookAccess::trangThai($r->userId(), $bo, $r->isStaff());
+        // Khách học thử đọc trọn quyển đầu của bộ sách thuộc giáo trình mặc định, quyển sau phải đăng nhập.
+        return $r->user === null ? BookAccess::trangThaiKhach($bo) : BookAccess::trangThai($r->userId(), $bo, $r->isStaff());
+    }
+
+    /** Mã ký đường dẫn gắn với tài khoản; khách dùng chung một chủ thể vì phần khách đọc được là như nhau. */
+    private static function chuVe(Request $r): int|string
+    {
+        return $r->user === null ? BookAccess::KHACH : $r->userId();
     }
 
     private function kiemVe(Request $r, string $ma): void
     {
-        if (!BookAccess::veHopLe((string) $r->q('t', ''), $r->userId(), $ma)) {
+        if (!BookAccess::veHopLe((string) $r->q('t', ''), self::chuVe($r), $ma)) {
             throw new HttpError(403, 'TOKEN_INVALID', 'Đường dẫn trang sách đã hết hạn. Tải lại trang để đọc tiếp.');
         }
     }
@@ -249,7 +259,7 @@ final class BookController
 
     private static function boCua(Request $r): string
     {
-        return BookAccess::boCuaNguoi($r->userId());
+        return $r->user === null ? BookAccess::boKhach() : BookAccess::boCuaNguoi($r->userId());
     }
 
     /** @return array<string,mixed> */

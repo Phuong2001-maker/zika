@@ -49,7 +49,7 @@ final class Curricula
         if ($r->isPreview() && ($id = $r->qInt('curriculum')) > 0) {
             return $id;
         }
-        return self::ofUser($r->userId());
+        return $r->user === null ? self::defaultId() : self::ofUser($r->userId());
     }
 
     /** Bài của giáo trình khác coi như không có, kể cả khi người học tự gõ id trên URL. */

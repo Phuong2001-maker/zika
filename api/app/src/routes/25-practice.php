@@ -14,11 +14,12 @@ return [
 
     ['GET',   '/tests/lessons/{id}/summary', [Test::class, 'lessonSummary'], 'L'],
     ['GET',   '/tests/mock/{id}/summary', [Test::class, 'mockSummary'], 'L'],
-    ['POST',  '/tests/start', [Test::class, 'start'], 'L'],
-    ['GET',   '/tests/attempts/{id}', [Test::class, 'show'], 'L'],
-    ['PATCH', '/tests/attempts/{id}', [Test::class, 'save'], 'L'],
-    ['POST',  '/tests/attempts/{id}/submit', [Test::class, 'submit'], 'L'],
-    ['POST',  '/tests/attempts/{id}/check', [Test::class, 'check'], 'L'],
+    // Khách học thử làm được Kiểm tra / Thi thử HSK 3.0 cấp 1: lượt gắn cookie zk_khach (TestService::startKhach).
+    ['POST',  '/tests/start', [Test::class, 'start'], 'P'],
+    ['GET',   '/tests/attempts/{id}', [Test::class, 'show'], 'P'],
+    ['PATCH', '/tests/attempts/{id}', [Test::class, 'save'], 'P'],
+    ['POST',  '/tests/attempts/{id}/submit', [Test::class, 'submit'], 'P'],
+    ['POST',  '/tests/attempts/{id}/check', [Test::class, 'check'], 'P'],
 
     ['POST',  '/writing/result', [Writing::class, 'result'], 'L'],
     ['GET',   '/writing/weak', [Writing::class, 'weak'], 'L'],

@@ -94,8 +94,9 @@ final class Hsk30Test extends DbTestCase
         self::assertSame([], PartContent::reviewKt(2, false, 1)['mockTests']);
         self::assertSame('E', Router::match('GET', '/admin/hsk30')['auth']);
         self::assertSame('E', Router::match('POST', '/admin/hsk30')['auth']);
-        self::assertSame('L', Router::match('GET', '/learn/hsk30')['auth']);
-        self::assertSame('L', Router::match('POST', '/tests/attempts/5/check')['auth']);
+        // Khách học thử làm được đề cấp 1 (TestService::startKhach), nên kho đề và lượt làm bài mở công khai.
+        self::assertSame('P', Router::match('GET', '/learn/hsk30')['auth']);
+        self::assertSame('P', Router::match('POST', '/tests/attempts/5/check')['auth']);
     }
 
     public function testCauNoiKhongMangDiemVaLuonOPhanNoi(): void
@@ -137,6 +138,37 @@ final class Hsk30Test extends DbTestCase
             self::assertSame([$de], array_column($ds[0]['exams'], 'id'));
             self::assertSame(['listening' => 1, 'reading' => 1, 'writing' => 1, 'speaking' => 1], $ds[0]['exams'][0]['sections']);
         }
+    }
+
+    public function testKhachHocThuLamDeCap1TheoCookieKhongGhiTienDo(): void
+    {
+        $de = $this->deMau();
+        $deCap2 = $this->taoDe(2, 'HSK 2 · Đề 1');
+        Db::update('mock_tests', ['status' => 'published'], ['id' => $deCap2]);
+        $cookie = ['zk_khach' => str_repeat('a', 43)];
+        $khach = function (string $method, string $path, array $body = [], array $params = [], ?array $cookies = null) use ($cookie): Request {
+            $r = new Request($method, $path, body: $body, cookies: $cookies ?? $cookie, ip: '10.0.0.1');
+            $r->params = $params;
+            return $r;
+        };
+        $batDau = fn (int $deId, ?array $cookies = null) => $this->json((new TestController())->start($khach('POST', '/tests/start', ['mockTestId' => $deId, 'mode' => 'exam'], cookies: $cookies)));
+
+        $a = $batDau($de);
+        $id = (int) $a['attemptId'];
+        $dong = Db::one('SELECT user_id, guest_key FROM test_attempts WHERE id = ?', [$id]);
+        self::assertSame([null, hash('sha256', $cookie['zk_khach'])], [$dong['user_id'], $dong['guest_key']], 'DB chỉ giữ mã đã băm');
+        // Tải lại trang thì làm tiếp đúng lượt cũ; khách khác (cookie khác) không chạm được lượt này.
+        self::assertSame($id, (int) $batDau($de)['attemptId']);
+        $nop = fn (array $cookies) => (new TestController())->submit($khach('POST', "/tests/attempts/$id/submit", ['answers' => [(string) $a['questions'][0]['id'] => 0]], ['id' => (string) $id], $cookies));
+        self::assertSame(404, $this->loi(fn () => $nop(['zk_khach' => str_repeat('b', 43)])));
+        self::assertSame(4, $nop($cookie)['questionCount']);
+        self::assertSame(0, (int) Db::val('SELECT COUNT(*) FROM study_days'), 'Khách không có ngày học để ghi');
+        self::assertSame(1, (new Hsk30Controller())->index($khach('GET', '/learn/hsk30'))['levels'][0]['exams'][0]['best']['attempts']);
+
+        // Đề cấp 2 phải đăng nhập. Trình duyệt chưa có mã thì được cấp cookie mới.
+        self::assertSame(401, $this->loi(fn () => $batDau($deCap2)));
+        $batDau($de, []);
+        self::assertArrayHasKey('zk_khach', \Zika\Core\Cookie::pending());
     }
 
     public function testThiThatGiauDapAnVaKhongChoXemTungCau(): void

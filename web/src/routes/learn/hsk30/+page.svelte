@@ -10,6 +10,8 @@
   import Skeleton from '$lib/components/Skeleton.svelte';
   import EmptyState from '$lib/components/EmptyState.svelte';
   import { PHAN, type SoCauPhan } from '$lib/learn/thi-hsk/cau-truc';
+  import { session } from '$lib/stores/session.svelte';
+  import { loginUrl } from '$lib/auth/routes';
 
   // Thi thử HSK 3.0 · danh sách đề theo cấp. Kho đề chung, học viên học giáo trình nào cũng thấy như nhau.
   interface De {
@@ -28,6 +30,8 @@
 
   const capChon = $derived(Number(page.url.searchParams.get('cap')) || ds?.[0]?.level || 1);
   const capHien = $derived(ds?.find((c) => c.level === capChon) ?? ds?.[0] ?? null);
+  /** Khách học thử chỉ làm đề HSK 1 (server: TestService::startKhach). */
+  const khoaCap = $derived(!session.user && (capHien?.level ?? 1) > 1);
 
   async function tai(): Promise<void> {
     loi = false;
@@ -46,7 +50,7 @@
 
 <svelte:head><title>Thi thử HSK 3.0 · Zìkǎ</title></svelte:head>
 
-{#snippet theDe(d: De)}
+{#snippet theDe(d: De, khoa: boolean)}
   <article class="zk-o hs-de">
     <h3 class="hs-de-ten">{d.title}</h3>
     <p class="muted num hs-de-phu">{d.questionCount} câu · {Math.round(d.durationSec / 60)} phút</p>
@@ -58,6 +62,10 @@
     {#if d.best}
       <p class="hs-diem">Thi thật tốt nhất: <b class="num">{d.best.percent ?? 0}%</b> · đã thi {d.best.attempts} lần</p>
     {/if}
+    {#if khoa}
+      <!-- Khách học thử làm được đề HSK 1; đề cấp khác cần tài khoản, đăng nhập xong về thẳng đề này. -->
+      <a class="btn btn-son hs-nut-dn" href={loginUrl(`/learn/hsk30/${d.id}`)}><Icon name="lock" size={16} /> Đăng nhập để làm đề</a>
+    {:else}
     <div class="hs-nut">
       <a class="btn" href="/learn/hsk30/{d.id}?mode=practice">
         <Icon name="book" size={16} /> {d.open.practice ? 'Luyện tiếp' : 'Luyện tập'}
@@ -66,6 +74,7 @@
         <Icon name="clock" size={16} /> {d.open.exam ? 'Thi tiếp' : 'Thi thật'}
       </a>
     </div>
+    {/if}
   </article>
 {/snippet}
 
@@ -89,8 +98,9 @@
         <p><b><Icon name="clock" size={15} /> Thi thật</b> Tính giờ như đề thật, nghe tối đa 2 lần, nộp bài mới có điểm từng phần.</p>
       </div>
 
+      {#if khoaCap}<p class="muted">Bạn đang học thử: làm được mọi đề HSK 1. Đăng nhập để làm đề HSK {capHien.level}.</p>{/if}
       <div class="hs-ds">
-        {#each capHien.exams as d (d.id)}{@render theDe(d)}{/each}
+        {#each capHien.exams as d (d.id)}{@render theDe(d, khoaCap)}{/each}
       </div>
     {/if}
   </section>
@@ -135,4 +145,5 @@
   .hs-phan li { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; }
   .hs-diem { font-size: 14px; color: var(--green-text); }
   .hs-nut { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: auto; }
+  .hs-nut-dn { margin-top: auto; }
 </style>

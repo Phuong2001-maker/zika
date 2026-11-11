@@ -152,6 +152,11 @@ final class MaintenanceService
             [$truoc(self::MAIL_DAYS)],
         );
         $out['audit_log'] = Db::exec('DELETE FROM audit_log WHERE created_at < ?', [$truoc(self::AUDIT_DAYS)]);
+        // Lượt thi của khách học thử: cookie zk_khach hết hạn sau từng ấy ngày thì không ai mở lại được nữa.
+        $out['guest_attempts'] = Db::exec(
+            'DELETE FROM test_attempts WHERE user_id IS NULL AND guest_key IS NOT NULL AND started_at < ?',
+            [$truoc(\Zika\Core\Khach::GIU_NGAY)],
+        );
         $out['log_files'] = self::pruneLogFiles();
 
         return $out;

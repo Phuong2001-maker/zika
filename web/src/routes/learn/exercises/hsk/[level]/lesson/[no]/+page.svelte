@@ -19,6 +19,7 @@
   import { khoiPhucLuot, luotBaiTapDo, type KetQuaLuot } from '$lib/learn/resume';
   import { answered, check, CHOICE_TYPES, rightAnswerText, TYPE_LABEL, type Answer, type Payload } from '$lib/utils/grade';
   import type { LessonRef, NextLesson } from '$lib/api/types';
+  import { session } from '$lib/stores/session.svelte';
 
   // Bài tập · Làm bài (07 §6). Chấm ngay tại máy, server chấm lại khi lưu.
   interface Q {
@@ -80,7 +81,7 @@
       // Còn lượt dở thì làm tiếp, không mở lượt mới bỏ rơi lượt cũ. Không đọc được tiến độ thì mở lượt mới.
       let khoi: ReturnType<typeof khoiPhucLuot> = null;
       let dangDo: number | null = null;
-      if (!fromStart) {
+      if (!fromStart && session.user) {
         dangDo = await levelProgress(levelId, 'bt').then((p) => luotBaiTapDo(progressOf(p, l.id), false)).catch(() => null);
         if (dangDo !== null) {
           const cu = await api
@@ -90,7 +91,12 @@
         }
       }
 
-      if (khoi && dangDo !== null) {
+      if (!session.user) {
+        attemptId = null;
+        order = questions.map((_, k) => k);
+        i = 0;
+        results = [];
+      } else if (khoi && dangDo !== null) {
         attemptId = dangDo;
         order = khoi.order;
         i = khoi.i;

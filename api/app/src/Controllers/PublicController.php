@@ -8,6 +8,8 @@ use Zika\Core\Csrf;
 use Zika\Core\HttpError;
 use Zika\Core\Request;
 use Zika\Core\Settings;
+use Zika\Services\Curricula;
+use Zika\Services\FeatureAccess;
 
 /** Endpoint công khai: cấu hình web cho app, trang Chính sách / Điều khoản. */
 final class PublicController
@@ -27,6 +29,12 @@ final class PublicController
             'allowSignup' => (bool) $auth['allow_signup'],
             'contactEmail' => (string) $site['contact_email'],
             'showFeedbackButton' => (bool) Settings::value('content', 'show_feedback_button', true),
+            // Khách học thử theo cờ mặc định; web không được coi HSK hay id 1 là mặc định.
+            'defaultCurriculumId' => Curricula::defaultId(),
+            'defaultLevelLabel' => Curricula::levelLabel(null),
+            // Server xét khách như học viên (FeatureAccess::roleOf), bớt phần cần tài khoản; web ẩn hiện theo đúng bảng
+            // này để không mời khách bấm vào phần chỉ dẫn tới trang đăng nhập.
+            'guestFeatures' => FeatureAccess::choKhach(),
             'csrf' => Csrf::ensure($r),
         ];
     }

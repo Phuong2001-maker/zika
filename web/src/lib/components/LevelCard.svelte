@@ -4,6 +4,7 @@
   import { num } from '$lib/utils/format';
   import Bar from './Bar.svelte';
   import { SO_HAN, taiChuBut } from '$lib/learn/hoa-tiet';
+  import { loginUrl } from '$lib/auth/routes';
 
   taiChuBut();
 
@@ -17,6 +18,7 @@
     slug = 'flashcards',
     past,
     mobile = false,
+    locked = false,
   }: {
     level: LevelInfo;
     done?: number;
@@ -24,6 +26,8 @@
     slug?: string;
     past?: string;
     mobile?: boolean;
+    /** Khách nhìn thấy quyển sau để biết lộ trình, nhưng phải đăng nhập mới mở được. */
+    locked?: boolean;
   } = $props();
 
   const n = $derived(level.id);
@@ -46,11 +50,12 @@
     <span class="num" style="font-size: 14px"><b>Đang soạn</b></span>
   </div>
 {:else}
-  <a {href} class="lv lv{n} lv-nen" style="text-decoration: none; --mau: var(--hsk{n})">
+  <!-- Thẻ khoá vẫn là link: bấm vào thì đăng nhập rồi về thẳng cấp đó, không để khách bấm mà không có gì xảy ra. -->
+  <a href={locked ? loginUrl(href) : href} class="lv lv{n} lv-nen" class:lv-khoa={locked} style="text-decoration: none; --mau: var(--hsk{n})">
     <span class="lv-hoa" lang="zh" aria-hidden="true" style="font-size: {mobile ? 96 : 150}px; right: {mobile ? -4 : 6}px; bottom: {mobile ? -18 : -30}px">{SO_HAN[n]}</span>
     <span class="lv-top">
       <span class="lv-hsk"><span class="disp lv-lbl">{cap.nhan}</span><span class="bignum" style="font-size: {mobile ? 40 : 58}px">{n}</span></span>
-      {#if current}<span class="tag tag-bad">Đang học</span>{/if}
+      {#if locked}<span class="tag">Cần đăng nhập</span>{:else if current}<span class="tag tag-bad">Đang học</span>{/if}
     </span>
     {#if !mobile && level.sampleText}<span class="hz" lang="zh" style="font-size: 24px; line-height: 1.1">{level.sampleText}</span>{/if}
     <span class="lv-meta">
@@ -59,7 +64,7 @@
     </span>
     <Bar value={done} {total} trackStyle="background: rgba(255,255,255,.7)" />
     {#if !mobile}
-      <span class="lv-more">Xem các bài </span>
+      <span class="lv-more">{locked ? 'Đăng nhập để học' : 'Xem các bài'} </span>
     {/if}
   </a>
 {/if}
@@ -95,5 +100,9 @@
     gap: 6px;
     font-size: 13.5px;
     font-weight: 700;
+  }
+  .lv-khoa {
+    opacity: 0.52;
+    filter: grayscale(0.25);
   }
 </style>

@@ -18,6 +18,7 @@
   import DanhSachNghe from '$lib/learn/giao-trinh/DanhSachNghe.svelte';
   import TrinhPhat from '$lib/learn/giao-trinh/TrinhPhat.svelte';
   import KhoaBai from '$lib/learn/giao-trinh/KhoaBai.svelte';
+  import { loginUrl } from '$lib/auth/routes';
 
   // Đọc một quyển giáo trình: trang sách cuộn dọc, kèm mục lục, file nghe và đáp án (nút nào sách không có thì ẩn).
   const st = new DocSach();
@@ -249,10 +250,13 @@
           <h1>{sach.ten}</h1>
           <p class="muted">{sach.bai.length} bài · {sach.soTrang} trang{sach.nghe.length && session.can('books.audio') ? ` · ${sach.nghe.length} file nghe` : ''}</p>
           <p>
-            {#if ke}Bài mở lần lượt theo thứ tự. Mở hết <b>{ke.tenSach}</b> (bài tiếp theo: Bài {ke.bai}) là đọc được quyển này.{/if}
+            <!-- Khách học thử chỉ đọc quyển đầu; quyển sau mở bằng điểm theo tài khoản nên phải đăng nhập. -->
+            {#if !session.user}Đăng nhập để đọc tiếp quyển này. Quyển đầu bạn đang đọc thử miễn phí.
+            {:else if ke}Bài mở lần lượt theo thứ tự. Mở hết <b>{ke.tenSach}</b> (bài tiếp theo: Bài {ke.bai}) là đọc được quyển này.{/if}
           </p>
           <div class="gt-ca-khoa-nut">
-            {#if ke}<a class="btn btn-son" href="/learn/books/{ke.ma}">Đến {ke.tenSach}</a>{/if}
+            {#if !session.user}<a class="btn btn-son" href={loginUrl(page.url.pathname)}>Đăng nhập</a>
+            {:else if ke}<a class="btn btn-son" href="/learn/books/{ke.ma}">Đến {ke.tenSach}</a>{/if}
           </div>
         </div>
       </section>

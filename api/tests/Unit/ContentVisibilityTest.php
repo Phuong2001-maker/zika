@@ -75,6 +75,17 @@ final class ContentVisibilityTest extends DbTestCase
         self::assertSame(0, (int) Db::val('SELECT COUNT(*) FROM lesson_progress'));
     }
 
+    public function testKhachHocThuCungKhongThayBaiAn(): void
+    {
+        // Nội dung học mở công khai cho khách: bỏ qua khách ở đây là bài vừa ẩn vẫn đọc được qua cache.
+        Db::exec('UPDATE curricula SET is_default = (id = 1)');
+        $khach = new Request('GET', "/learn/lessons/{$this->lesson}/flashcards");
+        ContentVisibility::enforce($khach);
+        $this->change('level', false);
+        $this->missing(fn () => ContentVisibility::enforce($khach));
+        $this->missing(fn () => ContentVisibility::enforce(new Request('GET', '/learn/levels/1/lessons')));
+    }
+
     public function testAnChaKhongCatLuotDangThiNhungChanLuotMoi(): void
     {
         Db::insert('questions', ['part' => 'kt', 'lesson_id' => $this->lesson, 'type' => 'pick', 'payload' => json_encode(['prompt' => 'Chọn chữ', 'options' => ['一', '二'], 'answer' => 0])]);

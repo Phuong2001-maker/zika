@@ -95,6 +95,34 @@ final class FeatureAccessTest extends DbTestCase
         self::assertSame('L', Router::match('GET', '/me/features')['auth']);
     }
 
+    public function testKhachHocThuBiXetNhuHocVien(): void
+    {
+        // Khách không có user: trước đây enforce bỏ qua hẳn nên API mở công khai lại rộng quyền hơn học viên.
+        $khach = fn (string $path) => new Request('GET', $path);
+        self::assertSame('learner', FeatureAccess::roleOf($khach('/learn/levels')));
+        FeatureAccess::enforce($khach('/learn/levels'));
+        FeatureAccess::enforce($khach('/learn/lessons/5/grammar'));
+        $this->set('learn.grammar', false);
+        try { FeatureAccess::enforce($khach('/learn/lessons/5/grammar')); self::fail('Phần đã tắt cho học viên thì khách cũng không vào được.'); }
+        catch (HttpError $e) { self::assertSame('FEATURE_DISABLED', $e->errorCode); }
+        $this->set('community.contests.ranking', false);
+        try { FeatureAccess::enforce($khach('/contest/ranking')); self::fail('Bảng xếp hạng đã tắt cho học viên.'); }
+        catch (HttpError $e) { self::assertSame(403, $e->status); }
+        // Bảng quyền gửi cho web: như học viên nhưng bớt phần cần tài khoản.
+        $this->set('community.chat', true);
+        $khachThay = FeatureAccess::choKhach();
+        self::assertTrue($khachThay['learn.flashcards']);
+        self::assertFalse($khachThay['learn.grammar'], 'Theo đúng công tắc của học viên');
+        self::assertFalse($khachThay['community.chat']);
+        self::assertFalse($khachThay['books.points']);
+        self::assertFalse($khachThay['account.avatar']);
+        self::assertTrue($khachThay['books']);
+        // Tắt cho vai trò khác không ảnh hưởng khách.
+        $this->set('learn.writing', false, 'editor');
+        FeatureAccess::enforce($khach('/learn/lessons/5/writing'));
+        self::assertFalse(FeatureAccess::ongoing(new Request('POST', '/tests/start', body: ['lessonId' => 5])));
+    }
+
     public function testConTatKhongChanDangKyHayCacConKhac(): void
     {
         $this->set('community.contests.info', false);

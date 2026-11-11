@@ -46,16 +46,16 @@ return [
     ['GET',    '/me/notifications', [Me::class, 'notifications'], 'L'],
     ['POST',   '/me/notifications/read-all', [Me::class, 'readAllNotifications'], 'L'],
 
-    ['GET',    '/contest/current', [ContestC::class, 'current'], 'L'],
-    ['GET',    '/contest/ranking', [ContestC::class, 'ranking'], 'L'],
-    ['GET',    '/contest/registrants', [ContestC::class, 'registrants'], 'L'],
-    ['GET',    '/contest/history', [ContestC::class, 'history'], 'L'],
-    ['GET',    '/contest/study-top', [ContestC::class, 'studyTop'], 'L'],
+    ['GET',    '/contest/current', [ContestC::class, 'current'], 'P'],
+    ['GET',    '/contest/ranking', [ContestC::class, 'ranking'], 'P'],
+    ['GET',    '/contest/registrants', [ContestC::class, 'registrants'], 'P'],
+    ['GET',    '/contest/history', [ContestC::class, 'history'], 'P'],
+    ['GET',    '/contest/study-top', [ContestC::class, 'studyTop'], 'P'],
     ['POST',   '/contest/register', [ContestC::class, 'register'], 'L'],
     ['DELETE', '/contest/register', [ContestC::class, 'unregister'], 'L'],
 
     // Link Shopee phía người học
-    ['GET',    '/support/links', [Support::class, 'links'], 'L'],
+    ['GET',    '/support/links', [Support::class, 'links'], 'P'],
     ['POST',   '/support/view', [Support::class, 'view'], 'L'],
     ['GET',    '/go/{id}', [Support::class, 'go'], 'P', ['csrf' => false]],
 ];

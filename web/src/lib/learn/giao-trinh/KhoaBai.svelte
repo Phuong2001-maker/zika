@@ -2,6 +2,8 @@
   import Icon from '$lib/components/Icon.svelte';
   import { session } from '$lib/stores/session.svelte';
   import { diemDoc } from '$lib/learn/diem-doc.svelte';
+  import { loginUrl } from '$lib/auth/routes';
+  import { page } from '$app/state';
   import type { DocSach, MucBai } from './doc-sach.svelte';
 
   // Thẻ đứng thay cho các trang của một bài chưa mở. Server không gửi ảnh, đáp án, file nghe của bài này, nên ở
@@ -43,6 +45,10 @@
   {#if st.dapAn}
     <p class="gt-khoa-loi-giai">Mở bài trong sách là xem được đáp án của bài đó.</p>
     <button type="button" class="btn btn-son" onclick={() => st.veSach(bai.so)}><Icon name="book" size={16} />Về Bài {bai.so} trong sách</button>
+  {:else if !session.user}
+    <!-- Khách học thử: điểm mở bài đi theo tài khoản, nên lối duy nhất là đăng nhập. -->
+    <p class="gt-khoa-loi-giai">Đăng nhập để mở tiếp các bài sau bằng điểm.</p>
+    <a class="btn btn-son" href={loginUrl(page.url.pathname)}>Đăng nhập</a>
   {:else if laKe}
     {#if !session.can('books.points')}
       <p class="gt-khoa-loi-giai">Liên hệ quản trị viên để được mở bài.</p>

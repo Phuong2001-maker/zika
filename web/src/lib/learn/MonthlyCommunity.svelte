@@ -13,6 +13,9 @@
   import { ApiError } from '$lib/api/client';
   import { toast } from '$lib/stores/toast.svelte';
   import FeatureGate from '$lib/components/FeatureGate.svelte';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
+  import { loginUrl } from '$lib/auth/routes';
 
   // Tiền quỹ, link Shopee và giờ thi lấy theo cấu hình ở khu quản trị; Top chăm học tính từ phút học thật trong tháng.
   const currency = (value: number): string =>
@@ -49,6 +52,10 @@
 
   async function setRegistered(on: boolean): Promise<void> {
     if (registering) return;
+    if (!session.user) {
+      void goto(loginUrl(page.url.pathname + page.url.search));
+      return;
+    }
     registrationMessage = '';
     registering = true;
     try {

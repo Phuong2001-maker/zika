@@ -57,6 +57,47 @@ final class BookAccess
         return Curricula::levelLabel(Curricula::ofUser($userId)) === 'Quyển' ? 'hanngu' : 'hsk';
     }
 
+    /** Bộ sách khách học thử thấy: bộ của giáo trình mặc định, giống học viên chưa được phân giáo trình. */
+    public static function boKhach(): string
+    {
+        return Curricula::levelLabel(Curricula::defaultId()) === 'Quyển' ? 'hanngu' : 'hsk';
+    }
+
+    /**
+     * Trạng thái đọc của khách học thử: chỉ quyển đầu của bộ (giống phần mở sẵn cho học viên), không có điểm nên
+     * không có bài nào "mở tiếp" được; quyển sau hiện khoá để khách đăng nhập. Ẩn/hiện nội dung theo giáo trình mặc định.
+     * @return array{tuDo:bool, mo:array<string,array<int,true>>, ke:null, toi:array<string,true>, an:array<string,true|array<int,true>>}
+     */
+    public static function trangThaiKhach(string $bo): array
+    {
+        $ds = self::sachCuaBo($bo);
+        $an = self::an($bo, Curricula::defaultId());
+        $mo = self::moQuyenDau($ds, $an);
+        return ['tuDo' => false, 'mo' => $mo, 'ke' => null, 'toi' => array_map(static fn (): bool => true, $mo), 'an' => $an];
+    }
+
+    /**
+     * Quyển đầu tiên của bộ sách là phần nhập môn: ai cũng đọc trọn quyển, không cần dòng mở bài hay trừ điểm.
+     * Điểm chỉ bắt đầu dùng từ quyển thứ hai; bài bị ẩn trong cây nội dung vẫn phải giữ kín.
+     * @param list<array<string,mixed>> $ds @param array<string,true|array<int,true>> $an
+     * @return array<string,array<int,true>>
+     */
+    private static function moQuyenDau(array $ds, array $an): array
+    {
+        if (!isset($ds[0]) || ($an[$ds[0]['ma']] ?? []) === true) {
+            return [];
+        }
+        $anQuyenDau = $an[$ds[0]['ma']] ?? [];
+        $mo = [];
+        foreach ($ds[0]['bai'] as $b) {
+            $so = (int) $b['so'];
+            if (!isset($anQuyenDau[$so])) {
+                $mo[(string) $ds[0]['ma']][$so] = true;
+            }
+        }
+        return $mo;
+    }
+
     /**
      * Giáo trình dùng để xét Ẩn/hiện nội dung cho một bộ sách. Học viên chỉ thấy bộ của giáo trình mình nên lấy
      * giáo trình của chính họ; biên tập/quản trị đọc cả hai bộ nên bộ khác lấy giáo trình gốc của bộ đó.
@@ -144,6 +185,9 @@ final class BookAccess
             foreach (Db::all('SELECT ma, bai FROM book_unlocks WHERE user_id = ? AND ma IN (' . Db::in($ma) . ')', [$userId, ...$ma]) as $u) {
                 $mo[(string) $u['ma']][(int) $u['bai']] = true;
             }
+        }
+        foreach (self::moQuyenDau($ds, $an) as $maQuyen => $bai) {
+            $mo[$maQuyen] = ($mo[$maQuyen] ?? []) + $bai;
         }
         // Bài ẩn bị bỏ qua khi tìm bài mở tiếp: không thì học viên kẹt trước một bài không ai mở được.
         $ke = null;
@@ -347,13 +391,19 @@ final class BookAccess
 
     // ---------------------------------------------------------------- mã ký đường dẫn
 
-    public static function ve(int $userId, string $ma): string
+    /**
+     * @param int|string $userId id tài khoản, hoặc KHACH cho khách học thử. Mã của khách không gắn với ai: khách nào
+     * cũng đọc được đúng phần đó (trangThaiKhach), mã chỉ để đường dẫn ảnh hết hạn như của học viên.
+     */
+    public static function ve(int|string $userId, string $ma): string
     {
         $het = Clock::now()->getTimestamp() + self::VE_GIAY;
         return $het . '.' . self::ky("$userId|$ma|$het");
     }
 
-    public static function veHopLe(string $ve, int $userId, string $ma): bool
+    public const KHACH = 'khach';
+
+    public static function veHopLe(string $ve, int|string $userId, string $ma): bool
     {
         [$het, $chuKy] = explode('.', $ve, 2) + ['', ''];
         if (!ctype_digit($het) || (int) $het < Clock::now()->getTimestamp()) {

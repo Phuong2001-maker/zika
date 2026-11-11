@@ -74,9 +74,37 @@ final class FeatureAccess
 
     public static function allows(string $role, string $key): bool { return self::effective($role)[$key] ?? false; }
 
+    /** Phần chỉ có nghĩa khi có tài khoản: điểm, thông báo, trò chuyện, góp ý, trang tài khoản. */
+    private const CHI_TAI_KHOAN = ['header.points', 'header.notifications', 'books.points', 'community.chat', 'community.feedback', 'community.notifications', 'account'];
+
+    /**
+     * Bảng quyền gửi cho web khi chưa đăng nhập (/public/config): như học viên, trừ phần cần tài khoản. Hiện những phần
+     * đó cho khách thì bấm vào chỉ ra trang đăng nhập; Chuyển nhanh của khách phải toàn phần học được ngay.
+     * @return array<string,bool>
+     */
+    public static function choKhach(): array
+    {
+        $out = self::effective('learner');
+        foreach ($out as $key => $_) {
+            foreach (self::CHI_TAI_KHOAN as $k) {
+                if ($key === $k || str_starts_with($key, "$k.")) $out[$key] = false;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Khách học thử bị xét như học viên: admin tắt phần nào cho học viên thì khách cũng không vào được,
+     * không thì một API mở công khai lại rộng quyền hơn chính tài khoản đã đăng nhập.
+     */
+    public static function roleOf(Request $r): string
+    {
+        return $r->user === null ? 'learner' : $r->role();
+    }
+
     public static function require(Request $r, string $key): void
     {
-        if (!self::allows($r->role(), $key)) throw new HttpError(403, 'FEATURE_DISABLED', 'Phần này hiện chưa được mở cho vai trò của bạn.');
+        if (!self::allows(self::roleOf($r), $key)) throw new HttpError(403, 'FEATURE_DISABLED', 'Phần này hiện chưa được mở cho vai trò của bạn.');
     }
 
     /**
@@ -94,6 +122,7 @@ final class FeatureAccess
     /** Lượt kiểm tra đang làm vẫn đọc, lưu và nộp được dù admin vừa tắt quyền. */
     public static function ongoing(Request $r): bool
     {
+        if ($r->user === null) return false;
         if (preg_match('~^/tests/attempts/(\d+)(?:/submit|/check)?$~', $r->path, $m)) {
             return Db::val('SELECT id FROM test_attempts WHERE id = ? AND user_id = ? AND submitted_at IS NULL', [(int) $m[1], $r->userId()]) !== null;
         }
@@ -122,7 +151,7 @@ final class FeatureAccess
     public static function enforce(Request $r): void
     {
         $p = $r->path;
-        if (str_starts_with($p, '/admin/') || $r->user === null) return;
+        if (str_starts_with($p, '/admin/')) return;
         if (self::ongoing($r)) return;
         $key = null;
         $parts = ['lt' => 'flashcards', 'bt' => 'exercises', 'kt' => 'tests', 'lv' => 'writing', 'ht' => 'dialogues', 'np' => 'grammar', 'test' => 'tests', 'dialogue' => 'dialogues'];
@@ -148,7 +177,9 @@ final class FeatureAccess
             $mock = self::so($r->input('mockTestId')) ?: null;
             if (self::so($r->input('lessonId'))) $mock = null;
             if (preg_match('~^/tests/mock/(\d+)/summary$~', $p, $m)) $mock = (int) $m[1];
-            if (str_starts_with($p, '/tests/attempts/')) $mock = Db::val('SELECT mock_test_id FROM test_attempts WHERE id = ? AND user_id = ?', [$r->id(), $r->userId()]);
+            if (str_starts_with($p, '/tests/attempts/')) $mock = $r->user === null
+                ? Db::val('SELECT mock_test_id FROM test_attempts WHERE id = ? AND guest_key = ?', [$r->id(), \Zika\Core\Khach::ma($r) ?? ''])
+                : Db::val('SELECT mock_test_id FROM test_attempts WHERE id = ? AND user_id = ?', [$r->id(), $r->userId()]);
             $isContest = $mock && Db::val('SELECT id FROM contests WHERE mock_test_id = ? LIMIT 1', [$mock]) !== null;
             $isHsk30 = $mock && Db::val('SELECT kind FROM mock_tests WHERE id = ?', [$mock]) === 'hsk30';
             $key = $isContest ? 'community.contests.enter' : ($isHsk30 ? 'learn.hsk30' : 'learn.tests');

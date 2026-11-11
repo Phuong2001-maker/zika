@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Zika\Controllers;
 
+use Zika\Core\Db;
 use Zika\Core\HttpError;
 use Zika\Core\Request;
 use Zika\Core\Response;
@@ -45,6 +46,9 @@ final class LearnController
     public function levelLessons(Request $r): Response
     {
         $id = $r->id();
+        if ($r->user === null && $id !== 1) {
+            throw new HttpError(401, 'UNAUTHENTICATED', 'Đăng nhập để học nội dung này.');
+        }
         $c = Curricula::forRequest($r);
         return $this->serve($r, "l{$id}-c{$c}-lessons", static fn (bool $p) => ContentBuilder::levelLessons($id, $p, $c));
     }
@@ -56,8 +60,17 @@ final class LearnController
         $slug = $r->param('part');
         self::boot();
         $fn = self::$lessonBuilders[$slug] ?? throw HttpError::notFound();
+        if ($r->user === null) {
+            // Khách học thử trọn cấp 1 của giáo trình mặc định ở cả 6 phần (Kiểm tra dùng lượt khách, TestService::startKhach).
+            $lesson = Db::one('SELECT curriculum_id, level_id FROM lessons WHERE id = ?', [$id]);
+            if ($lesson === null
+                || (int) $lesson['curriculum_id'] !== Curricula::defaultId()
+                || (int) $lesson['level_id'] !== 1) {
+                throw new HttpError(401, 'UNAUTHENTICATED', 'Đăng nhập để học từ ' . Curricula::levelLabel(null) . ' 2.');
+            }
+        }
         // Biên tập và quản trị được mở bài của mọi giáo trình; cache theo bài nên phải chặn trước khi đọc cache.
-        if (!$r->isStaff()) {
+        if ($r->user !== null && !$r->isStaff()) {
             Curricula::assertLesson($id, Curricula::ofUser($r->userId()));
         }
         return $this->serve($r, "x{$id}-{$slug}", static fn (bool $p) => $fn($id, $p));
@@ -66,6 +79,9 @@ final class LearnController
     /** GET /learn/levels/{id}/review/{part} */
     public function review(Request $r): Response
     {
+        if ($r->user === null) {
+            throw new HttpError(401, 'UNAUTHENTICATED', 'Đăng nhập để học bài tổng hợp.');
+        }
         $id = $r->id();
         $part = $r->param('part');
         self::boot();

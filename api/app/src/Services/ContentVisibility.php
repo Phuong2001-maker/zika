@@ -19,7 +19,8 @@ final class ContentVisibility
 
     public static function enforce(Request $r): void
     {
-        if ($r->user === null || str_starts_with($r->path, '/admin/') || $r->isPreview() || FeatureAccess::ongoing($r)) return;
+        // Khách cũng phải qua đây: nội dung học mở công khai cho khách học thử, bài vừa ẩn không được lộ qua cache.
+        if (str_starts_with($r->path, '/admin/') || $r->isPreview() || FeatureAccess::ongoing($r)) return;
         // Kiểm trước khi đọc cache file, tránh link cũ trả nội dung vừa bị ẩn.
         if (preg_match('~^/learn/lessons/(\d+)/~', $r->path, $m)) ContentBuilder::lesson((int) $m[1], false);
         if (preg_match('~^/learn/levels/(\d+)/(?:lessons|review/)~', $r->path, $m)) ContentBuilder::level((int) $m[1], false, Curricula::forRequest($r));
@@ -27,7 +28,7 @@ final class ContentVisibility
             $id = isset($m[1]) ? (int) $m[1] : (int) $r->input('mockTestId');
             // Đề HSK 3.0 không thuộc giáo trình nào: ẩn cấp của giáo trình không được chặn nó.
             $mock = Db::one('SELECT level_id, for_contest, kind FROM mock_tests WHERE id = ?', [$id]);
-            if ($mock && !(int) $mock['for_contest'] && $mock['kind'] === 'mock' && !self::levelVisible(Curricula::ofUser($r->userId()), (int) $mock['level_id'])) throw HttpError::notFound();
+            if ($mock && !(int) $mock['for_contest'] && $mock['kind'] === 'mock' && !self::levelVisible(Curricula::forRequest($r), (int) $mock['level_id'])) throw HttpError::notFound();
         }
     }
 }

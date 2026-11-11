@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { canView, homePath, isAdminRoute, isGuestOnly, isPublicRoute, landingPath, loginUrl, safeNext } from './routes';
+import { canView, homePath, isAdminRoute, isGuestOnly, isGuestTrialRoute, isPublicRoute, landingPath, loginUrl, safeNext } from './routes';
 import { emailProblem, nameProblem, passwordProblem } from '$lib/utils/validate';
 
 describe('phân loại route', () => {
@@ -7,7 +7,21 @@ describe('phân loại route', () => {
     expect(isPublicRoute('/login')).toBe(true);
     expect(isPublicRoute('/pages/privacy')).toBe(true);
     expect(isPublicRoute('/invite')).toBe(true);
-    expect(isPublicRoute('/learn/flashcards')).toBe(false);
+    expect(isPublicRoute('/learn/flashcards')).toBe(true);
+    expect(isGuestTrialRoute('/learn/grammar/hsk/1/lesson/2')).toBe(true);
+    expect(isGuestTrialRoute('/learn/grammar/hsk/1/lesson/14')).toBe(true);
+    expect(isGuestTrialRoute('/learn/flashcards/hsk/2')).toBe(false);
+    // Mọi phần trong Chuyển nhanh học thử được ở cấp 1: Kiểm tra, Thi thử HSK 3.0, Giáo trình.
+    expect(isGuestTrialRoute('/learn/tests/hsk/1/lesson/1')).toBe(true);
+    expect(isGuestTrialRoute('/learn/hsk30')).toBe(true);
+    expect(isGuestTrialRoute('/learn/hsk30/12')).toBe(true);
+    expect(isGuestTrialRoute('/learn/books')).toBe(true);
+    expect(isGuestTrialRoute('/learn/books/hn1')).toBe(true);
+    // Bài tổng hợp, đề thi cuối cấp, cuộc thi, Quán trà vẫn cần tài khoản.
+    expect(isGuestTrialRoute('/learn/tests/hsk/1/mock/3')).toBe(false);
+    expect(isGuestTrialRoute('/learn/flashcards/hsk/1/review')).toBe(false);
+    expect(isGuestTrialRoute('/learn/cuoc-thi/3')).toBe(false);
+    expect(isGuestTrialRoute('/learn/chat')).toBe(false);
     expect(isPublicRoute('/loginx')).toBe(false);
     expect(isGuestOnly('/forgot')).toBe(true);
     expect(isGuestOnly('/reset')).toBe(false);

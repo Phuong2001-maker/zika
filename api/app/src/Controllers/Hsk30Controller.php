@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Zika\Controllers;
 
 use Zika\Core\Db;
+use Zika\Core\Khach;
 use Zika\Core\Request;
 use Zika\Services\TestService;
 
@@ -16,7 +17,8 @@ final class Hsk30Controller
     /** GET /learn/hsk30 — đề đã công khai, gom theo cấp, kèm điểm thi thật tốt nhất và lượt đang dở của người này. */
     public function index(Request $r): array
     {
-        $uid = $r->userId();
+        // Khách học thử xem cả kho đề nhưng chỉ làm được cấp 1 (TestService::startKhach); lượt của khách theo cookie.
+        [$cot, $uid] = $r->user === null ? ['guest_key', Khach::ma($r) ?? ''] : ['user_id', $r->userId()];
         $exams = Db::all(
             "SELECT m.id, m.level_id, m.title, m.duration_sec,
                     SUM(q.section = 'listening') AS nghe, SUM(q.section = 'reading') AS doc,
@@ -32,7 +34,7 @@ final class Hsk30Controller
             $in = Db::in($ids);
             foreach (Db::all(
                 "SELECT mock_test_id, MAX(CASE WHEN max_score > 0 THEN score / max_score END) AS ti_le, COUNT(*) AS lan
-                   FROM test_attempts WHERE user_id = ? AND mode = 'exam' AND submitted_at IS NOT NULL AND mock_test_id IN ($in)
+                   FROM test_attempts WHERE $cot = ? AND mode = 'exam' AND submitted_at IS NOT NULL AND mock_test_id IN ($in)
                   GROUP BY mock_test_id",
                 [$uid, ...$ids],
             ) as $b) {
@@ -40,7 +42,7 @@ final class Hsk30Controller
             }
             foreach (Db::all(
                 "SELECT mock_test_id, mode, deadline_at FROM test_attempts
-                  WHERE user_id = ? AND submitted_at IS NULL AND mock_test_id IN ($in)",
+                  WHERE $cot = ? AND submitted_at IS NULL AND mock_test_id IN ($in)",
                 [$uid, ...$ids],
             ) as $o) {
                 // Lượt đã quá hạn sẽ được chấm khi mở lại, không còn là "làm tiếp".

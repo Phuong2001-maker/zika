@@ -12,15 +12,19 @@
   import TooltipLayer from '$lib/components/TooltipLayer.svelte';
   import ShopeeBuddy from '$lib/learn/ShopeeBuddy.svelte';
   import FeedbackModal from '$lib/components/FeedbackModal.svelte';
-  import { canView, homePath, isAdminRoute, isGuestOnly, isPublicRoute, landingPath, loginUrl } from '$lib/auth/routes';
+  import { canView, homePath, isAdminRoute, isGuestOnly, isGuestTrialRoute, isPublicRoute, landingPath, loginUrl } from '$lib/auth/routes';
   import { registerServiceWorker } from '$lib/utils/pwa';
 
   let { children }: { children: Snippet } = $props();
 
   // Xử lý lỗi API chung (02 §3.3). Đăng ký ở đây để client.ts không phụ thuộc vòng vào store/router.
   onApiEvent('auth', () => {
+    const laKhach = !session.user;
     session.clear();
-    if (!isPublicRoute(page.url.pathname)) void goto(loginUrl(page.url.pathname + page.url.search), { replaceState: true });
+    const p = page.url.pathname;
+    // Khách đang học thử mà server báo 401 nghĩa là phần này cần tài khoản (đề HSK 2, quyển sau…): sang đăng nhập
+    // rồi quay lại đúng chỗ, đừng để màn học báo lỗi chung chung.
+    if (!isPublicRoute(p) || (laKhach && isGuestTrialRoute(p))) void goto(loginUrl(p + page.url.search), { replaceState: true });
   });
   onApiEvent('locked', () => {
     session.clear();
@@ -44,7 +48,7 @@
     const p = page.url.pathname;
     const u = session.user;
     if (p === '/') return false;
-    if (!u) return isPublicRoute(p);
+    if (!u) return isPublicRoute(p) && (!isGuestTrialRoute(p) || canView('learner', p, session.quyen));
     if (isGuestOnly(p)) return false;
     if (!canView(u.role, p, session.features, session.activeTests)) return false;
     return true;
@@ -56,9 +60,12 @@
     const p = page.url.pathname;
     const u = session.user;
     if (p === '/') {
-      void goto(u ? homePath(u.role, session.features) : '/login', { replaceState: true });
+      void goto(homePath(u?.role ?? 'learner', session.quyen), { replaceState: true });
     } else if (!u && !isPublicRoute(p)) {
       void goto(loginUrl(p + page.url.search), { replaceState: true });
+    } else if (!u && isGuestTrialRoute(p) && !canView('learner', p, session.quyen)) {
+      // Phần đã tắt cho học viên: đăng nhập cũng không mở được, nên đưa về phần đầu tiên còn mở thay vì trang đăng nhập.
+      void goto(homePath('learner', session.quyen), { replaceState: true });
     } else if (u && isGuestOnly(p)) {
       void goto(landingPath(u.role, page.url.searchParams.get('next')), { replaceState: true });
     } else if (u && !canView(u.role, p, session.features, session.activeTests)) {

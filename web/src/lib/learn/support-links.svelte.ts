@@ -1,4 +1,5 @@
 import { api } from '$lib/api/client';
+import { session } from '$lib/stores/session.svelte';
 
 export interface SupportLink {
   id: number;
@@ -50,6 +51,8 @@ class SupportLinks {
   }
 
   logView(place: 'icon' | 'fund'): void {
+    // Lượt xem ghi theo tài khoản (API cần đăng nhập): khách học thử gửi lên chỉ nhận 401 ở mỗi màn.
+    if (!session.user) return;
     void api.post('/support/view', { place }, { quiet: true }).catch(() => {});
   }
 }

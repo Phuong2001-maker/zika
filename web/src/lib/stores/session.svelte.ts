@@ -14,7 +14,9 @@ class Session {
   announcements = $state<Announcement[]>([]);
   features = $state<Features | null>(null);
   activeTests = $state<ActiveTest[]>([]);
-  can(key: string): boolean { return featureAllowed(this.features, this.user?.role, key); }
+  /** Khách chưa đăng nhập theo quyền học viên mà server gửi ở /public/config (server cũng xét khách như học viên). */
+  get quyen(): Features | null { return this.user ? this.features : (this.config?.guestFeatures ?? null); }
+  can(key: string): boolean { return featureAllowed(this.quyen, this.user?.role ?? 'learner', key); }
   async refreshFeatures(): Promise<void> {
     try {
       const data = await api.get<{ features: Features; activeTests: ActiveTest[] }>('/me/features', { quiet: true });
@@ -35,6 +37,7 @@ class Session {
     try {
       const cfg = await api.get<PublicConfig>('/public/config', { quiet: true });
       this.config = cfg;
+      setContentScope(cfg.defaultCurriculumId);
       setCsrf(cfg.csrf);
     } catch {
       // Không tải được cấu hình: vẫn thử /me; các form sẽ báo lỗi mạng khi gửi.
@@ -83,6 +86,8 @@ class Session {
     this.features = null;
     this.activeTests = [];
     clearLessonCache();
+    // Đăng xuất xong là khách: nội dung học quay về giáo trình mặc định, đừng giữ ?c= của tài khoản vừa thoát.
+    setContentScope(this.config?.defaultCurriculumId ?? null);
     notifications.xoa(); // đổi tài khoản trên cùng máy không được thấy thông báo của người trước
     this.announcements = [];
     this.supportEnabled = false;

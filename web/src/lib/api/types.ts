@@ -16,6 +16,10 @@ export interface PublicConfig {
   allowSignup: boolean;
   contactEmail: string;
   showFeedbackButton: boolean;
+  defaultCurriculumId: number;
+  defaultLevelLabel: string;
+  /** Quyền của vai trò học viên: khách học thử thấy và bị chặn đúng như học viên. */
+  guestFeatures: Record<string, boolean>;
   csrf: string;
 }
 

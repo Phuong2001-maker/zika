@@ -10,6 +10,7 @@
   import { dinhDangPhut, quyenGan, taiKeSach, trangDaDoc, urlBia, type TomTatSach } from '$lib/learn/sach';
   import { diemDoc } from '$lib/learn/diem-doc.svelte';
   import { session } from '$lib/stores/session.svelte';
+  import { loginUrl } from '$lib/auth/routes';
 
   // Giáo trình · kệ sách. Học viên chỉ thấy bộ sách của giáo trình mình học, quản trị thấy cả hai bộ.
   heartbeat.setActivity({ part: null, screen: 'book' });
@@ -79,11 +80,12 @@
 
 {#snippet the(q: TomTatSach, mobile: boolean)}
   {@const trang = dangDoc[q.ma] ?? 1}
-  <a href="/learn/books/{q.ma}" class="gt-quyen" class:gt-quyen-khoa={q.khoa}>
+  <!-- Khách học thử đọc quyển đầu; quyển khoá dẫn thẳng sang đăng nhập rồi quay lại đúng quyển đó. -->
+  <a href={q.khoa && !session.user ? loginUrl(`/learn/books/${q.ma}`) : `/learn/books/${q.ma}`} class="gt-quyen" class:gt-quyen-khoa={q.khoa}>
     <span class="gt-bia-khung">
       <img class="gt-bia" src={urlBia(q)} alt="" loading="lazy" draggable="false" />
       {#if q.khoa}
-        <span class="gt-khoa-bia"><Icon name="lock" size={16} />{truoc[q.ma] ? `Mở hết ${truoc[q.ma]}` : 'Chưa mở'}</span>
+        <span class="gt-khoa-bia"><Icon name="lock" size={16} />{!session.user ? 'Cần đăng nhập' : truoc[q.ma] ? `Mở hết ${truoc[q.ma]}` : 'Chưa mở'}</span>
       {:else if q.soNghe && session.can('books.audio')}<span class="gt-co-nghe" title="Có file nghe"><Icon name="headphones" size={15} /></span>{/if}
     </span>
     <b class="gt-ten" style="font-size: {mobile ? 14 : 16}px">{q.ten}</b>

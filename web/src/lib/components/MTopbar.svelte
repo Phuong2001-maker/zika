@@ -9,7 +9,8 @@
   import DiemChip from '$lib/learn/DiemChip.svelte';
   import FeatureGate from './FeatureGate.svelte';
   import { session } from '$lib/stores/session.svelte';
-  import { homePath } from '$lib/auth/routes';
+  import { homePath, loginUrl } from '$lib/auth/routes';
+  import { page } from '$app/state';
 
   // Thanh trên người học, bố cục điện thoại — một thanh dùng chung cho mọi màn (người dùng yêu cầu 08/11, trước đó
   // 21 màn 21 kiểu: màn có Quỹ tháng, màn không; màn có Chuyển nhanh, màn không).
@@ -48,12 +49,13 @@
 
 <header class="mtop mtb" bind:clientHeight={cao}>
   <div class="mtb-dong1">
-    <FeatureGate name="header.points"><DiemChip gon /></FeatureGate>
+    {#if session.user}<FeatureGate name="header.points"><DiemChip gon /></FeatureGate>{/if}
     <MonthlyCommunity />
     <!-- Thứ tự người dùng chốt 08/11: chuông rồi mới tới Chuyển nhanh, cuối cùng là tài khoản. -->
     <FeatureGate name="header.notifications"><FeatureGate name="community.notifications"><NotificationBell size={32} /></FeatureGate></FeatureGate>
-    {#if session.can('header.switcher')}<Switcher {current} />{:else}<a class="btn btn-sm" href={homePath(session.user?.role, session.features)}>Bàn học</a>{/if}
-    <Avatar size={32} current={accountCurrent} bell={false} />
+    {#if session.can('header.switcher')}<Switcher {current} />{:else}<a class="btn btn-sm" href={homePath(session.user?.role, session.quyen)}>Bàn học</a>{/if}
+    <!-- Khách học thử: chỗ tài khoản là nút Đăng nhập, đăng nhập xong quay lại đúng màn đang xem. -->
+    {#if session.user}<Avatar size={32} current={accountCurrent} bell={false} />{:else}<a class="btn btn-son btn-sm" href={loginUrl(page.url.pathname + page.url.search)}>Đăng nhập</a>{/if}
   </div>
   {#if coDong2}
     <div class="mtb-dong2">

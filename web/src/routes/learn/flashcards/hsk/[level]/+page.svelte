@@ -19,6 +19,7 @@
   import BackLink from '$lib/components/BackLink.svelte';
   import { SO_HAN, taiChuBut } from '$lib/learn/hoa-tiet';
   import { soHienThi } from '$lib/learn/resume';
+  import { levelProgress } from '$lib/learn/lesson';
 
   // Chọn bài — Lật thẻ (07 §4.2).
   const level = $derived(Number(page.params.level));
@@ -44,7 +45,7 @@
     try {
       const [c, p] = await Promise.all([
         api.get<LevelLessons>(`/learn/levels/${level}/lessons`),
-        api.get<LevelProgress>(`/progress/levels/${level}`, { query: { part: 'lt' } }),
+        levelProgress(level, 'lt'),
       ]);
       content = c;
       prog = p;

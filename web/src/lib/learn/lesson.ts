@@ -2,6 +2,7 @@
 // và lấy tiến độ của một phần.
 import { api, previewKey } from '$lib/api/client';
 import type { LevelLessons, LessonItem, Part, ProgressRow, LevelProgress } from '$lib/api/types';
+import { session } from '$lib/stores/session.svelte';
 
 /** Bộ nhớ tạm trong phiên: map (cấp → danh sách bài) để không gọi lại mỗi lần đổi bài. */
 const cache = new Map<string, LevelLessons>();
@@ -33,6 +34,7 @@ export async function lessonByNo(levelId: number, no: number): Promise<LessonIte
 }
 
 export async function levelProgress(levelId: number, part: Part): Promise<LevelProgress> {
+  if (!session.user) return { lessons: [], review: { position: 0, total: 0, timesDone: 0, state: null, updatedAt: null }, doneCount: 0, lessonCount: 0 };
   return api.get<LevelProgress>(`/progress/levels/${levelId}`, { query: { part } });
 }
 
@@ -48,10 +50,12 @@ export async function saveProgress(
   total: number,
   state?: Record<string, unknown> | null,
 ): Promise<void> {
+  if (!session.user) return;
   await api.put(`/progress/lessons/${lessonId}/${part}`, { position, total, state });
 }
 
 export async function completePart(lessonId: number, part: Part): Promise<{ firstTime: boolean; levelDone: { done: number; total: number }; lessonsDone: number }> {
+  if (!session.user) return { firstTime: false, levelDone: { done: 0, total: 0 }, lessonsDone: 0 };
   return api.post(`/progress/lessons/${lessonId}/${part}/complete`);
 }
 

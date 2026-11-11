@@ -29,7 +29,9 @@
     try {
       const [lv, hm] = await Promise.all([
         api.get<LevelInfo[]>('/learn/levels'),
-        api.get<HomeProgress>('/progress/home', { query: { part: 'lt' } }),
+        session.user
+          ? api.get<HomeProgress>('/progress/home', { query: { part: 'lt' } })
+          : Promise.resolve<HomeProgress>({ currentLevelId: 1, levels: [], continue: null, reviewSuggest: null }),
       ]);
       levels = lv;
       home = hm;
@@ -61,7 +63,7 @@
 
 <!-- Khối “Hôm nay”: việc nên làm ngay (học tiếp bài đang dở) + chuỗi ngày học để có lý do quay lại. -->
 {#snippet homNay(m: boolean)}
-  {#if home && session.can('home') && (session.can('home.continue') || session.can('home.streak') || session.can('home.words'))}
+  {#if session.user && home && session.can('home') && (session.can('home.continue') || session.can('home.streak') || session.can('home.words'))}
     <section class="hn" class:hn-m={m} class:hn-don={!session.can('home.continue') || (!session.can('home.streak') && !session.can('home.words'))} aria-label="Hôm nay">
       {#if home.continue && session.can('home.continue')}
         {@const c = home.continue}
@@ -158,7 +160,7 @@
         <h2 class="hn-muc">{cap.chon}</h2>
         <section aria-label={cap.cacCap} class="lv-grid m">
           {#each moLevels as l (l.id)}
-            <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} mobile />
+            <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} mobile locked={!session.user && l.id > 1} />
           {/each}
         </section>
         {@render sapCoRow()}
@@ -186,7 +188,7 @@
               {#each Array.from({ length: 3 }) as _, i (i)}<Skeleton h="190px" r={20} />{/each}
             {:else}
               {#each moLevels as l (l.id)}
-                <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} />
+                <LevelCard level={l} done={doneOf(l.id)} current={l.id === home?.currentLevelId} locked={!session.user && l.id > 1} />
               {/each}
             {/if}
           </section>

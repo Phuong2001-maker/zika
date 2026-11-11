@@ -72,7 +72,7 @@ final class SupportLinksTest extends DbTestCase
 
     public function testRoute(): void
     {
-        self::assertSame('L', Router::match('GET', '/support/links')['auth']);
+        self::assertSame('P', Router::match('GET', '/support/links')['auth']);
         self::assertSame('L', Router::match('POST', '/support/view')['auth']);
         self::assertSame('P', Router::match('GET', '/go/12')['auth']);
         self::assertSame('A', Router::match('PUT', '/admin/support/fund')['auth']);

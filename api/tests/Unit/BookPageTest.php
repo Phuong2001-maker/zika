@@ -123,16 +123,44 @@ final class BookPageTest extends DbTestCase
 
     public function testRouteDoiDangNhapVaKhongTinhGioiHan(): void
     {
+        self::assertSame('P', Router::match('GET', '/support/links')['auth']);
+        // Khách học thử đọc được quyển đầu (BookController chặn phần còn lại); mở bài bằng điểm vẫn phải đăng nhập.
         foreach (['/learn/books/hsk2/12', '/learn/books/hn6/bia', '/learn/books/hn3/nghe/4', '/learn/books/hn4/dap-an/2'] as $p) {
             $m = Router::match('GET', $p);
-            self::assertSame('L', $m['auth'], $p);
+            self::assertSame('P', $m['auth'], $p);
             self::assertFalse($m['opts']['rate'] ?? true, $p);
         }
-        self::assertSame('L', Router::match('GET', '/learn/books')['auth']);
+        self::assertSame('P', Router::match('GET', '/learn/books')['auth']);
         self::assertSame('hn1', Router::match('GET', '/learn/books/hn1')['params']['ma']);
         self::assertSame('L', Router::match('POST', '/learn/books/hn1/mo/5')['auth']);
-        self::assertSame('L', Router::match('GET', '/learn/books/hn1/quyen')['auth']);
+        self::assertSame('P', Router::match('GET', '/learn/books/hn1/quyen')['auth']);
         self::assertSame('A', Router::match('POST', '/admin/book-points/adjust')['auth']);
+    }
+
+    public function testKhachDocTronQuyenDauConQuyenSauPhaiDangNhap(): void
+    {
+        // Giáo trình mặc định của máy test là HSK (id 1) nên khách thấy bộ HSK.
+        $khach = function (array $params, bool $ve = true): Request {
+            $t = $ve ? BookAccess::ve(BookAccess::KHACH, $params['ma'] ?? '') : '';
+            $r = new Request('GET', '/learn/books', query: $t === '' ? [] : ['t' => $t]);
+            $r->params = $params;
+            return $r;
+        };
+        $c = new BookController();
+        $ds = array_column($c->index($khach([])), null, 'ma');
+        self::assertSame(['hsk1', 'hsk2'], array_keys($ds));
+        self::assertSame([false, 2, true], [$ds['hsk1']['khoa'], $ds['hsk1']['baiMo'], $ds['hsk2']['khoa']]);
+        $trang = fn (string $ma, string $so, bool $ve = true) => $this->loi(fn () => $c->page($khach(['ma' => $ma, 'trang' => $so], $ve)));
+        self::assertSame('', $trang('hsk1', '7'));
+        self::assertSame('', $this->loi(fn () => $c->audio($khach(['ma' => 'hsk1', 'so' => '2']))));
+        self::assertSame('403 LOCKED', $trang('hsk2', '4'));
+        self::assertSame('403 TOKEN_INVALID', $trang('hsk1', '7', false));
+        // Mã ký của khách không thay được mã của học viên.
+        self::assertSame('403 TOKEN_INVALID', $this->trang($this->nguoi(), 'hsk1', '4', BookAccess::ve(BookAccess::KHACH, 'hsk1')));
+        $q = $c->access($khach(['ma' => 'hsk1']));
+        self::assertSame([[1, 2], null, 0], [$q['mo'], $q['ke'], $q['diem']]);
+        self::assertSame('401 UNAUTHENTICATED', $this->loi(fn () => $c->unlock($khach(['ma' => 'hsk2', 'bai' => '1']))));
+        self::assertSame(0, (int) Db::val('SELECT COUNT(*) FROM book_points'));
     }
 
     public function testRouteKhongNhanDuongDanLa(): void
@@ -158,12 +186,8 @@ final class BookPageTest extends DbTestCase
     {
         $uid = $this->nguoi();
         $ds = array_column((new BookController())->index($this->req($uid)), null, 'ma');
-        self::assertSame([false, 0], [$ds['hsk1']['khoa'], $ds['hsk1']['baiMo']]);
-        self::assertTrue($ds['hsk2']['khoa']);
-        $this->moBai($uid, 'hsk1', 1);
-        $this->moBai($uid, 'hsk1', 2);
-        $ds = array_column((new BookController())->index($this->req($uid)), null, 'ma');
-        self::assertSame([2, false], [$ds['hsk1']['baiMo'], $ds['hsk2']['khoa']]);
+        self::assertSame([false, 2], [$ds['hsk1']['khoa'], $ds['hsk1']['baiMo']]);
+        self::assertFalse($ds['hsk2']['khoa'], 'Đọc hết Quyển 1 miễn phí nên đã học tới trang đầu Quyển 2.');
         // Quản trị không bị khoá quyển nào.
         foreach ((new BookController())->index($this->req($this->nguoi('admin'))) as $q) {
             self::assertFalse($q['khoa'], $q['ma']);
@@ -188,24 +212,20 @@ final class BookPageTest extends DbTestCase
 
     // ------------------------------------------------------------------ chặn file
 
-    public function testBaiChuaMoKhongTraFileNao(): void
+    public function testQuyenDauDocTuDoNhungQuyenSauVanCanDiem(): void
     {
         $uid = $this->nguoi();
         $c = new BookController();
         // Trang đầu sách của quyển đang học tới thì đọc được; bìa luôn xem được.
         self::assertSame('', $this->trang($uid, 'hsk1', '2'));
         self::assertSame('', $this->trang($uid, 'hsk2', 'bia', false));
-        // Bài 1 chưa mở: ảnh trang, file nghe đều bị chặn.
-        self::assertSame('403 LOCKED', $this->trang($uid, 'hsk1', '4'));
-        self::assertSame('403 LOCKED', $this->loi(fn () => $c->audio($this->req($uid, ['ma' => 'hsk1', 'so' => '1']))));
-        // Quyển sau còn khoá cả trang đầu.
-        self::assertSame('403 LOCKED', $this->trang($uid, 'hsk2', '2'));
-
-        $this->moBai($uid, 'hsk1', 1);
+        // Cả Quyển 1 miễn phí; trang đầu Quyển 2 đọc được nhưng nội dung Bài 1 vẫn cần điểm.
         self::assertSame('', $this->trang($uid, 'hsk1', '4'));
         self::assertSame('', $this->loi(fn () => $c->audio($this->req($uid, ['ma' => 'hsk1', 'so' => '1']))));
-        self::assertSame('403 LOCKED', $this->trang($uid, 'hsk1', '7'));
-        self::assertSame('403 LOCKED', $this->loi(fn () => $c->audio($this->req($uid, ['ma' => 'hsk1', 'so' => '2']))));
+        self::assertSame('', $this->trang($uid, 'hsk1', '7'));
+        self::assertSame('', $this->loi(fn () => $c->audio($this->req($uid, ['ma' => 'hsk1', 'so' => '2']))));
+        self::assertSame('', $this->trang($uid, 'hsk2', '2'));
+        self::assertSame('403 LOCKED', $this->trang($uid, 'hsk2', '4'));
     }
 
     public function testDapAnTheoBaiDaMo(): void
@@ -216,8 +236,6 @@ final class BookPageTest extends DbTestCase
         $dapAn = fn (string $trang) => $this->loi(fn () => $c->answer($this->req($uid, ['ma' => 'hn3', 'trang' => $trang])));
         // Trang 1 của đáp án là trang đầu (trước Bài 1), trang 2 là đáp án Bài 1.
         self::assertSame('', $dapAn('1'));
-        self::assertSame('403 LOCKED', $dapAn('2'));
-        $this->moBai($uid, 'hn3', 1);
         self::assertSame('', $dapAn('2'));
         self::assertSame('RIFF-dap-an-2', file_get_contents((string) $c->answer($this->req($uid, ['ma' => 'hn3', 'trang' => '2']))->filePath));
         // Quyển không có đáp án.
@@ -288,25 +306,19 @@ final class BookPageTest extends DbTestCase
         $uid = $this->nguoi();
         $c = new BookController();
         $mo = fn (string $ma, string $bai) => $this->loi(fn () => $c->unlock($this->req($uid, ['ma' => $ma, 'bai' => $bai])));
-        self::assertSame('409 NO_POINTS', $mo('hsk1', '1'));
+        // Quyển 1 mở sẵn và bấm mở lại cũng không ghi sổ, không cần điểm.
+        self::assertSame('', $mo('hsk1', '1'));
+        self::assertSame('', $mo('hsk1', '2'));
+        self::assertSame('409 NO_POINTS', $mo('hsk2', '1'));
         BookAccess::nhanDiemNgay($uid);
-        // Phải mở lần lượt.
-        self::assertSame('422 VALIDATION', $mo('hsk1', '2'));
-        self::assertSame('422 VALIDATION', $mo('hsk2', '1'));
-        self::assertSame('', $mo('hsk1', '1'));
-        // Bấm lại bài đã mở không trừ thêm.
-        self::assertSame('', $mo('hsk1', '1'));
+        self::assertSame('', $mo('hsk2', '1'));
         self::assertSame(2, BookAccess::soDiem($uid));
         $q = $c->access($this->req($uid, ['ma' => 'hsk1']));
-        self::assertSame([[1], ['ma' => 'hsk1', 'bai' => 2, 'tenSach' => 'Sách hsk1'], 2, false], [$q['mo'], $q['ke'], $q['diem'], $q['khoa']]);
+        self::assertSame([[1, 2], null, 2, false], [$q['mo'], $q['ke'], $q['diem'], $q['khoa']]);
         self::assertTrue(BookAccess::veHopLe($q['ve'], $uid, 'hsk1'));
-        self::assertSame('', $mo('hsk1', '2'));
-        // Hết quyển 1 thì quyển 2 mở trang đầu và mở bài được.
         self::assertSame('', $this->trang($uid, 'hsk2', '2'));
-        self::assertSame('', $mo('hsk2', '1'));
-        self::assertSame(0, BookAccess::soDiem($uid));
         self::assertNull($c->access($this->req($uid, ['ma' => 'hsk2']))['ke']);
-        self::assertSame(['first', 'daily', 'unlock', 'unlock', 'unlock'], Db::col('SELECT kind FROM book_points WHERE user_id = ? ORDER BY id', [$uid]));
+        self::assertSame(['first', 'daily', 'unlock'], Db::col('SELECT kind FROM book_points WHERE user_id = ? ORDER BY id', [$uid]));
     }
 
     public function testNhanDiemRiengKhongPhuThuocLinkShopee(): void
@@ -371,8 +383,8 @@ final class BookPageTest extends DbTestCase
         self::assertSame(['moThem' => 1], $mo($hv, 'hsk2'));
         self::assertSame(3, BookAccess::soDiem($hv));
         self::assertSame('', $this->trang($hv, 'hsk2', '4'));
-        // Thứ tự mở bằng điểm không đổi: bài tiếp theo vẫn là hsk1 bài 1.
-        self::assertSame(['ma' => 'hsk1', 'bai' => 1], BookAccess::trangThai($hv, 'hsk')['ke']);
+        // Quyển 1 miễn phí và Quyển 2 đã được quản trị mở hết nên không còn bài chờ mở.
+        self::assertNull(BookAccess::trangThai($hv, 'hsk')['ke']);
 
         // Mở lại quyển đã mở hết thì không ghi thêm gì; sổ điểm có đúng một dòng 0 điểm.
         self::assertSame(['moThem' => 0], $mo($hv, 'hsk2'));

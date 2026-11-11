@@ -8,7 +8,7 @@ class CapHoc {
   private idXemTruoc: number | null = null;
 
   get nhan(): string {
-    return this.nhanXemTruoc ?? session.user?.levelLabel ?? 'HSK';
+    return this.nhanXemTruoc ?? session.user?.levelLabel ?? session.config?.defaultLevelLabel ?? 'HSK';
   }
 
   private get laHsk(): boolean {

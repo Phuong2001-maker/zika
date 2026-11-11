@@ -526,3 +526,26 @@ Thử trên DB bản sao `test_zika_e2e`. API: tắt từng khoá Truy cập, AP
 | Q5 | Có lượt luyện tập HSK 3.0 dở, tắt HSK 3.0, gửi `mode: exam` | 403; gửi `mode: practice` vẫn làm tiếp | Đạt (trước sửa: mở được lượt thi mới) |
 | Q6 | Tắt Thông tin cuộc thi khi đã đăng ký | Vẫn thấy số người đăng ký và nút Huỷ đăng ký | Đạt |
 | Q7 | Trên server thật, sau khi bật intl hoặc lên PHP mới: nộp bài có câu Sắp xếp | Chấm bình thường, không lỗi 500 | Chưa thử |
+
+# Khách học thử không cần đăng nhập (11/11/2026)
+
+Khách học trọn cấp 1 (Quyển 1 / HSK 1) của giáo trình bật `is_default`, theo đúng quyền của vai trò Học viên.
+Mở bằng cửa sổ ẩn danh (chưa đăng nhập). Đọc sách: Quyển 1 của mỗi bộ sách miễn phí cho mọi học viên đã đăng nhập.
+
+| # | Bước | Mong đợi | Kết quả |
+|---|---|---|---|
+| KT1 | Mở `/` khi chưa đăng nhập | Vào thẳng Lật thẻ, không về `/login`; thanh đầu trang có nút **Đăng nhập** thay cho avatar, không có điểm và chuông | Chưa thử |
+| KT2 | Xem các thẻ cấp ở Lật thẻ và ở 5 phần khác | Cấp 1 bấm được; cấp 2 trở lên mờ, ghi "Cần đăng nhập"; bấm vào thì sang đăng nhập, đăng nhập xong về đúng cấp đó | Chưa thử |
+| KT3 | Học vài bài cấp 1 ở Lật thẻ, Luyện viết, Hội thoại, Ngữ pháp, tới bài cuối của cấp | Học được mọi bài của cấp 1; tải lại trang thì tiến độ không còn (khách không lưu); bấm sang bài kế tiếp thuộc cấp 2 thì sang đăng nhập | Chưa thử |
+| KT4 | Gõ thẳng `/learn/flashcards/hsk/2`, `/learn/flashcards/hsk/1/review`, `/learn/cuoc-thi/1` | Cả ba sang trang đăng nhập, có `?next=` đúng | Chưa thử |
+| KT5 | Bật Kiểm tra cho Học viên, khách làm Kiểm tra một bài cấp 1, tải lại giữa chừng rồi nộp | Làm được, tải lại thì làm tiếp đúng lượt cũ, nộp xong có điểm; không ghi tiến độ | Chưa thử |
+| KT6 | Admin tắt Ngữ pháp cho Học viên, khách tải lại | Chuyển nhanh không còn Ngữ pháp; gõ thẳng `/learn/grammar/hsk/1` thì về phần đầu tiên còn mở; API trả 403 `FEATURE_DISABLED` | Chưa thử |
+| KT7 | Ẩn một bài cấp 1 ở Giáo trình → Ẩn/hiện nội dung, khách mở bài đó | Không thấy bài trong danh sách; gõ thẳng id bài thì 404 | Chưa thử |
+| KT8 | Khách bấm Đăng ký thi trong hộp Quỹ tháng / Cuộc thi | Sang đăng nhập; bảng xếp hạng, Top chăm học, lịch sử vẫn xem được (nếu Học viên được xem) | Chưa thử |
+| KT9 | Đăng nhập học viên chưa phân giáo trình, mở Giáo trình → quyển đầu của bộ sách | Đọc mọi trang, nghe mọi file, xem đáp án mà không cần điểm và không trừ điểm; quyển 2 vẫn cần điểm từ Bài 1 | Chưa thử |
+| KT10 | Đăng xuất ngay trên màn học rồi học tiếp như khách | Nội dung là giáo trình mặc định, không còn bài của giáo trình tài khoản vừa thoát | Chưa thử |
+| KT11 | Khách mở Chuyển nhanh | Chỉ có phần học được ngay (không có Quán trà, Góp ý); bấm từng mục không mục nào ra trang đăng nhập | Chưa thử |
+| KT12 | Khách mở Thi thử HSK 3.0 → HSK 1, làm Luyện tập và Thi thật một đề, tải lại giữa chừng | Làm được cả hai chế độ, tải lại làm tiếp, nộp có điểm từng phần; danh sách đề hiện "đã thi 1 lần" | Chưa thử |
+| KT13 | Khách chọn tab HSK 2 ở Thi thử HSK 3.0, hoặc gõ thẳng `/learn/hsk30/<id đề HSK 2>` | Nút đổi thành "Đăng nhập để làm đề"; gõ thẳng thì sang đăng nhập, xong về đúng đề | Chưa thử |
+| KT14 | Khách mở Giáo trình | Thấy bộ sách của giáo trình mặc định; quyển đầu đọc hết trang, nghe file, xem đáp án; quyển sau ghi "Cần đăng nhập", bấm vào sang đăng nhập; không có ví điểm | Chưa thử |
+| KT15 | Đăng nhập trên máy đã làm đề như khách | Lượt làm của khách không hiện trong lịch sử tài khoản (hai bên tách riêng) | Chưa thử |

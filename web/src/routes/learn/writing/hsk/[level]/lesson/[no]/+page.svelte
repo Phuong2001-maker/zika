@@ -15,6 +15,7 @@
   import { untrack } from 'svelte';
   import { replaceState } from '$app/navigation';
   import { completePart, lessonByNo, levelProgress, progressOf, saveProgress } from '$lib/learn/lesson';
+  import { session } from '$lib/stores/session.svelte';
   import { viTriDaLuu } from '$lib/learn/resume';
   import { speak } from '$lib/learn/speech';
   import type { LessonRef, NextLesson } from '$lib/api/types';
@@ -114,6 +115,17 @@
     if (!c || !data) return;
     passes++;
     try {
+      if (!session.user) {
+        if (passes >= need) {
+          if (ci + 1 < chars.length) {
+            toast.ok(`Xong chữ ${c.hanzi}!`);
+            pickChar(ci + 1);
+          } else {
+            await finish();
+          }
+        }
+        return;
+      }
       const res = await api.post<{ passes: number; charDone: boolean }>('/writing/result', {
         charId: c.id,
         lessonId: data.lesson.id,

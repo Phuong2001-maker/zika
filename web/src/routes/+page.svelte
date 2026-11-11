@@ -1,1 +1,1 @@
-<!-- “/”: layout gốc tự chuyển hướng — đã đăng nhập → /learn/flashcards, chưa → /login (07 §0). -->
+<!-- “/”: vào thẳng Bàn học; khách học thử trọn cấp 1 của giáo trình mặc định (isGuestTrialRoute). -->

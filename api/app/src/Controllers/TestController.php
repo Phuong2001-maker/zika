@@ -5,6 +5,8 @@ namespace Zika\Controllers;
 
 use Zika\Core\Db;
 use Zika\Core\HttpError;
+use Zika\Core\Khach;
+use Zika\Core\RateLimit;
 use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Core\Validator;
@@ -43,6 +45,11 @@ final class TestController
             throw HttpError::validation(['lessonId' => 'Chỉ chọn bài hoặc đề thi thử, không chọn cả hai.']);
         }
 
+        if ($r->user === null) {
+            // Khách học thử: lượt gắn với cookie ẩn danh. Mỗi lượt là một dòng trong DB nên chặn theo IP kẻo bị gọi dồn.
+            RateLimit::enforce('khach-thi:' . $r->ip, 40, 3600, 'Bạn mở đề quá nhiều lần. Đăng nhập để làm tiếp nhé.');
+            return Response::json(TestService::startKhach((string) Khach::ma($r, true), $lessonId, $mockId, $mode), 201);
+        }
         return Response::json(TestService::start($r->userId(), $lessonId, $mockId, $mode), 201);
     }
 
@@ -90,7 +97,9 @@ final class TestController
     /** @return array<string,mixed> */
     private function attempt(Request $r): array
     {
-        $a = Db::one('SELECT * FROM test_attempts WHERE id = ? AND user_id = ?', [$r->id(), $r->userId()]);
+        $a = $r->user === null
+            ? Db::one('SELECT * FROM test_attempts WHERE id = ? AND guest_key = ?', [$r->id(), Khach::ma($r) ?? ''])
+            : Db::one('SELECT * FROM test_attempts WHERE id = ? AND user_id = ?', [$r->id(), $r->userId()]);
         if ($a === null) {
             throw HttpError::notFound('Không tìm thấy lượt làm bài.');
         }

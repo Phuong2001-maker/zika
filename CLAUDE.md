@@ -37,12 +37,23 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 128/128 test; API 244/244 (chạy khoảng 18 phút vì mỗi test xoá sạch bảng); `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 128/128 test; API 250/250 (chạy khoảng 18 phút vì mỗi test xoá sạch bảng); `python data/nap-sach/test_doc_edge.py` 12/12.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
 
 Quyền hiển thị/truy cập khu học (09/11): đọc [HUONG-DAN-QUYEN-HIEN-THI.md](HUONG-DAN-QUYEN-HIEN-THI.md). Admin → Cài đặt → Quyền truy cập & hiển thị, migration 025. `Services/FeatureAccess.php` là danh mục/kiểm quyền backend; frontend dùng `session.can(...)` và `auth/features.ts`. Không thêm lại điều kiện ẩn cứng Bài tập/Kiểm tra/Quán trà theo `isAdmin`. Nội dung quản lý ở Giáo trình → Ẩn/hiện nội dung, migration 026, `Services/ContentVisibility.php`: giáo trình → cấp/quyển → bài, một trạng thái bài áp dụng cả 6 phần; không thêm lại công tắc riêng ở các tab soạn. Tắt cha giữ nguyên lựa chọn riêng của con; quyền này không thay thế quyền quản trị hay phân giáo trình cho từng người.
+
+Khách học thử (11/11): chưa đăng nhập vẫn học trọn **cấp 1 ở mọi phần trong Chuyển nhanh** (người dùng chốt: không mục nào bấm
+vào lại ra đăng nhập): 6 phần của giáo trình mặc định kể cả làm Kiểm tra, Thi thử HSK 3.0 đề HSK 1, Giáo trình quyển đầu của bộ
+sách. Cấp sau, bài tổng hợp, cuộc thi phải đăng nhập. Khách **không lưu tiến độ** (`lib/learn/lesson.ts` bỏ qua khi `!session.user`).
+Lượt Kiểm tra/HSK 3.0 của khách nằm ở `test_attempts` với `user_id` NULL + `guest_key` = sha256 cookie `zk_khach` (`Core/Khach.php`,
+`TestService::startKhach`, migration 028), xoá sau 30 ngày. Sách: `BookAccess::trangThaiKhach`, mã ký `BookAccess::KHACH`.
+Luật route ở `isGuestTrialRoute` (`auth/routes.ts`); khách gặp 401 trên route học thử thì layout gốc chuyển sang đăng nhập.
+Khách bị xét quyền **như học viên**: `FeatureAccess::roleOf()` ở server; web dùng `session.quyen` = `guestFeatures` của
+`/public/config` (`FeatureAccess::choKhach()`: quyền học viên bớt phần cần tài khoản như điểm, chuông, Quán trà, Góp ý).
+`FeatureAccess::enforce` và `ContentVisibility::enforce` không được bỏ qua khách. Đổi API sang `'P'` thì API đó phải chạy được
+khi `$r->user === null` (đừng gọi `$r->userId()` hay `$r->role()` trần).
 
 ```
 web/src/routes/          màn hình (SvelteKit)
@@ -146,7 +157,8 @@ này rơi vào `catch` của `load()` nên trang báo "0 điểm" dù API trả 
 ### 9. Giáo trình: chặn ở server, mọi đường dẫn file cần mã ký
 
 Ảnh trang, trang đáp án, file nghe đi qua `BookController`, kiểm `BookAccess` (bài đã mở) **và** mã `?t=` của
-chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả hai, đừng chỉ dựa vào giao diện ẩn nút. Điểm chỉ cộng ở
+chính tài khoản. Thêm lối mới trả file sách thì phải gọi cả hai, đừng chỉ dựa vào giao diện ẩn nút. Quyển đầu của mỗi bộ sách
+mở sẵn cho mọi học viên, không ghi sổ điểm (11/11, `BookAccess::trangThai`); điểm chỉ dùng từ quyển thứ hai. Điểm chỉ cộng ở
 `POST /learn/points/daily` (lần đầu +3, mỗi ngày +1, không có chế độ test); quản trị mở cả quyển không trừ điểm qua
 `BookAccess::moCaQuyen` (chỉ quyển thuộc giáo trình của học viên); test nhớ `site_settings` giữ nguyên giữa các test
 nên phải đặt lại `support` trong `setUp`. Cây Ẩn/hiện nội dung cũng áp vào sách (`BookAccess::an`, 09/11): lối mới trả
@@ -172,6 +184,9 @@ file sách phải đi qua `BookController::doc()` và `chanBaiAn()`, bài ẩn c
 
 ## Việc còn treo
 
+- **Khách học thử + màn đăng nhập mới (11/11/2026), chưa lên server:** cần chạy **migration 028** (`test_attempts.user_id` cho
+  phép NULL, thêm `guest_key`) rồi xoá `storage/cache/content`. Từ bản này ai vào web cũng đọc được trọn quyển đầu của bộ sách
+  thuộc giáo trình mặc định (người dùng chốt: mọi mục trong Chuyển nhanh học được cấp 1). Checklist KT1–KT15 trong KICH-BAN-TEST.
 - **Đã lên server 08/11/2026 (đã kiểm trên web thật):** code `ad9032a` (Top chăm học/Lịch sử thi số thật, sửa 2 lỗi giao diện),
   khoá quản trị theo `admin_emails` trong `config.php` server (2 email: phuongnv24012001, nvpchaytran), ví dụ lật thẻ Hán ngữ đủ
   2.990 từ + 586 file giọng. 496 câu tự soạn ở `data/han-ngu/vi-du/` (luật và cách chạy ở

@@ -217,6 +217,49 @@ final class CurriculumTest extends DbTestCase
         self::assertSame(1, $this->json((new LearnController())->levels($cap))[0]['lessonCount']);
     }
 
+    public function testKhachHocThuTronQuyenMotCuaGiaoTrinhMacDinh(): void
+    {
+        $macDinh = $this->giaoTrinh('Mặc định');
+        Db::exec('UPDATE curricula SET is_default = (id = ?)', [$macDinh]);
+        $baiMot = $this->bai($macDinh, 1);
+        $baiHai = $this->bai($macDinh, 2);
+        $baiBa = $this->bai($macDinh, 3);
+        $baiQuyenHai = Db::insert('lessons', [
+            'curriculum_id' => $macDinh, 'level_id' => 2, 'lesson_no' => 1, 'title' => 'Quyển 2',
+            'status' => 'published', 'cnt_words' => 3,
+        ]);
+        $this->bai(Curricula::HSK_ID, 1);
+
+        $danhSach = new Request('GET', '/learn/levels/1/lessons');
+        $danhSach->params = ['id' => '1'];
+        self::assertSame([$baiMot, $baiHai, $baiBa], array_column($this->json((new LearnController())->levelLessons($danhSach))['lessons'], 'id'));
+
+        $hoc = new Request('GET', "/learn/lessons/$baiMot/flashcards");
+        $hoc->params = ['id' => (string) $baiMot, 'part' => 'flashcards'];
+        self::assertSame($baiMot, $this->json((new LearnController())->lesson($hoc))['lesson']['id']);
+
+        $hocBaiBa = new Request('GET', "/learn/lessons/$baiBa/flashcards");
+        $hocBaiBa->params = ['id' => (string) $baiBa, 'part' => 'flashcards'];
+        self::assertSame($baiBa, $this->json((new LearnController())->lesson($hocBaiBa))['lesson']['id']);
+
+        // Kiểm tra: khách mở lượt được ở bài Quyển 1 (bài chưa có câu nên 422), Quyển 2 thì phải đăng nhập.
+        $kiemTra = static function (int $baiId): int {
+            try {
+                \Zika\Services\TestService::startKhach(str_repeat('k', 64), $baiId, null);
+                return 0;
+            } catch (HttpError $e) {
+                return $e->status;
+            }
+        };
+        self::assertSame(422, $kiemTra($baiMot));
+        self::assertSame(401, $kiemTra($baiQuyenHai));
+
+        $khoa = new Request('GET', "/learn/lessons/$baiQuyenHai/flashcards");
+        $khoa->params = ['id' => (string) $baiQuyenHai, 'part' => 'flashcards'];
+        $this->expectException(HttpError::class);
+        (new LearnController())->lesson($khoa);
+    }
+
     public function testBaiCuaGiaoTrinhKhacTraVe404(): void
     {
         $c = $this->giaoTrinh();

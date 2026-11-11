@@ -136,12 +136,26 @@ final class ContestTest extends DbTestCase
 
     public function testRoute(): void
     {
-        self::assertSame('L', Router::match('GET', '/contest/current')['auth']);
-        self::assertSame('L', Router::match('GET', '/contest/history')['auth']);
-        self::assertSame('L', Router::match('GET', '/contest/study-top')['auth']);
+        self::assertSame('P', Router::match('GET', '/contest/current')['auth']);
+        self::assertSame('P', Router::match('GET', '/contest/history')['auth']);
+        self::assertSame('P', Router::match('GET', '/contest/study-top')['auth']);
+        self::assertSame('L', Router::match('POST', '/contest/register')['auth']);
         self::assertSame('A', Router::match('GET', '/admin/contests')['auth']);
         self::assertSame('A', Router::match('POST', '/admin/contests')['auth']);
         self::assertSame('A', Router::match('DELETE', '/admin/contests/3')['auth']);
+    }
+
+    public function testKhachXemDuocCuocThiXepHangVaLichSu(): void
+    {
+        $mock = $this->de();
+        $this->cuocThi($mock, '2026-11-21 08:00:00', '2026-11-21 09:00:00');
+        $guest = new Request('GET', '/contest/current');
+        $controller = new ContestController();
+
+        self::assertNotNull($controller->current($guest)['contest']);
+        self::assertArrayHasKey('rows', $controller->ranking($guest));
+        self::assertIsArray($controller->history($guest));
+        self::assertArrayHasKey('rows', $controller->studyTop($guest));
     }
 
     public function testNguoiMinhHoaHienTrongDangKyVaBangThiTheoTungCongTac(): void
