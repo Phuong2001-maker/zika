@@ -56,8 +56,7 @@ export interface PartTexts {
 
 export const PART_TEXTS: Record<Exclude<Part, 'lt'>, PartTexts> = {
   bt: {
-    homeDesc:
-      'Mỗi bài có 10 câu, 8 dạng: chọn nghĩa, điền chỗ trống, nghe chọn chữ, pinyin, sắp xếp câu, dịch, đúng/sai, nối từ. Làm xong câu nào chấm ngay câu đó.',
+    homeDesc: '',
     past: 'làm',
     contTitle: 'Làm tiếp',
     contStart: 'Làm tiếp',
@@ -85,7 +84,7 @@ export const PART_TEXTS: Record<Exclude<Part, 'lt'>, PartTexts> = {
     allStart: 'Bắt đầu thi thử',
   },
   lv: {
-    homeDesc: 'Viết từng chữ Hán của bài theo đúng thứ tự nét: xem mẫu, tô theo nét mờ rồi tự viết.',
+    homeDesc: '',
     past: 'viết',
     contTitle: 'Viết tiếp',
     contStart: 'Viết tiếp',
@@ -98,7 +97,7 @@ export const PART_TEXTS: Record<Exclude<Part, 'lt'>, PartTexts> = {
     allStart: 'Bắt đầu luyện viết',
   },
   ht: {
-    homeDesc: 'Mỗi bài có một đoạn hội thoại ngắn: nghe, đọc theo từng câu, bật tắt pinyin và nghĩa.',
+    homeDesc: '',
     past: 'đọc',
     contTitle: 'Đọc tiếp',
     contStart: 'Đọc tiếp',
@@ -113,7 +112,7 @@ export const PART_TEXTS: Record<Exclude<Part, 'lt'>, PartTexts> = {
     },
   },
   np: {
-    homeDesc: 'Mỗi bài có 2–3 cấu trúc ngữ pháp: công thức, ví dụ khẳng định, phủ định, câu hỏi và bài sắp xếp câu.',
+    homeDesc: '',
     past: 'xem',
     contTitle: 'Xem tiếp',
     contStart: 'Xem tiếp',

@@ -16,6 +16,7 @@ use Zika\Core\Response;
 use Zika\Core\Router;
 use Zika\Core\Settings;
 use Zika\Services\BookAccess;
+use Zika\Services\FeatureAccess;
 use Zika\Tests\DbTestCase;
 
 /**
@@ -29,6 +30,7 @@ final class BookPageTest extends DbTestCase
         parent::setUp();
         // site_settings giữ nguyên giữa các test (DbTestCase::KEEP): đặt lại khối test này có sửa.
         Settings::set('support', Settings::DEFAULTS['support']);
+        FeatureAccess::clearCache();
         // DbTestCase ẩn mọi cấp; màn đọc sách nay theo cây Ẩn/hiện nội dung nên phải bật lại, như dữ liệu thật.
         Db::exec('UPDATE levels SET is_visible = 1');
         $goc = Config::uploadsDir('giao-trinh');
@@ -192,6 +194,31 @@ final class BookPageTest extends DbTestCase
         foreach ((new BookController())->index($this->req($this->nguoi('admin'))) as $q) {
             self::assertFalse($q['khoa'], $q['ma']);
         }
+    }
+
+    public function testTatDiemMoBaiThiMoHetSachNhungVanGiuBaoMatFile(): void
+    {
+        $uid = $this->nguoi();
+        Db::insert('feature_access', ['role' => 'learner', 'feature_key' => 'books.points', 'enabled' => 0]);
+        FeatureAccess::clearCache();
+
+        $c = new BookController();
+        $ds = array_column($c->index($this->req($uid)), null, 'ma');
+        self::assertSame([false, 2, false, 1], [
+            $ds['hsk1']['khoa'], $ds['hsk1']['baiMo'],
+            $ds['hsk2']['khoa'], $ds['hsk2']['baiMo'],
+        ]);
+        self::assertSame('', $this->trang($uid, 'hsk2', '4'));
+
+        // Bỏ điểm không biến file thành công khai: thiếu vé hoặc dùng vé của tài khoản khác vẫn bị chặn.
+        self::assertSame('403 TOKEN_INVALID', $this->trang($uid, 'hsk2', '4', false));
+        $nguoiKhac = $this->nguoi();
+        self::assertSame('403 TOKEN_INVALID', $this->trang($uid, 'hsk2', '4', BookAccess::ve($nguoiKhac, 'hsk2')));
+
+        // Khách chưa đăng nhập vẫn chỉ được học thử quyển đầu, không hưởng cấu hình miễn điểm của tài khoản.
+        $khach = new Request('GET', '/learn/books', query: ['t' => BookAccess::ve(BookAccess::KHACH, 'hsk2')]);
+        $khach->params = ['ma' => 'hsk2', 'trang' => '4'];
+        self::assertSame('403 LOCKED', $this->loi(fn () => $c->page($khach)));
     }
 
     public function testGiaSachChiBaoCoNgheVaDapAnKhiSachCo(): void

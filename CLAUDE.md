@@ -39,6 +39,8 @@ cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 
 Mốc hiện tại (15/11): web **0 lỗi 0 cảnh báo**, lint sạch, 130/130 test; API 266/266 (chạy khoảng 18–30 phút vì mỗi test xoá sạch bảng); `python data/nap-sach/test_doc_edge.py` 13/13.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
+Mỗi lúc chỉ một lượt PHPUnit trên một DB: hai lượt cùng chạy trên `zika_test` (hoặc `mariadb-dump` khoá bảng giữa chừng) xoá
+bảng của nhau, ra F/E giả (15/11). Cần chạy song song thì đặt `ZIKA_TEST_DB=test_<tên>` (DB `test_*` user `zika` tạo được).
 
 ## Bản đồ nhanh
 
@@ -164,6 +166,8 @@ mở sẵn cho mọi học viên, không ghi sổ điểm (11/11, `BookAccess::t
 `BookAccess::moCaQuyen` (chỉ quyển thuộc giáo trình của học viên); test nhớ `site_settings` giữ nguyên giữa các test
 nên phải đặt lại `support` trong `setUp`. Cây Ẩn/hiện nội dung cũng áp vào sách (`BookAccess::an`, 09/11): lối mới trả
 file sách phải đi qua `BookController::doc()` và `chanBaiAn()`, bài ẩn chặn cả quản trị.
+Vai trò bị tắt quyền `books.points` thì đọc tự do như biên tập (`BookController::trangThai`, 15/11): chỉ bỏ hàng rào điểm, vẫn giữ
+lọc giáo trình, cây ẩn/hiện và mã ký; khách không hưởng. Test đổi `feature_access` phải gọi `FeatureAccess::clearCache()`.
 
 ## Nếp viết
 
@@ -185,13 +189,19 @@ file sách phải đi qua `BookController::doc()` và `chanBaiAn()`, bài ẩn c
 
 ## Việc còn treo
 
-- **Bài tập Hán ngữ theo sách + Luyện viết Cách nhớ/Từ ghép + Thi thử kiểu tờ đề + 4 đề mô phỏng HSK 1–2 (15/11/2026), đã commit
-  và push, chưa lên server:** kế hoạch đã chốt ở `data/han-ngu/ra/KE-HOACH-BAI-TAP-LUYEN-VIET.md` (chỉ ở máy local, `ra/` không
+- **Tắt điểm mở bài thì đọc tự do giáo trình được gán + bỏ đoạn giới thiệu ở 4 trang phần học (15/11/2026), đã commit và push,
+  chưa lên server:** chỉ đổi code PHP (`BookController.php`) và web, **không có migration**, không cần xoá cache nội dung. Lên
+  server chỉ cần gói code mới, rồi kiểm dòng O21 của KICH-BAN-TEST. Công tắc ở Cài đặt → Quyền truy cập & hiển thị →
+  Giáo trình → Điểm và nhận điểm mở bài; người dùng tự quyết khi nào tắt cho học viên.
+- **Bài tập Hán ngữ theo sách + Luyện viết Cách nhớ/Từ ghép + Thi thử kiểu tờ đề + 4 đề mô phỏng HSK 1–2 (15/11/2026), đã commit,
+  push và lên server 15/11:** kế hoạch đã chốt ở `data/han-ngu/ra/KE-HOACH-BAI-TAP-LUYEN-VIET.md` (chỉ ở máy local, `ra/` không
   lên git), kịch bản test phần S–V của
-  KICH-BAN-TEST. Lên server cần: code mới, **migration 029** (`characters.cach_nho/tu_ghep`) + **030** (`text_pinyin`), chép
-  `uploads/hinh-de/` (tranh cắt từ đề), rồi trỏ `ZIKA_API` về server chạy `data/han-ngu/nap_bai_tap.py all`,
-  `data/han-ngu/nap_cach_nho.py`, `data/hsk30/nap_de.py data/hsk30/de-sach/*.json` (đề nạp là Nháp, công khai ở quản trị),
-  `data/hsk30/sinh_pinyin.py`, rồi giọng đọc, xoá `storage/cache/content`. Dữ liệu chép từ sách (`data/han-ngu/bai-tap/`,
+  KICH-BAN-TEST. **DB server đã xong 15/11** (đã kiểm bằng câu đếm): migration 029 + 030 chạy tay ở phpMyAdmin, dữ liệu
+  Import từ `release/len-server-20261115/du-lieu-20261115.sql.gz` (sinh bằng `xuat_sql.php` cùng thư mục, khớp bài theo tên
+  giáo trình + cấp + số bài, chạy lại không nhân đôi; 4 đề nạp sẵn Công khai). **Code + tranh + giọng cũng đã lên 15/11**
+  (gói `release/zika-release-20261115-0731.zip` + `len-server-20261115/uploads-20261115.zip`); đã so qua API bằng tài khoản
+  admin: Bài tập Q2–6, Luyện viết Q1–6, 4 đề khớp local từng câu. Trên server Bài tập đang **tắt** cho học viên/khách ở Quyền
+  truy cập & hiển thị — người dùng tự bật khi muốn. Dữ liệu chép từ sách (`data/han-ngu/bai-tap/`,
   `data/hsk30/de-sach/`) không lên git. Luật: Bài tập lấy **đúng như sách**, không bịa phương án nhiễu; `blank` tới 16 phương án
   (khung từ), `pick`/`pic`/`listen` tới 6 (nhóm A–F; trên 4 phương án thì không xáo khi thi), dạng mới `go` (viết chữ Hán theo
   pinyin), `pic` nhận ảnh `/uploads/…`. Kiểm tra Hán ngữ vẫn trống (người dùng tự ẩn).

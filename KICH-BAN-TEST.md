@@ -340,6 +340,8 @@ Chưa bấm thử trên trình duyệt: nút Lưu ở form giáo trình (API đ�
 | O14 | Quản trị → Điểm mở bài: tìm email, cộng 2 điểm kèm lý do, trừ quá số đang có | Sổ điểm hiện từng dòng; trừ quá thì báo lỗi | Đạt ở test API; tìm và xem sổ đạt trên trình duyệt |
 | O15 | Quản trị/biên tập mở mọi quyển | Đọc tự do, không bị trừ điểm | Đạt |
 | O18 | Học viên mở kệ sách, màn đọc, thẻ khoá; gõ `/api/learn/packages` | Không còn nút hay chữ mua gói nào; API 404 | Đạt |
+| O21 | Cài đặt → Quyền truy cập: tắt **Giáo trình → Điểm và nhận điểm mở bài** cho Học viên, rồi mở lại kệ sách | Mọi quyển/bài thuộc giáo trình được gán đều đọc được; không có ví điểm, khoá quyển, thẻ mở bài hay dòng “Đã mở x/y bài”. Quyển của giáo trình khác và bài đang ẩn vẫn 404; URL file thiếu mã ký hoặc dùng mã của tài khoản khác vẫn 403; khách chưa đăng nhập vẫn chỉ đọc quyển đầu | Đạt test API + trình duyệt 15/11 (học viên mẫu, máy tính và điện thoại): kệ Hán ngữ 6 quyển đều mở, đọc được Bài 26 Quyển 6 kèm Nghe/Đáp án; ảnh trang thiếu mã hoặc sửa 1 ký tự 403; Q1 Bài 1 đang Nháp 404 "Bài này đang ẩn."; bộ HSK 404 |
+| O22 | Học viên mở trang đầu Bài tập, Luyện viết, Đọc hội thoại, Ngữ pháp (máy tính và điện thoại) | Dưới tiêu đề không còn đoạn giới thiệu dài, không có khoảng trống thừa; Lật thẻ và Kiểm tra giữ chữ cũ | Đạt 15/11 (điện thoại còn dòng gợi ý ngắn "Bấm vào một quyển để chọn bài." của bố cục điện thoại, giữ nguyên) |
 
 ## P. Góp ý · báo lỗi từ người học (08/11/2026)
 

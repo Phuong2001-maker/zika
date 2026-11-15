@@ -97,7 +97,7 @@
       {/if}
       {#if q.coDapAn && session.can('books.answers')}<span class="gt-chip gt-chip-da"><Icon name="answer" size={14} />Đáp án</span>{/if}
     </span>
-    {#if !session.isStaff}
+    {#if !session.isStaff && session.can('books.points')}
       <span class="gt-mo num">
         <Icon name={q.baiMo ? 'check' : 'lock'} size={14} />Đã mở {q.baiMo}/{q.soBai} bài
       </span>

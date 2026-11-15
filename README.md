@@ -102,6 +102,11 @@ Cần `pymupdf`, `Pillow`, `imageio-ffmpeg`. Cả 9 quyển ~740MB.
 Học viên **không đọc được bài chưa mở**: trang sách, trang đáp án và file nghe của bài đó server trả 403, kể cả khi gõ
 thẳng đường dẫn hay dùng công cụ tải. Biên tập và quản trị đọc tự do.
 
+Quản trị có thể tắt **Giáo trình → Điểm và nhận điểm mở bài** cho từng vai trò ở **Cài đặt → Quyền truy cập**. Khi tắt cho
+học viên đã đăng nhập, toàn bộ quyển và bài thuộc đúng giáo trình được phân quyền mở ngay; kệ sách ẩn ví điểm, trạng thái khoá và
+dòng “Đã mở x/y bài”. Công tắc chỉ bỏ điều kiện tích điểm: bộ sách vẫn lọc theo giáo trình của tài khoản, bài/cấp đang ẩn vẫn 404,
+ảnh trang, đáp án và file nghe vẫn đi qua API với mã ký `?t=` gắn tài khoản và quyển. Khách chưa đăng nhập vẫn chỉ đọc quyển đầu.
+
 - **Điểm:** lần đầu bấm nút **Nhận điểm** được **3 điểm**, từ hôm sau mỗi ngày bấm được **1 điểm**
   (ngày tính 0h–24h giờ Việt Nam). Bấm nhiều lần trong ngày vẫn chỉ 1; điểm chưa dùng giữ lại, ngày không bấm thì không bù.
   Điểm chỉ cộng ở `POST /learn/points/daily`, không phụ thuộc link Shopee: bé túi và link Quỹ tháng (`/go/{id}`) chỉ dẫn
@@ -116,7 +121,7 @@ thẳng đường dẫn hay dùng công cụ tải. Biên tập và quản trị
   nhớ theo tài khoản (`/support/links` trả `clickedToday`, đọc từ lượt bấm trong `affiliate_events`), nên đổi máy hay tải lại
   trang cũng không hiện lại trong ngày. Bấm link Quỹ tháng cũng tính là đã bấm. Link Quỹ tháng thì bấm được mọi lúc.
 - **Không bán sách:** đã làm phần bán gói (trọn bộ, chuyển khoản, quản trị duyệt) rồi bỏ ngày 08/11/2026 — bán bản scan sách
-  có bản quyền rủi ro pháp lý cao. Học viên chỉ mở bài bằng điểm.
+  có bản quyền rủi ro pháp lý cao. Khi công tắc điểm bật, học viên mở bài bằng điểm; khi tắt, học viên đọc tự do trong giáo trình được gán.
 - **Mã ký đường dẫn:** mọi đường dẫn ảnh trang và file nghe phải kèm `?t=<hết hạn>.<chữ ký>` do API cấp, gắn với tài khoản
   và quyển, sống 6 giờ (ký bằng `app_key`). Link dán sang tài khoản khác, sửa một ký tự, hay để quá 6 giờ đều 403. Màn đọc
   tự lấy mã mới trước khi hết hạn; ảnh hay file nghe lỗi giữa chừng thì lấy mã mới rồi tải lại.

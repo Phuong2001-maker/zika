@@ -8,6 +8,7 @@ use Zika\Core\HttpError;
 use Zika\Core\Request;
 use Zika\Core\Response;
 use Zika\Services\BookAccess;
+use Zika\Services\FeatureAccess;
 
 /**
  * Giáo trình đọc theo ảnh trang: HSK 1–3 (Hanu) và Hán ngữ 1–6, kèm file nghe và đáp án nếu sách có.
@@ -202,7 +203,13 @@ final class BookController
     private function trangThai(Request $r, string $bo): array
     {
         // Khách học thử đọc trọn quyển đầu của bộ sách thuộc giáo trình mặc định, quyển sau phải đăng nhập.
-        return $r->user === null ? BookAccess::trangThaiKhach($bo) : BookAccess::trangThai($r->userId(), $bo, $r->isStaff());
+        if ($r->user === null) {
+            return BookAccess::trangThaiKhach($bo);
+        }
+        // Tắt Điểm mở bài nghĩa là bỏ riêng hàng rào tích điểm. Quyền theo giáo trình, cây ẩn/hiện
+        // và mã ký ở lúc trả từng file vẫn được kiểm tra như cũ.
+        $docTuDo = $r->isStaff() || !FeatureAccess::allows($r->role(), 'books.points');
+        return BookAccess::trangThai($r->userId(), $bo, $docTuDo);
     }
 
     /** Mã ký đường dẫn gắn với tài khoản; khách dùng chung một chủ thể vì phần khách đọc được là như nhau. */

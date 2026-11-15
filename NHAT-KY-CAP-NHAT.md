@@ -23,6 +23,14 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 15/11/2026 — Tắt điểm mở bài thì mở toàn bộ giáo trình được phân quyền
+
+- Công tắc **Giáo trình → Điểm và nhận điểm mở bài** nay điều khiển cả luật đọc: khi tắt cho học viên, mọi quyển và bài không bị ẩn trong đúng giáo trình của tài khoản đều mở. Khách chưa đăng nhập vẫn chỉ đọc quyển đầu.
+- Lớp bảo vệ file giữ nguyên: học viên không thấy bộ sách của giáo trình khác; bài/cấp ẩn vẫn 404; ảnh trang, đáp án và file nghe vẫn cần mã ký `?t=` đúng tài khoản và đúng quyển, thiếu hoặc dùng mã của người khác trả 403.
+- Kệ sách ẩn ví điểm, trạng thái khoá và dòng “Đã mở x/y bài” khi công tắc điểm tắt. Bỏ các đoạn giới thiệu dài ở trang Bài tập, Luyện viết, Đọc hội thoại và Cấu trúc ngữ pháp; các nội dung khác giữ nguyên.
+- Test mới `BookPageTest::testTatDiemMoBaiThiMoHetSachNhungVanGiuBaoMatFile` kiểm tra mở toàn bộ, mã ký và luật khách. Web: Svelte 0 lỗi/0 cảnh báo, lint sạch, 130/130 test. API: `BookPageTest` chạy riêng 25/25; Python `test_doc_edge.py` 13/13.
+- Bấm trên trình duyệt bằng học viên mẫu (máy tính + điện thoại): O21, O22 đạt. `HUONG-DAN-QUYEN-HIEN-THI.md` đã sửa đoạn cũ "tắt điểm thì chỉ bài đã mở mới đọc được".
+
 ### 11/11/2026 — Lịch sử thưởng minh họa ở màn học viên, vá chặn quyền khi bắt đầu thi
 
 - Lịch sử thi & thưởng của học viên nay ghép thêm giải minh họa (`demo_rewards` đang hiện của người đang hiện), gom theo cuộc thi + ngày thi + tháng thưởng, xếp chung với cuộc thi thật theo ngày. Có tên giải, tiền, trạng thái; vai trò tắt "Thông tin giải thưởng" chỉ thấy hạng. Màn admin bỏ chữ "Chỉ hiển thị trong admin".

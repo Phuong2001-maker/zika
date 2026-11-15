@@ -81,7 +81,7 @@
   <main class="page" style="display: flex; flex-direction: column; gap: 28px">
     <div>
       <h1 style="font-size: 34px; line-height: 1.2">{info.name}</h1>
-      <p class="muted" style="margin-top: 6px; max-width: 70ch">{texts.homeDesc}</p>
+      {#if texts.homeDesc}<p class="muted" style="margin-top: 6px; max-width: 70ch">{texts.homeDesc}</p>{/if}
     </div>
 
     {#if failed}

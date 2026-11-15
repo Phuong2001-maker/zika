@@ -41,7 +41,10 @@ Các phụ thuộc khác vẫn áp dụng: bé túi cần công tắc/link ở �
 - API phiên: `/me` có `features` (quyền hiệu lực của vai trò hiện tại) và `activeTests`; `/me/features` trả cùng hai trường để làm mới. Không gửi ma trận của các vai trò khác cho học viên.
 - Frontend: `session.can(key)`, `FeatureGate.svelte`, `auth/features.ts`, `auth/routes.ts`. Bảng admin có trạng thái riêng trong `feature-access.svelte.ts`.
 - Quyền API có hiệu lực ngay ở request kế tiếp. Giao diện tải lại quyền khi mở trang và mỗi 60 giây; người vừa lưu được cập nhật ngay. F5 để thấy ngay ở một tài khoản đang mở sẵn.
-- Tắt điểm mở bài cũng chặn nhận điểm và mở bài bằng điểm; bài đã được mở vẫn đọc được, admin vẫn có thể cấp mở từ trang quản trị.
+- Tắt **Giáo trình → Điểm và nhận điểm mở bài** cho một vai trò thì vai trò đó không nhận điểm, không mở bài bằng điểm, và từ 15/11
+  được **đọc tự do mọi quyển, mọi bài** của giáo trình mình được phân (`BookController::trangThai` coi như biên tập/quản trị). Chỉ bỏ
+  hàng rào điểm: bộ sách vẫn lọc theo giáo trình của tài khoản, bài/cấp đang ẩn vẫn 404, ảnh trang/đáp án/file nghe vẫn cần mã ký
+  `?t=` đúng tài khoản. Khách chưa đăng nhập không hưởng: vẫn chỉ đọc quyển đầu. Bật lại thì quay về luật điểm, bài đã mở trước đó giữ nguyên.
 - Link `/go` kiểm vai trò và vị trí link (Icon/Quỹ) trước khi chuyển hướng; khách không đăng nhập vẫn có thể truy cập liên kết công khai theo hành vi cũ.
 - Migration 025–027 đã lên hosting (kiểm 10/11). Người học và lịch sử thưởng minh họa được ghép vào API học viên nhưng vẫn ở bảng `demo_*` riêng, xem [HUONG-DAN-DU-LIEU-MINH-HOA.md](HUONG-DAN-DU-LIEU-MINH-HOA.md).
 
@@ -56,6 +59,7 @@ Các phụ thuộc khác vẫn áp dụng: bé túi cần công tắc/link ở �
 7. Tắt Thông tin cuộc thi nhưng giữ Đăng ký: đăng ký không tự bị tắt. Tắt cha Cuộc thi: không đăng ký mới hoặc vào thi mới được.
 8. Bắt đầu thi rồi admin tắt chức năng: vẫn lưu/nộp lượt đó, không dùng lượt của người khác. Tắt quyền không thay đổi giờ kết thúc.
 9. Tắt một tab bảng xếp hạng hoặc lịch sử: tab/nút tương ứng ẩn, API tương ứng từ chối. Thông tin giải thưởng không hiển thị khi tắt mục đó.
+10. Tắt Học viên → Giáo trình → Điểm và nhận điểm mở bài: kệ sách không còn ví điểm, khoá quyển hay dòng “Đã mở x/y bài”, mọi bài của giáo trình được gán đọc được. Bài đang ẩn vẫn 404, link file dán sang tài khoản khác vẫn 403, khách vẫn chỉ đọc quyển đầu (KICH-BAN-TEST O21).
 10. Tắt Bé túi độc lập với link trong Quỹ tháng. Công tắc tổng/link Shopee cũ vẫn có hiệu lực.
 11. Tắt chỉnh avatar/tên/cài đặt/phiên/xóa tài khoản: đúng khu vực ẩn và API bị chặn; đăng xuất và đổi mật khẩu luôn dùng được.
 12. Mở hai phiên admin, lưu ở phiên thứ nhất rồi lưu dữ liệu cũ ở phiên thứ hai: báo cấu hình đã đổi (409), không ghi đè.
