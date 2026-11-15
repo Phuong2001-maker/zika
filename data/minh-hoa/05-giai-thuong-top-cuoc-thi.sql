@@ -3,7 +3,9 @@
 -- Cần migration 022–024 và cần có ít nhất 5 người bật is_visible + show_contest.
 -- Chạy lại an toàn: thay đúng nhóm giải do file này quản lý, không nhân đôi.
 
-SET NAMES utf8mb4;
+-- Một số hosting đặt connection là utf8mb4_general_ci trong khi bảng dùng
+-- utf8mb4_unicode_ci; ép cùng collation để so sánh biến chuỗi không lỗi #1267.
+SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 SET @zika_reward_now = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 7 HOUR);
 SET @zika_reward_month = '2026-11';
