@@ -47,7 +47,11 @@ Bộ SQL, cách bật ba mục và giới hạn 20 người ở Cuộc thi nằm
 
 Danh sách Đăng ký gán mỗi người minh họa một phút riêng, ổn định trong khoảng 07–15/11/2026, khung 07:00–22:59, rồi xếp theo thời điểm. Thời gian này chỉ dùng để hiển thị; không sửa `created_at` và không tạo dòng `contest_registrations`.
 
-Chỉ cần thay `src/Services/ContestService.php` trong thư mục app trên hosting, không có migration hay yêu cầu build frontend. Không cần các thay đổi sắp xếp trung gian ở `DemoActivity.php`/controller quản trị. Bản xem trước quản trị và dòng phụ “Chờ cập nhật kết quả” giữ giao diện cũ. Người dùng đã upload file qua 1Panel; chưa kiểm độc lập trên web thật. Lần commit này không chạy lại test theo yêu cầu của người dùng.
+`data/minh-hoa/05-giai-thuong-top-cuoc-thi.sql` tạo lịch sử cho đúng 5 tên đầu đang hiện ở bảng Cuộc thi: 50% + 25% + 15% + 5% + 5% = 100%, tương ứng 1.340.000đ + 670.000đ + 402.000đ + 134.000đ + 134.000đ = 2.680.000đ. Trạng thái là đã trao; file đồng bộ cả Quỹ tháng và cơ cấu giải trong `site_settings`. Chạy lại thay nhóm 5 giải cùng cuộc thi/ngày/tháng, không nhân đôi.
+
+`MonthlyCommunity.svelte` không hiện dòng “Chờ cập nhật kết quả” cho người minh họa. Vì đây là SPA tĩnh, thay đổi này cần build và cập nhật frontend trên hosting.
+
+Phần xáo trộn tên, điểm và thời gian đăng ký chỉ cần thay `src/Services/ContestService.php` trong thư mục app trên hosting, không có migration. Không cần các thay đổi sắp xếp trung gian ở `DemoActivity.php`/controller quản trị. Riêng việc bỏ dòng “Chờ cập nhật kết quả” là thay đổi frontend nên phải cập nhật bản build web. Người dùng đã upload file PHP qua 1Panel; chưa kiểm độc lập trên web thật. Lần commit này không chạy lại test theo yêu cầu của người dùng.
 
 ## Kịch bản kiểm tra
 

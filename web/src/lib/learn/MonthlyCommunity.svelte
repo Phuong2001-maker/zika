@@ -504,8 +504,7 @@
             <span class="mc-place" class:mc-medal-place={row.rank <= 3} role="img" aria-label={`Hạng ${row.rank}`}
               >{MEDALS[row.rank - 1] ?? row.rank}</span
             ><span class="mc-avatar" style="background: var(--lv{((row.rank - 1) % 3) + 1})">{#if row.avatarUrl}<img src={row.avatarUrl} alt="" />{:else}{initials(row.name)}{/if}</span><span class="mc-person"
-              ><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>{row.isDemo ? 'Chờ cập nhật kết quả' : row.participated ? `Làm trong ${clock(row.usedSec * 1000)}` : 'Không tham gia · 0 điểm'}</small
-              >{#if session.can('community.contests.rewards') && !row.isDemo && row.participated && contestStore.prizes[row.rank - 1]}{@const p = contestStore.prizes[row.rank - 1]}<small class="mc-row-prize"
+              ><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b>{#if !row.isDemo}<small>{row.participated ? `Làm trong ${clock(row.usedSec * 1000)}` : 'Không tham gia · 0 điểm'}</small>{/if}{#if session.can('community.contests.rewards') && !row.isDemo && row.participated && contestStore.prizes[row.rank - 1]}{@const p = contestStore.prizes[row.rank - 1]}<small class="mc-row-prize"
                   >{p.label} · {prizeMoney(p)}</small
                 >{/if}</span
             ><span class="mc-minutes"><b>{row.correct}/{row.total}</b><small>câu đúng</small></span>

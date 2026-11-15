@@ -72,3 +72,21 @@ Tải file cũ về dự phòng, mở đúng thư mục `zika-app/src/Services`,
 Người dùng đã thực hiện thao tác upload qua 1Panel trong cuộc trao đổi; không ghi nhận là đã kiểm độc lập trên web thật. Không chạy lại test trước commit theo yêu cầu trực tiếp của người dùng.
 
 Dữ liệu minh họa nằm riêng trong `demo_*`: không tạo tài khoản, đăng ký thi thật, tiến độ hay khoản chi thưởng. Top chăm học có ghép người minh họa vào bảng nên thứ hạng hiển thị ở mục đó có thể thay đổi. Import SQL trực tiếp không tạo `audit_log` như lưu qua form.
+
+## Năm giải thưởng khớp bảng Cuộc thi
+
+[05-giai-thuong-top-cuoc-thi.sql](05-giai-thuong-top-cuoc-thi.sql) lấy đúng 5 người minh họa đầu tiên đang hiện ở bảng Cuộc thi bằng cùng khóa xáo trộn CRC32, rồi ghi 5 dòng vào `demo_rewards`:
+
+| Hạng | Tỷ lệ | Tiền thưởng |
+|---|---:|---:|
+| 1 | 50% | 1.340.000đ |
+| 2 | 25% | 670.000đ |
+| 3 | 15% | 402.000đ |
+| 4 | 5% | 134.000đ |
+| 5 | 5% | 134.000đ |
+
+Tổng là **100%** và **2.680.000đ**. Cả 5 dòng có trạng thái `da-trao`, được hiển thị trong Lịch sử thi & thưởng. File cũng đồng bộ `site_settings.fund` và cơ cấu 5 giải để bảng quỹ nói cùng một số. Tên cuộc thi lấy từ cuộc thi đang mở; nếu không có thì lấy cuộc thi đã kết thúc gần nhất, cuối cùng mới dùng tên dự phòng.
+
+File chạy lại sẽ thay nhóm hạng 1–5 cùng tên cuộc thi, ngày 15/11/2026 và tháng 11/2026 nên không nhân đôi. Cần có ít nhất 5 người đang bật cả `is_visible` và `show_contest`. Nếu đổi người hiển thị Cuộc thi, chạy lại file để lịch sử lấy 5 tên mới.
+
+Giao diện người học đã bỏ dòng “Chờ cập nhật kết quả” dưới tên người minh họa trong bảng Cuộc thi. Đây là thay đổi frontend nên cần build và cập nhật phần `public/` trên hosting; chỉ thay `ContestService.php` sẽ chưa bỏ được dòng chữ này.
