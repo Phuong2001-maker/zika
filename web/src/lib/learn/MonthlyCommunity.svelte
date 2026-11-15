@@ -468,13 +468,12 @@
         {#if registrants && registrants.rows.length > 0}
           <div class="mc-rank-head">
             <b>{registrants.contest?.title ?? 'Danh sách đăng ký'}</b>
-            <span class="tag">{registrants.count} người đã đăng ký</span>
           </div>
           <ol class="mc-full-list">
             {#each registrants.rows as row, i (i)}
               <li class:mc-me={row.isMe}>
                 <span class="mc-place">{i + 1}</span><span class="mc-avatar" style="background: var(--lv{(i % 3) + 1})">{#if row.avatarUrl}<img src={row.avatarUrl} alt="" />{:else}{initials(row.name)}{/if}</span
-                ><span class="mc-person"><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b><small>Đăng ký lúc {row.at}</small></span>
+                ><span class="mc-person"><b>{row.name}{row.isMe ? ' (bạn)' : ''}</b></span>
               </li>
             {/each}
           </ol>
@@ -492,9 +491,6 @@
         {/if}
       {:else if contestRanking && contestRanking.rows.length > 0}<div class="mc-rank-head">
           <b>{contestRanking.contest?.title ?? 'Bảng cuộc thi'}</b>
-          <span class="tag" class:tag-ok={contestRanking.contest?.status === 'open'}>
-            {contestRanking.contest ? (contestRanking.contest.status === 'open' ? 'Đang diễn ra' : 'Đã kết thúc') : 'Chờ cuộc thi'} · {contestRanking.participants} người
-          </span>
         </div>
         {#if session.can('community.contests.rewards') && myPrize && myPrize.amount !== null && myPrize.amount > 0}
           <div class="mc-claim-banner"><span aria-hidden="true">🎉</span><div><b>Bạn đạt {myPrize.label}!</b><small>Phần thưởng {prizeMoney(myPrize)} · Gửi tên ngân hàng, số tài khoản và tên chủ tài khoản qua Góp ý để nhận thưởng.</small></div>{#if feedback.available && session.can('community.feedback')}<button type="button" class="btn btn-son btn-sm" onclick={claimPrize}>Gửi thông tin nhận thưởng</button>{/if}</div>
