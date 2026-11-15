@@ -95,7 +95,7 @@
     // Câu chọn tranh: phương án là mã hình, không dùng lại chữ của dạng cũ.
     if (t === 'pic') keep.options = ['', '', ''];
     if (t === 'tf') keep.answer = typeof p.answer === 'boolean' ? p.answer : false;
-    if (t === 'order') keep.answer = typeof p.answer === 'string' ? p.answer : '';
+    if (t === 'order' || t === 'go') keep.answer = typeof p.answer === 'string' ? p.answer : '';
     draft.type = t;
     draft.payload = keep;
     touch();
@@ -107,6 +107,21 @@
     const opts = [...(draft.payload.options ?? ['', '', '', ''])];
     opts[i] = v;
     draft.payload.options = opts;
+    touch();
+  }
+
+  /** Khung từ của sách có 8–15 từ: chỉ câu điền chỗ trống được quá 4 phương án (khớp QuestionPayload::MAX_OPTIONS_BLANK). */
+  const MAX_PA_BLANK = 16;
+  function themPhuongAn(): void {
+    if ((draft.payload.options ?? []).length >= MAX_PA_BLANK) return;
+    draft.payload.options = [...(draft.payload.options ?? []), ''];
+    touch();
+  }
+  function boPhuongAn(i: number): void {
+    const opts = (draft.payload.options ?? []).filter((_, k) => k !== i);
+    draft.payload.options = opts;
+    const a = draft.payload.answer;
+    if (typeof a === 'number') draft.payload.answer = a === i ? 0 : a > i ? a - 1 : a;
     touch();
   }
 
@@ -241,8 +256,28 @@
 {#if draft.type === 'pick'}
   <div class="field">
     <label class="lbl" for="q-pick">Đề bài</label>
-    <input id="q-pick" class="inp" bind:value={draft.payload.ask} oninput={touch} placeholder="Câu nào viết đúng?" />
+    <!-- Đề mô phỏng có câu chọn kèm cả đoạn văn (tới 600 ký tự) nên dùng ô nhiều dòng. -->
+    <textarea id="q-pick" class="inp" rows="2" bind:value={draft.payload.ask} oninput={touch} placeholder="Câu nào viết đúng?"></textarea>
     {#if errors.ask}<p class="err">{errors.ask}</p>{/if}
+  </div>
+{/if}
+
+{#if draft.type === 'go'}
+  <div class="field">
+    <label class="lbl" for="q-go-sent">Câu có ô viết chữ</label>
+    <input id="q-go-sent" class="inp hz" lang="zh" style="font-size: 22px" bind:value={draft.payload.sentence} oninput={touch} placeholder="你想喝___还是喝咖啡？" />
+    <p class="hint">Dùng <b>___</b> đánh dấu ô người học viết chữ.</p>
+    {#if errors.sentence}<p class="err">{errors.sentence}</p>{/if}
+  </div>
+  <div class="field">
+    <label class="lbl" for="q-go-py">Pinyin in trên ô</label>
+    <input id="q-go-py" class="inp" bind:value={draft.payload.pinyin} oninput={touch} placeholder="chá" />
+    {#if errors.pinyin}<p class="err">{errors.pinyin}</p>{/if}
+  </div>
+  <div class="field">
+    <label class="lbl" for="q-go-ans">Chữ đúng</label>
+    <input id="q-go-ans" class="inp hz" lang="zh" style="font-size: 22px" value={typeof draft.payload.answer === 'string' ? draft.payload.answer : ''} oninput={(e) => { draft.payload.answer = e.currentTarget.value; touch(); }} placeholder="茶" />
+    {#if errors.answer}<p class="err">{errors.answer}</p>{/if}
   </div>
 {/if}
 
@@ -273,8 +308,15 @@
           value={opt}
           oninput={(e) => setOption(i, e.currentTarget.value)}
         />
+        {#if isBlank && (draft.payload.options ?? []).length > 2}
+          <button type="button" class="btn btn-bare btn-sm" aria-label="Bỏ phương án {String.fromCharCode(65 + i)}" onclick={() => boPhuongAn(i)}><Icon name="trash" size={15} /></button>
+        {/if}
       </div>
     {/each}
+    <!-- Điền chỗ trống nhận cả khung từ của sách (tối đa 16 từ, QuestionPayload::MAX_OPTIONS_BLANK). -->
+    {#if isBlank && (draft.payload.options ?? []).length < MAX_PA_BLANK}
+      <button type="button" class="btn btn-sm btn-paper" style="align-self: flex-start" onclick={themPhuongAn}><Icon name="plus" size={15} /> Thêm phương án</button>
+    {/if}
     {#if errors.options}<p class="err">{errors.options}</p>{/if}
     {#if errors.answer}<p class="err">{errors.answer}</p>{/if}
   </div>

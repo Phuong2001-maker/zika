@@ -3,6 +3,7 @@
   import { tileOrder } from '$lib/utils/shuffle';
   import { speak } from '$lib/learn/speech';
   import { isChoice, PAIR_COLORS, type Answer, type Payload } from '$lib/utils/grade';
+  import { urlHinh } from '$lib/learn/thi-hsk/hinh';
 
   // Hiển thị một câu hỏi cho người học, dùng chung cho Bài tập và Kiểm tra (06 §6).
   // Component không tự chấm: trang gọi nó quyết định `state` để tô màu.
@@ -33,6 +34,10 @@
   const isAudioQ = $derived(type === 'audio' || type === 'listen' || (type === 'pic' && !!payload.audioText));
   const isPic = $derived(type === 'pic');
   const isBlankQ = $derived(type === 'blank');
+  /** Khung từ của sách (Hán ngữ 选词填空, 8–15 từ): hiện thành lưới từ gọn thay vì từng dòng phương án to. */
+  const khungTu = $derived(isBlankQ && options.length > 4);
+  /** Đoạn đọc hiểu dài (sách Hán ngữ) thì chữ nhỏ lại cho đọc liền mạch; đề ngắn giữ chữ to như cũ. */
+  const doanDai = $derived(String(payload.passage ?? '').length > 160);
 
   /* ---------------- trắc nghiệm ---------------- */
   function pickOption(i: number): void {
@@ -52,6 +57,8 @@
   const tiles = $derived<string[]>(payload.tiles ?? []);
   const shown = $derived(tileOrder(tiles));
   const picked = $derived<number[]>(Array.isArray(answer) ? (answer as number[]) : []);
+  /** Sắp xếp cả câu thành đoạn (连句成段): mỗi ô là một câu dài, xếp thành từng dòng. */
+  const oDai = $derived(tiles.some((t) => t.length > 12));
 
   function addTile(i: number): void {
     if (locked || picked.includes(i)) return;
@@ -142,7 +149,8 @@
   {#if isBlankQ}
     {@const parts = String(payload.sentence ?? '').split('___')}
     <p class="hz sentence" lang="zh" style="font-size: {mobile ? 24 : 30}px">
-      {parts[0]}<span class="blank">{rightIndex !== null ? options[rightIndex] : ''}</span>{parts[1] ?? ''}
+      <!-- Từ đang chọn hiện ngay trong chỗ trống (mờ) để người học đọc thử cả câu trước khi chấm. -->
+      {parts[0]}<span class="blank" class:thu={rightIndex === null && typeof answer === 'number'}>{rightIndex !== null ? options[rightIndex] : typeof answer === 'number' ? (options[answer] ?? '') : ''}</span>{parts[1] ?? ''}
     </p>
     {#if payload.showMeaning && payload.vi}<p class="muted ask">{payload.vi}</p>{/if}
   {/if}
@@ -152,14 +160,32 @@
   {/if}
 
   {#if type === 'pick' && payload.ask}
-    <p class="ask-big">{payload.ask}</p>
+    <p class="ask-big tron">{payload.ask}</p>
+  {/if}
+
+  {#if type === 'go'}
+    <!-- Viết chữ Hán theo pinyin (đề HSK 2 câu 56–60): pinyin in trên ô viết như đề giấy, gõ chữ vào ô. -->
+    {@const phan = String(payload.sentence ?? '').split('___')}
+    <p class="hz sentence" lang="zh" style="font-size: {mobile ? 24 : 30}px">
+      {phan[0]}<span class="go-o">
+        <span class="go-py">{payload.pinyin}</span>
+        <input
+          class="go-inp hz"
+          lang="zh"
+          maxlength="4"
+          disabled={locked}
+          value={typeof answer === 'string' ? answer : ''}
+          oninput={(e) => (answer = e.currentTarget.value)}
+          aria-label="Viết chữ Hán có pinyin {payload.pinyin}"
+        /></span>{phan[1] ?? ''}
+    </p>
   {/if}
   {#if type === 'toZh' && payload.vi}
     <p class="ask-big" style="font-size: {mobile ? 19 : 22}px">“{payload.vi}”</p>
   {/if}
 
   {#if type === 'tf'}
-    <div class="passage hz" lang="zh">{payload.passage}</div>
+    <div class="passage hz" class:dai={doanDai} lang="zh">{payload.passage}</div>
     <p class="stmt hz" lang="zh"><span class="star">★</span> {payload.statement}</p>
   {/if}
 
@@ -180,12 +206,12 @@
       {#each options as o, i (i)}
         <button type="button" class="{optClass(i)} qv-tranh-o" disabled={locked} onclick={() => pickOption(i)} aria-label="Tranh {String.fromCharCode(65 + i)}">
           <span class="k">{String.fromCharCode(65 + i)}</span>
-          <img src="/hinh-hsk/{o}.svg" alt="" width="160" height="120" loading="lazy" />
+          <img src={urlHinh(o)} alt="" width="160" height="120" loading="lazy" />
         </button>
       {/each}
     </div>
   {:else if isChoice(type)}
-    <div class="opts" class:one={hzOptions && options.some((o) => o.length > 12)}>
+    <div class="opts" class:one={hzOptions && options.some((o) => o.length > 12)} class:khung={khungTu}>
       {#each options as o, i (i)}
         <button type="button" class={optClass(i)} disabled={locked} onclick={() => pickOption(i)}>
           <span class="k">{String.fromCharCode(65 + i)}</span>
@@ -194,16 +220,16 @@
       {/each}
     </div>
   {:else if type === 'order'}
-    <div class="drop" class:trong={picked.length === 0}>
+    <div class="drop" class:trong={picked.length === 0} class:o-dai={oDai}>
       {#if picked.length === 0}
-        <span class="muted" style="font-size: 14px">Bấm các ô chữ bên dưới theo đúng thứ tự</span>
+        <span class="muted" style="font-size: 14px">{oDai ? 'Bấm các câu bên dưới theo đúng thứ tự để thành đoạn văn' : 'Bấm các ô chữ bên dưới theo đúng thứ tự'}</span>
       {:else}
         {#each picked as t, pos (pos)}
           <button type="button" class="wt" disabled={locked} onclick={() => removeTile(pos)}>{tiles[t]}</button>
         {/each}
       {/if}
     </div>
-    <div class="tiles">
+    <div class="tiles" class:o-dai={oDai}>
       {#each shown as i (i)}
         <button type="button" class="wt" disabled={locked || picked.includes(i)} onclick={() => addTile(i)}>{tiles[i]}</button>
       {/each}
@@ -420,6 +446,69 @@
 
   .q.m .opts {
     grid-template-columns: 1fr;
+  }
+  /* Khung từ của sách: lưới từ nhỏ, đủ 8–15 từ trong một màn hình. Đặt sau .q.m .opts để thắng trên điện thoại. */
+  .opts.khung,
+  .q.m .opts.khung {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+  .opts.khung .opt {
+    min-height: 48px;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .opts.khung .opt .k {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  .blank.thu {
+    color: var(--text-3);
+  }
+  .go-o {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 4px;
+    vertical-align: bottom;
+  }
+  .go-py {
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--text-2);
+  }
+  .go-inp {
+    width: 2.6em;
+    height: 1.5em;
+    padding: 0;
+    border: 1px solid var(--ink-strong);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--son-text);
+    font-size: inherit;
+    text-align: center;
+  }
+  .tron {
+    font-family: var(--font-mix);
+  }
+  .passage.dai {
+    font-size: 18px;
+    line-height: 1.75;
+  }
+  /* Ô là cả câu: xếp thành từng dòng, chữ cỡ đọc, căn trái. */
+  .o-dai {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .o-dai .wt {
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 17px;
+    line-height: 1.5;
+    text-align: left;
   }
   .q.m .blank {
     min-width: 72px;

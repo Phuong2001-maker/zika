@@ -33,7 +33,7 @@ export interface QuestionRow {
 }
 
 /** Dạng câu dùng được ở mỗi phần — giống QuestionGrader::BT_TYPES / KT_TYPES ở API. */
-const BT_TYPES = ['meaning', 'blank', 'audio', 'pinyin', 'order', 'trans', 'tf', 'match'];
+const BT_TYPES = ['meaning', 'blank', 'audio', 'pinyin', 'order', 'trans', 'tf', 'match', 'pick'];
 const KT_TYPES = ['blank', 'listen', 'meaning', 'pick', 'order', 'trans', 'tf', 'match', 'tone', 'toZh'];
 
 /** Đề khung HSK 3.0 (Thi thử HSK 3.0, đề cuộc thi): dạng câu theo phần, giống màn soạn (SoanDeHsk.svelte).

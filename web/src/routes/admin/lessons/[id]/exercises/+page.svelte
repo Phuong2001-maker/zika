@@ -21,6 +21,7 @@
     ['trans', 'Dịch sang tiếng Việt'],
     ['tf', 'Đúng / Sai'],
     ['match', 'Nối từ'],
+    ['pick', 'Chọn đáp án'],
   ];
   const typeName = (t: string): string => TYPES.find(([c]) => c === t)?.[1] ?? t;
 

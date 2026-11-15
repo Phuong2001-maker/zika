@@ -240,8 +240,8 @@ final class PartContent
     private static function charRows(string $where, array $params, bool $withLesson = false): array
     {
         $rows = Db::all(
-            "SELECT lc.id AS lesson_char_id, lc.lesson_id, lc.sort_order, l.lesson_no, lc.pinyin AS lesson_pinyin,
-                    c.*, w.hanzi AS word_hanzi, w.meaning_vi AS word_meaning
+            "SELECT lc.id AS lesson_char_id, lc.lesson_id, lc.sort_order, l.lesson_no, l.curriculum_id AS lesson_curriculum,
+                    lc.pinyin AS lesson_pinyin, c.*, w.hanzi AS word_hanzi, w.meaning_vi AS word_meaning
              FROM lesson_chars lc
              JOIN characters c ON c.id = lc.char_id
              JOIN lessons l ON l.id = lc.lesson_id
@@ -277,12 +277,61 @@ final class PartContent
                 'word' => $c['word_hanzi'] !== null
                     ? ['hanzi' => (string) $c['word_hanzi'], 'meaning' => (string) $c['word_meaning']]
                     : null,
+                // Màn Luyện viết mới (15/11/2026): Cách nhớ + Từ ghép. Chữ chưa soạn thì dùng đoạn phân tích cũ làm câu nhớ
+                // và lấy từ ghép trong bảng từ vựng, để màn không bao giờ trống.
+                'cachNho' => self::cachNho($c),
+                'tuGhep' => self::tuGhep($c),
             ];
             if ($withLesson) {
                 $item['lessonNo'] = (int) $c['lesson_no'];
             }
             return $item;
         }, $rows);
+    }
+
+    /**
+     * @param array<string,mixed> $c dòng characters
+     * @return array{phan:list<array<string,string>>,lienTuong:string}
+     */
+    private static function cachNho(array $c): array
+    {
+        $j = ContentBuilder::json($c['cach_nho'] ?? null, null);
+        if (is_array($j) && trim((string) ($j['lienTuong'] ?? '')) !== '') {
+            return ['phan' => array_values((array) ($j['phan'] ?? [])), 'lienTuong' => (string) $j['lienTuong']];
+        }
+        return ['phan' => [], 'lienTuong' => (string) ($c['analysis'] ?? '')];
+    }
+
+    /**
+     * @param array<string,mixed> $c dòng characters (+ lesson_curriculum)
+     * @return list<array{hanzi:string,pinyin:string,nghia:string}>
+     */
+    private static function tuGhep(array $c): array
+    {
+        $j = ContentBuilder::json($c['tu_ghep'] ?? null, null);
+        if (is_array($j) && $j !== []) {
+            return array_values($j);
+        }
+        $h = (string) $c['hanzi'];
+        // Từ của chính giáo trình đứng trước (người học đã gặp), rồi giáo trình khác; cấp thấp trước.
+        $rows = Db::all(
+            'SELECT w.hanzi, w.pinyin, w.meaning_vi FROM words w JOIN lessons l ON l.id = w.lesson_id
+             WHERE w.hanzi LIKE ? AND w.hanzi <> ?
+             ORDER BY (w.curriculum_id = ?) DESC, w.level_id, l.lesson_no, w.id LIMIT 12',
+            ['%' . $h . '%', $h, (int) ($c['lesson_curriculum'] ?? 0)],
+        );
+        $out = [];
+        foreach ($rows as $w) {
+            if (isset($out[$w['hanzi']])) {
+                continue;
+            }
+            $nghia = trim(explode(';', (string) $w['meaning_vi'])[0]);
+            $out[$w['hanzi']] = ['hanzi' => (string) $w['hanzi'], 'pinyin' => (string) $w['pinyin'], 'nghia' => mb_strtoupper(mb_substr($nghia, 0, 1)) . mb_substr($nghia, 1)];
+            if (count($out) === 5) {
+                break;
+            }
+        }
+        return array_values($out);
     }
 
     /* ------------------------------------------------------------------ */

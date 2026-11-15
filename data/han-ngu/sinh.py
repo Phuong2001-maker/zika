@@ -2,8 +2,8 @@
 
   python sinh.py all | python sinh.py 2 | python sinh.py 2 16
 
-Chỉ dựng 4 phần: Lật thẻ, Luyện viết, Đọc hội thoại, Ngữ pháp. Giáo trình này không có Bài tập và
-Kiểm tra (quyết định của người dùng), nên không sinh câu hỏi.
+Chỉ dựng 4 phần: Lật thẻ, Luyện viết, Đọc hội thoại, Ngữ pháp. Bài tập (từ 15/11/2026) chép từ phần 练习 của sách
+vào bai-tap/ và nạp riêng bằng nap_bai_tap.py (DAC-TA-BAI-TAP.md); Kiểm tra vẫn để trống (quyết định của người dùng).
 """
 from __future__ import annotations
 

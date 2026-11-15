@@ -5,6 +5,7 @@ namespace Zika\Controllers\Admin;
 
 use Zika\Core\Audit;
 use Zika\Core\Db;
+use Zika\Core\FileCache;
 use Zika\Core\HttpError;
 use Zika\Core\Pinyin;
 use Zika\Core\Request;
@@ -269,6 +270,69 @@ final class WritingController
         }
         Audit::log($r, 'characters.analysis', 'characters', null, ['count' => count($items)]);
         return ['updated' => $ok];
+    }
+
+    /**
+     * PUT /admin/characters/cach-nho — nạp hàng loạt "Cách nhớ" + "Từ ghép" cho màn Luyện viết (migration 029).
+     * items: [{hanzi, phan:[{mau,vi_tri,chu,ten,nghia}], lienTuong, tuGhep:[{hanzi,pinyin,nghia}]}].
+     * Chữ chưa có trong bảng characters thì bỏ qua. Màn học lấy từ cache nội dung nên xoá hết cache sau khi nạp.
+     */
+    public function cachNho(Request $r): array
+    {
+        $v = new Validator($r->body);
+        $items = $v->arr('items', 'Danh sách chữ');
+        $v->done();
+        if (count($items) > 500) {
+            throw HttpError::validation(['items' => 'Mỗi lượt nhiều nhất 500 chữ.']);
+        }
+        $cat = static fn (mixed $s, int $n): string => mb_substr(trim((string) $s), 0, $n);
+
+        $ok = 0;
+        $boQua = [];
+        // Một giao dịch cho cả lô: hàng trăm UPDATE lẻ mỗi lệnh tự commit thì quá 30 giây khi DB đang bận.
+        Db::tx(function () use ($items, $cat, &$ok, &$boQua): void {
+        foreach ($items as $k => $it) {
+            $hanzi = is_array($it) ? $cat($it['hanzi'] ?? '', 4) : '';
+            $lt = is_array($it) ? $cat($it['lienTuong'] ?? '', 300) : '';
+            if ($hanzi === '' || $lt === '') {
+                $boQua[] = 'Dòng ' . ($k + 1) . ': thiếu chữ hoặc câu liên tưởng.';
+                continue;
+            }
+            $phan = [];
+            foreach (array_slice(is_array($it['phan'] ?? null) ? $it['phan'] : [], 0, 2) as $p) {
+                if (!is_array($p) || !in_array($p['mau'] ?? '', ['a', 'b'], true)) {
+                    continue;
+                }
+                $phan[] = [
+                    'mau' => (string) $p['mau'],
+                    'vi_tri' => $cat($p['vi_tri'] ?? '', 30),
+                    'chu' => $cat($p['chu'] ?? '', 12),
+                    'ten' => $cat($p['ten'] ?? '', 60),
+                    'nghia' => $cat($p['nghia'] ?? '', 120),
+                ];
+            }
+            $tu = [];
+            foreach (array_slice(is_array($it['tuGhep'] ?? null) ? $it['tuGhep'] : [], 0, 5) as $t) {
+                $th = is_array($t) ? $cat($t['hanzi'] ?? '', 12) : '';
+                // Từ ghép phải chứa chữ đang học, không phải chính chữ đó.
+                if ($th === '' || $th === $hanzi || !str_contains($th, $hanzi)) {
+                    continue;
+                }
+                $tu[] = ['hanzi' => $th, 'pinyin' => $cat($t['pinyin'] ?? '', 60), 'nghia' => $cat($t['nghia'] ?? '', 80)];
+            }
+            $ok += Db::exec(
+                'UPDATE characters SET cach_nho = ?, tu_ghep = ? WHERE hanzi = ?',
+                [
+                    json_encode(['phan' => $phan, 'lienTuong' => $lt], JSON_UNESCAPED_UNICODE),
+                    $tu === [] ? null : json_encode($tu, JSON_UNESCAPED_UNICODE),
+                    $hanzi,
+                ],
+            );
+        }
+        });
+        FileCache::forgetAllContent();
+        Audit::log($r, 'characters.cach_nho', 'characters', null, ['count' => count($items)]);
+        return ['updated' => $ok, 'skipped' => $boQua];
     }
 
     /** DELETE /admin/lesson-chars/{id} */

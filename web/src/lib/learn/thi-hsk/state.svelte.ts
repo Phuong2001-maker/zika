@@ -33,6 +33,8 @@ export interface LuotLam {
   questions: CauHoi[];
   answers: Record<string, Answer>;
   listenCounts: Record<string, number>;
+  /** Đề HSK 1–2: chuỗi chữ → pinyin từng từ để in trên đầu chữ (migration 030). */
+  pinyin?: Record<string, [string, string][]>;
 }
 
 /** Kết quả chấm ngay một câu ở chế độ luyện tập (POST /tests/attempts/{id}/check). */
@@ -198,6 +200,46 @@ export class ThiHsk {
   conNghe(q: CauHoi): number | null {
     if (!this.at || this.luyenTap || q.type !== 'listen') return null;
     return Math.max(0, this.at.listenLimit - (this.listens[q.id] ?? 0));
+  }
+
+  /* ---- Màn kiểu tờ đề (15/11/2026): mọi câu hiện cùng lúc, thao tác theo câu chứ không theo "câu đang xem". ---- */
+
+  readonly pinyin = $derived(this.at?.pinyin && !Array.isArray(this.at.pinyin) ? this.at.pinyin : null);
+
+  /** Ghi câu trả lời của một câu bất kỳ; câu đã kiểm tra thì khoá (trừ câu nói, được tự đánh giá sau khi xem mẫu). */
+  traLoi(q: CauHoi, v: Answer): void {
+    if (this.kiemTra[q.id] && q.type !== 'speak') return;
+    this.answers = { ...this.answers, [q.id]: v };
+    this.#luuSau();
+  }
+
+  ngheCau(q: CauHoi): void {
+    this.listens = { ...this.listens, [q.id]: (this.listens[q.id] ?? 0) + 1 };
+    this.#luuSau();
+  }
+
+  daLamCau(q: CauHoi): boolean {
+    return answered(q.type, q.payload, this.answers[q.id] ?? null);
+  }
+
+  /**
+   * Luyện tập: "Kiểm tra phần này" chấm mọi câu đã làm của một nhóm (gọi lần lượt POST …/check như kiểm từng câu, để
+   * server giữ một đường chấm duy nhất). Câu chưa làm để nguyên, người học làm tiếp rồi kiểm lại được.
+   */
+  async kiemTraPhan(ds: CauHoi[]): Promise<void> {
+    if (!this.at || this.dangKiem || !this.luyenTap) return;
+    this.dangKiem = true;
+    try {
+      for (const q of ds) {
+        if (this.kiemTra[q.id] || !this.daLamCau(q)) continue;
+        const r = await api.post<KiemTra>(`/tests/attempts/${this.at.attemptId}/check`, { qid: q.id, answer: this.answers[q.id] ?? null });
+        this.kiemTra = { ...this.kiemTra, [q.id]: r };
+      }
+    } catch (e) {
+      toast.show(e instanceof ApiError ? e.message : 'Chưa kiểm tra được, thử lại nhé.');
+    } finally {
+      this.dangKiem = false;
+    }
   }
 
   async kiemTraCau(): Promise<void> {

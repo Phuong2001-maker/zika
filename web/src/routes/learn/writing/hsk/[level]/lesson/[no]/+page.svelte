@@ -12,6 +12,7 @@
   import EmptyState from '$lib/components/EmptyState.svelte';
   import DauBai from '$lib/components/DauBai.svelte';
   import HanziPad from '$lib/learn/HanziPad.svelte';
+  import ChuToMau from '$lib/learn/ChuToMau.svelte';
   import { untrack } from 'svelte';
   import { replaceState } from '$app/navigation';
   import { completePart, lessonByNo, levelProgress, progressOf, saveProgress } from '$lib/learn/lesson';
@@ -35,7 +36,11 @@
     radicalInfo: { no: number; form: string; root: string; name: string; meaning: string } | null;
     analysis: string;
     radicalExamples: { hanzi: string; pinyin: string; hanViet: string; meaning: string; word: string | null }[];
+    /** Cách nhớ (migration 029): phần a = bộ thủ (tô son), phần b = phần còn lại (tô xanh) + câu liên tưởng. */
+    cachNho: { phan: PhanChu[]; lienTuong: string };
+    tuGhep: { hanzi: string; pinyin: string; nghia: string }[];
   }
+  interface PhanChu { mau: 'a' | 'b'; vi_tri: string; chu: string; ten: string; nghia: string }
   interface Config { startMode: 'demo' | 'trace' | 'free'; grid: 'tian' | 'mi'; passCount: number; hintAfterMisses: number; showAnimation: boolean; highlightRadical: boolean }
   interface Data { lesson: LessonRef; config: Config; chars: Char[]; next: NextLesson | null }
 
@@ -160,6 +165,25 @@
     }
   }
 
+  /**
+   * Tách câu liên tưởng thành đoạn để tô màu chữ thành phần đúng như thẻ phần a/b (人 son, 交 xanh). Chữ thành phần
+   * dài khớp trước (丶㇇ trước 丶) để không cắt đôi một thành phần.
+   */
+  function doanMau(text: string, phan: PhanChu[]): { t: string; mau: 'a' | 'b' | null }[] {
+    const ds = phan.filter((p) => p.chu.trim() !== '').sort((x, y) => y.chu.length - x.chu.length);
+    if (ds.length === 0) return [{ t: text, mau: null }];
+    const re = new RegExp(`(${ds.map((p) => p.chu.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gu');
+    return text
+      .split(re)
+      .filter((t) => t !== '')
+      .map((t) => ({ t, mau: ds.find((p) => p.chu === t)?.mau ?? null }));
+  }
+
+  /** Tô son chữ đang học trong từ ghép (今天 → 今 son). */
+  function tachTu(tu: string, chu: string): { t: string; on: boolean }[] {
+    return Array.from(tu).map((t) => ({ t, on: t === chu }));
+  }
+
   const hint = $derived(
     mode === 'demo'
       ? 'Nét được đánh số theo thứ tự viết. Xem xong thì chuyển sang “Tô theo”.'
@@ -240,11 +264,13 @@
     {@render cheDo(m)}
     <p class="vt-huong">{hint}</p>
     {@render congCu(m)}
-    {#if m}<p class="vt-luot num">Chữ {ci + 1}/{chars.length} · Lượt viết đúng {passes}/{need}</p>{/if}
+    <!-- Bỏ "Lượt viết đúng" (người dùng chốt 15/11/2026): đếm lượt vẫn chạy ngầm, xong lượt thì báo bằng thông báo nổi. -->
+    {#if m}<p class="vt-luot num">Chữ {ci + 1}/{chars.length}</p>{/if}
   </div>
 {/snippet}
 
-<!-- Thông tin chữ: một ô nền nhạt trong khung, các ô con (bộ thủ, chữ cùng bộ) nền trắng nổi lên trên. -->
+<!-- Thông tin chữ (giao diện chốt 15/11/2026, ảnh data/han-ngu/ra/mau-luyen-viet*.png): chữ + pinyin + Hán Việt,
+     nghĩa, rồi Cách nhớ (chữ tô màu theo bộ phận, thẻ từng phần, câu liên tưởng) và Từ ghép. -->
 {#snippet thongTin(cc: Char)}
   <div class="zk-o vt-tt">
     <div class="vt-tt-dau">
@@ -258,34 +284,52 @@
 
     <p style="font-size: 15px">{cc.meaning}</p>
     <hr class="rule" />
-    <p class="muted" style="font-size: 13.5px"><b>{cc.strokes} nét</b>{cc.structure ? ` · ${cc.structure}` : ''}</p>
-    {#if cc.word}
-      <p style="font-size: 14px">Có trong từ: <b class="hz" lang="zh">{cc.word.hanzi}</b> <span class="muted">{cc.word.meaning}</span></p>
-    {/if}
 
-    {#if cc.radicalInfo}
-      <div class="vt-bo">
-        <span class="hz vt-bo-chu" lang="zh">{cc.radicalInfo.form}</span>
-        <div style="min-width: 0">
-          <p style="font-size: 14px"><b>Bộ {cc.radicalInfo.name}</b>{#if cc.radicalInfo.form !== cc.radicalInfo.root}&nbsp;<span class="hz" lang="zh">({cc.radicalInfo.root})</span>{/if} · <span class="muted">số {cc.radicalInfo.no}</span></p>
-          <p class="muted" style="font-size: 13.5px">Nghĩa: {cc.radicalInfo.meaning}</p>
+    {#if cc.cachNho.lienTuong || cc.cachNho.phan.length > 0}
+      <div>
+        <p class="vt-nhan">Cách nhớ</p>
+        <div class="vt-nho">
+          {#if cc.cachNho.phan.length > 0}
+            <div class="vt-nho-ghep">
+              <ChuToMau dataUrl={cc.strokeDataUrl} hanzi={cc.hanzi} size={media.isMobile ? 76 : 84} />
+              <div class="vt-nho-ds">
+                {#each cc.cachNho.phan as p, pi (pi)}
+                  <div class="vt-nho-phan" class:b={p.mau === 'b'}>
+                    <span class="hz vt-nho-chu" lang="zh">{p.chu}</span>
+                    <div style="min-width: 0">
+                      <b>{p.vi_tri ? `${p.vi_tri.charAt(0).toUpperCase()}${p.vi_tri.slice(1)} · ` : ''}{p.ten}</b>
+                      <span class="vt-nho-nghia">{p.nghia}</span>
+                    </div>
+                  </div>
+                {/each}
+              </div>
+            </div>
+          {/if}
+          {#if cc.cachNho.lienTuong}
+            <div class="vt-nho-y" class:vt-nho-y-mot={cc.cachNho.phan.length === 0}>
+              <span class="vt-nho-den" aria-hidden="true"><Icon name="bulb" size={17} /></span>
+              <p>
+                {#if cc.cachNho.phan.length > 0}<b>Liên tưởng:</b>{/if}
+                {#each doanMau(cc.cachNho.lienTuong, cc.cachNho.phan) as d, di (di)}{#if d.mau}<span class="hz vt-mau-{d.mau}" lang="zh">{d.t}</span>{:else}{d.t}{/if}{/each}
+              </p>
+            </div>
+          {/if}
         </div>
       </div>
     {/if}
-    {#if cc.analysis}
-      <p style="font-size: 14px; line-height: 1.55">{cc.analysis}</p>
-    {/if}
-    {#if cc.radicalExamples.length > 0 && cc.radicalInfo}
+
+    {#if cc.tuGhep.length > 0}
       <div>
-        <p class="vt-nhan">Chữ khác cùng bộ {cc.radicalInfo.form}</p>
-        <div class="vt-cung">
-          {#each cc.radicalExamples as e, ei (ei)}
-            <button type="button" class="vt-cung-o" onclick={() => speak(e.hanzi)} aria-label="Nghe {e.hanzi}">
-              <span class="hz" lang="zh" style="font-size: 26px; line-height: 1">{e.hanzi}</span>
-              <span style="min-width: 0; text-align: left">
-                <b style="font-size: 13px">{e.pinyin}</b>{#if e.hanViet}<span class="muted" style="font-size: 11.5px; margin-left: 5px">{e.hanViet}</span>{/if}
-                <span class="muted" style="display: block; font-size: 12.5px">{e.meaning}{#if e.word} · <span class="hz" lang="zh">{e.word}</span>{/if}</span>
+        <p class="vt-nhan">Từ ghép</p>
+        <div class="vt-tu">
+          {#each cc.tuGhep as t, ti (ti)}
+            <button type="button" class="vt-tu-dong" onclick={() => speak(t.hanzi)} aria-label="Nghe {t.hanzi}">
+              <span class="hz vt-tu-hz" lang="zh">{#each tachTu(t.hanzi, cc.hanzi) as x, xi (xi)}{#if x.on}<em>{x.t}</em>{:else}{x.t}{/if}{/each}</span>
+              <span class="vt-tu-chu">
+                <span class="vt-tu-py">{t.pinyin}</span>
+                <span class="vt-tu-nghia">{t.nghia}</span>
               </span>
+              <span class="vt-tu-loa" aria-hidden="true"><Icon name="speaker" size={17} /></span>
             </button>
           {/each}
         </div>
@@ -298,8 +342,8 @@
      tới chữ cuối hoặc xong bài, như trước. -->
 {#snippet chan(m: boolean)}
   <div class="zk-chan">
-    {#if !m}
-      <span class="vt-luot num">{done ? 'Đã viết xong cả bài.' : `Lượt viết đúng: ${passes}/${need}`}</span>
+    {#if !m && done}
+      <span class="vt-luot">Đã viết xong cả bài.</span>
     {/if}
     <div class="vt-chan-nut" class:vt-chan-nut-m={m}>
       {#if done && data}
@@ -535,58 +579,162 @@
     outline: 2px solid var(--focus);
     outline-offset: 2px;
   }
-  .vt-bo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--surface);
-  }
-  .vt-bo-chu {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    background: var(--troi);
-    font-size: 28px;
-    color: var(--blue-text);
-  }
   .vt-nhan {
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     font-size: 12.5px;
     font-weight: 700;
     letter-spacing: 0.02em;
     text-transform: uppercase;
     color: var(--text-2);
   }
-  .vt-cung {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
-    gap: 8px;
+
+  /* Cách nhớ: chữ tô màu theo bộ phận, thẻ từng phần (a son = bộ thủ, b xanh = phần còn lại), câu liên tưởng. */
+  .vt-nho {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
   }
-  .vt-cung-o {
+  .vt-nho-ghep {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .vt-nho-ds {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .vt-nho-phan {
     display: flex;
     align-items: center;
     gap: 10px;
-    min-height: 52px;
-    padding: 8px 10px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: var(--son-soft);
+  }
+  .vt-nho-phan.b {
+    background: var(--troi);
+  }
+  .vt-nho-chu {
+    flex: none;
+    min-width: 34px;
+    font-size: 24px;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--son-text);
+  }
+  .vt-nho-phan.b .vt-nho-chu {
+    color: var(--blue-text);
+  }
+  .vt-nho-phan b {
+    display: block;
+    font-size: 13px;
+  }
+  .vt-nho-nghia {
+    display: block;
+    font-size: 13.5px;
+    color: var(--text-2);
+  }
+  .vt-nho-y {
+    display: flex;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+  }
+  /* Chữ chưa tách phần (chỉ có câu nhớ cũ): không cần đường ngăn phía trên. */
+  .vt-nho-y-mot {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .vt-nho-den {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: #fef6e4;
+    color: #b7791f;
+  }
+  .vt-nho-y p {
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .vt-mau-a {
+    color: var(--son-text);
+  }
+  .vt-mau-b {
+    color: var(--blue-text);
+  }
+
+  /* Từ ghép: mỗi dòng bấm để nghe, chữ đang học tô son. */
+  .vt-tu {
     border: 1px solid var(--line);
-    border-radius: var(--r-sm);
+    border-radius: 12px;
     background: var(--surface);
+    overflow: hidden;
+  }
+  .vt-tu-dong {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 54px;
+    padding: 8px 10px 8px 14px;
+    border: 0;
+    background: none;
     color: var(--text);
     font: inherit;
+    text-align: left;
     cursor: pointer;
   }
-  .vt-cung-o:hover {
-    border-color: var(--line-3);
+  .vt-tu-dong + .vt-tu-dong {
+    border-top: 1px solid var(--line);
   }
-  .vt-cung-o:focus-visible {
+  .vt-tu-dong:hover {
+    background: var(--surface-2);
+  }
+  .vt-tu-dong:focus-visible {
     outline: 2px solid var(--focus);
-    outline-offset: 2px;
+    outline-offset: -2px;
+  }
+  .vt-tu-hz {
+    flex: none;
+    min-width: 64px;
+    font-size: 22px;
+    line-height: 1.1;
+  }
+  .vt-tu-hz em {
+    font-style: normal;
+    color: var(--son-text);
+  }
+  .vt-tu-chu {
+    flex: 1;
+    min-width: 0;
+  }
+  .vt-tu-py {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+  }
+  .vt-tu-nghia {
+    display: block;
+    font-size: 14.5px;
+  }
+  .vt-tu-loa {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    color: var(--text-2);
   }
 
   /* Hàng nút cuối khung: nút nằm bên phải; điện thoại kéo hết bề ngang. */

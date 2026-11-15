@@ -316,6 +316,11 @@ final class TestService
         }
 
         $map = range(0, $n - 1);
+        // Trên 4 phương án là nhóm A–F dùng chung cả nhóm câu (đề mô phỏng của sách: tranh A–F, khung từ A–F, câu trả lời
+        // A–F): xáo riêng từng câu thì cùng một tranh mang chữ cái khác nhau ở mỗi câu → giữ đúng thứ tự in.
+        if ($q['type'] !== 'order' && $q['type'] !== 'match' && $n > 4) {
+            return $map;
+        }
         // Câu sắp xếp và nối từ luôn phải xáo: cột phải của nối từ mà giữ nguyên thì dòng nào cũng thẳng hàng với đáp án.
         if ($shuffle || $q['type'] === 'order' || $q['type'] === 'match') {
             shuffle($map);
@@ -376,6 +381,8 @@ final class TestService
             'autoSubmit' => (bool) $cfg['autoSubmit'],
             'contestTitle' => self::contestTitle($a),
             'questions' => $out,
+            // Đề HSK 1–2 in pinyin trên chữ như đề giấy: bảng chuỗi → pinyin (rỗng ở cấp cao hoặc đề bài học).
+            'pinyin' => $mock === null ? [] : PinyinDe::choDe($out, (int) $mock['level_id']),
             'answers' => ContentBuilder::json($a['answers'], []),
             'flags' => ContentBuilder::json($a['flags'], []),
             'listenCounts' => ContentBuilder::json($a['listen_counts'], []),

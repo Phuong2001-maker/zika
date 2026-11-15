@@ -1,0 +1,6755 @@
+[
+ {
+  "hanzi": "现",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "王",
+    "ten": "Bộ Ngọc (viết như 王)",
+    "nghia": "ngọc"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "见",
+    "ten": "chữ Kiến (jiàn)",
+    "nghia": "thấy · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Ánh ngọc 王 lộ ra cho mắt thấy 见 → hiện ra; hiện tại. Âm Hán Việt HIỆN như “hiện tại”.",
+  "tu_ghep": [
+   {
+    "hanzi": "现在",
+    "pinyin": "xiànzài",
+    "nghia": "Bây giờ"
+   },
+   {
+    "hanzi": "现代",
+    "pinyin": "xiàndài",
+    "nghia": "Hiện đại"
+   },
+   {
+    "hanzi": "表现",
+    "pinyin": "biǎoxiàn",
+    "nghia": "Biểu hiện, thể hiện"
+   },
+   {
+    "hanzi": "发现",
+    "pinyin": "fāxiàn",
+    "nghia": "Phát hiện"
+   },
+   {
+    "hanzi": "实现",
+    "pinyin": "shíxiàn",
+    "nghia": "Thực hiện"
+   }
+  ]
+ },
+ {
+  "hanzi": "心",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "cả chữ",
+    "chu": "心",
+    "ten": "Bộ Tâm",
+    "nghia": "hình trái tim"
+   }
+  ],
+  "lien_tuong": "Nét cong như quả tim, ba chấm như nhịp đập → tim, lòng. Đứng bên trái chữ khác viết thành 忄. Âm Hán Việt TÂM như “tâm hồn”.",
+  "tu_ghep": [
+   {
+    "hanzi": "心情",
+    "pinyin": "xīnqíng",
+    "nghia": "Tâm trạng"
+   },
+   {
+    "hanzi": "小心",
+    "pinyin": "xiǎoxīn",
+    "nghia": "Cẩn thận"
+   },
+   {
+    "hanzi": "担心",
+    "pinyin": "dān xīn",
+    "nghia": "Lo lắng"
+   },
+   {
+    "hanzi": "开心",
+    "pinyin": "kāixīn",
+    "nghia": "Vui vẻ"
+   },
+   {
+    "hanzi": "关心",
+    "pinyin": "guānxīn",
+    "nghia": "Quan tâm"
+   }
+  ]
+ },
+ {
+  "hanzi": "情",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "忄",
+    "ten": "Bộ Tâm đứng",
+    "nghia": "lòng, tình cảm"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "青",
+    "ten": "chữ Thanh (qīng)",
+    "nghia": "xanh, trẻ · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tấm lòng 忄 trong xanh 青 như tuổi trẻ → tình cảm. 青 qīng gợi âm qíng. Âm Hán Việt TÌNH như “tình yêu”.",
+  "tu_ghep": [
+   {
+    "hanzi": "心情",
+    "pinyin": "xīnqíng",
+    "nghia": "Tâm trạng"
+   },
+   {
+    "hanzi": "热情",
+    "pinyin": "rèqíng",
+    "nghia": "Nhiệt tình"
+   },
+   {
+    "hanzi": "爱情",
+    "pinyin": "àiqíng",
+    "nghia": "Tình yêu"
+   },
+   {
+    "hanzi": "感情",
+    "pinyin": "gǎnqíng",
+    "nghia": "Tình cảm"
+   },
+   {
+    "hanzi": "事情",
+    "pinyin": "shìqing",
+    "nghia": "Sự việc"
+   }
+  ]
+ },
+ {
+  "hanzi": "哈",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "口",
+    "ten": "Bộ Khẩu",
+    "nghia": "miệng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "合",
+    "ten": "chữ Hợp (hé)",
+    "nghia": "khép lại · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Miệng 口 há ra rồi khép 合 lại liên tục: “ha ha!” → tiếng cười. Âm Hán Việt HA.",
+  "tu_ghep": [
+   {
+    "hanzi": "哈哈大笑",
+    "pinyin": "hāhā dàxiào",
+    "nghia": "Cười ha hả"
+   },
+   {
+    "hanzi": "马大哈",
+    "pinyin": "mǎdàhā",
+    "nghia": "Người đểnh đoảng, cẩu thả"
+   },
+   {
+    "hanzi": "哈哈",
+    "pinyin": "hāhā",
+    "nghia": "Ha ha (tiếng cười)"
+   }
+  ]
+ },
+ {
+  "hanzi": "联",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "耳",
+    "ten": "Bộ Nhĩ",
+    "nghia": "tai"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "关",
+    "ten": "chữ Quan (guān)",
+    "nghia": "đóng; liên quan"
+   }
+  ],
+  "lien_tuong": "Tai 耳 lắng nghe tin nhau, giữ mối liên quan 关 → liên kết, liên lạc. Âm Hán Việt LIÊN như “liên hệ”.",
+  "tu_ghep": [
+   {
+    "hanzi": "联欢会",
+    "pinyin": "liánhuānhuì",
+    "nghia": "Buổi liên hoan"
+   },
+   {
+    "hanzi": "对联儿",
+    "pinyin": "duìliánr",
+    "nghia": "Câu đối"
+   },
+   {
+    "hanzi": "联系",
+    "pinyin": "liánxì",
+    "nghia": "Liên hệ, liên lạc"
+   },
+   {
+    "hanzi": "互联网",
+    "pinyin": "hùliánwǎng",
+    "nghia": "Internet"
+   }
+  ]
+ },
+ {
+  "hanzi": "应",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao trên trái",
+    "chu": "广",
+    "ten": "Bộ Nghiễm",
+    "nghia": "mái nhà rộng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trong",
+    "chu": "丶丶丿一",
+    "ten": "hai chấm, một phẩy, một ngang",
+    "nghia": "như ba người đứng trên mặt đất"
+   }
+  ],
+  "lien_tuong": "Trong nhà 广 có tiếng gọi, cả ba người 丶丶丿一 cùng lên tiếng đáp → đáp ứng, nên. Âm Hán Việt ƯNG như “ưng thuận”.",
+  "tu_ghep": [
+   {
+    "hanzi": "答应",
+    "pinyin": "dāying",
+    "nghia": "Đồng ý, nhận lời"
+   },
+   {
+    "hanzi": "适应",
+    "pinyin": "shìyìng",
+    "nghia": "Thích ứng"
+   },
+   {
+    "hanzi": "应有尽有",
+    "pinyin": "yīngyǒu jìnyǒu",
+    "nghia": "Cần gì có nấy"
+   },
+   {
+    "hanzi": "应该",
+    "pinyin": "yīnggāi",
+    "nghia": "Nên"
+   }
+  ]
+ },
+ {
+  "hanzi": "竹",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "cả chữ",
+    "chu": "竹",
+    "ten": "Bộ Trúc",
+    "nghia": "hình hai cành tre lá rủ"
+   }
+  ],
+  "lien_tuong": "Hai cành tre đứng cạnh nhau, lá rủ xuống → tre, trúc. Đứng trên chữ khác viết thành ⺮. Âm Hán Việt TRÚC.",
+  "tu_ghep": [
+   {
+    "hanzi": "竹子",
+    "pinyin": "zhúzi",
+    "nghia": "Cây tre"
+   },
+   {
+    "hanzi": "竹林",
+    "pinyin": "zhúlín",
+    "nghia": "Rừng tre",
+    "them": true
+   },
+   {
+    "hanzi": "爆竹",
+    "pinyin": "bàozhú",
+    "nghia": "Pháo",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "窗",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "穴",
+    "ten": "Bộ Huyệt",
+    "nghia": "hang, lỗ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "囱",
+    "ten": "chữ 囱 (cōng)",
+    "nghia": "ô thông khí trên tường · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Khoét lỗ 穴 trên tường làm ô thông 囱 cho gió vào → cửa sổ. Âm Hán Việt SONG như “song cửa”.",
+  "tu_ghep": [
+   {
+    "hanzi": "窗户",
+    "pinyin": "chuānghu",
+    "nghia": "Cửa sổ"
+   },
+   {
+    "hanzi": "橱窗",
+    "pinyin": "chúchuāng",
+    "nghia": "Tủ kính trưng bày"
+   },
+   {
+    "hanzi": "窗口",
+    "pinyin": "chuāngkǒu",
+    "nghia": "Cửa sổ; quầy giao dịch",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "基",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "土",
+    "ten": "Bộ Thổ",
+    "nghia": "đất"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "其",
+    "ten": "chữ Kỳ (qí)",
+    "nghia": "cái ấy · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Đất 土 nện chắc dưới chân 其 làm móng → nền móng, cơ sở. Âm Hán Việt CƠ như “cơ bản”.",
+  "tu_ghep": [
+   {
+    "hanzi": "基础",
+    "pinyin": "jīchǔ",
+    "nghia": "Nền tảng, cơ sở"
+   },
+   {
+    "hanzi": "基本",
+    "pinyin": "jīběn",
+    "nghia": "Cơ bản"
+   },
+   {
+    "hanzi": "基地",
+    "pinyin": "jīdì",
+    "nghia": "Căn cứ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "松",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "木",
+    "ten": "Bộ Mộc",
+    "nghia": "cây, gỗ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "公",
+    "ten": "chữ Công (gōng)",
+    "nghia": "ông, chung · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Cây 木 được tôn là bậc “ông” 公 trong các loài cây → cây tùng, thông. Âm Hán Việt TÙNG như “tùng bách”.",
+  "tu_ghep": [
+   {
+    "hanzi": "轻松",
+    "pinyin": "qīngsōng",
+    "nghia": "Thoải mái, nhẹ nhõm"
+   },
+   {
+    "hanzi": "放松",
+    "pinyin": "fàngsōng",
+    "nghia": "Thả lỏng",
+    "them": true
+   },
+   {
+    "hanzi": "松树",
+    "pinyin": "sōngshù",
+    "nghia": "Cây thông",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "数",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "攵",
+    "ten": "Bộ Phộc",
+    "nghia": "đánh khẽ, tác động bằng tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "娄",
+    "ten": "chữ Lâu (lóu)",
+    "nghia": "gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay cầm que 攵 gõ đếm từng chồng 娄 → đếm, con số. Âm Hán Việt SỐ như “số học”.",
+  "tu_ghep": [
+   {
+    "hanzi": "少数",
+    "pinyin": "shǎoshù",
+    "nghia": "Thiểu số, số ít"
+   },
+   {
+    "hanzi": "数字",
+    "pinyin": "shùzì",
+    "nghia": "Chữ số"
+   },
+   {
+    "hanzi": "无数",
+    "pinyin": "wúshù",
+    "nghia": "Vô số"
+   },
+   {
+    "hanzi": "数学",
+    "pinyin": "shùxué",
+    "nghia": "Toán học"
+   }
+  ]
+ },
+ {
+  "hanzi": "街",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "hai bên",
+    "chu": "行",
+    "ten": "Bộ Hành",
+    "nghia": "đi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "giữa",
+    "chu": "圭",
+    "ten": "chữ Khuê (guī)",
+    "nghia": "ngọc khuê (hai chữ 土 chồng) · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Đi 行 qua lại giữa hai dãy nhà đất 圭 → đường phố. Âm Hán Việt NHAI.",
+  "tu_ghep": [
+   {
+    "hanzi": "上街",
+    "pinyin": "shàng jiē",
+    "nghia": "Ra phố"
+   },
+   {
+    "hanzi": "大街",
+    "pinyin": "dàjiē",
+    "nghia": "Phố lớn"
+   },
+   {
+    "hanzi": "街道",
+    "pinyin": "jiēdào",
+    "nghia": "Đường phố"
+   }
+  ]
+ },
+ {
+  "hanzi": "船",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "舟",
+    "ten": "Bộ Chu",
+    "nghia": "thuyền"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "几口",
+    "ten": "chữ Kỷ + chữ Khẩu",
+    "nghia": "mấy + miệng (người)"
+   }
+  ],
+  "lien_tuong": "Chiếc thuyền 舟 chở mấy người 几口 qua sông → thuyền. Âm Hán Việt THUYỀN.",
+  "tu_ghep": [
+   {
+    "hanzi": "划船",
+    "pinyin": "huá chuán",
+    "nghia": "Chèo thuyền"
+   },
+   {
+    "hanzi": "飞船",
+    "pinyin": "fēichuán",
+    "nghia": "Phi thuyền"
+   },
+   {
+    "hanzi": "轮船",
+    "pinyin": "lúnchuán",
+    "nghia": "Tàu thuỷ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "娘",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "女",
+    "ten": "Bộ Nữ",
+    "nghia": "phụ nữ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "良",
+    "ten": "chữ Lương (liáng)",
+    "nghia": "tốt, hiền lành · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Người phụ nữ 女 hiền lành 良 → cô gái, mẹ. Âm Hán Việt NƯƠNG như “cô nương”.",
+  "tu_ghep": [
+   {
+    "hanzi": "新娘",
+    "pinyin": "xīnniáng",
+    "nghia": "Cô dâu"
+   },
+   {
+    "hanzi": "姑娘",
+    "pinyin": "gūniang",
+    "nghia": "Cô gái"
+   },
+   {
+    "hanzi": "大娘",
+    "pinyin": "dàniáng",
+    "nghia": "Bác gái",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "装",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "衣",
+    "ten": "Bộ Y",
+    "nghia": "áo"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "壮",
+    "ten": "chữ Tráng (zhuàng)",
+    "nghia": "khoẻ mạnh · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Chàng trai khoẻ 壮 khoác áo 衣 → ăn mặc, trang phục; lắp đặt. Âm Hán Việt TRANG như “trang phục”.",
+  "tu_ghep": [
+   {
+    "hanzi": "装饰",
+    "pinyin": "zhuāngshì",
+    "nghia": "Trang trí"
+   },
+   {
+    "hanzi": "服装",
+    "pinyin": "fúzhuāng",
+    "nghia": "Trang phục"
+   },
+   {
+    "hanzi": "春装",
+    "pinyin": "chūnzhuāng",
+    "nghia": "Quần áo mùa xuân"
+   },
+   {
+    "hanzi": "装作",
+    "pinyin": "zhuāngzuò",
+    "nghia": "Giả vờ"
+   }
+  ]
+ },
+ {
+  "hanzi": "满",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "氵",
+    "ten": "Bộ Thuỷ (ba chấm thuỷ)",
+    "nghia": "nước"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "艹两",
+    "ten": "艹 + chữ Lưỡng 两",
+    "nghia": "cỏ + hai · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Nước 氵 dâng ngập cả cỏ hai bờ 艹两 → đầy, đủ. Âm Hán Việt MÃN như “mãn nguyện”.",
+  "tu_ghep": [
+   {
+    "hanzi": "满意",
+    "pinyin": "mǎnyì",
+    "nghia": "Hài lòng"
+   },
+   {
+    "hanzi": "充满",
+    "pinyin": "chōngmǎn",
+    "nghia": "Tràn đầy"
+   },
+   {
+    "hanzi": "不满",
+    "pinyin": "bùmǎn",
+    "nghia": "Bất mãn"
+   }
+  ]
+ },
+ {
+  "hanzi": "划",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "刂",
+    "ten": "Bộ Đao (đao đứng)",
+    "nghia": "dao"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "戈",
+    "ten": "chữ Qua (gē)",
+    "nghia": "ngọn giáo"
+   }
+  ],
+  "lien_tuong": "Dao 刂 và giáo 戈 vạch đường ranh → vạch, phân định; mái chèo rẽ nước. Âm Hán Việt HOẠCH như “kế hoạch”.",
+  "tu_ghep": [
+   {
+    "hanzi": "计划",
+    "pinyin": "jìhuà",
+    "nghia": "Kế hoạch"
+   },
+   {
+    "hanzi": "划船",
+    "pinyin": "huá chuán",
+    "nghia": "Chèo thuyền"
+   },
+   {
+    "hanzi": "规划",
+    "pinyin": "guīhuà",
+    "nghia": "Quy hoạch",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "简",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "⺮",
+    "ten": "Bộ Trúc",
+    "nghia": "tre"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "间",
+    "ten": "chữ Gian (jiān)",
+    "nghia": "khoảng giữa · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Thẻ tre ⺮ ghi chữ cách khoảng 间 đều nhau, viết thật gọn → đơn giản. Âm Hán Việt GIẢN như “giản dị”.",
+  "tu_ghep": [
+   {
+    "hanzi": "简单",
+    "pinyin": "jiǎndān",
+    "nghia": "Đơn giản"
+   },
+   {
+    "hanzi": "简直",
+    "pinyin": "jiǎnzhí",
+    "nghia": "Quả thật, quả là"
+   },
+   {
+    "hanzi": "简历",
+    "pinyin": "jiǎnlì",
+    "nghia": "Sơ yếu lý lịch",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "选",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao dưới trái",
+    "chu": "辶",
+    "ten": "Bộ Sước",
+    "nghia": "bước đi, đường đi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên phải",
+    "chu": "先",
+    "ten": "chữ Tiên (xiān)",
+    "nghia": "trước · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Đi 辶 lên trước 先 người khác để chọn → chọn lựa. Âm Hán Việt TUYỂN như “tuyển chọn”.",
+  "tu_ghep": [
+   {
+    "hanzi": "选择",
+    "pinyin": "xuǎnzé",
+    "nghia": "Lựa chọn"
+   },
+   {
+    "hanzi": "竞选",
+    "pinyin": "jìngxuǎn",
+    "nghia": "Tranh cử"
+   },
+   {
+    "hanzi": "选手",
+    "pinyin": "xuǎnshǒu",
+    "nghia": "Tuyển thủ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "甜",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "甘",
+    "ten": "Bộ Cam",
+    "nghia": "ngọt"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "舌",
+    "ten": "chữ Thiệt (shé)",
+    "nghia": "cái lưỡi"
+   }
+  ],
+  "lien_tuong": "Lưỡi 舌 nếm thấy vị ngọt 甘 → ngọt. Âm Hán Việt ĐIỀM.",
+  "tu_ghep": [
+   {
+    "hanzi": "酸甜苦辣",
+    "pinyin": "suān tián kǔ là",
+    "nghia": "Ngọt bùi cay đắng"
+   },
+   {
+    "hanzi": "甜蜜",
+    "pinyin": "tiánmì",
+    "nghia": "Ngọt ngào"
+   },
+   {
+    "hanzi": "甜点",
+    "pinyin": "tiándiǎn",
+    "nghia": "Món tráng miệng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "图",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao ngoài",
+    "chu": "囗",
+    "ten": "Bộ Vi",
+    "nghia": "vây quanh"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trong",
+    "chu": "冬",
+    "ten": "chữ Đông (dōng)",
+    "nghia": "mùa đông"
+   }
+  ],
+  "lien_tuong": "Trong khung 囗 vẽ cảnh mùa đông 冬 → bức tranh, bản đồ. Âm Hán Việt ĐỒ như “bản đồ”.",
+  "tu_ghep": [
+   {
+    "hanzi": "图书馆",
+    "pinyin": "túshūguǎn",
+    "nghia": "Thư viện"
+   },
+   {
+    "hanzi": "图书",
+    "pinyin": "túshū",
+    "nghia": "Sách"
+   },
+   {
+    "hanzi": "地图",
+    "pinyin": "dìtú",
+    "nghia": "Bản đồ"
+   }
+  ]
+ },
+ {
+  "hanzi": "辣",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "辛",
+    "ten": "Bộ Tân",
+    "nghia": "cay, vất vả"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "束",
+    "ten": "chữ Thúc (shù)",
+    "nghia": "bó lại"
+   }
+  ],
+  "lien_tuong": "Vị cay 辛 bó chặt 束 lấy cổ họng → cay. Âm Hán Việt LẠT.",
+  "tu_ghep": [
+   {
+    "hanzi": "辣子鸡丁",
+    "pinyin": "làzi jīdīng",
+    "nghia": "Gà xào ớt"
+   },
+   {
+    "hanzi": "酸甜苦辣",
+    "pinyin": "suān tián kǔ là",
+    "nghia": "Ngọt bùi cay đắng"
+   },
+   {
+    "hanzi": "辣椒",
+    "pinyin": "làjiāo",
+    "nghia": "Ớt",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "之",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "cả chữ",
+    "chu": "之",
+    "ten": "Chữ hội ý",
+    "nghia": "vốn là bàn chân bước đi"
+   }
+  ],
+  "lien_tuong": "Nét chấm trên như cái đầu, thân uốn khúc như con đường quanh co → vốn nghĩa là đi, nay làm trợ từ “của”. Âm Hán Việt CHI.",
+  "tu_ghep": [
+   {
+    "hanzi": "之一",
+    "pinyin": "zhī yī",
+    "nghia": "Một trong những"
+   },
+   {
+    "hanzi": "之后",
+    "pinyin": "zhīhòu",
+    "nghia": "Sau đó, sau khi"
+   },
+   {
+    "hanzi": "总之",
+    "pinyin": "zǒngzhī",
+    "nghia": "Tóm lại"
+   },
+   {
+    "hanzi": "之间",
+    "pinyin": "zhī jiān",
+    "nghia": "Giữa"
+   }
+  ]
+ },
+ {
+  "hanzi": "待",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "彳",
+    "ten": "Bộ Xích",
+    "nghia": "bước chân, bước đi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "寺",
+    "ten": "chữ Tự (sì)",
+    "nghia": "chùa · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Bước 彳 đến cổng chùa 寺 rồi đứng đợi → đợi, ở lại; tiếp đãi. Âm Hán Việt ĐÃI như “tiếp đãi”.",
+  "tu_ghep": [
+   {
+    "hanzi": "等待",
+    "pinyin": "děngdài",
+    "nghia": "Chờ đợi"
+   },
+   {
+    "hanzi": "招待",
+    "pinyin": "zhāodài",
+    "nghia": "Tiếp đãi, chiêu đãi"
+   },
+   {
+    "hanzi": "期待",
+    "pinyin": "qīdài",
+    "nghia": "Mong đợi"
+   }
+  ]
+ },
+ {
+  "hanzi": "无",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "cả chữ",
+    "chu": "无",
+    "ten": "Bộ Vô",
+    "nghia": "không, không có"
+   }
+  ],
+  "lien_tuong": "Giống chữ 天 mà nét cuối cong lên trượt mất → chẳng còn gì, không có. Âm Hán Việt VÔ như “vô số”.",
+  "tu_ghep": [
+   {
+    "hanzi": "无聊",
+    "pinyin": "wúliáo",
+    "nghia": "Buồn chán"
+   },
+   {
+    "hanzi": "无法",
+    "pinyin": "wúfǎ",
+    "nghia": "Không thể, không có cách"
+   },
+   {
+    "hanzi": "无数",
+    "pinyin": "wúshù",
+    "nghia": "Vô số"
+   },
+   {
+    "hanzi": "无奈",
+    "pinyin": "wúnài",
+    "nghia": "Đành chịu"
+   },
+   {
+    "hanzi": "无论",
+    "pinyin": "wúlùn",
+    "nghia": "Bất kể"
+   }
+  ]
+ },
+ {
+  "hanzi": "引",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "弓",
+    "ten": "Bộ Cung",
+    "nghia": "cái cung"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "丨",
+    "ten": "một nét sổ",
+    "nghia": "dây cung"
+   }
+  ],
+  "lien_tuong": "Kéo dây 丨 căng hết cỡ cây cung 弓 → kéo, dẫn. Âm Hán Việt DẪN như “hướng dẫn”.",
+  "tu_ghep": [
+   {
+    "hanzi": "引起",
+    "pinyin": "yǐnqǐ",
+    "nghia": "Gây ra, dẫn tới"
+   },
+   {
+    "hanzi": "吸引",
+    "pinyin": "xīyǐn",
+    "nghia": "Thu hút"
+   },
+   {
+    "hanzi": "引导",
+    "pinyin": "yǐndǎo",
+    "nghia": "Dẫn dắt",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "副",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "刂",
+    "ten": "Bộ Đao (đao đứng)",
+    "nghia": "dao"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "畐",
+    "ten": "chữ Phúc (fú)",
+    "nghia": "bình đầy · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Dùng dao 刂 bổ đôi bình đầy 畐 → thành hai phần: một cặp, phần phụ, phó. Âm Hán Việt PHÓ như “phó giám đốc”.",
+  "tu_ghep": [
+   {
+    "hanzi": "副业",
+    "pinyin": "fùyè",
+    "nghia": "Nghề phụ"
+   },
+   {
+    "hanzi": "副作用",
+    "pinyin": "fùzuòyòng",
+    "nghia": "Tác dụng phụ",
+    "them": true
+   },
+   {
+    "hanzi": "副校长",
+    "pinyin": "fùxiàozhǎng",
+    "nghia": "Phó hiệu trưởng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "管",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "⺮",
+    "ten": "Bộ Trúc",
+    "nghia": "tre"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "官",
+    "ten": "chữ Quan (guān)",
+    "nghia": "quan · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Ông quan 官 cầm ống sáo tre ⺮ điều khiển mọi người → ống; quản lý. Âm Hán Việt QUẢN như “quản lý”.",
+  "tu_ghep": [
+   {
+    "hanzi": "管理员",
+    "pinyin": "guǎnlǐyuán",
+    "nghia": "Người quản lý"
+   },
+   {
+    "hanzi": "管理",
+    "pinyin": "guǎnlǐ",
+    "nghia": "Quản lý"
+   },
+   {
+    "hanzi": "不管",
+    "pinyin": "bùguǎn",
+    "nghia": "Bất kể"
+   },
+   {
+    "hanzi": "尽管",
+    "pinyin": "jǐnguǎn",
+    "nghia": "Mặc dù"
+   }
+  ]
+ },
+ {
+  "hanzi": "吹",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "口",
+    "ten": "Bộ Khẩu",
+    "nghia": "miệng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "欠",
+    "ten": "chữ Khiếm (qiàn)",
+    "nghia": "người há miệng"
+   }
+  ],
+  "lien_tuong": "Miệng 口 há to 欠, phồng má mà thổi → thổi; thổi phồng. Âm Hán Việt XUY.",
+  "tu_ghep": [
+   {
+    "hanzi": "吹牛",
+    "pinyin": "chuī niú",
+    "nghia": "Khoác lác"
+   },
+   {
+    "hanzi": "吹风机",
+    "pinyin": "chuīfēngjī",
+    "nghia": "Máy sấy tóc",
+    "them": true
+   },
+   {
+    "hanzi": "吹口哨",
+    "pinyin": "chuī kǒushào",
+    "nghia": "Huýt sáo",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "伙",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "火",
+    "ten": "chữ Hoả (huǒ)",
+    "nghia": "lửa · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Những người 亻 ngồi quanh một bếp lửa 火 ăn chung → bạn bè, nhóm. 火 huǒ đọc y như 伙.",
+  "tu_ghep": [
+   {
+    "hanzi": "小伙子",
+    "pinyin": "xiǎohuǒzi",
+    "nghia": "Chàng trai"
+   },
+   {
+    "hanzi": "家伙",
+    "pinyin": "jiāhuo",
+    "nghia": "Gã, thằng cha"
+   },
+   {
+    "hanzi": "伙伴",
+    "pinyin": "huǒbàn",
+    "nghia": "Bạn đồng hành",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "连",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao dưới trái",
+    "chu": "辶",
+    "ten": "Bộ Sước",
+    "nghia": "bước đi, đường đi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên phải",
+    "chu": "车",
+    "ten": "chữ Xa (chē)",
+    "nghia": "xe"
+   }
+  ],
+  "lien_tuong": "Xe 车 nối đuôi nhau chạy 辶 trên đường → liên tiếp, nối liền. Âm Hán Việt LIÊN như “liên tục”.",
+  "tu_ghep": [
+   {
+    "hanzi": "连…也…",
+    "pinyin": "lián…yě…",
+    "nghia": "Ngay cả… cũng…"
+   },
+   {
+    "hanzi": "一连",
+    "pinyin": "yìlián",
+    "nghia": "Liên tiếp"
+   },
+   {
+    "hanzi": "连忙",
+    "pinyin": "liánmáng",
+    "nghia": "Vội vàng"
+   },
+   {
+    "hanzi": "连续",
+    "pinyin": "liánxù",
+    "nghia": "Liên tục"
+   }
+  ]
+ },
+ {
+  "hanzi": "脸",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "月",
+    "ten": "Bộ Nhục (viết như 月)",
+    "nghia": "thịt, cơ thể"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "佥",
+    "ten": "chữ Thiêm (qiān)",
+    "nghia": "đều, tất cả · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Phần thân thể 月 mà tất cả 佥 mọi người đều nhìn thấy → khuôn mặt. Âm Hán Việt KIỂM.",
+  "tu_ghep": [
+   {
+    "hanzi": "脸谱",
+    "pinyin": "liǎnpǔ",
+    "nghia": "Mặt nạ Kinh kịch"
+   },
+   {
+    "hanzi": "没脸",
+    "pinyin": "méi liǎn",
+    "nghia": "Mất mặt"
+   },
+   {
+    "hanzi": "脸红",
+    "pinyin": "liǎn hóng",
+    "nghia": "Đỏ mặt"
+   },
+   {
+    "hanzi": "脸色",
+    "pinyin": "liǎnsè",
+    "nghia": "Sắc mặt"
+   }
+  ]
+ },
+ {
+  "hanzi": "底",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao trên trái",
+    "chu": "广",
+    "ten": "Bộ Nghiễm",
+    "nghia": "mái nhà rộng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trong",
+    "chu": "氐",
+    "ten": "chữ Đê (dī)",
+    "nghia": "gốc, rễ · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Dưới mái nhà 广 là phần gốc 氐 sát đất → đáy. Âm Hán Việt ĐỂ như “triệt để”.",
+  "tu_ghep": [
+   {
+    "hanzi": "到底",
+    "pinyin": "dào dǐ",
+    "nghia": "Rốt cuộc"
+   },
+   {
+    "hanzi": "彻底",
+    "pinyin": "chèdǐ",
+    "nghia": "Triệt để"
+   },
+   {
+    "hanzi": "年底",
+    "pinyin": "niándǐ",
+    "nghia": "Cuối năm",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "富",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "宀",
+    "ten": "Bộ Miên",
+    "nghia": "mái nhà"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "畐",
+    "ten": "chữ Phúc (fú)",
+    "nghia": "bình đầy · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Trong nhà 宀 có bình đầy 畐 của cải → giàu. Âm Hán Việt PHÚ như “phú ông”.",
+  "tu_ghep": [
+   {
+    "hanzi": "丰富",
+    "pinyin": "fēngfù",
+    "nghia": "Phong phú"
+   },
+   {
+    "hanzi": "富翁",
+    "pinyin": "fùwēng",
+    "nghia": "Phú ông, người giàu"
+   },
+   {
+    "hanzi": "富强",
+    "pinyin": "fùqiáng",
+    "nghia": "Giàu mạnh"
+   }
+  ]
+ },
+ {
+  "hanzi": "背",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "月",
+    "ten": "Bộ Nhục (viết như 月)",
+    "nghia": "thịt, cơ thể"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "北",
+    "ten": "chữ Bắc (běi)",
+    "nghia": "hai người quay lưng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Hai người quay lưng vào nhau 北, phần thân 月 phía sau là cái lưng → lưng; đọc thuộc lòng. Âm Hán Việt BỐI.",
+  "tu_ghep": [
+   {
+    "hanzi": "背包",
+    "pinyin": "bēibāo",
+    "nghia": "Ba lô",
+    "them": true
+   },
+   {
+    "hanzi": "背后",
+    "pinyin": "bèihòu",
+    "nghia": "Phía sau",
+    "them": true
+   },
+   {
+    "hanzi": "背诵",
+    "pinyin": "bèisòng",
+    "nghia": "Đọc thuộc lòng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "提",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "是",
+    "ten": "chữ Thị (shì)",
+    "nghia": "là, đúng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 nhấc đúng 是 món đồ lên → xách; nêu ra, nhắc đến. Âm Hán Việt ĐỀ như “đề nghị”.",
+  "tu_ghep": [
+   {
+    "hanzi": "提高",
+    "pinyin": "tígāo",
+    "nghia": "Nâng cao"
+   },
+   {
+    "hanzi": "手提包儿",
+    "pinyin": "shǒutíbāor",
+    "nghia": "Túi xách"
+   },
+   {
+    "hanzi": "别提了",
+    "pinyin": "biétí le",
+    "nghia": "Đừng nhắc nữa"
+   },
+   {
+    "hanzi": "提醒",
+    "pinyin": "tíxǐng",
+    "nghia": "Nhắc nhở"
+   },
+   {
+    "hanzi": "提起",
+    "pinyin": "tíqǐ",
+    "nghia": "Nhắc đến"
+   }
+  ]
+ },
+ {
+  "hanzi": "修",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "cả chữ",
+    "chu": "修",
+    "ten": "Chữ hình thanh",
+    "nghia": "攸 gợi âm, 彡 là nét hoa văn"
+   }
+  ],
+  "lien_tuong": "Người 亻 cầm gậy 攵 sửa sang, thêm nét hoa văn 彡 cho đẹp → sửa, tu sửa. Âm Hán Việt TU như “tu sửa”.",
+  "tu_ghep": [
+   {
+    "hanzi": "维修",
+    "pinyin": "wéixiū",
+    "nghia": "Bảo dưỡng, sửa chữa"
+   },
+   {
+    "hanzi": "修理",
+    "pinyin": "xiūlǐ",
+    "nghia": "Sửa chữa"
+   },
+   {
+    "hanzi": "修理工",
+    "pinyin": "xiūlǐgōng",
+    "nghia": "Thợ sửa chữa"
+   },
+   {
+    "hanzi": "修正",
+    "pinyin": "xiūzhèng",
+    "nghia": "Sửa cho đúng"
+   }
+  ]
+ },
+ {
+  "hanzi": "费",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "贝",
+    "ten": "Bộ Bối",
+    "nghia": "vỏ sò, tiền của"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "弗",
+    "ten": "chữ Phất (fú)",
+    "nghia": "không · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tiền 贝 tiêu đi mà không 弗 giữ lại → tốn, chi phí. Âm Hán Việt PHÍ như “lãng phí”.",
+  "tu_ghep": [
+   {
+    "hanzi": "浪费",
+    "pinyin": "làngfèi",
+    "nghia": "Lãng phí"
+   },
+   {
+    "hanzi": "免费",
+    "pinyin": "miǎn fèi",
+    "nghia": "Miễn phí"
+   },
+   {
+    "hanzi": "耗费",
+    "pinyin": "hàofèi",
+    "nghia": "Tiêu tốn"
+   },
+   {
+    "hanzi": "学费",
+    "pinyin": "xuéfèi",
+    "nghia": "Học phí"
+   }
+  ]
+ },
+ {
+  "hanzi": "担",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "旦",
+    "ten": "chữ Đán (dàn)",
+    "nghia": "buổi sáng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Từ sáng sớm 旦 đã dùng tay 扌 gánh vác việc → gánh vác, đảm nhận. Âm Hán Việt ĐẢM như “đảm nhận”.",
+  "tu_ghep": [
+   {
+    "hanzi": "担心",
+    "pinyin": "dān xīn",
+    "nghia": "Lo lắng"
+   },
+   {
+    "hanzi": "担当",
+    "pinyin": "dāndāng",
+    "nghia": "Đảm đương"
+   },
+   {
+    "hanzi": "分担",
+    "pinyin": "fēndān",
+    "nghia": "Chia sẻ gánh vác"
+   }
+  ]
+ },
+ {
+  "hanzi": "计",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "讠",
+    "ten": "Bộ Ngôn",
+    "nghia": "lời nói"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "十",
+    "ten": "chữ Thập (shí)",
+    "nghia": "mười"
+   }
+  ],
+  "lien_tuong": "Miệng 讠 đếm từ một đến mười 十 → tính toán, kế hoạch. Âm Hán Việt KẾ như “kế hoạch”.",
+  "tu_ghep": [
+   {
+    "hanzi": "估计",
+    "pinyin": "gūjì",
+    "nghia": "Ước tính, phỏng đoán"
+   },
+   {
+    "hanzi": "计划",
+    "pinyin": "jìhuà",
+    "nghia": "Kế hoạch"
+   },
+   {
+    "hanzi": "设计",
+    "pinyin": "shèjì",
+    "nghia": "Thiết kế"
+   }
+  ]
+ },
+ {
+  "hanzi": "性",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "忄",
+    "ten": "Bộ Tâm đứng",
+    "nghia": "lòng, tình cảm"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "生",
+    "ten": "chữ Sinh (shēng)",
+    "nghia": "sinh ra · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Cái tâm 忄 có từ khi sinh 生 ra → bản tính. Âm Hán Việt TÍNH như “tính cách”.",
+  "tu_ghep": [
+   {
+    "hanzi": "慢性病",
+    "pinyin": "mànxìngbìng",
+    "nghia": "Bệnh mãn tính"
+   },
+   {
+    "hanzi": "性格",
+    "pinyin": "xìnggé",
+    "nghia": "Tính cách"
+   },
+   {
+    "hanzi": "可能性",
+    "pinyin": "kěnéngxìng",
+    "nghia": "Khả năng"
+   },
+   {
+    "hanzi": "性别",
+    "pinyin": "xìngbié",
+    "nghia": "Giới tính"
+   }
+  ]
+ },
+ {
+  "hanzi": "单",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "丷",
+    "ten": "Bộ Bát (丷)",
+    "nghia": "số tám, chia ra"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "田十",
+    "ten": "chữ Điền 田 + chữ Thập 十 (chung nét sổ)",
+    "nghia": "như tờ phiếu kẻ ô"
+   }
+  ],
+  "lien_tuong": "Tờ phiếu kẻ ô 田十 có cái kẹp 丷 trên đầu → tờ đơn, hoá đơn; chỉ một tờ → đơn. Âm Hán Việt ĐƠN như “thực đơn”.",
+  "tu_ghep": [
+   {
+    "hanzi": "简单",
+    "pinyin": "jiǎndān",
+    "nghia": "Đơn giản"
+   },
+   {
+    "hanzi": "单身",
+    "pinyin": "dānshēn",
+    "nghia": "Độc thân"
+   },
+   {
+    "hanzi": "单位",
+    "pinyin": "dānwèi",
+    "nghia": "Đơn vị, cơ quan"
+   },
+   {
+    "hanzi": "菜单",
+    "pinyin": "càidān",
+    "nghia": "Thực đơn"
+   },
+   {
+    "hanzi": "下单",
+    "pinyin": "xià dān",
+    "nghia": "Đặt hàng"
+   }
+  ]
+ },
+ {
+  "hanzi": "双",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "又",
+    "ten": "Bộ Hựu",
+    "nghia": "bàn tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "又",
+    "ten": "thêm một chữ Hựu (yòu)",
+    "nghia": "bàn tay"
+   }
+  ],
+  "lien_tuong": "Bàn tay 又 bên cạnh bàn tay 又 → một đôi, hai. Âm Hán Việt SONG như “song song”.",
+  "tu_ghep": [
+   {
+    "hanzi": "双职工",
+    "pinyin": "shuāngzhígōng",
+    "nghia": "Vợ chồng cùng đi làm"
+   },
+   {
+    "hanzi": "双方",
+    "pinyin": "shuāngfāng",
+    "nghia": "Đôi bên"
+   },
+   {
+    "hanzi": "双胞胎",
+    "pinyin": "shuāngbāotāi",
+    "nghia": "Sinh đôi",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "被",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "衤",
+    "ten": "Bộ Y (áo)",
+    "nghia": "áo, vải"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "皮",
+    "ten": "chữ Bì (pí)",
+    "nghia": "da · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Lấy vải 衤 phủ lên da 皮 khi ngủ → cái chăn; bị trùm lên → bị (bị động). Âm Hán Việt BỊ như “bị động”.",
+  "tu_ghep": [
+   {
+    "hanzi": "被子",
+    "pinyin": "bèizi",
+    "nghia": "Chăn"
+   },
+   {
+    "hanzi": "被动",
+    "pinyin": "bèidòng",
+    "nghia": "Bị động",
+    "them": true
+   },
+   {
+    "hanzi": "被迫",
+    "pinyin": "bèipò",
+    "nghia": "Bị ép",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "油",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "氵",
+    "ten": "Bộ Thuỷ (ba chấm thuỷ)",
+    "nghia": "nước, chất lỏng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "由",
+    "ten": "chữ Do (yóu)",
+    "nghia": "từ, do · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Chất lỏng 氵 ép ra từ 由 hạt, từ quả → dầu. 由 yóu đọc y như 油.",
+  "tu_ghep": [
+   {
+    "hanzi": "油腻",
+    "pinyin": "yóunì",
+    "nghia": "Béo ngậy, nhiều dầu mỡ"
+   },
+   {
+    "hanzi": "油画",
+    "pinyin": "yóuhuà",
+    "nghia": "Tranh sơn dầu"
+   },
+   {
+    "hanzi": "加油",
+    "pinyin": "jiāyóu",
+    "nghia": "Cố lên"
+   }
+  ]
+ },
+ {
+  "hanzi": "镜",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "钅",
+    "ten": "Bộ Kim",
+    "nghia": "kim loại"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "竟",
+    "ten": "chữ Cánh (jìng)",
+    "nghia": "tận cùng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tấm kim loại 钅 mài bóng, soi thấu tận cùng 竟 → gương, kính. 竟 jìng đọc y như 镜. Âm Hán Việt KÍNH.",
+  "tu_ghep": [
+   {
+    "hanzi": "眼镜儿",
+    "pinyin": "yǎnjìngr",
+    "nghia": "Kính mắt"
+   },
+   {
+    "hanzi": "镜子",
+    "pinyin": "jìngzi",
+    "nghia": "Cái gương"
+   },
+   {
+    "hanzi": "镜头",
+    "pinyin": "jìngtóu",
+    "nghia": "Ống kính"
+   }
+  ]
+ },
+ {
+  "hanzi": "怕",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "忄",
+    "ten": "Bộ Tâm đứng",
+    "nghia": "lòng, tình cảm"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "白",
+    "ten": "chữ Bạch (bái)",
+    "nghia": "trắng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Trong lòng 忄 sợ đến mặt trắng bệch 白 → sợ. Âm Hán Việt PHẠ.",
+  "tu_ghep": [
+   {
+    "hanzi": "恐怕",
+    "pinyin": "kǒngpà",
+    "nghia": "E rằng"
+   },
+   {
+    "hanzi": "哪怕",
+    "pinyin": "nǎpà",
+    "nghia": "Cho dù"
+   },
+   {
+    "hanzi": "可怕",
+    "pinyin": "kěpà",
+    "nghia": "Đáng sợ"
+   },
+   {
+    "hanzi": "害怕",
+    "pinyin": "hàipà",
+    "nghia": "Sợ, sợ hãi",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "规",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "见",
+    "ten": "Bộ Kiến",
+    "nghia": "thấy, nhìn"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "夫",
+    "ten": "chữ Phu (fū)",
+    "nghia": "người đàn ông trưởng thành"
+   }
+  ],
+  "lien_tuong": "Người lớn 夫 nhìn 见 mà làm đúng khuôn phép → quy tắc. Âm Hán Việt QUY như “quy định”.",
+  "tu_ghep": [
+   {
+    "hanzi": "规则",
+    "pinyin": "guīzé",
+    "nghia": "Quy tắc, luật lệ"
+   },
+   {
+    "hanzi": "规矩",
+    "pinyin": "guīju",
+    "nghia": "Phép tắc, nề nếp"
+   },
+   {
+    "hanzi": "规定",
+    "pinyin": "guīdìng",
+    "nghia": "Quy định"
+   }
+  ]
+ },
+ {
+  "hanzi": "闭",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao ngoài",
+    "chu": "门",
+    "ten": "Bộ Môn",
+    "nghia": "cửa"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trong",
+    "chu": "才",
+    "ten": "chữ Tài (cái)",
+    "nghia": "như cái then cài cửa"
+   }
+  ],
+  "lien_tuong": "Cài then 才 ngang cánh cửa 门 → đóng lại, nhắm. Âm Hán Việt BẾ như “bế mạc”.",
+  "tu_ghep": [
+   {
+    "hanzi": "关闭",
+    "pinyin": "guānbì",
+    "nghia": "Đóng, đóng cửa",
+    "them": true
+   },
+   {
+    "hanzi": "闭幕",
+    "pinyin": "bìmù",
+    "nghia": "Bế mạc",
+    "them": true
+   },
+   {
+    "hanzi": "闭嘴",
+    "pinyin": "bì zuǐ",
+    "nghia": "Im miệng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "虚",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao trên trái",
+    "chu": "虍",
+    "ten": "Bộ Hô",
+    "nghia": "vằn hổ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trong",
+    "chu": "业",
+    "ten": "viết như chữ Nghiệp 业",
+    "nghia": "vốn là gò đồi"
+   }
+  ],
+  "lien_tuong": "Hổ 虍 bỏ đi, gò đồi 业 trống trơn → trống rỗng, hư. Âm Hán Việt HƯ như “hư vinh”.",
+  "tu_ghep": [
+   {
+    "hanzi": "谦虚",
+    "pinyin": "qiānxū",
+    "nghia": "Khiêm tốn",
+    "them": true
+   },
+   {
+    "hanzi": "虚心",
+    "pinyin": "xūxīn",
+    "nghia": "Khiêm tốn, cầu thị",
+    "them": true
+   },
+   {
+    "hanzi": "虚假",
+    "pinyin": "xūjiǎ",
+    "nghia": "Giả dối",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "摔",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "率",
+    "ten": "chữ Suất (shuài)",
+    "nghia": "hấp tấp; dẫn đầu · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Hấp tấp 率 vung tay 扌 → ngã, quăng, đánh rơi. Âm Hán Việt SUẤT như “khinh suất”.",
+  "tu_ghep": [
+   {
+    "hanzi": "摔跤",
+    "pinyin": "shuāi jiāo",
+    "nghia": "Ngã; đấu vật"
+   },
+   {
+    "hanzi": "摔倒",
+    "pinyin": "shuāidǎo",
+    "nghia": "Ngã nhào",
+    "them": true
+   },
+   {
+    "hanzi": "摔坏",
+    "pinyin": "shuāihuài",
+    "nghia": "Đánh rơi hỏng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "碰",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "石",
+    "ten": "Bộ Thạch",
+    "nghia": "đá"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "並",
+    "ten": "chữ Tịnh (bìng)",
+    "nghia": "sóng đôi, cùng nhau · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Hai hòn đá 石 đi sóng đôi 並 va vào nhau → chạm, va, gặp. Âm Hán Việt BÍNH.",
+  "tu_ghep": [
+   {
+    "hanzi": "碰撞",
+    "pinyin": "pèngzhuàng",
+    "nghia": "Va chạm"
+   },
+   {
+    "hanzi": "碰见",
+    "pinyin": "pèngjiàn",
+    "nghia": "Tình cờ gặp",
+    "them": true
+   },
+   {
+    "hanzi": "碰到",
+    "pinyin": "pèngdào",
+    "nghia": "Gặp phải, đụng phải",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "造",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao dưới trái",
+    "chu": "辶",
+    "ten": "Bộ Sước",
+    "nghia": "bước đi, đường đi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên phải",
+    "chu": "告",
+    "ten": "chữ Cáo (gào)",
+    "nghia": "báo · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Đi 辶 báo 告 cho mọi người cùng bắt tay làm → làm ra, tạo. Âm Hán Việt TẠO như “sáng tạo”.",
+  "tu_ghep": [
+   {
+    "hanzi": "造成",
+    "pinyin": "zàochéng",
+    "nghia": "Gây ra, tạo thành"
+   },
+   {
+    "hanzi": "创造",
+    "pinyin": "chuàngzào",
+    "nghia": "Sáng tạo"
+   },
+   {
+    "hanzi": "制造",
+    "pinyin": "zhìzào",
+    "nghia": "Chế tạo",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "掉",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "卓",
+    "ten": "chữ Trác (zhuó)",
+    "nghia": "cao vượt · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 với lên chỗ cao 卓 không giữ được → rơi, rớt. Âm Hán Việt ĐIỆU.",
+  "tu_ghep": [
+   {
+    "hanzi": "忘掉",
+    "pinyin": "wàngdiào",
+    "nghia": "Quên mất",
+    "them": true
+   },
+   {
+    "hanzi": "扔掉",
+    "pinyin": "rēngdiào",
+    "nghia": "Vứt đi",
+    "them": true
+   },
+   {
+    "hanzi": "掉队",
+    "pinyin": "diào duì",
+    "nghia": "Tụt lại sau",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "遵",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao dưới trái",
+    "chu": "辶",
+    "ten": "Bộ Sước",
+    "nghia": "bước đi, đường đi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên phải",
+    "chu": "尊",
+    "ten": "chữ Tôn (zūn)",
+    "nghia": "tôn kính · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Bước 辶 theo người mình tôn kính 尊 → tuân theo. 尊 zūn đọc y như 遵. Âm Hán Việt TUÂN như “tuân thủ”.",
+  "tu_ghep": [
+   {
+    "hanzi": "遵守",
+    "pinyin": "zūnshǒu",
+    "nghia": "Tuân thủ"
+   },
+   {
+    "hanzi": "遵循",
+    "pinyin": "zūnxún",
+    "nghia": "Tuân theo",
+    "them": true
+   },
+   {
+    "hanzi": "遵命",
+    "pinyin": "zūnmìng",
+    "nghia": "Tuân lệnh",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "守",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "宀",
+    "ten": "Bộ Miên",
+    "nghia": "mái nhà"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "寸",
+    "ten": "chữ Thốn (cùn)",
+    "nghia": "tấc; bàn tay"
+   }
+  ],
+  "lien_tuong": "Bàn tay 寸 giữ chặt ngôi nhà 宀 → canh giữ. Âm Hán Việt THỦ như “thủ môn”.",
+  "tu_ghep": [
+   {
+    "hanzi": "遵守",
+    "pinyin": "zūnshǒu",
+    "nghia": "Tuân thủ"
+   },
+   {
+    "hanzi": "守门员",
+    "pinyin": "shǒuményuán",
+    "nghia": "Thủ môn",
+    "them": true
+   },
+   {
+    "hanzi": "保守",
+    "pinyin": "bǎoshǒu",
+    "nghia": "Bảo thủ; giữ kín",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "则",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "刂",
+    "ten": "Bộ Đao (đao đứng)",
+    "nghia": "dao"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "贝",
+    "ten": "chữ Bối (bèi)",
+    "nghia": "vỏ sò, đồ quý"
+   }
+  ],
+  "lien_tuong": "Dùng dao 刂 khắc luật lên đồ quý 贝 → quy tắc, phép tắc. Âm Hán Việt TẮC như “nguyên tắc”.",
+  "tu_ghep": [
+   {
+    "hanzi": "规则",
+    "pinyin": "guīzé",
+    "nghia": "Quy tắc"
+   },
+   {
+    "hanzi": "否则",
+    "pinyin": "fǒuzé",
+    "nghia": "Nếu không thì"
+   },
+   {
+    "hanzi": "原则",
+    "pinyin": "yuánzé",
+    "nghia": "Nguyên tắc",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "保",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "呆",
+    "ten": "chữ 呆 (dāi)",
+    "nghia": "ngây ngô (như em bé)"
+   }
+  ],
+  "lien_tuong": "Người lớn 亻 cõng em bé ngây thơ 呆 trên lưng → che chở, bảo vệ. Âm Hán Việt BẢO như “bảo vệ”.",
+  "tu_ghep": [
+   {
+    "hanzi": "保证",
+    "pinyin": "bǎozhèng",
+    "nghia": "Bảo đảm"
+   },
+   {
+    "hanzi": "保护",
+    "pinyin": "bǎohù",
+    "nghia": "Bảo vệ",
+    "them": true
+   },
+   {
+    "hanzi": "保持",
+    "pinyin": "bǎochí",
+    "nghia": "Giữ, duy trì",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "带",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "巾",
+    "ten": "Bộ Cân",
+    "nghia": "khăn"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "卅冖",
+    "ten": "hình dây đai có tua",
+    "nghia": "dây thắt lưng"
+   }
+  ],
+  "lien_tuong": "Dây đai có tua 卅冖 thắt ngang, khăn 巾 rủ xuống → dây, đai; mang theo. Âm Hán Việt ĐỚI như “nhiệt đới”.",
+  "tu_ghep": [
+   {
+    "hanzi": "领带",
+    "pinyin": "lǐngdài",
+    "nghia": "Cà vạt"
+   },
+   {
+    "hanzi": "彩带",
+    "pinyin": "cǎidài",
+    "nghia": "Dải lụa màu"
+   },
+   {
+    "hanzi": "安全带",
+    "pinyin": "ānquándài",
+    "nghia": "Dây an toàn"
+   },
+   {
+    "hanzi": "鞋带儿",
+    "pinyin": "xiédàir",
+    "nghia": "Dây giày"
+   }
+  ]
+ },
+ {
+  "hanzi": "辈",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "非",
+    "ten": "Bộ Phi",
+    "nghia": "trái ngược, chẳng phải"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "车",
+    "ten": "chữ Xa (chē)",
+    "nghia": "xe"
+   }
+  ],
+  "lien_tuong": "Hàng xe 车 xếp hai bên 非 thành từng lớp → lớp người, thế hệ, đời. Âm Hán Việt BỐI như “tiền bối”.",
+  "tu_ghep": [
+   {
+    "hanzi": "长辈",
+    "pinyin": "zhǎngbèi",
+    "nghia": "Bề trên"
+   },
+   {
+    "hanzi": "一辈子",
+    "pinyin": "yíbèizi",
+    "nghia": "Cả đời"
+   },
+   {
+    "hanzi": "前辈",
+    "pinyin": "qiánbèi",
+    "nghia": "Tiền bối",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "累",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "糸",
+    "ten": "Bộ Mịch",
+    "nghia": "sợi tơ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "田",
+    "ten": "chữ Điền (rút gọn của 畾)",
+    "nghia": "các khối chồng lên nhau · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Vác bó tơ 糸 nặng từ ruộng 田 về → mệt. Âm Hán Việt LUỴ như “liên luỵ”.",
+  "tu_ghep": [
+   {
+    "hanzi": "劳累",
+    "pinyin": "láolèi",
+    "nghia": "Mệt nhọc",
+    "them": true
+   },
+   {
+    "hanzi": "积累",
+    "pinyin": "jīlěi",
+    "nghia": "Tích luỹ",
+    "them": true
+   },
+   {
+    "hanzi": "连累",
+    "pinyin": "liánlei",
+    "nghia": "Liên luỵ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "肯",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "月",
+    "ten": "Bộ Nhục (viết như 月)",
+    "nghia": "thịt, cơ thể"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "止",
+    "ten": "chữ Chỉ (zhǐ)",
+    "nghia": "dừng"
+   }
+  ],
+  "lien_tuong": "Ăn miếng thịt 月 đến sát xương thì dừng 止 → chỗ then chốt; gật đầu chịu. Âm Hán Việt KHẲNG như “khẳng định”.",
+  "tu_ghep": [
+   {
+    "hanzi": "肯定",
+    "pinyin": "kěndìng",
+    "nghia": "Khẳng định, chắc chắn"
+   },
+   {
+    "hanzi": "不肯",
+    "pinyin": "bù kěn",
+    "nghia": "Không chịu",
+    "them": true
+   },
+   {
+    "hanzi": "中肯",
+    "pinyin": "zhòngkěn",
+    "nghia": "Xác đáng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "讲",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "讠",
+    "ten": "Bộ Ngôn",
+    "nghia": "lời nói"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "井",
+    "ten": "chữ Tỉnh (jǐng)",
+    "nghia": "cái giếng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Lời nói 讠 rành mạch, ngay ngắn như ô giếng 井 → giảng giải, nói. Âm Hán Việt GIẢNG như “giảng bài”.",
+  "tu_ghep": [
+   {
+    "hanzi": "讲话",
+    "pinyin": "jiǎng huà",
+    "nghia": "Phát biểu, nói chuyện"
+   },
+   {
+    "hanzi": "讲究",
+    "pinyin": "jiǎngjiu",
+    "nghia": "Chú trọng, cầu kỳ"
+   },
+   {
+    "hanzi": "讲台",
+    "pinyin": "jiǎngtái",
+    "nghia": "Bục giảng"
+   },
+   {
+    "hanzi": "听讲",
+    "pinyin": "tīngjiǎng",
+    "nghia": "Nghe giảng"
+   },
+   {
+    "hanzi": "讲解",
+    "pinyin": "jiǎngjiě",
+    "nghia": "Giảng giải"
+   }
+  ]
+ },
+ {
+  "hanzi": "纸",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "纟",
+    "ten": "Bộ Mịch",
+    "nghia": "sợi tơ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "氏",
+    "ten": "chữ Thị (shì)",
+    "nghia": "họ · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Xơ sợi 纟 xeo mỏng thành tờ, ghi tên họ 氏 lên → tờ giấy. Âm Hán Việt CHỈ.",
+  "tu_ghep": [
+   {
+    "hanzi": "纸箱",
+    "pinyin": "zhǐxiāng",
+    "nghia": "Thùng giấy"
+   },
+   {
+    "hanzi": "面巾纸",
+    "pinyin": "miànjīnzhǐ",
+    "nghia": "Khăn giấy"
+   },
+   {
+    "hanzi": "报纸",
+    "pinyin": "bàozhǐ",
+    "nghia": "Báo"
+   }
+  ]
+ },
+ {
+  "hanzi": "除",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "阝",
+    "ten": "Bộ Phụ",
+    "nghia": "gò đất, bậc thềm"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "余",
+    "ten": "chữ Dư (yú)",
+    "nghia": "thừa · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Bậc thềm 阝 có gì thừa 余 thì dọn đi → bỏ đi, trừ. Âm Hán Việt TRỪ như “trừ bỏ”.",
+  "tu_ghep": [
+   {
+    "hanzi": "除了",
+    "pinyin": "chúle",
+    "nghia": "Ngoài… ra"
+   },
+   {
+    "hanzi": "删除",
+    "pinyin": "shānchú",
+    "nghia": "Xoá bỏ",
+    "them": true
+   },
+   {
+    "hanzi": "消除",
+    "pinyin": "xiāochú",
+    "nghia": "Loại bỏ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "爬",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao dưới trái",
+    "chu": "爪",
+    "ten": "Bộ Trảo",
+    "nghia": "móng vuốt"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên phải",
+    "chu": "巴",
+    "ten": "chữ Ba (bā)",
+    "nghia": "bám vào · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Móng vuốt 爪 bám chặt 巴 vào vách mà leo → bò, leo, trèo. 巴 bā gợi âm pá.",
+  "tu_ghep": [
+   {
+    "hanzi": "爬山",
+    "pinyin": "páshān",
+    "nghia": "Leo núi"
+   },
+   {
+    "hanzi": "爬楼梯",
+    "pinyin": "pá lóutī",
+    "nghia": "Leo cầu thang",
+    "them": true
+   },
+   {
+    "hanzi": "爬行",
+    "pinyin": "páxíng",
+    "nghia": "Bò, trườn",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "伤",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "丿一力",
+    "ten": "nét phẩy, ngang + chữ Lực 力",
+    "nghia": "như mũi tên + sức"
+   }
+  ],
+  "lien_tuong": "Người 亻 trúng mũi tên, mất hết sức 丿一力 → bị thương. Âm Hán Việt THƯƠNG như “thương tích”.",
+  "tu_ghep": [
+   {
+    "hanzi": "受伤",
+    "pinyin": "shòu shāng",
+    "nghia": "Bị thương"
+   },
+   {
+    "hanzi": "伤痛",
+    "pinyin": "shāngtòng",
+    "nghia": "Đau đớn"
+   },
+   {
+    "hanzi": "感伤",
+    "pinyin": "gǎnshāng",
+    "nghia": "Thương cảm"
+   },
+   {
+    "hanzi": "伤口",
+    "pinyin": "shāngkǒu",
+    "nghia": "Vết thương"
+   },
+   {
+    "hanzi": "伤害",
+    "pinyin": "shānghài",
+    "nghia": "Làm tổn thương"
+   }
+  ]
+ },
+ {
+  "hanzi": "紧",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "糸",
+    "ten": "Bộ Mịch",
+    "nghia": "sợi tơ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "丨丨又",
+    "ten": "hai nét sổ + chữ Hựu 又",
+    "nghia": "bàn tay nắm chặt"
+   }
+  ],
+  "lien_tuong": "Bàn tay 丨丨又 kéo căng sợi tơ 糸 → chặt, căng. Âm Hán Việt KHẨN như “khẩn trương”.",
+  "tu_ghep": [
+   {
+    "hanzi": "不要紧",
+    "pinyin": "bú yàojǐn",
+    "nghia": "Không sao"
+   },
+   {
+    "hanzi": "不紧不慢",
+    "pinyin": "bùjǐn búmàn",
+    "nghia": "Thong thả"
+   },
+   {
+    "hanzi": "紧张",
+    "pinyin": "jǐnzhāng",
+    "nghia": "Căng thẳng"
+   },
+   {
+    "hanzi": "赶紧",
+    "pinyin": "gǎnjǐn",
+    "nghia": "Mau, tranh thủ"
+   }
+  ]
+ },
+ {
+  "hanzi": "困",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao ngoài",
+    "chu": "囗",
+    "ten": "Bộ Vi",
+    "nghia": "vây quanh"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trong",
+    "chu": "木",
+    "ten": "chữ Mộc (mù)",
+    "nghia": "cây"
+   }
+  ],
+  "lien_tuong": "Cây 木 bị vây kín trong khung 囗, không vươn ra được → khốn đốn; mệt, buồn ngủ. Âm Hán Việt KHỐN như “khốn khó”.",
+  "tu_ghep": [
+   {
+    "hanzi": "困难",
+    "pinyin": "kùnnan",
+    "nghia": "Khó khăn"
+   },
+   {
+    "hanzi": "困境",
+    "pinyin": "kùnjìng",
+    "nghia": "Cảnh khốn khó",
+    "them": true
+   },
+   {
+    "hanzi": "犯困",
+    "pinyin": "fàn kùn",
+    "nghia": "Buồn ngủ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "各",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "口",
+    "ten": "Bộ Khẩu",
+    "nghia": "miệng, cửa nhà"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "夂",
+    "ten": "chữ Truy (zhǐ)",
+    "nghia": "bước chân"
+   }
+  ],
+  "lien_tuong": "Mỗi bước chân 夂 dừng ở một cửa nhà 口 khác nhau → mỗi, các. Âm Hán Việt CÁC như “các bạn”.",
+  "tu_ghep": [
+   {
+    "hanzi": "各种各样",
+    "pinyin": "gèzhǒng gèyàng",
+    "nghia": "Đủ loại"
+   },
+   {
+    "hanzi": "人各有志",
+    "pinyin": "rén gè yǒu zhì",
+    "nghia": "Mỗi người một chí hướng"
+   },
+   {
+    "hanzi": "各位",
+    "pinyin": "gèwèi",
+    "nghia": "Các vị",
+    "them": true
+   },
+   {
+    "hanzi": "各自",
+    "pinyin": "gèzì",
+    "nghia": "Mỗi người, riêng mỗi",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "挑",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "兆",
+    "ten": "chữ Triệu (zhào)",
+    "nghia": "điềm báo, triệu · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 lựa trong cả triệu 兆 thứ → chọn lựa; gánh. Âm Hán Việt KHIÊU như “khiêu chiến”.",
+  "tu_ghep": [
+   {
+    "hanzi": "挑选",
+    "pinyin": "tiāoxuǎn",
+    "nghia": "Lựa chọn",
+    "them": true
+   },
+   {
+    "hanzi": "挑战",
+    "pinyin": "tiǎozhàn",
+    "nghia": "Thử thách, khiêu chiến",
+    "them": true
+   },
+   {
+    "hanzi": "挑剔",
+    "pinyin": "tiāoti",
+    "nghia": "Kén chọn, xét nét",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "抽",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "由",
+    "ten": "chữ Do (yóu)",
+    "nghia": "từ, do · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 kéo từ 由 trong ra ngoài → rút, kéo; hút. Âm Hán Việt TRỪU như “trừu tượng”.",
+  "tu_ghep": [
+   {
+    "hanzi": "抽烟",
+    "pinyin": "chōu yān",
+    "nghia": "Hút thuốc"
+   },
+   {
+    "hanzi": "抽屉",
+    "pinyin": "chōuti",
+    "nghia": "Ngăn kéo",
+    "them": true
+   },
+   {
+    "hanzi": "抽象",
+    "pinyin": "chōuxiàng",
+    "nghia": "Trừu tượng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "另",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "口",
+    "ten": "Bộ Khẩu",
+    "nghia": "miệng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "力",
+    "ten": "chữ Lực (lì)",
+    "nghia": "sức"
+   }
+  ],
+  "lien_tuong": "Miệng 口 nói một đằng, sức 力 làm một nẻo → khác, riêng. Âm Hán Việt LÁNH.",
+  "tu_ghep": [
+   {
+    "hanzi": "另外",
+    "pinyin": "lìngwài",
+    "nghia": "Ngoài ra, khác"
+   },
+   {
+    "hanzi": "另一方面",
+    "pinyin": "lìng yì fāngmiàn",
+    "nghia": "Mặt khác",
+    "them": true
+   },
+   {
+    "hanzi": "另眼相看",
+    "pinyin": "lìngyǎn xiāngkàn",
+    "nghia": "Nhìn bằng con mắt khác",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "钥",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "钅",
+    "ten": "Bộ Kim",
+    "nghia": "kim loại"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "月",
+    "ten": "chữ Nguyệt (yuè)",
+    "nghia": "trăng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Thanh kim loại 钅 cong như vầng trăng 月 khuyết → chìa khoá. 月 yuè gợi âm yào. Âm Hán Việt THƯỢC.",
+  "tu_ghep": [
+   {
+    "hanzi": "钥匙",
+    "pinyin": "yàoshi",
+    "nghia": "Chìa khoá"
+   },
+   {
+    "hanzi": "钥匙链儿",
+    "pinyin": "yàoshiliànr",
+    "nghia": "Móc chìa khoá"
+   },
+   {
+    "hanzi": "车钥匙",
+    "pinyin": "chē yàoshi",
+    "nghia": "Chìa khoá xe",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "匙",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên phải",
+    "chu": "匕",
+    "ten": "Bộ Chuỷ",
+    "nghia": "cái thìa"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bao dưới trái",
+    "chu": "是",
+    "ten": "chữ Thị (shì)",
+    "nghia": "là · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Cái thìa 匕 nằm gọn trên 是 → thìa; trong 钥匙 là chìa khoá. 是 shì gợi âm. Âm Hán Việt THI.",
+  "tu_ghep": [
+   {
+    "hanzi": "钥匙",
+    "pinyin": "yàoshi",
+    "nghia": "Chìa khoá"
+   },
+   {
+    "hanzi": "钥匙链儿",
+    "pinyin": "yàoshiliànr",
+    "nghia": "Móc chìa khoá"
+   },
+   {
+    "hanzi": "汤匙",
+    "pinyin": "tāngchí",
+    "nghia": "Thìa canh",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "却",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "卩",
+    "ten": "Bộ Tiết",
+    "nghia": "người quỳ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "去",
+    "ten": "chữ Khứ (qù)",
+    "nghia": "đi · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Định đi 去 rồi lại quỳ 卩 xuống từ chối → lùi lại; nhưng lại. Âm Hán Việt KHƯỚC như “từ khước”.",
+  "tu_ghep": [
+   {
+    "hanzi": "冷却",
+    "pinyin": "lěngquè",
+    "nghia": "Làm nguội",
+    "them": true
+   },
+   {
+    "hanzi": "忘却",
+    "pinyin": "wàngquè",
+    "nghia": "Quên đi",
+    "them": true
+   },
+   {
+    "hanzi": "退却",
+    "pinyin": "tuìquè",
+    "nghia": "Rút lui, chùn bước",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "插",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "臿",
+    "ten": "chữ Sáp (chā)",
+    "nghia": "chày giã trong cối · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 cắm chày 臿 vào cối → cắm, cài. 臿 chā đọc y như 插. Âm Hán Việt SÁP.",
+  "tu_ghep": [
+   {
+    "hanzi": "插头",
+    "pinyin": "chātóu",
+    "nghia": "Phích cắm"
+   },
+   {
+    "hanzi": "插座",
+    "pinyin": "chāzuò",
+    "nghia": "Ổ cắm",
+    "them": true
+   },
+   {
+    "hanzi": "插花",
+    "pinyin": "chāhuā",
+    "nghia": "Cắm hoa",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "拔",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "犮",
+    "ten": "chữ Bạt (bá)",
+    "nghia": "chó chạy · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 giật mạnh, nhanh như chó chạy 犮 → nhổ, rút. 犮 bá đọc y như 拔. Âm Hán Việt BẠT.",
+  "tu_ghep": [
+   {
+    "hanzi": "拔河",
+    "pinyin": "báhé",
+    "nghia": "Kéo co",
+    "them": true
+   },
+   {
+    "hanzi": "拔牙",
+    "pinyin": "bá yá",
+    "nghia": "Nhổ răng",
+    "them": true
+   },
+   {
+    "hanzi": "海拔",
+    "pinyin": "hǎibá",
+    "nghia": "Độ cao so với mặt biển",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "址",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "土",
+    "ten": "Bộ Thổ",
+    "nghia": "đất"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "止",
+    "ten": "chữ Chỉ (zhǐ)",
+    "nghia": "dừng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Mảnh đất 土 nơi mình dừng 止 chân → địa điểm, địa chỉ. 止 zhǐ đọc y như 址.",
+  "tu_ghep": [
+   {
+    "hanzi": "地址",
+    "pinyin": "dìzhǐ",
+    "nghia": "Địa chỉ"
+   },
+   {
+    "hanzi": "住址",
+    "pinyin": "zhùzhǐ",
+    "nghia": "Địa chỉ nơi ở"
+   },
+   {
+    "hanzi": "网址",
+    "pinyin": "wǎngzhǐ",
+    "nghia": "Địa chỉ web",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "似",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "以",
+    "ten": "chữ Dĩ (yǐ)",
+    "nghia": "lấy, dùng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Người 亻 lấy 以 người khác làm mẫu nên trông giống → giống như, dường như. Âm Hán Việt TỰ như “tương tự”.",
+  "tu_ghep": [
+   {
+    "hanzi": "…似的",
+    "pinyin": "…shìde",
+    "nghia": "Giống như"
+   },
+   {
+    "hanzi": "似乎",
+    "pinyin": "sìhū",
+    "nghia": "Dường như"
+   },
+   {
+    "hanzi": "相似",
+    "pinyin": "xiāngsì",
+    "nghia": "Tương tự",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "穿",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "穴",
+    "ten": "Bộ Huyệt",
+    "nghia": "hang, lỗ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "牙",
+    "ten": "chữ Nha (yá)",
+    "nghia": "răng"
+   }
+  ],
+  "lien_tuong": "Chuột dùng răng 牙 khoét thủng lỗ 穴 → xuyên qua; luồn tay vào áo → mặc. Âm Hán Việt XUYÊN như “xuyên suốt”.",
+  "tu_ghep": [
+   {
+    "hanzi": "穿着",
+    "pinyin": "chuānzhuó",
+    "nghia": "Cách ăn mặc",
+    "them": true
+   },
+   {
+    "hanzi": "穿过",
+    "pinyin": "chuānguò",
+    "nghia": "Đi xuyên qua",
+    "them": true
+   },
+   {
+    "hanzi": "看穿",
+    "pinyin": "kànchuān",
+    "nghia": "Nhìn thấu",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "脚",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "月",
+    "ten": "Bộ Nhục (viết như 月)",
+    "nghia": "thịt, cơ thể"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "却",
+    "ten": "chữ Khước (què)",
+    "nghia": "lùi lại · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Phần thân thể 月 dùng để bước tới, bước lùi 却 → bàn chân. Âm Hán Việt CƯỚC.",
+  "tu_ghep": [
+   {
+    "hanzi": "腿脚",
+    "pinyin": "tuǐjiǎo",
+    "nghia": "Chân cẳng"
+   },
+   {
+    "hanzi": "七手八脚",
+    "pinyin": "qīshǒu bājiǎo",
+    "nghia": "Tay năm tay mười"
+   },
+   {
+    "hanzi": "脚步",
+    "pinyin": "jiǎobù",
+    "nghia": "Bước chân",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "裙",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "衤",
+    "ten": "Bộ Y (áo)",
+    "nghia": "áo, vải"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "君",
+    "ten": "chữ Quân (jūn)",
+    "nghia": "vua, người quân tử · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tà áo 衤 dài thướt tha của bậc quân 君 vương → váy. 君 jūn gợi âm qún. Âm Hán Việt QUẦN.",
+  "tu_ghep": [
+   {
+    "hanzi": "裙子",
+    "pinyin": "qúnzi",
+    "nghia": "Váy"
+   },
+   {
+    "hanzi": "连衣裙",
+    "pinyin": "liányīqún",
+    "nghia": "Váy liền thân",
+    "them": true
+   },
+   {
+    "hanzi": "短裙",
+    "pinyin": "duǎnqún",
+    "nghia": "Váy ngắn",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "扛",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "工",
+    "ten": "chữ Công (gōng)",
+    "nghia": "thanh xà, việc làm · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Hai tay 扌 đưa thanh xà ngang 工 lên vai → vác, khiêng.",
+  "tu_ghep": [
+   {
+    "hanzi": "扛起",
+    "pinyin": "kángqǐ",
+    "nghia": "Vác lên; gánh vác",
+    "them": true
+   },
+   {
+    "hanzi": "扛不住",
+    "pinyin": "kángbuzhù",
+    "nghia": "Không chịu nổi",
+    "them": true
+   },
+   {
+    "hanzi": "硬扛",
+    "pinyin": "yìngkáng",
+    "nghia": "Cố gượng chịu",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "厅",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao trên trái",
+    "chu": "厂",
+    "ten": "Bộ Hán",
+    "nghia": "sườn núi, mái che"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trong",
+    "chu": "丁",
+    "ten": "chữ Đinh (dīng)",
+    "nghia": "người · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Dưới mái rộng 厂, mọi người 丁 tụ họp → sảnh, phòng lớn. 丁 dīng gợi âm tīng. Âm Hán Việt SẢNH như “đại sảnh”.",
+  "tu_ghep": [
+   {
+    "hanzi": "客厅",
+    "pinyin": "kètīng",
+    "nghia": "Phòng khách"
+   },
+   {
+    "hanzi": "会议厅",
+    "pinyin": "huìyìtīng",
+    "nghia": "Phòng hội nghị"
+   },
+   {
+    "hanzi": "大厅",
+    "pinyin": "dàtīng",
+    "nghia": "Đại sảnh"
+   }
+  ]
+ },
+ {
+  "hanzi": "挂",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "圭",
+    "ten": "chữ Khuê (guī)",
+    "nghia": "ngọc khuê · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 treo miếng ngọc khuê 圭 lên tường → treo. 圭 guī gợi âm guà. Âm Hán Việt QUẢI.",
+  "tu_ghep": [
+   {
+    "hanzi": "挂号",
+    "pinyin": "guà hào",
+    "nghia": "Đăng ký khám bệnh",
+    "them": true
+   },
+   {
+    "hanzi": "挂念",
+    "pinyin": "guàniàn",
+    "nghia": "Nhớ mong, lo lắng",
+    "them": true
+   },
+   {
+    "hanzi": "挂钟",
+    "pinyin": "guàzhōng",
+    "nghia": "Đồng hồ treo tường",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "摆",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "罢",
+    "ten": "chữ Bãi (bà)",
+    "nghia": "thôi, xong · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 sắp đặt xong 罢 mọi thứ ngay ngắn → bày, xếp; đung đưa.",
+  "tu_ghep": [
+   {
+    "hanzi": "摆脱",
+    "pinyin": "bǎituō",
+    "nghia": "Thoát khỏi",
+    "them": true
+   },
+   {
+    "hanzi": "摆放",
+    "pinyin": "bǎifàng",
+    "nghia": "Bày, đặt",
+    "them": true
+   },
+   {
+    "hanzi": "摇摆",
+    "pinyin": "yáobǎi",
+    "nghia": "Đung đưa",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "摄",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "聂",
+    "ten": "chữ Niếp (niè)",
+    "nghia": "ghé tai nói nhỏ · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 giữ chặt, ghé tai 聂 thu lấy từng âm thanh, hình ảnh → thu, chụp. Âm Hán Việt NHIẾP như “nhiếp ảnh”.",
+  "tu_ghep": [
+   {
+    "hanzi": "摄像机",
+    "pinyin": "shèxiàngjī",
+    "nghia": "Máy quay phim"
+   },
+   {
+    "hanzi": "摄影",
+    "pinyin": "shèyǐng",
+    "nghia": "Nhiếp ảnh",
+    "them": true
+   },
+   {
+    "hanzi": "摄影师",
+    "pinyin": "shèyǐngshī",
+    "nghia": "Nhiếp ảnh gia",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "郎",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "阝",
+    "ten": "Bộ Ấp",
+    "nghia": "thành ấp, vùng đất"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "良",
+    "ten": "chữ Lương 良 (lược nét)",
+    "nghia": "tốt · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Chàng trai tốt 良 trong làng ấp 阝 → chàng, lang quân. Âm Hán Việt LANG như “tân lang” (chú rể).",
+  "tu_ghep": [
+   {
+    "hanzi": "新郎",
+    "pinyin": "xīnláng",
+    "nghia": "Chú rể"
+   },
+   {
+    "hanzi": "女郎",
+    "pinyin": "nǚláng",
+    "nghia": "Cô gái",
+    "them": true
+   },
+   {
+    "hanzi": "郎中",
+    "pinyin": "lángzhōng",
+    "nghia": "Thầy lang",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "帅",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "巾",
+    "ten": "Bộ Cân",
+    "nghia": "khăn"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "刂",
+    "ten": "nét sổ và nét phẩy (như 刂)",
+    "nghia": "như thanh kiếm"
+   }
+  ],
+  "lien_tuong": "Đeo kiếm 刂 bên hông, khăn 巾 choàng vai → vị chủ soái oai phong; đẹp trai. Âm Hán Việt SOÁI như “nguyên soái”.",
+  "tu_ghep": [
+   {
+    "hanzi": "帅哥",
+    "pinyin": "shuàigē",
+    "nghia": "Anh đẹp trai",
+    "them": true
+   },
+   {
+    "hanzi": "元帅",
+    "pinyin": "yuánshuài",
+    "nghia": "Nguyên soái",
+    "them": true
+   },
+   {
+    "hanzi": "帅气",
+    "pinyin": "shuàiqi",
+    "nghia": "Bảnh bao, đẹp trai",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "骨",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "cả chữ",
+    "chu": "骨",
+    "ten": "Bộ Cốt",
+    "nghia": "khung xương 冎 bọc thịt 月"
+   }
+  ],
+  "lien_tuong": "Trên là khung xương 冎, dưới là thịt 月 bám vào → xương. Âm Hán Việt CỐT như “cốt nhục”.",
+  "tu_ghep": [
+   {
+    "hanzi": "骨头",
+    "pinyin": "gǔtou",
+    "nghia": "Xương"
+   },
+   {
+    "hanzi": "骨折",
+    "pinyin": "gǔzhé",
+    "nghia": "Gãy xương"
+   },
+   {
+    "hanzi": "骨肉",
+    "pinyin": "gǔròu",
+    "nghia": "Ruột thịt",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "术",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "nền",
+    "chu": "木",
+    "ten": "Bộ Mộc",
+    "nghia": "cây"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "chấm trên phải",
+    "chu": "丶",
+    "ten": "một chấm",
+    "nghia": "nét điểm"
+   }
+  ],
+  "lien_tuong": "Cây 木 thêm một chấm 丶, mẹo nhỏ của người làm vườn → kỹ thuật, phương pháp. Âm Hán Việt THUẬT như “kỹ thuật”.",
+  "tu_ghep": [
+   {
+    "hanzi": "艺术",
+    "pinyin": "yìshù",
+    "nghia": "Nghệ thuật"
+   },
+   {
+    "hanzi": "手术",
+    "pinyin": "shǒushù",
+    "nghia": "Phẫu thuật"
+   },
+   {
+    "hanzi": "技术",
+    "pinyin": "jìshù",
+    "nghia": "Kỹ thuật",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "越",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao dưới trái",
+    "chu": "走",
+    "ten": "Bộ Tẩu",
+    "nghia": "chạy, đi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên phải",
+    "chu": "戉",
+    "ten": "chữ Việt (yuè)",
+    "nghia": "cái rìu lớn · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Cầm rìu 戉 chạy 走 vượt qua mọi chướng ngại → vượt; càng… càng…. Âm Hán Việt VIỆT như “Việt Nam”.",
+  "tu_ghep": [
+   {
+    "hanzi": "越来越",
+    "pinyin": "yuèláiyuè",
+    "nghia": "Ngày càng"
+   },
+   {
+    "hanzi": "越…越…",
+    "pinyin": "yuè…yuè…",
+    "nghia": "Càng… càng…"
+   },
+   {
+    "hanzi": "超越",
+    "pinyin": "chāoyuè",
+    "nghia": "Vượt qua",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "际",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "阝",
+    "ten": "Bộ Phụ",
+    "nghia": "gò đất, đồi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "示",
+    "ten": "chữ Thị (shì)",
+    "nghia": "chỉ ra, bày ra"
+   }
+  ],
+  "lien_tuong": "Cột mốc dựng trên gò 阝 để chỉ 示 chỗ giáp ranh → ranh giới, giữa các bên. Âm Hán Việt TẾ như “quốc tế”.",
+  "tu_ghep": [
+   {
+    "hanzi": "国际",
+    "pinyin": "guójì",
+    "nghia": "Quốc tế"
+   },
+   {
+    "hanzi": "实际上",
+    "pinyin": "shíjìshang",
+    "nghia": "Trên thực tế"
+   },
+   {
+    "hanzi": "人际",
+    "pinyin": "rénjì",
+    "nghia": "Giữa người với người"
+   },
+   {
+    "hanzi": "交际",
+    "pinyin": "jiāojì",
+    "nghia": "Giao tiếp"
+   }
+  ]
+ },
+ {
+  "hanzi": "搬",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "般",
+    "ten": "chữ Ban (bān)",
+    "nghia": "loại, kiểu · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 bê đồ lên thuyền 般 chở đi → chuyển, dời. 般 bān đọc y như 搬. Âm Hán Việt BAN.",
+  "tu_ghep": [
+   {
+    "hanzi": "搬家",
+    "pinyin": "bān jiā",
+    "nghia": "Chuyển nhà"
+   },
+   {
+    "hanzi": "搬运",
+    "pinyin": "bānyùn",
+    "nghia": "Bốc vác, vận chuyển",
+    "them": true
+   },
+   {
+    "hanzi": "搬走",
+    "pinyin": "bānzǒu",
+    "nghia": "Dọn đi",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "资",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "贝",
+    "ten": "Bộ Bối",
+    "nghia": "vỏ sò, tiền của"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "次",
+    "ten": "chữ Thứ (cì)",
+    "nghia": "lần, thứ · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tiền 贝 dành dụm từng lần 次 một → vốn liếng, tài sản. Âm Hán Việt TƯ như “đầu tư”.",
+  "tu_ghep": [
+   {
+    "hanzi": "资料",
+    "pinyin": "zīliào",
+    "nghia": "Tài liệu"
+   },
+   {
+    "hanzi": "合资",
+    "pinyin": "hézī",
+    "nghia": "Liên doanh"
+   },
+   {
+    "hanzi": "资金",
+    "pinyin": "zījīn",
+    "nghia": "Vốn"
+   },
+   {
+    "hanzi": "资格",
+    "pinyin": "zīgé",
+    "nghia": "Tư cách"
+   }
+  ]
+ },
+ {
+  "hanzi": "棵",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "木",
+    "ten": "Bộ Mộc",
+    "nghia": "cây"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "果",
+    "ten": "chữ Quả (guǒ)",
+    "nghia": "quả · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Cây 木 sai trĩu quả 果 → từ đếm cây: một cây. Âm Hán Việt KHOẢ.",
+  "tu_ghep": [
+   {
+    "hanzi": "一棵树",
+    "pinyin": "yì kē shù",
+    "nghia": "Một cái cây",
+    "them": true
+   },
+   {
+    "hanzi": "一棵草",
+    "pinyin": "yì kē cǎo",
+    "nghia": "Một ngọn cỏ",
+    "them": true
+   },
+   {
+    "hanzi": "一棵白菜",
+    "pinyin": "yì kē báicài",
+    "nghia": "Một cây cải thảo",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "扮",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "分",
+    "ten": "chữ Phân (fēn)",
+    "nghia": "chia · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 chia 分 phấn son, quần áo ra thử → hoá trang, ăn diện. 分 fēn gợi âm bàn.",
+  "tu_ghep": [
+   {
+    "hanzi": "打扮",
+    "pinyin": "dǎban",
+    "nghia": "Ăn diện, trang điểm"
+   },
+   {
+    "hanzi": "女扮男装",
+    "pinyin": "nǚbàn nánzhuāng",
+    "nghia": "Gái giả trai"
+   },
+   {
+    "hanzi": "扮演",
+    "pinyin": "bànyǎn",
+    "nghia": "Đóng vai",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "盖",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "皿",
+    "ten": "Bộ Mãnh",
+    "nghia": "bát đĩa"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "羊",
+    "ten": "phần trên giống chữ Dương (yáng)",
+    "nghia": "con dê (chỉ là hình dáng)"
+   }
+  ],
+  "lien_tuong": "Đậy nắp lên bát 皿 thịt dê 羊 cho khỏi nguội → nắp, đậy; lợp, xây nhà. Âm Hán Việt CÁI.",
+  "tu_ghep": [
+   {
+    "hanzi": "覆盖",
+    "pinyin": "fùgài",
+    "nghia": "Che phủ"
+   },
+   {
+    "hanzi": "盖子",
+    "pinyin": "gàizi",
+    "nghia": "Cái nắp",
+    "them": true
+   },
+   {
+    "hanzi": "盖章",
+    "pinyin": "gài zhāng",
+    "nghia": "Đóng dấu",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "随",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "阝",
+    "ten": "Bộ Phụ",
+    "nghia": "gò đất, đồi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "迶",
+    "ten": "bộ Sước 辶 + chữ Hữu 有",
+    "nghia": "bước đi + có"
+   }
+  ],
+  "lien_tuong": "Thấy có người đi 迶 qua gò 阝 là bước theo → theo, tuỳ. Âm Hán Việt TUỲ như “tuỳ ý”.",
+  "tu_ghep": [
+   {
+    "hanzi": "随便",
+    "pinyin": "suíbiàn",
+    "nghia": "Tuỳ ý"
+   },
+   {
+    "hanzi": "随着",
+    "pinyin": "suízhe",
+    "nghia": "Cùng với, theo"
+   },
+   {
+    "hanzi": "跟随",
+    "pinyin": "gēnsuí",
+    "nghia": "Đi theo"
+   },
+   {
+    "hanzi": "随心所欲",
+    "pinyin": "suíxīnsuǒyù",
+    "nghia": "Muốn sao làm vậy"
+   }
+  ]
+ },
+ {
+  "hanzi": "圣",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "土",
+    "ten": "Bộ Thổ",
+    "nghia": "đất"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "又",
+    "ten": "chữ Hựu (yòu)",
+    "nghia": "bàn tay"
+   }
+  ],
+  "lien_tuong": "Bàn tay 又 vun đất 土 làm ruộng cho mọi người → bậc thánh hiền. Âm Hán Việt THÁNH như “thánh nhân”.",
+  "tu_ghep": [
+   {
+    "hanzi": "圣诞树",
+    "pinyin": "shèngdànshù",
+    "nghia": "Cây thông Noel"
+   },
+   {
+    "hanzi": "圣诞节",
+    "pinyin": "Shèngdàn Jié",
+    "nghia": "Lễ Giáng sinh"
+   },
+   {
+    "hanzi": "神圣",
+    "pinyin": "shénshèng",
+    "nghia": "Thiêng liêng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "诞",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "讠",
+    "ten": "Bộ Ngôn",
+    "nghia": "lời nói"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "延",
+    "ten": "chữ Diên (yán)",
+    "nghia": "kéo dài · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Lời nói 讠 kéo dài 延 khoa trương → hoang đường; ngày ra đời được nhắc mãi là ngày sinh. Âm Hán Việt ĐẢN như “hoang đản”.",
+  "tu_ghep": [
+   {
+    "hanzi": "圣诞树",
+    "pinyin": "shèngdànshù",
+    "nghia": "Cây thông Noel"
+   },
+   {
+    "hanzi": "圣诞节",
+    "pinyin": "Shèngdàn Jié",
+    "nghia": "Lễ Giáng sinh"
+   },
+   {
+    "hanzi": "诞生",
+    "pinyin": "dànshēng",
+    "nghia": "Ra đời",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "饰",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "饣",
+    "ten": "Bộ Thực",
+    "nghia": "ăn · ở đây gợi âm đọc"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "丿一巾",
+    "ten": "nét phẩy, ngang + chữ Cân 巾",
+    "nghia": "người + khăn"
+   }
+  ],
+  "lien_tuong": "Lấy khăn 丿一巾 lau bát ăn 饣 cho sáng bóng → tô điểm, trang trí. Âm Hán Việt SỨC như “trang sức”.",
+  "tu_ghep": [
+   {
+    "hanzi": "饰物",
+    "pinyin": "shìwù",
+    "nghia": "Đồ trang trí"
+   },
+   {
+    "hanzi": "装饰",
+    "pinyin": "zhuāngshì",
+    "nghia": "Trang trí"
+   },
+   {
+    "hanzi": "首饰",
+    "pinyin": "shǒushi",
+    "nghia": "Đồ trang sức"
+   }
+  ]
+ },
+ {
+  "hanzi": "续",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "纟",
+    "ten": "Bộ Mịch",
+    "nghia": "sợi tơ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "卖",
+    "ten": "chữ Mại (mài)",
+    "nghia": "bán"
+   }
+  ],
+  "lien_tuong": "Sợi tơ 纟 đứt thì nối, hàng bán 卖 hết lại nhập tiếp → tiếp tục. Âm Hán Việt TỤC như “liên tục”.",
+  "tu_ghep": [
+   {
+    "hanzi": "手续",
+    "pinyin": "shǒuxù",
+    "nghia": "Thủ tục"
+   },
+   {
+    "hanzi": "继续",
+    "pinyin": "jìxù",
+    "nghia": "Tiếp tục"
+   },
+   {
+    "hanzi": "连续",
+    "pinyin": "liánxù",
+    "nghia": "Liên tục"
+   }
+  ]
+ },
+ {
+  "hanzi": "硬",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "石",
+    "ten": "Bộ Thạch",
+    "nghia": "đá"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "更",
+    "ten": "chữ Canh (gèng)",
+    "nghia": "càng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Đá 石 lại càng 更 thêm rắn → cứng. Âm Hán Việt NGẠNH.",
+  "tu_ghep": [
+   {
+    "hanzi": "硬币",
+    "pinyin": "yìngbì",
+    "nghia": "Tiền xu"
+   },
+   {
+    "hanzi": "坚硬",
+    "pinyin": "jiānyìng",
+    "nghia": "Cứng rắn"
+   },
+   {
+    "hanzi": "硬盘",
+    "pinyin": "yìngpán",
+    "nghia": "Ổ cứng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "格",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "木",
+    "ten": "Bộ Mộc",
+    "nghia": "cây, gỗ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "各",
+    "ten": "chữ Các (gè)",
+    "nghia": "mỗi · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Thanh gỗ 木 chia thành mỗi 各 ô vuông vức → ô, khuôn khổ, cách thức. Âm Hán Việt CÁCH như “tính cách”.",
+  "tu_ghep": [
+   {
+    "hanzi": "性格",
+    "pinyin": "xìnggé",
+    "nghia": "Tính cách"
+   },
+   {
+    "hanzi": "严格",
+    "pinyin": "yángé",
+    "nghia": "Nghiêm khắc"
+   },
+   {
+    "hanzi": "资格",
+    "pinyin": "zīgé",
+    "nghia": "Tư cách"
+   },
+   {
+    "hanzi": "价格",
+    "pinyin": "jiàgé",
+    "nghia": "Giá cả",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "渴",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "氵",
+    "ten": "Bộ Thuỷ (ba chấm thuỷ)",
+    "nghia": "nước"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "曷",
+    "ten": "chữ Hạt (hé)",
+    "nghia": "sao, vì sao · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Thiếu nước 氵, cổ họng khô khốc hỏi “sao 曷 chưa có nước?” → khát. Âm Hán Việt KHÁT như “khát vọng”.",
+  "tu_ghep": [
+   {
+    "hanzi": "求知若渴",
+    "pinyin": "qiúzhī ruòkě",
+    "nghia": "Khao khát hiểu biết"
+   },
+   {
+    "hanzi": "口渴",
+    "pinyin": "kǒukě",
+    "nghia": "Khát nước",
+    "them": true
+   },
+   {
+    "hanzi": "渴望",
+    "pinyin": "kěwàng",
+    "nghia": "Khát khao",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "板",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "木",
+    "ten": "Bộ Mộc",
+    "nghia": "cây, gỗ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "反",
+    "ten": "chữ Phản (fǎn)",
+    "nghia": "lật ngược · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tấm gỗ 木 phẳng, lật ngược 反 lại vẫn phẳng → tấm ván, bảng. Âm Hán Việt BẢN.",
+  "tu_ghep": [
+   {
+    "hanzi": "平板电脑",
+    "pinyin": "píngbǎn diànnǎo",
+    "nghia": "Máy tính bảng"
+   },
+   {
+    "hanzi": "老板",
+    "pinyin": "lǎobǎn",
+    "nghia": "Ông chủ"
+   },
+   {
+    "hanzi": "黑板",
+    "pinyin": "hēibǎn",
+    "nghia": "Bảng đen"
+   }
+  ]
+ },
+ {
+  "hanzi": "置",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "罒",
+    "ten": "Bộ Võng",
+    "nghia": "cái lưới"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "直",
+    "ten": "chữ Trực (zhí)",
+    "nghia": "thẳng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Giăng lưới 罒 cho thẳng 直 ngay ngắn → đặt, bố trí. Âm Hán Việt TRÍ như “bố trí”.",
+  "tu_ghep": [
+   {
+    "hanzi": "布置",
+    "pinyin": "bùzhì",
+    "nghia": "Bố trí"
+   },
+   {
+    "hanzi": "位置",
+    "pinyin": "wèizhi",
+    "nghia": "Vị trí",
+    "them": true
+   },
+   {
+    "hanzi": "设置",
+    "pinyin": "shèzhì",
+    "nghia": "Cài đặt, thiết lập",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "诉",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "讠",
+    "ten": "Bộ Ngôn",
+    "nghia": "lời nói"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "斥",
+    "ten": "chữ Xích (chì)",
+    "nghia": "quát mắng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Lời 讠 kể lể, trách mắng 斥 điều oan ức → kể ra, tố cáo. Âm Hán Việt TỐ như “khởi tố”.",
+  "tu_ghep": [
+   {
+    "hanzi": "告诉",
+    "pinyin": "gàosu",
+    "nghia": "Nói cho biết"
+   },
+   {
+    "hanzi": "诉说",
+    "pinyin": "sùshuō",
+    "nghia": "Kể lể"
+   },
+   {
+    "hanzi": "投诉",
+    "pinyin": "tóusù",
+    "nghia": "Khiếu nại",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "份",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "分",
+    "ten": "chữ Phân (fēn)",
+    "nghia": "chia · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Chia 分 cho mỗi người 亻 một phần → phần, suất. 分 fēn gợi âm fèn. Âm Hán Việt PHẦN.",
+  "tu_ghep": [
+   {
+    "hanzi": "身份",
+    "pinyin": "shēnfèn",
+    "nghia": "Thân phận, danh tính",
+    "them": true
+   },
+   {
+    "hanzi": "月份",
+    "pinyin": "yuèfèn",
+    "nghia": "Tháng",
+    "them": true
+   },
+   {
+    "hanzi": "股份",
+    "pinyin": "gǔfèn",
+    "nghia": "Cổ phần",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "擦",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "察",
+    "ten": "chữ Sát (chá)",
+    "nghia": "xem xét · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 lau, mắt xem xét 察 chỗ nào còn bẩn → lau, chùi. Âm Hán Việt SÁT như “ma sát”.",
+  "tu_ghep": [
+   {
+    "hanzi": "擦拭",
+    "pinyin": "cāshì",
+    "nghia": "Lau chùi"
+   },
+   {
+    "hanzi": "摩擦",
+    "pinyin": "mócā",
+    "nghia": "Ma sát, cọ xát",
+    "them": true
+   },
+   {
+    "hanzi": "擦干",
+    "pinyin": "cāgān",
+    "nghia": "Lau khô",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "圆",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao ngoài",
+    "chu": "囗",
+    "ten": "Bộ Vi",
+    "nghia": "vây quanh"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trong",
+    "chu": "员",
+    "ten": "chữ Viên (yuán)",
+    "nghia": "thành viên · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Mọi thành viên 员 quây thành vòng 囗 → tròn. 员 yuán đọc y như 圆. Âm Hán Việt VIÊN.",
+  "tu_ghep": [
+   {
+    "hanzi": "圆圈儿",
+    "pinyin": "yuánquānr",
+    "nghia": "Vòng tròn"
+   },
+   {
+    "hanzi": "团圆",
+    "pinyin": "tuányuán",
+    "nghia": "Đoàn tụ",
+    "them": true
+   },
+   {
+    "hanzi": "圆满",
+    "pinyin": "yuánmǎn",
+    "nghia": "Trọn vẹn",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "祥",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "礻",
+    "ten": "Bộ Thị",
+    "nghia": "thần linh, cúng tế"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "羊",
+    "ten": "chữ Dương (yáng)",
+    "nghia": "con dê · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Dâng dê 羊 lên bàn thờ 礻 cầu may → điềm lành. Âm Hán Việt TƯỜNG như “cát tường”.",
+  "tu_ghep": [
+   {
+    "hanzi": "吉祥",
+    "pinyin": "jíxiáng",
+    "nghia": "Cát tường, may mắn"
+   },
+   {
+    "hanzi": "慈祥",
+    "pinyin": "cíxiáng",
+    "nghia": "Hiền từ",
+    "them": true
+   },
+   {
+    "hanzi": "祥和",
+    "pinyin": "xiánghé",
+    "nghia": "Yên bình, hoà thuận",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "旺",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "日",
+    "ten": "Bộ Nhật",
+    "nghia": "mặt trời"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "王",
+    "ten": "chữ Vương (wáng)",
+    "nghia": "vua · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Mặt trời 日 rực rỡ như vua 王 → thịnh vượng. Âm Hán Việt VƯỢNG như “thịnh vượng”.",
+  "tu_ghep": [
+   {
+    "hanzi": "兴旺",
+    "pinyin": "xīngwàng",
+    "nghia": "Thịnh vượng"
+   },
+   {
+    "hanzi": "旺季",
+    "pinyin": "wàngjì",
+    "nghia": "Mùa cao điểm",
+    "them": true
+   },
+   {
+    "hanzi": "旺盛",
+    "pinyin": "wàngshèng",
+    "nghia": "Dồi dào, sung sức",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "幸",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "干",
+    "ten": "Bộ Can",
+    "nghia": "cái khiên; can dự"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "土丷",
+    "ten": "chữ Thổ 土 + hai chấm 丷",
+    "nghia": "đất + hai chấm"
+   }
+  ],
+  "lien_tuong": "Thoát khỏi gông 干, đứng trên mặt đất 土丷 tự do → may mắn, hạnh phúc. Âm Hán Việt HẠNH như “hạnh phúc”.",
+  "tu_ghep": [
+   {
+    "hanzi": "幸福",
+    "pinyin": "xìngfú",
+    "nghia": "Hạnh phúc"
+   },
+   {
+    "hanzi": "不幸",
+    "pinyin": "búxìng",
+    "nghia": "Bất hạnh"
+   },
+   {
+    "hanzi": "幸运",
+    "pinyin": "xìngyùn",
+    "nghia": "May mắn",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "福",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "礻",
+    "ten": "Bộ Thị",
+    "nghia": "thần linh, cúng tế"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "畐",
+    "ten": "chữ Phúc (fú)",
+    "nghia": "bình đầy · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Dâng bình rượu đầy 畐 lên bàn thờ 礻 cầu trời → phúc. 畐 fú đọc y như 福. Âm Hán Việt PHÚC.",
+  "tu_ghep": [
+   {
+    "hanzi": "幸福",
+    "pinyin": "xìngfú",
+    "nghia": "Hạnh phúc"
+   },
+   {
+    "hanzi": "祝福",
+    "pinyin": "zhùfú",
+    "nghia": "Chúc phúc",
+    "them": true
+   },
+   {
+    "hanzi": "福气",
+    "pinyin": "fúqi",
+    "nghia": "Phúc, có phúc",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "登",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "癶",
+    "ten": "Bộ Bát (gạt ngược)",
+    "nghia": "hai bàn chân bước"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "豆",
+    "ten": "chữ Đậu (dòu)",
+    "nghia": "cái đậu (đồ có chân)"
+   }
+  ],
+  "lien_tuong": "Hai chân 癶 bước lên cái bục 豆 → leo lên. Âm Hán Việt ĐĂNG như “đăng ký”.",
+  "tu_ghep": [
+   {
+    "hanzi": "登机",
+    "pinyin": "dēng jī",
+    "nghia": "Lên máy bay"
+   },
+   {
+    "hanzi": "登机牌儿",
+    "pinyin": "dēngjīpáir",
+    "nghia": "Thẻ lên máy bay"
+   },
+   {
+    "hanzi": "登台",
+    "pinyin": "dēng tái",
+    "nghia": "Lên sân khấu"
+   }
+  ]
+ },
+ {
+  "hanzi": "抱",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "包",
+    "ten": "chữ Bao (bāo)",
+    "nghia": "bọc · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Đôi tay 扌 bọc 包 lấy người khác → ôm, bế. 包 bāo gợi âm bào. Âm Hán Việt BÃO như “hoài bão”.",
+  "tu_ghep": [
+   {
+    "hanzi": "抱歉",
+    "pinyin": "bàoqiàn",
+    "nghia": "Xin lỗi, áy náy"
+   },
+   {
+    "hanzi": "拥抱",
+    "pinyin": "yōngbào",
+    "nghia": "Ôm",
+    "them": true
+   },
+   {
+    "hanzi": "抱怨",
+    "pinyin": "bàoyuàn",
+    "nghia": "Phàn nàn",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "领",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "页",
+    "ten": "Bộ Hiệt",
+    "nghia": "cái đầu"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "令",
+    "ten": "chữ Lệnh (lìng)",
+    "nghia": "ra lệnh · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Người đứng đầu 页 ra lệnh 令 cho mọi người → dẫn dắt, lãnh đạo; cổ áo. Âm Hán Việt LÃNH như “lãnh đạo”.",
+  "tu_ghep": [
+   {
+    "hanzi": "领带",
+    "pinyin": "lǐngdài",
+    "nghia": "Cà vạt"
+   },
+   {
+    "hanzi": "领导",
+    "pinyin": "lǐngdǎo",
+    "nghia": "Lãnh đạo"
+   },
+   {
+    "hanzi": "领悟",
+    "pinyin": "lǐngwù",
+    "nghia": "Lĩnh hội"
+   }
+  ]
+ },
+ {
+  "hanzi": "票",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "示",
+    "ten": "Bộ Thị",
+    "nghia": "bày ra, thần linh"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "覀",
+    "ten": "Bộ Á (覀)",
+    "nghia": "che đậy"
+   }
+  ],
+  "lien_tuong": "Tấm vé phải trình ra 示 khi soát; phần trên 覀 như nắp che → vé, phiếu. Âm Hán Việt PHIẾU như “bỏ phiếu”.",
+  "tu_ghep": [
+   {
+    "hanzi": "机票",
+    "pinyin": "jīpiào",
+    "nghia": "Vé máy bay"
+   },
+   {
+    "hanzi": "门票",
+    "pinyin": "ménpiào",
+    "nghia": "Vé vào cửa"
+   },
+   {
+    "hanzi": "检票",
+    "pinyin": "jiǎnpiào",
+    "nghia": "Soát vé"
+   }
+  ]
+ },
+ {
+  "hanzi": "卡",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "卜",
+    "ten": "Bộ Bốc",
+    "nghia": "bói"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "上",
+    "ten": "chữ Thượng (shàng)",
+    "nghia": "trên"
+   }
+  ],
+  "lien_tuong": "Trên là 上, dưới 卜 như chữ 下: lên không được, xuống chẳng xong → mắc kẹt; mượn âm làm “thẻ”. Âm Hán Việt CA.",
+  "tu_ghep": [
+   {
+    "hanzi": "卡子",
+    "pinyin": "qiǎzi",
+    "nghia": "Cái kẹp"
+   },
+   {
+    "hanzi": "信用卡",
+    "pinyin": "xìnyòngkǎ",
+    "nghia": "Thẻ tín dụng"
+   },
+   {
+    "hanzi": "贺卡",
+    "pinyin": "hèkǎ",
+    "nghia": "Thiệp chúc mừng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "凉",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "冫",
+    "ten": "Bộ Băng (hai chấm thuỷ)",
+    "nghia": "băng, lạnh"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "京",
+    "ten": "chữ Kinh (jīng)",
+    "nghia": "kinh đô · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Gió lạnh 冫 thổi về kinh thành 京 → mát. Âm Hán Việt LƯƠNG như “thê lương”.",
+  "tu_ghep": [
+   {
+    "hanzi": "凉快",
+    "pinyin": "liángkuai",
+    "nghia": "Mát mẻ"
+   },
+   {
+    "hanzi": "凉水",
+    "pinyin": "liángshuǐ",
+    "nghia": "Nước lạnh",
+    "them": true
+   },
+   {
+    "hanzi": "着凉",
+    "pinyin": "zháoliáng",
+    "nghia": "Bị cảm lạnh",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "扳",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "反",
+    "ten": "chữ Phản (fǎn)",
+    "nghia": "lật ngược · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 bẻ ngược 反 lại → uốn, bẻ, vặn. Âm Hán Việt BAN.",
+  "tu_ghep": [
+   {
+    "hanzi": "扳手",
+    "pinyin": "bānshou",
+    "nghia": "Cờ lê",
+    "them": true
+   },
+   {
+    "hanzi": "扳机",
+    "pinyin": "bānjī",
+    "nghia": "Cò súng",
+    "them": true
+   },
+   {
+    "hanzi": "扳倒",
+    "pinyin": "bāndǎo",
+    "nghia": "Quật ngã",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "掏",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "匋",
+    "ten": "chữ Đào (táo)",
+    "nghia": "đồ gốm · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Thò tay 扌 vào lò gốm 匋 moi đồ ra → móc, moi, rút. 匋 táo gợi âm tāo. Âm Hán Việt ĐÀO.",
+  "tu_ghep": [
+   {
+    "hanzi": "掏钱",
+    "pinyin": "tāo qián",
+    "nghia": "Móc tiền ra trả",
+    "them": true
+   },
+   {
+    "hanzi": "掏出",
+    "pinyin": "tāochū",
+    "nghia": "Móc ra, lấy ra",
+    "them": true
+   },
+   {
+    "hanzi": "掏腰包",
+    "pinyin": "tāo yāobāo",
+    "nghia": "Bỏ tiền túi",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "暗",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "日",
+    "ten": "Bộ Nhật",
+    "nghia": "mặt trời"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "音",
+    "ten": "chữ Âm (yīn)",
+    "nghia": "âm thanh · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Mặt trời 日 tắt, chỉ còn nghe âm thanh 音 → tối tăm. Âm Hán Việt ÁM như “u ám”, “ám chỉ”.",
+  "tu_ghep": [
+   {
+    "hanzi": "暗示",
+    "pinyin": "ànshì",
+    "nghia": "Ám chỉ, ra hiệu ngầm"
+   },
+   {
+    "hanzi": "黑暗",
+    "pinyin": "hēi'àn",
+    "nghia": "Tối tăm",
+    "them": true
+   },
+   {
+    "hanzi": "暗中",
+    "pinyin": "ànzhōng",
+    "nghia": "Ngấm ngầm",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "牌",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "片",
+    "ten": "Bộ Phiến",
+    "nghia": "tấm, mảnh"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "卑",
+    "ten": "chữ Ti (bēi)",
+    "nghia": "thấp · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tấm gỗ 片 nhỏ treo thấp 卑 trước cửa → biển hiệu, thẻ, quân bài. Âm Hán Việt BÀI như “bài lá”.",
+  "tu_ghep": [
+   {
+    "hanzi": "登机牌儿",
+    "pinyin": "dēngjīpáir",
+    "nghia": "Thẻ lên máy bay"
+   },
+   {
+    "hanzi": "打牌",
+    "pinyin": "dǎ pái",
+    "nghia": "Chơi bài"
+   },
+   {
+    "hanzi": "名牌",
+    "pinyin": "míngpái",
+    "nghia": "Hàng hiệu",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "洒",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "氵",
+    "ten": "Bộ Thuỷ (ba chấm thuỷ)",
+    "nghia": "nước"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "西",
+    "ten": "chữ Tây (xī)",
+    "nghia": "phía tây · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Nước 氵 hắt về phía tây 西 → rảy, vương vãi. Âm Hán Việt SÁI.",
+  "tu_ghep": [
+   {
+    "hanzi": "洒水",
+    "pinyin": "sǎ shuǐ",
+    "nghia": "Tưới nước, rảy nước",
+    "them": true
+   },
+   {
+    "hanzi": "潇洒",
+    "pinyin": "xiāosǎ",
+    "nghia": "Phóng khoáng",
+    "them": true
+   },
+   {
+    "hanzi": "洒落",
+    "pinyin": "sǎluò",
+    "nghia": "Rơi vãi",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "傻",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "囟八夂",
+    "ten": "thóp 囟 + chữ Bát 八 + chân 夂",
+    "nghia": "đầu, thân, chân"
+   }
+  ],
+  "lien_tuong": "Người 亻 mà đầu óc non nớt như thóp trẻ 囟八夂 → ngốc nghếch. Âm Hán Việt XOẠ.",
+  "tu_ghep": [
+   {
+    "hanzi": "傻眼",
+    "pinyin": "shǎ yǎn",
+    "nghia": "Ngẩn người"
+   },
+   {
+    "hanzi": "傻瓜",
+    "pinyin": "shǎguā",
+    "nghia": "Đồ ngốc",
+    "them": true
+   },
+   {
+    "hanzi": "傻笑",
+    "pinyin": "shǎxiào",
+    "nghia": "Cười ngây ngô",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "腿",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "月",
+    "ten": "Bộ Nhục (viết như 月)",
+    "nghia": "thịt, cơ thể"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "退",
+    "ten": "chữ Thoái (tuì)",
+    "nghia": "lùi · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Phần thân thể 月 dùng để tiến lùi 退 → cái chân. 退 tuì gợi âm tuǐ. Âm Hán Việt THỐI.",
+  "tu_ghep": [
+   {
+    "hanzi": "腿脚",
+    "pinyin": "tuǐjiǎo",
+    "nghia": "Chân cẳng"
+   },
+   {
+    "hanzi": "大腿",
+    "pinyin": "dàtuǐ",
+    "nghia": "Đùi",
+    "them": true
+   },
+   {
+    "hanzi": "火腿",
+    "pinyin": "huǒtuǐ",
+    "nghia": "Giăm bông",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "遇",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao dưới trái",
+    "chu": "辶",
+    "ten": "Bộ Sước",
+    "nghia": "bước đi, đường đi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên phải",
+    "chu": "禺",
+    "ten": "chữ Ngung (yú)",
+    "nghia": "một loài khỉ · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Đi 辶 trong rừng tình cờ gặp con khỉ 禺 → gặp gỡ. Âm Hán Việt NGỘ như “tao ngộ”.",
+  "tu_ghep": [
+   {
+    "hanzi": "遇到",
+    "pinyin": "yùdào",
+    "nghia": "Gặp phải"
+   },
+   {
+    "hanzi": "遇见",
+    "pinyin": "yùjiàn",
+    "nghia": "Gặp",
+    "them": true
+   },
+   {
+    "hanzi": "机遇",
+    "pinyin": "jīyù",
+    "nghia": "Cơ hội",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "偷",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "俞",
+    "ten": "chữ Du (yú)",
+    "nghia": "vâng, đồng ý (từ cổ) · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Người 亻 vâng dạ 俞 trước mặt, sau lưng lén lấy đồ → ăn trộm, lén lút. Âm Hán Việt THÂU.",
+  "tu_ghep": [
+   {
+    "hanzi": "小偷儿",
+    "pinyin": "xiǎotōur",
+    "nghia": "Kẻ trộm"
+   },
+   {
+    "hanzi": "偷偷儿",
+    "pinyin": "tōutōur",
+    "nghia": "Lén lút"
+   },
+   {
+    "hanzi": "偷看",
+    "pinyin": "tōukàn",
+    "nghia": "Nhìn trộm",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "骗",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "马",
+    "ten": "Bộ Mã",
+    "nghia": "ngựa"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "扁",
+    "ten": "chữ Biển (biǎn)",
+    "nghia": "dẹt · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Nhảy phắt lên ngựa 马, nằm dẹt 扁 người trốn mất → lừa gạt. Âm Hán Việt PHIẾN.",
+  "tu_ghep": [
+   {
+    "hanzi": "受骗",
+    "pinyin": "shòu piàn",
+    "nghia": "Bị lừa"
+   },
+   {
+    "hanzi": "欺骗",
+    "pinyin": "qīpiàn",
+    "nghia": "Lừa dối"
+   },
+   {
+    "hanzi": "骗子",
+    "pinyin": "piànzi",
+    "nghia": "Kẻ lừa đảo",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "浪",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "氵",
+    "ten": "Bộ Thuỷ (ba chấm thuỷ)",
+    "nghia": "nước"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "良",
+    "ten": "chữ Lương (liáng)",
+    "nghia": "tốt · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Nước 氵 dâng lên từng đợt đẹp 良 mắt → sóng; tiêu hoang như sóng cuốn là 浪费. Âm Hán Việt LÃNG như “lãng phí”.",
+  "tu_ghep": [
+   {
+    "hanzi": "浪费",
+    "pinyin": "làngfèi",
+    "nghia": "Lãng phí"
+   },
+   {
+    "hanzi": "浪漫",
+    "pinyin": "làngmàn",
+    "nghia": "Lãng mạn",
+    "them": true
+   },
+   {
+    "hanzi": "海浪",
+    "pinyin": "hǎilàng",
+    "nghia": "Sóng biển",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "罚",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "罒",
+    "ten": "Bộ Võng",
+    "nghia": "cái lưới"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "讠刂",
+    "ten": "Bộ Ngôn 讠 + Bộ Đao 刂",
+    "nghia": "lời nói + dao"
+   }
+  ],
+  "lien_tuong": "Sa lưới 罒 pháp luật, nghe lời phán nghiêm như dao 讠刂 → bị phạt. Âm Hán Việt PHẠT như “xử phạt”.",
+  "tu_ghep": [
+   {
+    "hanzi": "罚款",
+    "pinyin": "fákuǎn",
+    "nghia": "Phạt tiền",
+    "them": true
+   },
+   {
+    "hanzi": "惩罚",
+    "pinyin": "chéngfá",
+    "nghia": "Trừng phạt",
+    "them": true
+   },
+   {
+    "hanzi": "处罚",
+    "pinyin": "chǔfá",
+    "nghia": "Xử phạt",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "戒",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao ngoài",
+    "chu": "戈",
+    "ten": "Bộ Qua",
+    "nghia": "ngọn giáo"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trong dưới",
+    "chu": "廾",
+    "ten": "Bộ Củng",
+    "nghia": "hai tay chắp"
+   }
+  ],
+  "lien_tuong": "Hai tay 廾 cầm giáo 戈 canh gác → đề phòng, răn; cai, chừa. Âm Hán Việt GIỚI như “giới luật”.",
+  "tu_ghep": [
+   {
+    "hanzi": "戒烟",
+    "pinyin": "jiè yān",
+    "nghia": "Cai thuốc lá"
+   },
+   {
+    "hanzi": "戒指",
+    "pinyin": "jièzhi",
+    "nghia": "Nhẫn",
+    "them": true
+   },
+   {
+    "hanzi": "警戒",
+    "pinyin": "jǐngjiè",
+    "nghia": "Cảnh giới, đề phòng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "社",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "礻",
+    "ten": "Bộ Thị",
+    "nghia": "thần linh, cúng tế"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "土",
+    "ten": "chữ Thổ (tǔ)",
+    "nghia": "đất"
+   }
+  ],
+  "lien_tuong": "Cả làng cùng cúng tế 礻 thần đất 土 → xã, đoàn thể. Âm Hán Việt XÃ như “xã hội”.",
+  "tu_ghep": [
+   {
+    "hanzi": "旅行社",
+    "pinyin": "lǚxíngshè",
+    "nghia": "Công ty du lịch"
+   },
+   {
+    "hanzi": "社会",
+    "pinyin": "shèhuì",
+    "nghia": "Xã hội"
+   },
+   {
+    "hanzi": "报社",
+    "pinyin": "bàoshè",
+    "nghia": "Toà soạn báo"
+   }
+  ]
+ },
+ {
+  "hanzi": "胜",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "月",
+    "ten": "Bộ Nhục (viết như 月)",
+    "nghia": "thịt, cơ thể"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "生",
+    "ten": "chữ Sinh (shēng)",
+    "nghia": "sống, sinh ra · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Thân thể 月 tràn đầy sức sống 生 → mạnh hơn, chiến thắng. Âm Hán Việt THẮNG như “thắng lợi”.",
+  "tu_ghep": [
+   {
+    "hanzi": "胜利",
+    "pinyin": "shènglì",
+    "nghia": "Thắng lợi"
+   },
+   {
+    "hanzi": "胜任",
+    "pinyin": "shèngrèn",
+    "nghia": "Đảm nhiệm được"
+   },
+   {
+    "hanzi": "名胜",
+    "pinyin": "míngshèng",
+    "nghia": "Danh lam thắng cảnh",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "羡",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "羊",
+    "ten": "Bộ Dương",
+    "nghia": "con dê"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "次",
+    "ten": "viết như chữ Thứ 次",
+    "nghia": "vốn là chảy nước dãi"
+   }
+  ],
+  "lien_tuong": "Thấy thịt dê 羊 ngon, thèm chảy nước dãi 次 → thèm muốn, ngưỡng mộ. Âm Hán Việt TIỆN.",
+  "tu_ghep": [
+   {
+    "hanzi": "羡慕",
+    "pinyin": "xiànmù",
+    "nghia": "Ngưỡng mộ"
+   },
+   {
+    "hanzi": "令人羡慕",
+    "pinyin": "lìng rén xiànmù",
+    "nghia": "Đáng ngưỡng mộ",
+    "them": true
+   },
+   {
+    "hanzi": "欣羡",
+    "pinyin": "xīnxiàn",
+    "nghia": "Hâm mộ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "慕",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "⺗",
+    "ten": "Bộ Tâm (dạng ⺗)",
+    "nghia": "tim, lòng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "莫",
+    "ten": "chữ Mạc (mò)",
+    "nghia": "chớ, đừng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Trong lòng ⺗ ngưỡng mộ mà chẳng 莫 dám nói ra → hâm mộ. Âm Hán Việt MỘ như “ái mộ”.",
+  "tu_ghep": [
+   {
+    "hanzi": "羡慕",
+    "pinyin": "xiànmù",
+    "nghia": "Ngưỡng mộ"
+   },
+   {
+    "hanzi": "爱慕",
+    "pinyin": "àimù",
+    "nghia": "Ái mộ",
+    "them": true
+   },
+   {
+    "hanzi": "慕名",
+    "pinyin": "mùmíng",
+    "nghia": "Nghe danh mà tìm đến",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "猜",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "犭",
+    "ten": "Bộ Khuyển",
+    "nghia": "chó, thú vật"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "青",
+    "ten": "chữ Thanh (qīng)",
+    "nghia": "xanh · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Chó 犭 đánh hơi trong bụi cỏ xanh 青, đoán xem con gì → đoán. Âm Hán Việt SAI.",
+  "tu_ghep": [
+   {
+    "hanzi": "猜测",
+    "pinyin": "cāicè",
+    "nghia": "Phỏng đoán",
+    "them": true
+   },
+   {
+    "hanzi": "猜谜",
+    "pinyin": "cāi mí",
+    "nghia": "Đoán câu đố",
+    "them": true
+   },
+   {
+    "hanzi": "猜想",
+    "pinyin": "cāixiǎng",
+    "nghia": "Đoán, ngờ rằng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "艺",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "艹",
+    "ten": "Bộ Thảo",
+    "nghia": "cỏ cây"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "乙",
+    "ten": "chữ Ất (yǐ)",
+    "nghia": "can Ất · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Trồng cây cỏ 艹 uốn cong 乙 thành dáng đẹp → tay nghề, nghệ thuật. Âm Hán Việt NGHỆ như “nghệ thuật”.",
+  "tu_ghep": [
+   {
+    "hanzi": "艺术",
+    "pinyin": "yìshù",
+    "nghia": "Nghệ thuật"
+   },
+   {
+    "hanzi": "手艺",
+    "pinyin": "shǒuyì",
+    "nghia": "Tay nghề"
+   },
+   {
+    "hanzi": "文艺",
+    "pinyin": "wényì",
+    "nghia": "Văn nghệ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "估",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "古",
+    "ten": "chữ Cổ (gǔ)",
+    "nghia": "xưa · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Người 亻 dựa vào kinh nghiệm xưa 古 mà ước chừng → ước lượng. Âm Hán Việt CỔ.",
+  "tu_ghep": [
+   {
+    "hanzi": "估计",
+    "pinyin": "gūjì",
+    "nghia": "Ước tính, phỏng đoán"
+   },
+   {
+    "hanzi": "评估",
+    "pinyin": "pínggū",
+    "nghia": "Đánh giá",
+    "them": true
+   },
+   {
+    "hanzi": "低估",
+    "pinyin": "dīgū",
+    "nghia": "Đánh giá thấp",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "争",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "nét sổ giữa",
+    "chu": "亅",
+    "ten": "Bộ Quyết",
+    "nghia": "nét sổ móc"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "xung quanh",
+    "chu": "⺈彐",
+    "ten": "đầu ⺈ + bàn tay 彐",
+    "nghia": "hai bàn tay"
+   }
+  ],
+  "lien_tuong": "Hai bàn tay ⺈彐 cùng giành giật một cây gậy 亅 → tranh giành. Âm Hán Việt TRANH như “cạnh tranh”.",
+  "tu_ghep": [
+   {
+    "hanzi": "争取",
+    "pinyin": "zhēngqǔ",
+    "nghia": "Ra sức giành lấy"
+   },
+   {
+    "hanzi": "争论",
+    "pinyin": "zhēnglùn",
+    "nghia": "Tranh luận"
+   },
+   {
+    "hanzi": "竞争",
+    "pinyin": "jìngzhēng",
+    "nghia": "Cạnh tranh"
+   },
+   {
+    "hanzi": "争吵",
+    "pinyin": "zhēngchǎo",
+    "nghia": "Cãi nhau"
+   }
+  ]
+ },
+ {
+  "hanzi": "族",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "方",
+    "ten": "Bộ Phương",
+    "nghia": "vuông; phương hướng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "丿一矢",
+    "ten": "lá cờ + chữ Thỉ 矢",
+    "nghia": "cờ + mũi tên"
+   }
+  ],
+  "lien_tuong": "Người cầm mũi tên 丿一矢 tụ họp dưới lá cờ 方 → dòng họ, dân tộc. Âm Hán Việt TỘC như “dân tộc”.",
+  "tu_ghep": [
+   {
+    "hanzi": "民族",
+    "pinyin": "mínzú",
+    "nghia": "Dân tộc"
+   },
+   {
+    "hanzi": "贵族",
+    "pinyin": "guìzú",
+    "nghia": "Quý tộc"
+   },
+   {
+    "hanzi": "家族",
+    "pinyin": "jiāzú",
+    "nghia": "Gia tộc",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "喘",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "口",
+    "ten": "Bộ Khẩu",
+    "nghia": "miệng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "耑",
+    "ten": "chữ Đoan (duān)",
+    "nghia": "đầu mút · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Miệng 口 há ra thở tới tận đầu mút 耑 hơi → thở dốc. Âm Hán Việt SUYỄN như “hen suyễn”.",
+  "tu_ghep": [
+   {
+    "hanzi": "喘气",
+    "pinyin": "chuǎn qì",
+    "nghia": "Thở dốc"
+   },
+   {
+    "hanzi": "哮喘",
+    "pinyin": "xiàochuǎn",
+    "nghia": "Hen suyễn",
+    "them": true
+   },
+   {
+    "hanzi": "气喘吁吁",
+    "pinyin": "qìchuǎn xūxū",
+    "nghia": "Thở hồng hộc",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "恐",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "心",
+    "ten": "Bộ Tâm",
+    "nghia": "tim, lòng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "巩",
+    "ten": "chữ Củng (gǒng)",
+    "nghia": "vững chắc · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Lòng 心 phải gồng cho vững 巩 vì đang sợ → sợ hãi. Âm Hán Việt KHỦNG như “khủng khiếp”.",
+  "tu_ghep": [
+   {
+    "hanzi": "恐怕",
+    "pinyin": "kǒngpà",
+    "nghia": "E rằng"
+   },
+   {
+    "hanzi": "恐怖",
+    "pinyin": "kǒngbù",
+    "nghia": "Kinh hãi, khủng bố",
+    "them": true
+   },
+   {
+    "hanzi": "恐龙",
+    "pinyin": "kǒnglóng",
+    "nghia": "Khủng long",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "危",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "㔾",
+    "ten": "Bộ Tiết (㔾)",
+    "nghia": "người quỳ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "厃",
+    "ten": "chữ 厃 (wēi)",
+    "nghia": "người đứng trên vách đá"
+   }
+  ],
+  "lien_tuong": "Người đứng chênh vênh trên vách đá 厃, bên dưới có người quỳ 㔾 run sợ → nguy hiểm. Âm Hán Việt NGUY.",
+  "tu_ghep": [
+   {
+    "hanzi": "危险",
+    "pinyin": "wēixiǎn",
+    "nghia": "Nguy hiểm"
+   },
+   {
+    "hanzi": "危机",
+    "pinyin": "wēijī",
+    "nghia": "Khủng hoảng",
+    "them": true
+   },
+   {
+    "hanzi": "危害",
+    "pinyin": "wēihài",
+    "nghia": "Gây hại",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "险",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "阝",
+    "ten": "Bộ Phụ",
+    "nghia": "gò đất, đồi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "佥",
+    "ten": "chữ Thiêm (qiān)",
+    "nghia": "đều, tất cả · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Gò núi 阝 cheo leo, tất cả 佥 đều phải dè chừng → hiểm trở, nguy hiểm. Âm Hán Việt HIỂM như “mạo hiểm”.",
+  "tu_ghep": [
+   {
+    "hanzi": "危险",
+    "pinyin": "wēixiǎn",
+    "nghia": "Nguy hiểm"
+   },
+   {
+    "hanzi": "冒险",
+    "pinyin": "mào xiǎn",
+    "nghia": "Mạo hiểm"
+   },
+   {
+    "hanzi": "保险",
+    "pinyin": "bǎoxiǎn",
+    "nghia": "Bảo hiểm",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "积",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "禾",
+    "ten": "Bộ Hoà",
+    "nghia": "cây lúa"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "只",
+    "ten": "chữ Chỉ (zhǐ)",
+    "nghia": "chỉ · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Chỉ 只 cần gom từng bó lúa 禾 → tích luỹ dần. Âm Hán Việt TÍCH như “tích cực”, “diện tích”.",
+  "tu_ghep": [
+   {
+    "hanzi": "面积",
+    "pinyin": "miànjī",
+    "nghia": "Diện tích"
+   },
+   {
+    "hanzi": "积极",
+    "pinyin": "jījí",
+    "nghia": "Tích cực"
+   },
+   {
+    "hanzi": "积累",
+    "pinyin": "jīlěi",
+    "nghia": "Tích luỹ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "纠",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "纟",
+    "ten": "Bộ Mịch",
+    "nghia": "sợi tơ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "丩",
+    "ten": "chữ Củ (jiū)",
+    "nghia": "dây quấn, móc vào nhau · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Sợi tơ 纟 quấn móc 丩 vào nhau → rối, xoắn; uốn lại cho đúng (纠正). 丩 jiū đọc y như 纠. Âm Hán Việt CỦ.",
+  "tu_ghep": [
+   {
+    "hanzi": "纠正",
+    "pinyin": "jiūzhèng",
+    "nghia": "Uốn nắn, sửa"
+   },
+   {
+    "hanzi": "纠纷",
+    "pinyin": "jiūfēn",
+    "nghia": "Tranh chấp",
+    "them": true
+   },
+   {
+    "hanzi": "纠结",
+    "pinyin": "jiūjié",
+    "nghia": "Rối rắm, băn khoăn",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "邀",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bao dưới trái",
+    "chu": "辶",
+    "ten": "Bộ Sước",
+    "nghia": "bước đi, đường đi"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên phải",
+    "chu": "敫",
+    "ten": "chữ Kiểu (jiǎo)",
+    "nghia": "sáng rõ · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Đi 辶 tới tận nơi, lời mời sáng rõ 敫 → mời. Âm Hán Việt YÊU.",
+  "tu_ghep": [
+   {
+    "hanzi": "邀请",
+    "pinyin": "yāoqǐng",
+    "nghia": "Mời"
+   },
+   {
+    "hanzi": "邀约",
+    "pinyin": "yāoyuē",
+    "nghia": "Mời hẹn",
+    "them": true
+   },
+   {
+    "hanzi": "应邀",
+    "pinyin": "yìngyāo",
+    "nghia": "Nhận lời mời",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "播",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "番",
+    "ten": "chữ Phiên (fān)",
+    "nghia": "lượt, lần · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 rải hạt xuống ruộng từng lượt 番 → gieo; lan truyền. Âm Hán Việt BÁ như “truyền bá”.",
+  "tu_ghep": [
+   {
+    "hanzi": "广播",
+    "pinyin": "guǎngbō",
+    "nghia": "Phát thanh"
+   },
+   {
+    "hanzi": "传播",
+    "pinyin": "chuánbō",
+    "nghia": "Truyền bá"
+   },
+   {
+    "hanzi": "直播",
+    "pinyin": "zhíbō",
+    "nghia": "Phát trực tiếp",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "搞",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "高",
+    "ten": "chữ Cao (gāo)",
+    "nghia": "cao · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Tay 扌 xắn lên làm cho việc lên cao 高 → làm, xoay xở. 高 gāo gợi âm gǎo. Âm Hán Việt CẢO.",
+  "tu_ghep": [
+   {
+    "hanzi": "搞定",
+    "pinyin": "gǎodìng",
+    "nghia": "Giải quyết xong",
+    "them": true
+   },
+   {
+    "hanzi": "搞笑",
+    "pinyin": "gǎoxiào",
+    "nghia": "Gây cười, hài hước",
+    "them": true
+   },
+   {
+    "hanzi": "搞错",
+    "pinyin": "gǎocuò",
+    "nghia": "Làm nhầm",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "兵",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "八",
+    "ten": "Bộ Bát",
+    "nghia": "số tám · ở đây là hai tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "丘",
+    "ten": "chữ Khâu (qiū)",
+    "nghia": "gò đất (vốn là cây rìu 斤)"
+   }
+  ],
+  "lien_tuong": "Hai tay 八 cầm cây rìu 丘 xông trận → binh lính. Âm Hán Việt BINH như “binh lính”.",
+  "tu_ghep": [
+   {
+    "hanzi": "兵马俑",
+    "pinyin": "bīngmǎyǒng",
+    "nghia": "Tượng binh mã"
+   },
+   {
+    "hanzi": "士兵",
+    "pinyin": "shìbīng",
+    "nghia": "Binh lính",
+    "them": true
+   },
+   {
+    "hanzi": "当兵",
+    "pinyin": "dāng bīng",
+    "nghia": "Đi lính",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "醋",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "酉",
+    "ten": "Bộ Dậu",
+    "nghia": "bình rượu"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "昔",
+    "ten": "chữ Tích (xī)",
+    "nghia": "ngày xưa · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Rượu 酉 để từ xưa 昔 lâu ngày thành chua → giấm. Âm Hán Việt THỐ.",
+  "tu_ghep": [
+   {
+    "hanzi": "糖醋鱼",
+    "pinyin": "tángcùyú",
+    "nghia": "Cá sốt chua ngọt"
+   },
+   {
+    "hanzi": "吃醋",
+    "pinyin": "chī cù",
+    "nghia": "Ghen",
+    "them": true
+   },
+   {
+    "hanzi": "白醋",
+    "pinyin": "báicù",
+    "nghia": "Giấm trắng",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "丁",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "cả chữ",
+    "chu": "丁",
+    "ten": "Chữ tượng hình",
+    "nghia": "hình cái đinh"
+   }
+  ],
+  "lien_tuong": "Nét ngang là mũ đinh, nét sổ móc là thân đinh → cái đinh; người trai tráng; hạt lựu. Âm Hán Việt ĐINH.",
+  "tu_ghep": [
+   {
+    "hanzi": "辣子鸡丁",
+    "pinyin": "làzi jīdīng",
+    "nghia": "Gà xào ớt"
+   },
+   {
+    "hanzi": "丁香",
+    "pinyin": "dīngxiāng",
+    "nghia": "Đinh hương",
+    "them": true
+   },
+   {
+    "hanzi": "肉丁",
+    "pinyin": "ròudīng",
+    "nghia": "Thịt thái hạt lựu",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "俗",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "谷",
+    "ten": "chữ Cốc (gǔ)",
+    "nghia": "thung lũng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Người 亻 sống trong thung lũng 谷 giữ nếp riêng → phong tục; thông thường. Âm Hán Việt TỤC như “phong tục”.",
+  "tu_ghep": [
+   {
+    "hanzi": "风俗",
+    "pinyin": "fēngsú",
+    "nghia": "Phong tục"
+   },
+   {
+    "hanzi": "习俗",
+    "pinyin": "xísú",
+    "nghia": "Tập tục",
+    "them": true
+   },
+   {
+    "hanzi": "俗话",
+    "pinyin": "súhuà",
+    "nghia": "Tục ngữ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "零",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "雨",
+    "ten": "Bộ Vũ",
+    "nghia": "mưa"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "令",
+    "ten": "chữ Lệnh (lìng)",
+    "nghia": "ra lệnh · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Mưa 雨 lất phất từng giọt lẻ tẻ, như nghe lệnh 令 mà rơi → lẻ; số không. Âm Hán Việt LINH như “linh tinh”.",
+  "tu_ghep": [
+   {
+    "hanzi": "零下",
+    "pinyin": "líng xià",
+    "nghia": "Dưới 0 độ"
+   },
+   {
+    "hanzi": "零钱",
+    "pinyin": "língqián",
+    "nghia": "Tiền lẻ",
+    "them": true
+   },
+   {
+    "hanzi": "零食",
+    "pinyin": "língshí",
+    "nghia": "Đồ ăn vặt",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "线",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "纟",
+    "ten": "Bộ Mịch",
+    "nghia": "sợi tơ"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "戋",
+    "ten": "chữ Tiên (jiān)",
+    "nghia": "nhỏ, mỏng · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Sợi tơ 纟 mảnh 戋 kéo dài → sợi chỉ, đường. Âm Hán Việt TUYẾN như “tuyến đường”.",
+  "tu_ghep": [
+   {
+    "hanzi": "路线",
+    "pinyin": "lùxiàn",
+    "nghia": "Tuyến đường"
+   },
+   {
+    "hanzi": "在线",
+    "pinyin": "zàixiàn",
+    "nghia": "Trực tuyến",
+    "them": true
+   },
+   {
+    "hanzi": "毛线",
+    "pinyin": "máoxiàn",
+    "nghia": "Len, sợi len",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "雕",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "隹",
+    "ten": "Bộ Chuy",
+    "nghia": "chim đuôi ngắn"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "周",
+    "ten": "chữ Chu (zhōu)",
+    "nghia": "vòng quanh · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Con chim 隹 lượn vòng quanh 周 trên cao → chim điêu; khắc tỉ mỉ → điêu khắc. Âm Hán Việt ĐIÊU như “điêu khắc”.",
+  "tu_ghep": [
+   {
+    "hanzi": "冰雕",
+    "pinyin": "bīngdiāo",
+    "nghia": "Tượng băng"
+   },
+   {
+    "hanzi": "雕刻",
+    "pinyin": "diāokè",
+    "nghia": "Điêu khắc",
+    "them": true
+   },
+   {
+    "hanzi": "雕塑",
+    "pinyin": "diāosù",
+    "nghia": "Tượng điêu khắc",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "甲",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "cả chữ",
+    "chu": "甲",
+    "ten": "Chữ 田 có nét sổ dài",
+    "nghia": "như tấm giáp có dây đeo"
+   }
+  ],
+  "lien_tuong": "Chữ 田 thòng nét sổ xuống như tấm áo giáp có dây đeo → giáp; đứng đầu mười can. Âm Hán Việt GIÁP như “áo giáp”.",
+  "tu_ghep": [
+   {
+    "hanzi": "指甲",
+    "pinyin": "zhǐjia",
+    "nghia": "Móng tay",
+    "them": true
+   },
+   {
+    "hanzi": "盔甲",
+    "pinyin": "kuījiǎ",
+    "nghia": "Áo giáp",
+    "them": true
+   },
+   {
+    "hanzi": "甲方",
+    "pinyin": "jiǎfāng",
+    "nghia": "Bên A (trong hợp đồng)",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "鞋",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "革",
+    "ten": "Bộ Cách",
+    "nghia": "da thuộc"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "圭",
+    "ten": "chữ Khuê (guī)",
+    "nghia": "ngọc khuê (hai chữ 土 chồng) · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Da thuộc 革 khâu thành giày để bước trên đất 圭 → giày. Âm Hán Việt HÀI.",
+  "tu_ghep": [
+   {
+    "hanzi": "鞋带儿",
+    "pinyin": "xiédàir",
+    "nghia": "Dây giày"
+   },
+   {
+    "hanzi": "皮鞋",
+    "pinyin": "píxié",
+    "nghia": "Giày da",
+    "them": true
+   },
+   {
+    "hanzi": "拖鞋",
+    "pinyin": "tuōxié",
+    "nghia": "Dép lê",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "梅",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "木",
+    "ten": "Bộ Mộc",
+    "nghia": "cây"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "每",
+    "ten": "chữ Mỗi (měi)",
+    "nghia": "mỗi · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Cây 木 mỗi 每 độ đông tàn lại nở hoa → cây mai. Âm Hán Việt MAI như “hoa mai”.",
+  "tu_ghep": [
+   {
+    "hanzi": "梅花",
+    "pinyin": "méihuā",
+    "nghia": "Hoa mai",
+    "them": true
+   },
+   {
+    "hanzi": "梅雨",
+    "pinyin": "méiyǔ",
+    "nghia": "Mưa dầm đầu hè",
+    "them": true
+   },
+   {
+    "hanzi": "话梅",
+    "pinyin": "huàméi",
+    "nghia": "Ô mai",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "寒",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "宀",
+    "ten": "Bộ Miên",
+    "nghia": "mái nhà"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "共冫",
+    "ten": "phần như chữ 共 + hai chấm băng 冫",
+    "nghia": "rơm cỏ phủ + băng giá"
+   }
+  ],
+  "lien_tuong": "Trong nhà 宀 vẫn phải đắp rơm, chân giẫm băng 共冫 → lạnh giá. Âm Hán Việt HÀN như “bần hàn”.",
+  "tu_ghep": [
+   {
+    "hanzi": "寒假",
+    "pinyin": "hánjià",
+    "nghia": "Kỳ nghỉ đông"
+   },
+   {
+    "hanzi": "岁寒三友",
+    "pinyin": "suì hán sān yǒu",
+    "nghia": "Tuế hàn tam hữu (tùng, trúc, mai)"
+   },
+   {
+    "hanzi": "寒冷",
+    "pinyin": "hánlěng",
+    "nghia": "Lạnh giá",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "扶",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "扌",
+    "ten": "Bộ Thủ (tay)",
+    "nghia": "tay"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "夫",
+    "ten": "chữ Phu (fū)",
+    "nghia": "người đàn ông · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Đưa tay 扌 dìu người đàn ông 夫 sắp ngã → dìu, đỡ, nâng. 夫 fū gợi âm fú. Âm Hán Việt PHÒ như “phò tá”.",
+  "tu_ghep": [
+   {
+    "hanzi": "扶手",
+    "pinyin": "fúshǒu",
+    "nghia": "Tay vịn"
+   },
+   {
+    "hanzi": "扶贫",
+    "pinyin": "fúpín",
+    "nghia": "Xoá đói giảm nghèo",
+    "them": true
+   },
+   {
+    "hanzi": "搀扶",
+    "pinyin": "chānfú",
+    "nghia": "Dìu đỡ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "伸",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "申",
+    "ten": "chữ Thân (shēn)",
+    "nghia": "duỗi ra · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Người 亻 duỗi 申 tay chân ra → duỗi, vươn. 申 shēn đọc y như 伸. Âm Hán Việt THÂN.",
+  "tu_ghep": [
+   {
+    "hanzi": "伸手",
+    "pinyin": "shēn shǒu",
+    "nghia": "Đưa tay ra",
+    "them": true
+   },
+   {
+    "hanzi": "延伸",
+    "pinyin": "yánshēn",
+    "nghia": "Kéo dài, mở rộng",
+    "them": true
+   },
+   {
+    "hanzi": "伸懒腰",
+    "pinyin": "shēn lǎnyāo",
+    "nghia": "Vươn vai",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "胡",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên phải",
+    "chu": "月",
+    "ten": "Bộ Nhục (viết như 月)",
+    "nghia": "thịt, cơ thể"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên trái",
+    "chu": "古",
+    "ten": "chữ Cổ (gǔ)",
+    "nghia": "xưa · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Lớp thịt 月 chảy xệ dưới cằm người già 古 → râu; mượn chỉ người Hồ, nói bừa. Âm Hán Việt HỒ như “nhị hồ”.",
+  "tu_ghep": [
+   {
+    "hanzi": "胡说",
+    "pinyin": "húshuō",
+    "nghia": "Nói bậy"
+   },
+   {
+    "hanzi": "胡同",
+    "pinyin": "hútòng",
+    "nghia": "Ngõ nhỏ"
+   },
+   {
+    "hanzi": "胡子",
+    "pinyin": "húzi",
+    "nghia": "Râu",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "吉",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "dưới",
+    "chu": "口",
+    "ten": "Bộ Khẩu",
+    "nghia": "miệng"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "trên",
+    "chu": "士",
+    "ten": "chữ Sĩ (shì)",
+    "nghia": "kẻ sĩ"
+   }
+  ],
+  "lien_tuong": "Lời 口 của bậc kẻ sĩ 士 nói ra đều tốt lành → may mắn. Âm Hán Việt CÁT như “cát tường”.",
+  "tu_ghep": [
+   {
+    "hanzi": "吉祥",
+    "pinyin": "jíxiáng",
+    "nghia": "Cát tường"
+   },
+   {
+    "hanzi": "吉利",
+    "pinyin": "jílì",
+    "nghia": "May mắn"
+   },
+   {
+    "hanzi": "吉他",
+    "pinyin": "jítā",
+    "nghia": "Đàn ghi-ta",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "申",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "cả chữ",
+    "chu": "申",
+    "ten": "Chữ tượng hình",
+    "nghia": "vốn vẽ tia chớp"
+   }
+  ],
+  "lien_tuong": "Nét sổ xuyên qua chữ 日 như tia chớp vươn dài → duỗi ra, bày tỏ, xin. Âm Hán Việt THÂN như “thân thỉnh”.",
+  "tu_ghep": [
+   {
+    "hanzi": "申请",
+    "pinyin": "shēnqǐng",
+    "nghia": "Xin, đăng ký"
+   },
+   {
+    "hanzi": "申报",
+    "pinyin": "shēnbào",
+    "nghia": "Khai báo",
+    "them": true
+   },
+   {
+    "hanzi": "重申",
+    "pinyin": "chóngshēn",
+    "nghia": "Nhắc lại, khẳng định lại",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "伟",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "亻",
+    "ten": "Bộ Nhân đứng",
+    "nghia": "người"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "韦",
+    "ten": "chữ Vi (wéi)",
+    "nghia": "da thuộc · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Người 亻 cao lớn khoác áo da 韦 oai vệ → to lớn, vĩ đại. Âm Hán Việt VĨ như “vĩ đại”.",
+  "tu_ghep": [
+   {
+    "hanzi": "伟大",
+    "pinyin": "wěidà",
+    "nghia": "Vĩ đại"
+   },
+   {
+    "hanzi": "伟人",
+    "pinyin": "wěirén",
+    "nghia": "Vĩ nhân",
+    "them": true
+   },
+   {
+    "hanzi": "雄伟",
+    "pinyin": "xióngwěi",
+    "nghia": "Hùng vĩ",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "笨",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "trên",
+    "chu": "⺮",
+    "ten": "Bộ Trúc",
+    "nghia": "tre"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "dưới",
+    "chu": "本",
+    "ten": "chữ Bản (běn)",
+    "nghia": "gốc · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Chỉ biết gốc 本 tre ⺮ thô nặng, chẳng biết khéo léo → vụng, đần. 本 běn gợi âm bèn.",
+  "tu_ghep": [
+   {
+    "hanzi": "笨蛋",
+    "pinyin": "bèndàn",
+    "nghia": "Đồ ngốc",
+    "them": true
+   },
+   {
+    "hanzi": "笨重",
+    "pinyin": "bènzhòng",
+    "nghia": "Cồng kềnh, nặng nề",
+    "them": true
+   },
+   {
+    "hanzi": "愚笨",
+    "pinyin": "yúbèn",
+    "nghia": "Ngu đần",
+    "them": true
+   }
+  ]
+ },
+ {
+  "hanzi": "谊",
+  "phan": [
+   {
+    "mau": "a",
+    "vi_tri": "bên trái",
+    "chu": "讠",
+    "ten": "Bộ Ngôn",
+    "nghia": "lời nói"
+   },
+   {
+    "mau": "b",
+    "vi_tri": "bên phải",
+    "chu": "宜",
+    "ten": "chữ Nghi (yí)",
+    "nghia": "thích hợp · gợi âm đọc"
+   }
+  ],
+  "lien_tuong": "Lời nói 讠 hợp ý 宜 nhau → tình bạn, tình nghĩa. Âm Hán Việt NGHỊ như “hữu nghị”.",
+  "tu_ghep": [
+   {
+    "hanzi": "友谊",
+    "pinyin": "yǒuyì",
+    "nghia": "Tình bạn, hữu nghị"
+   },
+   {
+    "hanzi": "情谊",
+    "pinyin": "qíngyì",
+    "nghia": "Tình nghĩa"
+   },
+   {
+    "hanzi": "联谊",
+    "pinyin": "liányì",
+    "nghia": "Giao lưu kết thân",
+    "them": true
+   }
+  ]
+ }
+]

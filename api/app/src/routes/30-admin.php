@@ -103,6 +103,8 @@ return [
     ['PATCH',  '/admin/lesson-chars/{id}', [Writing::class, 'updateLessonChar'], 'E'],
     ['DELETE', '/admin/lesson-chars/{id}', [Writing::class, 'deleteLessonChar'], 'E'],
     ['PUT',    '/admin/characters/analysis', [Writing::class, 'analysis'], 'E'],
+    ['PUT',    '/admin/characters/cach-nho', [Writing::class, 'cachNho'], 'E'],
+    ['PUT',    '/admin/pinyin', [Question::class, 'pinyin'], 'E'],
     ['POST',   '/admin/characters/{id}/stroke-data', [Writing::class, 'uploadStroke'], 'E'],
     ['POST',   '/admin/characters/{id}/stroke-data/fetch', [Writing::class, 'fetchStroke'], 'E'],
 

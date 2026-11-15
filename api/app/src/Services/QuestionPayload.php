@@ -15,6 +15,23 @@ final class QuestionPayload
     /** Số phương án của câu trắc nghiệm. */
     private const MIN_OPTIONS = 2;
     private const MAX_OPTIONS = 4;
+    /**
+     * Điền chỗ trống được hiện nguyên khung từ của sách (Hán ngữ 选词填空 in 8–15 từ cho cả mục) — người dùng chốt 15/11/2026
+     * lấy đúng như sách, không rút còn 4 phương án tự chọn.
+     */
+    public const MAX_OPTIONS_BLANK = 16;
+    /** Đoạn văn đúng/sai: bài đọc hiểu của sách dài hơn 400 ký tự. */
+    public const MAX_TF_PASSAGE = 2000;
+    /** Sắp xếp: 连句成段 xếp cả câu thành đoạn, mỗi ô là một câu. */
+    public const MAX_ORDER_ANSWER = 400;
+    public const MAX_ORDER_TILE = 120;
+    public const MAX_ORDER_TILES = 12;
+    /**
+     * Đề mô phỏng HSK 3.0 của sách (15/11/2026): tranh A–F, câu trả lời A–F dùng chung cho cả nhóm câu → chọn tranh,
+     * chọn đáp án, nghe chọn có tới 6 phương án; bài đọc của câu chọn đáp án dài hơn 200 ký tự.
+     */
+    public const MAX_OPTIONS_DE = 6;
+    public const MAX_PICK_ASK = 600;
 
     /**
      * @param array<string,mixed> $in payload thô từ trình soạn
@@ -27,7 +44,8 @@ final class QuestionPayload
             'meaning', 'pinyin', 'tone' => self::word($type, $in, $errors),
             'audio', 'listen' => self::audio($type, $in, $errors),
             'blank' => self::blank($in, $errors),
-            'pick' => self::ask($in, $errors, 'ask', 'Câu hỏi'),
+            'go' => self::go($in, $errors),
+            'pick' => self::ask($in, $errors, 'ask', 'Câu hỏi', self::MAX_PICK_ASK, self::MAX_OPTIONS_DE),
             'toZh' => self::ask($in, $errors, 'vi', 'Câu tiếng Việt'),
             'order' => self::order($in, $errors),
             'trans' => self::trans($in, $errors),
@@ -57,7 +75,7 @@ final class QuestionPayload
      * @param array<string,string> $errors
      * @return array<string,mixed>
      */
-    private static function options(array $in, array &$errors, bool $hanziOnly = false): array
+    private static function options(array $in, array &$errors, bool $hanziOnly = false, int $max = self::MAX_OPTIONS): array
     {
         $opts = [];
         // Ô trống bị lọc bỏ làm lệch chỉ số: đáp án phải được đổi theo vị trí mới, nếu không đáp án lưu sẽ trỏ sang phương án khác.
@@ -74,8 +92,8 @@ final class QuestionPayload
             $errors['options'] = 'Cần ít nhất ' . self::MIN_OPTIONS . ' phương án.';
             return [[], 0];
         }
-        if (count($opts) > self::MAX_OPTIONS) {
-            $opts = array_slice($opts, 0, self::MAX_OPTIONS);
+        if (count($opts) > $max) {
+            $opts = array_slice($opts, 0, $max);
         }
 
         // Trùng phương án thì người học có 2 đáp án đúng như nhau → chỉ rõ chữ cái.
@@ -137,7 +155,7 @@ final class QuestionPayload
             $errors['audioText'] = "Nội dung đọc dài quá $max ký tự.";
         }
 
-        [$opts, $answer] = self::options($in, $errors, $type === 'audio');
+        [$opts, $answer] = self::options($in, $errors, $type === 'audio', $type === 'listen' ? self::MAX_OPTIONS_DE : self::MAX_OPTIONS);
         return [
             'audioText' => mb_substr($text, 0, $max),
             'audioUrl' => self::path($in['audioUrl'] ?? null),
@@ -157,7 +175,7 @@ final class QuestionPayload
             $errors['sentence'] = 'Câu dài quá 255 ký tự.';
         }
 
-        [$opts, $answer] = self::options($in, $errors);
+        [$opts, $answer] = self::options($in, $errors, false, self::MAX_OPTIONS_BLANK);
         return [
             'sentence' => mb_substr($sentence, 0, 255),
             'vi' => mb_substr(trim((string) ($in['vi'] ?? '')), 0, 255),
@@ -168,17 +186,45 @@ final class QuestionPayload
     }
 
     /** pick (`ask`) · toZh (`vi`) — chỉ khác tên trường đề bài. */
-    private static function ask(array $in, array &$errors, string $field, string $label): array
+    private static function ask(array $in, array &$errors, string $field, string $label, int $maxLen = 200, int $maxOpts = self::MAX_OPTIONS): array
     {
         $text = trim((string) ($in[$field] ?? ''));
         if ($text === '') {
             $errors[$field] = "Nhập $label.";
-        } elseif (mb_strlen($text) > 200) {
-            $errors[$field] = "$label dài quá 200 ký tự.";
+        } elseif (mb_strlen($text) > $maxLen) {
+            $errors[$field] = "$label dài quá $maxLen ký tự.";
         }
 
-        [$opts, $answer] = self::options($in, $errors);
-        return [$field => mb_substr($text, 0, 200), 'options' => $opts, 'answer' => $answer];
+        [$opts, $answer] = self::options($in, $errors, false, $maxOpts);
+        return [$field => mb_substr($text, 0, $maxLen), 'options' => $opts, 'answer' => $answer];
+    }
+
+    /**
+     * go — viết chữ Hán theo pinyin (đề HSK 2 câu 56–60): câu có một `___`, pinyin của chữ cần viết in trên chỗ trống,
+     * người học gõ chữ, chấm đúng chữ.
+     */
+    private static function go(array $in, array &$errors): array
+    {
+        $sentence = trim((string) ($in['sentence'] ?? ''));
+        if (substr_count($sentence, '___') !== 1) {
+            $errors['sentence'] = 'Câu phải có đúng một chỗ trống ___.';
+        } elseif (mb_strlen($sentence) > 255) {
+            $errors['sentence'] = 'Câu dài quá 255 ký tự.';
+        }
+        $answer = trim((string) ($in['answer'] ?? ''));
+        if ($answer === '' || !Pinyin::isHanzi($answer) || mb_strlen($answer) > 4) {
+            $errors['answer'] = 'Đáp án là 1–4 chữ Hán.';
+        }
+        $pinyin = trim((string) ($in['pinyin'] ?? ''));
+        if ($pinyin === '') {
+            $errors['pinyin'] = 'Nhập pinyin của chữ cần viết.';
+        }
+        return [
+            'sentence' => mb_substr($sentence, 0, 255),
+            'pinyin' => mb_substr($pinyin, 0, 60),
+            'vi' => mb_substr(trim((string) ($in['vi'] ?? '')), 0, 255),
+            'answer' => mb_substr($answer, 0, 4),
+        ];
     }
 
     /* ---------------- Các dạng còn lại ---------------- */
@@ -188,26 +234,26 @@ final class QuestionPayload
         $answer = trim((string) ($in['answer'] ?? ''));
         if ($answer === '') {
             $errors['answer'] = 'Nhập câu đúng.';
-        } elseif (mb_strlen($answer) > 60) {
-            $errors['answer'] = 'Câu đúng dài quá 60 ký tự.';
+        } elseif (mb_strlen($answer) > self::MAX_ORDER_ANSWER) {
+            $errors['answer'] = 'Câu đúng dài quá ' . self::MAX_ORDER_ANSWER . ' ký tự.';
         }
 
         $tiles = [];
         foreach ((array) ($in['tiles'] ?? []) as $t) {
             $s = trim((string) $t);
             if ($s !== '') {
-                $tiles[] = mb_substr($s, 0, 20);
+                $tiles[] = mb_substr($s, 0, self::MAX_ORDER_TILE);
             }
         }
-        if (count($tiles) < 2 || count($tiles) > 8) {
-            $errors['tiles'] = 'Cần 2 đến 8 ô chữ.';
+        if (count($tiles) < 2 || count($tiles) > self::MAX_ORDER_TILES) {
+            $errors['tiles'] = 'Cần 2 đến ' . self::MAX_ORDER_TILES . ' ô chữ.';
         } elseif (QuestionGrader::normZh(implode('', $tiles)) !== QuestionGrader::normZh($answer)) {
             $errors['tiles'] = 'Các ô chữ ghép lại chưa đúng với câu đúng.';
         }
 
         return [
             'vi' => mb_substr(trim((string) ($in['vi'] ?? '')), 0, 200),
-            'answer' => mb_substr($answer, 0, 60),
+            'answer' => mb_substr($answer, 0, self::MAX_ORDER_ANSWER),
             'tiles' => $tiles,
         ];
     }
@@ -248,18 +294,18 @@ final class QuestionPayload
         $statement = trim((string) ($in['statement'] ?? ''));
         if ($passage === '') {
             $errors['passage'] = 'Nhập đoạn văn.';
-        } elseif (mb_strlen($passage) > 400) {
-            $errors['passage'] = 'Đoạn văn dài quá 400 ký tự.';
+        } elseif (mb_strlen($passage) > self::MAX_TF_PASSAGE) {
+            $errors['passage'] = 'Đoạn văn dài quá ' . self::MAX_TF_PASSAGE . ' ký tự.';
         }
         if ($statement === '') {
             $errors['statement'] = 'Nhập câu cần xét đúng/sai.';
-        } elseif (mb_strlen($statement) > 200) {
-            $errors['statement'] = 'Câu dài quá 200 ký tự.';
+        } elseif (mb_strlen($statement) > 300) {
+            $errors['statement'] = 'Câu dài quá 300 ký tự.';
         }
 
         return [
-            'passage' => mb_substr($passage, 0, 400),
-            'statement' => mb_substr($statement, 0, 200),
+            'passage' => mb_substr($passage, 0, self::MAX_TF_PASSAGE),
+            'statement' => mb_substr($statement, 0, 300),
             'answer' => (bool) ($in['answer'] ?? false),
         ];
     }
@@ -305,8 +351,9 @@ final class QuestionPayload
     }
 
     /**
-     * pic — chọn tranh đúng (HSK 1–2): nghe `audioText` hoặc đọc `ask` rồi chọn một trong 2–4 hình. Phương án là mã
-     * hình trong kho, chấm như trắc nghiệm theo chỉ số.
+     * pic — chọn tranh đúng (HSK 1–2): nghe `audioText` hoặc đọc `ask` rồi chọn một trong 2–6 hình. Phương án là mã
+     * hình trong kho, hoặc ảnh cắt từ đề mô phỏng của sách đã tải lên /uploads/ (tranh A–F dùng chung cả nhóm câu).
+     * Chấm như trắc nghiệm theo chỉ số.
      */
     private static function pic(array $in, array &$errors): array
     {
@@ -318,9 +365,9 @@ final class QuestionPayload
         if (mb_strlen($audio) > 200 || mb_strlen($ask) > 200) {
             $errors['audioText'] = 'Dài quá 200 ký tự.';
         }
-        [$opts, $answer] = self::options($in, $errors);
+        [$opts, $answer] = self::options($in, $errors, false, self::MAX_OPTIONS_DE);
         foreach ($opts as $o) {
-            if (!preg_match(self::MA_HINH, $o)) {
+            if (!preg_match(self::MA_HINH, $o) && self::path($o) === null) {
                 $errors['options'] = 'Mỗi phương án phải là một hình trong kho.';
                 break;
             }

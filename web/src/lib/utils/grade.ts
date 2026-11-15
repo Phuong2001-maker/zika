@@ -68,7 +68,7 @@ export function answered(type: string, payload: Payload, a: Answer): boolean {
   if (a === null || a === undefined) return false;
   if (isChoice(type)) return typeof a === 'number';
   if (type === 'order') return Array.isArray(a) && a.length === (payload.tiles ?? []).length;
-  if (type === 'trans') return typeof a === 'string' && a.trim() !== '';
+  if (type === 'trans' || type === 'go') return typeof a === 'string' && a.trim() !== '';
   if (type === 'tf') return typeof a === 'boolean';
   if (type === 'speak') return typeof a === 'string' && a in SPEAK_ANSWERS;
   if (type === 'match') {
@@ -104,6 +104,8 @@ export function check(type: string, payload: Payload, a: Answer): boolean {
 
   if (type === 'tf') return typeof a === 'boolean' && a === payload.answer;
 
+  if (type === 'go') return typeof a === 'string' && normZh(a) !== '' && normZh(a) === normZh(String(payload.answer ?? ''));
+
   if (type === 'match') {
     const pairs = (a as { pairs: Record<number, number> })?.pairs ?? {};
     const n = (payload.pairs ?? []).length;
@@ -118,7 +120,7 @@ export function check(type: string, payload: Payload, a: Answer): boolean {
 /** Chuỗi đáp án đúng để hiện ở khung phản hồi. */
 export function rightAnswerText(type: string, payload: Payload): string {
   if (isChoice(type)) return String((payload.options ?? [])[Number(payload.answer)] ?? '');
-  if (type === 'order') return String(payload.answer ?? '');
+  if (type === 'order' || type === 'go') return String(payload.answer ?? '');
   if (type === 'trans') return String(payload.sample ?? '');
   if (type === 'tf') return payload.answer ? 'Đúng' : 'Sai';
   if (type === 'match') return (payload.pairs ?? []).map((p) => `${p[0]} ${p[1]}`).join(' · ');
@@ -133,14 +135,17 @@ export const TYPE_LABEL: Record<string, string> = {
   audio: 'Nghe và chọn chữ Hán',
   listen: 'Nghe và chọn',
   blank: 'Điền vào chỗ trống',
-  pick: 'Chọn câu viết đúng',
+  // Chung cho chọn câu viết đúng (đề HSK) và chọn vị trí A–D (Bài tập Hán ngữ).
+  pick: 'Chọn đáp án đúng',
   toZh: 'Chọn câu tiếng Trung đúng nghĩa',
   order: 'Sắp xếp thành câu',
   trans: 'Dịch sang tiếng Việt',
   tf: 'Đọc và chọn Đúng / Sai',
-  match: 'Nối từ với nghĩa',
+  // Nối từ – nghĩa hoặc nối hai vế câu (Bài tập Hán ngữ 连成句子).
+  match: 'Nối cho đúng cặp',
   speak: 'Nói',
   pic: 'Chọn tranh đúng',
+  go: 'Viết chữ Hán theo pinyin',
 };
 
 /** Câu nói (Thi thử HSK 3.0): ghi âm ở máy người học, không chấm tự động. Khớp QuestionGrader::SPEAK_ANSWERS. */

@@ -109,7 +109,8 @@ export const HINH: Hinh[] = [
 
 export const HINH_THEO_MA: Record<string, Hinh> = Object.fromEntries(HINH.map((h) => [h.ma, h]));
 
-export const urlHinh = (ma: string): string => `/hinh-hsk/${ma}.svg`;
+/** Mã hình trong kho → đường dẫn; ảnh cắt từ đề mô phỏng của sách đã là đường dẫn /uploads/… thì giữ nguyên. */
+export const urlHinh = (ma: string): string => (ma.startsWith('/') ? ma : `/hinh-hsk/${ma}.svg`);
 
 /** Mã hình từ đường dẫn /hinh-hsk/<mã>.svg (ô hình minh hoạ lưu cả đường dẫn). */
 export function maTuUrl(url: string | null | undefined): string | null {

@@ -37,7 +37,7 @@ cd web && npm run check && npm run lint && npm test
 cd api && "D:/zika-devtools/php/php.exe" app/vendor/bin/phpunit -c phpunit.xml
 ```
 
-Mốc hiện tại: web **0 lỗi 0 cảnh báo**, lint sạch, 128/128 test; API 250/250 (chạy khoảng 18 phút vì mỗi test xoá sạch bảng); `python data/nap-sach/test_doc_edge.py` 12/12.
+Mốc hiện tại (15/11): web **0 lỗi 0 cảnh báo**, lint sạch, 130/130 test; API 266/266 (chạy khoảng 18–30 phút vì mỗi test xoá sạch bảng); `python data/nap-sach/test_doc_edge.py` 13/13.
 Đừng commit khi còn đỏ hoặc còn cảnh báo.
 
 ## Bản đồ nhanh
@@ -64,7 +64,8 @@ web/src/lib/curricula/   màn Giáo trình + Phân quyền học (giáo trình �
 web/src/lib/auth/        routes.ts — toàn bộ luật chặn và điều hướng theo vai trò
 web/src/lib/stores/cap.svelte.ts  cách gọi cấp theo giáo trình ("HSK 1" / "Quyển 1"), màn học lấy chữ từ đây
 web/src/lib/learn/che-do/  3 chế độ luyện ở màn Lật thẻ (Ghép cặp, Trắc nghiệm, Gõ chữ)
-web/src/lib/learn/thi-hsk/  Thi thử HSK 3.0: kho đề chung mọi giáo trình, luyện tập/thi thật, câu nói ghi âm ở máy (HUONG-DAN-THI-THU-HSK30.md)
+web/src/lib/learn/thi-hsk/  Thi thử HSK 3.0: kho đề chung mọi giáo trình, luyện tập/thi thật, câu nói ghi âm ở máy (HUONG-DAN-THI-THU-HSK30.md);
+                          từ 15/11 cả đề một trang cuộn kiểu tờ đề (ThiHskRunner + CauGiay), pinyin HSK 1–2 qua Ruby.svelte (PinyinDe.php)
 web/src/lib/admin/SoanDeHsk.svelte  màn soạn đề khung HSK 3.0, dùng chung cho Đề HSK 3.0 và đề cuộc thi (tab Đề thi); cuộc thi làm ở /learn/cuoc-thi
 data/hsk30/               đề HSK 3.0 tự soạn: đặc tả, kiem_de.py, nap_de.py, hinh/ve.py (kho hình SVG web/static/hinh-hsk)
 web/src/routes/learn/chat/  Quán trà — trò chuyện chia bàn theo chủ đề (hỏi tin mới 4 giây/lần), quản trị ở /admin/chat
@@ -184,6 +185,17 @@ file sách phải đi qua `BookController::doc()` và `chanBaiAn()`, bài ẩn c
 
 ## Việc còn treo
 
+- **Bài tập Hán ngữ theo sách + Luyện viết Cách nhớ/Từ ghép + Thi thử kiểu tờ đề + 4 đề mô phỏng HSK 1–2 (15/11/2026), đã commit
+  và push, chưa lên server:** kế hoạch đã chốt ở `data/han-ngu/ra/KE-HOACH-BAI-TAP-LUYEN-VIET.md` (chỉ ở máy local, `ra/` không
+  lên git), kịch bản test phần S–V của
+  KICH-BAN-TEST. Lên server cần: code mới, **migration 029** (`characters.cach_nho/tu_ghep`) + **030** (`text_pinyin`), chép
+  `uploads/hinh-de/` (tranh cắt từ đề), rồi trỏ `ZIKA_API` về server chạy `data/han-ngu/nap_bai_tap.py all`,
+  `data/han-ngu/nap_cach_nho.py`, `data/hsk30/nap_de.py data/hsk30/de-sach/*.json` (đề nạp là Nháp, công khai ở quản trị),
+  `data/hsk30/sinh_pinyin.py`, rồi giọng đọc, xoá `storage/cache/content`. Dữ liệu chép từ sách (`data/han-ngu/bai-tap/`,
+  `data/hsk30/de-sach/`) không lên git. Luật: Bài tập lấy **đúng như sách**, không bịa phương án nhiễu; `blank` tới 16 phương án
+  (khung từ), `pick`/`pic`/`listen` tới 6 (nhóm A–F; trên 4 phương án thì không xáo khi thi), dạng mới `go` (viết chữ Hán theo
+  pinyin), `pic` nhận ảnh `/uploads/…`. Kiểm tra Hán ngữ vẫn trống (người dùng tự ẩn).
+
 - **Khách học thử + màn đăng nhập mới (11/11/2026), chưa lên server:** cần chạy **migration 028** (`test_attempts.user_id` cho
   phép NULL, thêm `guest_key`) rồi xoá `storage/cache/content`. Từ bản này ai vào web cũng đọc được trọn quyển đầu của bộ sách
   thuộc giáo trình mặc định (người dùng chốt: mọi mục trong Chuyển nhanh học được cấp 1). Checklist KT1–KT15 trong KICH-BAN-TEST.
@@ -212,7 +224,7 @@ file sách phải đi qua `BookController::doc()` và `chanBaiAn()`, bài ẩn c
   kể cả nút Nghe bài khoá (`gan_hn.py` `DUNG_BANG = False`). Sách ở `HanNgu/New folder/` → đặt `ZIKA_HANNGU_DIR` khi đọc PDF
   (thư mục "File nghe…" vẫn ở `HanNgu/`). Xem NHAT-KY 08/11.
 - **Giáo trình "Hán ngữ 6 tập" (07/11/2026):** 76 bài đã nạp ở local, quy trình ở [data/han-ngu/README.md](data/han-ngu/README.md).
-  Chỉ có 4 phần, Bài tập và Kiểm tra cố ý để trống. Gói server ở `../dong-goi-han-ngu/`, **chưa đưa lên**: cần code mới trước,
+  Lúc đầu 4 phần (Bài tập có từ 15/11, chép từ 练习 bằng nap_bai_tap.py; Kiểm tra vẫn trống). Gói server ở `../dong-goi-han-ngu/`, **chưa đưa lên**: cần code mới trước,
   rồi chạy `01-cau-truc.sql` (migration 006–018, đã chạy thì tự bỏ qua) và `02-han-ngu.sql`, chép zip uploads, xoá `storage/cache/content`.
   Màn học gọi cấp theo `curricula.level_label` qua `lib/stores/cap.svelte.ts` ("Quyển n"), đừng viết cứng "HSK n" ở màn học; riêng "Thi thử HSK n" giữ vì là đề HSK dùng chung. Góp ý ở màn học đã nối 08/11 (Chuyển nhanh → Góp ý, `POST /feedback`, học viên đọc trả lời trong hộp).
 

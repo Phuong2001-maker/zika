@@ -374,11 +374,76 @@ nào tràn ngang, không lỗi tải, không lỗi JS; bấm tay ở 375px và 8
 | R1 | Server có `admin_emails` trong `config.php`; đăng nhập bằng email trong danh sách | Vào được Quản trị như cũ | Đạt (test API) | |
 | R2 | Sửa DB cho một tài khoản ngoài danh sách thành `role = admin` rồi đăng nhập tài khoản đó | Chỉ là người học, mở `/admin` bị đưa về màn học | Đạt (test API) | |
 | R3 | Quản trị → Người dùng → ⋯ → Đổi quyền → Quản trị viên cho email ngoài danh sách | Báo "Email này chưa có trong danh sách quản trị…", quyền không đổi | Đạt (test API) | |
-| R4 | Học viên Hán ngữ mở Bài tập hoặc Kiểm tra (Hán ngữ cố ý để trống), chọn một bài | Bài ghi "Sắp có"; tấm dưới đáy (điện thoại) ghi "Phần này của bài chưa soạn xong", không có nút Bắt đầu | Đạt | |
+| R4 | Học viên Hán ngữ mở Kiểm tra (vẫn để trống; Bài tập đã có từ 15/11 — xem phần S), chọn một bài | Bài ghi "Sắp có"; tấm dưới đáy (điện thoại) ghi "Phần này của bài chưa soạn xong", không có nút Bắt đầu | Đạt | |
 | R5 | Gõ thẳng đường dẫn bài tập của bài 0 câu, hoặc bài Lật thẻ không tồn tại | Báo lỗi ngay trong khung có thanh đầu trang (vẫn có menu đi phần khác) | Đạt | |
 | R7 | Hán ngữ Quyển 1 Bài 1, lật thẻ 五, 马, 你好 | Có "Câu ví dụ" là câu thật (我家五口人。, 白马不大。…), không còn ví dụ chỉ là chính từ đó; bấm loa nghe được giọng | Đạt (local) | |
 | R8 | Hán ngữ Quyển 1 Bài 8, thẻ 太…了 | Có câu ví dụ, chữ 太 được tô | Đạt (local) | |
 | R6 | Lật thẻ 3 chế độ, Chuyển nhanh, chuông, tài khoản, đọc sách (mục lục, file nghe), Quán trà, Top chăm học, Quỹ tháng | Mở/đóng được, không che chữ, không tràn | Đạt | |
+
+## S. Bài tập Hán ngữ chép từ phần 练习 của sách (15/11/2026)
+
+Lấy **đúng như sách**, không bịa phương án (kế hoạch: `data/han-ngu/ra/KE-HOACH-BAI-TAP-LUYEN-VIET.md`). 1.252 câu ở 70 bài:
+Q1 89 · Q2 100 · Q3 254 · Q4 175 · Q5 315 · Q6 319. Nạp bằng `data/han-ngu/nap_bai_tap.py`. Server cần code mới (giới hạn mới của
+`QuestionPayload`, `pick` ở Bài tập); dữ liệu nạp lại trên server bằng cùng script (trỏ `ZIKA_API`). Kiểm tra vẫn để trống (người dùng tự ẩn).
+
+| # | Làm gì | Mong đợi | Máy | Web thật |
+|---|---|---|---|---|
+| S1 | Học viên Hán ngữ → Bài tập → Quyển 1 Bài 1 | Câu "Chọn pinyin đúng": chữ 一 với 4 thanh yī/yí/yǐ/yì như dòng sách; chấm đúng/sai | Đạt (Q1 b2: 他 + các thanh in trên dòng; Q1 b1 đang ở trạng thái Nháp từ trước nên học viên chưa thấy) | |
+| S2 | Quyển 5 bài bất kỳ, câu "Điền vào chỗ trống" có khung từ | Hiện **cả khung từ** của sách (8–15 từ) thành lưới nhỏ A, B, C…; chọn từ thì từ hiện mờ ngay trong chỗ trống; điện thoại không tràn ngang | Đạt (Q5 b1 câu 8: 10 từ A–J) | |
+| S3 | Câu có hai chỗ trống ở sách (Q2, Q5 1B) | Thành hai câu, mỗi câu một chỗ trống, chỗ kia đã điền sẵn đáp án | | |
+| S4 | Q1 bài 11, câu chọn vị trí A–D | Dạng "Chọn đáp án đúng": "（了）我A已经B…" với 4 nút A B C D | | |
+| S5 | Q5/Q6, câu "Nghe và chọn chữ Hán" (辨音辨调) | Bấm loa nghe một từ, chọn 1 trong 2 từ sách in; có giọng người (không phải giọng trình duyệt) | Đạt (giọng đã sinh 0 lỗi; chưa nghe tay) | |
+| S6 | Q5/Q6, câu "Sắp xếp thành câu" dạng 连句成段 | Mỗi ô là cả một câu, xếp thành từng dòng; đúng thứ tự thì chấm Đúng | | |
+| S7 | Q3 bài 5, câu "Đọc và chọn Đúng / Sai" | Cả bài đọc hiện chữ vừa (không to như đề HSK), câu ★ bên dưới | | |
+| S8 | Quản trị → bài Hán ngữ → Bài tập → sửa câu điền chỗ trống, bấm "Thêm phương án" tới 16 rồi lưu | Lưu được 16 phương án; quá 16 thì nút ẩn; dạng "Chọn đáp án" có trong ô chọn dạng câu | Đạt (10 phương án, nút thêm/bỏ) | |
+
+## T. Luyện viết: Cách nhớ + Từ ghép (15/11/2026)
+
+Giao diện chốt theo ảnh `data/han-ngu/ra/mau-luyen-viet.png` (今) và `mau-luyen-viet-2.png` (校). Server cần **migration 029** và
+nạp `data/han-ngu/nap_cach_nho.py` (1.381 chữ Hán ngữ). Chữ chưa soạn vẫn có Từ ghép lấy từ kho từ vựng.
+
+| # | Làm gì | Mong đợi | Máy | Web thật |
+|---|---|---|---|---|
+| T1 | Hán ngữ Q1 Bài 4 → Luyện viết → chữ 今 | Không còn số nét, thẻ bộ thủ, đoạn phân tích, "Chữ khác cùng bộ", "Lượt viết đúng 0/2"; có ô **Cách nhớ** và **Từ ghép** | Đạt | |
+| T2 | Ô Cách nhớ của 今 | Chữ 今 tô hai màu (人 đỏ, phần dưới xanh); thẻ "Trên · Bộ Nhân" đỏ, thẻ phần dưới xanh; dòng "Liên tưởng:" có 人 tô đỏ | Đạt | |
+| T3 | Bấm từng dòng Từ ghép | Đọc từ đó; chữ đang học tô đỏ trong từ | Đạt (giọng từ ghép sinh 15/11) | |
+| T4 | Chữ 校 (trái–phải), một chữ tượng hình (人, 口) | 校: Bộ Mộc bên trái, chữ Giao bên phải; chữ một khối: một thẻ "cả chữ" | Đạt (校) | |
+| T5 | Viết xong 2 lượt một chữ | Vẫn tự sang chữ sau, báo "Xong chữ …" (đếm lượt chạy ngầm) | Có test API | |
+| T6 | Điện thoại 375px | Ô viết trên, Cách nhớ + Từ ghép dưới, không tràn ngang; dòng dưới ô viết chỉ ghi "Chữ x/y" | Đạt (375px không tràn) | |
+| T8 | Điện thoại thật (iPhone, Android), chữ 流, 危, 官, 希, 笔, 青 | Thẻ thành phần hiện đủ ký tự hiếm (㐬 㔾 㠯 㐅 ⺮ 龶), không thành ô vuông trống | Đạt trên Chrome Windows | |
+| T7 | Giáo trình HSK 3.0 → Luyện viết một chữ chưa soạn cách nhớ | Câu nhớ cũ hiện trong ô Cách nhớ (không có thẻ màu); Từ ghép lấy từ kho từ vựng | Đạt (test API) | |
+
+## U. Thi thử HSK 3.0 kiểu tờ đề (15/11/2026)
+
+Mẫu duyệt: `release/mau-giao-dien/thi-thu-hsk/`. Server cần **migration 030** và chạy `data/hsk30/sinh_pinyin.py` (pinyin đề HSK 1–2).
+
+| # | Làm gì | Mong đợi | Máy | Web thật |
+|---|---|---|---|---|
+| U1 | Máy tính, mở một đề HSK 2 Thi thật | Cả đề một trang cuộn: bìa đề, nút 一、听力 / 二、阅读 / 三、书写, mỗi phần chia 第一部分 · Phần 1…, "Câu a–b" + lời dặn | Đạt | |
+| U2 | Cuộn xuống giữa đề | Cột phải (đồng hồ, tiến độ, phiếu trả lời, Nộp bài) và dải nút phần **đứng yên**; nút phần đang xem sáng; ô "đang xem" trên phiếu đi theo | Đạt | |
+| U3 | Bấm một số trên phiếu | Cuộn tới đúng câu đó | Đạt | |
+| U4 | Đề HSK 1–2 | Pinyin in trên đầu từng từ ở câu đọc, phương án, đoạn văn; đề HSK 3 trở lên không có pinyin | Đạt | |
+| U5 | Luyện tập: làm vài câu của Phần 1 rồi bấm "Kiểm tra phần 1" | Câu đúng viền xanh, sai viền đỏ, đáp án đúng viền xanh đứt + lời giải; phiếu tô xanh/đỏ; dòng "Phần 1: đúng x/y câu đã kiểm" | Đạt | |
+| U6 | Câu Đúng/Sai ở phần nghe | Nút Đúng luôn đứng trước Sai | Đạt | |
+| U7 | Thi thật: nghe một câu 3 lần | Lần thứ 3 nút nghe mờ, ghi "còn 0 lượt" | | |
+| U8 | Điện thoại 375px | Thanh trên có đồng hồ + vạch tiến độ, dải nút phần dính ngay dưới; thanh dưới "Phiếu trả lời · x/y" + "Nộp bài"; bấm phiếu → bảng số câu trượt lên, bấm số thì cuộn tới câu | Đạt | |
+| U9 | Cửa sổ 800–1080px | Cột phải xuống đáy màn hình (đồng hồ + nút Phiếu trả lời + Nộp bài), bấm Phiếu mở bảng trượt lên | Đạt (900px) | |
+| U10 | Nộp bài | Hỏi lại, nộp xong ra màn kết quả như cũ | Đạt | |
+| U11 | Đề HSK 3–6 có câu nói | Câu nói ghi âm như cũ trong tờ đề | Đạt (HSK 3 · Đề 1, 70 câu) | |
+
+## V. Đề mô phỏng HSK 1–2 chép từ sách (15/11/2026)
+
+4 đề từ `Project/Thi hsk3.0/`: "HSK 1 · Đề mô phỏng 1/2" (40 câu, 35 phút), "HSK 2 · Đề mô phỏng 1/2". Lời nghe chép từ
+听力文本, đọc bằng giọng tự tạo hai giọng nam/nữ (không dùng file mp3 gốc). Tranh cắt từ đề lưu ở `uploads/hinh-de/` — **phải chép
+thư mục này lên server**. Nạp: `python data/hsk30/nap_de.py data/hsk30/de-sach/*.json`, rồi sinh pinyin, sinh giọng.
+
+| # | Làm gì | Mong đợi | Máy | Web thật |
+|---|---|---|---|---|
+| V1 | Thi thử → HSK 1 | Có thêm Đề mô phỏng 1, 2 | Đạt | |
+| V2 | Đề mô phỏng HSK 1, câu 11–15 | Tranh ảnh thật cắt từ đề, đủ 6 tranh A–F, chọn được | Đạt | |
+| V3 | HSK 2 đề mô phỏng câu 56–60 | Dạng "Viết chữ Hán": pinyin trên ô, gõ chữ vào ô; nộp xong chấm đúng chữ | Đạt (gõ 语 → chấm đúng) | |
+| V4 | HSK 2 đề mô phỏng câu 51–55 | Hình chữ còn thiếu bộ phận + 6 bộ phận A–F để chọn | Đạt | |
+| V5 | So 5 câu bất kỳ mỗi đề với file PDF và 答案 | Câu chữ, phương án, đáp án đúng như sách | Đạt (đối chiếu 答案 lúc chép, không lệch) | |
 
 ## E. Kiểm tra tự động (chạy ở máy dev)
 

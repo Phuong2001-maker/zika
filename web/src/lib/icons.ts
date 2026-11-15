@@ -63,6 +63,7 @@ export const ICONS: Record<string, string> = {
   "fwd5": "<path d=\"M19.5 12a7.5 7.5 0 1 1-2.2-5.3L19.5 9\"/><path d=\"M19.5 4v5h-5\"/>",
   "skip-prev": "<path d=\"M18 6l-9 6 9 6z\"/><path d=\"M6 6v12\"/>",
   "skip-next": "<path d=\"M6 6l9 6-9 6z\"/><path d=\"M18 6v12\"/>",
+  "bulb": "<path d=\"M9 18h6\"/><path d=\"M10 22h4\"/><path d=\"M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V18h6v-1.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z\"/>",
 };
 
 export type IconName = keyof typeof ICONS;

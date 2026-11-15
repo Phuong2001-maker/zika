@@ -29,10 +29,18 @@ PHAN = ["listening", "reading", "writing", "speaking"]
 DANG_THEO_PHAN = {
     "listening": {"listen", "pic"},
     "reading": {"pic", "blank", "pick", "tf", "match"},
-    "writing": {"order", "toZh", "blank"},
+    "writing": {"order", "toZh", "blank", "pick", "go"},
     "speaking": {"speak"},
 }
 CHOICE = {"listen", "pic", "blank", "pick", "toZh"}
+# Đề mô phỏng chép từ sách ("nguon": "sach", thư mục de-sach/): tranh/câu A–F dùng chung cả nhóm nên tới 6 phương án,
+# tranh là ảnh cắt từ đề đã tải lên /uploads/, bài đọc câu chọn dài hơn. Giới hạn khớp QuestionPayload.php sau 15/11/2026.
+TOI_DA_PA = {"pic": 6, "pick": 6, "listen": 6, "blank": 16}
+UPLOADS = GOC / "api" / "dev-uploads"
+
+
+def anh_tai_len(url: str) -> bool:
+    return url.startswith("/uploads/") and (UPLOADS / url.removeprefix("/uploads/")).is_file()
 NHIEM_VU = {"repeat", "read", "answer", "topic", "picture"}
 HAN = re.compile(r"[㐀-鿿]")
 
@@ -47,7 +55,7 @@ def norm_zh(s: str) -> str:
     return re.sub(r"[\s，。！？、；：“”‘’（）《》,.!?;:'\"()\-]", "", s)
 
 
-def kiem_cau(q: dict, hinh: set[str]) -> list[str]:
+def kiem_cau(q: dict, hinh: set[str], sach: bool = False) -> list[str]:
     loi: list[str] = []
     t = q.get("type")
     p = q.get("payload")
@@ -57,8 +65,9 @@ def kiem_cau(q: dict, hinh: set[str]) -> list[str]:
 
     def phuong_an(can_han: bool) -> None:
         opts = p.get("options")
-        if not isinstance(opts, list) or not 2 <= len(opts) <= 4:
-            loi.append("cần 2–4 phương án")
+        toi_da = TOI_DA_PA.get(t, 4)
+        if not isinstance(opts, list) or not 2 <= len(opts) <= toi_da:
+            loi.append(f"cần 2–{toi_da} phương án")
             return
         opts = [str(o).strip() for o in opts]
         if any(o == "" for o in opts):
@@ -77,7 +86,8 @@ def kiem_cau(q: dict, hinh: set[str]) -> list[str]:
         if not 1 <= len(s("audioText")) <= 200 or not HAN.search(s("audioText")):
             loi.append("audioText 1–200 ký tự chữ Hán")
         opts = [str(o) for o in p.get("options") or []]
-        phuong_an(can_han=opts not in (["Đúng", "Sai"], ["Sai", "Đúng"]))
+        # Đề sách có phương án in là số (608 / 809 / 908): giữ đúng như in.
+        phuong_an(can_han=not sach and opts not in (["Đúng", "Sai"], ["Sai", "Đúng"]))
     elif t == "pic":
         if not s("audioText") and not s("ask"):
             loi.append("pic cần audioText hoặc ask")
@@ -85,8 +95,8 @@ def kiem_cau(q: dict, hinh: set[str]) -> list[str]:
             loi.append("audioText/ask dài quá 200")
         phuong_an(can_han=False)
         for o in p.get("options") or []:
-            if o not in hinh:
-                loi.append(f"mã hình không có trong kho: {o}")
+            if o not in hinh and not anh_tai_len(str(o)):
+                loi.append(f"hình không có trong kho cũng không có file tải lên: {o}")
     elif t == "blank":
         if s("sentence").count("___") != 1:
             loi.append("sentence phải có đúng một ___")
@@ -94,18 +104,25 @@ def kiem_cau(q: dict, hinh: set[str]) -> list[str]:
             loi.append("sentence dài quá 255")
         phuong_an(can_han=True)
     elif t == "pick":
-        if not 1 <= len(s("ask")) <= 200:
-            loi.append("ask 1–200 ký tự")
+        if not 1 <= len(s("ask")) <= 600:
+            loi.append("ask 1–600 ký tự")
         phuong_an(can_han=False)
+    elif t == "go":
+        if s("sentence").count("___") != 1 or len(s("sentence")) > 255:
+            loi.append("sentence phải có đúng một ___ và ≤ 255 ký tự")
+        if not s("pinyin"):
+            loi.append("go cần pinyin của chữ cần viết")
+        if not 1 <= len(s("answer")) <= 4 or not all(HAN.match(c) for c in s("answer")):
+            loi.append("answer của go là 1–4 chữ Hán")
     elif t == "toZh":
         if not 1 <= len(s("vi")) <= 200:
             loi.append("vi 1–200 ký tự")
         phuong_an(can_han=True)
     elif t == "tf":
-        if not 1 <= len(s("passage")) <= 400:
-            loi.append("passage 1–400 ký tự")
-        if not 1 <= len(s("statement")) <= 200:
-            loi.append("statement 1–200 ký tự")
+        if not 1 <= len(s("passage")) <= 2000:
+            loi.append("passage 1–2000 ký tự")
+        if not 1 <= len(s("statement")) <= 300:
+            loi.append("statement 1–300 ký tự")
         if not isinstance(p.get("answer"), bool):
             loi.append("answer của tf phải là true/false")
     elif t == "match":
@@ -152,8 +169,8 @@ def kiem_cau(q: dict, hinh: set[str]) -> list[str]:
     url = p.get("imageUrl")
     if url:
         m = re.fullmatch(r"/hinh-hsk/([a-z0-9-]+)\.svg", str(url))
-        if not m or m.group(1) not in hinh:
-            loi.append(f"imageUrl không có trong kho: {url}")
+        if (not m or m.group(1) not in hinh) and not anh_tai_len(str(url)):
+            loi.append(f"imageUrl không có trong kho cũng không có file tải lên: {url}")
     if t != "speak":
         ex = str(q.get("explain") or "").strip()
         if not ex or len(ex) > 1000:
@@ -184,8 +201,12 @@ def kiem_file(f: Path, hinh: set[str]) -> tuple[list[str], int, list[tuple[str, 
     if cap not in CAU_TRUC:
         return [f"{f.name}: level phải 1–6"], 0, []
     giay, *so = CAU_TRUC[cap]
-    if de.get("durationSec") != giay:
+    # Đề chép từ sách giữ đúng cấu trúc, số câu, thời gian của sách; không áp khung tự soạn và luật độ dài đáp án.
+    sach = de.get("nguon") == "sach"
+    if not sach and de.get("durationSec") != giay:
         loi.append(f"{f.name}: durationSec phải là {giay}")
+    if sach and not (isinstance(de.get("durationSec"), int) and 600 <= de["durationSec"] <= 9000):
+        loi.append(f"{f.name}: durationSec của đề sách phải 600–9000 giây")
     if not str(de.get("title") or "").strip() or len(str(de["title"])) > 80:
         loi.append(f"{f.name}: title 1–80 ký tự")
     qs = de.get("questions") or []
@@ -203,18 +224,18 @@ def kiem_file(f: Path, hinh: set[str]) -> tuple[list[str], int, list[tuple[str, 
             loi.append(f"{f.name} · câu {i}: dạng {q.get('type')} không dùng ở phần {sec}")
         if sec == "listening" and q.get("type") == "pic" and not (q.get("payload") or {}).get("audioText"):
             loi.append(f"{f.name} · câu {i}: chọn tranh ở phần nghe cần audioText")
-        for e in kiem_cau(q, hinh):
+        for e in kiem_cau(q, hinh, sach):
             loi.append(f"{f.name} · câu {i}: {e}")
         k = khoa_trung(q)
-        if k:
+        if k and not sach:  # đề sách độc lập với bộ đề tự soạn: không bắt trùng
             khoa.append((k, f"{f.name} · câu {i}"))
     for sec, n in zip(PHAN, so):
-        if dem[sec] != n:
+        if not sach and dem[sec] != n:
             loi.append(f"{f.name}: phần {sec} cần {n} câu, đang có {dem[sec]}")
     if thu_tu != sorted(thu_tu):
         loi.append(f"{f.name}: câu phải xếp Nghe → Đọc → Viết → Nói")
     dai, mong, n = do_dai_dap_an(qs)
-    if n and dai / n > mong + 0.05:
+    if not sach and n and dai / n > mong + 0.05:
         loi.append(f"{f.name}: đáp án đúng là phương án dài nhất ở {dai}/{n} câu ({dai / n:.0%}), chỉ nên"
                    f" ≤ {mong + 0.05:.0%} — người thi đoán theo độ dài được")
     return loi, cap, khoa

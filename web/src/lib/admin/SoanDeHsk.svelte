@@ -22,7 +22,7 @@
   const DANG: Record<Phan, [string, string][]> = {
     listening: [['listen', 'Nghe và chọn'], ['pic', 'Nghe chọn tranh']],
     reading: [['pic', 'Đọc chọn tranh'], ['blank', 'Chọn từ điền câu'], ['pick', 'Chọn câu đúng'], ['tf', 'Đúng / Sai'], ['match', 'Nối từ']],
-    writing: [['order', 'Sắp xếp câu'], ['toZh', 'Chọn câu tiếng Trung'], ['blank', 'Chọn từ điền câu']],
+    writing: [['order', 'Sắp xếp câu'], ['toZh', 'Chọn câu tiếng Trung'], ['blank', 'Chọn từ điền câu'], ['pick', 'Chọn bộ phận / đáp án'], ['go', 'Viết chữ Hán theo pinyin']],
     speaking: [['speak', 'Nói']],
   };
   /** Tên dạng câu theo phần: câu chọn tranh ở phần Đọc là "Đọc chọn tranh", không phải "Nghe chọn tranh". */

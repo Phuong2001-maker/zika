@@ -15,14 +15,14 @@ final class QuestionGrader
     /** Nhóm dạng trắc nghiệm: đáp án là một chỉ số trong options (06 §1). */
     public const CHOICE = ['meaning', 'pinyin', 'tone', 'audio', 'listen', 'blank', 'pick', 'toZh', 'pic'];
 
-    /** Mọi dạng câu dùng được ở Bài tập. */
-    public const BT_TYPES = ['meaning', 'blank', 'audio', 'pinyin', 'order', 'trans', 'tf', 'match'];
+    /** Mọi dạng câu dùng được ở Bài tập. `pick` thêm 15/11/2026 cho bài chọn vị trí A–D của sách Hán ngữ. */
+    public const BT_TYPES = ['meaning', 'blank', 'audio', 'pinyin', 'order', 'trans', 'tf', 'match', 'pick'];
 
     /** Mọi dạng câu dùng được ở Kiểm tra và Thi thử. */
     public const KT_TYPES = ['blank', 'listen', 'meaning', 'pick', 'order', 'trans', 'tf', 'match', 'tone', 'toZh'];
 
-    /** Đề Thi thử HSK 3.0: thêm câu nói. */
-    public const HSK30_TYPES = [...self::KT_TYPES, 'pic', 'speak'];
+    /** Đề Thi thử HSK 3.0: thêm câu nói, chọn tranh, và viết chữ Hán theo pinyin (`go`, đề mô phỏng HSK 2 câu 56–60). */
+    public const HSK30_TYPES = [...self::KT_TYPES, 'pic', 'speak', 'go'];
 
     /**
      * Câu không chấm tự động: câu nói chỉ ghi âm ở máy người học, server không có file để nghe.
@@ -58,6 +58,8 @@ final class QuestionGrader
             'trans' => self::checkTrans($payload, $answer),
             'tf'    => is_bool($answer) && $answer === (bool) ($payload['answer'] ?? false),
             'match' => self::checkMatch($payload, $answer),
+            // Viết chữ Hán theo pinyin (đề HSK 2 câu 56–60): so đúng chữ, bỏ khoảng trắng và dấu câu gõ thừa.
+            'go'    => is_string($answer) && self::normZh($answer) !== '' && self::normZh($answer) === self::normZh((string) ($payload['answer'] ?? '')),
             default => false,
         };
     }
@@ -73,7 +75,7 @@ final class QuestionGrader
         }
         return match ($type) {
             'order' => is_array($answer) && count($answer) === count((array) ($payload['tiles'] ?? [])),
-            'trans' => is_string($answer) && trim($answer) !== '',
+            'trans', 'go' => is_string($answer) && trim($answer) !== '',
             'tf'    => is_bool($answer),
             'match' => is_array($answer) && count($answer) === count((array) ($payload['pairs'] ?? [])),
             'speak' => is_string($answer) && isset(self::SPEAK_ANSWERS[$answer]),
@@ -170,7 +172,7 @@ final class QuestionGrader
             return (string) ($opts[(int) ($payload['answer'] ?? 0)] ?? '');
         }
         return match ($type) {
-            'order' => (string) ($payload['answer'] ?? ''),
+            'order', 'go' => (string) ($payload['answer'] ?? ''),
             'trans', 'speak' => (string) ($payload['sample'] ?? ''),
             'tf'    => ((bool) ($payload['answer'] ?? false)) ? 'Đúng' : 'Sai',
             'match' => implode(' · ', array_map(
@@ -201,7 +203,7 @@ final class QuestionGrader
             'order' => is_array($answer)
                 ? implode('', array_map(static fn ($i) => (string) (((array) ($payload['tiles'] ?? []))[$i] ?? ''), $answer))
                 : 'Chưa trả lời',
-            'trans' => is_string($answer) ? trim($answer) : 'Chưa trả lời',
+            'trans', 'go' => is_string($answer) && trim($answer) !== '' ? trim($answer) : 'Chưa trả lời',
             'tf'    => is_bool($answer) ? ($answer ? 'Đúng' : 'Sai') : 'Chưa trả lời',
             'match' => self::matchAnswerText($payload, $answer),
             'speak' => is_string($answer) ? (self::SPEAK_ANSWERS[$answer] ?? 'Chưa trả lời') : 'Chưa trả lời',
@@ -237,6 +239,7 @@ final class QuestionGrader
             'tone'    => $p('word') . ' → thanh điệu?',
             'audio', 'listen' => 'Nghe: ' . $p('audioText'),
             'blank'   => $p('sentence'),
+            'go'      => $p('sentence') . ($p('pinyin') !== '' ? ' (' . $p('pinyin') . ')' : ''),
             'pick'    => $p('ask'),
             'toZh'    => $p('vi'),
             'order'   => implode(' / ', array_map('strval', (array) ($payload['tiles'] ?? []))),

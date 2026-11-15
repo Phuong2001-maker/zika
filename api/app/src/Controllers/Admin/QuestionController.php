@@ -13,6 +13,7 @@ use Zika\Core\Validator;
 use Zika\Services\ContentBuilder;
 use Zika\Services\ContentWriter;
 use Zika\Services\PartContent;
+use Zika\Services\PinyinDe;
 use Zika\Services\QuestionGrader;
 use Zika\Services\QuestionPayload;
 use Zika\Services\TestService;
@@ -72,6 +73,20 @@ final class QuestionController
      * Câu nào sai thì bỏ qua và báo số dòng, các câu còn lại vẫn vào — nhập 50 câu không nên
      * hỏng cả mẻ vì một dòng thiếu đáp án.
      */
+    /** PUT /admin/pinyin — nạp pinyin sinh sẵn cho đề Thi thử HSK 1–2 (data/hsk30/sinh_pinyin.py, migration 030). */
+    public function pinyin(Request $r): array
+    {
+        $v = new Validator($r->body);
+        $items = $v->arr('items', 'Danh sách câu');
+        $v->done();
+        if (count($items) > 1000) {
+            throw HttpError::validation(['items' => 'Mỗi lượt nhiều nhất 1000 câu.']);
+        }
+        $kq = PinyinDe::luu($items);
+        Audit::log($r, 'pinyin.import', 'text_pinyin', null, ['count' => $kq['saved']]);
+        return $kq;
+    }
+
     public function bulk(Request $r): array
     {
         $lesson = ContentWriter::lesson($r->id());
@@ -593,6 +608,9 @@ final class QuestionController
         $allowed = $hsk30 ? ['listening', 'reading', 'writing'] : ['listening', 'reading'];
         if (is_string($requested) && in_array($requested, $allowed, true)) {
             return $requested;
+        }
+        if ($type === 'go' && $hsk30) {
+            return 'writing';
         }
         return in_array($type, ['listen', 'audio'], true) ? 'listening' : 'reading';
     }

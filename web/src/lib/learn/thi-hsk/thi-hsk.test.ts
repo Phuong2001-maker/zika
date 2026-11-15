@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { answered, isChoice } from '$lib/utils/grade';
+import { answered, check, isChoice } from '$lib/utils/grade';
 import { canView } from '$lib/auth/routes';
 import { isActiveTest, routeFeature } from '$lib/auth/features';
-import { moTaPhan, nhomTheoPhan } from './cau-truc';
+import { chiaDe, loiDan, moTaPhan, nhomTheoPhan } from './cau-truc';
 import { chonDinhDang, khoaBanGhi, loiGhiAm } from './ghi-am';
 import { HINH, maTuUrl, urlHinh } from './hinh';
 
@@ -60,5 +60,37 @@ describe('Thi thử HSK 3.0', () => {
     expect(ma.every((m) => /^[a-z0-9][a-z0-9-]{0,39}$/.test(m))).toBe(true);
     expect(maTuUrl(urlHinh('an-com'))).toBe('an-com');
     expect(maTuUrl('https://x.test/a.svg')).toBeNull();
+  });
+
+  it('tờ đề chia phần như đề giấy: 一、听力 → 第一部分…, nhóm là các câu liền nhau cùng dạng (15/11/2026)', () => {
+    const q = (section: string, type: string, options: string[] = []) => ({ section, type, payload: { options } });
+    const de = chiaDe([
+      q('listening', 'listen', ['Đúng', 'Sai']),
+      q('listening', 'listen', ['Sai', 'Đúng']),
+      q('listening', 'listen', ['他', '她', '它']),
+      q('listening', 'pic'),
+      q('reading', 'blank'),
+      q('reading', 'blank'),
+      q('writing', 'go'),
+    ]);
+    expect(de.map((p) => p.han)).toEqual(['一、听力', '二、阅读', '三、书写']);
+    expect(de[0].bo.map((b) => [b.han, b.cau.length])).toEqual([['第一部分', 2], ['第二部分', 1], ['第三部分', 1]]);
+    expect(de[0].bo[2].cau[0].k).toBe(3);
+    expect(de[2].bo[0].cachLam).toBe('Nhìn pinyin, viết chữ Hán vào ô.');
+    expect(loiDan('pic', 'reading', {})).toBe('Đọc câu rồi chọn tranh đúng.');
+    // Cùng dạng chọn tranh nhưng đổi bộ tranh A–F dùng chung → sang phần mới như đề giấy.
+    const nhomA = ['a', 'b', 'c', 'd', 'e', 'f'];
+    const nhomB = ['g', 'h', 'i', 'j', 'k'];
+    const tranh = chiaDe([q('listening', 'pic', ['x', 'y', 'z']), q('listening', 'pic', ['u', 'v', 'w']), q('listening', 'pic', nhomA), q('listening', 'pic', nhomA), q('listening', 'pic', nhomB)]);
+    expect(tranh[0].bo.map((b) => b.cau.length)).toEqual([2, 2, 1]);
+  });
+
+  it('viết chữ Hán theo pinyin: đã làm khi gõ chữ, chấm đúng chữ; tranh tải lên giữ nguyên đường dẫn', () => {
+    expect(answered('go', {}, '茶')).toBe(true);
+    expect(answered('go', {}, ' ')).toBe(false);
+    expect(check('go', { answer: '茶' }, ' 茶')).toBe(true);
+    expect(check('go', { answer: '茶' }, '查')).toBe(false);
+    expect(urlHinh('/uploads/hinh-de/hsk2-mp1/c01-a.jpg')).toBe('/uploads/hinh-de/hsk2-mp1/c01-a.jpg');
+    expect(urlHinh('cha')).toBe('/hinh-hsk/cha.svg');
   });
 });

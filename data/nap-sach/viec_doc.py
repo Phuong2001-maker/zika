@@ -154,6 +154,26 @@ def tu_web(ds: dict, thoai: list) -> None:
                 thoai.append({"cap": cap, "bai": b["no"], "lessonId": b["id"], "khoa": k["no"], "coAudio": bool(k["audioUrl"]),
                               "giong": {sp["name"]: giong[sp["id"]] for sp in k["speakers"]},
                               "cau": [{"zh": l["zh"], "pinyin": l["pinyin"], "voice": giong[l["speakerId"]]} for l in k["lines"]]})
+    # Bài tập Hán ngữ chép từ sách (15/11/2026): câu "Nghe và chọn chữ Hán" (辨音辨调 quyển 5–6) đọc bằng giọng chung.
+    # Giáo trình Hán ngữ nằm ngoài vòng lặp trên (vòng trên là giáo trình HSK cấp 1–3).
+    ds_gt = s.goi("GET", "/admin/curricula")
+    ds_gt = ds_gt["curricula"] if isinstance(ds_gt, dict) and "curricula" in ds_gt else ds_gt
+    for gt in ds_gt:
+        if gt["name"] != "Hán ngữ 6 tập":
+            continue
+        for cap in range(1, 7):
+            for b in s.goi("GET", f"/admin/levels/{cap}/lessons?curriculum={gt['id']}")["lessons"]:
+                for phan in ("bt", "kt"):
+                    for q in s.goi("GET", f"/admin/lessons/{b['id']}/questions?part={phan}")["questions"]:
+                        t = (q.get("payload") or {}).get("audioText")
+                        if t:
+                            them(ds, t, None)
+    # Từ ghép ở ô "Cách nhớ" màn Luyện viết (migration 029): bấm từ là đọc từ đó (speak(chữ) → sha1 chữ), nên từ ghép đã
+    # soạn cũng cần giọng; từ đã có trong kho từ vựng thì trùng file, không sinh lại.
+    for f in sorted((THU_MUC.parent / "han-ngu" / "cach-nho").glob("q*.json")):
+        for x in json.loads(f.read_text(encoding="utf-8")):
+            for t in x.get("tu_ghep", []):
+                them(ds, t["hanzi"], None)
     # Thi thử HSK 3.0 (migration 027): câu phát cho người học nghe và bài nói mẫu của mọi đề, kể cả đề Nháp,
     # để công khai đề là có giọng ngay. Đề không thuộc giáo trình nào nên không nằm trong vòng lặp bài ở trên.
     for de in s.goi("GET", "/admin/hsk30"):
