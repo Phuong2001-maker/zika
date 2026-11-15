@@ -45,6 +45,8 @@ Bộ SQL, cách bật ba mục và giới hạn 20 người ở Cuộc thi nằm
 
 `ContestService::withDemoRanking()` tự xáo trộn ổn định tên người minh họa trong bảng Cuộc thi; người đầu đạt 40/40, các số còn lại trong khoảng 1–39 và xếp giảm dần. Điểm phụ thuộc danh sách đang hiện và cuộc thi, không thay đổi chỉ vì tải lại. Đây là số hiển thị, không ghi kết quả thi vào DB; người thật giữ nguyên thứ hạng và quyền nhận giải. Đăng ký vẫn theo ID, Chăm học vẫn theo phút học.
 
+Danh sách Đăng ký gán mỗi người minh họa một phút riêng, ổn định trong khoảng 07–15/11/2026, khung 07:00–22:59, rồi xếp theo thời điểm. Thời gian này chỉ dùng để hiển thị; không sửa `created_at` và không tạo dòng `contest_registrations`.
+
 Chỉ cần thay `src/Services/ContestService.php` trong thư mục app trên hosting, không có migration hay yêu cầu build frontend. Không cần các thay đổi sắp xếp trung gian ở `DemoActivity.php`/controller quản trị. Bản xem trước quản trị và dòng phụ “Chờ cập nhật kết quả” giữ giao diện cũ. Người dùng đã upload file qua 1Panel; chưa kiểm độc lập trên web thật. Lần commit này không chạy lại test theo yêu cầu của người dùng.
 
 ## Kịch bản kiểm tra

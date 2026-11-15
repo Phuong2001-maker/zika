@@ -53,6 +53,12 @@ Thay đổi cuối cùng tập trung trong `api/app/src/Services/ContestService.
 
 Không cần cập nhật `DemoActivity.php`, controller quản trị hoặc build frontend cho yêu cầu cuối cùng này. Các thay đổi trung gian và gói ZIP ba mục cũ đã được dọn khỏi lần bàn giao.
 
+## Thời điểm đăng ký minh họa
+
+Cũng trong `ContestService.php`, mỗi người minh họa được gán ổn định một phút riêng từ **07/11/2026 đến 15/11/2026**, trong khung 07:00–22:59. Danh sách Đăng ký xếp theo thời điểm này nên không còn cùng ngày, giờ và phút. Thuật toán xử lý va chạm để các người đang hiển thị không trùng phút; tải lại trang không đổi thời điểm.
+
+Thời gian này chỉ là dữ liệu hiển thị do API tạo, không sửa `created_at` và không ghi thêm đăng ký thật vào DB. Người đăng ký thật vẫn giữ thời gian thật và đứng trước nhóm minh họa như hành vi hiện có.
+
 ## Đưa file lên hosting
 
 File đích:

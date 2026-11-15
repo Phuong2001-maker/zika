@@ -85,12 +85,27 @@ final class ContestService
                 'isDemo' => false,
                 'avatarUrl' => null,
             ], $rows);
+        $demo = [];
+        $usedSlots = [];
         foreach (DemoActivity::visible('registered') as $n) {
-            $out[] = [
+            // Rải ổn định từng người vào một phút riêng từ 07–15/11/2026, trong khung 07:00–22:59.
+            $seed = 'dang-ky-minh-hoa:2026:' . $n['name'];
+            $slot = (int) (hexdec(substr(hash('sha256', $seed), 0, 8)) % (9 * 16 * 60));
+            while (isset($usedSlots[$slot])) $slot = ($slot + 1) % (9 * 16 * 60);
+            $usedSlots[$slot] = true;
+            $day = 7 + intdiv($slot, 16 * 60);
+            $minuteOfDay = 7 * 60 + $slot % (16 * 60);
+            $at = sprintf('2026-11-%02d %02d:%02d:00', $day, intdiv($minuteOfDay, 60), $minuteOfDay % 60);
+            $demo[] = [
                 'name' => (string) $n['name'], 'isMe' => false,
-                'at' => Clock::parse((string) $n['created_at'])->format('H:i, d/m'),
+                'at' => Clock::parse($at)->format('H:i, d/m'), '_sort' => $at,
                 'isDemo' => true, 'avatarUrl' => $n['avatar_path'],
             ];
+        }
+        usort($demo, static fn ($a, $b) => $a['_sort'] <=> $b['_sort'] ?: $a['name'] <=> $b['name']);
+        foreach ($demo as $row) {
+            unset($row['_sort']);
+            $out[] = $row;
         }
         return [
             'contest' => $c === null ? null : ['id' => (int) $c['id'], 'title' => (string) $c['title'], 'status' => self::status($c)],
