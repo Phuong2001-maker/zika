@@ -39,6 +39,14 @@ Tác vụ `demoActivity` đã ghép vào `app/cron/every5min.php` có sẵn. Hos
 
 Cấu hình gửi trường `tuDong` (boolean). Trường tùy chọn `goc: { phut, ngay, bai }` là số liệu lúc mở form: trường nào admin không sửa sẽ giữ số mới nhất sau đồng bộ, trường nào đã sửa áp dụng giá trị mới. Không truyền `goc` được hiểu là chỉnh tay cả ba trường.
 
+## Bộ 80 người và số câu đúng minh họa (15/11/2026)
+
+Bộ SQL, cách bật ba mục và giới hạn 20 người ở Cuộc thi nằm trong [data/minh-hoa/README.md](data/minh-hoa/README.md). Có hai file: `80-nguoi-hoc.sql` để thêm tên chưa có và `80-nguoi-hoc-bat-ba-muc.sql` để bật hiển thị cho bộ đã nhập. Không import lại file bật ba mục sau khi đã thu danh sách Cuộc thi xuống 20 người nếu muốn giữ giới hạn này.
+
+`ContestService::withDemoRanking()` tự xáo trộn ổn định tên người minh họa trong bảng Cuộc thi; người đầu đạt 40/40, các số còn lại trong khoảng 1–39 và xếp giảm dần. Điểm phụ thuộc danh sách đang hiện và cuộc thi, không thay đổi chỉ vì tải lại. Đây là số hiển thị, không ghi kết quả thi vào DB; người thật giữ nguyên thứ hạng và quyền nhận giải. Đăng ký vẫn theo ID, Chăm học vẫn theo phút học.
+
+Chỉ cần thay `src/Services/ContestService.php` trong thư mục app trên hosting, không có migration hay yêu cầu build frontend. Không cần các thay đổi sắp xếp trung gian ở `DemoActivity.php`/controller quản trị. Bản xem trước quản trị và dòng phụ “Chờ cập nhật kết quả” giữ giao diện cũ. Người dùng đã upload file qua 1Panel; chưa kiểm độc lập trên web thật. Lần commit này không chạy lại test theo yêu cầu của người dùng.
+
 ## Kịch bản kiểm tra
 
 1. Admin vào màn lần đầu: danh sách trống, không có dữ liệu mẫu tự chèn.

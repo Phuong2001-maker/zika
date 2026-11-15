@@ -140,11 +140,23 @@ final class ContestService
     private static function withDemoRanking(array $ranking, int $limit): array
     {
         $count = (int) $ranking['participants'];
-        foreach (DemoActivity::visible('contest') as $n) {
+        $people = DemoActivity::visible('contest');
+        // Trộn ngay tại bảng thi để chỉ thay file này cũng khác thứ tự đăng ký ở bản PHP cũ.
+        usort($people, static fn ($a, $b) =>
+            crc32('cuoc-thi:' . $a['name']) <=> crc32('cuoc-thi:' . $b['name'])
+            ?: (int) $a['id'] <=> (int) $b['id']);
+        $scores = [];
+        foreach ($people as $index => $person) {
+            // Giữ điểm minh họa ổn định khi tải lại, có người đạt trọn 40 câu.
+            $seed = 'diem-minh-hoa:' . ($ranking['contest']['id'] ?? 0) . ':' . $person['name'];
+            $scores[] = $index === 0 ? 40 : 1 + (int) (hexdec(substr(hash('sha256', $seed), 0, 8)) % 39);
+        }
+        rsort($scores, SORT_NUMERIC);
+        foreach ($people as $index => $n) {
             $count++;
             if (count($ranking['rows']) < $limit) {
                 $ranking['rows'][] = [
-                    'rank' => $count, 'name' => (string) $n['name'], 'correct' => 0, 'total' => 0,
+                    'rank' => $count, 'name' => (string) $n['name'], 'correct' => $scores[$index], 'total' => 40,
                     'usedSec' => 0, 'participated' => false, 'isMe' => false,
                     'isDemo' => true, 'avatarUrl' => $n['avatar_path'],
                 ];
