@@ -125,7 +125,7 @@ body {
 }
 h1, h2, h3, p, ul, ol, figure { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
-h1, h2, .h2, .bignum, .logo, .disp { font-family: var(--font-display); }
+h1, h2, .h2, .bignum, .disp { font-family: var(--font-display); }
 h1 { font-weight: 700; letter-spacing: -.02em; }
 a { color: var(--son-text); text-decoration: none; }
 a:hover { color: var(--son-hover); }
@@ -205,13 +205,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* Nút đang bật (Chuyển nhanh, Pinyin, Đúng/Sai đã chọn) */
 .apps-on { background: var(--son-soft) !important; border-color: var(--son) !important; color: var(--son-text) !important; }
 
-/* Dấu (logo 字, con dấu 完成) */
-.seal {
-  display: inline-grid; place-items: center; flex: none;
-  background: var(--son); color: #fff; border-radius: 9px;
-  font-family: var(--font-hz); font-weight: 700; line-height: 1;
-}
-
 /* =====================================================================
    Ô nhập
    ===================================================================== */
@@ -279,8 +272,6 @@ html[data-theme="dark"] .pick span { color: var(--text-2); }  /* #374151 cố đ
    Khung trang
    ===================================================================== */
 .topbar { display: flex; align-items: center; gap: 12px 32px; flex-wrap: wrap; padding: 0 clamp(16px,4vw,44px); min-height: 60px; background: var(--surface); border-bottom: 1px solid var(--line); }
-.logo { display: inline-flex; align-items: center; gap: 9px; min-height: 40px; text-decoration: none; color: var(--text); font-weight: 700; font-size: 19px; letter-spacing: -.01em; }
-.logo:hover { color: var(--text); }
 .ava { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--surface-3); color: var(--text); font-weight: 600; font-size: 13px; flex: none; text-decoration: none; overflow: hidden; }
 .ava img { width: 100%; height: 100%; object-fit: cover; }
 button.ava { cursor: pointer; width: 40px; height: 40px; }

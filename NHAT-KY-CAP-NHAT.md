@@ -23,6 +23,14 @@ Kịch bản test giao diện: [KICH-BAN-TEST.md](KICH-BAN-TEST.md).
 
 ## Các lần cập nhật
 
+### 15/11/2026 — Bỏ hết logo 字 Zìkǎ
+
+- Người dùng không cần logo: bỏ ô 字 + chữ Zìkǎ ở màn đăng nhập/đăng ký/quên mật khẩu (`AuthShell`), menu quản trị (máy tính
+  còn chữ "Quản trị" làm lối về Tổng quan; điện thoại bỏ ô 字), màn chờ tải (nay ghi "Đang tải…"), trang lỗi, màn xác nhận email
+  và đầu email (`Mailer::compose`). Xoá class `.seal`, `.logo` trong `app.css` vì không còn chỗ dùng.
+- Giữ: tên "Zìkǎ" ở tiêu đề tab và câu chữ, biểu tượng Google ở nút đăng nhập, biểu tượng tab/ứng dụng (`favicon.svg`, `icon-*.png`).
+- Kịch bản test phần W.
+
 ### 15/11/2026 — Tắt điểm mở bài thì mở toàn bộ giáo trình được phân quyền
 
 - Công tắc **Giáo trình → Điểm và nhận điểm mở bài** nay điều khiển cả luật đọc: khi tắt cho học viên, mọi quyển và bài không bị ẩn trong đúng giáo trình của tài khoản đều mở. Khách chưa đăng nhập vẫn chỉ đọc quyển đầu.

@@ -58,7 +58,6 @@
 <AuthShell>
   {#if view === 'checking'}
     <div class="stack" style="align-items: center; padding: 24px 0" aria-busy="true">
-      <span class="seal" lang="zh" style="width: 48px; height: 48px; font-size: 26px">字</span>
       <p class="muted">Đang xác nhận email…</p>
     </div>
   {:else if view === 'expired'}

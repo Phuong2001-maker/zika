@@ -105,11 +105,8 @@
 </script>
 
 {#snippet menu()}
-  <a href="/admin" class="brand">
-    <span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>
-    <b>Zìkǎ</b>
-    <span class="tag tag-warn">Quản trị</span>
-  </a>
+  <!-- Không có logo (người dùng bỏ 15/11); dòng chữ vẫn là lối về Tổng quan. -->
+  <a href="/admin" class="brand">Quản trị</a>
 
   <nav class="nav" aria-label="Menu quản trị">
     {#each groups as g (g.title)}
@@ -151,7 +148,6 @@
       <button type="button" class="btn btn-bare" aria-label="Mở menu" onclick={() => (drawer = true)}>
         <Icon name="menu" size={22} />
       </button>
-      <span class="seal" lang="zh" style="width: 30px; height: 30px; font-size: 17px">字</span>
       <b class="disp" style="font-size: 18px; font-weight: 800">Quản trị</b>
       <a href="/admin/feedback" class="btn btn-bare bell" style="margin-left: auto" aria-label="Góp ý">
         <Icon name="bell" size={20} />
@@ -228,11 +224,6 @@
     color: var(--text);
     font-weight: 800;
     font-size: 19px;
-  }
-  .brand .tag {
-    background: var(--bo-soft);
-    border: 1px solid var(--line);
-    color: var(--warn-text);
   }
 
   .nav {

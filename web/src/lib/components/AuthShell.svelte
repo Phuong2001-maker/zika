@@ -21,8 +21,8 @@
 </script>
 
 <div class="dn-man">
+  <!-- Không có logo (người dùng bỏ hết logo 15/11). -->
   <div class="dn-cot">
-    <span class="logo"><span class="seal" lang="zh" style="width: 34px; height: 34px; font-size: 19px">字</span>Zìkǎ</span>
     <main class="block dn-the">
       {#if backHref}
         <a href={backHref} class="btn btn-text btn-sm dn-lui"><Icon name="chev" size={16} style="transform: rotate(180deg)" /> {backLabel}</a>

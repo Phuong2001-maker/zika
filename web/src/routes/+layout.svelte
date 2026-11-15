@@ -109,8 +109,8 @@
   <!-- Hộp Góp ý cho mọi màn người học đã đăng nhập (mở từ bảng Chuyển nhanh); khu quản trị không cần. -->
   {#if session.user && !isAdminRoute(page.url.pathname) && session.can('community.feedback')}<FeedbackModal />{/if}
 {:else}
-  <div class="boot center" aria-busy="true" aria-label="Đang tải">
-    <span class="seal" lang="zh" style="width: 48px; height: 48px; font-size: 26px">字</span>
+  <div class="boot center" aria-busy="true">
+    <p class="muted">Đang tải…</p>
   </div>
 {/if}
 

@@ -178,7 +178,9 @@ lọc giáo trình, cây ẩn/hiện và mã ký; khách không hưởng. Test �
   trước 08/11 mỗi màn một kiểu, người dùng báo thiếu menu. Ngoại lệ duy nhất: màn đang thi (`TestRunner`, `ThiHskRunner` của Thi thử HSK 3.0).
   Điện thoại **luôn** là `lib/components/MTopbar.svelte` (dòng 1 giống hệt mọi màn; nút lùi + tên màn ở dòng 2 qua
   `back`/`title`/`sub` hoặc nội dung con). Hai thanh cùng thứ tự: điểm mở bài, Quỹ tháng, Top chăm học, chuông,
-  Chuyển nhanh, tài khoản. Không đặt logo "字 Zìkǎ" ở thanh đầu trang nào (người dùng bỏ 08/11).
+  Chuyển nhanh, tài khoản. Không đặt logo "字 Zìkǎ" ở **bất kỳ đâu**: thanh đầu trang bỏ 08/11, mọi chỗ còn lại (màn đăng nhập, menu quản trị,
+  màn chờ tải, trang lỗi, xác nhận email, đầu email) bỏ 15/11; class `.seal`/`.logo` đã xoá khỏi `app.css`. Tên "Zìkǎ" ở tiêu đề
+  tab và trong câu chữ vẫn giữ. Biểu tượng tab/ứng dụng (`favicon.svg`, `icon-*.png`) vẫn là chữ 字.
 - Font: chữ Việt dùng `--font-ui` (Be Vietnam Pro), chữ Hán `--font-hz`; dòng trộn cả hai dùng `--font-mix`, đừng viết `var(--font-hz), var(--font-ui)` (chữ Việt sẽ lẫn hai font). Không thêm font khác.
 - Dấu ấn chữ Hán dùng lại, đừng tự chế kiểu khác: `ChuDien.svelte` (chữ trong ô chữ điền), `.dau-xong` (triện "完" bài đã xong),
   `.lv-nen` + `.lv-hoa` với `SO_HAN` trong `lib/learn/hoa-tiet.ts` (hoạ tiết số Hán của cấp).

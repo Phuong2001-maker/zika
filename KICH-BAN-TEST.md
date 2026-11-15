@@ -447,6 +447,16 @@ thư mục này lên server**. Nạp: `python data/hsk30/nap_de.py data/hsk30/de
 | V4 | HSK 2 đề mô phỏng câu 51–55 | Hình chữ còn thiếu bộ phận + 6 bộ phận A–F để chọn | Đạt | |
 | V5 | So 5 câu bất kỳ mỗi đề với file PDF và 答案 | Câu chữ, phương án, đáp án đúng như sách | Đạt (đối chiếu 答案 lúc chép, không lệch) | |
 
+## W. Bỏ hết logo 字 Zìkǎ (15/11/2026)
+
+| # | Làm gì | Mong đợi | Kết quả |
+|---|---|---|---|
+| W1 | Mở /login, /forgot, /reset, /verify-email khi chưa đăng nhập (máy tính và điện thoại) | Thẻ đăng nhập nằm giữa màn, không còn dòng logo 字 Zìkǎ phía trên | Đạt 15/11 (/login máy tính, /forgot điện thoại) |
+| W2 | Quản trị trên máy tính: menu trái; trên điện thoại (dưới 900px): thanh đầu | Menu trái mở đầu bằng chữ "Quản trị" (bấm về Tổng quan), không có ô 字 và chữ Zìkǎ; thanh đầu điện thoại chỉ có nút menu + "Quản trị" | Đạt 15/11 |
+| W3 | Gõ một đường dẫn không có, ví dụ `/khong-co` | Trang "Không tìm thấy trang" không có con dấu 字 to | Đạt 15/11 (đăng nhập quản trị; khách thì chuyển sang đăng nhập như cũ) |
+| W4 | Tải lại trang (F5) lúc mạng chậm | Màn chờ ghi "Đang tải…", không còn ô 字 | Chưa bấm (đã đổi code) |
+| W5 | Gửi email quên mật khẩu (máy dev: xem `api/app/storage/logs/mail-*.log`) | Đầu thư không còn ô 字 + tên web; tên web vẫn ở dòng cuối thư | Đạt 15/11 (dựng thử `Mailer::compose`) |
+
 ## E. Kiểm tra tự động (chạy ở máy dev)
 
 ```bash

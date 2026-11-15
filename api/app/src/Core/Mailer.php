@@ -114,10 +114,8 @@ final class Mailer
                 . '<p style="margin:0 0 14px;font-size:13px;color:#8A909C">Nếu nút không bấm được, mở link này: ' . $e($buttonUrl) . '</p>';
         }
         $html = '<!doctype html><html lang="vi"><body style="margin:0;background:#F2F5FA;font-family:Arial,Helvetica,sans-serif">'
+            // Không có logo đầu thư (người dùng bỏ hết logo 15/11); tên web vẫn ở người gửi và dòng cuối thư.
             . '<div style="max-width:560px;margin:0 auto;padding:28px 16px">'
-            . '<div style="font-size:19px;font-weight:700;color:#1A1D23;margin-bottom:16px">'
-            . '<span style="display:inline-block;width:32px;height:32px;line-height:32px;text-align:center;background:#E5484D;color:#ffffff;border-radius:9px;margin-right:8px">字</span>'
-            . $e($site) . '</div>'
             . '<div style="background:#ffffff;border:1px solid #E7E9ED;border-radius:16px;padding:24px">'
             . '<h1 style="margin:0 0 14px;font-size:22px;font-weight:700;color:#1A1D23">' . $e($title) . '</h1>' . $body . '</div>'
             . '<p style="font-size:12px;color:#8A909C;margin-top:14px">' . $e($site) . ' — học chữ Hán miễn phí.</p></div></body></html>';
